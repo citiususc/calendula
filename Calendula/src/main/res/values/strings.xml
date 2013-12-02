@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Calendula</string>
+    <string name="title_home">Home</string>
+    <string name="title_daily_agenda">Today</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="home_menu_routines">ROUTINES</string>
+    <string name="home_menu_medicines">MEDICINES</string>
+    <string name="home_menu_schedules">SCHEDULES</string>
+    <string name="home_menu_pharmacies">PHARMACIES</string>
+    <string name="home_menu_plantrip">PLAN TRIP</string>
+    <string name="action_bar_title_today">Today</string>
+    <string name="action_bar_title_home">Home</string>
+
+
+    <string-array name="home_action_list">
+        <item>Home</item>
+        <item>Agenda</item>
+    </string-array>
+
+</resources>

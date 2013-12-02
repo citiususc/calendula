@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_grey_home">
+
+
+    <ImageView
+        android:layout_width="20dip"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/home_right_edge_shadow"
+        android:scaleType="fitXY" />
+
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/home_button_height"
+        android:text="@string/home_menu_plantrip"
+        android:id="@+id/home_button_plantrip"
+        android:textSize="@dimen/home_button_text_size"
+        style="@style/home_button"
+        android:background="@drawable/plantrip_button_selector"
+        android:layout_marginBottom="20dip"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="@dimen/home_button_margin_right"
+        android:textAlignment="textStart"
+        android:gravity="center"
+        android:paddingRight="@dimen/home_button_height" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/home_button_height"
+        android:text="@string/home_menu_pharmacies"
+        android:id="@+id/home_button_pharmacies"
+        android:textSize="@dimen/home_button_text_size"
+        style="@style/home_button"
+        android:background="@drawable/pharmacies_button_selector"
+        android:layout_above="@id/home_button_plantrip"
+        android:layout_marginBottom="10dip"
+        android:layout_marginRight="@dimen/home_button_margin_right"
+        android:textAlignment="textStart"
+        android:gravity="center"
+        android:paddingRight="@dimen/home_button_height" />
+
+
+        <Button
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/home_button_height"
+        android:text="@string/home_menu_schedules"
+        android:id="@+id/home_button_schedules"
+        android:textSize="@dimen/home_button_text_size"
+            style="@style/home_button"
+        android:background="@drawable/schedules_button_selector"
+        android:layout_above="@id/home_button_pharmacies"
+        android:layout_marginBottom="10dip"
+        android:layout_marginRight="@dimen/home_button_margin_right"
+            android:textAlignment="textStart"
+            android:gravity="center"
+            android:paddingRight="@dimen/home_button_height" />
+
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/home_button_height"
+        android:text="@string/home_menu_medicines"
+        android:id="@+id/home_button_medicines"
+        android:textSize="@dimen/home_button_text_size"
+        style="@style/home_button"
+        android:background="@drawable/medicines_button_selector"
+        android:layout_above="@id/home_button_schedules"
+        android:layout_marginBottom="10dip"
+        android:layout_marginRight="@dimen/home_button_margin_right"
+        android:textAlignment="textStart"
+        android:gravity="center"
+        android:paddingRight="@dimen/home_button_height" />
+
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/home_button_height"
+        android:text="@string/home_menu_routines"
+        android:id="@+id/home_button_routines"
+        android:textSize="@dimen/home_button_text_size"
+        android:background="@drawable/routines_button_selector"
+        android:layout_marginBottom="10dip"
+        android:layout_above="@id/home_button_medicines"
+        style="@style/home_button"
+        android:layout_marginRight="@dimen/home_button_margin_right"
+        android:textAlignment="textStart"
+        android:gravity="center"
+        android:paddingRight="@dimen/home_button_height" />
+
+    <ImageView
+        android:layout_width="@dimen/home_button_height"
+        android:layout_height="@dimen/home_button_height"
+        android:layout_alignTop="@+id/home_button_routines"
+        android:layout_alignRight="@+id/home_button_routines"
+        android:src="@drawable/ic_button_routines" />
+
+    <ImageView
+        android:layout_width="@dimen/home_button_height"
+        android:layout_height="@dimen/home_button_height"
+        android:layout_alignTop="@+id/home_button_medicines"
+        android:layout_alignRight="@+id/home_button_medicines"
+        android:src="@drawable/ic_button_medicines" />
+
+    <ImageView
+        android:layout_width="@dimen/home_button_height"
+        android:layout_height="@dimen/home_button_height"
+        android:layout_alignTop="@+id/home_button_schedules"
+        android:layout_alignRight="@+id/home_button_schedules"
+        android:src="@drawable/ic_button_schedules" />
+
+    <ImageView
+        android:layout_width="@dimen/home_button_height"
+        android:layout_height="@dimen/home_button_height"
+        android:layout_alignTop="@+id/home_button_pharmacies"
+        android:layout_alignRight="@+id/home_button_pharmacies"
+        android:src="@drawable/ic_button_pharmacies" />
+
+    <ImageView
+        android:layout_width="@dimen/home_button_height"
+        android:layout_height="@dimen/home_button_height"
+        android:layout_alignTop="@+id/home_button_plantrip"
+        android:layout_alignRight="@+id/home_button_plantrip"
+        android:src="@drawable/ic_button_plantrip" />
+
+
+</RelativeLayout>

@@ -1,0 +1,23 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:spinnerDropDownItemStyle">@style/DropDownItemStyle</item>
+    </style>
+
+    <style name="home_button">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="DropDownItemStyle" parent="Widget.AppCompat.Base.DropDownItem.Spinner">
+        <item name="android:textAppearance">@style/DropDownItemTextStyle</item>
+    </style>
+
+    <style name="DropDownItemTextStyle">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18dp</item>
+    </style>
+
+</resources>

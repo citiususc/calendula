@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/android_green">
+
+    <RelativeLayout
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:background="#ccffffff"
+        android:id="@+id/daily_agenda_item_med_left">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="12"
+            android:id="@+id/bottom_current_hour_text"
+            android:textColor="@color/android_green"
+            android:textStyle="bold"
+            android:textSize="22dp"
+            android:layout_alignParentTop="true"
+
+            android:visibility="visible"
+            android:textAlignment="center"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="45"
+            android:id="@+id/bottom_current_minute_text"
+            android:textColor="@color/android_green_light"
+            android:textSize="22dp"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/bottom_current_hour_text"
+            android:visibility="visible"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="3dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:id="@+id/daily_agenda_item_med_right">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Ibuprofeno"
+            android:id="@+id/med_item_name"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:background="#44ffffff" />
+
+        </RelativeLayout>
+
+
+</LinearLayout>
