@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="80dp">
+
+    <RelativeLayout
+        android:layout_width="140dp"
+        android:layout_height="80dp"
+        android:id="@+id/imageView"
+        android:background="@color/android_blue">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="08:"
+                android:id="@+id/routines_list_item_hour"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="30dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00"
+                android:id="@+id/routines_list_item_minute"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/routines_list_item_hour"
+                android:textColor="@color/white"
+                android:textSize="30dp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:layout_marginLeft="140dp">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/abc_ic_go_search_api_holo_light"
+            android:background="@null"
+            android:layout_marginRight="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Breakfast"
+            android:id="@+id/routines_list_item_name"
+            android:textColor="#555555"
+            android:textSize="25dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="5dp"
+        android:id="@+id/imageView2"
+        android:src="@drawable/daily_view_list_item_tab_shadow_bottom"
+        android:layout_alignParentBottom="true"
+        android:scaleType="fitXY"
+        android:layout_alignParentTop="false" />
+
+
+</RelativeLayout>

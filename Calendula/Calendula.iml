@@ -72,6 +72,7 @@
     <orderEntry type="library" exported="" name="support-v4-18.0.0" level="project" />
     <orderEntry type="module" module-name="ExpandableListview" exported="" />
     <orderEntry type="library" exported="" name="ComAndroidSupportAppcompatV71800.aar" level="project" />
+    <orderEntry type="library" exported="" name="joda-time-2.3" level="project" />
   </component>
 </module>
 
