@@ -10,7 +10,7 @@ Core ideas
 - Fit user habits or routines
 - Simple, user focused, and visually attractive interface
 
-Reltaed goals
+Related goals
 ====================
 - Medicine stock management
 - Gamification concepts to improve prescription adherence
