@@ -13,7 +13,7 @@ Core ideas
 Reltaed goals
 ====================
 - Medicine stock management
-- Gamification concepts to to improve prescription adherence
+- Gamification concepts to improve prescription adherence
 - Trip assistance (how many pills I need for the weekend?)
 - Nearby pharmacies information
 
