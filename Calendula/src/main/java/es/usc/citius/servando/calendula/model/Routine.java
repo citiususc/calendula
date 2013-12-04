@@ -1,6 +1,6 @@
 package es.usc.citius.servando.calendula.model;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 
 /**
  * Represents a time during the day that the users choose to take their medicines
@@ -9,13 +9,13 @@ import org.joda.time.DateTime;
  */
 public class Routine {
 
-    private DateTime time;
+    private LocalTime time;
     private String name;
 
     public Routine() {
     }
 
-    public Routine(DateTime time, String name) {
+    public Routine(LocalTime time, String name) {
         this.time = time;
         this.name = name;
     }
@@ -23,11 +23,11 @@ public class Routine {
     /**
      * Routine time during day
      */
-    public DateTime getTime() {
+    public LocalTime getTime() {
         return time;
     }
 
-    public void setTime(DateTime time) {
+    public void setTime(LocalTime time) {
         this.time = time;
     }
 

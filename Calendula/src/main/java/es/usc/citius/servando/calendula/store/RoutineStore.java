@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.store;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,10 +16,10 @@ import es.usc.citius.servando.calendula.model.Routine;
 public class RoutineStore {
 
     private static final RoutineStore instance = new RoutineStore();
-    private HashMap<DateTime, Routine> routines;
+    private HashMap<LocalTime, Routine> routines;
 
     public RoutineStore() {
-        routines = new LinkedHashMap<DateTime, Routine>();
+        routines = new LinkedHashMap<LocalTime, Routine>();
     }
 
     public static RoutineStore getInstance() {
@@ -39,6 +40,10 @@ public class RoutineStore {
 
     public List<Routine> asList() {
         return new ArrayList<Routine>(routines.values());
+    }
+
+    public int size() {
+        return routines.size();
     }
 
 }

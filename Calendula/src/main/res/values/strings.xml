@@ -22,5 +22,10 @@
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
+    <string name="routine_name">Routine name</string>
+    <string name="routine_time">Time</string>
+    <string name="edit_routine_button_text">Save changes</string>
+    <string name="create_routine_button_text">Create routine</string>
+    <string name="add_routine_button">ADD ROUTINE </string>
 
 </resources>

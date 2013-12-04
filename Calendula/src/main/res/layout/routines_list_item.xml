@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="80dp">
+    android:layout_height="80dp"
+    android:paddingLeft="0dp"
+    android:paddingTop="0dp"
+    android:paddingRight="0dp"
+    android:paddingBottom="1dp"
+    android:background="@color/android_blue_dark">
 
     <RelativeLayout
         android:layout_width="140dp"
         android:layout_height="80dp"
-        android:id="@+id/imageView"
+        android:id="@+id/routines_list_item_time"
         android:background="@color/android_blue">
 
         <LinearLayout
@@ -42,7 +47,8 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="80dp"
-        android:layout_marginLeft="140dp">
+        android:layout_marginLeft="140dp"
+        android:background="@color/white">
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -61,7 +67,7 @@
             android:text="Breakfast"
             android:id="@+id/routines_list_item_name"
             android:textColor="#555555"
-            android:textSize="25dp"
+            android:textSize="23dp"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="20dp" />
@@ -70,12 +76,33 @@
 
     <ImageView
         android:layout_width="fill_parent"
-        android:layout_height="5dp"
+        android:layout_height="10dp"
         android:id="@+id/imageView2"
         android:src="@drawable/daily_view_list_item_tab_shadow_bottom"
         android:layout_alignParentBottom="true"
         android:scaleType="fitXY"
-        android:layout_alignParentTop="false" />
+        android:layout_alignParentTop="false"
+        android:alpha="0.1" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="10dp"
+        android:id="@+id/imageView2"
+        android:src="@drawable/daily_view_list_item_tab_shadow_top"
+        android:scaleType="fitXY"
+        android:layout_alignParentTop="true"
+        android:visibility="visible"
+        android:alpha="0.1" />
+
+    <ImageButton
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:id="@+id/routines_list_item_overlay"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/list_item_overlay_selector" />
 
 
 </RelativeLayout>

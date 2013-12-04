@@ -24,7 +24,10 @@
         </activity>
         <activity
             android:name="es.usc.citius.servando.calendula.activities.RoutinesActivity"
-            android:label="@string/title_activity_routines"></activity>
+            android:label="@string/title_activity_routines"
+            android:windowSoftInputMode="adjustPan">
+
+        </activity>
     </application>
 
 </manifest>

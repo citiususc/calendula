@@ -8,13 +8,16 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.Locale;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.fragments.RoutineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
+import es.usc.citius.servando.calendula.model.Routine;
 
-public class RoutinesActivity extends ActionBarActivity {
+public class RoutinesActivity extends ActionBarActivity implements RoutinesListFragment.OnRoutineSelectedListener, RoutineCreateOrEditFragment.OnRoutineEditListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -25,6 +28,8 @@ public class RoutinesActivity extends ActionBarActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
+    RoutinesListFragment listFragment;
+    RoutineCreateOrEditFragment editFragment;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -68,6 +73,37 @@ public class RoutinesActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onRoutineSelected(Routine r) {
+        Toast.makeText(this, r.getName(), Toast.LENGTH_SHORT).show();
+        // change to the routine edit view
+        // TODO
+        if (editFragment == null)
+            editFragment = new RoutineCreateOrEditFragment();
+        editFragment.setRoutine(r);
+        mViewPager.setCurrentItem(1);
+    }
+
+    @Override
+    public void onCreateRoutine() {
+        editFragment.clear();
+        mViewPager.setCurrentItem(1);
+    }
+
+    @Override
+    public void onRoutineEdited(Routine r) {
+        Toast.makeText(this, "Changes saved!", Toast.LENGTH_SHORT).show();
+        mViewPager.setCurrentItem(0);
+        listFragment.notifyDataChange();
+    }
+
+    @Override
+    public void onRoutineCreated(Routine r) {
+        Toast.makeText(this, "Routine created!", Toast.LENGTH_SHORT).show();
+        mViewPager.setCurrentItem(0);
+        listFragment.notifyDataChange();
+    }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -83,7 +119,15 @@ public class RoutinesActivity extends ActionBarActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return new RoutinesListFragment();
+            if (position == 0) {
+                if (listFragment == null)
+                    listFragment = new RoutinesListFragment();
+                return listFragment;
+            } else {
+                if (editFragment == null)
+                    editFragment = new RoutineCreateOrEditFragment();
+                return editFragment;
+            }
         }
 
         @Override
@@ -107,5 +151,12 @@ public class RoutinesActivity extends ActionBarActivity {
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        if (mViewPager.getCurrentItem() != 0)
+            mViewPager.setCurrentItem(0);
+        else {
+            super.onBackPressed();
+        }
+    }
 }

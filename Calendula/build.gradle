@@ -7,9 +7,19 @@ buildscript {
     }
 }
 apply plugin: 'android'
+apply plugin: 'idea'
+
+
 
 repositories {
     mavenCentral()
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
 }
 
 android {

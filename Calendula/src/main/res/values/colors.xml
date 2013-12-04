@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Android palette -->
-
     <color name="android_pink">#AA66CC</color>
     <color name="android_pink_dark">#9933CC</color>
     <color name="android_pink_light">#55AA66CC</color>
@@ -21,6 +20,7 @@
     <color name="android_blue">#33B5E5</color>
     <color name="android_blue_dark">#0099CC</color>
     <color name="android_blue_light">#5533B5E5</color>
+
     <!-- Other colors -->
     <color name="white">#FFFFFF</color>
     <color name="dark_grey_home">#272727</color>
@@ -28,5 +28,8 @@
     <color name="green_hour_expanded_left">#2299CC00</color>
     <color name="green_hour_expanded_right">#CC99CC00</color>
 
+    <!-- List items -->
+    <color name="list_item_selector_normal">#00111111</color>
+    <color name="list_item_selector_pressed">#3333B5E5</color>
 
 </resources>
