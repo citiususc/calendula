@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 
 /**
@@ -40,6 +41,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 launchActivity(RoutinesActivity.class);
                 break;
             case R.id.home_button_medicines:
+                launchActivity(MedicinesActivity.class);
                 break;
             case R.id.home_button_schedules:
                 break;

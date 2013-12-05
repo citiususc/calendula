@@ -22,6 +22,11 @@
     <string name="title_edit_routine_activity">Edit routine</string>
     <string name="title_create_routine_activity">Create routine</string>
 
+    <string name="title_activity_medicines">Medicines</string>
+    <string name="title_edit_medicine_activity">Edit medicine</string>
+    <string name="title_create_medicine_activity">Create medicine</string>
+
+
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
@@ -31,4 +36,9 @@
     <string name="create_routine_button_text">Create routine</string>
     <string name="add_routine_button">ADD ROUTINE </string>
 
+
+    <string name="medicine_name">Medicine name</string>
+    <string name="edit_medicine_button_text">Save changes</string>
+    <string name="create_medicine_button_text">Create medicine</string>
+    <string name="add_medicine_button">ADD MEDICINE</string>
 </resources>

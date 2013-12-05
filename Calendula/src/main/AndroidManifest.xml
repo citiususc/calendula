@@ -28,6 +28,11 @@
             android:windowSoftInputMode="adjustPan">
 
         </activity>
+
+        <activity
+            android:name="es.usc.citius.servando.calendula.activities.MedicinesActivity"
+            android:label="@string/title_activity_medicines"
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>
