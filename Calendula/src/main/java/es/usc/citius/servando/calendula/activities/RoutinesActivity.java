@@ -16,6 +16,7 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.fragments.RoutineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
 import es.usc.citius.servando.calendula.model.Routine;
+import es.usc.citius.servando.calendula.util.FragmentUtils;
 
 public class RoutinesActivity extends ActionBarActivity implements RoutinesListFragment.OnRoutineSelectedListener, RoutineCreateOrEditFragment.OnRoutineEditListener {
 
@@ -28,13 +29,16 @@ public class RoutinesActivity extends ActionBarActivity implements RoutinesListF
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
-    RoutinesListFragment listFragment;
-    RoutineCreateOrEditFragment editFragment;
+//    RoutinesListFragment listFragment;
+//    RoutineCreateOrEditFragment editFragment;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+
+    String listFragmentName;
+    String editFragmentName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,8 @@ public class RoutinesActivity extends ActionBarActivity implements RoutinesListF
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        listFragmentName = FragmentUtils.makeViewPagerFragmentName(R.id.pager, 0);
+        editFragmentName = FragmentUtils.makeViewPagerFragmentName(R.id.pager, 1);
 
     }
 
@@ -75,33 +81,33 @@ public class RoutinesActivity extends ActionBarActivity implements RoutinesListF
 
     @Override
     public void onRoutineSelected(Routine r) {
-        Toast.makeText(this, r.getName(), Toast.LENGTH_SHORT).show();
-        // change to the routine edit view
-        // TODO
-        if (editFragment == null)
-            editFragment = new RoutineCreateOrEditFragment();
-        editFragment.setRoutine(r);
         mViewPager.setCurrentItem(1);
+        ((RoutineCreateOrEditFragment) getViewPagerFragment(1)).setRoutine(r);
+        setTitle(R.string.title_edit_routine_activity);
+
     }
 
     @Override
     public void onCreateRoutine() {
-        editFragment.clear();
         mViewPager.setCurrentItem(1);
+        ((RoutineCreateOrEditFragment) getViewPagerFragment(1)).clear();
+        setTitle(R.string.title_create_routine_activity);
     }
 
     @Override
     public void onRoutineEdited(Routine r) {
         Toast.makeText(this, "Changes saved!", Toast.LENGTH_SHORT).show();
         mViewPager.setCurrentItem(0);
-        listFragment.notifyDataChange();
+        ((RoutinesListFragment) getViewPagerFragment(0)).notifyDataChange();
+        setTitle(R.string.title_activity_routines);
     }
 
     @Override
     public void onRoutineCreated(Routine r) {
         Toast.makeText(this, "Routine created!", Toast.LENGTH_SHORT).show();
         mViewPager.setCurrentItem(0);
-        listFragment.notifyDataChange();
+        ((RoutinesListFragment) getViewPagerFragment(0)).notifyDataChange();
+        setTitle(R.string.title_activity_routines);
     }
 
 
@@ -120,13 +126,9 @@ public class RoutinesActivity extends ActionBarActivity implements RoutinesListF
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 0) {
-                if (listFragment == null)
-                    listFragment = new RoutinesListFragment();
-                return listFragment;
+                return new RoutinesListFragment();
             } else {
-                if (editFragment == null)
-                    editFragment = new RoutineCreateOrEditFragment();
-                return editFragment;
+                return new RoutineCreateOrEditFragment();
             }
         }
 
@@ -153,10 +155,17 @@ public class RoutinesActivity extends ActionBarActivity implements RoutinesListF
 
     @Override
     public void onBackPressed() {
-        if (mViewPager.getCurrentItem() != 0)
+        if (mViewPager.getCurrentItem() != 0) {
             mViewPager.setCurrentItem(0);
-        else {
+            setTitle(R.string.title_activity_routines);
+        } else {
             super.onBackPressed();
         }
     }
+
+
+    Fragment getViewPagerFragment(int position) {
+        return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
+    }
+
 }

@@ -30,6 +30,15 @@ public class RoutineStore {
         routines.put(r.getTime(), r);
     }
 
+    public Routine getRoutine(LocalTime time) {
+        return routines.get(time);
+    }
+
+    public Routine getRoutine(String timeAsString) {
+        String[] values = timeAsString.split(":");
+        return routines.get(new LocalTime(Integer.valueOf(values[0]), Integer.valueOf(values[1])));
+    }
+
     public void removeRoutine(Routine r) {
         routines.remove(r.getTime());
     }

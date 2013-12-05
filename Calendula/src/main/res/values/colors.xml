@@ -31,5 +31,7 @@
     <!-- List items -->
     <color name="list_item_selector_normal">#00111111</color>
     <color name="list_item_selector_pressed">#3333B5E5</color>
+    <color name="home_background_color">#ececec</color>
+    <color name="actionbar_background_color">@color/dark_grey_home</color>
 
 </resources>

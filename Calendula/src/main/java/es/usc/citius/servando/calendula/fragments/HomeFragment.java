@@ -1,7 +1,6 @@
 package es.usc.citius.servando.calendula.fragments;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -38,6 +37,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         switch (viewId) {
             case R.id.home_button_routines:
+                launchActivity(RoutinesActivity.class);
                 break;
             case R.id.home_button_medicines:
                 break;
@@ -48,17 +48,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.home_button_plantrip:
                 break;
         }
-
-        onClickHomeMenuItem(null);
     }
 
     /**
      * Launch the activity related to the user selection on the home menu
-     *
-     * @param activityToLaunch
+     * @param activityCls
      */
-    private void onClickHomeMenuItem(Activity activityToLaunch) {
-        Intent intent = new Intent(getActivity(), RoutinesActivity.class);
+    private void launchActivity(Class activityCls) {
+        Intent intent = new Intent(getActivity(), activityCls);
         startActivity(intent);
     }
 }

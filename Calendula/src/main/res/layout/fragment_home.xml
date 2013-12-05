@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/dark_grey_home">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 
     <ImageView
@@ -14,7 +14,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:src="@drawable/home_right_edge_shadow"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"
+        android:alpha="0.2" />
 
 
     <Button
@@ -48,20 +49,20 @@
         android:paddingRight="@dimen/home_button_height" />
 
 
-        <Button
+    <Button
         android:layout_width="fill_parent"
         android:layout_height="@dimen/home_button_height"
         android:text="@string/home_menu_schedules"
         android:id="@+id/home_button_schedules"
         android:textSize="@dimen/home_button_text_size"
-            style="@style/home_button"
+        style="@style/home_button"
         android:background="@drawable/schedules_button_selector"
         android:layout_above="@id/home_button_pharmacies"
         android:layout_marginBottom="10dip"
         android:layout_marginRight="@dimen/home_button_margin_right"
-            android:textAlignment="textStart"
-            android:gravity="center"
-            android:paddingRight="@dimen/home_button_height" />
+        android:textAlignment="textStart"
+        android:gravity="center"
+        android:paddingRight="@dimen/home_button_height" />
 
 
     <Button

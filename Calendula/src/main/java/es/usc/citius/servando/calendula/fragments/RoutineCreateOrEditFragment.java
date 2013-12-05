@@ -36,10 +36,8 @@ public class RoutineCreateOrEditFragment extends Fragment {
         mTimePicker = (TimePicker) rootView.findViewById(R.id.routine_time_picker);
         mNameTextView = (TextView) rootView.findViewById(R.id.routine_edit_name);
         mConfirmButton = (Button) rootView.findViewById(R.id.routine_button_ok);
-
         mTimePicker.setIs24HourView(true);
-        mConfirmButton.setText(getString(R.string.create_routine_button_text));
-
+        mConfirmButton.setText(getString(mRoutine == null ? R.string.create_routine_button_text : R.string.edit_routine_button_text));
         mConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,11 +45,19 @@ public class RoutineCreateOrEditFragment extends Fragment {
             }
         });
 
-        Log.d(getTag(), "Root view created. Routine is null?  " + (mRoutine == null));
-
+        if (savedInstanceState != null && savedInstanceState.containsKey("routine")) {
+            mRoutine = RoutineStore.getInstance().getRoutine(savedInstanceState.getString("routine"));
+            mConfirmButton.setText(getString(R.string.edit_routine_button_text));
+        }
         return rootView;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mRoutine != null)
+            outState.putString("routine", mRoutine.getTimeAsString());
+    }
 
     public void setRoutine(Routine r) {
         Log.d(getTag(), "Routine set: " + r.getName());
@@ -69,7 +75,6 @@ public class RoutineCreateOrEditFragment extends Fragment {
         mTimePicker.setCurrentHour(12);
         mTimePicker.setCurrentMinute(00);
         mConfirmButton.setText(getString(R.string.create_routine_button_text));
-
     }
 
 

@@ -44,7 +44,7 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         mActionBar = getSupportActionBar();
-        mActionBar.setDisplayHomeAsUpEnabled(true);
+        //mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setDisplayShowTitleEnabled(false);
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 

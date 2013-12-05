@@ -41,4 +41,8 @@ public class Routine {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getTimeAsString() {
+        return time != null ? (getTime().getHourOfDay() + ":" + getTime().getMinuteOfHour()) : "";
+    }
 }

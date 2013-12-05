@@ -2,7 +2,9 @@ package es.usc.citius.servando.calendula.fragments;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -62,8 +63,6 @@ public class RoutinesListFragment extends Fragment {
             adapter.add(r);
         }
         adapter.notifyDataSetChanged();
-        adapter.notifyDataSetInvalidated();
-
     }
 
     private View createRoutineListItem(LayoutInflater inflater, final Routine routine) {
@@ -80,13 +79,15 @@ public class RoutinesListFragment extends Fragment {
         ((TextView) item.findViewById(R.id.routines_list_item_minute)).setText(strMinute);
         ((TextView) item.findViewById(R.id.routines_list_item_name)).setText(routine.getName());
         View overlay = item.findViewById(R.id.routines_list_item_overlay);
+        overlay.setTag(routine);
 
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRoutineSelectedCallback != null) {
-                    Log.d(getTag(), "Click at " + routine.getName());
-                    mRoutineSelectedCallback.onRoutineSelected(routine);
+                Routine r = (Routine) view.getTag();
+                if (mRoutineSelectedCallback != null && r != null) {
+                    Log.d(getTag(), "Click at " + r.getName());
+                    mRoutineSelectedCallback.onRoutineSelected(r);
                 } else {
                     Log.d(getTag(), "No callback set");
                 }
@@ -98,11 +99,32 @@ public class RoutinesListFragment extends Fragment {
         overlay.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Toast.makeText(getActivity(), "Delete is not supported yet :(", Toast.LENGTH_SHORT).show();
+                if (view.getTag() != null)
+                    showDeleteConfirmationDialog((Routine) view.getTag());
                 return true;
             }
         });
         return item;
+    }
+
+
+    void showDeleteConfirmationDialog(final Routine r) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Remove " + r.getName() + " routine?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        RoutineStore.getInstance().removeRoutine(r);
+                        notifyDataChange();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private class RoutinesListAdapter extends ArrayAdapter<Routine> {

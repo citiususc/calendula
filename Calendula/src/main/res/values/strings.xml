@@ -19,6 +19,9 @@
     </string-array>
 
     <string name="title_activity_routines">Routines</string>
+    <string name="title_edit_routine_activity">Edit routine</string>
+    <string name="title_create_routine_activity">Create routine</string>
+
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
