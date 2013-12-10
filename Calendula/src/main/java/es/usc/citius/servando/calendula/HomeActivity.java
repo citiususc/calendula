@@ -5,14 +5,20 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 
+import com.espian.showcaseview.OnShowcaseEventListener;
+import com.espian.showcaseview.ShowcaseView;
+import com.espian.showcaseview.targets.PointTarget;
+
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
 import es.usc.citius.servando.calendula.store.MedicineStore;
 import es.usc.citius.servando.calendula.store.RoutineStore;
+import es.usc.citius.servando.calendula.util.Screen;
 
 public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener, ActionBar.OnNavigationListener {
 
@@ -31,6 +37,7 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+    ShowcaseView sv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +46,7 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new HomePageAdapter(getSupportFragmentManager(), this,this);
+        mSectionsPagerAdapter = new HomePageAdapter(getSupportFragmentManager(), this, this);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -53,7 +60,7 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
         SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.home_action_list,
                 android.R.layout.simple_spinner_dropdown_item);
 
-        mActionBar.setListNavigationCallbacks(mSpinnerAdapter,this);
+        mActionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
         mViewPager.setOnPageChangeListener(this);
 
         if (MedicineStore.getInstance().size() == 0) {
@@ -62,13 +69,48 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
         if (RoutineStore.getInstance().size() == 0) {
             DummyDataGenerator.fillRoutineStore();
         }
-
     }
 
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (sv == null) {
+            ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
+            co.hideOnClickOutside = true;
+            co.centerText = true;
+            co.shotType = ShowcaseView.TYPE_ONE_SHOT; // display only first time
+            // ViewTarget target = new ViewTarget(R.id.pager, this);
+            //sv = ShowcaseView.insertShowcaseView(target, this, "Daily agenda", "Swipe left to se the full agenda", co);
+
+            Log.d("TAG", mViewPager.getLeft() + ", " + (Screen.getDpSize(this).y / 2));
+
+            PointTarget pt = new PointTarget((int) Screen.getDpSize(this).x * 2, (int) Screen.getDpSize(this).y);
+            sv = ShowcaseView.insertShowcaseView(pt, this, "Daily agenda", "Swipe left to se the full agenda", co);
+            sv.setOnShowcaseEventListener(new OnShowcaseEventListener() {
+                @Override
+                public void onShowcaseViewHide(ShowcaseView showcaseView) {
+                    Log.d("SV", "Hide");
+                }
+
+                @Override
+                public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+                    Log.d("SV", "DIVHide");
+                }
+
+                @Override
+                public void onShowcaseViewShow(ShowcaseView showcaseView) {
+                    Log.d("SV", "Show");
+                }
+            });
+            sv.show();
+        }
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
@@ -89,9 +131,9 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
 
     @Override
     public void onBackPressed() {
-        if(mViewPager.getCurrentItem()!=0)
+        if (mViewPager.getCurrentItem() != 0)
             mViewPager.setCurrentItem(0);
-        else{
+        else {
             super.onBackPressed();
         }
     }

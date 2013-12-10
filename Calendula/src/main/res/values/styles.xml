@@ -5,6 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="android:spinnerDropDownItemStyle">@style/DropDownItemStyle</item>
         <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="showcaseViewStyle">@style/CustomShowcaseTheme</item>
 
         <!-- Support library compatibility -->
         <item name="actionBarStyle">@style/MyActionBar</item>
@@ -60,6 +61,22 @@
     <style name="DropDownItemTextStyle">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">18dp</item>
+    </style>
+
+
+    <style name="CustomShowcaseTheme" parent="ShowcaseView.Light">
+        <item name="sv_titleTextColor">@color/white</item>
+        <item name="sv_detailTextColor">@color/white</item>
+        <item name="sv_backgroundColor">#cc111111</item>
+        <item name="sv_buttonBackgroundColor">#ffffff</item>
+        <item name="sv_buttonText">Close</item>
+        <item name="sv_detailTextAppearance">@style/CustomShowcaseDetail</item>
+    </style>
+
+    <style name="CustomShowcaseDetail" parent="TextAppearance.ShowcaseView.Detail.Light">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:shadowColor">#FF0000</item>
+        <item name="android:shadowRadius">0</item>
     </style>
 
 </resources>

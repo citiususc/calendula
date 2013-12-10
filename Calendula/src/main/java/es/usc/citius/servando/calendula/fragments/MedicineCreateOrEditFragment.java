@@ -19,6 +19,10 @@ import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
+import com.espian.showcaseview.OnShowcaseEventListener;
+import com.espian.showcaseview.ShowcaseView;
+import com.espian.showcaseview.targets.PointTarget;
+
 import java.util.ArrayList;
 
 import es.usc.citius.servando.calendula.R;
@@ -26,6 +30,7 @@ import es.usc.citius.servando.calendula.activities.SchedulesActivity;
 import es.usc.citius.servando.calendula.model.Medicine;
 import es.usc.citius.servando.calendula.model.Presentation;
 import es.usc.citius.servando.calendula.store.MedicineStore;
+import es.usc.citius.servando.calendula.util.Screen;
 
 /**
  * Created by joseangel.pineiro on 12/4/13.
@@ -40,6 +45,8 @@ public class MedicineCreateOrEditFragment extends Fragment {
     Button mConfirmButton;
     Presentation selectedPresentation;
     HorizontalScrollView presentationScroll;
+
+    ShowcaseView sv;
 
 
     @Override
@@ -85,6 +92,42 @@ public class MedicineCreateOrEditFragment extends Fragment {
         setupMedPresentationChooser(rootView);
 
         return rootView;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (sv == null) {
+            ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
+            co.hideOnClickOutside = true;
+            co.centerText = true;
+            co.shotType = ShowcaseView.TYPE_ONE_SHOT; // display only first time
+            // ViewTarget target = new ViewTarget(R.id.pager, this);
+            //sv = ShowcaseView.insertShowcaseView(target, this, "Daily agenda", "Swipe left to se the full agenda", co);
+
+
+            PointTarget pt = new PointTarget((int) Screen.getDpSize(getActivity()).x, (int) (Screen.getDpSize(getActivity()).y * 1.2));
+            sv = ShowcaseView.insertShowcaseView(pt, getActivity(), "Medicine presentation", "Scroll to see all available types", co);
+            sv.setOnShowcaseEventListener(new OnShowcaseEventListener() {
+                @Override
+                public void onShowcaseViewHide(ShowcaseView showcaseView) {
+                    Log.d("SV", "Hide");
+                }
+
+                @Override
+                public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+                    Log.d("SV", "DIVHide");
+                }
+
+                @Override
+                public void onShowcaseViewShow(ShowcaseView showcaseView) {
+                    Log.d("SV", "Show");
+                }
+            });
+            sv.show();
+        }
     }
 
     public boolean validate() {
