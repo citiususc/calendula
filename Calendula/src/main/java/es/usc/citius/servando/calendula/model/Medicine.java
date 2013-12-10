@@ -17,6 +17,11 @@ public class Medicine {
         this.name = name;
     }
 
+    public Medicine(String name, Presentation presentation) {
+        this.name = name;
+        this.presentation = presentation;
+    }
+
     public String getName() {
         return name;
     }

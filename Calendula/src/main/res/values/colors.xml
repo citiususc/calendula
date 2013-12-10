@@ -35,4 +35,6 @@
     <!--#ececec-->
     <color name="actionbar_background_color">#161616</color>
 
+    <color name="med_presentation_circle_bg">#3333B5E5</color>
+
 </resources>

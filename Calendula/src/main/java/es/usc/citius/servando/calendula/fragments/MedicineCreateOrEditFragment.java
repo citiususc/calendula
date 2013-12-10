@@ -132,8 +132,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
         for (View v : getViewsByTag((ViewGroup) rootView, "med_type")) {
             v.setBackgroundColor(getResources().getColor(R.color.white));
         }
-
-        rootView.findViewById(viewId).setBackgroundColor(getResources().getColor(R.color.list_item_selector_pressed));
+        rootView.findViewById(viewId).setBackgroundResource(R.drawable.presentation_circle_background);
 
         switch (viewId) {
             case R.id.med_presentation_1:
@@ -217,7 +216,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
         if (p != null) {
             int viewId = getPresentationViewId(p);
             View view = getView().findViewById(viewId);
-            view.setBackgroundColor(getResources().getColor(R.color.list_item_selector_pressed));
+            view.setBackgroundResource(R.drawable.presentation_circle_background);
             scrollToMedPresentation(view);
         }
     }
@@ -276,14 +275,16 @@ public class MedicineCreateOrEditFragment extends Fragment {
             // look for it in the med store
             if (mMedicine == null) {
                 mMedicine = MedicineStore.getInstance().getByName(name);
-                mMedicine.setPresentation(selectedPresentation != null ? selectedPresentation : Presentation.UNKNOWN);
                 Log.d(getTag(), "Looking for " + name + " in med store returned " + (mMedicine == null ? "null" : "a valid med"));
             }
             // if it wasn't on the store, create a new med
             if (mMedicine == null) {
                 Log.d(getTag(), " Creating medicine " + name);
                 mMedicine = new Medicine(name);
-                mMedicine.setPresentation(selectedPresentation != null ? selectedPresentation : Presentation.UNKNOWN);
+            }
+            // in both cases, update the med presentation if any selected
+            if (selectedPresentation != null) {
+                mMedicine.setPresentation(selectedPresentation);
             }
         }
         // TODO: Set other properties

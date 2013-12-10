@@ -3,6 +3,7 @@ package es.usc.citius.servando.calendula;
 import org.joda.time.DateTime;
 
 import es.usc.citius.servando.calendula.model.Medicine;
+import es.usc.citius.servando.calendula.model.Presentation;
 import es.usc.citius.servando.calendula.model.Routine;
 import es.usc.citius.servando.calendula.store.MedicineStore;
 import es.usc.citius.servando.calendula.store.RoutineStore;
@@ -22,10 +23,10 @@ public class DummyDataGenerator {
 
     public static void fillMedicineStore() {
 
-        MedicineStore.getInstance().addMedicine(new Medicine("Atrovent"));
-        MedicineStore.getInstance().addMedicine(new Medicine("Ramipril"));
-        MedicineStore.getInstance().addMedicine(new Medicine("Digoxina"));
-        MedicineStore.getInstance().addMedicine(new Medicine("Ibuprofeno"));
+        MedicineStore.getInstance().addMedicine(new Medicine("Atrovent", Presentation.PILLS));
+        MedicineStore.getInstance().addMedicine(new Medicine("Ramipril", Presentation.EFFERVESCENT));
+        MedicineStore.getInstance().addMedicine(new Medicine("Digoxina", Presentation.DROPS));
+        MedicineStore.getInstance().addMedicine(new Medicine("Ibuprofeno", Presentation.CAPSULES));
 
     }
 }
