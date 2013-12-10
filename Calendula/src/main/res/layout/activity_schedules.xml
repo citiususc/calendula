@@ -1,0 +1,136 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="7dp"
+        android:orientation="horizontal"
+        android:gravity="center|center_vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:id="@+id/add_sched_page_indicator_up_1"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:src="@color/android_blue_light" />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:id="@+id/add_sched_page_indicator_up_2"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:src="@color/android_blue_light" />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:id="@+id/add_sched_page_indicator_up_3"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:src="@color/android_blue_light" />
+    </LinearLayout>
+
+    <es.usc.citius.servando.calendula.util.view.NonSwipeableViewPager xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".SchedulesActivity"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="80dp" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="7dp"
+        android:orientation="horizontal"
+        android:gravity="center|center_vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/linearLayout">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:id="@+id/add_sched_page_indicator_down_1"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:src="@color/android_blue_light" />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:id="@+id/add_sched_page_indicator_down_2"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:src="@color/android_blue_light" />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:id="@+id/add_sched_page_indicator_down_3"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:src="@color/android_blue_light" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="2dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/spacer_center"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/prev"
+        android:id="@+id/schedules_prev_button"
+        android:layout_weight=".5"
+        android:layout_marginLeft="20dp"
+        style="@style/prev_button"
+        android:layout_marginRight="1dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_toLeftOf="@id/spacer_center"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="25dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm"
+        android:id="@+id/schedules_next_button"
+        android:layout_weight=".5"
+        android:layout_toRightOf="@id/spacer_center"
+        android:layout_marginRight="20dp"
+        style="@style/next_button"
+        android:layout_marginLeft="1dp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="25dp" />
+
+
+</RelativeLayout>
+
+

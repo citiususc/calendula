@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
+import es.usc.citius.servando.calendula.store.MedicineStore;
+import es.usc.citius.servando.calendula.store.RoutineStore;
 
 public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener, ActionBar.OnNavigationListener {
 
@@ -53,6 +55,13 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
 
         mActionBar.setListNavigationCallbacks(mSpinnerAdapter,this);
         mViewPager.setOnPageChangeListener(this);
+
+        if (MedicineStore.getInstance().size() == 0) {
+            DummyDataGenerator.fillMedicineStore();
+        }
+        if (RoutineStore.getInstance().size() == 0) {
+            DummyDataGenerator.fillRoutineStore();
+        }
 
     }
 

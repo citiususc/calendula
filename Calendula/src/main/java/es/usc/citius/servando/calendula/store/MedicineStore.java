@@ -46,4 +46,11 @@ public class MedicineStore {
         return medicines.size();
     }
 
+    public String[] getMedicineNames() {
+        String names[] = new String[medicines.size()];
+        for (int i = 0; i < medicines.size(); i++) {
+            names[i] = medicines.get(i).getName();
+        }
+        return names;
+    }
 }

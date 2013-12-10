@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
+import es.usc.citius.servando.calendula.activities.SchedulesActivity;
 
 /**
  * Created by joseangel.pineiro on 11/15/13.
@@ -44,6 +45,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 launchActivity(MedicinesActivity.class);
                 break;
             case R.id.home_button_schedules:
+                launchActivity(SchedulesActivity.class);
                 break;
             case R.id.home_button_pharmacies:
                 break;
@@ -54,6 +56,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     /**
      * Launch the activity related to the user selection on the home menu
+     *
      * @param activityCls
      */
     private void launchActivity(Class activityCls) {

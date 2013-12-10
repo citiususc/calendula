@@ -2,7 +2,8 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <TextView
         android:layout_width="wrap_content"
@@ -18,7 +19,7 @@
         android:textSize="25dp"
         android:textColor="@color/android_blue_dark" />
 
-    <EditText
+    <AutoCompleteTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/medicine_edit_name"
@@ -27,7 +28,11 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:textColor="@color/dark_grey_home"
-        android:textSize="22dp" />
+        android:textSize="22dp"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:lines="1"
+        android:maxLines="1" />
 
     <Button
         android:layout_width="match_parent"
@@ -38,6 +43,28 @@
         android:layout_alignParentLeft="true"
         style="@style/ok_button"
         android:background="@drawable/ok_button_selector" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/medicine_presentation"
+        android:textStyle="bold"
+        android:textSize="25dp"
+        android:textColor="@color/android_blue_dark"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/medicine_edit_name"
+        android:layout_alignLeft="@+id/medicine_edit_name"
+        android:layout_marginTop="20dp" />
+
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="120dp"
+        layout="@layout/fragment_med_presentation"
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
 
 
 </RelativeLayout>

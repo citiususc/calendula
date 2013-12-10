@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import es.usc.citius.servando.calendula.DummyDataGenerator;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.model.Routine;
 import es.usc.citius.servando.calendula.store.RoutineStore;
@@ -38,9 +37,7 @@ public class RoutinesListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_routines_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.routines_list);
 
-        if (RoutineStore.getInstance().size() == 0) {
-            DummyDataGenerator.fillRoutineStore();
-        }
+
         mRoutines = RoutineStore.getInstance().asList();
         adapter = new RoutinesListAdapter(getActivity(), R.layout.daily_view_hour, mRoutines);
         listview.setAdapter(adapter);

@@ -25,14 +25,14 @@
         <activity
             android:name="es.usc.citius.servando.calendula.activities.RoutinesActivity"
             android:label="@string/title_activity_routines"
-            android:windowSoftInputMode="adjustPan">
-
-        </activity>
-
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name="es.usc.citius.servando.calendula.activities.MedicinesActivity"
             android:label="@string/title_activity_medicines"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="es.usc.citius.servando.calendula.activities.SchedulesActivity"
+            android:label="@string/title_activity_schedules"></activity>
     </application>
 
 </manifest>

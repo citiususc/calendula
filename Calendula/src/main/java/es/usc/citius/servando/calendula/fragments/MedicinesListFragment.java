@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import es.usc.citius.servando.calendula.DummyDataGenerator;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.model.Medicine;
 import es.usc.citius.servando.calendula.store.MedicineStore;
@@ -38,10 +37,6 @@ public class MedicinesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_medicines_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.medicines_list);
-
-        if (MedicineStore.getInstance().size() == 0) {
-            DummyDataGenerator.fillMedicineStore();
-        }
         mMedicines = MedicineStore.getInstance().getAll();
         adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
         listview.setAdapter(adapter);
