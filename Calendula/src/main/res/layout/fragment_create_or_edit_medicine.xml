@@ -13,7 +13,7 @@
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:textStyle="bold"
         android:textSize="25dp"
@@ -64,7 +64,8 @@
         android:layout_below="@+id/textView2"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp" />
+        android:layout_marginRight="20dp"
+        android:id="@+id/med_presentation" />
 
 
 </RelativeLayout>

@@ -4,55 +4,108 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.TreeSet;
 
 import es.usc.citius.servando.calendula.model.Routine;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
  */
-public class RoutineStore {
+public class RoutineStore implements IRoutineStore {
 
-    private static final RoutineStore instance = new RoutineStore();
-    private HashMap<LocalTime, Routine> routines;
+    TreeSet<Routine> routines;
 
-    public RoutineStore() {
-        routines = new LinkedHashMap<LocalTime, Routine>();
-    }
+    private static final IRoutineStore instance = new RoutineStore();
 
-    public static RoutineStore getInstance() {
+    public static IRoutineStore getInstance() {
         return instance;
     }
 
+    public RoutineStore() {
+        routines = new TreeSet<Routine>();
+    }
+
+    @Override
     public void addRoutine(Routine r) {
-        routines.put(r.getTime(), r);
+        routines.add(r);
     }
 
+    @Override
     public Routine getRoutine(LocalTime time) {
-        return routines.get(time);
+        for (Routine r : routines) {
+            if (r.getTime().compareTo(time) == 0) {
+                return r;
+            }
+        }
+        return null;
     }
 
+    @Override
+    public Routine getRoutineByName(String name) {
+
+        if (name == null) {
+            return null;
+        }
+
+        for (Routine r : routines) {
+            if (name.equalsIgnoreCase(r.getName())) {
+                return r;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public Routine getRoutine(String timeAsString) {
-        String[] values = timeAsString.split(":");
-        return routines.get(new LocalTime(Integer.valueOf(values[0]), Integer.valueOf(values[1])));
+        if (timeAsString == null) {
+            return null;
+        }
+
+        for (Routine r : routines) {
+            if (timeAsString.equalsIgnoreCase(r.getTimeAsString())) {
+                return r;
+            }
+        }
+        return null;
     }
 
+    @Override
     public void removeRoutine(Routine r) {
-        routines.remove(r.getTime());
+        routines.remove(r);
     }
 
+    @Override
     public boolean existRoutine(DateTime time) {
-        return routines.containsKey(time);
+        for (Routine r : routines) {
+            if (r.getTime().compareTo(time.toLocalDate()) == 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
+    @Override
     public List<Routine> asList() {
-        return new ArrayList<Routine>(routines.values());
+        return new ArrayList<Routine>(routines);
     }
 
+    @Override
+    public String[] routineNames() {
+
+        int i = 0;
+        String names[] = new String[routines.size()];
+
+        for (Routine r : routines) {
+            names[i++] = r.getName();
+        }
+        return names;
+    }
+
+    @Override
     public int size() {
         return routines.size();
     }
+
 
 }

@@ -31,6 +31,8 @@
     <string name="routine_time">Time</string>
     <string name="edit_routine_button_text">Save changes</string>
     <string name="create_routine_button_text">Create routine</string>
+    <string name="create_new_routine">Create new routine...</string>
+
     <string name="add_routine_button">ADD ROUTINE </string>
     <string name="medicine_name">Med name</string>
     <string name="medicine_presentation">Presentation</string>
@@ -54,6 +56,15 @@
     <string name="syrup">Syrup</string>
     <string name="unknown">Unknown</string>
     <string name="effervescent">Effervescent</string>
+    <string name="schedule">Schedule</string>
+
+    <!-- Med schedules -->
+    <string-array name="schedules_array">
+        <item>Once a day</item>
+        <item>Twice a day</item>
+        <item>Three times a day</item>
+        <item>Four times a day</item>
+    </string-array>
 
 
 </resources>

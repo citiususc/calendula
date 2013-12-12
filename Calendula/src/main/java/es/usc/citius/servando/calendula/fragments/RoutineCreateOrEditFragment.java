@@ -3,7 +3,9 @@ package es.usc.citius.servando.calendula.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +23,7 @@ import es.usc.citius.servando.calendula.store.RoutineStore;
 /**
  * Created by joseangel.pineiro on 12/4/13.
  */
-public class RoutineCreateOrEditFragment extends Fragment {
+public class RoutineCreateOrEditFragment extends DialogFragment {
 
     OnRoutineEditListener mRoutineEditCallback;
     Routine mRoutine;
@@ -49,6 +51,11 @@ public class RoutineCreateOrEditFragment extends Fragment {
             mRoutine = RoutineStore.getInstance().getRoutine(savedInstanceState.getString("routine"));
             mConfirmButton.setText(getString(R.string.edit_routine_button_text));
         }
+
+        if (getDialog() != null) {
+            getDialog().setTitle(R.string.title_create_routine_activity);
+        }
+
         return rootView;
     }
 
@@ -84,21 +91,43 @@ public class RoutineCreateOrEditFragment extends Fragment {
         int hour = mTimePicker.getCurrentHour();
         int minute = mTimePicker.getCurrentMinute();
 
-        // if editing
-        if (mRoutine != null) {
-            mRoutine.setName(name);
-            mRoutine.setTime(new LocalTime(hour, minute));
-            if (mRoutineEditCallback != null) {
-                mRoutineEditCallback.onRoutineEdited(mRoutine);
+        if (name != null && name.length() > 0) {
+
+
+            // if editing
+            if (mRoutine != null) {
+                mRoutine.setName(name);
+                mRoutine.setTime(new LocalTime(hour, minute));
+                if (mRoutineEditCallback != null) {
+                    mRoutineEditCallback.onRoutineEdited(mRoutine);
+                }
             }
-        }
-        // if creating
-        else {
-            Routine r = new Routine(new LocalTime(hour, minute), name);
-            RoutineStore.getInstance().addRoutine(r);
-            if (mRoutineEditCallback != null) {
-                mRoutineEditCallback.onRoutineCreated(mRoutine);
+            // if creating
+            else {
+                mRoutine = new Routine(new LocalTime(hour, minute), name);
+                Log.d(getTag(), "Routine created");
+                RoutineStore.getInstance().addRoutine(mRoutine);
+                if (mRoutineEditCallback != null) {
+                    mRoutineEditCallback.onRoutineCreated(mRoutine);
+                }
             }
+        } else {
+            mNameTextView.setError("Please, type a name");
+            mNameTextView.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                    mNameTextView.setError(null);
+                    mNameTextView.removeTextChangedListener(this);
+                }
+
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                }
+            });
         }
     }
 
@@ -110,8 +139,14 @@ public class RoutineCreateOrEditFragment extends Fragment {
         // If the container activity has implemented
         // the callback interface, set it as listener
         if (activity instanceof OnRoutineEditListener) {
+            Log.d(getTag(), "Set onRoutineEditListener onAttach");
             mRoutineEditCallback = (OnRoutineEditListener) activity;
         }
+    }
+
+    // optionally set the listener manually
+    public void setOnRoutineEditListener(OnRoutineEditListener l) {
+        mRoutineEditCallback = l;
     }
 
     // Container Activity must implement this interface

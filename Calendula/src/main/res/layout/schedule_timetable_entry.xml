@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="08:"
+        android:id="@+id/hour_text"
+        android:paddingTop="10dp"
+        android:textColor="@color/android_blue"
+        android:textStyle="bold"
+        android:textSize="25dp"
+        android:gravity="bottom|right"
+        android:layout_weight="0.12"
+        android:layout_gravity="right" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="00"
+        android:id="@+id/minute_text"
+        android:paddingTop="10dp"
+        android:textColor="@color/android_blue"
+        android:textSize="25dp"
+        android:gravity="bottom|left"
+        android:layout_weight="0.12" />
+
+    <Spinner
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:tag="routine_spinner"
+        android:id="@+id/entry_routine_spinner"
+        android:layout_weight="0.56"
+        android:gravity="center_vertical"
+        android:spinnerMode="dialog" />
+
+    <Spinner
+        android:layout_width="0dp"
+        android:tag="dose_spinner"
+        android:layout_height="fill_parent"
+        android:id="@+id/entry_dose_spinner"
+        android:layout_weight="0.20"
+        android:gravity="center_vertical"
+        android:spinnerMode="dialog" />
+
+</LinearLayout>

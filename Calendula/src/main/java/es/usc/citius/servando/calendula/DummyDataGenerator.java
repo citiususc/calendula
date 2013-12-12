@@ -1,6 +1,6 @@
 package es.usc.citius.servando.calendula;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 
 import es.usc.citius.servando.calendula.model.Medicine;
 import es.usc.citius.servando.calendula.model.Presentation;
@@ -15,9 +15,9 @@ public class DummyDataGenerator {
 
     public static void fillRoutineStore() {
 
-        RoutineStore.getInstance().addRoutine(new Routine(DateTime.now().minusHours(5).toLocalTime(), "Breakfast"));
-        RoutineStore.getInstance().addRoutine(new Routine(DateTime.now().toLocalTime(), "Lunch"));
-        RoutineStore.getInstance().addRoutine(new Routine(DateTime.now().plusHours(7).toLocalTime(), "Dinner"));
+        RoutineStore.getInstance().addRoutine(new Routine(new LocalTime(9, 0), "Breakfast"));
+        RoutineStore.getInstance().addRoutine(new Routine(new LocalTime(13, 0), "Lunch"));
+        RoutineStore.getInstance().addRoutine(new Routine(new LocalTime(21, 0), "Dinner"));
 
     }
 

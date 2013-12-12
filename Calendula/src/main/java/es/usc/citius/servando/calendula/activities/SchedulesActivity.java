@@ -20,6 +20,7 @@ import java.util.Locale;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
+import es.usc.citius.servando.calendula.fragments.ScheduleTimetableFragment;
 import es.usc.citius.servando.calendula.model.Medicine;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 
@@ -234,6 +235,8 @@ public class SchedulesActivity extends ActionBarActivity implements ViewPager.On
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 0) {
                 return new MedicineCreateOrEditFragment();
+            } else if (position == 1) {
+                return new ScheduleTimetableFragment();
             }
             return PlaceholderFragment.newInstance(position + 1);
         }
@@ -294,6 +297,14 @@ public class SchedulesActivity extends ActionBarActivity implements ViewPager.On
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mViewPager.getCurrentItem() > 0) {
+            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     Fragment getViewPagerFragment(int position) {
         return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));

@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.espian.showcaseview.OnShowcaseEventListener;
 import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.targets.PointTarget;
+import com.espian.showcaseview.targets.ViewTarget;
 
 import java.util.ArrayList;
 
@@ -47,6 +48,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
     HorizontalScrollView presentationScroll;
 
     ShowcaseView sv;
+    boolean showcaseShown = false;
 
 
     @Override
@@ -90,7 +92,6 @@ public class MedicineCreateOrEditFragment extends Fragment {
         }
 
         setupMedPresentationChooser(rootView);
-
         return rootView;
     }
 
@@ -98,36 +99,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        if (sv == null) {
-            ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
-            co.hideOnClickOutside = true;
-            co.centerText = true;
-            co.shotType = ShowcaseView.TYPE_ONE_SHOT; // display only first time
-            // ViewTarget target = new ViewTarget(R.id.pager, this);
-            //sv = ShowcaseView.insertShowcaseView(target, this, "Daily agenda", "Swipe left to se the full agenda", co);
-
-
-            PointTarget pt = new PointTarget((int) Screen.getDpSize(getActivity()).x, (int) (Screen.getDpSize(getActivity()).y * 1.2));
-            sv = ShowcaseView.insertShowcaseView(pt, getActivity(), "Medicine presentation", "Scroll to see all available types", co);
-            sv.setOnShowcaseEventListener(new OnShowcaseEventListener() {
-                @Override
-                public void onShowcaseViewHide(ShowcaseView showcaseView) {
-                    Log.d("SV", "Hide");
-                }
-
-                @Override
-                public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
-                    Log.d("SV", "DIVHide");
-                }
-
-                @Override
-                public void onShowcaseViewShow(ShowcaseView showcaseView) {
-                    Log.d("SV", "Show");
-                }
-            });
-            sv.show();
-        }
+//        showShowCase();
     }
 
     public boolean validate() {
@@ -328,6 +300,8 @@ public class MedicineCreateOrEditFragment extends Fragment {
             // in both cases, update the med presentation if any selected
             if (selectedPresentation != null) {
                 mMedicine.setPresentation(selectedPresentation);
+            } else if (mMedicine.getPresentation() == null) {
+                mMedicine.setPresentation(Presentation.PILLS);// TODO change to unknown
             }
         }
         // TODO: Set other properties
@@ -360,10 +334,41 @@ public class MedicineCreateOrEditFragment extends Fragment {
         imm.hideSoftInputFromWindow(mNameTextView.getWindowToken(), 0);
     }
 
+
+    void showShowCase() {
+        if (!showcaseShown) {
+            ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
+            co.hideOnClickOutside = true;
+//            co.centerText = true;
+            ViewTarget target = new ViewTarget(R.id.med_presentation, getActivity());
+            sv = ShowcaseView.insertShowcaseView(target, getActivity(), "Daily agenda", "Swipe left to se the full agenda", co);
+            PointTarget pt = new PointTarget((int) Screen.getDpSize(getActivity()).x, (int) (Screen.getDpSize(getActivity()).y * 1.2));
+            sv = ShowcaseView.insertShowcaseView(pt, getActivity(), "Medicine presentation", "Scroll to see all available types", co);
+            sv.setOnShowcaseEventListener(new OnShowcaseEventListener() {
+                @Override
+                public void onShowcaseViewHide(ShowcaseView showcaseView) {
+                    Log.d("SV", "Hide showcase at med");
+                    sv = null;
+                }
+
+                @Override
+                public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+                    Log.d("SV", "DidHide showcase at med");
+                }
+
+                @Override
+                public void onShowcaseViewShow(ShowcaseView showcaseView) {
+                    Log.d("SV", "Show showcase at med");
+                    showcaseShown = true;
+                }
+            });
+        }
+    }
+
+
     // Container Activity must implement this interface
     public interface OnMedicineEditListener {
         public void onMedicineEdited(Medicine r);
-
         public void onMedicineCreated(Medicine r);
     }
 

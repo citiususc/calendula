@@ -38,6 +38,7 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
      */
     ViewPager mViewPager;
     ShowcaseView sv;
+    boolean showcaseShown = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,37 +76,34 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
     @Override
     protected void onResume() {
         super.onResume();
-        if (sv == null) {
+//       showShowCase();
+    }
+
+    private void showShowCase() {
+        if (!showcaseShown) {
             ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
             co.hideOnClickOutside = true;
-            co.centerText = true;
-            co.shotType = ShowcaseView.TYPE_ONE_SHOT; // display only first time
-            // ViewTarget target = new ViewTarget(R.id.pager, this);
-            //sv = ShowcaseView.insertShowcaseView(target, this, "Daily agenda", "Swipe left to se the full agenda", co);
-
-            Log.d("TAG", mViewPager.getLeft() + ", " + (Screen.getDpSize(this).y / 2));
-
             PointTarget pt = new PointTarget((int) Screen.getDpSize(this).x * 2, (int) Screen.getDpSize(this).y);
-            sv = ShowcaseView.insertShowcaseView(pt, this, "Daily agenda", "Swipe left to se the full agenda", co);
+            sv = ShowcaseView.insertShowcaseView(pt, HomeActivity.this, "Daily agenda", "Swipe left to se the full agenda", co);
             sv.setOnShowcaseEventListener(new OnShowcaseEventListener() {
                 @Override
                 public void onShowcaseViewHide(ShowcaseView showcaseView) {
-                    Log.d("SV", "Hide");
+                    Log.d("SV", "Hide showcase at home");
+                    sv = null;
                 }
 
                 @Override
                 public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
-                    Log.d("SV", "DIVHide");
+                    Log.d("SV", "DidHide showcase at home");
                 }
 
                 @Override
                 public void onShowcaseViewShow(ShowcaseView showcaseView) {
-                    Log.d("SV", "Show");
+                    Log.d("SV", "Show showcase at home");
+                    showcaseShown = true;
                 }
             });
-            sv.show();
         }
-
     }
 
     @Override
