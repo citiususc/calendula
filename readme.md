@@ -11,7 +11,7 @@ Core ideas
 
 Related goals
 =============
-- Medicine stock management
+- Medicine stock management and refill warnings
 - Gamification concepts to improve prescription adherence
 - Trip assistance (how many pills I need for the weekend?)
 - Nearby pharmacies information
