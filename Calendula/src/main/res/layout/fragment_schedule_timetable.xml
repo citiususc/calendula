@@ -41,7 +41,7 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.80"
+            android:layout_weight="0.70"
             android:layout_marginRight="2dp">
 
             <TextView
@@ -86,6 +86,15 @@
                 android:background="@color/android_blue" />
 
         </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.10"
+            android:layout_marginLeft="2dp">
+
+        </RelativeLayout>
+
     </LinearLayout>
 
     <LinearLayout

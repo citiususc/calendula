@@ -23,6 +23,7 @@ import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleTimetableFragment;
 import es.usc.citius.servando.calendula.model.Medicine;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
+import es.usc.citius.servando.calendula.util.ScheduleCreationStateHolder;
 
 public class SchedulesActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener, MedicineCreateOrEditFragment.OnMedicineEditListener {
 
@@ -108,6 +109,7 @@ public class SchedulesActivity extends ActionBarActivity implements ViewPager.On
             MedicineCreateOrEditFragment fragment = ((MedicineCreateOrEditFragment) getViewPagerFragment(0));
             if (fragment.validate()) {
                 med = fragment.getMedicineFromView();
+                ScheduleCreationStateHolder.getInstance().setSelectedMed(med);
                 Log.d(SchedulesActivity.class.getName(), "Med created but no saved: " + med.getName() + ", " + med.getPresentation().getName(getResources()));
                 return true;
             } else {
@@ -302,9 +304,16 @@ public class SchedulesActivity extends ActionBarActivity implements ViewPager.On
         if (mViewPager.getCurrentItem() > 0) {
             mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
         } else {
+            ScheduleCreationStateHolder.getInstance().clear();
             super.onBackPressed();
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
 
     Fragment getViewPagerFragment(int position) {
         return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));

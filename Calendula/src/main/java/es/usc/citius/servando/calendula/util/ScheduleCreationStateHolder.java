@@ -17,6 +17,8 @@ public class ScheduleCreationStateHolder {
     private static final ScheduleCreationStateHolder instance = new ScheduleCreationStateHolder();
 
     private Medicine selectedMed;
+    private int selectedScheduleIdx = 0;
+    private int timesPerDay = 1;
     private List<Routine> selectedRoutines;
     private boolean[] selectedDays = new boolean[]{true, true, true, true, true, true, true}; // 7 days
 
@@ -54,7 +56,32 @@ public class ScheduleCreationStateHolder {
     }
 
     public void toggleSelectedDay(int i) {
-        selectedDays[i] = !selectedDays[i];
-        Log.d("Days", Arrays.toString(selectedDays));
+        getSelectedDays()[i] = !getSelectedDays()[i];
+        Log.d("Days", Arrays.toString(getSelectedDays()));
+    }
+
+    public int getSelectedScheduleIdx() {
+        return selectedScheduleIdx;
+    }
+
+    public void setSelectedScheduleIdx(int selectedScheduleIdx) {
+        this.selectedScheduleIdx = selectedScheduleIdx;
+    }
+
+    public int getTimesPerDay() {
+        return timesPerDay;
+    }
+
+    public void setTimesPerDay(int timesPerDay) {
+        this.timesPerDay = timesPerDay;
+    }
+
+
+    public void clear() {
+        setTimesPerDay(1);
+        setSelectedRoutines(new ArrayList<Routine>());
+        setSelectedMed(null);
+        setSelectedScheduleIdx(0);
+        selectedDays = new boolean[]{true, true, true, true, true, true, true};
     }
 }

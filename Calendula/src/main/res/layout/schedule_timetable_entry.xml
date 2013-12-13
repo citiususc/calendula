@@ -3,7 +3,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="50dp">
+    android:layout_height="50dp"
+    android:gravity="center_vertical">
 
     <TextView
         android:layout_width="0dp"
@@ -36,7 +37,7 @@
         android:layout_height="fill_parent"
         android:tag="routine_spinner"
         android:id="@+id/entry_routine_spinner"
-        android:layout_weight="0.56"
+        android:layout_weight="0.46"
         android:gravity="center_vertical"
         android:spinnerMode="dialog" />
 
@@ -48,5 +49,16 @@
         android:layout_weight="0.20"
         android:gravity="center_vertical"
         android:spinnerMode="dialog" />
+
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:id="@+id/entry_remove"
+        android:layout_weight="0.1"
+        android:src="@drawable/abc_ic_clear_holo_light"
+        android:background="@null"
+        android:scaleType="center"
+        android:baselineAlignBottom="false"
+        android:layout_marginTop="10dp" />
 
 </LinearLayout>

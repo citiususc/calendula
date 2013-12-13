@@ -31,6 +31,7 @@ import es.usc.citius.servando.calendula.activities.SchedulesActivity;
 import es.usc.citius.servando.calendula.model.Medicine;
 import es.usc.citius.servando.calendula.model.Presentation;
 import es.usc.citius.servando.calendula.store.MedicineStore;
+import es.usc.citius.servando.calendula.util.ScheduleCreationStateHolder;
 import es.usc.citius.servando.calendula.util.Screen;
 
 /**
@@ -95,6 +96,13 @@ public class MedicineCreateOrEditFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (ScheduleCreationStateHolder.getInstance().getSelectedMed() != null) {
+            setMedicne(ScheduleCreationStateHolder.getInstance().getSelectedMed());
+        }
+    }
 
     @Override
     public void onResume() {

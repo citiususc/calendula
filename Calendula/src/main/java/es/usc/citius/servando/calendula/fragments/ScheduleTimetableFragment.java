@@ -1,6 +1,5 @@
 package es.usc.citius.servando.calendula.fragments;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
@@ -30,8 +30,10 @@ import es.usc.citius.servando.calendula.util.ScheduleCreationStateHolder;
 public class ScheduleTimetableFragment extends Fragment {
 
     LinearLayout timetableContainer;
-
     Integer doses[] = new Integer[]{1, 2, 3, 4, 5, 6};
+    int timesPerDay = 1;
+
+    Spinner scheduleSpinner;
 
 
     @Override
@@ -43,20 +45,38 @@ public class ScheduleTimetableFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        timesPerDay = ScheduleCreationStateHolder.getInstance().getTimesPerDay();
+        scheduleSpinner.setSelection(ScheduleCreationStateHolder.getInstance().getSelectedScheduleIdx());
+        checkSelectedDays(view, ScheduleCreationStateHolder.getInstance().getSelectedDays());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("RESUME", "Idx: " + ScheduleCreationStateHolder.getInstance().getSelectedScheduleIdx());
+        Log.d("RESUME", "Days: " + Arrays.toString(ScheduleCreationStateHolder.getInstance().getSelectedDays()));
+        Log.d("RESUME", "Schedule: " + ScheduleCreationStateHolder.getInstance().getTimesPerDay());
+        Log.d("RESUME", "Times: " + Arrays.toString(ScheduleCreationStateHolder.getInstance().getSelectedRoutines().toArray()));
+    }
+
     private void setupScheduleSpinner(View rootView) {
-        Spinner spinner = (Spinner) rootView.findViewById(R.id.schedules_spinner);
+        scheduleSpinner = (Spinner) rootView.findViewById(R.id.schedules_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.schedules_array, R.layout.spinner_text_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
+        scheduleSpinner.setAdapter(adapter);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        scheduleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String selected = (String) adapterView.getItemAtPosition(i);
+                ScheduleCreationStateHolder.getInstance().setSelectedScheduleIdx(i);
                 Log.d(getTag(), "Selected: " + selected);
                 onScheduleSelected(selected);
             }
@@ -70,13 +90,13 @@ public class ScheduleTimetableFragment extends Fragment {
 
     void onScheduleSelected(String selection) {
 
-        int timesPerDay = 1;
         String schedules[] = getResources().getStringArray(R.array.schedules_array);
 
         // obtain times per day from selected schedule
         for (int i = 0; i < schedules.length; i++) {
             if (schedules[i].equalsIgnoreCase(selection)) {
                 timesPerDay = i + 1;
+                ScheduleCreationStateHolder.getInstance().setTimesPerDay(timesPerDay);
                 break;
             }
         }
@@ -152,17 +172,25 @@ public class ScheduleTimetableFragment extends Fragment {
 
         String[] routineNames = getUpdatedRoutineNames();
         timetableContainer.removeAllViews();
+
+        Collections.sort(ScheduleCreationStateHolder.getInstance().getSelectedRoutines());
+
         for (int i = 0; i < timesPerDay; i++) {
-            Routine r = (i < routines.size()) ? routines.get(i) : null;
-            Log.d(getTag(), "Routine " + i + " is" + (r == null ? " null" : " not null"));
+
+            // try to get previous routine from state holder
+            Routine r = (i < ScheduleCreationStateHolder.getInstance().getSelectedRoutines().size()) ?
+                    ScheduleCreationStateHolder.getInstance().getSelectedRoutines().get(i) : null;
+
+            // if null, get it from the store if possible
+            if (r == null) {
+                r = (i < routines.size()) ? routines.get(i) : null;
+            }
+
             View view = buildTimetableEntry(r, routineNames);
             timetableContainer.addView(view, params);
         }
     }
 
-    void orderTimetableEntries() {
-        //TODO: Order entries if needed
-    }
 
     String[] getUpdatedRoutineNames() {
         String[] routinesFromStore = RoutineStore.getInstance().routineNames();
@@ -179,9 +207,17 @@ public class ScheduleTimetableFragment extends Fragment {
 
     View buildTimetableEntry(Routine r, String[] routineNames) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View entry = inflater.inflate(R.layout.schedule_timetable_entry, null);
+        final View entry = inflater.inflate(R.layout.schedule_timetable_entry, null);
         updateEntryTime(r, entry);
         setupScheduleEntrySpinners(entry, r, routineNames);
+
+        entry.findViewById(R.id.entry_remove).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ScheduleCreationStateHolder.getInstance().getSelectedRoutines().remove(timetableContainer.indexOfChild(entry));
+                scheduleSpinner.setSelection(timesPerDay - 2);
+            }
+        });
         return entry;
     }
 
@@ -189,23 +225,6 @@ public class ScheduleTimetableFragment extends Fragment {
         ArrayAdapter<String> routineAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, routineNames);
         routineAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         routineSpinner.setAdapter(routineAdapter);
-
-//        routineSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                String selected = (String)adapterView.getItemAtPosition(i);
-//
-//                Log.d("SELECTED", "" + selected + ", " + getString(R.string.create_new_routine));
-//
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
     }
 
 
@@ -235,12 +254,20 @@ public class ScheduleTimetableFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String selected = (String) adapterView.getItemAtPosition(i);
                 Routine r = RoutineStore.getInstance().getRoutineByName(selected);
+
                 if (r != null) {
                     updateEntryTime(r, entryView);
                 } else {
                     updateEntryTime(null, entryView);
                     showAddNewRoutineDialog(entryView);
                 }
+
+                int idx = timetableContainer.indexOfChild(entryView);
+                if (ScheduleCreationStateHolder.getInstance().getSelectedRoutines().size() > idx) {
+                    ScheduleCreationStateHolder.getInstance().getSelectedRoutines().remove(idx);
+                }
+                // r can be null, yes
+                ScheduleCreationStateHolder.getInstance().getSelectedRoutines().add(idx, r);
             }
 
             @Override
@@ -323,4 +350,25 @@ public class ScheduleTimetableFragment extends Fragment {
 
         addRoutineFragment.show(fm, "fragment_edit_name");
     }
+
+    void checkSelectedDays(View rootView, boolean[] days) {
+
+        ((TextView) rootView.findViewById(R.id.day_mo)).setTextAppearance(getActivity(),
+                days[0] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
+        ((TextView) rootView.findViewById(R.id.day_tu)).setTextAppearance(getActivity(),
+                days[1] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
+        ((TextView) rootView.findViewById(R.id.day_we)).setTextAppearance(getActivity(),
+                days[2] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
+        ((TextView) rootView.findViewById(R.id.day_th)).setTextAppearance(getActivity(),
+                days[3] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
+        ((TextView) rootView.findViewById(R.id.day_fr)).setTextAppearance(getActivity(),
+                days[4] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
+        ((TextView) rootView.findViewById(R.id.day_sa)).setTextAppearance(getActivity(),
+                days[5] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
+        ((TextView) rootView.findViewById(R.id.day_su)).setTextAppearance(getActivity(),
+                days[6] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
+
+    }
+
+
 }
