@@ -32,7 +32,6 @@
     <string name="edit_routine_button_text">Save changes</string>
     <string name="create_routine_button_text">Create routine</string>
     <string name="create_new_routine">Create new routine...</string>
-
     <string name="add_routine_button">ADD ROUTINE </string>
     <string name="medicine_name">Med name</string>
     <string name="medicine_presentation">Presentation</string>
@@ -41,11 +40,9 @@
     <string name="add_medicine_button">ADD MEDICINE</string>
     <string name="no_stock_info_msg">No stock info</string>
     <string name="title_activity_schedules">Schedules</string>
-
     <string name="prev">PREV</string>
     <string name="next">NEXT</string>
     <string name="confirm">CONFIRM</string>
-
 
     <!-- Med presentations -->
     <string name="injections">Injections</string>
@@ -66,5 +63,6 @@
         <item>Four times a day</item>
     </string-array>
 
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

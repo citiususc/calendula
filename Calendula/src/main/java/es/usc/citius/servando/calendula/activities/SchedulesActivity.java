@@ -8,18 +8,17 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Locale;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
+import es.usc.citius.servando.calendula.fragments.ScheduleSummaryFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleTimetableFragment;
 import es.usc.citius.servando.calendula.model.Medicine;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
@@ -98,6 +97,8 @@ public class SchedulesActivity extends ActionBarActivity implements ViewPager.On
                 int currentPage = mViewPager.getCurrentItem();
                 if (currentPage < 2 && validatePage(currentPage)) {
                     mViewPager.setCurrentItem(currentPage + 1);
+                } else if (currentPage == 2) {
+                    Toast.makeText(SchedulesActivity.this, "Confirm!", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -239,8 +240,9 @@ public class SchedulesActivity extends ActionBarActivity implements ViewPager.On
                 return new MedicineCreateOrEditFragment();
             } else if (position == 1) {
                 return new ScheduleTimetableFragment();
+            } else {
+                return new ScheduleSummaryFragment();
             }
-            return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
@@ -261,41 +263,6 @@ public class SchedulesActivity extends ActionBarActivity implements ViewPager.On
                     return getString(R.string.title_section3).toUpperCase(l);
             }
             return null;
-        }
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_schedules, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
         }
     }
 
