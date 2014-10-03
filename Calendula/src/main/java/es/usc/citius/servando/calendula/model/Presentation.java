@@ -9,20 +9,22 @@ import es.usc.citius.servando.calendula.R;
  */
 public enum Presentation {
 
-    INJECTIONS(R.drawable.ic_presentation_1, R.string.injections),
-    CAPSULES(R.drawable.ic_presentation_2, R.string.capsules),
-    EFFERVESCENT(R.drawable.ic_presentation_3, R.string.effervescent),
-    PILLS(R.drawable.ic_presentation_4, R.string.pills),
-    SYRUP(R.drawable.ic_presentation_5, R.string.syrup),
-    DROPS(R.drawable.ic_presentation_6, R.string.drops),
-    UNKNOWN(R.drawable.ic_presentation_6, R.string.unknown);
+    INJECTIONS(R.drawable.ic_presentation_1, R.string.injections, R.string.injections_units),
+    CAPSULES(R.drawable.ic_presentation_2, R.string.capsules, R.string.capsules_units),
+    EFFERVESCENT(R.drawable.ic_presentation_3, R.string.effervescent, R.string.effervescent_units),
+    PILLS(R.drawable.ic_presentation_4, R.string.pills, R.string.pills_units),
+    SYRUP(R.drawable.ic_presentation_5, R.string.syrup, R.string.syrup_units),
+    DROPS(R.drawable.ic_presentation_6, R.string.drops, R.string.drops_units),
+    UNKNOWN(R.drawable.ic_presentation_6, R.string.unknown, R.string.unknown_units);
 
     private int drawable = R.drawable.ic_presentation_1;
     private int nameString = R.string.unknown;
+    private int unitsString= R.string.unknown_units;
 
-    Presentation(int drawable, int nameString) {
+    Presentation(int drawable, int nameString, int unitsString) {
         this.drawable = drawable;
         this.nameString = nameString;
+        this.unitsString = unitsString;
     }
 
     public int getDrawable() {
@@ -33,7 +35,8 @@ public enum Presentation {
         return r.getString(nameString);
     }
 
-    public int getNameString() {
-        return drawable;
+    public String getUnits(Resources r) {
+        return r.getString(unitsString);
     }
+
 }

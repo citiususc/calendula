@@ -27,11 +27,11 @@ import com.espian.showcaseview.targets.ViewTarget;
 import java.util.ArrayList;
 
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.activities.SchedulesActivity;
+import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.model.Medicine;
 import es.usc.citius.servando.calendula.model.Presentation;
 import es.usc.citius.servando.calendula.store.MedicineStore;
-import es.usc.citius.servando.calendula.util.ScheduleCreationStateHolder;
+import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
 import es.usc.citius.servando.calendula.util.Screen;
 
 /**
@@ -99,8 +99,8 @@ public class MedicineCreateOrEditFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (ScheduleCreationStateHolder.getInstance().getSelectedMed() != null) {
-            setMedicne(ScheduleCreationStateHolder.getInstance().getSelectedMed());
+        if (ScheduleCreationHelper.instance().getSelectedMed() != null) {
+            setMedicne(ScheduleCreationHelper.instance().getSelectedMed());
         }
     }
 
@@ -285,7 +285,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
         if (activity instanceof OnMedicineEditListener) {
             mMedicineEditCallback = (OnMedicineEditListener) activity;
         }
-        if (activity instanceof SchedulesActivity) {
+        if (activity instanceof ScheduleCreationActivity) {
             this.showConfirmButton = false;
         }
     }

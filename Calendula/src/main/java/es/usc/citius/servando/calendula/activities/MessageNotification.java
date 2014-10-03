@@ -16,7 +16,14 @@ import android.support.v4.app.NotificationCompat;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 
+import java.util.List;
+import java.util.Map;
+
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.model.Dose;
+import es.usc.citius.servando.calendula.model.Medicine;
+import es.usc.citius.servando.calendula.model.Schedule;
+import es.usc.citius.servando.calendula.model.ScheduleItem;
 
 /**
  * Helper class for showing and canceling message
@@ -47,31 +54,34 @@ public class MessageNotification {
      * @see #cancel(Context)
      */
     public static void notify(final Context context,
-                              final String exampleString, final int number) {
+                              final String exampleString,  Map<Schedule,ScheduleItem> doses, final int number, Intent intent) {
         final Resources res = context.getResources();
 
         // This image is used as the notification's large icon (thumbnail).
         // TODO: Remove this if your notification has no relevant thumbnail.
         final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.ic_launcher);
+        final String title = res.getString(R.string.message_notification_title_template, exampleString);
 
-        final SpannableStringBuilder exampleItem = new SpannableStringBuilder();
-        exampleItem.append("Omeprazol");
-        exampleItem.setSpan(new ForegroundColorSpan(Color.WHITE), 0, exampleItem.length(), 0);
-        exampleItem.append(" 1 pill");
+        NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
 
-        final SpannableStringBuilder exampleItem2 = new SpannableStringBuilder();
-        exampleItem2.append("Atrovent");
-        exampleItem2.setSpan(new ForegroundColorSpan(Color.WHITE), 0, exampleItem2.length(), 0);
-        exampleItem2.append(" 2 pills");
+        for(Schedule s : doses.keySet()){
 
-        final SpannableStringBuilder exampleItem3 = new SpannableStringBuilder();
-        exampleItem3.append("Digoxina");
-        exampleItem3.setSpan(new ForegroundColorSpan(Color.WHITE), 0, exampleItem3.length(), 0);
-        exampleItem3.append(" 1 pill");
+            Medicine med = s.getMedicine();
+            Dose dose = doses.get(s).dose();
+
+            final SpannableStringBuilder SpItem = new SpannableStringBuilder();
+            SpItem.append(s.getMedicine().getName());
+            SpItem.setSpan(new ForegroundColorSpan(Color.WHITE), 0, SpItem.length(), 0);
+            SpItem.append("   " + dose.ammount() + " " + med.getPresentation().getUnits(context.getResources()));
+            // add to style
+            style.addLine(SpItem);
+        }
+        style.setBigContentTitle(title);
+        style.setSummaryText(doses.size() + " meds to take now");
+
 
         final String ticker = exampleString;
-        final String title = res.getString(
-                R.string.message_notification_title_template, exampleString);
+
         final String text = res.getString(
                 R.string.message_notification_placeholder_text_template, exampleString);
 
@@ -83,7 +93,7 @@ public class MessageNotification {
 
                         // Set required fields, including the small icon, the
                         // notification title, and text.
-                .setSmallIcon(R.drawable.common_signin_btn_icon_light)
+                .setSmallIcon(R.drawable.abc_ab_share_pack_holo_dark)
                 .setContentTitle(title)
                 .setContentText(text)
 
@@ -119,18 +129,13 @@ public class MessageNotification {
                         PendingIntent.getActivity(
                                 context,
                                 0,
-                                new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com")),
+                                intent,
                                 PendingIntent.FLAG_UPDATE_CURRENT)
                 )
 
                         // Show an expanded list of items on devices running Android 4.1
                         // or later.
-                .setStyle(new NotificationCompat.InboxStyle()
-                        .addLine(exampleItem)
-                        .addLine(exampleItem2)
-                        .addLine(exampleItem3)
-                        .setBigContentTitle(title)
-                        .setSummaryText("3 meds to take now"))
+                .setStyle(style)
 
                         // Example additional actions for this notification. These will
                         // only show on devices running Android 4.1 or later, so you
@@ -138,7 +143,7 @@ public class MessageNotification {
                         // content intent provides access to the same actions in
                         // another way.
                 .addAction(
-                        R.drawable.common_signin_btn_icon_dark,
+                        R.drawable.abc_ab_bottom_solid_dark_holo,
                         res.getString(R.string.action_take_now),
                         PendingIntent.getActivity(
                                 context,
@@ -150,7 +155,7 @@ public class MessageNotification {
                         )
                 )
                 .addAction(
-                        R.drawable.common_signin_btn_icon_dark,
+                        R.drawable.abc_ab_bottom_solid_light_holo,
                         res.getString(R.string.action_delay),
                         PendingIntent.getActivity(
                                 context,
@@ -181,7 +186,7 @@ public class MessageNotification {
 
     /**
      * Cancels any notifications of this type previously shown using
-     * {@link #notify(Context, String, int)}.
+     * {@link #notify(Context, String, java.util.Map, int, android.content.Intent)}.
      */
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     public static void cancel(final Context context) {

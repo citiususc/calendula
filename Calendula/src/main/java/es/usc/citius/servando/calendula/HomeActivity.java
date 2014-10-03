@@ -1,5 +1,7 @@
 package es.usc.citius.servando.calendula;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -10,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
 import com.espian.showcaseview.OnShowcaseEventListener;
 import com.espian.showcaseview.ShowcaseView;
@@ -18,6 +21,7 @@ import com.espian.showcaseview.targets.PointTarget;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
 import es.usc.citius.servando.calendula.store.MedicineStore;
 import es.usc.citius.servando.calendula.store.RoutineStore;
+import es.usc.citius.servando.calendula.user.Session;
 import es.usc.citius.servando.calendula.util.Screen;
 
 public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener, ActionBar.OnNavigationListener {
@@ -67,9 +71,11 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
         if (MedicineStore.getInstance().size() == 0) {
             DummyDataGenerator.fillMedicineStore();
         }
-        if (RoutineStore.getInstance().size() == 0) {
+        if (RoutineStore.instance().size() == 0) {
             DummyDataGenerator.fillRoutineStore();
         }
+
+        Toast.makeText(getBaseContext(),"Logged as " + Session.getInstance().getUser().getEmail() + "", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -122,10 +128,35 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
         switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
+            case R.id.action_exit:
+                logout();
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
 
+    void logout(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Session will be closed, continue?")
+                .setPositiveButton("Yes, close", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        dialog.dismiss();
+                        Session.getInstance().close(getApplicationContext());
+                        finish();
+                    }
+                })
+                .setNegativeButton("No, cancel",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        dialog.dismiss();
+                    }
+                }).show();
+
+    }
 
     @Override
     public void onBackPressed() {

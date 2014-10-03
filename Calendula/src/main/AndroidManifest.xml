@@ -2,37 +2,74 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="es.usc.citius.servando.calendula"
     android:versionCode="1"
-    android:versionName="1.0">
+    android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="9"
         android:targetSdkVersion="18" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name="es.usc.citius.servando.calendula.HomeActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="es.usc.citius.servando.calendula.activities.RoutinesActivity"
+            android:label="@string/title_activity_routines"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="es.usc.citius.servando.calendula.activities.MedicinesActivity"
+            android:label="@string/title_activity_medicines"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="es.usc.citius.servando.calendula.activities.ScheduleCreationActivity"
+            android:label="@string/title_activity_schedules" />
+        <activity
+            android:name="es.usc.citius.servando.calendula.activities.SchedulesActivity"
+            android:label="@string/title_activity_schedules" />
+        <activity
+            android:name="es.usc.citius.servando.calendula.activities.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
+            android:name="es.usc.citius.servando.calendula.activities.StartActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            android:label="@string/title_activity_start" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name="es.usc.citius.servando.calendula.receiver.AlarmReceiver" />
+
         <activity
-            android:name="es.usc.citius.servando.calendula.activities.RoutinesActivity"
-            android:label="@string/title_activity_routines"
-            android:windowSoftInputMode="adjustPan"></activity>
-        <activity
-            android:name="es.usc.citius.servando.calendula.activities.MedicinesActivity"
-            android:label="@string/title_activity_medicines"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name="es.usc.citius.servando.calendula.activities.SchedulesActivity"
-            android:label="@string/title_activity_schedules"></activity>
+            android:name="es.usc.citius.servando.calendula.activities.ReminderActivity"
+            android:label="@string/title_activity_reminder" >
+        </activity>
     </application>
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- To access Google+ APIs: -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!--
+     To retrieve OAuth 2.0 tokens or invalidate tokens to disconnect a user. This disconnect
+     option is required to comply with the Google+ Sign-In developer policies
+    -->
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+
+    <!-- To retrieve the account name (email) as part of sign-in: -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
 </manifest>

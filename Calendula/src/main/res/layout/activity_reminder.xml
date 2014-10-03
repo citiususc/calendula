@@ -1,0 +1,76 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="es.usc.citius.servando.calendula.activities.ReminderActivity">
+
+    <es.usc.citius.servando.calendula.util.view.CustomDigitalClock
+        android:id="@+id/clock"
+        android:layout_width="200dip"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/android_blue_dark"
+        android:textSize="60dp"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/meds_time"
+        android:id="@+id/meds_time_textview"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/clock"
+        android:textColor="@color/android_blue" />
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView"
+        android:layout_below="@id/meds_time_textview"
+        android:layout_marginBottom="55dp"
+        android:layout_marginTop="25dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/reminder_list">
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <Button
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="@string/delay"
+        android:id="@+id/reminder_delay_button"
+        style="@style/delay_button"
+        android:layout_marginRight="1dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_alignParentLeft="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/done"
+        android:id="@+id/reminder_done_button"
+        style="@style/done_button"
+        android:layout_marginLeft="5dp"
+        android:gravity="center"
+        android:layout_toRightOf="@id/reminder_delay_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" />
+
+
+
+</RelativeLayout>

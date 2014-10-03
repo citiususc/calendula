@@ -14,14 +14,20 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.model.Dose;
 import es.usc.citius.servando.calendula.model.Routine;
+import es.usc.citius.servando.calendula.model.ScheduleItem;
+import es.usc.citius.servando.calendula.model.ScheduleItemComparator;
 import es.usc.citius.servando.calendula.store.RoutineStore;
-import es.usc.citius.servando.calendula.util.ScheduleCreationStateHolder;
+import es.usc.citius.servando.calendula.util.GsonUtil;
+import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
 
 
 /**
@@ -29,11 +35,15 @@ import es.usc.citius.servando.calendula.util.ScheduleCreationStateHolder;
  */
 public class ScheduleTimetableFragment extends Fragment {
 
+    public static final String TAG = ScheduleTimetableFragment.class.getName();
+
     LinearLayout timetableContainer;
     Integer doses[] = new Integer[]{1, 2, 3, 4, 5, 6};
     int timesPerDay = 1;
 
     Spinner scheduleSpinner;
+
+    ScheduleItemComparator scheduleItemComparator = new ScheduleItemComparator();
 
 
     @Override
@@ -48,18 +58,18 @@ public class ScheduleTimetableFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        timesPerDay = ScheduleCreationStateHolder.getInstance().getTimesPerDay();
-        scheduleSpinner.setSelection(ScheduleCreationStateHolder.getInstance().getSelectedScheduleIdx());
-        checkSelectedDays(view, ScheduleCreationStateHolder.getInstance().getSelectedDays());
+        timesPerDay = ScheduleCreationHelper.instance().getTimesPerDay();
+        scheduleSpinner.setSelection(ScheduleCreationHelper.instance().getSelectedScheduleIdx());
+        checkSelectedDays(view, ScheduleCreationHelper.instance().getSelectedDays());
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("RESUME", "Idx: " + ScheduleCreationStateHolder.getInstance().getSelectedScheduleIdx());
-        Log.d("RESUME", "Days: " + Arrays.toString(ScheduleCreationStateHolder.getInstance().getSelectedDays()));
-        Log.d("RESUME", "Schedule: " + ScheduleCreationStateHolder.getInstance().getTimesPerDay());
-        Log.d("RESUME", "Times: " + Arrays.toString(ScheduleCreationStateHolder.getInstance().getSelectedRoutines().toArray()));
+        Log.d("RESUME", "Idx: " + ScheduleCreationHelper.instance().getSelectedScheduleIdx());
+        Log.d("RESUME", "Days: " + Arrays.toString(ScheduleCreationHelper.instance().getSelectedDays()));
+        Log.d("RESUME", "Schedule: " + ScheduleCreationHelper.instance().getTimesPerDay());
+        //Log.d("RESUME", "Times: " + Arrays.toString(ScheduleCreationHelper.instance().getSelectedRoutines().toArray()));
     }
 
     private void setupScheduleSpinner(View rootView) {
@@ -76,7 +86,7 @@ public class ScheduleTimetableFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String selected = (String) adapterView.getItemAtPosition(i);
-                ScheduleCreationStateHolder.getInstance().setSelectedScheduleIdx(i);
+                ScheduleCreationHelper.instance().setSelectedScheduleIdx(i);
                 Log.d(getTag(), "Selected: " + selected);
                 onScheduleSelected(selected);
             }
@@ -96,12 +106,12 @@ public class ScheduleTimetableFragment extends Fragment {
         for (int i = 0; i < schedules.length; i++) {
             if (schedules[i].equalsIgnoreCase(selection)) {
                 timesPerDay = i + 1;
-                ScheduleCreationStateHolder.getInstance().setTimesPerDay(timesPerDay);
+                ScheduleCreationHelper.instance().setTimesPerDay(timesPerDay);
                 break;
             }
         }
 
-        List<Routine> routines = RoutineStore.getInstance().asList();
+        List<Routine> routines = RoutineStore.instance().asList();
         addTimetableEntries(timesPerDay, routines);
     }
 
@@ -125,25 +135,25 @@ public class ScheduleTimetableFragment extends Fragment {
 
                 switch (text.getId()) {
                     case R.id.day_mo:
-                        ScheduleCreationStateHolder.getInstance().toggleSelectedDay(0);
+                        ScheduleCreationHelper.instance().toggleSelectedDay(0);
                         break;
                     case R.id.day_tu:
-                        ScheduleCreationStateHolder.getInstance().toggleSelectedDay(1);
+                        ScheduleCreationHelper.instance().toggleSelectedDay(1);
                         break;
                     case R.id.day_we:
-                        ScheduleCreationStateHolder.getInstance().toggleSelectedDay(2);
+                        ScheduleCreationHelper.instance().toggleSelectedDay(2);
                         break;
                     case R.id.day_th:
-                        ScheduleCreationStateHolder.getInstance().toggleSelectedDay(3);
+                        ScheduleCreationHelper.instance().toggleSelectedDay(3);
                         break;
                     case R.id.day_fr:
-                        ScheduleCreationStateHolder.getInstance().toggleSelectedDay(4);
+                        ScheduleCreationHelper.instance().toggleSelectedDay(4);
                         break;
                     case R.id.day_sa:
-                        ScheduleCreationStateHolder.getInstance().toggleSelectedDay(5);
+                        ScheduleCreationHelper.instance().toggleSelectedDay(5);
                         break;
                     case R.id.day_su:
-                        ScheduleCreationStateHolder.getInstance().toggleSelectedDay(6);
+                        ScheduleCreationHelper.instance().toggleSelectedDay(6);
                         break;
                     default:
                         break;
@@ -173,51 +183,79 @@ public class ScheduleTimetableFragment extends Fragment {
         String[] routineNames = getUpdatedRoutineNames();
         timetableContainer.removeAllViews();
 
-        Collections.sort(ScheduleCreationStateHolder.getInstance().getSelectedRoutines());
+        Collections.sort(ScheduleCreationHelper.instance().getScheduleItems(), scheduleItemComparator);
+
+        for(ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems()){
+            Routine r = RoutineStore.instance().get(i.routineId());
+            Log.d("SORT", r!=null?r.getName():"null");
+        }
+
+        List<ScheduleItem> scheduleItems = new ArrayList<ScheduleItem>();
+
+        boolean enableDelete = timesPerDay > 1;
 
         for (int i = 0; i < timesPerDay; i++) {
-
             // try to get previous routine from state holder
-            Routine r = (i < ScheduleCreationStateHolder.getInstance().getSelectedRoutines().size()) ?
-                    ScheduleCreationStateHolder.getInstance().getSelectedRoutines().get(i) : null;
+            ScheduleItem  s = (i < ScheduleCreationHelper.instance().getScheduleItems().size()) ?
+                    ScheduleCreationHelper.instance().getScheduleItems().get(i) : null;
 
             // if null, get it from the store if possible
-            if (r == null) {
-                r = (i < routines.size()) ? routines.get(i) : null;
+
+            Log.d("ROUTINES", "Routines: " + routines.size() +", i:" + i);
+
+            if (s == null) {
+                s = new ScheduleItem((i < routines.size()) ? routines.get(i).id() : null, new Dose(1));
             }
 
-            View view = buildTimetableEntry(r, routineNames);
+            Log.d("ROUTINES", s.toString());
+
+            if(s !=null){
+                scheduleItems.add(s);
+            }
+
+            View view = buildTimetableEntry(s, routineNames, enableDelete);
             timetableContainer.addView(view, params);
         }
+
+        ScheduleCreationHelper.instance().setScheduleItems(scheduleItems);
+        Log.d(TAG, "SetScheduleItems: " + GsonUtil.get().toJson(scheduleItems));
+
     }
 
 
     String[] getUpdatedRoutineNames() {
-        String[] routinesFromStore = RoutineStore.getInstance().routineNames();
-        String[] routineNames = new String[routinesFromStore.length + 1];
 
-        for (int i = 0; i < routinesFromStore.length; i++) {
-            routineNames[i] = routinesFromStore[i];
+        List<Routine> routines = RoutineStore.instance().asList();
+
+        int j = 0;
+        String[] routineNames = new String[routines.size() + 1];
+        for (Routine r : routines) {
+            routineNames[j++] = r.getName();
         }
 
         routineNames[routineNames.length - 1] = getString(R.string.create_new_routine);
+
         return routineNames;
     }
 
 
-    View buildTimetableEntry(Routine r, String[] routineNames) {
+    View buildTimetableEntry(ScheduleItem r, String[] routineNames, boolean enableDelete) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View entry = inflater.inflate(R.layout.schedule_timetable_entry, null);
-        updateEntryTime(r, entry);
+        updateEntryTime(RoutineStore.instance().get(r.routineId()), entry);
         setupScheduleEntrySpinners(entry, r, routineNames);
 
-        entry.findViewById(R.id.entry_remove).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ScheduleCreationStateHolder.getInstance().getSelectedRoutines().remove(timetableContainer.indexOfChild(entry));
-                scheduleSpinner.setSelection(timesPerDay - 2);
-            }
-        });
+        if(enableDelete) {
+            entry.findViewById(R.id.entry_remove).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ScheduleCreationHelper.instance().getScheduleItems().remove(timetableContainer.indexOfChild(entry));
+                    scheduleSpinner.setSelection(timesPerDay - 2);
+                }
+            });
+        }else{
+            entry.findViewById(R.id.entry_remove).setVisibility(View.INVISIBLE);
+        }
         return entry;
     }
 
@@ -228,15 +266,23 @@ public class ScheduleTimetableFragment extends Fragment {
     }
 
 
-    private void setupScheduleEntrySpinners(final View entryView, Routine r, String[] routineNames) {
+    private void setupScheduleEntrySpinners(final View entryView, ScheduleItem scheduleItem, String[] routineNames) {
+
         final Spinner routineSpinner = (Spinner) entryView.findViewById(R.id.entry_routine_spinner);
         final Spinner doseSpinner = (Spinner) entryView.findViewById(R.id.entry_dose_spinner);
+
+        doseSpinner.setTag(scheduleItem);
+        routineSpinner.setTag(scheduleItem);
 
         // set up the routine selection adapter
         updateRoutineSelectionAdapter(entryView, routineSpinner, routineNames);
 
-        if (r != null) {
-            routineSpinner.setSelection(Arrays.asList(routineNames).indexOf(r.getName()));
+        if (scheduleItem != null && scheduleItem.routineId()!=null) {
+            Log.d("ROUTINES", "BeforeNull: " + scheduleItem.toString());
+            String routineId = scheduleItem.routineId();
+            String routineName = RoutineStore.instance().get(routineId).getName();
+            int index = Arrays.asList(routineNames).indexOf(routineName);
+            routineSpinner.setSelection(index);
         } else {
             routineSpinner.setSelection(routineNames.length - 1);
         }
@@ -246,28 +292,30 @@ public class ScheduleTimetableFragment extends Fragment {
         doseAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         doseSpinner.setAdapter(doseAdapter);
         // select 1 pill by default
-        doseSpinner.setSelection(0);
+        doseSpinner.setSelection(scheduleItem.dose().ammount() - 1); // dose "1" is located at the index "0", and so on
 
         // setup listeners
         routineSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String selected = (String) adapterView.getItemAtPosition(i);
-                Routine r = RoutineStore.getInstance().getRoutineByName(selected);
+                Routine r = RoutineStore.instance().getRoutineByName(selected);
+                ScheduleItem item = ((ScheduleItem)doseSpinner.getTag());
 
                 if (r != null) {
                     updateEntryTime(r, entryView);
+                    item.setRoutine(r.id());
                 } else {
                     updateEntryTime(null, entryView);
                     showAddNewRoutineDialog(entryView);
                 }
 
                 int idx = timetableContainer.indexOfChild(entryView);
-                if (ScheduleCreationStateHolder.getInstance().getSelectedRoutines().size() > idx) {
-                    ScheduleCreationStateHolder.getInstance().getSelectedRoutines().remove(idx);
+                if (ScheduleCreationHelper.instance().getScheduleItems().size() > idx) {
+                    ScheduleCreationHelper.instance().getScheduleItems().remove(idx);
                 }
                 // r can be null, yes
-                ScheduleCreationStateHolder.getInstance().getSelectedRoutines().add(idx, r);
+                ScheduleCreationHelper.instance().getScheduleItems().add(idx, new ScheduleItem(r!=null?r.id():null,item.dose()));
             }
 
             @Override
@@ -295,7 +343,12 @@ public class ScheduleTimetableFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Integer selected = (Integer) adapterView.getItemAtPosition(i);
-                Log.d(getTag(), "Selected: " + selected);
+                ScheduleItem item = ((ScheduleItem)doseSpinner.getTag());
+                item.dose().setAmmount(selected);
+                Log.d(TAG, "Set dose " + selected + " for scheduleItem " + item.id());
+                Log.d(TAG, GsonUtil.get().toJson(ScheduleCreationHelper.instance().getScheduleItems()));
+                //Log.d(getTag(), "Selected: " + selected + " for routine " + (item.routineId() != null ? RoutineStore.instance().get(item.routineId()).getName() : "[new]"));
+                //Log.d(getTag(), "Selected: " + selected + " for routine " + (item.routineId() != null ? RoutineStore.instance().get(item.routineId()).getName() : "[new]"));
             }
 
             @Override
@@ -369,6 +422,5 @@ public class ScheduleTimetableFragment extends Fragment {
                 days[6] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
 
     }
-
 
 }

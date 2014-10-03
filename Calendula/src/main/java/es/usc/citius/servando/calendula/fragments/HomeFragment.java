@@ -12,6 +12,7 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.MessageNotification;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
+import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.activities.SchedulesActivity;
 
 /**
@@ -49,7 +50,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 launchActivity(SchedulesActivity.class);
                 break;
             case R.id.home_button_pharmacies:
-                MessageNotification.notify(getActivity(), "Its time to take your meds", 3);
                 break;
             case R.id.home_button_plantrip:
                 break;

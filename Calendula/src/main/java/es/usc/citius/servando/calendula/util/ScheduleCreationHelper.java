@@ -7,27 +7,28 @@ import java.util.Arrays;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.model.Medicine;
-import es.usc.citius.servando.calendula.model.Routine;
+import es.usc.citius.servando.calendula.model.ScheduleItem;
 
 /**
  * Created by joseangel.pineiro on 12/12/13.
  */
-public class ScheduleCreationStateHolder {
+public class ScheduleCreationHelper {
 
-    private static final ScheduleCreationStateHolder instance = new ScheduleCreationStateHolder();
+    private static final ScheduleCreationHelper instance = new ScheduleCreationHelper();
 
     private Medicine selectedMed;
     private int selectedScheduleIdx = 0;
     private int timesPerDay = 1;
-    private List<Routine> selectedRoutines;
+    private List<ScheduleItem> scheduleItems;
     private boolean[] selectedDays = new boolean[]{true, true, true, true, true, true, true}; // 7 days
 
+    private String[] dayNames = new String[]{"Mon", "Tue", "Wed", "Thu", "Fry", "Sat", "Sun"}; // 7 days
 
-    private ScheduleCreationStateHolder() {
-        setSelectedRoutines(new ArrayList<Routine>());
+    private ScheduleCreationHelper() {
+        setScheduleItems(new ArrayList<ScheduleItem>());
     }
 
-    public static ScheduleCreationStateHolder getInstance() {
+    public static ScheduleCreationHelper instance() {
         return instance;
     }
 
@@ -39,12 +40,16 @@ public class ScheduleCreationStateHolder {
         this.selectedMed = selectedMed;
     }
 
-    public List<Routine> getSelectedRoutines() {
-        return selectedRoutines;
+    public List<ScheduleItem> getScheduleItems() {
+        return scheduleItems;
     }
 
-    public void setSelectedRoutines(List<Routine> selectedRoutines) {
-        this.selectedRoutines = selectedRoutines;
+    public void setScheduleItems(List<ScheduleItem> scheduleItems) {
+        this.scheduleItems = scheduleItems;
+    }
+
+    public void addScheduleItem(ScheduleItem i){
+        scheduleItems.add(i);
     }
 
     public boolean[] getSelectedDays() {
@@ -76,10 +81,35 @@ public class ScheduleCreationStateHolder {
         this.timesPerDay = timesPerDay;
     }
 
+    @Override
+    public String toString() {
+        return "ScheduleCreationHelper{" +
+                "selectedMed=" + selectedMed.getName() +
+                ", selectedScheduleIdx=" + selectedScheduleIdx +
+                ", timesPerDay=" + timesPerDay +
+                ", scheduleItems=" + scheduleItems.size() +
+                ", selectedDays=" + Arrays.toString(selectedDays) +
+                '}';
+    }
+
+    public String[] getDays(){
+        ArrayList<String> days = new ArrayList<String>();
+
+        for(int i = 0; i < selectedDays.length;i++){
+            if(selectedDays[i]){
+                days.add(dayNames[i]);
+            }
+        }
+
+        return days.toArray(new String[days.size()]);
+
+    }
+
+
 
     public void clear() {
         setTimesPerDay(1);
-        setSelectedRoutines(new ArrayList<Routine>());
+        scheduleItems = new ArrayList<ScheduleItem>();
         setSelectedMed(null);
         setSelectedScheduleIdx(0);
         selectedDays = new boolean[]{true, true, true, true, true, true, true};

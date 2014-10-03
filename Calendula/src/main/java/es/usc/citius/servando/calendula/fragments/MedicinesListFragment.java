@@ -53,7 +53,7 @@ public class MedicinesListFragment extends Fragment {
 
     public void notifyDataChange() {
         mMedicines = MedicineStore.getInstance().getAll();
-        Log.d(getTag(), "Routines : " + mMedicines.size() + ", " + RoutineStore.getInstance().size());
+        Log.d(getTag(), "Routines : " + mMedicines.size() + ", " + RoutineStore.instance().size());
 //        adapter.clear();
 //        for (Medicine m : mMedicines) {
 //            adapter.add(m);

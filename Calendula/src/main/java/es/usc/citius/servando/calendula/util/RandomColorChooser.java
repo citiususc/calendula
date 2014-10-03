@@ -30,6 +30,14 @@ public class RandomColorChooser {
         return (colorIndex++)%primary_colors.length;
     }
 
+    public static int getFixedColor(Object obj, Resources res){
+        return res.getColor(primary_colors[obj.hashCode()%primary_colors.length]);
+    }
+
+    public static int getFixedColorIdx(Object obj){
+        return obj.hashCode()%primary_colors.length;
+    }
+
     public static int getPrimaryColor(int idx, Resources res){
         return res.getColor(primary_colors[idx]);
     }

@@ -15,9 +15,9 @@ public class DummyDataGenerator {
 
     public static void fillRoutineStore() {
 
-        RoutineStore.getInstance().addRoutine(new Routine(new LocalTime(9, 0), "Breakfast"));
-        RoutineStore.getInstance().addRoutine(new Routine(new LocalTime(13, 0), "Lunch"));
-        RoutineStore.getInstance().addRoutine(new Routine(new LocalTime(21, 0), "Dinner"));
+        //RoutineStore.instance().addRoutine(new Routine(new LocalTime(9, 0), "Breakfast"));
+        //RoutineStore.instance().addRoutine(new Routine(new LocalTime(13, 0), "Lunch"));
+        //RoutineStore.instance().addRoutine(new Routine(new LocalTime(21, 0), "Dinner"));
 
     }
 

@@ -48,7 +48,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment {
         });
 
         if (savedInstanceState != null && savedInstanceState.containsKey("routine")) {
-            mRoutine = RoutineStore.getInstance().getRoutine(savedInstanceState.getString("routine"));
+            mRoutine = RoutineStore.instance().getRoutine(savedInstanceState.getString("routine"));
             mConfirmButton.setText(getString(R.string.edit_routine_button_text));
         }
 
@@ -98,6 +98,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment {
             if (mRoutine != null) {
                 mRoutine.setName(name);
                 mRoutine.setTime(new LocalTime(hour, minute));
+                RoutineStore.instance().save(getActivity());
                 if (mRoutineEditCallback != null) {
                     mRoutineEditCallback.onRoutineEdited(mRoutine);
                 }
@@ -106,7 +107,8 @@ public class RoutineCreateOrEditFragment extends DialogFragment {
             else {
                 mRoutine = new Routine(new LocalTime(hour, minute), name);
                 Log.d(getTag(), "Routine created");
-                RoutineStore.getInstance().addRoutine(mRoutine);
+                RoutineStore.instance().addRoutine(mRoutine);
+                RoutineStore.instance().save(getActivity());
                 if (mRoutineEditCallback != null) {
                     mRoutineEditCallback.onRoutineCreated(mRoutine);
                 }

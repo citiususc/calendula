@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.tjerkw.slideexpandable.library.SlideExpandableListAdapter;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -29,23 +31,28 @@ import es.usc.citius.servando.calendula.util.RandomColorChooser;
  */
 public class DailyAgendaFragment extends Fragment {
 
-    List<DailyAgendaItemStub> items;
-
-
-
-
+    List<DailyAgendaItemStub> items = new ArrayList<DailyAgendaItemStub>();
+    ArrayAdapter adapter = null;
+    ListView listview = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_daily_agenda, container, false);
-        final ListView listview = (ListView) rootView.findViewById(R.id.listview);
-
+        listview = (ListView) rootView.findViewById(R.id.listview);
         items = buildItems(); // allow user to change day
-
-        ListAdapter adapter = new AgendaItemAdapter(getActivity(),R.layout.daily_view_hour,items);
+        adapter = new AgendaItemAdapter(getActivity(),R.layout.daily_view_hour,items);
         listview.setAdapter(new SlideExpandableListAdapter(adapter,R.id.count_container,R.id.bottom));
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        items = buildItems(); // allow user to change day
+        int currentHour = DateTime.now().getHourOfDay();
+        adapter.notifyDataSetChanged();
+        listview.smoothScrollToPosition(currentHour);
     }
 
     public List<DailyAgendaItemStub> buildItems() {
@@ -53,7 +60,7 @@ public class DailyAgendaFragment extends Fragment {
         ArrayList<DailyAgendaItemStub> items = new ArrayList<DailyAgendaItemStub>();
 
         for(int i = 0; i < 24; i++){
-            DailyAgendaItemStub item = DailyAgendaItemStub.random(i);
+            DailyAgendaItemStub item = DailyAgendaItemStub.fromRoutine(i);
             items.add(item);
         }
         return items;
@@ -77,7 +84,7 @@ public class DailyAgendaFragment extends Fragment {
             DailyAgendaItemStub item = items.get(position);
 
             if(!item.hasColors){
-                int colorIndex = RandomColorChooser.getNextColorIndex();
+                int colorIndex = RandomColorChooser.getFixedColorIdx(new Integer(item.hour));
                 item.primaryColor = RandomColorChooser.getPrimaryColor(colorIndex,getResources());
                 item.secondaryColor = RandomColorChooser.getSecondaryColor(colorIndex,getResources());
                 item.hasColors=true;
@@ -92,9 +99,10 @@ public class DailyAgendaFragment extends Fragment {
             }else{
                 LinearLayout medList = (LinearLayout) v.findViewById(R.id.med_item_list);
                 boolean isFirst = true;
-                for(String s : item.meds){
+                for(DailyAgendaItemStub.DailyAgendaItemStubElement element : item.meds){
+
                     View medNameView = layoutInflater.inflate(R.layout.daily_agenda_item_med,null);
-                    ((TextView)medNameView.findViewById(R.id.med_item_name)).setText(s);
+                    ((TextView)medNameView.findViewById(R.id.med_item_name)).setText(element.medName + "(" + element.dose + ")");
                     if(isFirst){
                         ((TextView)medNameView.findViewById(R.id.bottom_current_hour_text)).setText(String.valueOf(item.hour<10?("0"+item.hour):item.hour));
                        isFirst=false;
@@ -106,7 +114,7 @@ public class DailyAgendaFragment extends Fragment {
                     ((TextView)medNameView.findViewById(R.id.bottom_current_hour_text)).setTextColor(item.primaryColor);
                     ((TextView)medNameView.findViewById(R.id.bottom_current_minute_text)).setTextColor(item.secondaryColor);
 
-                    ((TextView)medNameView.findViewById(R.id.bottom_current_minute_text)).setText("00"); // TODO set proper minute
+                    ((TextView)medNameView.findViewById(R.id.bottom_current_minute_text)).setText(element.minute);
                     medList.addView(medNameView);
                 }
                 // set number of meds to take

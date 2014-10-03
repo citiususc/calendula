@@ -11,6 +11,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 
+import es.usc.citius.servando.calendula.AlarmScheduler;
+import es.usc.citius.servando.calendula.store.RoutineStore;
+import es.usc.citius.servando.calendula.store.ScheduleStore;
+import es.usc.citius.servando.calendula.util.api.ApiRequestBuilder;
+import es.usc.citius.servando.calendula.util.api.ApiResponse;
+
 /**
  * Created by joseangel.pineiro on 6/16/14.
  */
@@ -40,9 +46,37 @@ public class Session {
 
     public void close(Context context) {
         // delete user data file
+        user=null;
+        AlarmScheduler.instance().cancelDailyAlarms(context);
         context.deleteFile(SESSION_FILENAME);
-
     }
+
+    public boolean resume(Context context) throws Exception {
+
+        ApiResponse response = null;
+
+        try {
+            open(context);
+
+        response = new ApiRequestBuilder()
+                    .to("auth")
+                    .authorize(user.getToken())
+                    .expect(ApiResponse.class)
+                    .post();
+
+            Log.d("Session", "Resume session [" + response.success + ", " +response.status + "]");
+            return response.success;
+
+        }catch (Exception e){
+            Log.e("Session", "Cannot resume user session [" + response + "]",e);
+            try {
+                // close(context);
+            }catch (Exception unhandled){/* do nothintg */}
+        }
+
+        return false;
+    }
+
 
     public void create(Context context, User user) throws Exception {
         // open session file where user data is stored
@@ -56,16 +90,38 @@ public class Session {
 
     public void open(Context context) throws Exception {
         // open session file where user data is stored
+        FileInputStream is = null;
         try {
-            final FileInputStream is = context.openFileInput(SESSION_FILENAME);
-            final BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            is = context.openFileInput(SESSION_FILENAME);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             user = new Gson().fromJson(reader, User.class);
-
+            onCreateSession(context);
+            Log.d(Session.class.getName(), "Opening session for user [" + user.getEmail()+ ", " + user.getToken() + "]");
         } catch (FileNotFoundException e) {
-            Log.e(Session.class.getName(), "Error reading session data");
+            Log.e(Session.class.getName(), "Error reading session data",e);
             throw new Exception("No user data file was found");
+        }finally {
+            try {
+                is.close();
+            }catch (Exception unhandled){
+                //do nothing
+            }
         }
 
+    }
+
+    private void onCreateSession(Context context) throws Exception{
+
+        // load routines
+        RoutineStore.instance().load(context);
+        // Load schedules
+        ScheduleStore.instance().load(context);
+        // Schedule routine alarms
+        AlarmScheduler.instance().scheduleDailyAlarms(context);
+    }
+
+    private String generateUserDirName(String username){
+        return username.replace("@","").replace(".","-");
     }
 
 }

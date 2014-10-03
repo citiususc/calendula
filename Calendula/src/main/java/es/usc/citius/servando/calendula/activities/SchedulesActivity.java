@@ -1,123 +1,75 @@
 package es.usc.citius.servando.calendula.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.Locale;
 
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
-import es.usc.citius.servando.calendula.fragments.ScheduleSummaryFragment;
-import es.usc.citius.servando.calendula.fragments.ScheduleTimetableFragment;
-import es.usc.citius.servando.calendula.model.Medicine;
+import es.usc.citius.servando.calendula.fragments.RoutineCreateOrEditFragment;
+import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
+import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
+import es.usc.citius.servando.calendula.model.Routine;
+import es.usc.citius.servando.calendula.model.Schedule;
+import es.usc.citius.servando.calendula.store.ScheduleStore;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
-import es.usc.citius.servando.calendula.util.ScheduleCreationStateHolder;
 
-public class SchedulesActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener, MedicineCreateOrEditFragment.OnMedicineEditListener {
+public class SchedulesActivity extends ActionBarActivity implements ScheduleListFragment.OnScheduleSelectedListener{
 
+    private static final String TAG = SchedulesActivity.class.getSimpleName();
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
+     * {@link android.support.v4.app.FragmentPagerAdapter} derivative, which will keep every
      * loaded fragment in memory. If this becomes too memory intensive, it
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
-    ActionBar mActionBar;
-
-    Button prevButton;
-    Button nextButton;
-
-    int currentPageIndicatorColor;
-    int normalPageIndicatorColor;
-    int selectedPage = -1;
-
-    // Medicine reference that will be created and returned by the createOrEdit fragment
-    Medicine med;
-
+//    RoutinesListFragment listFragment;
+//    RoutineCreateOrEditFragment editFragment;
 
     /**
-     * The {@link ViewPager} that will host the section contents.
+     * The {@link android.support.v4.view.ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+
+    String listFragmentName;
+    String editFragmentName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_schedules);
+        setContentView(R.layout.activity_schedule_list);
 
-        normalPageIndicatorColor = getResources().getColor(R.color.android_blue_light);
-        currentPageIndicatorColor = getResources().getColor(R.color.android_blue_dark);
 
-        prevButton = (Button) findViewById(R.id.schedules_prev_button);
-        nextButton = (Button) findViewById(R.id.schedules_next_button);
-
-        setFormOnClickListeners();
-
-        mActionBar = getSupportActionBar();
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOnPageChangeListener(this);
-        // set first page indicator
-        setCurrentPageIndicator(0);
+        listFragmentName = FragmentUtils.makeViewPagerFragmentName(R.id.pager, 0);
+        editFragmentName = FragmentUtils.makeViewPagerFragmentName(R.id.pager, 1);
+
     }
 
 
-    void setFormOnClickListeners() {
-        prevButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // show prev page if any
-                int currentPage = mViewPager.getCurrentItem();
-                if (currentPage > 0) {
-                    mViewPager.setCurrentItem(currentPage - 1);
-                }
-            }
-        });
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // show next page if any
-                int currentPage = mViewPager.getCurrentItem();
-                if (currentPage < 2 && validatePage(currentPage)) {
-                    mViewPager.setCurrentItem(currentPage + 1);
-                } else if (currentPage == 2) {
-                    Toast.makeText(SchedulesActivity.this, "Confirm!", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "Resume schedules activity");
 
-
-    boolean validatePage(int page) {
-        if (page == 0) {
-            MedicineCreateOrEditFragment fragment = ((MedicineCreateOrEditFragment) getViewPagerFragment(0));
-            if (fragment.validate()) {
-                med = fragment.getMedicineFromView();
-                ScheduleCreationStateHolder.getInstance().setSelectedMed(med);
-                Log.d(SchedulesActivity.class.getName(), "Med created but no saved: " + med.getName() + ", " + med.getPresentation().getName(getResources()));
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return true;
     }
 
     @Override
@@ -136,94 +88,57 @@ public class SchedulesActivity extends ActionBarActivity implements ViewPager.On
         switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
+            case R.id.action_remove_all:
+                ScheduleStore.instance().removeAll(getBaseContext());
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-
-    void setCurrentPageIndicator(int page) {
-
-        Log.d(SchedulesActivity.class.getName(), "page: " + page + ", current: " + selectedPage);
-
-        if (page != selectedPage) {
-            // uncheck old page indicator
-            if (selectedPage == 0) {
-                findViewById(R.id.add_sched_page_indicator_up_1).setBackgroundColor(normalPageIndicatorColor);
-                findViewById(R.id.add_sched_page_indicator_down_1).setBackgroundColor(normalPageIndicatorColor);
-                Log.d(SchedulesActivity.class.getName(), "Set background");
-            } else if (selectedPage == 1) {
-                findViewById(R.id.add_sched_page_indicator_up_2).setBackgroundColor(normalPageIndicatorColor);
-                findViewById(R.id.add_sched_page_indicator_down_2).setBackgroundColor(normalPageIndicatorColor);
-            } else if (selectedPage == 2) {
-                findViewById(R.id.add_sched_page_indicator_up_3).setBackgroundColor(normalPageIndicatorColor);
-                findViewById(R.id.add_sched_page_indicator_down_3).setBackgroundColor(normalPageIndicatorColor);
-            }
-            // check new page indicator
-            if (page == 0) {
-                findViewById(R.id.add_sched_page_indicator_up_1).setBackgroundColor(currentPageIndicatorColor);
-                findViewById(R.id.add_sched_page_indicator_down_1).setBackgroundColor(currentPageIndicatorColor);
-                // update buttons
-                prevButton.setBackgroundResource(R.drawable.transparent_button_selector);
-                prevButton.setEnabled(false);
-                nextButton.setBackgroundResource(R.drawable.next_button_selector);
-                nextButton.setText(R.string.next);
-
-            } else if (page == 1) {
-                findViewById(R.id.add_sched_page_indicator_up_2).setBackgroundColor(currentPageIndicatorColor);
-                findViewById(R.id.add_sched_page_indicator_down_2).setBackgroundColor(currentPageIndicatorColor);
-                // update buttons
-                prevButton.setEnabled(true);
-                prevButton.setBackgroundResource(R.drawable.prev_button_selector);
-                nextButton.setBackgroundResource(R.drawable.next_button_selector);
-                nextButton.setText(R.string.next);
-
-            } else if (page == 2) {
-                findViewById(R.id.add_sched_page_indicator_up_3).setBackgroundColor(currentPageIndicatorColor);
-                findViewById(R.id.add_sched_page_indicator_down_3).setBackgroundColor(currentPageIndicatorColor);
-                // update buttons
-                prevButton.setEnabled(true);
-                prevButton.setBackgroundResource(R.drawable.prev_button_selector);
-                nextButton.setBackgroundResource(R.drawable.confirm_button_selector);
-                nextButton.setText(R.string.confirm);
-            }
-
-            selectedPage = page;
-
-            Log.d(SchedulesActivity.class.getName(), "page: " + page + ", current: " + selectedPage);
-        }
-    }
-
     @Override
-    public void onPageScrolled(int i, float v, int i2) {
+    public void onScheduleSelected(Schedule r) {
 
     }
 
     @Override
-    public void onPageSelected(int page) {
-        setCurrentPageIndicator(page);
+    public void onCreateSchedule() {
+        launchActivity(ScheduleCreationActivity.class);
     }
-
+    /*
     @Override
-    public void onPageScrollStateChanged(int i) {
-
-    }
-
-    @Override
-    public void onMedicineEdited(Medicine r) {
-
-    }
-
-    @Override
-    public void onMedicineCreated(Medicine m) {
-        // save med reference
-        med = m;
-        // go to next step
+    public void onRoutineSelected(Routine r) {
         mViewPager.setCurrentItem(1);
+        ((RoutineCreateOrEditFragment) getViewPagerFragment(1)).setRoutine(r);
+        setTitle(R.string.title_edit_routine_activity);
+
     }
 
+    @Override
+    public void onCreateRoutine() {
+        mViewPager.setCurrentItem(1);
+        ((RoutineCreateOrEditFragment) getViewPagerFragment(1)).clear();
+        setTitle(R.string.title_create_routine_activity);
+    }
+
+    @Override
+    public void onRoutineEdited(Routine r) {
+        Toast.makeText(this, "Changes saved!", Toast.LENGTH_SHORT).show();
+        mViewPager.setCurrentItem(0);
+        ((RoutinesListFragment) getViewPagerFragment(0)).notifyDataChange();
+        setTitle(R.string.title_activity_routines);
+    }
+
+    @Override
+    public void onRoutineCreated(Routine r) {
+        Toast.makeText(this, "Routine created!", Toast.LENGTH_SHORT).show();
+        mViewPager.setCurrentItem(0);
+        ((RoutinesListFragment) getViewPagerFragment(0)).notifyDataChange();
+        setTitle(R.string.title_activity_routines);
+    }
+    */
 
     /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * A {@link android.support.v4.app.FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -236,54 +151,35 @@ public class SchedulesActivity extends ActionBarActivity implements ViewPager.On
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if (position == 0) {
-                return new MedicineCreateOrEditFragment();
-            } else if (position == 1) {
-                return new ScheduleTimetableFragment();
-            } else {
-                return new ScheduleSummaryFragment();
-            }
+
+            return new ScheduleListFragment();
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            switch (position) {
-                case 0:
-                    return getString(R.string.title_section1).toUpperCase(l);
-                case 1:
-                    return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
-            }
-            return null;
+            // Show 1 total pages.
+            return 1;
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (mViewPager.getCurrentItem() > 0) {
-            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+        if (mViewPager.getCurrentItem() != 0) {
+            mViewPager.setCurrentItem(0);
+            setTitle(R.string.title_activity_schedule_list);
         } else {
-            ScheduleCreationStateHolder.getInstance().clear();
             super.onBackPressed();
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
 
     Fragment getViewPagerFragment(int position) {
         return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
+    }
+
+    private void launchActivity(Class activityCls) {
+        Intent intent = new Intent(this, activityCls);
+        startActivity(intent);
     }
 
 }

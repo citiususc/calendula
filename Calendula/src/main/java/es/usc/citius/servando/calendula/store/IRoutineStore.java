@@ -19,6 +19,8 @@ public interface IRoutineStore {
 
     Routine getRoutine(String timeAsString);
 
+    Routine getRoutine(int hash);
+
     void removeRoutine(Routine r);
 
     boolean existRoutine(DateTime time);

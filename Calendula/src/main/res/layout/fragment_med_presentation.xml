@@ -126,7 +126,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="120dp"
-        android:id="@+id/imageView3"
+        android:id="@+id/imageView3l"
         android:src="@drawable/presentation_box_left"
         android:adjustViewBounds="false"
         android:cropToPadding="false"
@@ -135,7 +135,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="120dp"
-        android:id="@+id/imageView3"
+        android:id="@+id/imageView3r"
         android:src="@drawable/presentation_box_right"
         android:adjustViewBounds="false"
         android:layout_alignParentRight="true"
@@ -145,7 +145,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="3dp"
-        android:id="@+id/imageView4"
+        android:id="@+id/imageView4t"
         android:src="@drawable/presentation_box_shadow_top"
         android:scaleType="fitXY"
         android:layout_marginLeft="50dp"
@@ -155,7 +155,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="3dp"
-        android:id="@+id/imageView4"
+        android:id="@+id/imageView4b"
         android:src="@drawable/presentation_box_shadow_bottom"
         android:scaleType="fitXY"
         android:layout_marginLeft="50dp"

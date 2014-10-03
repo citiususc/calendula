@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!-- Android palette -->
     <color name="android_pink">#AA66CC</color>
     <color name="android_pink_dark">#9933CC</color>
     <color name="android_pink_light">#55AA66CC</color>
-
     <color name="android_green">#99CC00</color>
     <color name="android_green_dark">#669900</color>
     <color name="android_green_light">#55669900</color>
-
     <color name="android_orange">#FFBB33</color>
     <color name="android_orange_dark">#FF8800</color>
     <color name="android_orange_light">#55FFBB33</color>
-
     <color name="android_red">#FF4444</color>
     <color name="android_red_dark">#CC0000</color>
     <color name="android_red_light">#55FF4444</color>
-
     <color name="android_blue">#33B5E5</color>
     <color name="android_blue_dark">#0099CC</color>
     <color name="android_blue_light">#5533B5E5</color>
+    <color name="white_50">#55FFFFFF</color>
 
     <!-- Other colors -->
     <color name="white">#FFFFFF</color>
     <color name="dark_grey_home">#272727</color>
-
     <color name="green_hour_expanded_left">#2299CC00</color>
     <color name="green_hour_expanded_right">#CC99CC00</color>
 
@@ -32,9 +29,11 @@
     <color name="list_item_selector_normal">#00111111</color>
     <color name="list_item_selector_pressed">#3333B5E5</color>
     <color name="home_background_color">@color/dark_grey_home</color>
-    <!--#ececec-->
+    <color name="light_grey">#55ABABAB</color>
+    <color name="light_grey_pressed">#99989898</color>
+    <!-- #ececec -->
     <color name="actionbar_background_color">#161616</color>
-
     <color name="med_presentation_circle_bg">#3333B5E5</color>
+    <color name="black_overlay">#66000000</color>
 
 </resources>

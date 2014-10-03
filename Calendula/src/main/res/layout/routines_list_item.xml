@@ -77,7 +77,7 @@
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="10dp"
-        android:id="@+id/imageView2"
+        android:id="@+id/imageView2b"
         android:src="@drawable/daily_view_list_item_tab_shadow_bottom"
         android:layout_alignParentBottom="true"
         android:scaleType="fitXY"
@@ -87,7 +87,7 @@
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="10dp"
-        android:id="@+id/imageView2"
+        android:id="@+id/imageView2a"
         android:src="@drawable/daily_view_list_item_tab_shadow_top"
         android:scaleType="fitXY"
         android:layout_alignParentTop="true"
