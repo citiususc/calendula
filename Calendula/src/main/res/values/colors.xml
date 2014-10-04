@@ -20,6 +20,7 @@
     <color name="white_50">#55FFFFFF</color>
 
     <!-- Other colors -->
+    <color name="splash_background">#151515</color>
     <color name="white">#FFFFFF</color>
     <color name="dark_grey_home">#272727</color>
     <color name="green_hour_expanded_left">#2299CC00</color>

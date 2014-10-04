@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.usc.citius.servando.calendula.DailyDosageChecker;
 import es.usc.citius.servando.calendula.model.Routine;
 import es.usc.citius.servando.calendula.model.Schedule;
 import es.usc.citius.servando.calendula.model.ScheduleItem;
@@ -21,7 +22,7 @@ public class ScheduleUtils {
         if(items == null || items.size() == 0){
             throw new IllegalArgumentException("Routines list can not be null or empty");
         }
-
+        //TODO: move to values.xml
         switch (items.size()) {
             case 1:
                 return "Once a day";
@@ -45,7 +46,7 @@ public class ScheduleUtils {
      * @param routine The routine
      * @return
      */
-    public static Map<Schedule,ScheduleItem> getRoutineScheduleItems(Routine routine){
+    public static Map<Schedule,ScheduleItem> getRoutineScheduleItems(Routine routine, boolean includeTaken){
 
         Map<Schedule,ScheduleItem> doses = new HashMap<Schedule, ScheduleItem>();
 
@@ -58,14 +59,17 @@ public class ScheduleUtils {
                 // iterate over schedule items and check for current routine
                 for(ScheduleItem item : schedule.items()){
                     if(item.routineId().equals(routine.id())){
-                        // we need to add this item to the list of
-                        // schedule items to execute now
-                        doses.put(schedule,item);
-                        break;
+                        if(includeTaken || (!includeTaken && !DailyDosageChecker.instance().doseTaken(item))) {
+                            // we need to add this item to the list of
+                            // schedule items to execute now
+                            doses.put(schedule, item);
+                            break;
+                        }
                     }
                 }
             }
         }
         return doses;
     }
+
 }

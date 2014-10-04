@@ -48,7 +48,7 @@
     <string name="delay">DELAY</string>
     <string name="done">DONE</string>
     <string name="confirm">CONFIRM</string>
-    <string name="meds_time">It\'s time to take your meds</string>
+    <string name="meds_time">Remember to take your meds</string>
 
     <!-- Schedule creation -->
     <string name="summary_title">Check and confirm</string>
@@ -83,6 +83,13 @@
         <item>Three times a day</item>
         <item>Four times a day</item>
     </string-array>
+
+    <!-- Default routines -->
+    <string name="routine_breakfast">Breakfast</string>
+    <string name="routine_lunch">Lunch</string>
+    <string name="routine_dinner">Dinner</string>
+
+
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="message_notification_title_template">%1$s</string>

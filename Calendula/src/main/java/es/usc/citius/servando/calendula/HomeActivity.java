@@ -68,14 +68,10 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
         mActionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
         mViewPager.setOnPageChangeListener(this);
 
-        if (MedicineStore.getInstance().size() == 0) {
-            DummyDataGenerator.fillMedicineStore();
+        boolean welcome = getIntent().getBooleanExtra("welcome",false);
+        if(welcome) {
+            Toast.makeText(getBaseContext(), "Welcome to calendula!", Toast.LENGTH_SHORT).show();
         }
-        if (RoutineStore.instance().size() == 0) {
-            DummyDataGenerator.fillRoutineStore();
-        }
-
-        Toast.makeText(getBaseContext(),"Logged as " + Session.getInstance().getUser().getEmail() + "", Toast.LENGTH_SHORT).show();
     }
 
 

@@ -9,27 +9,33 @@
         android:targetSdkVersion="18" />
 
     <application
+        android:name=".CalendulaApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
             android:name="es.usc.citius.servando.calendula.HomeActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="es.usc.citius.servando.calendula.activities.RoutinesActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_routines"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="es.usc.citius.servando.calendula.activities.MedicinesActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_medicines"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="es.usc.citius.servando.calendula.activities.ScheduleCreationActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_schedules" />
         <activity
             android:name="es.usc.citius.servando.calendula.activities.SchedulesActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_schedules" />
         <activity
             android:name="es.usc.citius.servando.calendula.activities.LoginActivity"
@@ -38,6 +44,7 @@
         </activity>
         <activity
             android:name="es.usc.citius.servando.calendula.activities.StartActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
             android:label="@string/title_activity_start" >
             <intent-filter>
@@ -51,6 +58,7 @@
 
         <activity
             android:name="es.usc.citius.servando.calendula.activities.ReminderActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_reminder" >
         </activity>
     </application>

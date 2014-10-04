@@ -10,10 +10,9 @@ import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.LocalTime;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import es.usc.citius.servando.calendula.activities.MessageNotification;
+import es.usc.citius.servando.calendula.activities.ReminderNotification;
 import es.usc.citius.servando.calendula.activities.StartActivity;
 import es.usc.citius.servando.calendula.model.Dose;
 import es.usc.citius.servando.calendula.model.Medicine;
@@ -22,7 +21,6 @@ import es.usc.citius.servando.calendula.model.Schedule;
 import es.usc.citius.servando.calendula.model.ScheduleItem;
 import es.usc.citius.servando.calendula.receiver.AlarmReceiver;
 import es.usc.citius.servando.calendula.store.RoutineStore;
-import es.usc.citius.servando.calendula.store.ScheduleStore;
 import es.usc.citius.servando.calendula.util.ScheduleUtils;
 
 /**
@@ -49,8 +47,13 @@ public class AlarmScheduler {
      */
     public void setAlarm(Routine routine, Context ctx){
 
+        // first off all, when an routine is triggered, update
+        // daily schedule, to maintain status of taken and not
+        // taken meds for the current day
+        DailyDosageChecker.instance().updateDailySchedule(ctx);
+
         // set the routine alarm only if there are schedules associated
-        if(ScheduleUtils.getRoutineScheduleItems(routine).size() > 0) {
+        if(ScheduleUtils.getRoutineScheduleItems(routine,false).size() > 0) {
             Log.d(TAG, "Updating routine alarm ["+routine.getName()+"]");
             // intent our receiver will receive
             Intent intent = new Intent(ctx, AlarmReceiver.class);
@@ -63,12 +66,47 @@ public class AlarmScheduler {
             PendingIntent routinePendingIntent = PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             // Get the AlarmManager service
             AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-            // set the routine alarm, with repetition every 10 minutes
+            // set the routine alarm, with repetition every day
             if (alarmManager != null) {
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, routine.getTime().toDateTimeToday().getMillis(), AlarmManager.INTERVAL_DAY, routinePendingIntent);
-
                 Duration timeToAlarm= new Duration(LocalTime.now().toDateTimeToday(), routine.getTime().toDateTimeToday());
                 Log.d(TAG, "Alarm scheduled to " + timeToAlarm.getMillis() + " millis");
+            }
+        }
+    }
+
+
+    /**
+     * Set an alarm to an specific routine time using the
+     * android AlarmManager service. This alarm will
+     *
+     * @param routine The routine whose alarm will be set
+     */
+    public void delayAlarm(Routine routine, int millis, Context ctx){
+
+        // first off all, when an routine is triggered, update
+        // daily schedule, to maintain status of taken and not
+        // taken meds for the current day
+        DailyDosageChecker.instance().updateDailySchedule(ctx);
+
+        // set the routine alarm only if there are schedules associated
+        if(ScheduleUtils.getRoutineScheduleItems(routine,false).size() > 0) {
+            Log.d(TAG, "Updating routine alarm ["+routine.getName()+"]");
+            // intent our receiver will receive
+            Intent intent = new Intent(ctx, AlarmReceiver.class);
+            // indicate thar is for a routine
+            intent.putExtra(INTENT_EXTRA_ACTION, ACTION_ROUTINE_TIME);
+            // pass the routine id (hash code)
+            intent.putExtra(INTENT_EXTRA_ROUTINE_ID, routine.id());
+            // create pending intent
+            int intent_id = routine.id().hashCode();
+            PendingIntent routinePendingIntent = PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            // Get the AlarmManager service
+            AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+            // set the routine alarm, with repetition every day
+            if (alarmManager != null) {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, DateTime.now().getMillis()+millis, routinePendingIntent);
+                Log.d(TAG, "Alarm delayed " + millis + " millis");
             }
         }
     }
@@ -157,7 +195,7 @@ public class AlarmScheduler {
      */
     private void onRoutineTime(Routine routine, Context ctx){
 
-        Map<Schedule,ScheduleItem> doses = ScheduleUtils.getRoutineScheduleItems(routine);
+        Map<Schedule,ScheduleItem> doses = ScheduleUtils.getRoutineScheduleItems(routine,false);
 
         // now doses contain the schedule items for the current routine
         // associated with their respective schedules
@@ -174,7 +212,7 @@ public class AlarmScheduler {
         intent.putExtra("action",StartActivity.ACTION_SHOW_REMINDERS);
         intent.putExtra("routine_id", routine.id());
 
-        MessageNotification.notify(ctx, "Its time to take your meds", doses, 3, intent);
+        ReminderNotification.notify(ctx, "Remember to take your meds", routine, doses, 3, intent);
 
     }
 
@@ -185,7 +223,7 @@ public class AlarmScheduler {
      */
     private void onRoutineLost(Routine routine){
 
-        Map<Schedule,ScheduleItem> doses = ScheduleUtils.getRoutineScheduleItems(routine);
+        Map<Schedule,ScheduleItem> doses = ScheduleUtils.getRoutineScheduleItems(routine,false);
 
         // now doses contain the schedule items for the current routine
         // associated with their respective schedules

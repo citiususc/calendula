@@ -102,7 +102,7 @@ public class DailyAgendaFragment extends Fragment {
                 for(DailyAgendaItemStub.DailyAgendaItemStubElement element : item.meds){
 
                     View medNameView = layoutInflater.inflate(R.layout.daily_agenda_item_med,null);
-                    ((TextView)medNameView.findViewById(R.id.med_item_name)).setText(element.medName + "(" + element.dose + ")");
+                    ((TextView)medNameView.findViewById(R.id.med_item_name)).setText(element.medName + (element.taken?" ✔":""));
                     if(isFirst){
                         ((TextView)medNameView.findViewById(R.id.bottom_current_hour_text)).setText(String.valueOf(item.hour<10?("0"+item.hour):item.hour));
                        isFirst=false;

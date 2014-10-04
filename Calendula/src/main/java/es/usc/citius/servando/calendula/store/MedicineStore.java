@@ -17,7 +17,7 @@ public class MedicineStore {
         medicines = new ArrayList<Medicine>();
     }
 
-    public static MedicineStore getInstance() {
+    public static MedicineStore instance() {
         return instance;
     }
 

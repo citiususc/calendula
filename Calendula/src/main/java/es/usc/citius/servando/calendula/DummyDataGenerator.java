@@ -1,5 +1,8 @@
 package es.usc.citius.servando.calendula;
 
+import android.content.Context;
+import android.content.res.Resources;
+
 import org.joda.time.LocalTime;
 
 import es.usc.citius.servando.calendula.model.Medicine;
@@ -13,20 +16,21 @@ import es.usc.citius.servando.calendula.store.RoutineStore;
  */
 public class DummyDataGenerator {
 
-    public static void fillRoutineStore() {
+    public static void fillRoutineStore(Context ctx) {
 
-        //RoutineStore.instance().addRoutine(new Routine(new LocalTime(9, 0), "Breakfast"));
-        //RoutineStore.instance().addRoutine(new Routine(new LocalTime(13, 0), "Lunch"));
-        //RoutineStore.instance().addRoutine(new Routine(new LocalTime(21, 0), "Dinner"));
-
+        Resources r = ctx.getResources();
+        RoutineStore.instance().addRoutine(new Routine(new LocalTime(9, 0), r.getString(R.string.routine_breakfast)));
+        RoutineStore.instance().addRoutine(new Routine(new LocalTime(13, 0), r.getString(R.string.routine_lunch)));
+        RoutineStore.instance().addRoutine(new Routine(new LocalTime(21, 0), r.getString(R.string.routine_dinner)));
+        RoutineStore.instance().save(ctx);
     }
 
-    public static void fillMedicineStore() {
+    public static void fillMedicineStore(Context ctx) {
 
-        MedicineStore.getInstance().addMedicine(new Medicine("Atrovent", Presentation.PILLS));
-        MedicineStore.getInstance().addMedicine(new Medicine("Ramipril", Presentation.EFFERVESCENT));
-        MedicineStore.getInstance().addMedicine(new Medicine("Digoxina", Presentation.DROPS));
-        MedicineStore.getInstance().addMedicine(new Medicine("Ibuprofeno", Presentation.CAPSULES));
+        MedicineStore.instance().addMedicine(new Medicine("Atrovent", Presentation.PILLS));
+        MedicineStore.instance().addMedicine(new Medicine("Ramipril", Presentation.EFFERVESCENT));
+        MedicineStore.instance().addMedicine(new Medicine("Digoxina", Presentation.DROPS));
+        MedicineStore.instance().addMedicine(new Medicine("Ibuprofeno", Presentation.CAPSULES));
 
     }
 }

@@ -88,7 +88,7 @@ public class Session {
         open(context);
     }
 
-    public void open(Context context) throws Exception {
+    public boolean open(Context context) throws Exception {
         // open session file where user data is stored
         FileInputStream is = null;
         try {
@@ -97,9 +97,11 @@ public class Session {
             user = new Gson().fromJson(reader, User.class);
             onCreateSession(context);
             Log.d(Session.class.getName(), "Opening session for user [" + user.getEmail()+ ", " + user.getToken() + "]");
+            return true;
         } catch (FileNotFoundException e) {
             Log.e(Session.class.getName(), "Error reading session data",e);
-            throw new Exception("No user data file was found");
+            //throw new Exception("No user data file was found");
+
         }finally {
             try {
                 is.close();
@@ -107,17 +109,11 @@ public class Session {
                 //do nothing
             }
         }
-
+        return false;
     }
 
     private void onCreateSession(Context context) throws Exception{
 
-        // load routines
-        RoutineStore.instance().load(context);
-        // Load schedules
-        ScheduleStore.instance().load(context);
-        // Schedule routine alarms
-        AlarmScheduler.instance().scheduleDailyAlarms(context);
     }
 
     private String generateUserDirName(String username){

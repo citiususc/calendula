@@ -37,7 +37,7 @@ public class MedicinesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_medicines_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.medicines_list);
-        mMedicines = MedicineStore.getInstance().getAll();
+        mMedicines = MedicineStore.instance().getAll();
         adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
         listview.setAdapter(adapter);
 
@@ -52,7 +52,7 @@ public class MedicinesListFragment extends Fragment {
     }
 
     public void notifyDataChange() {
-        mMedicines = MedicineStore.getInstance().getAll();
+        mMedicines = MedicineStore.instance().getAll();
         Log.d(getTag(), "Routines : " + mMedicines.size() + ", " + RoutineStore.instance().size());
 //        adapter.clear();
 //        for (Medicine m : mMedicines) {
@@ -102,7 +102,7 @@ public class MedicinesListFragment extends Fragment {
                 .setCancelable(true)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        MedicineStore.getInstance().removeMedicine(m);
+                        MedicineStore.instance().removeMedicine(m);
                         notifyDataChange();
                     }
                 })

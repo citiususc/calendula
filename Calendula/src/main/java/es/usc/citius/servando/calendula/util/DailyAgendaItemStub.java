@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import es.usc.citius.servando.calendula.DailyDosageChecker;
 import es.usc.citius.servando.calendula.model.Dose;
 import es.usc.citius.servando.calendula.model.Medicine;
 import es.usc.citius.servando.calendula.model.Routine;
@@ -50,7 +51,7 @@ public class DailyAgendaItemStub {
         Log.d(TAG, "Routines in hour: " + routines.size());
 
         for(Routine routine : routines){
-            Map<Schedule, ScheduleItem> doses = ScheduleUtils.getRoutineScheduleItems(routine);
+            Map<Schedule, ScheduleItem> doses = ScheduleUtils.getRoutineScheduleItems(routine,true);
 
             Log.d(TAG, "Schedule items for routine " + routine.getName() + ": " + doses.size());
 
@@ -79,6 +80,7 @@ public class DailyAgendaItemStub {
                     el.medName = med.getName();
                     el.dose = String.valueOf(scheduleItem.dose().ammount());
                     el.minute = minute < 10 ? "0"+minute : String.valueOf(minute);
+                    el.taken = DailyDosageChecker.instance().doseTaken(scheduleItem);
                     item.meds.add(el);
                 }
             }
@@ -94,6 +96,7 @@ public class DailyAgendaItemStub {
         public String medName;
         public String minute;
         public String dose;
+        public boolean taken;
 
         @Override
         public int compareTo(DailyAgendaItemStubElement other) {

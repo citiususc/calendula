@@ -10,9 +10,7 @@ import android.view.ViewGroup;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
-import es.usc.citius.servando.calendula.activities.MessageNotification;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
-import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.activities.SchedulesActivity;
 
 /**

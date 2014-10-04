@@ -96,7 +96,7 @@ public class MedicinesActivity extends ActionBarActivity implements MedicinesLis
 
     @Override
     public void onMedicineCreated(Medicine m) {
-        MedicineStore.getInstance().addMedicine(m);
+        MedicineStore.instance().addMedicine(m);
         Toast.makeText(this, "Medicine created!", Toast.LENGTH_SHORT).show();
         mViewPager.setCurrentItem(0);
         ((MedicinesListFragment) getViewPagerFragment(0)).notifyDataChange();

@@ -55,7 +55,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_or_edit_medicine, container, false);
-        final String[] names = MedicineStore.getInstance().getMedicineNames();
+        final String[] names = MedicineStore.instance().getMedicineNames();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line, names);
 
@@ -65,7 +65,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
                 String name = (String) parent.getItemAtPosition(pos);
-                mMedicine = MedicineStore.getInstance().getByName(name);
+                mMedicine = MedicineStore.instance().getByName(name);
                 Log.d(getTag(), "Medicine selected: " + name + ", " + (mMedicine == null));
                 hideKeyboard();
                 selectPresentation(mMedicine != null ? mMedicine.getPresentation() : null);
@@ -87,7 +87,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
         }
 
         if (savedInstanceState != null && savedInstanceState.containsKey("medicine")) {
-            mMedicine = MedicineStore.getInstance().getByName(savedInstanceState.getString("medicine"));
+            mMedicine = MedicineStore.instance().getByName(savedInstanceState.getString("medicine"));
             if (mMedicine != null)
                 mConfirmButton.setText(getString(R.string.edit_routine_button_text));
         }
@@ -297,7 +297,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
             String name = mNameTextView.getText().toString();
             // look for it in the med store
             if (mMedicine == null) {
-                mMedicine = MedicineStore.getInstance().getByName(name);
+                mMedicine = MedicineStore.instance().getByName(name);
                 Log.d(getTag(), "Looking for " + name + " in med store returned " + (mMedicine == null ? "null" : "a valid med"));
             }
             // if it wasn't on the store, create a new med

@@ -13,11 +13,14 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.Map;
 
+import es.usc.citius.servando.calendula.AlarmScheduler;
+import es.usc.citius.servando.calendula.DailyDosageChecker;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.model.Dose;
 import es.usc.citius.servando.calendula.model.Medicine;
@@ -32,10 +35,11 @@ public class ReminderActivity extends Activity {
     public static final String TAG = ReminderActivity.class.getName();
 
     LinearLayout list;
-    ArrayList<ScheduleReminder> reminders = new ArrayList<ScheduleReminder>();
+    //ArrayList<ScheduleReminder> reminders = new ArrayList<ScheduleReminder>();
 
     Button delayButton = null;
     Button doneButton = null;
+    Map<Schedule,ScheduleItem> doses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +52,15 @@ public class ReminderActivity extends Activity {
         delayButton = (Button) findViewById(R.id.reminder_delay_button);
         doneButton = (Button) findViewById(R.id.reminder_done_button);
 
+        String routineId = getIntent().getStringExtra("routine_id");
+        final Routine routine = RoutineStore.instance().get(routineId);
+
+        ReminderNotification.cancel(getApplicationContext());
+
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // cancel reminder notification
                 finish();
             }
         });
@@ -58,21 +68,20 @@ public class ReminderActivity extends Activity {
         delayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AlarmScheduler.instance().delayAlarm(routine,5*60*1000,getApplicationContext());
+                Toast.makeText(getApplicationContext(),"Reminder delayed " + 5 + " mins",Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
 
+
+        doses = ScheduleUtils.getRoutineScheduleItems(routine,true);
         fillReminderList();
     }
 
     void fillReminderList(){
 
-
         LayoutInflater inflater = getLayoutInflater();
-
-        String routineId = getIntent().getStringExtra("routine_id");
-        Routine routine = RoutineStore.instance().get(routineId);
-        Map<Schedule,ScheduleItem> doses = ScheduleUtils.getRoutineScheduleItems(routine);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -83,28 +92,40 @@ public class ReminderActivity extends Activity {
 
         for(Schedule s: doses.keySet()){
 
-            ScheduleReminder reminder = new ScheduleReminder(s);
-            reminders.add(reminder);
+            //ScheduleReminder reminder = new ScheduleReminder(s);
+            //reminders.add(reminder);
+
+            ScheduleItem scheduleItem = doses.get(s);
 
             final View entry = inflater.inflate(R.layout.reminder_item, null);
-            entry.setTag(reminder);
+            entry.setTag(scheduleItem);
             Medicine med = s.getMedicine();
-            Dose dose = doses.get(s).dose();
+            Dose dose = scheduleItem.dose();
 
             ((TextView)entry.findViewById(R.id.med_name)).setText(med.getName());
             ((TextView)entry.findViewById(R.id.med_dose)).setText(dose.ammount() + " " + med.getPresentation().getUnits(getResources()));
 
             ToggleButton checkButton = (ToggleButton) entry.findViewById(R.id.check_button);
             final View background = entry.findViewById(R.id.reminder_item_container);
+
+            boolean taken = DailyDosageChecker.instance().doseTaken(scheduleItem);
+
+            if(taken){
+                checkButton.setChecked(taken);
+                background.setSelected(taken);
+            }
+
+            Log.d(TAG,"Add view for dose " + med.getName() + ", taken: " + taken);
+
             checkButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                    background.setSelected(checked);
-                    ScheduleReminder r = (ScheduleReminder)(entry.getTag());
-                    r.taken = checked;
-                    onReminderChecked();
-                }
-            });
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                        background.setSelected(checked);
+                        ScheduleItem dose = (ScheduleItem) (entry.getTag());
+                        DailyDosageChecker.instance().setDoseTaken(dose, checked, getApplicationContext());
+                        onReminderChecked();
+                    }
+                });
 
             list.addView(entry, params);
         }
@@ -113,15 +134,21 @@ public class ReminderActivity extends Activity {
 
     private void onReminderChecked() {
 
-        int total = reminders.size(), checked = 0;
+        int total = doses.size();
+        int checked=0;
 
-        for(ScheduleReminder sr : reminders) {
-            if (sr.taken) checked++;
+        for(ScheduleItem d : doses.values()) {
+            boolean taken = DailyDosageChecker.instance().doseTaken(d);
+            Log.d("Dosage","Dose taken?" + d.id() + " taken: " + taken);
+            if(taken)
+                checked++;
         }
 
         if(checked == total){
+            delayButton.setVisibility(View.INVISIBLE);
             doneButton.getBackground().setLevel(1);
         }else{
+            delayButton.setVisibility(View.VISIBLE);
             doneButton.getBackground().setLevel(0);
         }
 
@@ -149,15 +176,6 @@ public class ReminderActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    private class ScheduleReminder{
-        Schedule schedule;
-        boolean taken = false;
-
-        ScheduleReminder(Schedule s){
-            this.schedule = s;
-        }
-    }
 
 
 

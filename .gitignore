@@ -31,5 +31,6 @@ build/
 /*/*/production
 *.iws
 *.ipr
+*.iml
 *~
 *.swp

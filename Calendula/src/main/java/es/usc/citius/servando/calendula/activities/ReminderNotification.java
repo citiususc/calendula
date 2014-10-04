@@ -22,6 +22,7 @@ import java.util.Map;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.model.Dose;
 import es.usc.citius.servando.calendula.model.Medicine;
+import es.usc.citius.servando.calendula.model.Routine;
 import es.usc.citius.servando.calendula.model.Schedule;
 import es.usc.citius.servando.calendula.model.ScheduleItem;
 
@@ -32,11 +33,11 @@ import es.usc.citius.servando.calendula.model.ScheduleItem;
  * This class makes heavy use of the {@link NotificationCompat.Builder} helper
  * class to create notifications in a backward-compatible way.
  */
-public class MessageNotification {
+public class ReminderNotification {
     /**
      * The unique identifier for this type of notification.
      */
-    private static final String NOTIFICATION_TAG = "Message";
+    private static final String NOTIFICATION_TAG = "Reminder";
 
     /**
      * Shows the notification, or updates a previously shown notification of
@@ -54,7 +55,7 @@ public class MessageNotification {
      * @see #cancel(Context)
      */
     public static void notify(final Context context,
-                              final String exampleString,  Map<Schedule,ScheduleItem> doses, final int number, Intent intent) {
+                              final String exampleString, Routine r, Map<Schedule,ScheduleItem> doses, final int number, Intent intent) {
         final Resources res = context.getResources();
 
         // This image is used as the notification's large icon (thumbnail).
@@ -137,36 +138,6 @@ public class MessageNotification {
                         // or later.
                 .setStyle(style)
 
-                        // Example additional actions for this notification. These will
-                        // only show on devices running Android 4.1 or later, so you
-                        // should ensure that the activity in this notification's
-                        // content intent provides access to the same actions in
-                        // another way.
-                .addAction(
-                        R.drawable.abc_ab_bottom_solid_dark_holo,
-                        res.getString(R.string.action_take_now),
-                        PendingIntent.getActivity(
-                                context,
-                                0,
-                                Intent.createChooser(new Intent(Intent.ACTION_SEND)
-                                        .setType("text/plain")
-                                        .putExtra(Intent.EXTRA_TEXT, "Dummy text"), "Dummy title"),
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                        )
-                )
-                .addAction(
-                        R.drawable.abc_ab_bottom_solid_light_holo,
-                        res.getString(R.string.action_delay),
-                        PendingIntent.getActivity(
-                                context,
-                                0,
-                                Intent.createChooser(new Intent(Intent.ACTION_SEND)
-                                        .setType("text/plain")
-                                        .putExtra(Intent.EXTRA_TEXT, "Dummy text"), "Dummy title"),
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                        )
-                )
-
                         // Automatically dismiss the notification when it is touched.
                 .setAutoCancel(false);
 
@@ -186,7 +157,7 @@ public class MessageNotification {
 
     /**
      * Cancels any notifications of this type previously shown using
-     * {@link #notify(Context, String, java.util.Map, int, android.content.Intent)}.
+     * {@link #notify(Context, String, Routine, java.util.Map, int, android.content.Intent)}.
      */
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     public static void cancel(final Context context) {
