@@ -17,6 +17,7 @@
         android:textSize="60dp"
         android:gravity="center" />
 
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -71,6 +72,15 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true" />
 
+    <!--
+    <Spinner
+
+        android:id="@+id/delays_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:visibility="visible"
+        android:spinnerMode="dialog" />
+    -->
 
 
 </RelativeLayout>

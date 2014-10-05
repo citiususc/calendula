@@ -61,6 +61,7 @@ public class ReminderNotification {
         // This image is used as the notification's large icon (thumbnail).
         // TODO: Remove this if your notification has no relevant thumbnail.
         final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.ic_launcher);
+        final Bitmap largeIcon = BitmapFactory.decodeResource(res, R.drawable.ic_pill_small);
         final String title = res.getString(R.string.message_notification_title_template, exampleString);
 
         NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
@@ -94,7 +95,8 @@ public class ReminderNotification {
 
                         // Set required fields, including the small icon, the
                         // notification title, and text.
-                .setSmallIcon(R.drawable.abc_ab_share_pack_holo_dark)
+                .setSmallIcon(R.drawable.ic_pill_small)
+                .setLargeIcon(picture)
                 .setContentTitle(title)
                 .setContentText(text)
 

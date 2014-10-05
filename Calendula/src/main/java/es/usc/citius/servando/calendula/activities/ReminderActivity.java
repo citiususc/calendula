@@ -9,9 +9,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -28,6 +31,7 @@ import es.usc.citius.servando.calendula.model.Routine;
 import es.usc.citius.servando.calendula.model.Schedule;
 import es.usc.citius.servando.calendula.model.ScheduleItem;
 import es.usc.citius.servando.calendula.store.RoutineStore;
+import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
 import es.usc.citius.servando.calendula.util.ScheduleUtils;
 
 public class ReminderActivity extends Activity {
@@ -40,6 +44,9 @@ public class ReminderActivity extends Activity {
     Button delayButton = null;
     Button doneButton = null;
     Map<Schedule,ScheduleItem> doses;
+    Spinner delaySpinner;
+    String routineId;
+    Routine routine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +58,16 @@ public class ReminderActivity extends Activity {
         list = (LinearLayout) findViewById(R.id.reminder_list);
         delayButton = (Button) findViewById(R.id.reminder_delay_button);
         doneButton = (Button) findViewById(R.id.reminder_done_button);
+        routineId = getIntent().getStringExtra("routine_id");
+        routine = RoutineStore.instance().get(routineId);
 
-        String routineId = getIntent().getStringExtra("routine_id");
-        final Routine routine = RoutineStore.instance().get(routineId);
-
-        ReminderNotification.cancel(getApplicationContext());
+        setupScheduleSpinner();
 
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // cancel reminder notification
+                ReminderNotification.cancel(getApplicationContext());
                 finish();
             }
         });
@@ -68,6 +75,8 @@ public class ReminderActivity extends Activity {
         delayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //delaySpinner.performClick();
+                ReminderNotification.cancel(getApplicationContext());
                 AlarmScheduler.instance().delayAlarm(routine,5*60*1000,getApplicationContext());
                 Toast.makeText(getApplicationContext(),"Reminder delayed " + 5 + " mins",Toast.LENGTH_SHORT).show();
                 finish();
@@ -78,6 +87,35 @@ public class ReminderActivity extends Activity {
         doses = ScheduleUtils.getRoutineScheduleItems(routine,true);
         fillReminderList();
     }
+
+
+
+    private void setupScheduleSpinner() {
+//        delaySpinner = (Spinner) findViewById(R.id.delays_spinner);
+//        // Create an ArrayAdapter using the string array and a default spinner layout
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+//                R.array.delays_array, R.layout.spinner_text_item);
+//        // Specify the layout to use when the list of choices appears
+//        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+//        // Apply the adapter to the spinner
+//        delaySpinner.setAdapter(adapter);
+//
+//        delaySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//
+//
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//            }
+//
+//        });
+    }
+
 
     void fillReminderList(){
 

@@ -84,6 +84,14 @@
         <item>Four times a day</item>
     </string-array>
 
+    <!-- Med schedules -->
+    <string-array name="delays_array">
+        <item>5 min</item>
+        <item>15 min</item>
+        <item>30 min</item>
+        <item>1 hour</item>
+    </string-array>
+
     <!-- Default routines -->
     <string name="routine_breakfast">Breakfast</string>
     <string name="routine_lunch">Lunch</string>
