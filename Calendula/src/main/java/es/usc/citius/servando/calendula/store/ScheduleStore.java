@@ -3,23 +3,19 @@ package es.usc.citius.servando.calendula.store;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
 
-import es.usc.citius.servando.calendula.AlarmScheduler;
 import es.usc.citius.servando.calendula.model.Routine;
 import es.usc.citius.servando.calendula.model.Schedule;
-import es.usc.citius.servando.calendula.user.User;
+import es.usc.citius.servando.calendula.model.ScheduleItem;
 import es.usc.citius.servando.calendula.util.GsonUtil;
 
 /**
@@ -34,7 +30,7 @@ public class ScheduleStore extends Store {
     private static ScheduleStore instance = null;
 
     public static ScheduleStore instance() {
-        if(instance==null) {
+        if (instance == null) {
             instance = new ScheduleStore();
         }
         return instance;
@@ -54,6 +50,19 @@ public class ScheduleStore extends Store {
         notifyDataChange();
     }
 
+    public void removeFromRoutine(Routine r) {
+        for (Schedule s : schedules) {
+            ArrayList<ScheduleItem> toDelete = new ArrayList<ScheduleItem>();
+            for (ScheduleItem i : s.items()) {
+                if (r.id().equals(i.routineId())) {
+                    toDelete.add(i);
+                }
+            }
+            s.removeItems(toDelete);
+        }
+        notifyDataChange();
+    }
+
     public List<Schedule> getSchedules() {
         return schedules;
     }
@@ -62,7 +71,7 @@ public class ScheduleStore extends Store {
         return schedules.size();
     }
 
-    public void save(Context context){
+    public void save(Context context) {
         // open session file where user data is stored
         FileOutputStream out = null;
         try {
@@ -71,9 +80,9 @@ public class ScheduleStore extends Store {
             out.write(json.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
-                if(out != null) out.close();
+                if (out != null) out.close();
             } catch (IOException e) {
                 // do nothing
             }
@@ -88,27 +97,28 @@ public class ScheduleStore extends Store {
             is = context.openFileInput(SCHEDULES_FILE_NAME);
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 
-            List<Schedule> schedules = GsonUtil.get().fromJson(reader, new TypeToken<List<Schedule>>(){}.getType());
-            if(schedules!=null){
+            List<Schedule> schedules = GsonUtil.get().fromJson(reader, new TypeToken<List<Schedule>>() {
+            }.getType());
+            if (schedules != null) {
                 this.schedules = schedules;
             }
             Log.d(ScheduleStore.class.getName(), "Schedules loaded");
             Log.d(ScheduleStore.class.getName(), GsonUtil.get().toJson(this.schedules));
         } catch (Exception e) {
             removeAll(context);
-            Log.e(ScheduleStore.class.getName(), "Error reading schedules file",e);
-        }finally {
+            Log.e(ScheduleStore.class.getName(), "Error reading schedules file", e);
+        } finally {
 
             try {
                 is.close();
-            }catch (Exception unhandled){
+            } catch (Exception unhandled) {
                 //do nothing
             }
         }
 
     }
 
-    public void removeAll(Context context){
+    public void removeAll(Context context) {
         schedules.clear();
         context.deleteFile(SCHEDULES_FILE_NAME);
         notifyDataChange();

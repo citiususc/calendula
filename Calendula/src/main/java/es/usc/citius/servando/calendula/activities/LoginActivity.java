@@ -4,23 +4,16 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,17 +23,12 @@ import android.widget.Toast;
 import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import es.usc.citius.servando.calendula.HomeActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.user.Session;
 import es.usc.citius.servando.calendula.user.User;
-import es.usc.citius.servando.calendula.util.Settings;
 import es.usc.citius.servando.calendula.util.api.ApiLoginResponse;
 import es.usc.citius.servando.calendula.util.api.ApiRequestBuilder;
-import es.usc.citius.servando.calendula.util.api.RestApiMgr;
 
 /**
  * A login screen that offers login via email/password.
@@ -226,12 +214,12 @@ public class LoginActivity extends Activity {
                     User user = new User();
                     user.setEmail(mEmail);
                     user.setToken(loginResponse.data.token);
-                    Session.getInstance().create(getApplicationContext(), user);
-                    Log.d(TAG,"Login response : " + loginResponse.status);
+                    Session.instance().create(getApplicationContext(), user);
+                    Log.d(TAG, "Login response : " + loginResponse.status);
                     return true;
-                } else if(!loginResponse.success && loginResponse.status == HttpStatus.SC_NOT_FOUND){
+                } else if (!loginResponse.success && loginResponse.status == HttpStatus.SC_NOT_FOUND) {
 
-                    Log.d(TAG,"Login response: " + loginResponse.status +", username not found");
+                    Log.d(TAG, "Login response: " + loginResponse.status + ", username not found");
                     // username not found, so register
 
                     ApiLoginResponse registerResponse = new ApiRequestBuilder()
@@ -244,15 +232,15 @@ public class LoginActivity extends Activity {
                         User user = new User();
                         user.setEmail(mEmail);
                         user.setToken(registerResponse.data.token);
-                        Log.d(TAG,"Register response: " + loginResponse.status);
-                        Session.getInstance().create(getApplicationContext(), user);
+                        Log.d(TAG, "Register response: " + loginResponse.status);
+                        Session.instance().create(getApplicationContext(), user);
                         return true;
                     }
 
 
-                }else if (loginResponse.status == HttpStatus.SC_UNAUTHORIZED){
+                } else if (loginResponse.status == HttpStatus.SC_UNAUTHORIZED) {
                     // incorrect password
-                    Log.d(TAG,"Login response: " + loginResponse.status +", incorrect password");
+                    Log.d(TAG, "Login response: " + loginResponse.status + ", incorrect password");
                     error = getString(R.string.error_incorrect_password);
                 }
 
@@ -275,10 +263,10 @@ public class LoginActivity extends Activity {
                 finish();
 
             } else {
-                if(error!=null) {
+                if (error != null) {
                     mPasswordView.setError(error);
                     mPasswordView.requestFocus();
-                }else{
+                } else {
                     Toast.makeText(LoginActivity.this, "Unknown error on login :-(", Toast.LENGTH_SHORT).show();
                 }
             }

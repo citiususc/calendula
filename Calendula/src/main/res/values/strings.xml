@@ -86,17 +86,17 @@
 
     <!-- Med schedules -->
     <string-array name="delays_array">
+        <item>Choose a delay:</item>
         <item>5 min</item>
         <item>15 min</item>
         <item>30 min</item>
-        <item>1 hour</item>
+        <item>60 min</item>
     </string-array>
 
     <!-- Default routines -->
     <string name="routine_breakfast">Breakfast</string>
     <string name="routine_lunch">Lunch</string>
     <string name="routine_dinner">Dinner</string>
-
 
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -109,5 +109,6 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_reminder">ReminderActivity</string>
-
+    <string name="title_activity_agenda_detail">AgendaDetailActivity</string>
 </resources>
+

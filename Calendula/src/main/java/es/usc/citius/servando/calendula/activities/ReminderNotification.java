@@ -10,13 +10,11 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 
-import java.util.List;
 import java.util.Map;
 
 import es.usc.citius.servando.calendula.R;
@@ -55,7 +53,7 @@ public class ReminderNotification {
      * @see #cancel(Context)
      */
     public static void notify(final Context context,
-                              final String exampleString, Routine r, Map<Schedule,ScheduleItem> doses, final int number, Intent intent) {
+                              final String exampleString, Routine r, Map<Schedule, ScheduleItem> doses, Intent intent) {
         final Resources res = context.getResources();
 
         // This image is used as the notification's large icon (thumbnail).
@@ -66,7 +64,7 @@ public class ReminderNotification {
 
         NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
 
-        for(Schedule s : doses.keySet()){
+        for (Schedule s : doses.keySet()) {
 
             Medicine med = s.getMedicine();
             Dose dose = doses.get(s).dose();
@@ -115,7 +113,7 @@ public class ReminderNotification {
 
                         // Show a number. This is useful when stacking notifications of
                         // a single type.
-                .setNumber(number)
+                .setNumber(doses.size())
 
                         // If this notification relates to a past or upcoming event, you
                         // should set the relevant time information using the setWhen
@@ -159,7 +157,7 @@ public class ReminderNotification {
 
     /**
      * Cancels any notifications of this type previously shown using
-     * {@link #notify(Context, String, Routine, java.util.Map, int, android.content.Intent)}.
+     * {@link #notify(Context, String, Routine, java.util.Map, android.content.Intent)}.
      */
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     public static void cancel(final Context context) {

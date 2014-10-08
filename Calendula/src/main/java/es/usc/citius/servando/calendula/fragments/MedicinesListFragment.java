@@ -20,7 +20,6 @@ import java.util.List;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.model.Medicine;
 import es.usc.citius.servando.calendula.store.MedicineStore;
-import es.usc.citius.servando.calendula.store.RoutineStore;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -41,6 +40,8 @@ public class MedicinesListFragment extends Fragment {
         adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
         listview.setAdapter(adapter);
 
+        //MedicineStore.instance().addListener(this);
+
         rootView.findViewById(R.id.medicine_add_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,12 +53,13 @@ public class MedicinesListFragment extends Fragment {
     }
 
     public void notifyDataChange() {
+        Log.d(getTag(), "Notify data change");
         mMedicines = MedicineStore.instance().getAll();
-        Log.d(getTag(), "Routines : " + mMedicines.size() + ", " + RoutineStore.instance().size());
-//        adapter.clear();
-//        for (Medicine m : mMedicines) {
-//            adapter.add(m);
-//        }
+        Log.d(getTag(), "Routines : " + mMedicines.size() + ", " + MedicineStore.instance().size());
+        adapter.clear();
+        for (Medicine m : mMedicines) {
+            adapter.add(m);
+        }
         adapter.notifyDataSetChanged();
     }
 
@@ -103,6 +105,7 @@ public class MedicinesListFragment extends Fragment {
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         MedicineStore.instance().removeMedicine(m);
+                        MedicineStore.instance().save(getActivity());
                         notifyDataChange();
                     }
                 })
@@ -139,6 +142,18 @@ public class MedicinesListFragment extends Fragment {
         if (activity instanceof OnMedicineSelectedListener) {
             mMedicineSelectedCallback = (OnMedicineSelectedListener) activity;
         }
+    }
+
+//    @Override
+//    public void onChange() {
+//        Log.d("MedListFragment", "Medicines store change notified!");
+//        notifyDataChange();
+//    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+//        MedicineStore.instance().removeListener(this);
     }
 
     // Container Activity must implement this interface

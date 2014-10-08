@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import es.usc.citius.servando.calendula.DummyDataGenerator;
 import es.usc.citius.servando.calendula.HomeActivity;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.store.MedicineStore;
 import es.usc.citius.servando.calendula.store.RoutineStore;
 import es.usc.citius.servando.calendula.user.Session;
 import es.usc.citius.servando.calendula.user.User;
@@ -96,10 +95,10 @@ public class StartActivity extends Activity {
      */
     public class UserResumeSessionTask extends AsyncTask<Void, Void, String> {
 
-        private void keepSplashVisible(int seconds){
+        private void keepSplashVisible(int seconds) {
             // Show splash
             try {
-                Thread.sleep(seconds*1000);
+                Thread.sleep(seconds * 1000);
             } catch (InterruptedException e) {
                 // do nothing
             }
@@ -108,20 +107,20 @@ public class StartActivity extends Activity {
         @Override
         protected String doInBackground(Void... params) {
 
-            boolean sessionIsOpen = Session.getInstance().isOpen();
+            boolean sessionIsOpen = Session.instance().isOpen();
             try {
                 // session is open
                 if (sessionIsOpen) {
                     return STATUS_SESSION_OPEN;
                 }
                 // session is closed but there is a session stored
-                else if (Session.getInstance().open(getApplicationContext())) {
-                    keepSplashVisible(2);
+                else if (Session.instance().open(getApplicationContext())) {
+                    keepSplashVisible(1);
                     return STATUS_SESSION_RESUMED;
                 }
                 // there is no previous session
                 else {
-                    keepSplashVisible(3);
+                    keepSplashVisible(2);
 
                     // Add some default data
                     if (RoutineStore.instance().size() == 0) {
@@ -130,7 +129,7 @@ public class StartActivity extends Activity {
                     // create default session
                     User defaultUser = new User();
                     defaultUser.setName("Walter");
-                    Session.getInstance().create(getApplicationContext(), defaultUser);
+                    Session.instance().create(getApplicationContext(), defaultUser);
                     return STATUS_NO_SESSION;
                 }
             } catch (Exception e) {
@@ -145,7 +144,7 @@ public class StartActivity extends Activity {
 
             stopAnimations();
 
-            if(STATUS_SESSION_OPEN.equals(result) || STATUS_SESSION_RESUMED.equals(result)){
+            if (STATUS_SESSION_OPEN.equals(result) || STATUS_SESSION_RESUMED.equals(result)) {
                 switch (action) {
                     case ACTION_SHOW_REMINDERS:
                         Intent i = new Intent(getBaseContext(), ReminderActivity.class);
@@ -156,14 +155,12 @@ public class StartActivity extends Activity {
                         startActivity(new Intent(getBaseContext(), HomeActivity.class));
                         break;
                 }
-            }else{
+            } else {
                 // user first time in the app
                 Intent welcome = new Intent(getBaseContext(), HomeActivity.class);
                 welcome.putExtra("welcome", true);
                 startActivity(welcome);
             }
-
-
 
 
             finish();

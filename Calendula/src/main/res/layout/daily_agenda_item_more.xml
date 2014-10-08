@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="30dip"
+    android:background="@color/android_blue">
+
+    <RelativeLayout
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:background="#ccffffff"
+        android:id="@+id/daily_agenda_item_med_left">
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:id="@+id/daily_agenda_item_med_right">
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/more_button"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:gravity="center_vertical|end"
+            android:paddingLeft="20dp"
+            android:text="+"
+            android:background="#44ffffff"
+            android:scaleType="fitEnd"
+            android:paddingRight="20dp" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

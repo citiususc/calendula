@@ -3,6 +3,7 @@ package es.usc.citius.servando.calendula;
 import android.app.Application;
 import android.content.Context;
 
+import es.usc.citius.servando.calendula.store.MedicineStore;
 import es.usc.citius.servando.calendula.store.RoutineStore;
 import es.usc.citius.servando.calendula.store.ScheduleStore;
 import es.usc.citius.servando.calendula.util.Settings;
@@ -20,6 +21,8 @@ public class CalendulaApp extends Application {
         try {
             // Load settings
             Settings.instance().load(ctx);
+            // Load medicines
+            MedicineStore.instance().load(ctx);
             // load routines
             RoutineStore.instance().load(ctx);
             // Load schedules

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="es.usc.citius.servando.calendula"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="9"
@@ -13,12 +13,11 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name="es.usc.citius.servando.calendula.HomeActivity"
             android:screenOrientation="portrait"
-            android:label="@string/app_name" >
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity
             android:name="es.usc.citius.servando.calendula.activities.RoutinesActivity"
             android:screenOrientation="portrait"
@@ -40,12 +39,11 @@
         <activity
             android:name="es.usc.citius.servando.calendula.activities.LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
-        </activity>
+            android:windowSoftInputMode="adjustResize|stateVisible"></activity>
         <activity
             android:name="es.usc.citius.servando.calendula.activities.StartActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            android:theme="@android:style/Theme.Black.NoTitleBar">
             android:label="@string/title_activity_start" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -59,14 +57,19 @@
         <activity
             android:name="es.usc.citius.servando.calendula.activities.ReminderActivity"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_reminder" >
-        </activity>
+            android:label="@string/title_activity_reminder"></activity>
+
+        <activity
+            android:name="es.usc.citius.servando.calendula.activities.AgendaDetailActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_agenda_detail"></activity>
     </application>
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <!-- To access Google+ APIs: -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!--
      To retrieve OAuth 2.0 tokens or invalidate tokens to disconnect a user. This disconnect
      option is required to comply with the Google+ Sign-In developer policies

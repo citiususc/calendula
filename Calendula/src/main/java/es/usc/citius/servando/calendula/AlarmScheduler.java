@@ -175,7 +175,7 @@ public class AlarmScheduler {
         if(routine != null) {
             LocalTime now = LocalTime.now();
             LocalTime time = routine.getTime();
-            if(time.isBefore(now.minusMinutes(30))){
+            if (time.isBefore(now.minusMinutes(60))) {
                 // we are receiving an alarm for a routine that is in the past,
                 // probably because the application has started just now.
                 // We need to log and inform user
@@ -212,7 +212,7 @@ public class AlarmScheduler {
         intent.putExtra("action",StartActivity.ACTION_SHOW_REMINDERS);
         intent.putExtra("routine_id", routine.id());
 
-        ReminderNotification.notify(ctx, "Remember to take your meds", routine, doses, 3, intent);
+        ReminderNotification.notify(ctx, ctx.getResources().getString(R.string.meds_time), routine, doses, intent);
 
     }
 

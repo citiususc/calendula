@@ -21,6 +21,8 @@ import es.usc.citius.servando.calendula.AlarmScheduler;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.model.Routine;
 import es.usc.citius.servando.calendula.store.RoutineStore;
+import es.usc.citius.servando.calendula.store.ScheduleStore;
+import es.usc.citius.servando.calendula.util.ScheduleUtils;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -55,7 +57,7 @@ public class RoutinesListFragment extends Fragment {
 
     public void notifyDataChange() {
         mRoutines = RoutineStore.instance().asList();
-        Log.d(getTag(), "Routines : " + mRoutines.size() + ", " + RoutineStore.instance().size());
+        Log.d(getTag(), "Routines List Fragment: " + mRoutines.size() + ", " + RoutineStore.instance().size());
         adapter.clear();
         for (Routine r : mRoutines) {
             adapter.add(r);
@@ -108,15 +110,26 @@ public class RoutinesListFragment extends Fragment {
 
     void showDeleteConfirmationDialog(final Routine r) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Remove " + r.getName() + " routine?")
+
+        String message;
+
+        if (ScheduleUtils.hasSchedules(r)) {
+            message = "The routine " + r.getName() + " has associated schedules that will be lost if you delete it. Do you want to remove it anyway?";
+        } else {
+            message = "Remove " + r.getName() + " routine?";
+        }
+
+        builder.setMessage(message)
                 .setCancelable(true)
+                .setTitle("Remove routine")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         RoutineStore.instance().removeRoutine(r);
                         RoutineStore.instance().save(getActivity());
+                        ScheduleStore.instance().save(getActivity());
                         notifyDataChange();
                         // cancel routine alarm
-                        AlarmScheduler.instance().cancelAlarm(r,getActivity());
+                        AlarmScheduler.instance().cancelAlarm(r, getActivity());
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {

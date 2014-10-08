@@ -13,6 +13,8 @@ public class User {
 
     private String token;
 
+    private String profileImagePath;
+
     public String getName() {
         return name;
     }
@@ -45,4 +47,11 @@ public class User {
         this.token = token;
     }
 
+    public String getProfileImagePath() {
+        return profileImagePath;
+    }
+
+    public void setProfileImagePath(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
+    }
 }

@@ -10,6 +10,7 @@ import es.usc.citius.servando.calendula.DailyDosageChecker;
 import es.usc.citius.servando.calendula.model.Routine;
 import es.usc.citius.servando.calendula.model.Schedule;
 import es.usc.citius.servando.calendula.model.ScheduleItem;
+import es.usc.citius.servando.calendula.store.RoutineStore;
 import es.usc.citius.servando.calendula.store.ScheduleStore;
 
 /**
@@ -41,6 +42,21 @@ public class ScheduleUtils {
     }
 
 
+    public static boolean hasSchedules(Routine routine) {
+
+        // iterate over schedules
+        for (Schedule schedule : ScheduleStore.instance().getSchedules()) {
+            // iterate over schedule items and check for current routine
+            for (ScheduleItem item : schedule.items()) {
+                if (item.routineId().equals(routine.id())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
     /**
      * Obtains the doses (Schedule Items) that are attached to a routine
      * @param routine The routine
@@ -59,6 +75,37 @@ public class ScheduleUtils {
                 // iterate over schedule items and check for current routine
                 for(ScheduleItem item : schedule.items()){
                     if(item.routineId().equals(routine.id())){
+                        if (includeTaken || (!includeTaken && !DailyDosageChecker.instance().doseTaken(item))) {
+                            // we need to add this item to the list of
+                            // schedule items to execute now
+                            doses.put(schedule, item);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return doses;
+    }
+
+
+    /**
+     * Obtains the doses (Schedule Items) for an hour of the dayto a routine
+     *
+     * @param hour The hour to get items from
+     * @return
+     */
+    public static Map<Schedule, ScheduleItem> getHourScheduleItems(int hour, boolean includeTaken) {
+        Map<Schedule, ScheduleItem> doses = new HashMap<Schedule, ScheduleItem>();
+        int TODAY_IN_WEEK = DateTime.now().getDayOfWeek(); // ISO8601: MON = 1, TUE = 2...
+        // iterate over schedules
+        for (Schedule schedule : ScheduleStore.instance().getSchedules()) {
+            // check if schedule is enabled for today
+            if (schedule.enabledForDay(TODAY_IN_WEEK)) {
+                // iterate over schedule items and check for current routine
+                for (ScheduleItem item : schedule.items()) {
+                    Routine r = RoutineStore.instance().get(item.routineId());
+                    if (r.getTime().getHourOfDay() == hour) {
                         if(includeTaken || (!includeTaken && !DailyDosageChecker.instance().doseTaken(item))) {
                             // we need to add this item to the list of
                             // schedule items to execute now

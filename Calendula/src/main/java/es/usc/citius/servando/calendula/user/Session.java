@@ -1,6 +1,8 @@
 package es.usc.citius.servando.calendula.user;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -9,11 +11,10 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import es.usc.citius.servando.calendula.AlarmScheduler;
-import es.usc.citius.servando.calendula.store.RoutineStore;
-import es.usc.citius.servando.calendula.store.ScheduleStore;
 import es.usc.citius.servando.calendula.util.api.ApiRequestBuilder;
 import es.usc.citius.servando.calendula.util.api.ApiResponse;
 
@@ -32,7 +33,7 @@ public class Session {
     private Session() {
     }
 
-    public static Session getInstance() {
+    public static Session instance() {
         return instance;
     }
 
@@ -46,7 +47,7 @@ public class Session {
 
     public void close(Context context) {
         // delete user data file
-        user=null;
+        user = null;
         AlarmScheduler.instance().cancelDailyAlarms(context);
         context.deleteFile(SESSION_FILENAME);
     }
@@ -58,20 +59,20 @@ public class Session {
         try {
             open(context);
 
-        response = new ApiRequestBuilder()
+            response = new ApiRequestBuilder()
                     .to("auth")
                     .authorize(user.getToken())
                     .expect(ApiResponse.class)
                     .post();
 
-            Log.d("Session", "Resume session [" + response.success + ", " +response.status + "]");
+            Log.d("Session", "Resume session [" + response.success + ", " + response.status + "]");
             return response.success;
 
-        }catch (Exception e){
-            Log.e("Session", "Cannot resume user session [" + response + "]",e);
+        } catch (Exception e) {
+            Log.e("Session", "Cannot resume user session [" + response + "]", e);
             try {
                 // close(context);
-            }catch (Exception unhandled){/* do nothintg */}
+            } catch (Exception unhandled) {/* do nothintg */}
         }
 
         return false;
@@ -88,6 +89,15 @@ public class Session {
         open(context);
     }
 
+
+    public void save(Context context) throws Exception {
+        // open session file where user data is stored
+        final FileOutputStream out = context.openFileOutput(SESSION_FILENAME, Context.MODE_PRIVATE);
+        String json = new Gson().toJson(user);
+        out.write(json.getBytes());
+        out.close();
+    }
+
     public boolean open(Context context) throws Exception {
         // open session file where user data is stored
         FileInputStream is = null;
@@ -96,28 +106,43 @@ public class Session {
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             user = new Gson().fromJson(reader, User.class);
             onCreateSession(context);
-            Log.d(Session.class.getName(), "Opening session for user [" + user.getEmail()+ ", " + user.getToken() + "]");
+            Log.d(Session.class.getName(), "Opening session for user [" + user.getEmail() + ", " + user.getToken() + "]");
             return true;
         } catch (FileNotFoundException e) {
-            Log.e(Session.class.getName(), "Error reading session data",e);
+            Log.e(Session.class.getName(), "Error reading session data", e);
             //throw new Exception("No user data file was found");
 
-        }finally {
+        } finally {
             try {
                 is.close();
-            }catch (Exception unhandled){
+            } catch (Exception unhandled) {
                 //do nothing
             }
         }
         return false;
     }
 
-    private void onCreateSession(Context context) throws Exception{
+
+    public Bitmap getUserProfileImage(Context context) {
+        String profileImagePath = user.getProfileImagePath();
+        if (profileImagePath != null) {
+            try {
+                InputStream is = context.openFileInput(profileImagePath);
+                Bitmap selectedImage = BitmapFactory.decodeStream(is);
+                return selectedImage;
+            } catch (Exception e) {
+                Log.e("Session", "Error loading profile image", e);
+            }
+        }
+        return null;
+    }
+
+    private void onCreateSession(Context context) throws Exception {
 
     }
 
-    private String generateUserDirName(String username){
-        return username.replace("@","").replace(".","-");
+    private String generateUserDirName(String username) {
+        return username.replace("@", "").replace(".", "-");
     }
 
 }

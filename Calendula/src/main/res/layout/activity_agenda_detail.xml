@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/meds_time"
+        android:text="Meds to take from 13:00h to 14:00h"
         android:id="@+id/meds_time_textview"
         android:layout_centerInParent="true"
         android:layout_below="@+id/clock"
@@ -48,39 +48,14 @@
     </ScrollView>
 
 
-    <Spinner
-        android:id="@+id/delays_spinner"
-        android:layout_width="0dp"
-        android:layout_height="0dip"
-        android:text="@string/delay"
-        android:visibility="visible"
-        android:layout_marginRight="0dp"
-        android:layout_alignParentBottom="true"
-        android:gravity="center_horizontal|center_vertical"
-        android:layout_alignParentLeft="true"
-        android:spinnerMode="dialog" />
-
     <Button
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:text="@string/delay"
-        android:id="@+id/reminder_delay_button"
-        style="@style/delay_button"
-        android:layout_marginRight="1dp"
-
-        android:layout_alignParentBottom="true"
-        android:gravity="center_horizontal|center_vertical" />
-
-
-    <Button
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="50dip"
         android:text="@string/done"
         android:id="@+id/reminder_done_button"
         style="@style/done_button"
         android:layout_marginLeft="5dp"
         android:gravity="center"
-        android:layout_toRightOf="@id/reminder_delay_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true" />
 

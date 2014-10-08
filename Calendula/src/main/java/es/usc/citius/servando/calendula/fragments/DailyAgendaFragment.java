@@ -2,6 +2,7 @@ package es.usc.citius.servando.calendula.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,6 +23,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.AgendaDetailActivity;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 import es.usc.citius.servando.calendula.util.RandomColorChooser;
 
@@ -41,8 +42,8 @@ public class DailyAgendaFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_daily_agenda, container, false);
         listview = (ListView) rootView.findViewById(R.id.listview);
         items = buildItems(); // allow user to change day
-        adapter = new AgendaItemAdapter(getActivity(),R.layout.daily_view_hour,items);
-        listview.setAdapter(new SlideExpandableListAdapter(adapter,R.id.count_container,R.id.bottom));
+        adapter = new AgendaItemAdapter(getActivity(), R.layout.daily_view_hour, items);
+        listview.setAdapter(new SlideExpandableListAdapter(adapter, R.id.count_container, R.id.bottom));
         return rootView;
     }
 
@@ -59,7 +60,7 @@ public class DailyAgendaFragment extends Fragment {
 
         ArrayList<DailyAgendaItemStub> items = new ArrayList<DailyAgendaItemStub>();
 
-        for(int i = 0; i < 24; i++){
+        for (int i = 0; i < 24; i++) {
             DailyAgendaItemStub item = DailyAgendaItemStub.fromRoutine(i);
             items.add(item);
         }
@@ -67,63 +68,76 @@ public class DailyAgendaFragment extends Fragment {
     }
 
 
-    private class AgendaItemAdapter extends ArrayAdapter<DailyAgendaItemStub>{
+    private class AgendaItemAdapter extends ArrayAdapter<DailyAgendaItemStub> {
 
-        public AgendaItemAdapter(Context context, int layoutResourceId, List<DailyAgendaItemStub> items){
-            super(context,layoutResourceId,items);
+        public AgendaItemAdapter(Context context, int layoutResourceId, List<DailyAgendaItemStub> items) {
+            super(context, layoutResourceId, items);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-           final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
+            final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
 
-           int hour = new GregorianCalendar().get(Calendar.HOUR_OF_DAY);
-           int minute = new GregorianCalendar().get(Calendar.MINUTE);
+            final int hour = new GregorianCalendar().get(Calendar.HOUR_OF_DAY);
+            int minute = new GregorianCalendar().get(Calendar.MINUTE);
 
-            DailyAgendaItemStub item = items.get(position);
+            final DailyAgendaItemStub item = items.get(position);
 
-            if(!item.hasColors){
+            if (!item.hasColors) {
                 int colorIndex = RandomColorChooser.getFixedColorIdx(new Integer(item.hour));
-                item.primaryColor = RandomColorChooser.getPrimaryColor(colorIndex,getResources());
-                item.secondaryColor = RandomColorChooser.getSecondaryColor(colorIndex,getResources());
-                item.hasColors=true;
+                item.primaryColor = RandomColorChooser.getPrimaryColor(colorIndex, getResources());
+                item.secondaryColor = RandomColorChooser.getSecondaryColor(colorIndex, getResources());
+                item.hasColors = true;
             }
 
             View v = layoutInflater.inflate(R.layout.daily_view_hour, null);
 
             // select the correct layout
-            if(!item.hasEvents){
+            if (!item.hasEvents) {
                 v.findViewById(R.id.hide_if_empty).setVisibility(View.GONE);
                 v.findViewById(R.id.current_hour_spacer).setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 LinearLayout medList = (LinearLayout) v.findViewById(R.id.med_item_list);
                 boolean isFirst = true;
-                for(DailyAgendaItemStub.DailyAgendaItemStubElement element : item.meds){
+                for (DailyAgendaItemStub.DailyAgendaItemStubElement element : item.meds) {
 
-                    View medNameView = layoutInflater.inflate(R.layout.daily_agenda_item_med,null);
-                    ((TextView)medNameView.findViewById(R.id.med_item_name)).setText(element.medName + (element.taken?" ✔":""));
-                    if(isFirst){
-                        ((TextView)medNameView.findViewById(R.id.bottom_current_hour_text)).setText(String.valueOf(item.hour<10?("0"+item.hour):item.hour));
-                       isFirst=false;
-                    }else{
+                    View medNameView = layoutInflater.inflate(R.layout.daily_agenda_item_med, null);
+                    ((TextView) medNameView.findViewById(R.id.med_item_name)).setText(element.medName + (element.taken ? " ✔" : ""));
+                    if (isFirst) {
+                        ((TextView) medNameView.findViewById(R.id.bottom_current_hour_text)).setText(String.valueOf(item.hour < 10 ? ("0" + item.hour) : item.hour));
+                        isFirst = false;
+                    } else {
                         medNameView.findViewById(R.id.bottom_current_hour_text).setVisibility(View.INVISIBLE);
                     }
                     // change colors
                     medNameView.setBackgroundColor(item.primaryColor);
-                    ((TextView)medNameView.findViewById(R.id.bottom_current_hour_text)).setTextColor(item.primaryColor);
-                    ((TextView)medNameView.findViewById(R.id.bottom_current_minute_text)).setTextColor(item.secondaryColor);
+                    ((TextView) medNameView.findViewById(R.id.bottom_current_hour_text)).setTextColor(item.primaryColor);
+                    ((TextView) medNameView.findViewById(R.id.bottom_current_minute_text)).setTextColor(item.secondaryColor);
 
-                    ((TextView)medNameView.findViewById(R.id.bottom_current_minute_text)).setText(element.minute);
+                    ((TextView) medNameView.findViewById(R.id.bottom_current_minute_text)).setText(element.minute);
                     medList.addView(medNameView);
                 }
+
+                View moreView = layoutInflater.inflate(R.layout.daily_agenda_item_more, null);
+                moreView.setBackgroundColor(item.primaryColor);
+                moreView.findViewById(R.id.more_button).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final Intent intent = new Intent(getContext(), AgendaDetailActivity.class);
+                        intent.putExtra("hour", item.hour);
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(0, 0);
+                    }
+                });
+                medList.addView(moreView);
                 // set number of meds to take
                 ((TextView) v.findViewById(R.id.count_text)).setText(String.valueOf(item.meds.size()));
 
             }
 
             // enable hour indicator
-            if(hour == item.hour){
+            if (hour == item.hour) {
                 v.findViewById(R.id.hour_text).setVisibility(View.INVISIBLE);
                 v.findViewById(R.id.current_hour_indicator).setVisibility(View.VISIBLE);
                 TextView hText = (TextView) v.findViewById(R.id.current_hour_text);

@@ -32,5 +32,7 @@ build/
 *.iws
 *.ipr
 *.iml
+Calendula/Calendula.iml
+libraries/*.iml
 *~
 *.swp

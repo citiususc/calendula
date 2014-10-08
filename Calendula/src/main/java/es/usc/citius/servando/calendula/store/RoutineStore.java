@@ -5,9 +5,6 @@ import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalTime;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -17,17 +14,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TreeSet;
 
 import es.usc.citius.servando.calendula.model.Routine;
-import es.usc.citius.servando.calendula.model.Schedule;
-import es.usc.citius.servando.calendula.model.ScheduleItemComparator;
 import es.usc.citius.servando.calendula.util.GsonUtil;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
  */
-public class RoutineStore extends Store{
+public class RoutineStore extends Store {
 
     public static final String TAG = RoutineStore.class.getName();
     private static final String ROUTINES_FILE_NAME = "routines.json";
@@ -96,7 +90,9 @@ public class RoutineStore extends Store{
 
 
     public void removeRoutine(Routine r) {
-        routines.remove(r);
+        //remove all schedules bound to routine
+        ScheduleStore.instance().removeFromRoutine(r);
+        routines.remove(r.id());
     }
 
     public List<Routine> asList() {
@@ -111,7 +107,7 @@ public class RoutineStore extends Store{
     }
 
 
-    public void save(Context context){
+    public void save(Context context) {
         // open session file where user data is stored
         FileOutputStream out = null;
         try {
@@ -120,9 +116,9 @@ public class RoutineStore extends Store{
             out.write(json.getBytes());
         } catch (IOException e) {
             Log.e(TAG, "Error saving routines", e);
-        }finally {
+        } finally {
             try {
-                if(out != null) out.close();
+                if (out != null) out.close();
             } catch (IOException e) {
                 // do nothing
             }
@@ -137,25 +133,26 @@ public class RoutineStore extends Store{
             is = context.openFileInput(ROUTINES_FILE_NAME);
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 
-            HashMap<String,Routine> routines = GsonUtil.get().fromJson(reader, new TypeToken<HashMap<String,Routine>>(){}.getType());
-            if(routines!=null){
-                this.routines= routines;
+            HashMap<String, Routine> routines = GsonUtil.get().fromJson(reader, new TypeToken<HashMap<String, Routine>>() {
+            }.getType());
+            if (routines != null) {
+                this.routines = routines;
             }
-            Log.d(TAG, "Routines loaded");
+            Log.d(TAG, "Routines loaded (" + routines.size() + ")");
             Log.d(TAG, GsonUtil.get().toJson(this.routines));
         } catch (Exception e) {
             removeAll(context);
-            Log.e(ScheduleStore.class.getName(), "Error reading routines file",e);
-        }finally {
+            Log.e(ScheduleStore.class.getName(), "Error reading routines file", e);
+        } finally {
             try {
                 is.close();
-            }catch (Exception unhandled){
+            } catch (Exception unhandled) {
                 //do nothing
             }
         }
     }
 
-    public void removeAll(Context context){
+    public void removeAll(Context context) {
         routines.clear();
         context.deleteFile(ROUTINES_FILE_NAME);
         notifyDataChange();

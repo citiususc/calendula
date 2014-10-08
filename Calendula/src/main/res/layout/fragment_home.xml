@@ -3,11 +3,40 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/home_background_color">
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/imageView2"
+
+        android:background="@color/home_background_color"
+
+        android:cropToPadding="false"
+        android:scaleType="center"
+        android:alpha="0.1" />
 
 
-<ImageView
+    <ImageView
+        android:id="@+id/bg_blur"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@drawable/calendula_flower_blur"
+        android:alpha="1"
+        android:layout_below="@+id/profile_image_container" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:id="@+id/imageView5"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
+        android:background="@color/white_50"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
         android:layout_width="20dip"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
@@ -16,121 +45,217 @@
         android:layout_alignParentBottom="true"
         android:src="@drawable/home_right_edge_shadow"
         android:scaleType="fitXY"
-        android:alpha="0.2" />
+        android:alpha="0.5" />
 
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/home_button_height"
-        android:text="@string/home_menu_plantrip"
-        android:id="@+id/home_button_plantrip"
-        android:textSize="@dimen/home_button_text_size"
-        style="@style/home_button"
-        android:background="@drawable/plantrip_button_selector"
-        android:layout_marginBottom="20dip"
+    <TextView
+        android:layout_width="wrap_content"
+        style="@style/username_text"
+        android:visibility="visible"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Ángel Piñeiro"
+        android:id="@+id/profile_username"
+        android:layout_alignTop="@+id/profile_image_container"
+        android:layout_toRightOf="@+id/profile_image_container"
+        android:layout_toEndOf="@+id/profile_image_container"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/dark_grey_home"
+        android:layout_marginTop="5dp"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginRight="@dimen/home_button_margin_right"
-        android:textAlignment="textStart"
-        android:gravity="center"
-        android:paddingRight="@dimen/home_button_height" />
+        android:background="@android:color/transparent"
+        android:id="@+id/buttons_container"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="20dp">
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/home_button_height"
-        android:text="@string/home_menu_pharmacies"
-        android:id="@+id/home_button_pharmacies"
-        android:textSize="@dimen/home_button_text_size"
-        style="@style/home_button"
-        android:background="@drawable/pharmacies_button_selector"
-        android:layout_above="@id/home_button_plantrip"
-        android:layout_marginBottom="10dip"
-        android:layout_marginRight="@dimen/home_button_margin_right"
-        android:textAlignment="textStart"
-        android:gravity="center"
-        android:paddingRight="@dimen/home_button_height" />
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/home_button_height"
+            android:text="@string/home_menu_plantrip"
+            android:id="@+id/home_button_plantrip"
+            android:textSize="@dimen/home_button_text_size"
+            style="@style/home_button"
+            android:background="@drawable/plantrip_button_selector"
+            android:gravity="center"
+            android:paddingRight="@dimen/home_button_height"
+            android:layout_below="@+id/home_button_pharmacies"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="10dp" />
 
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/home_button_height"
-        android:text="@string/home_menu_schedules"
-        android:id="@+id/home_button_schedules"
-        android:textSize="@dimen/home_button_text_size"
-        style="@style/home_button"
-        android:background="@drawable/schedules_button_selector"
-        android:layout_above="@id/home_button_pharmacies"
-        android:layout_marginBottom="10dip"
-        android:layout_marginRight="@dimen/home_button_margin_right"
-        android:textAlignment="textStart"
-        android:gravity="center"
-        android:paddingRight="@dimen/home_button_height" />
-
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/home_button_height"
-        android:text="@string/home_menu_medicines"
-        android:id="@+id/home_button_medicines"
-        android:textSize="@dimen/home_button_text_size"
-        style="@style/home_button"
-        android:background="@drawable/medicines_button_selector"
-        android:layout_above="@id/home_button_schedules"
-        android:layout_marginBottom="10dip"
-        android:layout_marginRight="@dimen/home_button_margin_right"
-        android:textAlignment="textStart"
-        android:gravity="center"
-        android:paddingRight="@dimen/home_button_height" />
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/home_button_height"
+            android:text="@string/home_menu_pharmacies"
+            android:id="@+id/home_button_pharmacies"
+            android:textSize="@dimen/home_button_text_size"
+            style="@style/home_button"
+            android:background="@drawable/pharmacies_button_selector"
+            android:gravity="center"
+            android:paddingRight="@dimen/home_button_height"
+            android:layout_below="@+id/home_button_schedules"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="10dp" />
 
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/home_button_height"
-        android:text="@string/home_menu_routines"
-        android:id="@+id/home_button_routines"
-        android:textSize="@dimen/home_button_text_size"
-        android:background="@drawable/routines_button_selector"
-        android:layout_marginBottom="10dip"
-        android:layout_above="@id/home_button_medicines"
-        style="@style/home_button"
-        android:layout_marginRight="@dimen/home_button_margin_right"
-        android:textAlignment="textStart"
-        android:gravity="center"
-        android:paddingRight="@dimen/home_button_height" />
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/home_button_height"
+            android:text="@string/home_menu_schedules"
+            android:id="@+id/home_button_schedules"
+            android:textSize="@dimen/home_button_text_size"
+            style="@style/home_button"
+            android:background="@drawable/schedules_button_selector"
+            android:gravity="center"
+            android:paddingRight="@dimen/home_button_height"
+            android:layout_below="@+id/home_button_medicines"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="10dp" />
 
-    <ImageView
-        android:layout_width="@dimen/home_button_height"
-        android:layout_height="@dimen/home_button_height"
-        android:layout_alignTop="@+id/home_button_routines"
-        android:layout_alignRight="@+id/home_button_routines"
-        android:src="@drawable/ic_button_routines" />
 
-    <ImageView
-        android:layout_width="@dimen/home_button_height"
-        android:layout_height="@dimen/home_button_height"
-        android:layout_alignTop="@+id/home_button_medicines"
-        android:layout_alignRight="@+id/home_button_medicines"
-        android:src="@drawable/ic_button_medicines" />
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/home_button_height"
+            android:text="@string/home_menu_medicines"
+            android:id="@+id/home_button_medicines"
+            android:textSize="@dimen/home_button_text_size"
+            style="@style/home_button"
+            android:background="@drawable/medicines_button_selector"
+            android:gravity="center"
+            android:paddingRight="@dimen/home_button_height"
+            android:layout_below="@+id/home_button_routines"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="10dp" />
 
-    <ImageView
-        android:layout_width="@dimen/home_button_height"
-        android:layout_height="@dimen/home_button_height"
-        android:layout_alignTop="@+id/home_button_schedules"
-        android:layout_alignRight="@+id/home_button_schedules"
-        android:src="@drawable/ic_button_schedules" />
 
-    <ImageView
-        android:layout_width="@dimen/home_button_height"
-        android:layout_height="@dimen/home_button_height"
-        android:layout_alignTop="@+id/home_button_pharmacies"
-        android:layout_alignRight="@+id/home_button_pharmacies"
-        android:src="@drawable/ic_button_pharmacies" />
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/home_button_height"
+            android:text="@string/home_menu_routines"
+            android:id="@+id/home_button_routines"
+            android:textSize="@dimen/home_button_text_size"
+            android:background="@drawable/routines_button_selector"
+            style="@style/home_button"
+            android:paddingRight="@dimen/home_button_height"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="10dp" />
 
-    <ImageView
-        android:layout_width="@dimen/home_button_height"
-        android:layout_height="@dimen/home_button_height"
-        android:layout_alignTop="@+id/home_button_plantrip"
-        android:layout_alignRight="@+id/home_button_plantrip"
-        android:src="@drawable/ic_button_plantrip" />
+        <ImageView
+            android:layout_width="@dimen/home_button_height"
+            android:layout_height="@dimen/home_button_height"
+            android:layout_alignTop="@+id/home_button_routines"
+            android:layout_alignRight="@+id/home_button_routines"
+            android:src="@drawable/ic_button_routines" />
+
+        <ImageView
+            android:layout_width="@dimen/home_button_height"
+            android:layout_height="@dimen/home_button_height"
+            android:layout_alignTop="@+id/home_button_medicines"
+            android:layout_alignRight="@+id/home_button_medicines"
+            android:src="@drawable/ic_button_medicines" />
+
+        <ImageView
+            android:layout_width="@dimen/home_button_height"
+            android:layout_height="@dimen/home_button_height"
+            android:layout_alignTop="@+id/home_button_schedules"
+            android:layout_alignRight="@+id/home_button_schedules"
+            android:src="@drawable/ic_button_schedules" />
+
+        <ImageView
+            android:layout_width="@dimen/home_button_height"
+            android:layout_height="@dimen/home_button_height"
+            android:layout_alignTop="@+id/home_button_pharmacies"
+            android:layout_alignRight="@+id/home_button_pharmacies"
+            android:src="@drawable/ic_button_pharmacies" />
+
+        <ImageView
+            android:layout_width="@dimen/home_button_height"
+            android:layout_height="@dimen/home_button_height"
+            android:layout_alignTop="@+id/home_button_plantrip"
+            android:layout_alignRight="@+id/home_button_plantrip"
+            android:src="@drawable/ic_button_plantrip"
+            android:id="@+id/imageView3" />
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/profile_image_container"
+        android:background="@drawable/rounded_profile_image_container"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp">
+
+
+        <com.makeramen.RoundedImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:src="@drawable/default_avatar"
+            android:id="@+id/profile_image"
+            android:scaleType="centerCrop"
+            app:corner_radius="30dip"
+            app:border_width="4dip"
+            app:border_color="#ffffff"
+            app:mutate_background="true"
+            app:oval="true"
+            android:layout_margin="3dp"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentTop="false"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Next med at 12:00h"
+        android:id="@+id/textView"
+        android:layout_below="@+id/profile_username"
+        android:layout_toRightOf="@+id/profile_image_container"
+        android:layout_toEndOf="@+id/profile_image_container"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Lunch, 2 medicines"
+        android:id="@+id/textView4"
+        android:layout_below="@+id/textView"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:textColor="@color/white" />
 
 
 </RelativeLayout>

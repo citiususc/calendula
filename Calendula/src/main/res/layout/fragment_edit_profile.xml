@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!--<ImageView-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="fill_parent"-->
+    <!--android:id="@+id/imageView"-->
+    <!--android:src="@drawable/calendula_flower"-->
+    <!--android:scaleType="fitStart"-->
+    <!--android:alpha="0.8" />-->
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/imageView2" />
+
+    <Button
+        android:id="@+id/profile_button_ok"
+        style="@style/ok_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/ok_button_selector"
+        android:text="@string/edit_routine_button_text" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal|top"
+        android:id="@+id/linearLayout">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:layout_alignTop="@+id/profile_image"
+            android:layout_toEndOf="@+id/profile_image"
+            android:layout_toRightOf="@+id/profile_image"
+            android:text="Profile"
+            style="@style/dark_text_big"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginTop="20dp" />
+
+        <com.makeramen.RoundedImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:src="@drawable/default_avatar"
+            android:id="@+id/profile_image"
+            android:scaleType="centerCrop"
+            app:corner_radius="30dip"
+            app:border_width="1dip"
+            app:border_color="#333333"
+            app:mutate_background="true"
+            app:oval="true"
+            android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/profile_username"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            android:text="Walter"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/dark_grey_home" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

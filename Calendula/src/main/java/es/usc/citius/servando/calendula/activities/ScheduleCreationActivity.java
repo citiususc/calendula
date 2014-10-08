@@ -23,6 +23,7 @@ import es.usc.citius.servando.calendula.fragments.ScheduleSummaryFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleTimetableFragment;
 import es.usc.citius.servando.calendula.model.Medicine;
 import es.usc.citius.servando.calendula.model.Schedule;
+import es.usc.citius.servando.calendula.store.MedicineStore;
 import es.usc.citius.servando.calendula.store.ScheduleStore;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
@@ -103,6 +104,11 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
                 } else if (currentPage == 2) {
                     ScheduleSummaryFragment fragment = ((ScheduleSummaryFragment) getViewPagerFragment(2));
                     Schedule schedule = fragment.getSchedule();
+                    // save med
+                    Medicine m = ScheduleCreationHelper.instance().getSelectedMed();
+                    MedicineStore.instance().addMedicine(m);
+                    MedicineStore.instance().save(getApplicationContext());
+
                     ScheduleStore.instance().addSchedule(schedule);
                     ScheduleStore.instance().save(ScheduleCreationActivity.this);
                     AlarmScheduler.instance().setAlarmsIfNeeded(schedule, getBaseContext());
@@ -232,6 +238,8 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
     public void onMedicineCreated(Medicine m) {
         // save med reference
         med = m;
+        MedicineStore.instance().addMedicine(m);
+        MedicineStore.instance().save(getApplicationContext());
         // go to next step
         mViewPager.setCurrentItem(1);
     }

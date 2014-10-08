@@ -3,6 +3,7 @@ package es.usc.citius.servando.calendula;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -19,9 +20,9 @@ import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.targets.PointTarget;
 
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
-import es.usc.citius.servando.calendula.store.MedicineStore;
-import es.usc.citius.servando.calendula.store.RoutineStore;
+import es.usc.citius.servando.calendula.fragments.HomeFragment;
 import es.usc.citius.servando.calendula.user.Session;
+import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Screen;
 
 public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener, ActionBar.OnNavigationListener {
@@ -61,13 +62,13 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
         //mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setDisplayShowTitleEnabled(false);
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        mActionBar.hide();
 
         SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.home_action_list,
                 android.R.layout.simple_spinner_dropdown_item);
 
         mActionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
         mViewPager.setOnPageChangeListener(this);
-
         boolean welcome = getIntent().getBooleanExtra("welcome",false);
         if(welcome) {
             Toast.makeText(getBaseContext(), "Welcome to calendula!", Toast.LENGTH_SHORT).show();
@@ -141,7 +142,7 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
                         dialog.dismiss();
-                        Session.getInstance().close(getApplicationContext());
+                        Session.instance().close(getApplicationContext());
                         finish();
                     }
                 })
@@ -170,7 +171,10 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
     }
 
     @Override
-    public void onPageScrolled(int i, float v, int i2) {
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        Log.d("Home", position + ", " + positionOffset + ", " + positionOffsetPixels);
+        HomeFragment fragment = (HomeFragment) getViewPagerFragment(0);
+        fragment.onScroll(positionOffset, positionOffsetPixels);
 
     }
 
@@ -182,5 +186,9 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
     @Override
     public void onPageScrollStateChanged(int i) {
 
+    }
+
+    Fragment getViewPagerFragment(int position) {
+        return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
     }
 }

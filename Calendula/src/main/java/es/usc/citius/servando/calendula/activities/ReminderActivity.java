@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import es.usc.citius.servando.calendula.AlarmScheduler;
@@ -31,7 +29,6 @@ import es.usc.citius.servando.calendula.model.Routine;
 import es.usc.citius.servando.calendula.model.Schedule;
 import es.usc.citius.servando.calendula.model.ScheduleItem;
 import es.usc.citius.servando.calendula.store.RoutineStore;
-import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
 import es.usc.citius.servando.calendula.util.ScheduleUtils;
 
 public class ReminderActivity extends Activity {
@@ -43,10 +40,11 @@ public class ReminderActivity extends Activity {
 
     Button delayButton = null;
     Button doneButton = null;
-    Map<Schedule,ScheduleItem> doses;
+    Map<Schedule, ScheduleItem> doses;
     Spinner delaySpinner;
     String routineId;
     Routine routine;
+    boolean initialized = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,49 +73,59 @@ public class ReminderActivity extends Activity {
         delayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //delaySpinner.performClick();
-                ReminderNotification.cancel(getApplicationContext());
-                AlarmScheduler.instance().delayAlarm(routine,5*60*1000,getApplicationContext());
-                Toast.makeText(getApplicationContext(),"Reminder delayed " + 5 + " mins",Toast.LENGTH_SHORT).show();
-                finish();
+                delaySpinner.performClick();
             }
         });
 
-
-        doses = ScheduleUtils.getRoutineScheduleItems(routine,true);
+        doses = ScheduleUtils.getRoutineScheduleItems(routine, true);
         fillReminderList();
     }
 
 
-
     private void setupScheduleSpinner() {
-//        delaySpinner = (Spinner) findViewById(R.id.delays_spinner);
-//        // Create an ArrayAdapter using the string array and a default spinner layout
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-//                R.array.delays_array, R.layout.spinner_text_item);
-//        // Specify the layout to use when the list of choices appears
-//        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-//        // Apply the adapter to the spinner
-//        delaySpinner.setAdapter(adapter);
-//
-//        delaySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//            }
-//
-//        });
+        delaySpinner = (Spinner) findViewById(R.id.delays_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.delays_array, R.layout.delay_spinner);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        delaySpinner.setAdapter(adapter);
+        // Set selection listener
+        delaySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                String selected = (String) adapterView.getItemAtPosition(i);
+                Log.d(TAG, "Item selected (" + i + "), " + selected);
+                // prevent automatic delay when the spinner is initialized
+                if (i != 0) {
+
+                    selected = selected.replace("min", "").trim();
+                    int minutes = Integer.valueOf(selected);
+                    delay(minutes);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                // do nothing
+            }
+
+        });
     }
 
 
-    void fillReminderList(){
+    void delay(int minutes) {
+        ReminderNotification.cancel(getApplicationContext());
+        AlarmScheduler.instance().delayAlarm(routine, minutes * 60 * 1000, getApplicationContext());
+        Toast.makeText(getApplicationContext(), "Reminder delayed " + minutes + " mins", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+
+    void fillReminderList() {
 
         LayoutInflater inflater = getLayoutInflater();
 
@@ -128,7 +136,7 @@ public class ReminderActivity extends Activity {
 
         params.setMargins(0, 0, 0, 15);
 
-        for(Schedule s: doses.keySet()){
+        for (Schedule s : doses.keySet()) {
 
             //ScheduleReminder reminder = new ScheduleReminder(s);
             //reminders.add(reminder);
@@ -140,30 +148,30 @@ public class ReminderActivity extends Activity {
             Medicine med = s.getMedicine();
             Dose dose = scheduleItem.dose();
 
-            ((TextView)entry.findViewById(R.id.med_name)).setText(med.getName());
-            ((TextView)entry.findViewById(R.id.med_dose)).setText(dose.ammount() + " " + med.getPresentation().getUnits(getResources()));
+            ((TextView) entry.findViewById(R.id.med_name)).setText(med.getName());
+            ((TextView) entry.findViewById(R.id.med_dose)).setText(dose.ammount() + " " + med.getPresentation().getUnits(getResources()));
 
             ToggleButton checkButton = (ToggleButton) entry.findViewById(R.id.check_button);
             final View background = entry.findViewById(R.id.reminder_item_container);
 
             boolean taken = DailyDosageChecker.instance().doseTaken(scheduleItem);
 
-            if(taken){
+            if (taken) {
                 checkButton.setChecked(taken);
                 background.setSelected(taken);
             }
 
-            Log.d(TAG,"Add view for dose " + med.getName() + ", taken: " + taken);
+            Log.d(TAG, "Add view for dose " + med.getName() + ", taken: " + taken);
 
             checkButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                        background.setSelected(checked);
-                        ScheduleItem dose = (ScheduleItem) (entry.getTag());
-                        DailyDosageChecker.instance().setDoseTaken(dose, checked, getApplicationContext());
-                        onReminderChecked();
-                    }
-                });
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                    background.setSelected(checked);
+                    ScheduleItem dose = (ScheduleItem) (entry.getTag());
+                    DailyDosageChecker.instance().setDoseTaken(dose, checked, getApplicationContext());
+                    onReminderChecked();
+                }
+            });
 
             list.addView(entry, params);
         }
@@ -173,19 +181,19 @@ public class ReminderActivity extends Activity {
     private void onReminderChecked() {
 
         int total = doses.size();
-        int checked=0;
+        int checked = 0;
 
-        for(ScheduleItem d : doses.values()) {
+        for (ScheduleItem d : doses.values()) {
             boolean taken = DailyDosageChecker.instance().doseTaken(d);
-            Log.d("Dosage","Dose taken?" + d.id() + " taken: " + taken);
-            if(taken)
+            Log.d("Dosage", "Dose taken?" + d.id() + " taken: " + taken);
+            if (taken)
                 checked++;
         }
 
-        if(checked == total){
+        if (checked == total) {
             delayButton.setVisibility(View.INVISIBLE);
             doneButton.getBackground().setLevel(1);
-        }else{
+        } else {
             delayButton.setVisibility(View.VISIBLE);
             doneButton.getBackground().setLevel(0);
         }
@@ -196,7 +204,7 @@ public class ReminderActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.reminder, menu);
         return true;
@@ -213,8 +221,6 @@ public class ReminderActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
 
 }
