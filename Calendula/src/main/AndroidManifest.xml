@@ -63,6 +63,19 @@
             android:name="es.usc.citius.servando.calendula.activities.AgendaDetailActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_agenda_detail"></activity>
+
+
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="calendula.db" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="6" />
+        <meta-data
+            android:name="AA_SERIALIZERS"
+            android:value="es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimeSerializer,
+            es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimeSerializer" />
+
     </application>
 
     <uses-permission android:name="android.permission.VIBRATE" />

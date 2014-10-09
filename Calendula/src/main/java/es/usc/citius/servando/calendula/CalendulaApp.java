@@ -3,6 +3,9 @@ package es.usc.citius.servando.calendula;
 import android.app.Application;
 import android.content.Context;
 
+import com.activeandroid.ActiveAndroid;
+
+import es.usc.citius.servando.calendula.persistence.Testing;
 import es.usc.citius.servando.calendula.store.MedicineStore;
 import es.usc.citius.servando.calendula.store.RoutineStore;
 import es.usc.citius.servando.calendula.store.ScheduleStore;
@@ -18,6 +21,11 @@ public class CalendulaApp extends Application {
         super.onCreate();
 
         Context ctx = getApplicationContext();
+        // initialize sqlite engine
+        ActiveAndroid.initialize(this);
+
+        Testing.test();
+
         try {
             // Load settings
             Settings.instance().load(ctx);
