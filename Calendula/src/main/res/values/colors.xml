@@ -18,6 +18,10 @@
     <color name="android_blue_dark">#0099CC</color>
     <color name="android_blue_light">#5533B5E5</color>
     <color name="white_50">#55FFFFFF</color>
+    <color name="white_20">#22FFFFFF</color>
+    <color name="black_20">#22000000</color>
+    <color name="list_item_shadow">#11444444</color>
+
 
     <!-- Other colors -->
     <color name="splash_background">#151515</color>
@@ -30,11 +34,12 @@
     <color name="list_item_selector_normal">#00111111</color>
     <color name="list_item_selector_pressed">#3333B5E5</color>
     <color name="home_background_color">@color/dark_grey_home</color>
+    <color name="dark_grey_text">#6e6e6e</color>
     <color name="light_grey">#55ABABAB</color>
     <color name="light_grey_pressed">#99989898</color>
     <!-- #ececec -->
-    <color name="actionbar_background_color">#161616</color>
+    <!--<color name="actionbar_background_color">#161616</color>-->
+    <color name="actionbar_background_color">#0099CC</color>
     <color name="med_presentation_circle_bg">#3333B5E5</color>
     <color name="black_overlay">#66000000</color>
-
 </resources>

@@ -2,6 +2,7 @@ package es.usc.citius.servando.calendula.util;
 
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,5 +119,47 @@ public class ScheduleUtils {
         }
         return doses;
     }
+
+    public static String getDaysStr(String[] days) {
+        String dayStr = "";
+        for (int i = 0; i < days.length - 1; i++) {
+            if (i > 0)
+                dayStr += ", ";
+            dayStr += days[i];
+        }
+        return dayStr + ((days.length > 1 ? " and " : "") + days[days.length - 1]);
+    }
+
+    public static String getDaysStr(boolean[] checkedDays) {
+
+        String[] days = getSelectedDays(checkedDays);
+
+        if (days.length == 7) {
+            return "Every day";//TODO get from resources
+        }
+
+        String dayStr = "";
+        for (int i = 0; i < days.length - 1; i++) {
+            if (i > 0)
+                dayStr += ", ";
+            dayStr += days[i];
+        }
+        return dayStr + ((days.length > 1 ? " and " : "") + days[days.length - 1]);
+    }
+
+    public static String[] getSelectedDays(boolean[] days) {
+        ArrayList<String> sdays = new ArrayList<String>();
+
+        for (int i = 0; i < days.length; i++) {
+            if (days[i]) {
+                sdays.add(ScheduleUtils.dayNames[i]);
+            }
+        }
+        return sdays.toArray(new String[sdays.size()]);
+
+    }
+
+
+    public static String[] dayNames = new String[]{"Mon", "Tue", "Wed", "Thu", "Fry", "Sat", "Sun"}; // 7 days
 
 }

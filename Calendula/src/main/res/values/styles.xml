@@ -16,6 +16,7 @@
     <!-- ActionBar styles -->
     <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/actionbar_background_color</item>
+        <item name="android:height">@dimen/action_bar_height</item>
         <!-- Support library compatibility -->
         <item name="background">@color/actionbar_background_color</item>
     </style>
@@ -98,6 +99,7 @@
     </style>
 
     <style name="DropDownItemTextStyle">
+        <item name="android:background">@color/actionbar_background_color</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">18dp</item>
     </style>

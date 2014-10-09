@@ -24,6 +24,7 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.AgendaDetailActivity;
+import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 import es.usc.citius.servando.calendula.util.RandomColorChooser;
 
@@ -44,7 +45,20 @@ public class DailyAgendaFragment extends Fragment {
         items = buildItems(); // allow user to change day
         adapter = new AgendaItemAdapter(getActivity(), R.layout.daily_view_hour, items);
         listview.setAdapter(new SlideExpandableListAdapter(adapter, R.id.count_container, R.id.bottom));
+
+        rootView.findViewById(R.id.add_schedule_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchActivity(ScheduleCreationActivity.class);
+            }
+        });
+
         return rootView;
+    }
+
+    private void launchActivity(Class activityCls) {
+        Intent intent = new Intent(getActivity(), activityCls);
+        startActivity(intent);
     }
 
     @Override
@@ -105,7 +119,7 @@ public class DailyAgendaFragment extends Fragment {
                     View medNameView = layoutInflater.inflate(R.layout.daily_agenda_item_med, null);
                     ((TextView) medNameView.findViewById(R.id.med_item_name)).setText(element.medName + (element.taken ? " ✔" : ""));
                     if (isFirst) {
-                        ((TextView) medNameView.findViewById(R.id.bottom_current_hour_text)).setText(String.valueOf(item.hour < 10 ? ("0" + item.hour) : item.hour));
+                        ((TextView) medNameView.findViewById(R.id.bottom_current_hour_text)).setText(String.valueOf((item.hour < 10 ? ("0" + item.hour) : item.hour)) + ":");
                         isFirst = false;
                     } else {
                         medNameView.findViewById(R.id.bottom_current_hour_text).setVisibility(View.INVISIBLE);

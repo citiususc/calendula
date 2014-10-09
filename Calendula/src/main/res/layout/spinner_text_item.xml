@@ -5,4 +5,4 @@
     android:textSize="22dp"
     android:gravity="left"
     android:textColor="@color/android_blue_dark"
-    android:padding="5dip" />
+    android:padding="5dp" />

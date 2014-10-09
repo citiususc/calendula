@@ -78,7 +78,7 @@ public class RoutinesListFragment extends Fragment {
         ((TextView) item.findViewById(R.id.routines_list_item_hour)).setText(strHour);
         ((TextView) item.findViewById(R.id.routines_list_item_minute)).setText(strMinute);
         ((TextView) item.findViewById(R.id.routines_list_item_name)).setText(routine.getName());
-        View overlay = item.findViewById(R.id.routines_list_item_overlay);
+        View overlay = item.findViewById(R.id.routine_list_item_container);
         overlay.setTag(routine);
 
         View.OnClickListener clickListener = new View.OnClickListener() {

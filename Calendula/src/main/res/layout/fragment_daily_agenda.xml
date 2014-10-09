@@ -1,7 +1,28 @@
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/listview"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:divider="@null"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    android:addStatesFromChildren="false">
 
-    />
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:divider="@null" />
+
+    <com.shamanland.fab.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/ic_action_add"
+        android:scaleType="fitCenter"
+        app:floatingActionButtonColor="@color/android_blue"
+        app:floatingActionButtonSize="normal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/add_schedule_button"
+        android:layout_margin="10dp"
+        android:adjustViewBounds="true"
+        android:padding="10dip" />
+
+
+</RelativeLayout>

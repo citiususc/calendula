@@ -22,7 +22,6 @@ public class ScheduleCreationHelper {
     private List<ScheduleItem> scheduleItems;
     private boolean[] selectedDays = new boolean[]{true, true, true, true, true, true, true}; // 7 days
 
-    private String[] dayNames = new String[]{"Mon", "Tue", "Wed", "Thu", "Fry", "Sat", "Sun"}; // 7 days
 
     private ScheduleCreationHelper() {
         setScheduleItems(new ArrayList<ScheduleItem>());
@@ -48,7 +47,7 @@ public class ScheduleCreationHelper {
         this.scheduleItems = scheduleItems;
     }
 
-    public void addScheduleItem(ScheduleItem i){
+    public void addScheduleItem(ScheduleItem i) {
         scheduleItems.add(i);
     }
 
@@ -92,19 +91,18 @@ public class ScheduleCreationHelper {
                 '}';
     }
 
-    public String[] getDays(){
+    public String[] getDays() {
         ArrayList<String> days = new ArrayList<String>();
 
-        for(int i = 0; i < selectedDays.length;i++){
-            if(selectedDays[i]){
-                days.add(dayNames[i]);
+        for (int i = 0; i < selectedDays.length; i++) {
+            if (selectedDays[i]) {
+                days.add(ScheduleUtils.dayNames[i]);
             }
         }
 
         return days.toArray(new String[days.size()]);
 
     }
-
 
 
     public void clear() {

@@ -1,24 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="80dp"
-    android:paddingLeft="0dp"
-    android:paddingTop="0dp"
-    android:paddingRight="0dp"
-    android:paddingBottom="1dp"
-    android:background="@color/android_blue_dark">
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
 
     <RelativeLayout
-        android:layout_width="140dp"
-        android:layout_height="80dp"
-        android:id="@+id/routines_list_item_time"
-        android:background="@color/android_blue">
+        android:layout_width="fill_parent"
+        android:layout_height="90dp"
+        android:background="@drawable/shape_list_item"
+        android:layout_margin="7dip"
+        android:id="@+id/routine_list_item_container">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Breakfast"
+            android:id="@+id/routines_list_item_name"
+            android:textColor="@color/android_blue_dark"
+            android:textSize="23dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="20dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true">
+            android:layout_alignBottom="@+id/routines_list_item_name"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp">
+
+            <ImageButton
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:id="@+id/imageButton2"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_alarm"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center_vertical"
+                android:alpha="0.6" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -27,9 +48,10 @@
                 android:id="@+id/routines_list_item_hour"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:textColor="@color/white"
+                android:textColor="@color/dark_grey_text"
                 android:textStyle="bold"
-                android:textSize="30dp" />
+                android:textSize="20dp"
+                android:layout_gravity="center_vertical" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -38,71 +60,40 @@
                 android:id="@+id/routines_list_item_minute"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/routines_list_item_hour"
-                android:textColor="@color/white"
-                android:textSize="30dp" />
+                android:textColor="@color/dark_grey_text"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" h"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/routines_list_item_minute"
+                android:textColor="@color/dark_grey_text"
+                android:textSize="20dp" />
+
         </LinearLayout>
-
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="80dp"
-        android:layout_marginLeft="140dp"
-        android:background="@color/white">
+    <!--<ImageView-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="10dp"-->
+    <!--android:id="@+id/imageView2b"-->
+    <!--android:src="@drawable/daily_view_list_item_tab_shadow_bottom"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:scaleType="fitXY"-->
+    <!--android:layout_alignParentTop="false"-->
+    <!--android:alpha="0.1" />-->
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageButton"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/abc_ic_go_search_api_holo_light"
-            android:background="@null"
-            android:layout_marginRight="10dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Breakfast"
-            android:id="@+id/routines_list_item_name"
-            android:textColor="#555555"
-            android:textSize="23dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp" />
-
-    </RelativeLayout>
-
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="10dp"
-        android:id="@+id/imageView2b"
-        android:src="@drawable/daily_view_list_item_tab_shadow_bottom"
-        android:layout_alignParentBottom="true"
-        android:scaleType="fitXY"
-        android:layout_alignParentTop="false"
-        android:alpha="0.1" />
-
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="10dp"
-        android:id="@+id/imageView2a"
-        android:src="@drawable/daily_view_list_item_tab_shadow_top"
-        android:scaleType="fitXY"
-        android:layout_alignParentTop="true"
-        android:visibility="visible"
-        android:alpha="0.1" />
-
-    <ImageButton
-        android:layout_width="fill_parent"
-        android:layout_height="80dp"
-        android:id="@+id/routines_list_item_overlay"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/list_item_overlay_selector" />
+    <!--<ImageView-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="10dp"-->
+    <!--android:id="@+id/imageView2a"-->
+    <!--android:src="@drawable/daily_view_list_item_tab_shadow_top"-->
+    <!--android:scaleType="fitXY"-->
+    <!--android:layout_alignParentTop="true"-->
+    <!--android:visibility="visible"-->
+    <!--android:alpha="0.1" />-->
 
 
 </RelativeLayout>

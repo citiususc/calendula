@@ -21,7 +21,6 @@ import es.usc.citius.servando.calendula.util.ScheduleUtils;
 
 /**
  * A simple {@link android.support.v4.app.Fragment} subclass.
- *
  */
 public class ScheduleSummaryFragment extends Fragment {
 
@@ -47,9 +46,9 @@ public class ScheduleSummaryFragment extends Fragment {
         }
     }
 
-    public void updateSummary(){
+    public void updateSummary() {
 
-        Log.d(TAG,"updateSummary ScheduleSUmmaryFragment");
+        Log.d(TAG, "updateSummary ScheduleSUmmaryFragment");
         View rootView = getView();
 
         final TextView medNameTv = (TextView) rootView.findViewById(R.id.sched_summary_medname);
@@ -62,7 +61,7 @@ public class ScheduleSummaryFragment extends Fragment {
         int medIcon = ScheduleCreationHelper.instance().getSelectedMed().getPresentation().getDrawable();
         String freq = ScheduleUtils.getTimesStr(ScheduleCreationHelper.instance().getScheduleItems());
         String days[] = ScheduleCreationHelper.instance().getDays();
-        String dayStr = getDayStr(days);
+        String dayStr = ScheduleUtils.getDaysStr(days);
 
         medNameTv.setText(medName);
         medDailyFreqTv.setText(freq);
@@ -76,7 +75,7 @@ public class ScheduleSummaryFragment extends Fragment {
     }
 
 
-    public Schedule getSchedule(){
+    public Schedule getSchedule() {
 
         for (ScheduleItem scheduleItem : ScheduleCreationHelper.instance().getScheduleItems()) {
             Log.d(TAG, GsonUtil.get().toJson(scheduleItem));
@@ -91,16 +90,6 @@ public class ScheduleSummaryFragment extends Fragment {
         Log.d(TAG, GsonUtil.get().toJson(s));
 
         return s;
-    }
-
-    private String getDayStr(String[] days) {
-        String dayStr = "";
-        for(int i = 0; i < days.length -1 ; i++){
-            if(i>0)
-                dayStr += ", ";
-            dayStr += days[i];
-        }
-        return dayStr + ((days.length > 1 ? " and " : "") + days[days.length-1]);
     }
 
 

@@ -1,81 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="80dp"
+    android:layout_height="wrap_content"
     android:paddingLeft="0dp"
     android:paddingTop="0dp"
     android:paddingRight="0dp"
-    android:paddingBottom="1dp"
-    android:background="@color/android_blue_dark">
-
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="10dp"
-        android:id="@+id/imageView2b"
-        android:src="@drawable/daily_view_list_item_tab_shadow_bottom"
-        android:layout_alignParentBottom="true"
-        android:scaleType="fitXY"
-        android:layout_alignParentTop="false"
-        android:alpha="0.1" />
-
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="10dp"
-        android:id="@+id/imageView2a"
-        android:src="@drawable/daily_view_list_item_tab_shadow_top"
-        android:scaleType="fitXY"
-        android:layout_alignParentTop="true"
-        android:visibility="visible"
-        android:alpha="0.1" />
+    android:paddingBottom="1dp">
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="80dp"
-        android:background="@color/white">
+        android:layout_height="90dp"
+        android:background="@drawable/shape_list_item"
+        android:layout_margin="7dp"
+        android:id="@+id/schedules_list_item_container">
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:id="@+id/imageButton"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/abc_ic_go_search_api_holo_light"
+            android:src="@drawable/ic_presentation_2"
             android:background="@null"
-            android:layout_marginRight="10dp" />
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="false"
+            android:layout_marginLeft="15dp"
+            android:scaleType="fitCenter"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Atrovent"
             android:id="@+id/schedules_list_item_medname"
             android:textColor="#555555"
-            android:textSize="23dp"
-            android:layout_centerVertical="false"
-            android:layout_marginTop="15dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp" />
+            android:textSize="20dp"
+            android:layout_toEndOf="@+id/imageButton"
+            android:layout_alignTop="@+id/imageButton"
+            android:layout_toRightOf="@+id/imageButton"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_vertical" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/no_stock_info_msg"
+            android:text="Three times a day"
             android:id="@+id/schedules_list_item_times"
-            android:layout_below="@+id/schedules_list_item_medname"
-            android:layout_marginTop="2dp"
-            android:layout_alignLeft="@+id/schedules_list_item_medname"
-            android:textColor="@color/android_blue" />
+            android:textColor="@color/android_blue"
+            android:gravity="center_vertical"
+            android:layout_alignLeft="@+id/schedules_list_item_days"
+            android:layout_alignStart="@+id/schedules_list_item_days"
+            android:layout_below="@+id/schedules_list_item_days"
+            android:layout_marginTop="3dp" />
 
-        <ImageButton
-            android:layout_width="fill_parent"
-            android:layout_height="80dp"
-            android:id="@+id/schedules_list_item_overlay"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Every day"
+            android:id="@+id/schedules_list_item_days"
+            android:layout_alignLeft="@+id/schedules_list_item_medname"
+            android:layout_below="@+id/schedules_list_item_medname"
+            android:textSize="15dp"
+            android:layout_marginTop="0dp" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/imageView"
+            android:src="@drawable/ic_settings"
+            android:alpha="0.6"
+            android:layout_alignBottom="@+id/imageButton"
             android:layout_alignParentRight="true"
-            android:background="@drawable/list_item_overlay_selector" />
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="23dp" />
 
     </RelativeLayout>
 

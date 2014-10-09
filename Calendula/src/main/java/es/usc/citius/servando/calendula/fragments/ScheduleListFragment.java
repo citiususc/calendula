@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,7 +20,6 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.model.Schedule;
-import es.usc.citius.servando.calendula.store.RoutineStore;
 import es.usc.citius.servando.calendula.store.ScheduleStore;
 import es.usc.citius.servando.calendula.store.StoreListener;
 import es.usc.citius.servando.calendula.util.ScheduleUtils;
@@ -93,11 +93,16 @@ public class ScheduleListFragment extends Fragment implements StoreListener{
 
         View item = inflater.inflate(R.layout.schedules_list_item, null);
 
+
+        ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
+        icon.setImageDrawable(getResources().getDrawable(schedule.getMedicine().getPresentation().getDrawable()));
+
         ((TextView)item.findViewById(R.id.schedules_list_item_medname)).setText(schedule.getMedicine().getName());
         ((TextView)item.findViewById(R.id.schedules_list_item_times)).setText(ScheduleUtils.getTimesStr(schedule.items()));
+        ((TextView) item.findViewById(R.id.schedules_list_item_days)).setText(ScheduleUtils.getDaysStr(schedule.getDays()));
 
 
-        View overlay = item.findViewById(R.id.schedules_list_item_overlay);
+        View overlay = item.findViewById(R.id.schedules_list_item_container);
         overlay.setTag(schedule);
 
         View.OnClickListener clickListener = new View.OnClickListener() {

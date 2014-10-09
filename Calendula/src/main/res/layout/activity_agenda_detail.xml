@@ -10,7 +10,7 @@
 
     <es.usc.citius.servando.calendula.util.view.CustomDigitalClock
         android:id="@+id/clock"
-        android:layout_width="200dip"
+        android:layout_width="200dp"
         android:layout_height="80dp"
         android:layout_centerHorizontal="true"
         android:textColor="@color/android_blue_dark"
@@ -50,7 +50,7 @@
 
     <Button
         android:layout_width="fill_parent"
-        android:layout_height="50dip"
+        android:layout_height="50dp"
         android:text="@string/done"
         android:id="@+id/reminder_done_button"
         style="@style/done_button"

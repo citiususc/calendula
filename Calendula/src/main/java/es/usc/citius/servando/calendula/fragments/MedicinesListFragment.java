@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -68,7 +69,11 @@ public class MedicinesListFragment extends Fragment {
         View item = inflater.inflate(R.layout.medicines_list_item, null);
 
         ((TextView) item.findViewById(R.id.medicines_list_item_name)).setText(medicine.getName());
-        View overlay = item.findViewById(R.id.medicines_list_item_overlay);
+
+        ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
+        icon.setImageDrawable(getResources().getDrawable(medicine.getPresentation().getDrawable()));
+
+        View overlay = item.findViewById(R.id.medicines_list_item_container);
         overlay.setTag(medicine);
 
         View.OnClickListener clickListener = new View.OnClickListener() {
