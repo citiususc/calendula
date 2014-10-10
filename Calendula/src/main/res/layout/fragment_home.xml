@@ -221,11 +221,11 @@
             android:id="@+id/profile_image"
             android:scaleType="centerCrop"
             app:corner_radius="30dp"
-            app:border_width="4dp"
+            app:border_width="3dp"
             app:border_color="#ffffff"
             app:mutate_background="true"
             app:oval="true"
-            android:layout_margin="3dp"
+            android:layout_margin="2dp"
             android:layout_alignParentLeft="false"
             android:layout_alignParentTop="false"
             android:layout_centerInParent="true" />

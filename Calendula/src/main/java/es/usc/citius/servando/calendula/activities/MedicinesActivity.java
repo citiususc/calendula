@@ -147,4 +147,10 @@ public class MedicinesActivity extends ActionBarActivity implements MedicinesLis
         return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
+    }
+
 }

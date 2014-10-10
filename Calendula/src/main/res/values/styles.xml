@@ -17,6 +17,7 @@
     <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/actionbar_background_color</item>
         <item name="android:height">@dimen/action_bar_height</item>
+        <item name="android:icon">@drawable/ic_launcher_white</item>
         <!-- Support library compatibility -->
         <item name="background">@color/actionbar_background_color</item>
     </style>

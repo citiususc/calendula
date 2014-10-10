@@ -59,6 +59,11 @@ public class RoutinesActivity extends ActionBarActivity implements RoutinesListF
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

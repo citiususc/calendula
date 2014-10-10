@@ -344,4 +344,10 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
+    }
+
 }
