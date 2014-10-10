@@ -3,8 +3,12 @@ package es.usc.citius.servando.calendula.persistence;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
+
+import java.util.List;
 
 /**
  * Created by castrelo on 4/10/14.
@@ -13,12 +17,12 @@ import org.joda.time.LocalTime;
 public class DailyScheduleItem extends Model {
 
     public static final String COLUMN_DAILY_SCHEDULE_ITEM = "DailyScheduleItem";
-    public static final String COLUMN_DAILY_SCHEDULE = "DailySchedule";
+    public static final String COLUMN_DATE = "Date";
     public static final String COLUMN_TAKEN_TODAY = "TakenToday";
     public static final String COLUMN_TIME_TAKEN = "TimeTaken";
 
-    @Column(name = COLUMN_DAILY_SCHEDULE)
-    private DailySchedule dailySchedule;
+    @Column(name = COLUMN_DATE)
+    private DateTime date;
 
     @Column(name = COLUMN_DAILY_SCHEDULE_ITEM)
     private ScheduleItem scheduleItem;
@@ -30,15 +34,15 @@ public class DailyScheduleItem extends Model {
     private LocalTime timeTaken;
 
     public DailyScheduleItem() {
-
     }
 
-    public DailyScheduleItem(DailySchedule dailySchedule, ScheduleItem scheduleItem) {
-        this.dailySchedule = dailySchedule;
+    public DailyScheduleItem(DateTime date, ScheduleItem scheduleItem) {
+        this.date = date;
         this.scheduleItem = scheduleItem;
     }
 
     public DailyScheduleItem(ScheduleItem scheduleItem) {
+        this.date = scheduleItem.routine().time().toDateTimeToday();
         this.scheduleItem = scheduleItem;
     }
 
@@ -54,15 +58,13 @@ public class DailyScheduleItem extends Model {
         this.scheduleItem = scheduleItem;
     }
 
-
-    public DailySchedule dailySchedule() {
-        return dailySchedule;
+    public DateTime date() {
+        return date;
     }
 
-    public void setDailySchedule(DailySchedule dailySchedule) {
-        this.dailySchedule = dailySchedule;
+    public void setDate(DateTime date) {
+        this.date = date;
     }
-
 
     public boolean takenToday() {
         return takenToday;
@@ -83,6 +85,41 @@ public class DailyScheduleItem extends Model {
                 ", takenToday=" + takenToday +
                 ", timeTaken=" + timeTaken +
                 '}';
+    }
+
+
+    public static DailyScheduleItem findById(long id) {
+        return new Select().from(DailyScheduleItem.class)
+                .where("id = ?", id)
+                .executeSingle();
+    }
+
+
+    public static List<DailyScheduleItem> findAll() {
+        return new Select().from(DailyScheduleItem.class)
+                .execute();
+    }
+
+    public static DailyScheduleItem findByScheduleItem(ScheduleItem item) {
+        return new Select().from(DailyScheduleItem.class)
+                .where(COLUMN_DAILY_SCHEDULE_ITEM + " = ?", item.getId())
+                .executeSingle();
+    }
+
+    public static List<DailyScheduleItem> fromDate(DateTime date) {
+        // get one day interval
+        String start = date.withTimeAtStartOfDay().toString("yy/mm/dd kk:mm");
+        String end = date.plusDays(1).withTimeAtStartOfDay().toString("yy/mm/dd kk:mm");
+
+        return new Select().from(DailyScheduleItem.class)
+                .where(COLUMN_DATE + " BETWEEN ? AND ?", start, end)
+                .execute();
+    }
+
+    public static void removeAll() {
+        for (DailyScheduleItem i : findAll()) {
+            i.delete();
+        }
     }
 }
 

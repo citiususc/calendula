@@ -15,14 +15,12 @@ import android.support.v4.app.NotificationCompat;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 
-import java.util.Map;
+import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.model.Dose;
-import es.usc.citius.servando.calendula.model.Medicine;
-import es.usc.citius.servando.calendula.model.Routine;
-import es.usc.citius.servando.calendula.model.Schedule;
-import es.usc.citius.servando.calendula.model.ScheduleItem;
+import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Routine;
+import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
 /**
  * Helper class for showing and canceling message
@@ -53,7 +51,7 @@ public class ReminderNotification {
      * @see #cancel(Context)
      */
     public static void notify(final Context context,
-                              final String exampleString, Routine r, Map<Schedule, ScheduleItem> doses, Intent intent) {
+                              final String exampleString, Routine r, List<ScheduleItem> doses, Intent intent) {
         final Resources res = context.getResources();
 
         // This image is used as the notification's large icon (thumbnail).
@@ -64,15 +62,13 @@ public class ReminderNotification {
 
         NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
 
-        for (Schedule s : doses.keySet()) {
+        for (ScheduleItem scheduleItem : doses) {
 
-            Medicine med = s.getMedicine();
-            Dose dose = doses.get(s).dose();
-
+            Medicine med = scheduleItem.schedule().medicine();
             final SpannableStringBuilder SpItem = new SpannableStringBuilder();
-            SpItem.append(s.getMedicine().getName());
+            SpItem.append(med.name());
             SpItem.setSpan(new ForegroundColorSpan(Color.WHITE), 0, SpItem.length(), 0);
-            SpItem.append("   " + dose.ammount() + " " + med.getPresentation().getUnits(context.getResources()));
+            SpItem.append("   " + scheduleItem.dose() + " " + med.presentation().units(context.getResources()));
             // add to style
             style.addLine(SpItem);
         }
@@ -157,7 +153,7 @@ public class ReminderNotification {
 
     /**
      * Cancels any notifications of this type previously shown using
-     * {@link #notify(Context, String, Routine, java.util.Map, android.content.Intent)}.
+     * {@link #notify(Context, String, Routine, java.util.List, android.content.Intent)}.
      */
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     public static void cancel(final Context context) {

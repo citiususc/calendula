@@ -12,12 +12,11 @@ import android.widget.Toast;
 
 import java.util.Locale;
 
-import es.usc.citius.servando.calendula.AlarmScheduler;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.fragments.RoutineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
-import es.usc.citius.servando.calendula.model.Routine;
-import es.usc.citius.servando.calendula.store.RoutineStore;
+import es.usc.citius.servando.calendula.persistence.Routine;
+import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 
 public class RoutinesActivity extends ActionBarActivity implements RoutinesListFragment.OnRoutineSelectedListener, RoutineCreateOrEditFragment.OnRoutineEditListener {
@@ -98,7 +97,7 @@ public class RoutinesActivity extends ActionBarActivity implements RoutinesListF
 
     @Override
     public void onRoutineEdited(Routine r) {
-        AlarmScheduler.instance().setAlarm(r,this);
+        AlarmScheduler.instance().setAlarm(r, this);
         Toast.makeText(this, "Changes saved!", Toast.LENGTH_SHORT).show();
         mViewPager.setCurrentItem(0);
         ((RoutinesListFragment) getViewPagerFragment(0)).notifyDataChange();

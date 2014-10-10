@@ -19,8 +19,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.model.Medicine;
-import es.usc.citius.servando.calendula.store.MedicineStore;
+import es.usc.citius.servando.calendula.persistence.Medicine;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -37,7 +36,7 @@ public class MedicinesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_medicines_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.medicines_list);
-        mMedicines = MedicineStore.instance().getAll();
+        mMedicines = Medicine.findAll();
         adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
         listview.setAdapter(adapter);
 
@@ -55,8 +54,7 @@ public class MedicinesListFragment extends Fragment {
 
     public void notifyDataChange() {
         Log.d(getTag(), "Notify data change");
-        mMedicines = MedicineStore.instance().getAll();
-        Log.d(getTag(), "Routines : " + mMedicines.size() + ", " + MedicineStore.instance().size());
+        mMedicines = Medicine.findAll();
         adapter.clear();
         for (Medicine m : mMedicines) {
             adapter.add(m);
@@ -68,10 +66,10 @@ public class MedicinesListFragment extends Fragment {
 
         View item = inflater.inflate(R.layout.medicines_list_item, null);
 
-        ((TextView) item.findViewById(R.id.medicines_list_item_name)).setText(medicine.getName());
+        ((TextView) item.findViewById(R.id.medicines_list_item_name)).setText(medicine.name());
 
         ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
-        icon.setImageDrawable(getResources().getDrawable(medicine.getPresentation().getDrawable()));
+        icon.setImageDrawable(getResources().getDrawable(medicine.presentation().getDrawable()));
 
         View overlay = item.findViewById(R.id.medicines_list_item_container);
         overlay.setTag(medicine);
@@ -81,7 +79,7 @@ public class MedicinesListFragment extends Fragment {
             public void onClick(View view) {
                 Medicine m = (Medicine) view.getTag();
                 if (mMedicineSelectedCallback != null && m != null) {
-                    Log.d(getTag(), "Click at " + m.getName());
+                    Log.d(getTag(), "Click at " + m.name());
                     mMedicineSelectedCallback.onMedicineSelected(m);
                 } else {
                     Log.d(getTag(), "No callback set");
@@ -105,12 +103,11 @@ public class MedicinesListFragment extends Fragment {
 
     void showDeleteConfirmationDialog(final Medicine m) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Remove " + m.getName() + "?")
+        builder.setMessage("Remove " + m.name() + "?")
                 .setCancelable(true)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        MedicineStore.instance().removeMedicine(m);
-                        MedicineStore.instance().save(getActivity());
+                        m.delete();
                         notifyDataChange();
                     }
                 })

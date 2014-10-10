@@ -64,7 +64,7 @@ public class Routine extends Model {
 
     public static List<Routine> findAll() {
         return new Select().from(Routine.class)
-                .orderBy(COLUMN_NAME + " ASC")
+                .orderBy(COLUMN_TIME + " ASC")
                 .execute();
     }
 
@@ -78,6 +78,19 @@ public class Routine extends Model {
         return new Select().from(Routine.class)
                 .where(COLUMN_NAME + " = ?", name)
                 .executeSingle();
+    }
+
+    public static List<Routine> findInHour(int hour) {
+
+        LocalTime time = new LocalTime(hour, 0);
+
+        // get one hour interval [h:00, h:59:]
+        String start = time.toString("kk:mm");
+        String end = time.plusMinutes(59).toString("kk:mm");
+
+        return new Select().from(Routine.class)
+                .where(COLUMN_TIME + " BETWEEN ? AND ?", start, end)
+                .execute();
     }
 
 }

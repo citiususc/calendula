@@ -10,20 +10,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-
-import java.util.Locale;
 
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.fragments.RoutineCreateOrEditFragment;
-import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
-import es.usc.citius.servando.calendula.model.Routine;
-import es.usc.citius.servando.calendula.model.Schedule;
-import es.usc.citius.servando.calendula.store.ScheduleStore;
+import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 
-public class SchedulesActivity extends ActionBarActivity implements ScheduleListFragment.OnScheduleSelectedListener{
+public class SchedulesActivity extends ActionBarActivity implements ScheduleListFragment.OnScheduleSelectedListener {
 
     private static final String TAG = SchedulesActivity.class.getSimpleName();
     /**
@@ -89,7 +82,7 @@ public class SchedulesActivity extends ActionBarActivity implements ScheduleList
             case R.id.action_settings:
                 return true;
             case R.id.action_remove_all:
-                ScheduleStore.instance().removeAll(getBaseContext());
+                //TODO: remove all
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -102,40 +95,23 @@ public class SchedulesActivity extends ActionBarActivity implements ScheduleList
 
     @Override
     public void onCreateSchedule() {
-        launchActivity(ScheduleCreationActivity.class);
-    }
-    /*
-    @Override
-    public void onRoutineSelected(Routine r) {
-        mViewPager.setCurrentItem(1);
-        ((RoutineCreateOrEditFragment) getViewPagerFragment(1)).setRoutine(r);
-        setTitle(R.string.title_edit_routine_activity);
+        Intent intent = new Intent(this, ScheduleCreationActivity.class);
+        startActivityForResult(intent, 1);
 
     }
 
-    @Override
-    public void onCreateRoutine() {
-        mViewPager.setCurrentItem(1);
-        ((RoutineCreateOrEditFragment) getViewPagerFragment(1)).clear();
-        setTitle(R.string.title_create_routine_activity);
-    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-    @Override
-    public void onRoutineEdited(Routine r) {
-        Toast.makeText(this, "Changes saved!", Toast.LENGTH_SHORT).show();
-        mViewPager.setCurrentItem(0);
-        ((RoutinesListFragment) getViewPagerFragment(0)).notifyDataChange();
-        setTitle(R.string.title_activity_routines);
-    }
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                boolean scheduleCreated = data.getBooleanExtra("schedule_created", false);
+                if (scheduleCreated) {
+                    ((ScheduleListFragment) getViewPagerFragment(0)).notifyDataChange();
+                }
+            }
+        }
+    }//onActivityResult
 
-    @Override
-    public void onRoutineCreated(Routine r) {
-        Toast.makeText(this, "Routine created!", Toast.LENGTH_SHORT).show();
-        mViewPager.setCurrentItem(0);
-        ((RoutinesListFragment) getViewPagerFragment(0)).notifyDataChange();
-        setTitle(R.string.title_activity_routines);
-    }
-    */
 
     /**
      * A {@link android.support.v4.app.FragmentPagerAdapter} that returns a fragment corresponding to

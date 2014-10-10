@@ -17,8 +17,7 @@ import android.widget.TimePicker;
 import org.joda.time.LocalTime;
 
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.model.Routine;
-import es.usc.citius.servando.calendula.store.RoutineStore;
+import es.usc.citius.servando.calendula.persistence.Routine;
 
 /**
  * Created by joseangel.pineiro on 12/4/13.
@@ -48,7 +47,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment {
         });
 
         if (savedInstanceState != null && savedInstanceState.containsKey("routine")) {
-            mRoutine = RoutineStore.instance().getRoutine(savedInstanceState.getString("routine"));
+            mRoutine = Routine.findById(savedInstanceState.getLong("routine"));
             mConfirmButton.setText(getString(R.string.edit_routine_button_text));
         }
 
@@ -63,15 +62,15 @@ public class RoutineCreateOrEditFragment extends DialogFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mRoutine != null)
-            outState.putString("routine", mRoutine.getTimeAsString());
+            outState.putLong("routine", mRoutine.getId());
     }
 
     public void setRoutine(Routine r) {
-        Log.d(getTag(), "Routine set: " + r.getName());
+        Log.d(getTag(), "Routine set: " + r.name());
         mRoutine = r;
-        mNameTextView.setText(mRoutine.getName());
-        mTimePicker.setCurrentHour(mRoutine.getTime().getHourOfDay());
-        mTimePicker.setCurrentMinute(mRoutine.getTime().getMinuteOfHour());
+        mNameTextView.setText(mRoutine.name());
+        mTimePicker.setCurrentHour(mRoutine.time().getHourOfDay());
+        mTimePicker.setCurrentMinute(mRoutine.time().getMinuteOfHour());
         mConfirmButton.setText(getString(R.string.edit_routine_button_text));
 
     }
@@ -98,7 +97,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment {
             if (mRoutine != null) {
                 mRoutine.setName(name);
                 mRoutine.setTime(new LocalTime(hour, minute));
-                RoutineStore.instance().save(getActivity());
+                mRoutine.save();
                 if (mRoutineEditCallback != null) {
                     mRoutineEditCallback.onRoutineEdited(mRoutine);
                 }
@@ -107,8 +106,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment {
             else {
                 mRoutine = new Routine(new LocalTime(hour, minute), name);
                 Log.d(getTag(), "Routine created");
-                RoutineStore.instance().addRoutine(mRoutine);
-                RoutineStore.instance().save(getActivity());
+                mRoutine.save();
                 if (mRoutineEditCallback != null) {
                     mRoutineEditCallback.onRoutineCreated(mRoutine);
                 }

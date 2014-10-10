@@ -12,11 +12,8 @@ import android.widget.TextView;
 import java.util.Arrays;
 
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.model.Schedule;
-import es.usc.citius.servando.calendula.model.ScheduleItem;
-import es.usc.citius.servando.calendula.util.GsonUtil;
+import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
-import es.usc.citius.servando.calendula.util.ScheduleUtils;
 
 
 /**
@@ -57,11 +54,11 @@ public class ScheduleSummaryFragment extends Fragment {
         final ImageView medIconImage = (ImageView) rootView.findViewById(R.id.sched_summary_medicon);
 
 
-        String medName = ScheduleCreationHelper.instance().getSelectedMed().getName();
-        int medIcon = ScheduleCreationHelper.instance().getSelectedMed().getPresentation().getDrawable();
-        String freq = ScheduleUtils.getTimesStr(ScheduleCreationHelper.instance().getScheduleItems());
+        String medName = ScheduleCreationHelper.instance().getSelectedMed().name();
+        int medIcon = ScheduleCreationHelper.instance().getSelectedMed().presentation().getDrawable();
+        String freq = ScheduleUtils.getTimesStr(ScheduleCreationHelper.instance().getScheduleItems().size());
         String days[] = ScheduleCreationHelper.instance().getDays();
-        String dayStr = ScheduleUtils.getDaysStr(days);
+        String dayStr = ScheduleUtils.stringifyDays(days);
 
         medNameTv.setText(medName);
         medDailyFreqTv.setText(freq);
@@ -72,24 +69,6 @@ public class ScheduleSummaryFragment extends Fragment {
         Log.d(TAG, "Days: " + Arrays.toString(ScheduleCreationHelper.instance().getSelectedDays()));
         Log.d(TAG, "Schedule: " + ScheduleCreationHelper.instance().getTimesPerDay());
 
-    }
-
-
-    public Schedule getSchedule() {
-
-        for (ScheduleItem scheduleItem : ScheduleCreationHelper.instance().getScheduleItems()) {
-            Log.d(TAG, GsonUtil.get().toJson(scheduleItem));
-        }
-
-        Schedule s = Schedule.builder()
-                .med(ScheduleCreationHelper.instance().getSelectedMed())
-                .days(ScheduleCreationHelper.instance().getSelectedDays())
-                .doses(ScheduleCreationHelper.instance().getScheduleItems())
-                .build();
-
-        Log.d(TAG, GsonUtil.get().toJson(s));
-
-        return s;
     }
 
 

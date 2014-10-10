@@ -6,8 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import es.usc.citius.servando.calendula.model.Medicine;
-import es.usc.citius.servando.calendula.model.ScheduleItem;
+import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 
 /**
  * Created by joseangel.pineiro on 12/12/13.
@@ -83,7 +84,7 @@ public class ScheduleCreationHelper {
     @Override
     public String toString() {
         return "ScheduleCreationHelper{" +
-                "selectedMed=" + selectedMed.getName() +
+                "selectedMed=" + selectedMed.name() +
                 ", selectedScheduleIdx=" + selectedScheduleIdx +
                 ", timesPerDay=" + timesPerDay +
                 ", scheduleItems=" + scheduleItems.size() +

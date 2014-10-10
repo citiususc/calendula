@@ -14,7 +14,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import es.usc.citius.servando.calendula.AlarmScheduler;
+import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.api.ApiRequestBuilder;
 import es.usc.citius.servando.calendula.util.api.ApiResponse;
 

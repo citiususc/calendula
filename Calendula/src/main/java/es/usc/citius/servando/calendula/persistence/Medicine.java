@@ -60,9 +60,26 @@ public class Medicine extends Model {
                 .execute();
     }
 
+    public static String[] findAllMedicineNames() {
+        List<Medicine> ms = findAll();
+        String[] names = new String[ms.size()];
+        for (int i = 0; i < ms.size(); i++) {
+            names[i] = ms.get(i).name();
+        }
+        return names;
+    }
+
+
     public static Medicine findById(long id) {
         return new Select().from(Medicine.class)
                 .where("id = ?", id)
+                .executeSingle();
+    }
+
+
+    public static Medicine findByName(String name) {
+        return new Select().from(Medicine.class)
+                .where(COLUMN_NAME + " = ?", name)
                 .executeSingle();
     }
 

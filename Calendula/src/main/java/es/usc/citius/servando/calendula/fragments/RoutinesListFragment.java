@@ -17,12 +17,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import es.usc.citius.servando.calendula.AlarmScheduler;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.model.Routine;
-import es.usc.citius.servando.calendula.store.RoutineStore;
-import es.usc.citius.servando.calendula.store.ScheduleStore;
-import es.usc.citius.servando.calendula.util.ScheduleUtils;
+import es.usc.citius.servando.calendula.persistence.Routine;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -41,7 +37,7 @@ public class RoutinesListFragment extends Fragment {
         listview = (ListView) rootView.findViewById(R.id.routines_list);
 
 
-        mRoutines = RoutineStore.instance().asList();
+        mRoutines = Routine.findAll();
         adapter = new RoutinesListAdapter(getActivity(), R.layout.daily_view_hour, mRoutines);
         listview.setAdapter(adapter);
 
@@ -56,8 +52,8 @@ public class RoutinesListFragment extends Fragment {
     }
 
     public void notifyDataChange() {
-        mRoutines = RoutineStore.instance().asList();
-        Log.d(getTag(), "Routines List Fragment: " + mRoutines.size() + ", " + RoutineStore.instance().size());
+        Log.d(getTag(), "Notify data change");
+        mRoutines = Routine.findAll();
         adapter.clear();
         for (Routine r : mRoutines) {
             adapter.add(r);
@@ -67,8 +63,8 @@ public class RoutinesListFragment extends Fragment {
 
     private View createRoutineListItem(LayoutInflater inflater, final Routine routine) {
 
-        int hour = routine.getTime().getHourOfDay();
-        int minute = routine.getTime().getMinuteOfHour();
+        int hour = routine.time().getHourOfDay();
+        int minute = routine.time().getMinuteOfHour();
 
         String strHour = String.valueOf(hour >= 10 ? hour : "0" + hour);
         String strMinute = ":" + String.valueOf(minute >= 10 ? minute : "0" + minute);
@@ -77,7 +73,7 @@ public class RoutinesListFragment extends Fragment {
 
         ((TextView) item.findViewById(R.id.routines_list_item_hour)).setText(strHour);
         ((TextView) item.findViewById(R.id.routines_list_item_minute)).setText(strMinute);
-        ((TextView) item.findViewById(R.id.routines_list_item_name)).setText(routine.getName());
+        ((TextView) item.findViewById(R.id.routines_list_item_name)).setText(routine.name());
         View overlay = item.findViewById(R.id.routine_list_item_container);
         overlay.setTag(routine);
 
@@ -86,7 +82,7 @@ public class RoutinesListFragment extends Fragment {
             public void onClick(View view) {
                 Routine r = (Routine) view.getTag();
                 if (mRoutineSelectedCallback != null && r != null) {
-                    Log.d(getTag(), "Click at " + r.getName());
+                    Log.d(getTag(), "Click at " + r.name());
                     mRoutineSelectedCallback.onRoutineSelected(r);
                 } else {
                     Log.d(getTag(), "No callback set");
@@ -113,10 +109,10 @@ public class RoutinesListFragment extends Fragment {
 
         String message;
 
-        if (ScheduleUtils.hasSchedules(r)) {
-            message = "The routine " + r.getName() + " has associated schedules that will be lost if you delete it. Do you want to remove it anyway?";
+        if (r.scheduleItems().size() > 0) {
+            message = "The routine " + r.name() + " has associated schedules that will be lost if you delete it. Do you want to remove it anyway?";
         } else {
-            message = "Remove " + r.getName() + " routine?";
+            message = "Remove " + r.name() + " routine?";
         }
 
         builder.setMessage(message)
@@ -124,12 +120,10 @@ public class RoutinesListFragment extends Fragment {
                 .setTitle("Remove routine")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        RoutineStore.instance().removeRoutine(r);
-                        RoutineStore.instance().save(getActivity());
-                        ScheduleStore.instance().save(getActivity());
+                        r.save();
                         notifyDataChange();
                         // cancel routine alarm
-                        AlarmScheduler.instance().cancelAlarm(r, getActivity());
+                        // TODO: AlarmScheduler.instance().cancelAlarm(r, getActivity());
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {

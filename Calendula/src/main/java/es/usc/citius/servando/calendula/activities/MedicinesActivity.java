@@ -13,8 +13,7 @@ import android.widget.Toast;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
-import es.usc.citius.servando.calendula.model.Medicine;
-import es.usc.citius.servando.calendula.store.MedicineStore;
+import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 
 public class MedicinesActivity extends ActionBarActivity implements MedicinesListFragment.OnMedicineSelectedListener, MedicineCreateOrEditFragment.OnMedicineEditListener {
@@ -87,8 +86,8 @@ public class MedicinesActivity extends ActionBarActivity implements MedicinesLis
     }
 
     @Override
-    public void onMedicineEdited(Medicine r) {
-        MedicineStore.instance().save(getApplicationContext());
+    public void onMedicineEdited(Medicine m) {
+        m.save();
         Toast.makeText(this, "Changes saved!", Toast.LENGTH_SHORT).show();
         mViewPager.setCurrentItem(0);
         ((MedicinesListFragment) getViewPagerFragment(0)).notifyDataChange();
@@ -97,8 +96,7 @@ public class MedicinesActivity extends ActionBarActivity implements MedicinesLis
 
     @Override
     public void onMedicineCreated(Medicine m) {
-        MedicineStore.instance().addMedicine(m);
-        MedicineStore.instance().save(getApplicationContext());
+        m.save();
         Toast.makeText(this, "Medicine created!", Toast.LENGTH_SHORT).show();
         mViewPager.setCurrentItem(0);
         ((MedicinesListFragment) getViewPagerFragment(0)).notifyDataChange();

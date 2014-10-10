@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="es.usc.citius.servando.calendula.receiver.AlarmReceiver" />
+        <receiver android:name=".scheduling.AlarmReceiver" />
 
         <activity
             android:name="es.usc.citius.servando.calendula.activities.ReminderActivity"
@@ -74,7 +74,8 @@
         <meta-data
             android:name="AA_SERIALIZERS"
             android:value="es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimeSerializer,
-            es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimeSerializer" />
+            es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimeSerializer,
+            es.usc.citius.servando.calendula.persistence.typeSerializers.BooleanArraySerializer" />
 
     </application>
 

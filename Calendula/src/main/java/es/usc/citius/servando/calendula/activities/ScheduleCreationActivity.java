@@ -1,5 +1,6 @@
 package es.usc.citius.servando.calendula.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,22 +15,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.activeandroid.ActiveAndroid;
+
 import java.util.Locale;
 
-import es.usc.citius.servando.calendula.AlarmScheduler;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleSummaryFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleTimetableFragment;
-import es.usc.citius.servando.calendula.model.Medicine;
-import es.usc.citius.servando.calendula.model.Schedule;
-import es.usc.citius.servando.calendula.store.MedicineStore;
-import es.usc.citius.servando.calendula.store.ScheduleStore;
+import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
+import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Schedule;
+import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
 
 public class ScheduleCreationActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener, MedicineCreateOrEditFragment.OnMedicineEditListener {
 
+    public static final String TAG = ScheduleCreationActivity.class.getName();
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -83,6 +87,51 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
     }
 
 
+    public void saveSchedule() {
+
+        try {
+            ActiveAndroid.beginTransaction();
+
+            Medicine m = ScheduleCreationHelper.instance().getSelectedMed();
+            m.save();
+
+            Schedule s = new es.usc.citius.servando.calendula.persistence.Schedule();
+            s.setMedicine(m);
+            s.setDays(ScheduleCreationHelper.instance().getSelectedDays());
+            s.save();
+
+            for (ScheduleItem item : ScheduleCreationHelper.instance().getScheduleItems()) {
+                item.setSchedule(s);
+                item.save();
+                // for each item, add a new DailyScheduleItem item for it
+                new DailyScheduleItem(item).save();
+                Log.d(TAG, "Add item: " + s.getId() + ", " + item.getId());
+            }
+
+            Log.d(TAG, "Schedule saved successfully!");
+            ActiveAndroid.setTransactionSuccessful();
+
+            AlarmScheduler.instance().setAlarmsIfNeeded(s, getBaseContext());
+            ScheduleCreationHelper.instance().clear();
+            Toast.makeText(ScheduleCreationActivity.this, "Schedule created!", Toast.LENGTH_LONG).show();
+
+            // send result to caller activity
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("schedule_created", true);
+            setResult(RESULT_OK, returnIntent);
+            finish();
+
+
+            finish();
+
+        } catch (Exception e) {
+            Toast.makeText(this, " Error creating schedule", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        } finally {
+            ActiveAndroid.endTransaction();
+        }
+    }
+
     void setFormOnClickListeners() {
         prevButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,19 +151,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
                 if (currentPage < 2 && validatePage(currentPage)) {
                     mViewPager.setCurrentItem(currentPage + 1);
                 } else if (currentPage == 2) {
-                    ScheduleSummaryFragment fragment = ((ScheduleSummaryFragment) getViewPagerFragment(2));
-                    Schedule schedule = fragment.getSchedule();
-                    // save med
-                    Medicine m = ScheduleCreationHelper.instance().getSelectedMed();
-                    MedicineStore.instance().addMedicine(m);
-                    MedicineStore.instance().save(getApplicationContext());
-
-                    ScheduleStore.instance().addSchedule(schedule);
-                    ScheduleStore.instance().save(ScheduleCreationActivity.this);
-                    AlarmScheduler.instance().setAlarmsIfNeeded(schedule, getBaseContext());
-                    ScheduleCreationHelper.instance().clear();
-                    Toast.makeText(ScheduleCreationActivity.this, "Schedule created!", Toast.LENGTH_LONG).show();
-                    finish();
+                    saveSchedule();
                 }
             }
         });
@@ -127,7 +164,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             if (fragment.validate()) {
                 med = fragment.getMedicineFromView();
                 ScheduleCreationHelper.instance().setSelectedMed(med);
-                Log.d(ScheduleCreationActivity.class.getName(), "Med created but no saved: " + med.getName() + ", " + med.getPresentation().getName(getResources()));
+                Log.d(ScheduleCreationActivity.class.getName(), "Med created but no saved: " + med.name() + ", " + med.presentation().getName(getResources()));
                 return true;
             } else {
                 return false;
@@ -219,7 +256,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         setCurrentPageIndicator(page);
         // if we are going to show the summary page
         // update it
-        if(page == 2){
+        if (page == 2) {
 
         }
     }
@@ -238,8 +275,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
     public void onMedicineCreated(Medicine m) {
         // save med reference
         med = m;
-        MedicineStore.instance().addMedicine(m);
-        MedicineStore.instance().save(getApplicationContext());
+        m.save();
         // go to next step
         mViewPager.setCurrentItem(1);
     }

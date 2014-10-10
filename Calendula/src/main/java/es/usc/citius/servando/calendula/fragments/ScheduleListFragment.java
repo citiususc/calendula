@@ -19,15 +19,13 @@ import android.widget.TextView;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.model.Schedule;
-import es.usc.citius.servando.calendula.store.ScheduleStore;
-import es.usc.citius.servando.calendula.store.StoreListener;
-import es.usc.citius.servando.calendula.util.ScheduleUtils;
+import es.usc.citius.servando.calendula.persistence.Schedule;
+import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
  */
-public class ScheduleListFragment extends Fragment implements StoreListener{
+public class ScheduleListFragment extends Fragment {
 
     private static final String TAG = ScheduleListFragment.class.getSimpleName();
 
@@ -41,9 +39,7 @@ public class ScheduleListFragment extends Fragment implements StoreListener{
         View rootView = inflater.inflate(R.layout.fragment_schedule_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.schedule_list);
 
-        ScheduleStore.instance().addListener(this);
-
-        mSchedules = ScheduleStore.instance().getSchedules();
+        mSchedules = Schedule.findAll();
         adapter = new ScheduleListAdapter(getActivity(), R.layout.schedules_list_item, mSchedules);
         listview.setAdapter(adapter);
 
@@ -63,7 +59,7 @@ public class ScheduleListFragment extends Fragment implements StoreListener{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ScheduleStore.instance().removeListener(this);
+
     }
 
     @Override
@@ -80,12 +76,11 @@ public class ScheduleListFragment extends Fragment implements StoreListener{
     }
 
     public void notifyDataChange() {
-        mSchedules = ScheduleStore.instance().getSchedules();
-//        Log.d(getTag(), "Routines : " + mSchedules.size() + ", " + RoutineStore.instance().size());
-//        adapter.clear();
-//        for (Schedule r : mSchedules) {
-//            adapter.add(r);
-//        }
+        mSchedules = Schedule.findAll();
+        adapter.clear();
+        for (Schedule r : mSchedules) {
+            adapter.add(r);
+        }
         adapter.notifyDataSetChanged();
     }
 
@@ -95,11 +90,11 @@ public class ScheduleListFragment extends Fragment implements StoreListener{
 
 
         ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
-        icon.setImageDrawable(getResources().getDrawable(schedule.getMedicine().getPresentation().getDrawable()));
+        icon.setImageDrawable(getResources().getDrawable(schedule.medicine().presentation().getDrawable()));
 
-        ((TextView)item.findViewById(R.id.schedules_list_item_medname)).setText(schedule.getMedicine().getName());
-        ((TextView)item.findViewById(R.id.schedules_list_item_times)).setText(ScheduleUtils.getTimesStr(schedule.items()));
-        ((TextView) item.findViewById(R.id.schedules_list_item_days)).setText(ScheduleUtils.getDaysStr(schedule.getDays()));
+        ((TextView) item.findViewById(R.id.schedules_list_item_medname)).setText(schedule.medicine().name());
+        ((TextView) item.findViewById(R.id.schedules_list_item_times)).setText(ScheduleUtils.getTimesStr(schedule.items().size()));
+        ((TextView) item.findViewById(R.id.schedules_list_item_days)).setText(ScheduleUtils.stringifyDays(schedule.days()));
 
 
         View overlay = item.findViewById(R.id.schedules_list_item_container);
@@ -110,7 +105,7 @@ public class ScheduleListFragment extends Fragment implements StoreListener{
             public void onClick(View view) {
                 Schedule s = (Schedule) view.getTag();
                 if (mScheduleSelectedCallback != null && s != null) {
-                    Log.d(getTag(), "Click at " + s.getMedicine().getName() + " schedule");
+                    Log.d(getTag(), "Click at " + s.medicine().name() + " schedule");
                     mScheduleSelectedCallback.onScheduleSelected(s);
                 } else {
                     Log.d(getTag(), "No callback set");
@@ -133,11 +128,11 @@ public class ScheduleListFragment extends Fragment implements StoreListener{
 
     void showDeleteConfirmationDialog(final Schedule s) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Remove " + s.getMedicine().getName() + " schedule?")
+        builder.setMessage("Remove " + s.medicine().name() + " schedule?")
                 .setCancelable(true)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        ScheduleStore.instance().removeSchedule(s);
+                        s.delete();
                         notifyDataChange();
                     }
                 })
@@ -148,13 +143,6 @@ public class ScheduleListFragment extends Fragment implements StoreListener{
                 });
         AlertDialog alert = builder.create();
         alert.show();
-    }
-
-    @Override
-    public void onChange() {
-        Log.d(TAG, "ScheduleStore changed!");
-        mSchedules = ScheduleStore.instance().getSchedules();
-        adapter.notifyDataSetChanged();
     }
 
     private class ScheduleListAdapter extends ArrayAdapter<Schedule> {

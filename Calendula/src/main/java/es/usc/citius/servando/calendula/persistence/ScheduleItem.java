@@ -4,6 +4,8 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
+
 /**
  * Created by joseangel.pineiro on 7/9/14.
  */
@@ -38,11 +40,16 @@ public class ScheduleItem extends Model {
         this.routine = routine;
     }
 
-    public Routine getRoutine() {
+    public void saveAndUpdateDailyAgenda() {
+        this.save();
+        DailyAgenda.instance().updateDailySchedule(this);
+    }
+
+    public Routine routine() {
         return routine;
     }
 
-    public void routine(Routine routine) {
+    public void setRoutine(Routine routine) {
         this.routine = routine;
     }
 

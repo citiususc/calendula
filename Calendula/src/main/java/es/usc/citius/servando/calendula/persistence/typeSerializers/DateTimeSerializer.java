@@ -25,7 +25,7 @@ public class DateTimeSerializer extends TypeSerializer {
         if (data == null) {
             return null;
         }
-        return ((DateTime) data).toString("dd/mm/yy");
+        return ((DateTime) data).toString("yy/MM/dd kk:mm");
     }
 
     @Override
@@ -33,6 +33,6 @@ public class DateTimeSerializer extends TypeSerializer {
         if (data == null) {
             return null;
         }
-        return DateTime.parse((String) data, DateTimeFormat.forPattern("dd/mm/yy"));
+        return DateTime.parse((String) data, DateTimeFormat.forPattern("yy/MM/dd kk:mm"));
     }
 }

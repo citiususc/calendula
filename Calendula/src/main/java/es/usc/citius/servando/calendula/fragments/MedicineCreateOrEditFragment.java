@@ -28,9 +28,8 @@ import java.util.ArrayList;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
-import es.usc.citius.servando.calendula.model.Medicine;
-import es.usc.citius.servando.calendula.model.Presentation;
-import es.usc.citius.servando.calendula.store.MedicineStore;
+import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
 import es.usc.citius.servando.calendula.util.Screen;
 
@@ -55,7 +54,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_or_edit_medicine, container, false);
-        final String[] names = MedicineStore.instance().getMedicineNames();
+        final String[] names = Medicine.findAllMedicineNames();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line, names);
 
@@ -65,10 +64,10 @@ public class MedicineCreateOrEditFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
                 String name = (String) parent.getItemAtPosition(pos);
-                mMedicine = MedicineStore.instance().getByName(name);
+                mMedicine = Medicine.findByName(name);
                 Log.d(getTag(), "Medicine selected: " + name + ", " + (mMedicine == null));
                 hideKeyboard();
-                selectPresentation(mMedicine != null ? mMedicine.getPresentation() : null);
+                selectPresentation(mMedicine != null ? mMedicine.presentation() : null);
             }
         });
 
@@ -87,7 +86,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
         }
 
         if (savedInstanceState != null && savedInstanceState.containsKey("medicine")) {
-            mMedicine = MedicineStore.instance().getByName(savedInstanceState.getString("medicine"));
+            mMedicine = Medicine.findById(savedInstanceState.getLong("medicine"));
             if (mMedicine != null)
                 mConfirmButton.setText(getString(R.string.edit_routine_button_text));
         }
@@ -221,15 +220,15 @@ public class MedicineCreateOrEditFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mMedicine != null)
-            outState.putString("medicine", mMedicine.getName());
+            outState.putLong("medicine", mMedicine.getId());
     }
 
     public void setMedicne(Medicine r) {
-        Log.d(getTag(), "Medicine set: " + r.getName());
+        Log.d(getTag(), "Medicine set: " + r.name());
         mMedicine = r;
-        mNameTextView.setText(mMedicine.getName());
+        mNameTextView.setText(mMedicine.name());
         mConfirmButton.setText(getString(R.string.edit_medicine_button_text));
-        selectPresentation(mMedicine.getPresentation());
+        selectPresentation(mMedicine.presentation());
     }
 
     private void selectPresentation(Presentation p) {
@@ -297,7 +296,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
             String name = mNameTextView.getText().toString();
             // look for it in the med store
             if (mMedicine == null) {
-                mMedicine = MedicineStore.instance().getByName(name);
+                mMedicine = Medicine.findByName(name);
                 Log.d(getTag(), "Looking for " + name + " in med store returned " + (mMedicine == null ? "null" : "a valid med"));
             }
             // if it wasn't on the store, create a new med
@@ -308,7 +307,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
             // in both cases, update the med presentation if any selected
             if (selectedPresentation != null) {
                 mMedicine.setPresentation(selectedPresentation);
-            } else if (mMedicine.getPresentation() == null) {
+            } else if (mMedicine.presentation() == null) {
                 mMedicine.setPresentation(Presentation.PILLS);// TODO change to unknown
             }
         }
@@ -377,6 +376,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
     // Container Activity must implement this interface
     public interface OnMedicineEditListener {
         public void onMedicineEdited(Medicine r);
+
         public void onMedicineCreated(Medicine r);
     }
 

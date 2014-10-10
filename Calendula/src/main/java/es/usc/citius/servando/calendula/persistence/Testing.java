@@ -52,11 +52,7 @@ public class Testing {
         ScheduleItem item = new ScheduleItem(s, r, 1);
         item.save();
 
-
-        DailySchedule ds = new DailySchedule(DateTime.now());
-        ds.save();
-
-        DailyScheduleItem dsi = new DailyScheduleItem(ds, item);
+        DailyScheduleItem dsi = new DailyScheduleItem(item.routine().time().toDateTimeToday(), item);
         dsi.save();
 
 
@@ -79,21 +75,9 @@ public class Testing {
             Log.d(TAG, "Schedule: " + schedule.medicine().name() + ", " + Arrays.toString(schedule.days()));
         }
 
-
-        List<DailySchedule> dschedules = DailySchedule.findAll();
-        for (DailySchedule sc : dschedules) {
-            Log.d(TAG, "Schedule: " + sc.getDate() + ", " + sc.items().size() + " items ");
+        for (DailyScheduleItem d : DailyScheduleItem.fromDate(DateTime.now())) {
+            Log.d(TAG, "DSI: " + d.toString());
         }
-
-        DailySchedule dsched = DailySchedule.fromDate(DateTime.now());
-        if (dsched != null) {
-            Log.d(TAG, "Items: " + dsched.items().size() + ", date: " + dsched.getDate());
-            for (DailyScheduleItem d : dsched.items()) {
-
-                Log.d(TAG, "DSI: " + d.toString());
-            }
-        }
-
     }
 
 }

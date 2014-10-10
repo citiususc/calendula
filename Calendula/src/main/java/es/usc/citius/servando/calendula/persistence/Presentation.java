@@ -35,7 +35,7 @@ public enum Presentation {
         return r.getString(nameString);
     }
 
-    public String getUnits(Resources r) {
+    public String units(Resources r) {
         return r.getString(unitsString);
     }
 

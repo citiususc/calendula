@@ -61,7 +61,12 @@ public class Schedule extends Model {
         this.days = days;
     }
 
+    public boolean enabledFor(int dayOfWeek) {
+        if (dayOfWeek > 7 || dayOfWeek < 1)
+            throw new IllegalArgumentException("Day off week must be between 1 and 7");
 
+        return days[dayOfWeek - 1];
+    }
     //
     // DB queries
     //

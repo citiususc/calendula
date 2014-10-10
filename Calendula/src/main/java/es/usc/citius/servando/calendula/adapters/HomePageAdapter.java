@@ -20,7 +20,7 @@ public class HomePageAdapter extends FragmentPagerAdapter {
     public HomePageAdapter(FragmentManager fm, Context ctx, Activity activity) {
         super(fm);
         // obtain the window width in dp to use later
-        dpWidth  = Screen.getDpSize(activity).x;
+        dpWidth = Screen.getDpSize(activity).x;
     }
 
     @Override
@@ -35,9 +35,10 @@ public class HomePageAdapter extends FragmentPagerAdapter {
         int dipsToShow = 80;
         // get the percentage of the screen width that represents that 80dp
         // according to the current device
-        float percent = 1.0f-(dipsToShow/dpWidth);
+        float percent = 1.0f - (dipsToShow / dpWidth);
         // page width will be only reduced for home page to allow showing a
         // fragment of the agenda view
+        // return 1.0f;
         return position == 0 ? percent : 1.0f;
     }
 

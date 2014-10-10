@@ -12,10 +12,11 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
-import es.usc.citius.servando.calendula.DummyDataGenerator;
+import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.DefaultDataGenerator;
 import es.usc.citius.servando.calendula.HomeActivity;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.store.RoutineStore;
+import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.user.Session;
 import es.usc.citius.servando.calendula.user.User;
 
@@ -123,8 +124,8 @@ public class StartActivity extends Activity {
                     keepSplashVisible(2);
 
                     // Add some default data
-                    if (RoutineStore.instance().size() == 0) {
-                        DummyDataGenerator.fillRoutineStore(getApplicationContext());
+                    if (Routine.findAll().size() == 0) {
+                        DefaultDataGenerator.fillRoutineStore(getApplicationContext());
                     }
                     // create default session
                     User defaultUser = new User();
@@ -148,7 +149,7 @@ public class StartActivity extends Activity {
                 switch (action) {
                     case ACTION_SHOW_REMINDERS:
                         Intent i = new Intent(getBaseContext(), ReminderActivity.class);
-                        i.putExtra("routine_id", getIntent().getStringExtra("routine_id"));
+                        i.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1));
                         startActivity(i);
                         break;
                     default:
