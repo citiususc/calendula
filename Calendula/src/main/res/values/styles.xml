@@ -22,6 +22,16 @@
         <item name="background">@color/actionbar_background_color</item>
     </style>
 
+    <!-- Theme without ActionBar shadow (inherits main theme) -->
+    <!--<style name="MyActionBarNoShadowTheme" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">-->
+    <!--<item name="android:background">@color/actionbar_background_color</item>-->
+    <!--<item name="android:height">@dimen/action_bar_height</item>-->
+    <!--<item name="android:icon">@drawable/ic_launcher_white</item>-->
+    <!--&lt;!&ndash; Support library compatibility &ndash;&gt;-->
+    <!--<item name="background">@color/actionbar_background_color</item>-->
+    <!--<item name="android:windowContentOverlay">@null</item>-->
+    <!--</style>-->
+
     <style name="home_button">
         <item name="android:textColor">@color/white</item>
         <item name="android:textStyle">bold</item>

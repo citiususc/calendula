@@ -2,25 +2,19 @@ package es.usc.citius.servando.calendula.fragments;
 
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.SchedulesActivity;
-import es.usc.citius.servando.calendula.user.Session;
-import es.usc.citius.servando.calendula.user.User;
 
 /**
  * Created by joseangel.pineiro on 11/15/13.
@@ -29,14 +23,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     ImageView shadowBg;
 
-    ImageView profileImageView;
-    View profileImageContainer;
-    TextView profileUsername;
+
     RelativeLayout buttonsContainer;
-
-    int left;
-    int top;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,42 +37,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.home_button_pharmacies).setOnClickListener(this);
         rootView.findViewById(R.id.home_button_plantrip).setOnClickListener(this);
 
-        profileImageContainer = rootView.findViewById(R.id.profile_image_container);
 
         buttonsContainer = (RelativeLayout) rootView.findViewById(R.id.buttons_container);
 
         shadowBg = (ImageView) rootView.findViewById(R.id.bg_blur);
 
-        profileImageView = (ImageView) rootView.findViewById(R.id.profile_image);
-        profileUsername = (TextView) rootView.findViewById(R.id.profile_username);
-        updateProfileInfo();
-
-        profileImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showEditProfileDialog();
-            }
-        });
 
         return rootView;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        left = profileImageContainer.getLeft();
-        top = profileImageContainer.getTop();
-    }
 
-    void updateProfileInfo() {
-
-        User u = Session.instance().getUser();
-        profileUsername.setText(u.getName());
-        Bitmap profileImage = Session.instance().getUserProfileImage(getActivity());
-        if (profileImage != null) {
-            profileImageView.setImageBitmap(profileImage);
-        }
-
-    }
 
     @Override
     public void onClick(View view) {
@@ -119,19 +81,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         getActivity().overridePendingTransition(0, 0);
     }
 
-
-    void showEditProfileDialog() {
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        final EditUserProfileFragment editUserProfileFragment = new EditUserProfileFragment();
-        editUserProfileFragment.setOnProfileEditListener(new EditUserProfileFragment.OnProfileEditListener() {
-            @Override
-            public void onProfileEdited(User u) {
-                editUserProfileFragment.dismiss();
-                updateProfileInfo();
-            }
-        });
-        editUserProfileFragment.show(fm, "fragment_edit_profile");
-    }
 
     public void onScroll(float offset, int positionOffsetPixels) {
 

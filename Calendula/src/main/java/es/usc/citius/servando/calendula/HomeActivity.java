@@ -2,9 +2,11 @@ package es.usc.citius.servando.calendula;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -14,10 +16,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.espian.showcaseview.OnShowcaseEventListener;
@@ -25,8 +32,10 @@ import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.targets.PointTarget;
 
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
+import es.usc.citius.servando.calendula.fragments.EditUserProfileFragment;
 import es.usc.citius.servando.calendula.fragments.HomeFragment;
 import es.usc.citius.servando.calendula.user.Session;
+import es.usc.citius.servando.calendula.user.User;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Screen;
 
@@ -45,6 +54,15 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
     DrawerLayout mDrawerLayout;
     ListView mDrawerList;
     ActionBarDrawerToggle mDrawerToggle;
+
+    ImageView profileImageView;
+    View profileImageContainer;
+    TextView profileUsername;
+    RelativeLayout profileContainer;
+
+
+
+
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -78,6 +96,19 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
 
         mActionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
         mViewPager.setOnPageChangeListener(this);
+        profileContainer = (RelativeLayout) findViewById(R.id.profile_container);
+        profileImageContainer = findViewById(R.id.profile_image_container);
+        profileImageView = (ImageView) findViewById(R.id.profile_image);
+        profileUsername = (TextView) findViewById(R.id.profile_username);
+        updateProfileInfo();
+        profileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showEditProfileDialog();
+            }
+        });
+
+
         boolean welcome = getIntent().getBooleanExtra("welcome",false);
         if(welcome) {
             Toast.makeText(getBaseContext(), "Welcome to calendula!", Toast.LENGTH_SHORT).show();
@@ -146,6 +177,31 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
     protected void onResume() {
         super.onResume();
 //       showShowCase();
+    }
+
+
+    void updateProfileInfo() {
+
+        User u = Session.instance().getUser();
+        profileUsername.setText(u.getName());
+        Bitmap profileImage = Session.instance().getUserProfileImage(this);
+        if (profileImage != null) {
+            profileImageView.setImageBitmap(profileImage);
+        }
+
+    }
+
+    void showEditProfileDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        final EditUserProfileFragment editUserProfileFragment = new EditUserProfileFragment();
+        editUserProfileFragment.setOnProfileEditListener(new EditUserProfileFragment.OnProfileEditListener() {
+            @Override
+            public void onProfileEdited(User u) {
+                editUserProfileFragment.dismiss();
+                updateProfileInfo();
+            }
+        });
+        editUserProfileFragment.show(fm, "fragment_edit_profile");
     }
 
     private void showShowCase() {
@@ -257,4 +313,25 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
     Fragment getViewPagerFragment(int position) {
         return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
     }
+
+    private boolean profileShown = true;
+
+    public void hideProfile() {
+        if (profileShown) {
+            profileShown = false;
+            Animation slide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_slide_up);
+            slide.setFillAfter(true);
+            profileContainer.startAnimation(slide);
+        }
+    }
+
+    public void showProfile() {
+        if (!profileShown) {
+            profileShown = true;
+            Animation slide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_slide_up);
+            slide.setFillAfter(true);
+            profileContainer.startAnimation(slide);
+        }
+    }
+
 }

@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -37,6 +39,8 @@ public class DailyAgendaFragment extends Fragment {
     ArrayAdapter adapter = null;
     ListView listview = null;
 
+    int lastFirstVisible = 0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -50,6 +54,30 @@ public class DailyAgendaFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 launchActivity(ScheduleCreationActivity.class);
+            }
+        });
+
+        listview.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                if (firstVisibleItem > lastFirstVisible) {
+                    //scroll down
+                    Log.d(getTag(), "Scroll down");
+                    // ((HomeActivity)getActivity()).showProfile();
+                } else {
+                    Log.d(getTag(), "Scroll up");
+                    // ((HomeActivity)getActivity()).hideProfile();
+
+                }
+                lastFirstVisible = firstVisibleItem;
+
             }
         });
 
@@ -67,7 +95,7 @@ public class DailyAgendaFragment extends Fragment {
         items = buildItems(); // allow user to change day
         int currentHour = DateTime.now().getHourOfDay();
         adapter.notifyDataSetChanged();
-        listview.smoothScrollToPosition(currentHour);
+        //listview.smoothScrollToPosition(currentHour);
     }
 
     public List<DailyAgendaItemStub> buildItems() {
