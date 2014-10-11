@@ -1,13 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/text1"
-    android:text="Option text"
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:textAppearance="?android:attr/textAppearanceMedium"
-    android:gravity="center_vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:textColor="#fff"
-    android:background="@color/android_blue"
-    android:textStyle="bold" />
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/text"
+        android:text="Option text"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textColor="#777777"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:typeface="normal" />
+
+
+
+    <com.makeramen.RoundedImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/imageViewbg"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:src="@color/android_blue"
+        android:scaleType="centerCrop"
+        app:corner_radius="30dp"
+        app:border_width="0dp"
+        app:mutate_background="true"
+        app:oval="true"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="10dp" />
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:id="@+id/imageView"
+        android:layout_alignLeft="@id/imageViewbg"
+        android:layout_alignRight="@id/imageViewbg"
+        android:src="@drawable/ic_small_alarm"
+        android:layout_centerVertical="true" />
+
+
+</RelativeLayout>

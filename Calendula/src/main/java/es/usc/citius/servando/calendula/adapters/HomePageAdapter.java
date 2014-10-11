@@ -8,6 +8,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import es.usc.citius.servando.calendula.fragments.DailyAgendaFragment;
 import es.usc.citius.servando.calendula.fragments.HomeFragment;
+import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
+import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
+import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
 import es.usc.citius.servando.calendula.util.Screen;
 
 /**
@@ -25,7 +28,19 @@ public class HomePageAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return position == 1 ? new DailyAgendaFragment() : new HomeFragment();
+        switch (position){
+            case 0:
+                return new DailyAgendaFragment();
+            case 1:
+                return new RoutinesListFragment();
+            case 2:
+                return new MedicinesListFragment();
+            case 3:
+                return new ScheduleListFragment();
+        }
+        return null;
+
+        //return position == 1 ? new DailyAgendaFragment() : new HomeFragment();
     }
 
     @Override
@@ -38,13 +53,13 @@ public class HomePageAdapter extends FragmentPagerAdapter {
         float percent = 1.0f - (dipsToShow / dpWidth);
         // page width will be only reduced for home page to allow showing a
         // fragment of the agenda view
-        // return 1.0f;
-        return position == 0 ? percent : 1.0f;
+        return 1.0f;
+        //return position == 0 ? percent : 1.0f;
     }
 
     @Override
     public int getCount() {
         // Show 2 total pages. Home and agenda
-        return 2;
+        return 4;
     }
 }

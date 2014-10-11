@@ -17,8 +17,19 @@
     <string name="action_bar_title_home">Home</string>
 
     <string-array name="home_action_list">
-        <item>Home</item>
         <item>Agenda</item>
+        <item>Routines</item>
+        <item>Medicines</item>
+        <item>Schedules</item>
+    </string-array>
+
+    <string-array name="home_drawer_actions">
+        <item>Agenda</item>
+        <item>Routines</item>
+        <item>Medicines</item>
+        <item>Schedules</item>
+        <item>Pharmacies</item>
+        <item>Plan trip</item>
     </string-array>
 
     <string name="title_activity_routines">Routines</string>

@@ -1,8 +1,11 @@
 package es.usc.citius.servando.calendula;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -13,13 +16,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -31,15 +37,23 @@ import com.espian.showcaseview.OnShowcaseEventListener;
 import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.targets.PointTarget;
 
+import java.util.Arrays;
+import java.util.List;
+
+import es.usc.citius.servando.calendula.activities.MedicinesActivity;
+import es.usc.citius.servando.calendula.activities.RoutinesActivity;
+import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
 import es.usc.citius.servando.calendula.fragments.EditUserProfileFragment;
 import es.usc.citius.servando.calendula.fragments.HomeFragment;
+import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
+import es.usc.citius.servando.calendula.fragments.RoutineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.user.Session;
 import es.usc.citius.servando.calendula.user.User;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Screen;
 
-public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener, ActionBar.OnNavigationListener {
+public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener, ActionBar.OnNavigationListener, View.OnClickListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -55,12 +69,8 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
     ListView mDrawerList;
     ActionBarDrawerToggle mDrawerToggle;
 
-    ImageView profileImageView;
-    View profileImageContainer;
-    TextView profileUsername;
-    RelativeLayout profileContainer;
-
-
+    View addButton;
+    boolean addButtonShown = true;
 
 
 
@@ -96,17 +106,10 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
 
         mActionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
         mViewPager.setOnPageChangeListener(this);
-        profileContainer = (RelativeLayout) findViewById(R.id.profile_container);
-        profileImageContainer = findViewById(R.id.profile_image_container);
-        profileImageView = (ImageView) findViewById(R.id.profile_image);
-        profileUsername = (TextView) findViewById(R.id.profile_username);
-        updateProfileInfo();
-        profileImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showEditProfileDialog();
-            }
-        });
+
+        addButton=findViewById(R.id.add_button);
+
+        addButton.setOnClickListener(this);
 
 
         boolean welcome = getIntent().getBooleanExtra("welcome",false);
@@ -115,14 +118,54 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
         }
     }
 
+    public int getActionDrawable(int index){
+        switch (index){
+            case 0:
+                return R.drawable.ic_small_home_w;
+            case 1:
+                return R.drawable.ic_small_alarm;
+            case 2:
+                return R.drawable.ic_pill;
+            case 3:
+                return R.drawable.ic_small_calendar_w;
+            case 4:
+                return R.drawable.ic_small_pin_w;
+            case 5:
+                return R.drawable.ic_small_plane_w;
+            default:
+                return R.drawable.ic_small_home_w;
+
+        }
+    }
+
+    public int getActionColor(int index){
+        switch (index){
+            case 1:
+                return R.color.android_blue;
+            case 2:
+                return R.color.android_pink;
+            case 3:
+                return R.color.android_green;
+            case 4:
+                return R.color.android_orange;
+            case 5:
+                return R.color.android_red;
+            default:
+                return R.color.dark_grey_home;
+
+        }
+    }
+
+
     private void initializeDrawer() {
 
-        String items[] = {"Action 1", "Action 2", "Action 3"};
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
+        List<String> items = Arrays.asList(getResources().getStringArray(R.array.home_drawer_actions));
         // Set the adapter for the list view
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, items));
+        mDrawerList.setAdapter(new DrawerListAdapter(getApplication(), R.layout.drawer_list_item, items));
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
@@ -156,6 +199,61 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
 
     }
 
+
+    class DrawerListAdapter extends ArrayAdapter<String> {
+
+        public DrawerListAdapter(Context context, int resource, List<String> items) {
+            super(context, resource,items);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            final LayoutInflater layoutInflater = getLayoutInflater();
+            View v = layoutInflater.inflate(R.layout.drawer_list_item,null);
+
+            ((TextView)v.findViewById(R.id.text)).setText(getItem(position).toUpperCase());
+            ((ImageView)v.findViewById(R.id.imageView)).setImageResource(getActionDrawable(position));
+            ((ImageView)v.findViewById(R.id.imageViewbg)).setImageResource(getActionColor(position));
+
+            return v;
+        }
+    }
+
+
+
+    @Override
+    public void onClick(View view) {
+
+        if(view.getId()==R.id.add_button) {
+            Intent i;
+            switch (mViewPager.getCurrentItem()) {
+                case 0: // agenda
+                    launchActivity(new Intent(this, ScheduleCreationActivity.class));
+                    break;
+                case 1: // routines
+                    i = new Intent(this, RoutinesActivity.class);
+                    i.putExtra("create", true);
+                    launchActivity(i);
+                    break;
+                case 2: // medicines
+                    i = new Intent(this, MedicinesActivity.class);
+                    i.putExtra("create", true);
+                    launchActivity(i);
+                    break;
+                case 3: // schedules
+                    launchActivity(new Intent(this, ScheduleCreationActivity.class));
+                    break;
+
+            }
+        }
+    }
+
+    private void launchActivity(Intent i) {
+        startActivity(i);
+        this.overridePendingTransition(0, 0);
+    }
+
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
@@ -180,29 +278,7 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
     }
 
 
-    void updateProfileInfo() {
 
-        User u = Session.instance().getUser();
-        profileUsername.setText(u.getName());
-        Bitmap profileImage = Session.instance().getUserProfileImage(this);
-        if (profileImage != null) {
-            profileImageView.setImageBitmap(profileImage);
-        }
-
-    }
-
-    void showEditProfileDialog() {
-        FragmentManager fm = getSupportFragmentManager();
-        final EditUserProfileFragment editUserProfileFragment = new EditUserProfileFragment();
-        editUserProfileFragment.setOnProfileEditListener(new EditUserProfileFragment.OnProfileEditListener() {
-            @Override
-            public void onProfileEdited(User u) {
-                editUserProfileFragment.dismiss();
-                updateProfileInfo();
-            }
-        });
-        editUserProfileFragment.show(fm, "fragment_edit_profile");
-    }
 
     private void showShowCase() {
         if (!showcaseShown) {
@@ -239,11 +315,17 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
         return true;
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
@@ -295,14 +377,16 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         Log.d("Home", position + ", " + positionOffset + ", " + positionOffsetPixels);
-        HomeFragment fragment = (HomeFragment) getViewPagerFragment(0);
-        fragment.onScroll(positionOffset, positionOffsetPixels);
+
 
     }
 
     @Override
     public void onPageSelected(int i) {
         mActionBar.setSelectedNavigationItem(i);
+        if(i > 0){
+            showAddButton();
+        }
     }
 
     @Override
@@ -310,28 +394,64 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
 
     }
 
+    public void hideAddButton() {
+        if (addButtonShown) {
+            addButtonShown = false;
+            Animation slideDown = AnimationUtils.loadAnimation(this, R.anim.anim_slide_down_2);
+            slideDown.setFillAfter(true);
+            addButton.startAnimation(slideDown);
+            slideDown.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    //getActionBar().hide();
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+
+
+        }
+    }
+
+    public void showAddButton() {
+        if (!addButtonShown) {
+            addButtonShown = true;
+            Animation slideUp = AnimationUtils.loadAnimation(this, R.anim.anim_slide_up_2);
+            slideUp.setFillAfter(true);
+            slideUp.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    //getActionBar().show();
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            addButton.startAnimation(slideUp);
+
+        }
+    }
+
     Fragment getViewPagerFragment(int position) {
         return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
     }
 
-    private boolean profileShown = true;
 
-    public void hideProfile() {
-        if (profileShown) {
-            profileShown = false;
-            Animation slide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_slide_up);
-            slide.setFillAfter(true);
-            profileContainer.startAnimation(slide);
-        }
-    }
 
-    public void showProfile() {
-        if (!profileShown) {
-            profileShown = true;
-            Animation slide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.anim_slide_up);
-            slide.setFillAfter(true);
-            profileContainer.startAnimation(slide);
-        }
-    }
 
 }

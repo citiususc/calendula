@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -22,9 +24,8 @@ import es.usc.citius.servando.calendula.activities.SchedulesActivity;
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     ImageView shadowBg;
-
-
     RelativeLayout buttonsContainer;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,13 +37,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.home_button_schedules).setOnClickListener(this);
         rootView.findViewById(R.id.home_button_pharmacies).setOnClickListener(this);
         rootView.findViewById(R.id.home_button_plantrip).setOnClickListener(this);
-
-
         buttonsContainer = (RelativeLayout) rootView.findViewById(R.id.buttons_container);
-
         shadowBg = (ImageView) rootView.findViewById(R.id.bg_blur);
-
-
         return rootView;
     }
 
@@ -97,4 +93,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         //profileImageContainer.scrollTo(left-positionOffsetPixels,top);
         buttonsContainer.scrollTo(positionOffsetPixels * 2, 0);
     }
+
+
+
 }

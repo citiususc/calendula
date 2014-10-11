@@ -48,6 +48,12 @@ public class MedicinesActivity extends ActionBarActivity implements MedicinesLis
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        boolean create = getIntent().getBooleanExtra("create",false);
+
+        if(create){
+            //mViewPager.setCurrentItem(1);
+        }
     }
 
 
@@ -116,18 +122,19 @@ public class MedicinesActivity extends ActionBarActivity implements MedicinesLis
 
         @Override
         public Fragment getItem(int position) {
+            return new MedicineCreateOrEditFragment();
             // getItem is called to instantiate the fragment for the given page.
-            if (position == 0) {
-                return new MedicinesListFragment();
-            } else {
-                return new MedicineCreateOrEditFragment();
-            }
+//            if (position == 0) {
+//                return new MedicinesListFragment();
+//            } else {
+//                return new MedicineCreateOrEditFragment();
+//            }
         }
 
         @Override
         public int getCount() {
             // Show 2 total pages.
-            return 2;
+            return 1;
         }
 
     }

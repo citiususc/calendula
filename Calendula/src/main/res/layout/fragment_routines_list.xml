@@ -57,6 +57,7 @@
         android:id="@+id/routine_add_button"
         android:layout_margin="10dp"
         android:adjustViewBounds="true"
+        android:visibility="gone"
         android:padding="10dip" />
 
 </RelativeLayout>

@@ -54,6 +54,12 @@ public class RoutinesActivity extends ActionBarActivity implements RoutinesListF
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        boolean create = getIntent().getBooleanExtra("create",false);
+        if(create){
+            //mViewPager.setCurrentItem(1);
+        }
+
         listFragmentName = FragmentUtils.makeViewPagerFragmentName(R.id.pager, 0);
         editFragmentName = FragmentUtils.makeViewPagerFragmentName(R.id.pager, 1);
 
@@ -130,19 +136,20 @@ public class RoutinesActivity extends ActionBarActivity implements RoutinesListF
 
         @Override
         public Fragment getItem(int position) {
+            return new RoutineCreateOrEditFragment();
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if (position == 0) {
-                return new RoutinesListFragment();
-            } else {
-                return new RoutineCreateOrEditFragment();
-            }
+            //if (position == 0) {
+            //    return new RoutinesListFragment();
+            //} else {
+                //return new RoutineCreateOrEditFragment();
+            //}
         }
 
         @Override
         public int getCount() {
             // Show 2 total pages.
-            return 2;
+            return 1;
         }
 
         @Override

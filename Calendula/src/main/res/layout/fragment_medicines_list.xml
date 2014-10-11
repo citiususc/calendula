@@ -55,6 +55,7 @@
         android:layout_alignParentEnd="true"
         android:id="@+id/medicine_add_button"
         android:layout_margin="10dp"
+        android:visibility="gone"
         android:adjustViewBounds="true"
         android:padding="10dip" />
 

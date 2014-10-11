@@ -38,6 +38,9 @@ android {
 }
 
 dependencies {
+    compile 'com.google.code.gson:gson'
+    compile project(':libraries:ExpandableListview')
+    compile project(':libraries:ShowcaseView')
     compile 'com.android.support:appcompat-v7:20.0.0'
     compile 'com.android.support:support-v4:20.0.0'
     compile 'joda-time:joda-time:2.3'
@@ -45,7 +48,4 @@ dependencies {
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile 'com.shamanland:fab:0.0.5'
     compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.1.0'
-    compile 'com.google.code.gson:gson'
-    compile project(':libraries:ExpandableListview')
-    compile project(':libraries:ShowcaseView')
 }

@@ -19,6 +19,8 @@ public class DailyAgendaItemStub {
 
     public static final String TAG = DailyAgendaItemStub.class.getName();
 
+    public boolean isSpacer=false;
+
     public int hour;
     public boolean hasEvents;
     public List<DailyAgendaItemStubElement> meds;
