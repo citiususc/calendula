@@ -2,6 +2,8 @@ package es.usc.citius.servando.calendula.fragments;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
@@ -12,32 +14,41 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
+import com.doomonafireball.betterpickers.radialtimepicker.RadialPickerLayout;
+import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
+
+import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Routine;
 
 /**
  * Created by joseangel.pineiro on 12/4/13.
  */
-public class RoutineCreateOrEditFragment extends DialogFragment {
+public class RoutineCreateOrEditFragment extends DialogFragment implements RadialTimePickerDialog.OnTimeSetListener {
 
     OnRoutineEditListener mRoutineEditCallback;
     Routine mRoutine;
 
-    TimePicker mTimePicker;
+    //    timepicker mtimepicker;
+    Button timeButton;
     TextView mNameTextView;
     Button mConfirmButton;
+
+    int hour;
+    int minute;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_or_edit_routine, container, false);
-        mTimePicker = (TimePicker) rootView.findViewById(R.id.routine_time_picker);
+//        mTimePicker = (TimePicker) rootView.findViewById(R.id.routine_time_picker);
         mNameTextView = (TextView) rootView.findViewById(R.id.routine_edit_name);
         mConfirmButton = (Button) rootView.findViewById(R.id.routine_button_ok);
-        mTimePicker.setIs24HourView(true);
+        timeButton = (Button) rootView.findViewById(R.id.button2);
+//        mTimePicker.setIs24HourView(true);
         mConfirmButton.setText(getString(mRoutine == null ? R.string.create_routine_button_text : R.string.edit_routine_button_text));
         mConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,49 +57,90 @@ public class RoutineCreateOrEditFragment extends DialogFragment {
             }
         });
 
-        if (savedInstanceState != null && savedInstanceState.containsKey("routine")) {
-            mRoutine = Routine.findById(savedInstanceState.getLong("routine"));
+
+        long routineId = -1;
+
+        if (getArguments() != null) {
+            routineId = getArguments().getLong(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
+        }
+
+        if (routineId == -1 && savedInstanceState != null) {
+            routineId = savedInstanceState.getLong(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
+        }
+
+        if (routineId != -1) {
+            mRoutine = Routine.findById(routineId);
+            setRoutine(mRoutine);
+            hour = mRoutine.time().getHourOfDay();
+            minute = mRoutine.time().getMinuteOfHour();
             mConfirmButton.setText(getString(R.string.edit_routine_button_text));
+        } else {
+            DateTime now = DateTime.now();
+            hour = now.getHourOfDay();
+            minute = now.getMinuteOfHour();
         }
 
         if (getDialog() != null) {
             getDialog().setTitle(R.string.title_create_routine_activity);
         }
 
+
+        timeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                TimePickerBuilder tpb = new TimePickerBuilder()
+//                        .setFragmentManager(getChildFragmentManager())
+//                        .setStyleResId(R.style.BetterPickersDialogFragment_Light)
+//                        .setTargetFragment(RoutineCreateOrEditFragment.this);
+//                tpb.show();
+
+
+                DateTime now = DateTime.now();
+                RadialTimePickerDialog timePickerDialog = RadialTimePickerDialog
+                        .newInstance(RoutineCreateOrEditFragment.this, hour, minute, true);
+                timePickerDialog.show(getChildFragmentManager(), "111");
+            }
+        });
+
+        updateTime();
+
+
         return rootView;
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mRoutine != null)
-            outState.putLong("routine", mRoutine.getId());
+            outState.putLong(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, mRoutine.getId());
     }
 
-    public void setRoutine(Routine r) {
+    private void setRoutine(Routine r) {
         Log.d(getTag(), "Routine set: " + r.name());
         mRoutine = r;
         mNameTextView.setText(mRoutine.name());
-        mTimePicker.setCurrentHour(mRoutine.time().getHourOfDay());
-        mTimePicker.setCurrentMinute(mRoutine.time().getMinuteOfHour());
+        updateTime();
         mConfirmButton.setText(getString(R.string.edit_routine_button_text));
 
     }
 
-    public void clear() {
-        mRoutine = null;
-        mNameTextView.setText("");
-        mTimePicker.setCurrentHour(12);
-        mTimePicker.setCurrentMinute(00);
-        mConfirmButton.setText(getString(R.string.create_routine_button_text));
-    }
+//    prievate void clear() {
+//        mRoutine = null;
+//        mNameTextView.setText("");
+//        mTimePicker.setCurrentHour(12);
+//        mTimePicker.setCurrentMinute(00);
+//        mConfirmButton.setText(getString(R.string.create_routine_button_text));
+//    }
 
+
+    void updateTime() {
+        timeButton.setText(new LocalTime(hour, minute).toString("kk:mm") + "h");
+    }
 
     private void onEdit() {
 
         String name = mNameTextView.getText().toString();
-        int hour = mTimePicker.getCurrentHour();
-        int minute = mTimePicker.getCurrentMinute();
 
         if (name != null && name.length() > 0) {
 
@@ -131,6 +183,37 @@ public class RoutineCreateOrEditFragment extends DialogFragment {
         }
     }
 
+
+    public void showDeleteConfirmationDialog(final Routine r) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        String message;
+
+        if (r.scheduleItems().size() > 0) {
+            message = "The routine " + r.name() + " has associated schedules that will be lost if you delete it. Do you want to remove it anyway?";
+        } else {
+            message = "Remove " + r.name() + " routine?";
+        }
+
+        builder.setMessage(message)
+                .setCancelable(true)
+                .setTitle("Remove routine")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (mRoutineEditCallback != null) {
+                            mRoutineEditCallback.onRoutineDeleted(mRoutine);
+                        }
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -149,11 +232,20 @@ public class RoutineCreateOrEditFragment extends DialogFragment {
         mRoutineEditCallback = l;
     }
 
+    @Override
+    public void onTimeSet(RadialPickerLayout radialPickerLayout, int hourOfDay, int minute) {
+        this.hour = hourOfDay;
+        this.minute = minute;
+        updateTime();
+    }
+
     // Container Activity must implement this interface
     public interface OnRoutineEditListener {
         public void onRoutineEdited(Routine r);
 
         public void onRoutineCreated(Routine r);
+
+        public void onRoutineDeleted(Routine r);
     }
 
 }

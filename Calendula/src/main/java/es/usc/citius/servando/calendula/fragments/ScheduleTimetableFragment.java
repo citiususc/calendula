@@ -369,6 +369,12 @@ public class ScheduleTimetableFragment extends Fragment {
             }
 
             @Override
+            public void onRoutineDeleted(Routine r) {
+                // do nothing
+            }
+
+
+            @Override
             public void onRoutineCreated(final Routine r) {
                 Spinner rSpinner = (Spinner) entryView.findViewById(R.id.entry_routine_spinner);
                 String names[] = getUpdatedRoutineNames();

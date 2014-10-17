@@ -1,8 +1,6 @@
 package es.usc.citius.servando.calendula.fragments;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,7 +19,6 @@ import es.usc.citius.servando.calendula.user.User;
 /**
  * A simple {@link Fragment} subclass.
  * to handle interaction events.
- *
  */
 public class HomeUserInfoFragment extends Fragment {
 
@@ -70,7 +67,7 @@ public class HomeUserInfoFragment extends Fragment {
 
     }
 
-    void showEditProfileDialog() {
+    public void showEditProfileDialog() {
         FragmentManager fm = getActivity().getSupportFragmentManager();
         final EditUserProfileFragment editUserProfileFragment = new EditUserProfileFragment();
         editUserProfileFragment.setOnProfileEditListener(new EditUserProfileFragment.OnProfileEditListener() {
@@ -83,7 +80,7 @@ public class HomeUserInfoFragment extends Fragment {
         editUserProfileFragment.show(fm, "fragment_edit_profile");
     }
 
-    public static HomeUserInfoFragment newInstance(){
+    public static HomeUserInfoFragment newInstance() {
         return new HomeUserInfoFragment();
     }
 }

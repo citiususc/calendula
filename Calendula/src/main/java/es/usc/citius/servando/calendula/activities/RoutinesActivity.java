@@ -6,20 +6,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import java.util.Locale;
-
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.fragments.RoutineCreateOrEditFragment;
-import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 
-public class RoutinesActivity extends ActionBarActivity implements RoutinesListFragment.OnRoutineSelectedListener, RoutineCreateOrEditFragment.OnRoutineEditListener {
+public class RoutinesActivity extends ActionBarActivity implements RoutineCreateOrEditFragment.OnRoutineEditListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -30,39 +29,72 @@ public class RoutinesActivity extends ActionBarActivity implements RoutinesListF
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
-//    RoutinesListFragment listFragment;
-//    RoutineCreateOrEditFragment editFragment;
-
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+    MenuItem removeItem;
 
-    String listFragmentName;
-    String editFragmentName;
+    long mRoutineId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routines);
-
-
+        processIntent();
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        boolean create = getIntent().getBooleanExtra("create",false);
-        if(create){
-            //mViewPager.setCurrentItem(1);
+    }
+
+
+    private void processIntent() {
+        mRoutineId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.routines, menu);
+        removeItem = menu.findItem(R.id.action_remove);
+        removeItem.setVisible(mRoutineId != -1 ? true : false);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_remove:
+                ((RoutineCreateOrEditFragment) getViewPagerFragment(0)).showDeleteConfirmationDialog(Routine.findById(mRoutineId));
+                return true;
         }
+        return super.onOptionsItemSelected(item);
+    }
 
-        listFragmentName = FragmentUtils.makeViewPagerFragmentName(R.id.pager, 0);
-        editFragmentName = FragmentUtils.makeViewPagerFragmentName(R.id.pager, 1);
+    @Override
+    public void onRoutineEdited(Routine r) {
+        AlarmScheduler.instance().setAlarm(r, this);
+        Toast.makeText(this, "Changes saved!", Toast.LENGTH_SHORT).show();
+        finish();
+    }
 
+    @Override
+    public void onRoutineDeleted(Routine r) {
+        r.delete();
+        AlarmScheduler.instance().cancelAlarm(r, this);
+        Toast.makeText(this, "Routine deleted!", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    @Override
+    public void onRoutineCreated(Routine r) {
+        Toast.makeText(this, "Routine created!", Toast.LENGTH_SHORT).show();
+        // send result to caller activity
+        finish();
     }
 
     @Override
@@ -70,59 +102,6 @@ public class RoutinesActivity extends ActionBarActivity implements RoutinesListF
         super.onPause();
         overridePendingTransition(0, 0);
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.routines, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onRoutineSelected(Routine r) {
-        mViewPager.setCurrentItem(1);
-        ((RoutineCreateOrEditFragment) getViewPagerFragment(1)).setRoutine(r);
-        setTitle(R.string.title_edit_routine_activity);
-
-    }
-
-    @Override
-    public void onCreateRoutine() {
-        mViewPager.setCurrentItem(1);
-        ((RoutineCreateOrEditFragment) getViewPagerFragment(1)).clear();
-        setTitle(R.string.title_create_routine_activity);
-    }
-
-    @Override
-    public void onRoutineEdited(Routine r) {
-        AlarmScheduler.instance().setAlarm(r, this);
-        Toast.makeText(this, "Changes saved!", Toast.LENGTH_SHORT).show();
-        mViewPager.setCurrentItem(0);
-        ((RoutinesListFragment) getViewPagerFragment(0)).notifyDataChange();
-        setTitle(R.string.title_activity_routines);
-    }
-
-    @Override
-    public void onRoutineCreated(Routine r) {
-        Toast.makeText(this, "Routine created!", Toast.LENGTH_SHORT).show();
-        mViewPager.setCurrentItem(0);
-        ((RoutinesListFragment) getViewPagerFragment(0)).notifyDataChange();
-        setTitle(R.string.title_activity_routines);
-    }
-
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -136,44 +115,24 @@ public class RoutinesActivity extends ActionBarActivity implements RoutinesListF
 
         @Override
         public Fragment getItem(int position) {
-            return new RoutineCreateOrEditFragment();
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            //if (position == 0) {
-            //    return new RoutinesListFragment();
-            //} else {
-                //return new RoutineCreateOrEditFragment();
-            //}
+            Log.d("Routines", "Create fragment: " + mRoutineId);
+            Fragment f = new RoutineCreateOrEditFragment();
+            Bundle args = new Bundle();
+            args.putLong(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, mRoutineId);
+            f.setArguments(args);
+            return f;
         }
 
         @Override
         public int getCount() {
-            // Show 2 total pages.
+            // Show 1 total pages.
             return 1;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            switch (position) {
-                case 0:
-                    return getString(R.string.title_section1).toUpperCase(l);
-                case 1:
-                    return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
-            }
-            return null;
-        }
-    }
+            return getString(R.string.home_menu_routines);
 
-    @Override
-    public void onBackPressed() {
-        if (mViewPager.getCurrentItem() != 0) {
-            mViewPager.setCurrentItem(0);
-            setTitle(R.string.title_activity_routines);
-        } else {
-            super.onBackPressed();
         }
     }
 

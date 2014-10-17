@@ -146,11 +146,11 @@ public class MedicinesListFragment extends Fragment {
         }
     }
 
-//    @Override
-//    public void onChange() {
-//        Log.d("MedListFragment", "Medicines store change notified!");
-//        notifyDataChange();
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        notifyDataChange();
+    }
 
     @Override
     public void onDestroy() {

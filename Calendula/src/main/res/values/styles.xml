@@ -8,19 +8,17 @@
         <item name="android:spinnerDropDownItemStyle">@style/DropDownItemStyle</item>
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <item name="showcaseViewStyle">@style/CustomShowcaseTheme</item>
-        <!--<item name="android:windowActionBarOverlay">true</item>-->
-
+        <item name="android:windowActionBarOverlay">true</item>
         <!-- Support library compatibility -->
         <item name="actionBarStyle">@style/MyActionBar</item>
-    <!--<item name="windowActionBarOverlay">true</item>-->
-</style>
+        <item name="windowActionBarOverlay">true</item>
+    </style>
 
-<!-- ActionBar styles -->
+    <!-- ActionBar styles -->
     <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/actionbar_background_color</item>
         <item name="android:height">@dimen/action_bar_height</item>
         <item name="android:icon">@drawable/ic_launcher_white</item>
-        <item name="android:windowContentOverlay">@null</item>
 
         <!-- Support library compatibility -->
         <item name="background">@color/actionbar_background_color</item>
@@ -36,7 +34,7 @@
     <!--<item name="android:background">@color/actionbar_background_color</item>-->
     <!--<item name="android:height">@dimen/action_bar_height</item>-->
     <!--<item name="android:icon">@drawable/ic_launcher_white</item>-->
-    <!--&lt;!&ndash; Support library compatibility &ndash;&gt;-->
+    <!-- Support library compatibility -->
     <!--<item name="background">@color/actionbar_background_color</item>-->
     <!--<item name="android:windowContentOverlay">@null</item>-->
     <!--</style>-->

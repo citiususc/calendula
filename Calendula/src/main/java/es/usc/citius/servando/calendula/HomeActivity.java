@@ -1,15 +1,14 @@
 package es.usc.citius.servando.calendula;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -21,14 +20,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,20 +39,28 @@ import com.espian.showcaseview.targets.PointTarget;
 import java.util.Arrays;
 import java.util.List;
 
+import es.usc.citius.servando.calendula.activities.AlertFullScreenActivity;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
-import es.usc.citius.servando.calendula.fragments.EditUserProfileFragment;
-import es.usc.citius.servando.calendula.fragments.HomeFragment;
-import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
-import es.usc.citius.servando.calendula.fragments.RoutineCreateOrEditFragment;
+import es.usc.citius.servando.calendula.fragments.DailyAgendaFragment;
+import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
+import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.user.Session;
-import es.usc.citius.servando.calendula.user.User;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Screen;
 
-public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener, ActionBar.OnNavigationListener, View.OnClickListener {
+
+public class HomeActivity extends ActionBarActivity implements
+        ViewPager.OnPageChangeListener,
+        ActionBar.OnNavigationListener,
+        View.OnClickListener,
+        RoutinesListFragment.OnRoutineSelectedListener {
+
+    public static final int ROUTINES_ACTIVITY_RQ = 1;
+    public static final int SCHEDULES_ACTIVITY_RQ = 2;
+    public static final int MEDICINES_ACTIVITY_RQ = 3;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -68,9 +75,12 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
     DrawerLayout mDrawerLayout;
     ListView mDrawerList;
     ActionBarDrawerToggle mDrawerToggle;
+//    ImageView actionBarImage;
 
     View addButton;
     boolean addButtonShown = true;
+    //boolean profileShown = true;
+    String[] titles;
 
 
 
@@ -86,6 +96,17 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            setTranslucentStatus(true);
+        }
+        // create our manager instance after the content view is set
+//        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        // enable status bar tint
+//        tintManager.setStatusBarTintEnabled(true);
+//        tintManager.setTintColor(Color.parseColor("#0099CC"));
+        // enable navigation bar tint
+        //tintManager.setNavigationBarTintEnabled(true);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new HomePageAdapter(getSupportFragmentManager(), this, this);
@@ -97,9 +118,13 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
         mActionBar = getSupportActionBar();
         //mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setDisplayShowTitleEnabled(false);
-        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        mActionBar.setCustomView(R.layout.action_bar);
         //mActionBar.hide();
         initializeDrawer();
+
+        titles = getResources().getStringArray(R.array.home_action_list);
 
         SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.home_action_list,
                 android.R.layout.simple_spinner_dropdown_item);
@@ -107,10 +132,22 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
         mActionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
         mViewPager.setOnPageChangeListener(this);
 
-        addButton=findViewById(R.id.add_button);
 
+//        actionBarImage=(ImageView)findViewById(R.id.action_bar_profile_image);
+//        actionBarImage.setImageBitmap(Session.instance().getUserProfileImage(this));
+//        actionBarImage.setVisibility(View.INVISIBLE);
+//        actionBarImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ((DailyAgendaFragment)getViewPagerFragment(0)).editProfile();
+//            }
+//        });
+        addButton = findViewById(R.id.add_button);
         addButton.setOnClickListener(this);
 
+//        SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
+//        mViewPager.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
+//        mDrawerList.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
 
         boolean welcome = getIntent().getBooleanExtra("welcome",false);
         if(welcome) {
@@ -118,19 +155,32 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
         }
     }
 
+    @TargetApi(19)
+    private void setTranslucentStatus(boolean on) {
+        Window win = getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        win.setAttributes(winParams);
+    }
+
     public int getActionDrawable(int index){
         switch (index){
             case 0:
                 return R.drawable.ic_small_home_w;
-            case 1:
-                return R.drawable.ic_small_alarm;
             case 2:
+                return R.drawable.ic_small_alarm;
+            case 4:
                 return R.drawable.ic_pill;
             case 3:
                 return R.drawable.ic_small_calendar_w;
-            case 4:
+            case 6:
                 return R.drawable.ic_small_pin_w;
-            case 5:
+            case 7:
                 return R.drawable.ic_small_plane_w;
             default:
                 return R.drawable.ic_small_home_w;
@@ -140,15 +190,15 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
 
     public int getActionColor(int index){
         switch (index){
-            case 1:
-                return R.color.android_blue;
             case 2:
-                return R.color.android_pink;
+                return R.color.android_blue;
             case 3:
-                return R.color.android_green;
+                return R.color.android_pink;
             case 4:
+                return R.color.android_green;
+            case 6:
                 return R.color.android_orange;
-            case 5:
+            case 7:
                 return R.color.android_red;
             default:
                 return R.color.dark_grey_home;
@@ -193,10 +243,22 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
 
+    }
+
+    @Override
+    public void onRoutineSelected(Routine r) {
+        Intent i = new Intent(this, RoutinesActivity.class);
+        i.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, r.getId());
+        launchActivity(i);
+    }
+
+    @Override
+    public void onCreateRoutine() {
+        //do nothing
     }
 
 
@@ -208,15 +270,22 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            String item = getItem(position).toUpperCase();
 
             final LayoutInflater layoutInflater = getLayoutInflater();
-            View v = layoutInflater.inflate(R.layout.drawer_list_item,null);
 
-            ((TextView)v.findViewById(R.id.text)).setText(getItem(position).toUpperCase());
-            ((ImageView)v.findViewById(R.id.imageView)).setImageResource(getActionDrawable(position));
-            ((ImageView)v.findViewById(R.id.imageViewbg)).setImageResource(getActionColor(position));
-
-            return v;
+            if (item.equalsIgnoreCase(getString(R.string.drawer_menu_option)) ||
+                    item.equalsIgnoreCase(getString(R.string.drawer_services_option))) {
+                View v = layoutInflater.inflate(R.layout.drawer_list_item_spacer, null);
+                ((TextView) v.findViewById(R.id.text)).setText(item);
+                return v;
+            } else {
+                View v = layoutInflater.inflate(R.layout.drawer_list_item, null);
+                ((TextView) v.findViewById(R.id.text)).setText(item);
+                ((ImageView) v.findViewById(R.id.imageView)).setImageResource(getActionDrawable(position));
+                ((ImageView) v.findViewById(R.id.imageViewbg)).setImageResource(getActionColor(position));
+                return v;
+            }
         }
     }
 
@@ -232,9 +301,7 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
                     launchActivity(new Intent(this, ScheduleCreationActivity.class));
                     break;
                 case 1: // routines
-                    i = new Intent(this, RoutinesActivity.class);
-                    i.putExtra("create", true);
-                    launchActivity(i);
+                    launchActivity(new Intent(this, RoutinesActivity.class));
                     break;
                 case 2: // medicines
                     i = new Intent(this, MedicinesActivity.class);
@@ -246,6 +313,17 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
                     break;
 
             }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d("Home", "onActivityResult: " + requestCode + ", " + resultCode + ", " + data.toString());
+        switch (requestCode) {
+            case ROUTINES_ACTIVITY_RQ:
+                ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
         }
     }
 
@@ -265,7 +343,14 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
      * Swaps fragments in the main content view
      */
     private void selectItem(int position) {
-
+        Log.d("Agenda", "Position :" + position);
+        if (position == 0)
+            mViewPager.setCurrentItem(0);
+        else if (position > 1 && position < 5)
+            mViewPager.setCurrentItem(position - 1);
+        else
+            launchActivity(new Intent(this, AlertFullScreenActivity.class));
+        //Toast.makeText(this,"Working on it!",Toast.LENGTH_SHORT).show();
 
         mDrawerLayout.closeDrawer(mDrawerList);
     }
@@ -274,7 +359,8 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
     @Override
     protected void onResume() {
         super.onResume();
-//       showShowCase();
+
+
     }
 
 
@@ -315,6 +401,17 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
         return true;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        int pageNum = mViewPager.getCurrentItem();
+        if (pageNum == 0) {
+            menu.findItem(R.id.action_expand).setVisible(true);
+
+        } else {
+            menu.findItem(R.id.action_expand).setVisible(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
 
 
     @Override
@@ -329,8 +426,8 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
         switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
-            case R.id.action_exit:
-                logout();
+            case R.id.action_expand:
+                ((DailyAgendaFragment) getViewPagerFragment(0)).toogleExpand();
                 return true;
 
         }
@@ -383,9 +480,19 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
 
     @Override
     public void onPageSelected(int i) {
-        mActionBar.setSelectedNavigationItem(i);
+
+        invalidateOptionsMenu();
+        if (i == 0) {
+//            setCustomTitle(Session.instance().getUser().getName());
+//            actionBarImage.setVisibility(View.VISIBLE);
+        } else {
+            setCustomTitle(titles[i]);
+//            actionBarImage.setVisibility(View.INVISIBLE);
+        }
+
         if(i > 0){
             showAddButton();
+//            actionBarImage.setVisibility(View.VISIBLE);
         }
     }
 
@@ -394,12 +501,23 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
 
     }
 
+    public void hideAddButton(boolean showProfile) {
+//        this.profileShown = showProfile;
+        hideAddButton();
+    }
+
+    public void showAddButton(boolean showProfile) {
+//        this.profileShown = showProfile;
+        showAddButton();
+    }
+
     public void hideAddButton() {
         if (addButtonShown) {
             addButtonShown = false;
             Animation slideDown = AnimationUtils.loadAnimation(this, R.anim.anim_slide_down_2);
             slideDown.setFillAfter(true);
             addButton.startAnimation(slideDown);
+
             slideDown.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
@@ -408,7 +526,8 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    //getActionBar().hide();
+                    setCustomTitle(Session.instance().getUser().getName());
+//                    actionBarImage.setVisibility(View.VISIBLE);
                 }
 
                 @Override
@@ -422,7 +541,13 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
     }
 
     public void showAddButton() {
-        if (!addButtonShown) {
+
+        if (mViewPager.getCurrentItem() != 0 && !addButtonShown) {
+//            setCustomTitle(titles[0]);
+//            actionBarImage.setVisibility(View.INVISIBLE);
+//        }
+//
+//        if (!addButtonShown) {
             addButtonShown = true;
             Animation slideUp = AnimationUtils.loadAnimation(this, R.anim.anim_slide_up_2);
             slideUp.setFillAfter(true);
@@ -434,7 +559,7 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    //getActionBar().show();
+
                 }
 
                 @Override
@@ -451,6 +576,9 @@ public class HomeActivity extends ActionBarActivity implements ViewPager.OnPageC
         return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
     }
 
+    public void setCustomTitle(String title) {
+        ((TextView) findViewById(R.id.action_bar_custom_title)).setText(title);
+    }
 
 
 

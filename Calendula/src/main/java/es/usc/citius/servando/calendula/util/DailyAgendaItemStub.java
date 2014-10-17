@@ -8,6 +8,7 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
@@ -20,6 +21,8 @@ public class DailyAgendaItemStub {
     public static final String TAG = DailyAgendaItemStub.class.getName();
 
     public boolean isSpacer=false;
+
+    public boolean isNext = false;
 
     public int hour;
     public boolean hasEvents;
@@ -44,6 +47,7 @@ public class DailyAgendaItemStub {
         for (Routine routine : routines) {
             doses.addAll(routine.scheduleItems());
         }
+
         if (doses.size() > 0) {
             item.hasEvents = true;
             item.meds = new ArrayList<DailyAgendaItemStubElement>();
@@ -54,7 +58,9 @@ public class DailyAgendaItemStub {
                 Medicine med = scheduleItem.schedule().medicine();
                 DailyAgendaItemStubElement el = new DailyAgendaItemStubElement();
                 el.medName = med.name();
-                el.dose = String.valueOf((int) scheduleItem.dose());
+                el.dose = (int) scheduleItem.dose();
+                el.res = med.presentation().getDrawable();
+                el.presentation = med.presentation();
                 el.minute = minute < 10 ? "0" + minute : String.valueOf(minute);
                 el.taken = DailyScheduleItem.findByScheduleItem(scheduleItem).takenToday();
                 item.meds.add(el);
@@ -69,8 +75,11 @@ public class DailyAgendaItemStub {
 
         public String medName;
         public String minute;
-        public String dose;
+        public int dose;
         public boolean taken;
+        public Presentation presentation;
+        public int res;
+
 
         @Override
         public int compareTo(DailyAgendaItemStubElement other) {
