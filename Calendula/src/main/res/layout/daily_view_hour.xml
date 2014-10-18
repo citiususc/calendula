@@ -5,149 +5,151 @@
     android:orientation="vertical"
     android:background="@color/white">
 
-<RelativeLayout
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:visibility="visible"
-    android:id="@+id/top"
-    android:background="@color/white">
-
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/hide_if_empty">
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:visibility="visible"
+        android:id="@+id/top"
+        android:background="@color/white">
 
-        <ImageButton
+        <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="5dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="70dp"
-            android:background="@color/android_green"
-            android:id="@+id/agenda_item_top_bg"
-            android:layout_alignTop="@+id/count_container"
-            android:layout_alignParentBottom="true" />
+            android:layout_height="fill_parent"
+            android:id="@+id/hide_if_empty">
+
+            <ImageButton
+                android:layout_width="fill_parent"
+                android:layout_height="5dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="70dp"
+                android:background="@color/android_green"
+                android:id="@+id/agenda_item_top_bg"
+                android:layout_alignTop="@+id/count_container"
+                android:layout_alignParentBottom="true" />
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="60dp"
+                android:id="@+id/imageView5"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/daily_view_list_item_tab"
+                android:layout_marginTop="2dp"
+                android:scaleType="fitXY"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="130dp" />
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="70dp"
+                android:background="@null"
+                android:id="@+id/count_container"
+                android:layout_marginTop="2dp" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/imageView2"
+                android:src="@drawable/ic_pill"
+                android:layout_centerVertical="true"
+                android:layout_alignLeft="@+id/count_container"
+                android:layout_marginLeft="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="3"
+                android:id="@+id/count_text"
+                android:layout_centerVertical="true"
+                android:textAlignment="center"
+
+                android:textColor="@color/white"
+                android:layout_toRightOf="@+id/imageView2" />
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/imageView3"
+                android:layout_alignTop="@+id/imageView5"
+                android:layout_toRightOf="@+id/imageView5"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="3dp"
+                android:background="#ffffff" />
+
+        </RelativeLayout>
 
         <ImageView
-            android:layout_width="80dp"
-            android:layout_height="60dp"
-            android:id="@+id/imageView5"
+            android:layout_width="10dp"
+            android:layout_height="1dp"
+            android:id="@+id/imageView"
             android:layout_alignParentTop="true"
-            android:src="@drawable/daily_view_list_item_tab"
-            android:layout_marginTop="2dp"
-            android:scaleType="fitXY"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="3dp"
-            android:layout_marginLeft="130dp" />
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="60dp"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="70dp"
-            android:background="@null"
-            android:id="@+id/count_container"
-            android:layout_marginTop="2dp" />
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:id="@+id/imageView2"
-            android:src="@drawable/ic_pill"
-            android:layout_centerVertical="true"
-            android:layout_alignLeft="@+id/count_container"
-            android:layout_marginLeft="5dp" />
+            android:background="@color/android_blue" />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="3"
-            android:id="@+id/count_text"
-            android:layout_centerVertical="true"
-            android:textAlignment="center"
+            android:layout_height="60dp"
+            android:text="12"
+            android:id="@+id/hour_text"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/android_blue"
+            android:textStyle="normal"
+            android:textSize="16sp"
+            android:layout_marginLeft="5dp"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/imageView" />
 
-            android:textColor="@color/white"
-            android:layout_toRightOf="@+id/imageView2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:text="12"
+            android:id="@+id/current_hour_text"
+            android:textColor="@color/android_blue"
+            android:textStyle="bold"
+            android:textSize="22dp"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/imageView"
+            android:visibility="invisible"
+            android:textAlignment="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:text="45"
+            android:id="@+id/current_minute_text"
+            android:textColor="@color/android_blue_light"
+            android:textSize="22dp"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/current_hour_text"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:layout_width="10dp"
+            android:id="@+id/current_hour_indicator"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:background="@color/android_blue"
+            android:layout_height="60dp"
+            android:visibility="invisible" />
 
         <ImageView
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/imageView3"
-            android:layout_alignTop="@+id/imageView5"
-            android:layout_toRightOf="@+id/imageView5"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="3dp"
-            android:background="#ffffff" />
+            android:id="@+id/current_hour_spacer"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:background="#22AA66CC"
+            android:layout_height="1dp"
+            android:visibility="invisible"
+            android:layout_marginLeft="70dp" />
 
     </RelativeLayout>
-
-    <ImageView
-        android:layout_width="10dp"
-        android:layout_height="1dp"
-        android:id="@+id/imageView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:background="@color/android_blue" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:text="12"
-        android:id="@+id/hour_text"
-        android:textColor="@color/android_blue"
-        android:textStyle="normal"
-        android:textSize="16sp"
-        android:layout_marginLeft="5dp"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/imageView" />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:text="12"
-        android:id="@+id/current_hour_text"
-        android:textColor="@color/android_blue"
-        android:textStyle="bold"
-        android:textSize="25dp"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/imageView"
-        android:visibility="invisible"
-        android:textAlignment="center" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:text="45"
-        android:id="@+id/current_minute_text"
-        android:textColor="@color/android_blue_light"
-        android:textSize="25dp"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/current_hour_text"
-        android:visibility="invisible" />
-
-    <ImageView
-        android:layout_width="10dp"
-        android:id="@+id/current_hour_indicator"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:background="@color/android_blue"
-        android:layout_height="60dp"
-        android:visibility="invisible" />
-
-    <ImageView
-        android:layout_width="fill_parent"
-        android:id="@+id/current_hour_spacer"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:background="#22AA66CC"
-        android:layout_height="1dp"
-        android:visibility="invisible"
-        android:layout_marginLeft="70dp" />
-
-</RelativeLayout>
 
     <RelativeLayout
         android:layout_width="fill_parent"

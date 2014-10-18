@@ -2,5 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pager"
     android:layout_width="match_parent"
+    android:paddingTop="@dimen/action_bar_height"
     android:layout_height="match_parent"
     tools:context=".RoutinesActivity" />

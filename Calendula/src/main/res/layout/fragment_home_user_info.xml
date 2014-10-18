@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
+        android:layout_height="130dp"
         android:id="@+id/profile_container"
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp"
@@ -17,94 +17,161 @@
         <FrameLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginBottom="7dp"
+            android:layout_marginBottom="5dp"
             android:background="@color/android_blue_dark"></FrameLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            style="@style/username_text"
-            android:visibility="visible"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Ángel Piñeiro"
-            android:id="@+id/profile_username"
-            android:layout_alignTop="@+id/profile_image_container"
-            android:layout_toRightOf="@+id/profile_image_container"
-            android:layout_toEndOf="@+id/profile_image_container"
-            android:layout_marginLeft="10dp"
-            android:textColor="@color/dark_grey_home"
-            android:layout_marginTop="5dp"
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
         <RelativeLayout
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:id="@+id/profile_image_container"
-            android:background="@drawable/rounded_profile_image_container"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="10dp">
+            android:layout_width="fill_parent"
+            android:layout_height="130dp"
+            android:id="@+id/profile_info"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                style="@style/username_text"
+                android:visibility="visible"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Ángel Piñeiro"
+                android:id="@+id/profile_username"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:fontFamily="sans-serif-light"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="5dp"
+                android:layout_alignParentTop="true" />
+
+            <RelativeLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/profile_image_container"
+                android:background="@drawable/rounded_profile_image_container"
+                android:orientation="horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/profile_username"
+                android:layout_marginTop="5dp">
 
 
-            <com.makeramen.RoundedImageView
+                <com.makeramen.RoundedImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:src="@drawable/default_avatar"
+                    android:id="@+id/profile_image"
+                    android:scaleType="centerCrop"
+                    app:corner_radius="30dp"
+                    app:border_width="3dp"
+                    app:border_color="@color/white"
+                    app:mutate_background="true"
+                    app:oval="true"
+                    android:layout_margin="2dp"
+                    android:layout_alignParentLeft="false"
+                    android:layout_alignParentTop="false"
+                    android:layout_centerInParent="true" />
+
+            </RelativeLayout>
+
+            <ImageView
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:src="@drawable/default_avatar"
-                android:id="@+id/profile_image"
-                android:scaleType="centerCrop"
-                app:corner_radius="30dp"
-                app:border_width="3dp"
-                app:border_color="@color/white"
-                app:mutate_background="true"
-                app:oval="true"
-                android:layout_margin="2dp"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false"
-                android:layout_centerInParent="true" />
+                android:layout_height="5dp"
+                android:id="@+id/imageView"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignBottom="@+id/profile_image_container"
+                android:src="@drawable/daily_view_list_item_tab_shadow_top"
+                android:scaleType="fitXY"
+                android:visibility="invisible" />
+
+
+            <es.usc.citius.servando.calendula.util.view.CustomDigitalClock
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/hour_text"
+                android:fontFamily="sans-serif-light"
+                android:layout_toEndOf="@+id/profile_image_container"
+                android:textSize="40sp"
+                android:textColor="@color/white"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_above="@+id/imageView"
+                android:layout_alignParentTop="true"
+                android:typeface="serif"
+                android:layout_toRightOf="@+id/profile_image_container"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="14:35"
+                android:id="@+id/hour_text_t"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_toEndOf="@+id/profile_image_container"
+                android:gravity="center"
+                android:textSize="35sp"
+                android:textColor="@color/white"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_above="@+id/imageView"
+                android:layout_alignParentTop="true"
+                android:typeface="serif"
+                android:visibility="gone"
+                android:layout_toRightOf="@+id/profile_image_container" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@+id/profile_image_container"
+                android:layout_toStartOf="@+id/profile_image_container"
+                android:layout_centerVertical="true">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="OCT"
+                    android:fontFamily="sans-serif-light"
+                    android:id="@+id/month_text"
+                    android:layout_toStartOf="@+id/profile_image_container"
+                    android:gravity="center|top"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"
+                    android:layout_toLeftOf="@+id/profile_image_container"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/day_text" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="12"
+                    android:id="@+id/day_text"
+                    android:layout_toStartOf="@+id/profile_username"
+                    android:gravity="center|bottom"
+                    android:textSize="35sp"
+                    android:textColor="@color/white"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="false"
+                    android:layout_centerVertical="true"
+                    android:textStyle="bold"
+                    android:padding="0dp" />
+
+            </LinearLayout>
 
         </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Next med at 12:00h"
-            android:id="@+id/textView"
-            android:layout_below="@+id/profile_username"
-            android:layout_toRightOf="@+id/profile_image_container"
-            android:layout_toEndOf="@+id/profile_image_container"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Lunch, 2 medicines"
-            android:id="@+id/textView4"
-            android:layout_below="@+id/textView"
-            android:layout_alignLeft="@+id/textView"
-            android:layout_alignStart="@+id/textView"
-            android:textColor="@color/white" />
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="7dp"
-            android:id="@+id/imageView"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignBottom="@+id/profile_image_container"
-            android:src="@drawable/daily_view_list_item_tab_shadow_top"
-            android:scaleType="fitXY" />
-
-
     </RelativeLayout>
-
 
 
 </FrameLayout>

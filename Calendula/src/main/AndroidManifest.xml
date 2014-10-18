@@ -22,6 +22,7 @@
         <activity
             android:name="es.usc.citius.servando.calendula.activities.RoutinesActivity"
             android:screenOrientation="portrait"
+            android:parentActivityName=".HomeActivity"
             android:label="@string/title_activity_routines"
             android:windowSoftInputMode="adjustPan" />
         <activity
@@ -35,6 +36,10 @@
             android:label="@string/title_activity_schedules" />
         <activity
             android:name="es.usc.citius.servando.calendula.activities.SchedulesActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_schedules" />
+        <activity
+            android:name="es.usc.citius.servando.calendula.activities.AlertFullScreenActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_schedules" />
         <activity

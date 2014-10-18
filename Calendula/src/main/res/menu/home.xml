@@ -1,12 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+
+    <!--<item android:id="@+id/action_settings"-->
+    <!--android:title="@string/action_settings"-->
+    <!--android:orderInCategory="100"-->
+    <!--app:showAsAction="never" />-->
+    <item
+        android:id="@+id/action_expand"
+        android:title="Expand"
+        android:icon="@drawable/ic_list"
         android:orderInCategory="100"
-        app:showAsAction="never" />
-    <item android:id="@+id/action_exit"
-        android:title="@string/action_exit"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 </menu>

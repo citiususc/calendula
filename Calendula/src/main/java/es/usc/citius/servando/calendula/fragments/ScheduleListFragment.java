@@ -52,7 +52,6 @@ public class ScheduleListFragment extends Fragment {
         });
 
 
-
         return rootView;
     }
 
@@ -65,14 +64,12 @@ public class ScheduleListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        //onChange();
+        notifyDataChange();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //ScheduleStore.instance().removeListener(this);
     }
 
     public void notifyDataChange() {
@@ -174,6 +171,7 @@ public class ScheduleListFragment extends Fragment {
     // Container Activity must implement this interface
     public interface OnScheduleSelectedListener {
         public void onScheduleSelected(Schedule r);
+
         public void onCreateSchedule();
     }
 }

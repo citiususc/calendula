@@ -39,7 +39,10 @@
     <color name="light_grey_pressed">#99989898</color>
     <!-- #ececec -->
     <!--<color name="actionbar_background_color">#161616</color>-->
-    <color name="actionbar_background_color">#0099CC</color>
     <color name="med_presentation_circle_bg">#3333B5E5</color>
     <color name="black_overlay">#66000000</color>
+
+    <color name="actionbar_background_color">#0099CC</color>
+    <color name="activity_background_color">#E0EAEF</color>
+    <!--#006699-->
 </resources>

@@ -16,6 +16,62 @@
         android:layout_height="fill_parent"
         android:id="@+id/imageView2" />
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_toEndOf="@+id/profile_image"
+        android:text="Profile"
+        style="@style/dark_text_big"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginTop="20dp"
+        android:gravity="center" />
+
+    <RelativeLayout
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/profile_image_container"
+        android:background="@drawable/rounded_profile_image_container"
+        android:orientation="horizontal"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true">
+
+
+        <com.makeramen.RoundedImageView
+            android:layout_width="80dp"
+            android:layout_height="fill_parent"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:src="@drawable/default_avatar"
+            android:id="@+id/profile_image"
+            android:scaleType="centerCrop"
+            app:corner_radius="30dp"
+            app:border_width="3dp"
+            app:border_color="@color/white"
+            app:mutate_background="true"
+            app:oval="true"
+            android:layout_margin="2dp"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentTop="false"
+            android:layout_centerVertical="true" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/profile_username"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Walter"
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/profile_image_container"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/dark_grey_home" />
+
     <Button
         android:id="@+id/profile_button_ok"
         style="@style/ok_button"
@@ -25,52 +81,14 @@
         android:background="@drawable/ok_button_selector"
         android:text="@string/edit_routine_button_text" />
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal|top"
-        android:id="@+id/linearLayout">
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_alignTop="@+id/profile_image"
-            android:layout_toEndOf="@+id/profile_image"
-            android:layout_toRightOf="@+id/profile_image"
-            android:text="Profile"
-            style="@style/dark_text_big"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_marginTop="20dp" />
-
-        <com.makeramen.RoundedImageView
-            android:layout_width="100dp"
-            android:layout_height="20dp"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:src="@drawable/default_avatar"
-            android:id="@+id/profile_image"
-            android:scaleType="centerCrop"
-            app:corner_radius="30dp"
-            app:border_width="1dp"
-            app:border_color="#333333"
-            app:mutate_background="true"
-            app:oval="true"
-            android:layout_marginTop="10dp" />
-
-        <EditText
-            android:id="@+id/profile_username"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:text="Walter"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/dark_grey_home" />
-
-    </LinearLayout>
-
 
 </RelativeLayout>
+
+
+
+
+
+
+
+
+

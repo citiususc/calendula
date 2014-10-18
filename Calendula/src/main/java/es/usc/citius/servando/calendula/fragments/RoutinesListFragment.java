@@ -19,6 +19,7 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Routine;
+import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -40,14 +41,6 @@ public class RoutinesListFragment extends Fragment {
         mRoutines = Routine.findAll();
         adapter = new RoutinesListAdapter(getActivity(), R.layout.daily_view_hour, mRoutines);
         listview.setAdapter(adapter);
-
-        rootView.findViewById(R.id.routine_add_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mRoutineSelectedCallback != null)
-                    mRoutineSelectedCallback.onCreateRoutine();
-            }
-        });
         return rootView;
     }
 
@@ -59,6 +52,12 @@ public class RoutinesListFragment extends Fragment {
             adapter.add(r);
         }
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        notifyDataChange();
     }
 
     private View createRoutineListItem(LayoutInflater inflater, final Routine routine) {
@@ -120,10 +119,10 @@ public class RoutinesListFragment extends Fragment {
                 .setTitle("Remove routine")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        r.save();
+                        // cancel routine alarm and delete it
+                        AlarmScheduler.instance().cancelAlarm(r, getActivity());
+                        r.delete();
                         notifyDataChange();
-                        // cancel routine alarm
-                        // TODO: AlarmScheduler.instance().cancelAlarm(r, getActivity());
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {

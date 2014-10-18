@@ -13,7 +13,7 @@
 
     <ImageView
         android:layout_width="fill_parent"
-        android:layout_height="7dp"
+        android:layout_height="5dp"
         android:id="@+id/imageView2a"
         android:src="@drawable/daily_view_list_item_tab_shadow_top"
         android:scaleType="fitXY"

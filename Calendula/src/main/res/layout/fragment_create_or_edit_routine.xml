@@ -2,16 +2,17 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/activity_background_color">
 
-    <TimePicker
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/routine_time_picker"
-        android:layout_below="@+id/textView2"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp" />
+    <!--<TimePicker-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:id="@+id/routine_time_picker"-->
+    <!--android:layout_below="@+id/textView2"-->
+    <!--android:layout_alignLeft="@+id/textView2"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:layout_marginRight="20dp" />-->
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,8 +25,9 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:textStyle="bold"
-        android:textSize="25dp"
-        android:textColor="@color/android_blue_dark" />
+        android:textSize="18dp"
+        android:textColor="@color/android_blue_dark"
+        android:textAllCaps="true" />
 
     <EditText
         android:layout_width="match_parent"
@@ -48,8 +50,9 @@
         android:layout_alignLeft="@+id/routine_edit_name"
         android:layout_marginTop="20dp"
         android:textStyle="bold"
-        android:textSize="25dp"
-        android:textColor="@color/android_blue_dark" />
+        android:textSize="18dp"
+        android:textColor="@color/android_blue_dark"
+        android:textAllCaps="true" />
 
     <Button
         android:layout_width="match_parent"
@@ -60,6 +63,19 @@
         android:layout_alignParentLeft="true"
         style="@style/ok_button"
         android:background="@drawable/ok_button_selector" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="18:30h"
+        android:id="@+id/button2"
+        android:layout_below="@+id/textView2"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="60sp"
+        android:textColor="@color/dark_grey_text"
+        android:background="@null" />
 
 
 </RelativeLayout>

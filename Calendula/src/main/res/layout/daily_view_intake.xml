@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/shape_list_item"
+        android:padding="10dp">
+
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/routine_list_item_container">
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:visibility="visible"
+                android:src="@drawable/arrow_down"
+                android:id="@+id/count_container"
+                android:background="@null"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Breakfast (3 pills)"
+                android:fontFamily="sans-serif-condensed"
+                android:id="@+id/routines_list_item_name"
+                android:textColor="@color/android_blue_dark"
+                android:textSize="20dp"
+                android:layout_toEndOf="@+id/linearLayout"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="20dp"
+                android:textAllCaps="true" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:id="@+id/linearLayout"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp">
+
+                <ImageButton
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/imageButton2"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_alarm"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:layout_gravity="center_vertical"
+                    android:alpha="0.6" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="08:"
+                    android:id="@+id/routines_list_item_hour"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/dark_grey_text"
+                    android:textStyle="bold"
+                    android:textSize="22dp"
+                    android:layout_gravity="center_vertical" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00"
+                    android:id="@+id/routines_list_item_minute"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/routines_list_item_hour"
+                    android:textColor="@color/dark_grey_text"
+                    android:textSize="22dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" h"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/routines_list_item_minute"
+                    android:textColor="@color/dark_grey_text"
+                    android:textSize="22dp" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/bottom"
+            android:layout_alignParentBottom="true"
+            android:visibility="visible"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:id="@+id/imageView2"
+                android:src="@drawable/daily_view_list_item_tab_shadow_top"
+                android:scaleType="fitXY"
+                android:layout_marginTop="5dp" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/med_item_list"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="5dp"></LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -5,6 +5,7 @@
     <string name="title_home">Home</string>
     <string name="title_daily_agenda">Today</string>
     <string name="action_settings">Settings</string>
+    <string name="action_remove">Remove</string>
     <string name="action_remove_all">Remove all</string>
 
     <string name="action_exit">Exit</string>
@@ -17,17 +18,22 @@
     <string name="action_bar_title_home">Home</string>
 
     <string-array name="home_action_list">
-        <item>Agenda</item>
+        <item>Calendula</item>
         <item>Routines</item>
         <item>Medicines</item>
         <item>Schedules</item>
     </string-array>
 
+    <string name="drawer_menu_option">Menu</string>
+    <string name="drawer_services_option">Tools</string>
+
     <string-array name="home_drawer_actions">
-        <item>Agenda</item>
+        <item>Home</item>
+        <item>@string/drawer_menu_option</item>
         <item>Routines</item>
         <item>Medicines</item>
         <item>Schedules</item>
+        <item>@string/drawer_services_option</item>
         <item>Pharmacies</item>
         <item>Plan trip</item>
     </string-array>
@@ -79,11 +85,11 @@
 
     <!-- Med presentation units -->
     <string name="injections_units">injection</string>
-    <string name="pills_units">pills</string>
-    <string name="capsules_units">capsules</string>
-    <string name="inhaler_units">inhalations</string>
-    <string name="drops_units">drops</string>
-    <string name="syrup_units">syrup spoons</string>
+    <string name="pills_units">pill</string>
+    <string name="capsules_units">capsule</string>
+    <string name="inhaler_units">inhalation</string>
+    <string name="drops_units">drop</string>
+    <string name="syrup_units">syrup spoon</string>
     <string name="unknown_units">Unknown</string>
     <string name="effervescent_units">sachet</string>
 

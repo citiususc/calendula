@@ -20,321 +20,328 @@ import java.util.BitSet;
  * @date 6/9/12 4:41 PM
  */
 public abstract class AbstractSlideExpandableListAdapter extends WrapperListAdapterImpl {
-	/**
-	 * Reference to the last expanded list item.
-	 * Since lists are recycled this might be null if
-	 * though there is an expanded list item
-	 */
-	private View lastOpen = null;
-	/**
-	 * The position of the last expanded list item.
-	 * If -1 there is no list item expanded.
-	 * Otherwise it points to the position of the last expanded list item
-	 */
-	private int lastOpenPosition = -1;
-	
-	/**
-	 * Default Animation duration
-	 * Set animation duration with @see setAnimationDuration
-	 */
-	private int animationDuration = 330;
-	
-	/**
-	 * A list of positions of all list items that are expanded.
-	 * Normally only one is expanded. But a mode to expand
-	 * multiple will be added soon.
-	 *
-	 * If an item onj position x is open, its bit is set
-	 */
-	private BitSet openItems = new BitSet();
-	/**
-	 * We remember, for each collapsable view its height.
-	 * So we dont need to recalculate.
-	 * The height is calculated just before the view is drawn.
-	 */
-	private final SparseIntArray viewHeights = new SparseIntArray(10);
+    /**
+     * Reference to the last expanded list item.
+     * Since lists are recycled this might be null if
+     * though there is an expanded list item
+     */
+    private View lastOpen = null;
+    /**
+     * The position of the last expanded list item.
+     * If -1 there is no list item expanded.
+     * Otherwise it points to the position of the last expanded list item
+     */
+    private int lastOpenPosition = -1;
 
-	public AbstractSlideExpandableListAdapter(ListAdapter wrapped) {
-		super(wrapped);
-	}
+    /**
+     * Default Animation duration
+     * Set animation duration with @see setAnimationDuration
+     */
+    private int animationDuration = 330;
 
-	@Override
-	public View getView(int position, View view, ViewGroup viewGroup) {
-		view = wrapped.getView(position, view, viewGroup);
-		enableFor(view, position);
-		return view;
-	}
+    /**
+     * A list of positions of all list items that are expanded.
+     * Normally only one is expanded. But a mode to expand
+     * multiple will be added soon.
+     * <p/>
+     * If an item onj position x is open, its bit is set
+     */
+    private BitSet openItems = new BitSet();
+    /**
+     * We remember, for each collapsable view its height.
+     * So we dont need to recalculate.
+     * The height is calculated just before the view is drawn.
+     */
+    private final SparseIntArray viewHeights = new SparseIntArray(10);
 
-	/**
-	 * This method is used to get the Button view that should
-	 * expand or collapse the Expandable View.
-	 * <br/>
-	 * Normally it will be implemented as:
-	 * <pre>
-	 * return parent.findViewById(R.id.expand_toggle_button)
-	 * </pre>
-	 *
-	 * A listener will be attached to the button which will
-	 * either expand or collapse the expandable view
-	 *
-	 * @see #getExpandableView(android.view.View)
-	 * @param parent the list view item
-	 * @ensure return!=null
-	 * @return a child of parent which is a button
-	 */
-	public abstract View getExpandToggleButton(View parent);
+    public AbstractSlideExpandableListAdapter(ListAdapter wrapped, int lastOpen) {
+        super(wrapped);
+        lastOpenPosition = lastOpen;
+        if (lastOpen != -1)
+            openItems.set(lastOpenPosition, true);
+    }
 
-	/**
-	 * This method is used to get the view that will be hidden
-	 * initially and expands or collapse when the ExpandToggleButton
-	 * is pressed @see getExpandToggleButton
-	 * <br/>
-	 * Normally it will be implemented as:
-	 * <pre>
-	 * return parent.findViewById(R.id.expandable)
-	 * </pre>
-	 *
-	 * @see #getExpandToggleButton(android.view.View)
-	 * @param parent the list view item
-	 * @ensure return!=null
-	 * @return a child of parent which is a view (or often ViewGroup)
-	 *  that can be collapsed and expanded
-	 */
-	public abstract View getExpandableView(View parent);
+    @Override
+    public View getView(int position, View view, ViewGroup viewGroup) {
+        view = wrapped.getView(position, view, viewGroup);
+        enableFor(view, position);
+        return view;
+    }
 
-	/**
-	 * Gets the duration of the collapse animation in ms.
-	 * Default is 330ms. Override this method to change the default.
-	 *
-	 * @return the duration of the anim in ms
-	 */
-	public int getAnimationDuration() {
-		return animationDuration;
-	}
-	/**
-	 * Set's the Animation duration for the Expandable animation
-	 * 
-	 * @param duration The duration as an integer in MS (duration > 0)
-	 * @exception IllegalArgumentException if parameter is less than zero
-	 */
-	public void setAnimationDuration(int duration) {
-		if(duration < 0) {
-			throw new IllegalArgumentException("Duration is less than zero");
-		}
-		
-		animationDuration = duration;
-	}
-	/**
-	 * Check's if any position is currently Expanded
-	 * To collapse the open item @see collapseLastOpen
-	 * 
-	 * @return boolean True if there is currently an item expanded, otherwise false
-	 */
-	public boolean isAnyItemExpanded() {
-		return (lastOpenPosition != -1) ? true : false;
-	}
+    /**
+     * This method is used to get the Button view that should
+     * expand or collapse the Expandable View.
+     * <br/>
+     * Normally it will be implemented as:
+     * <pre>
+     * return parent.findViewById(R.id.expand_toggle_button)
+     * </pre>
+     * <p/>
+     * A listener will be attached to the button which will
+     * either expand or collapse the expandable view
+     *
+     * @param parent the list view item
+     * @return a child of parent which is a button
+     * @ensure return!=null
+     * @see #getExpandableView(android.view.View)
+     */
+    public abstract View getExpandToggleButton(View parent);
 
-	public void enableFor(View parent, int position) {
-		View more = getExpandToggleButton(parent);
-		View itemToolbar = getExpandableView(parent);
-		itemToolbar.measure(parent.getWidth(), parent.getHeight());
+    /**
+     * This method is used to get the view that will be hidden
+     * initially and expands or collapse when the ExpandToggleButton
+     * is pressed @see getExpandToggleButton
+     * <br/>
+     * Normally it will be implemented as:
+     * <pre>
+     * return parent.findViewById(R.id.expandable)
+     * </pre>
+     *
+     * @param parent the list view item
+     * @return a child of parent which is a view (or often ViewGroup)
+     * that can be collapsed and expanded
+     * @ensure return!=null
+     * @see #getExpandToggleButton(android.view.View)
+     */
+    public abstract View getExpandableView(View parent);
 
-		enableFor(more, itemToolbar, position);
-	}
+    /**
+     * Gets the duration of the collapse animation in ms.
+     * Default is 330ms. Override this method to change the default.
+     *
+     * @return the duration of the anim in ms
+     */
+    public int getAnimationDuration() {
+        return animationDuration;
+    }
 
+    /**
+     * Set's the Animation duration for the Expandable animation
+     *
+     * @param duration The duration as an integer in MS (duration > 0)
+     * @throws IllegalArgumentException if parameter is less than zero
+     */
+    public void setAnimationDuration(int duration) {
+        if (duration < 0) {
+            throw new IllegalArgumentException("Duration is less than zero");
+        }
 
-	private void enableFor(final View button, final View target, final int position) {
-		if(target == lastOpen && position!=lastOpenPosition) {
-			// lastOpen is recycled, so its reference is false
-			lastOpen = null;
-		}
-		if(position == lastOpenPosition) {
-			// re reference to the last view
-			// so when can animate it when collapsed
-			lastOpen = target;
-		}
-		int height = viewHeights.get(position, -1);
-		if(height == -1) {
-			viewHeights.put(position, target.getMeasuredHeight());
-			updateExpandable(target,position);
-		} else {
-			updateExpandable(target, position);
-		}
+        animationDuration = duration;
+    }
 
-		button.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(final View view) {
+    /**
+     * Check's if any position is currently Expanded
+     * To collapse the open item @see collapseLastOpen
+     *
+     * @return boolean True if there is currently an item expanded, otherwise false
+     */
+    public boolean isAnyItemExpanded() {
+        return (lastOpenPosition != -1) ? true : false;
+    }
 
-				Animation a = target.getAnimation();
+    public void enableFor(View parent, int position) {
+        View more = getExpandToggleButton(parent);
+        View itemToolbar = getExpandableView(parent);
+        itemToolbar.measure(parent.getWidth(), parent.getHeight());
 
-				if (a != null && a.hasStarted() && !a.hasEnded()) {
-
-					a.setAnimationListener(new Animation.AnimationListener() {
-						@Override
-						public void onAnimationStart(Animation animation) {
-						}
-
-						@Override
-						public void onAnimationEnd(Animation animation) {
-							view.performClick();
-						}
-
-						@Override
-						public void onAnimationRepeat(Animation animation) {
-						}
-					});
-
-				} else {
-
-					target.setAnimation(null);
-
-					int type = target.getVisibility() == View.VISIBLE
-							? ExpandCollapseAnimation.COLLAPSE
-							: ExpandCollapseAnimation.EXPAND;
-
-					// remember the state
-					if (type == ExpandCollapseAnimation.EXPAND) {
-						openItems.set(position, true);
-					} else {
-						openItems.set(position, false);
-					}
-					// check if we need to collapse a different view
-					if (type == ExpandCollapseAnimation.EXPAND) {
-						if (lastOpenPosition != -1 && lastOpenPosition != position) {
-							if (lastOpen != null) {
-								animateView(lastOpen, ExpandCollapseAnimation.COLLAPSE);
-							}
-							openItems.set(lastOpenPosition, false);
-						}
-						lastOpen = target;
-						lastOpenPosition = position;
-					} else if (lastOpenPosition == position) {
-						lastOpenPosition = -1;
-					}
-					animateView(target, type);
-				}
-			}
-		});
-	}
-
-	private void updateExpandable(View target, int position) {
-
-		final LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)target.getLayoutParams();
-		if(openItems.get(position)) {
-			target.setVisibility(View.VISIBLE);
-			params.bottomMargin = 0;
-		} else {
-			target.setVisibility(View.GONE);
-			params.bottomMargin = 0-viewHeights.get(position);
-		}
-	}
-
-	/**
-	 * Performs either COLLAPSE or EXPAND animation on the target view
-	 * @param target the view to animate
-	 * @param type the animation type, either ExpandCollapseAnimation.COLLAPSE
-	 *			 or ExpandCollapseAnimation.EXPAND
-	 */
-	private void animateView(final View target, final int type) {
-		Animation anim = new ExpandCollapseAnimation(
-				target,
-				type
-		);
-		anim.setDuration(getAnimationDuration());
-		target.startAnimation(anim);
-	}
+        enableFor(more, itemToolbar, position);
+    }
 
 
-	/**
-	 * Closes the current open item.
-	 * If it is current visible it will be closed with an animation.
-	 *
-	 * @return true if an item was closed, false otherwise
-	 */
-	public boolean collapseLastOpen() {
-		if(isAnyItemExpanded()) {
-			// if visible animate it out
-			if(lastOpen != null) {
-				animateView(lastOpen, ExpandCollapseAnimation.COLLAPSE);
-			}
-			openItems.set(lastOpenPosition, false);
-			lastOpenPosition = -1;
-			return true;
-		}
-		return false;
-	}
+    private void enableFor(final View button, final View target, final int position) {
+        if (target == lastOpen && position != lastOpenPosition) {
+            // lastOpen is recycled, so its reference is false
+            lastOpen = null;
+        }
+        if (position == lastOpenPosition) {
+            // re reference to the last view
+            // so when can animate it when collapsed
+            lastOpen = target;
+        }
+        int height = viewHeights.get(position, -1);
+        if (height == -1) {
+            viewHeights.put(position, target.getMeasuredHeight());
+            updateExpandable(target, position);
+        } else {
+            updateExpandable(target, position);
+        }
 
-	public Parcelable onSaveInstanceState(Parcelable parcelable) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
 
-		SavedState ss = new SavedState(parcelable);
-		ss.lastOpenPosition = this.lastOpenPosition;
-		ss.openItems = this.openItems;
-		return ss;
-	}
+                Animation a = target.getAnimation();
 
-	public void onRestoreInstanceState(SavedState state) {
+                if (a != null && a.hasStarted() && !a.hasEnded()) {
 
-		this.lastOpenPosition = state.lastOpenPosition;
-		this.openItems = state.openItems;
-	}
+                    a.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                        }
 
-	/**
-	 * Utility methods to read and write a bitset from and to a Parcel
-	 */
-	private static BitSet readBitSet(Parcel src) {
-		int cardinality = src.readInt();
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            view.performClick();
+                        }
 
-		BitSet set = new BitSet();
-		for (int i = 0; i < cardinality; i++) {
-			set.set(src.readInt());
-		}
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+                        }
+                    });
 
-		return set;
-	}
+                } else {
 
-	private static void writeBitSet(Parcel dest, BitSet set) {
-		int nextSetBit = -1;
+                    target.setAnimation(null);
 
-		dest.writeInt(set.cardinality());
+                    int type = target.getVisibility() == View.VISIBLE
+                            ? ExpandCollapseAnimation.COLLAPSE
+                            : ExpandCollapseAnimation.EXPAND;
 
-		while ((nextSetBit = set.nextSetBit(nextSetBit + 1)) != -1) {
-			dest.writeInt(nextSetBit);
-		}
-	}
+                    // remember the state
+                    if (type == ExpandCollapseAnimation.EXPAND) {
+                        openItems.set(position, true);
+                    } else {
+                        openItems.set(position, false);
+                    }
+                    // check if we need to collapse a different view
+                    if (type == ExpandCollapseAnimation.EXPAND) {
+                        if (lastOpenPosition != -1 && lastOpenPosition != position) {
+                            if (lastOpen != null) {
+                                animateView(lastOpen, ExpandCollapseAnimation.COLLAPSE);
+                            }
+                            openItems.set(lastOpenPosition, false);
+                        }
+                        lastOpen = target;
+                        lastOpenPosition = position;
+                    } else if (lastOpenPosition == position) {
+                        lastOpenPosition = -1;
+                    }
+                    animateView(target, type);
+                }
+            }
+        });
+    }
 
-	/**
-	 * The actual state class
-	 */
-	static class SavedState extends View.BaseSavedState {
-		public BitSet openItems = null;
-		public int lastOpenPosition = -1;
+    private void updateExpandable(View target, int position) {
 
-		SavedState(Parcelable superState) {
-			super(superState);
-		}
+        final LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) target.getLayoutParams();
+        if (openItems.get(position)) {
+            target.setVisibility(View.VISIBLE);
+            params.bottomMargin = 0;
+        } else {
+            target.setVisibility(View.GONE);
+            params.bottomMargin = 0 - viewHeights.get(position);
+        }
+    }
 
-		private SavedState(Parcel in) {
-			super(in);
-			in.writeInt(lastOpenPosition);
-			writeBitSet(in, openItems);
-		}
+    /**
+     * Performs either COLLAPSE or EXPAND animation on the target view
+     *
+     * @param target the view to animate
+     * @param type   the animation type, either ExpandCollapseAnimation.COLLAPSE
+     *               or ExpandCollapseAnimation.EXPAND
+     */
+    private void animateView(final View target, final int type) {
+        Animation anim = new ExpandCollapseAnimation(
+                target,
+                type
+        );
+        anim.setDuration(getAnimationDuration());
+        target.startAnimation(anim);
+    }
 
-		@Override
-		public void writeToParcel(Parcel out, int flags) {
-			super.writeToParcel(out, flags);
-			lastOpenPosition = out.readInt();
-			 openItems = readBitSet(out);
-		}
 
-		//required field that makes Parcelables from a Parcel
-		public static final Creator<SavedState> CREATOR =
-		new Creator<SavedState>() {
-			public SavedState createFromParcel(Parcel in) {
-				return new SavedState(in);
-			}
-			public SavedState[] newArray(int size) {
-				return new SavedState[size];
-			}
-		};
-	}
+    /**
+     * Closes the current open item.
+     * If it is current visible it will be closed with an animation.
+     *
+     * @return true if an item was closed, false otherwise
+     */
+    public boolean collapseLastOpen() {
+        if (isAnyItemExpanded()) {
+            // if visible animate it out
+            if (lastOpen != null) {
+                animateView(lastOpen, ExpandCollapseAnimation.COLLAPSE);
+            }
+            openItems.set(lastOpenPosition, false);
+            lastOpenPosition = -1;
+            return true;
+        }
+        return false;
+    }
+
+    public Parcelable onSaveInstanceState(Parcelable parcelable) {
+
+        SavedState ss = new SavedState(parcelable);
+        ss.lastOpenPosition = this.lastOpenPosition;
+        ss.openItems = this.openItems;
+        return ss;
+    }
+
+    public void onRestoreInstanceState(SavedState state) {
+
+        this.lastOpenPosition = state.lastOpenPosition;
+        this.openItems = state.openItems;
+    }
+
+    /**
+     * Utility methods to read and write a bitset from and to a Parcel
+     */
+    private static BitSet readBitSet(Parcel src) {
+        int cardinality = src.readInt();
+
+        BitSet set = new BitSet();
+        for (int i = 0; i < cardinality; i++) {
+            set.set(src.readInt());
+        }
+
+        return set;
+    }
+
+    private static void writeBitSet(Parcel dest, BitSet set) {
+        int nextSetBit = -1;
+
+        dest.writeInt(set.cardinality());
+
+        while ((nextSetBit = set.nextSetBit(nextSetBit + 1)) != -1) {
+            dest.writeInt(nextSetBit);
+        }
+    }
+
+    /**
+     * The actual state class
+     */
+    static class SavedState extends View.BaseSavedState {
+        public BitSet openItems = null;
+        public int lastOpenPosition = -1;
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            in.writeInt(lastOpenPosition);
+            writeBitSet(in, openItems);
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            lastOpenPosition = out.readInt();
+            openItems = readBitSet(out);
+        }
+
+        //required field that makes Parcelables from a Parcel
+        public static final Creator<SavedState> CREATOR =
+                new Creator<SavedState>() {
+                    public SavedState createFromParcel(Parcel in) {
+                        return new SavedState(in);
+                    }
+
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                };
+    }
 }

@@ -1,0 +1,92 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="es.usc.citius.servando.calendula.activities.ReminderActivity">
+
+    <!--<es.usc.citius.servando.calendula.util.view.CustomDigitalClock-->
+    <!--android:id="@+id/clock"-->
+    <!--android:layout_width="200dp"-->
+    <!--android:layout_height="80dp"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:textColor="@color/android_blue_dark"-->
+    <!--android:textSize="60dp"-->
+    <!--android:gravity="center" />-->
+
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/imageView"
+        android:src="@drawable/calendula_flower_blurred"
+        android:scaleType="center" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/imageView2"
+        android:src="@color/white_50"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/imageView"
+        android:layout_alignStart="@+id/imageView" />
+
+
+    <Spinner
+        android:id="@+id/delays_spinner"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/delay"
+        android:visibility="visible"
+        android:layout_marginRight="0dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_alignParentLeft="true"
+        android:spinnerMode="dialog" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/delay"
+        android:id="@+id/reminder_delay_button"
+        style="@style/delay_button"
+
+        android:gravity="center_horizontal|center_vertical"
+        android:textColor="#ececec"
+        android:layout_alignBottom="@+id/delays_spinner"
+        android:layout_alignLeft="@+id/imageView"
+        android:layout_alignStart="@+id/imageView"
+        android:layout_margin="20dp" />
+
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="DO IT NOW"
+        android:id="@+id/reminder_done_button"
+        style="@style/done_button"
+        android:gravity="center"
+        android:layout_above="@+id/reminder_delay_button"
+        android:layout_alignLeft="@+id/imageView"
+        android:layout_margin="20dp" />
+
+    <AnalogClock
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/analogClock"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Its time to take your meds"
+        android:id="@+id/textView2"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="#fff"
+        android:textStyle="bold" />
+
+
+</RelativeLayout>
