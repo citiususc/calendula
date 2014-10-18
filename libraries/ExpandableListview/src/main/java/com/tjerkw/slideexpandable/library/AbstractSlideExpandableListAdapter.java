@@ -5,7 +5,11 @@ import android.os.Parcelable;
 import android.util.SparseIntArray;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 
@@ -26,6 +30,7 @@ public abstract class AbstractSlideExpandableListAdapter extends WrapperListAdap
      * though there is an expanded list item
      */
     private View lastOpen = null;
+    private View lastButton = null;
     /**
      * The position of the last expanded list item.
      * If -1 there is no list item expanded.
@@ -37,7 +42,7 @@ public abstract class AbstractSlideExpandableListAdapter extends WrapperListAdap
      * Default Animation duration
      * Set animation duration with @see setAnimationDuration
      */
-    private int animationDuration = 330;
+    private int animationDuration = 200;
 
     /**
      * A list of positions of all list items that are expanded.
@@ -60,6 +65,13 @@ public abstract class AbstractSlideExpandableListAdapter extends WrapperListAdap
         if (lastOpen != -1)
             openItems.set(lastOpenPosition, true);
     }
+
+//    public void updateOpenItems(int... items){
+//        openItems.clear();
+//        for(int i:items){
+//            openItems.set(i,true);
+//        }
+//    }
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
@@ -157,13 +169,14 @@ public abstract class AbstractSlideExpandableListAdapter extends WrapperListAdap
             // re reference to the last view
             // so when can animate it when collapsed
             lastOpen = target;
+            lastButton = button;
         }
         int height = viewHeights.get(position, -1);
         if (height == -1) {
             viewHeights.put(position, target.getMeasuredHeight());
-            updateExpandable(target, position);
+            updateExpandable(target, button,position);
         } else {
-            updateExpandable(target, position);
+            updateExpandable(target, button, position);
         }
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -207,27 +220,29 @@ public abstract class AbstractSlideExpandableListAdapter extends WrapperListAdap
                     if (type == ExpandCollapseAnimation.EXPAND) {
                         if (lastOpenPosition != -1 && lastOpenPosition != position) {
                             if (lastOpen != null) {
-                                animateView(lastOpen, ExpandCollapseAnimation.COLLAPSE);
+                                animateView(lastOpen, lastButton, ExpandCollapseAnimation.COLLAPSE);
                             }
                             openItems.set(lastOpenPosition, false);
                         }
                         lastOpen = target;
+                        lastButton = button;
                         lastOpenPosition = position;
                     } else if (lastOpenPosition == position) {
                         lastOpenPosition = -1;
                     }
-                    animateView(target, type);
+                    animateView(target, button, type);
                 }
             }
         });
     }
 
-    private void updateExpandable(View target, int position) {
+    private void updateExpandable(View target, View button, int position) {
 
         final LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) target.getLayoutParams();
         if (openItems.get(position)) {
             target.setVisibility(View.VISIBLE);
             params.bottomMargin = 0;
+            button.setRotation(180);
         } else {
             target.setVisibility(View.GONE);
             params.bottomMargin = 0 - viewHeights.get(position);
@@ -241,13 +256,42 @@ public abstract class AbstractSlideExpandableListAdapter extends WrapperListAdap
      * @param type   the animation type, either ExpandCollapseAnimation.COLLAPSE
      *               or ExpandCollapseAnimation.EXPAND
      */
-    private void animateView(final View target, final int type) {
+    private void animateView(final View target, final View button,  final int type) {
         Animation anim = new ExpandCollapseAnimation(
                 target,
                 type
         );
         anim.setDuration(getAnimationDuration());
         target.startAnimation(anim);
+        animateButton(button,type);
+    }
+
+    protected void animateButton(final View button, int type){
+
+        final int from = button.getRotation()==0?0:180;
+        final int to = button.getRotation()==0?180:0;
+
+        button.setRotation(to);
+
+//        RotateAnimation anim = new RotateAnimation(from,to,Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+//        anim.setDuration(200);
+//        anim.setFillAfter(true);
+//        anim.setInterpolator(new LinearInterpolator());
+//        anim.setAnimationListener(new Animation.AnimationListener() {
+//            @Override
+//            public void onAnimationStart(Animation animation) {
+//
+//            }
+//            @Override
+//            public void onAnimationEnd(Animation animation) {
+//                //button.setRotation(to);
+//            }
+//            @Override
+//            public void onAnimationRepeat(Animation animation) {
+//
+//            }
+//        });
+//        button.startAnimation(anim);
     }
 
 
@@ -261,7 +305,7 @@ public abstract class AbstractSlideExpandableListAdapter extends WrapperListAdap
         if (isAnyItemExpanded()) {
             // if visible animate it out
             if (lastOpen != null) {
-                animateView(lastOpen, ExpandCollapseAnimation.COLLAPSE);
+                animateView(lastOpen, lastButton, ExpandCollapseAnimation.COLLAPSE);
             }
             openItems.set(lastOpenPosition, false);
             lastOpenPosition = -1;
@@ -344,4 +388,11 @@ public abstract class AbstractSlideExpandableListAdapter extends WrapperListAdap
                     }
                 };
     }
+
+    public void setLastOpenPosition(int lastOpenPosition){
+        this.lastOpenPosition=lastOpenPosition;
+        openItems.clear();
+        openItems.set(lastOpenPosition,true);
+    }
+
 }

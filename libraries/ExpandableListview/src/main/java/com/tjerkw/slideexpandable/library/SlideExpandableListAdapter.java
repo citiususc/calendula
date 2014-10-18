@@ -1,6 +1,7 @@
 package com.tjerkw.slideexpandable.library;
 
 import android.view.View;
+import android.view.animation.Interpolator;
 import android.widget.ListAdapter;
 
 /**
@@ -34,4 +35,5 @@ public class SlideExpandableListAdapter extends AbstractSlideExpandableListAdapt
     public View getExpandableView(View parent) {
         return parent.findViewById(expandable_view_id);
     }
+
 }

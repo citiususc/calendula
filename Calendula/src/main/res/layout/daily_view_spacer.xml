@@ -3,7 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/activity_background_color">
+    >
+    <!--android:background="@color/android_blue_dark"-->
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -16,9 +17,10 @@
 
     <RelativeLayout
         android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_height="130dp"
         android:visibility="visible"
         android:id="@+id/top"
+
         android:layout_gravity="bottom">
 
         <RelativeLayout
@@ -37,15 +39,6 @@
                 android:visibility="gone" />
 
         </RelativeLayout>
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="5dp"
-            android:id="@+id/imageView"
-            android:layout_alignParentBottom="true"
-            android:src="@drawable/daily_view_list_item_tab_shadow_top"
-            android:scaleType="fitXY"
-            android:visibility="gone" />
 
     </RelativeLayout>
 

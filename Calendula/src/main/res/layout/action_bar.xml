@@ -14,7 +14,7 @@
         android:textSize="15sp"
         android:text="CALENDULA"
         android:textStyle="bold"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:layout_centerHorizontal="true" />
 
 

@@ -427,7 +427,7 @@ public class HomeActivity extends ActionBarActivity implements
             case R.id.action_settings:
                 return true;
             case R.id.action_expand:
-                ((DailyAgendaFragment) getViewPagerFragment(0)).toogleExpand();
+                ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
                 return true;
 
         }
@@ -483,11 +483,9 @@ public class HomeActivity extends ActionBarActivity implements
 
         invalidateOptionsMenu();
         if (i == 0) {
-//            setCustomTitle(Session.instance().getUser().getName());
-//            actionBarImage.setVisibility(View.VISIBLE);
+            hideAddButton();
         } else {
             setCustomTitle(titles[i]);
-//            actionBarImage.setVisibility(View.INVISIBLE);
         }
 
         if(i > 0){
@@ -542,12 +540,7 @@ public class HomeActivity extends ActionBarActivity implements
 
     public void showAddButton() {
 
-        if (mViewPager.getCurrentItem() != 0 && !addButtonShown) {
-//            setCustomTitle(titles[0]);
-//            actionBarImage.setVisibility(View.INVISIBLE);
-//        }
-//
-//        if (!addButtonShown) {
+        if (!addButtonShown) {
             addButtonShown = true;
             Animation slideUp = AnimationUtils.loadAnimation(this, R.anim.anim_slide_up_2);
             slideUp.setFillAfter(true);
@@ -559,7 +552,7 @@ public class HomeActivity extends ActionBarActivity implements
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-
+                    addButton.setVisibility(View.GONE);
                 }
 
                 @Override
@@ -568,7 +561,6 @@ public class HomeActivity extends ActionBarActivity implements
                 }
             });
             addButton.startAnimation(slideUp);
-
         }
     }
 

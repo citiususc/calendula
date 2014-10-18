@@ -13,8 +13,16 @@
     <!--android:layout_alignParentTop="true"/>-->
 
 
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="135dp"
+        android:id="@+id/imageView"
+        android:background="@color/android_blue_dark" />
+
     <ListView
         android:id="@+id/listview"
+        android:background="@color/activity_background_color"
+        android:scrollbars="none"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:divider="@null"
