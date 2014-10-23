@@ -16,6 +16,7 @@
     <string name="home_menu_plantrip">PLAN TRIP</string>
     <string name="action_bar_title_today">Today</string>
     <string name="action_bar_title_home">Home</string>
+    <string name="medicine">medicine</string>
 
     <string-array name="home_action_list">
         <item>Calendula</item>
@@ -93,13 +94,23 @@
     <string name="unknown_units">Unknown</string>
     <string name="effervescent_units">sachet</string>
 
+    <string name="never">Never</string>
+    <string name="every_day">Every day</string>
+    <string name="once_a_day">Once a day</string>
+    <string name="twice_a_day">Twice a day</string>
+    <string name="tree_times_a_day">Three times a day</string>
+    <string name="four_times_a_day">Four times a day</string>
+    <string name="times_a_day">times a day</string>
+    <string name="and">and</string>
+
     <!-- Med schedules -->
     <string-array name="schedules_array">
-        <item>Once a day</item>
-        <item>Twice a day</item>
-        <item>Three times a day</item>
-        <item>Four times a day</item>
+        <item>@string/once_a_day</item>
+        <item>@string/twice_a_day</item>
+        <item>@string/tree_times_a_day</item>
+        <item>@string/four_times_a_day</item>
     </string-array>
+
 
     <!-- Med schedules -->
     <string-array name="delays_array">
