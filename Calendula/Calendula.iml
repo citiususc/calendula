@@ -78,7 +78,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
     </content>
-    <orderEntry type="jdk" jdkName="Android API 18 Platform" jdkType="Android SDK" />
+    <orderEntry type="jdk" jdkName="Android API 20 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="fab-0.0.5" level="project" />
     <orderEntry type="library" exported="" name="activeandroid-3.1.0-SNAPSHOT" level="project" />
@@ -90,6 +90,7 @@
     <orderEntry type="library" exported="" name="joda-time-2.3" level="project" />
     <orderEntry type="library" exported="" name="library-2.4.0" level="project" />
     <orderEntry type="library" exported="" name="gson-jodatime-serialisers-1.1.0" level="project" />
+    <orderEntry type="library" exported="" name="library-1.5.2" level="project" />
     <orderEntry type="module" module-name="ExpandableListview" exported="" />
     <orderEntry type="module" module-name="ShowcaseView" exported="" />
   </component>
