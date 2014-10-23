@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/list_item_shadow" />
+
+    <item
+        android:drawable="@drawable/shape_list_item_bg_active"
+        android:bottom="3px"
+        android:right="3px" />
+
+</layer-list>

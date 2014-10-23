@@ -4,36 +4,51 @@
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/action_bar_height"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="es.usc.citius.servando.calendula.activities.ReminderActivity">
-
-    <es.usc.citius.servando.calendula.util.view.CustomDigitalClock
-        android:id="@+id/clock"
-        android:layout_width="200dp"
-        android:layout_height="80dp"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/android_blue_dark"
-        android:textSize="60dp"
-        android:gravity="center" />
+    tools:context="es.usc.citius.servando.calendula.activities.ReminderActivity"
+    android:background="@color/android_blue_dark">
 
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/prof_container"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/meds_time"
-        android:id="@+id/meds_time_textview"
-        android:layout_centerInParent="true"
-        android:layout_below="@+id/clock"
-        android:textColor="@color/android_blue" />
+        android:padding="20dp"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:background="@drawable/shape_list_item">
+
+        <es.usc.citius.servando.calendula.util.view.CustomDigitalClock
+            android:id="@+id/clock"
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/android_blue_dark"
+            android:textSize="60dp"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Lunch, 3 meds"
+            android:layout_below="@+id/prof_container"
+            android:id="@+id/meds_time_textview"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:textColor="@color/dark_grey_text"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
 
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/scrollView"
-        android:layout_below="@id/meds_time_textview"
+        android:layout_below="@id/prof_container"
         android:layout_marginBottom="55dp"
         android:layout_marginTop="25dp">
 

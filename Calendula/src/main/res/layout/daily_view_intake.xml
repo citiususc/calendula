@@ -20,7 +20,7 @@
             android:id="@+id/routine_list_item_container">
 
             <ImageButton
-                android:layout_width="30dp"
+                android:layout_width="40dp"
                 android:layout_height="30dp"
                 android:visibility="visible"
                 android:src="@drawable/arrow_down"
@@ -42,7 +42,8 @@
                 android:layout_toRightOf="@+id/linearLayout"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="20dp"
-                android:textAllCaps="true" />
+                android:textAllCaps="true"
+                android:ellipsize="end" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -57,7 +58,7 @@
                     android:layout_height="20dp"
                     android:id="@+id/imageButton2"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_alarm"
+                    android:src="@drawable/ic_alarm_black_48dp"
                     android:background="@null"
                     android:scaleType="fitCenter"
                     android:layout_gravity="center_vertical"

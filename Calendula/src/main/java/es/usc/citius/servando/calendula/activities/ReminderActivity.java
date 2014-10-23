@@ -1,7 +1,7 @@
 package es.usc.citius.servando.calendula.activities;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,12 +28,11 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 
-public class ReminderActivity extends Activity {
+public class ReminderActivity extends FragmentActivity {
 
     public static final String TAG = ReminderActivity.class.getName();
 
     LinearLayout list;
-    //ArrayList<ScheduleReminder> reminders = new ArrayList<ScheduleReminder>();
 
     Button delayButton = null;
     Button doneButton = null;
@@ -86,6 +85,8 @@ public class ReminderActivity extends Activity {
             Toast.makeText(this, "Error: " + routineId, Toast.LENGTH_SHORT).show();
             finish();
         }
+        //opening transition animations
+        overridePendingTransition(R.anim.activity_open_scale, 0);
     }
 
 
@@ -160,8 +161,8 @@ public class ReminderActivity extends Activity {
             final View background = entry.findViewById(R.id.reminder_item_container);
             final ToggleButton checkButton = (ToggleButton) entry.findViewById(R.id.check_button);
 
-            ((TextView) entry.findViewById(R.id.med_name)).setText(med.name());
-            ((TextView) entry.findViewById(R.id.med_dose)).setText(getDisplayableDose((int) scheduleItem.dose(), med, r));
+            ((TextView) entry.findViewById(R.id.med_item_name)).setText(med.name());
+            ((TextView) entry.findViewById(R.id.med_item_dose)).setText(getDisplayableDose((int) scheduleItem.dose(), med, r));
 
             entry.setTag(dsi);
 

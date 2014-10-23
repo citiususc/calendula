@@ -25,8 +25,8 @@
                 tools:context=".HomeActivity" />
 
             <com.shamanland.fab.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:src="@drawable/ic_action_add"
                 android:scaleType="fitCenter"
                 app:floatingActionButtonColor="@color/android_blue"

@@ -1,12 +1,14 @@
 package es.usc.citius.servando.calendula.activities;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -20,7 +22,7 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 
-public class AgendaDetailActivity extends Activity {
+public class AgendaDetailActivity extends FragmentActivity {
 
     public static final String TAG = AgendaDetailActivity.class.getName();
 
@@ -30,15 +32,17 @@ public class AgendaDetailActivity extends Activity {
     List<ScheduleItem> doses;
     boolean totalChecked;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         //getActionBar().hide();
         setContentView(R.layout.activity_agenda_detail);
-
+//        getActionBar().hide();
         list = (LinearLayout) findViewById(R.id.reminder_list);
         doneButton = (Button) findViewById(R.id.reminder_done_button);
+
         hour = getIntent().getIntExtra("hour", 0);
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,9 +54,19 @@ public class AgendaDetailActivity extends Activity {
                 finish();
             }
         });
+
+
         doses = ScheduleUtils.getHourScheduleItems(hour, true);
-        Log.d(TAG, "Hour: " + hour + ", doses: " + doses.size());
+        overridePendingTransition(0, 0);
+        //Log.d(TAG, "Hour: " + hour + ", doses: " + doses.size());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         fillReminderList();
+        list.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(this, R.anim.reminder_list_controller));
+        list.getLayoutAnimation().start();
     }
 
     public String getDisplayableDose(int dose, Medicine m, Routine r) {
@@ -84,8 +98,9 @@ public class AgendaDetailActivity extends Activity {
             final View background = entry.findViewById(R.id.reminder_item_container);
             final ToggleButton checkButton = (ToggleButton) entry.findViewById(R.id.check_button);
 
-            ((TextView) entry.findViewById(R.id.med_name)).setText(med.name());
-            ((TextView) entry.findViewById(R.id.med_dose)).setText(getDisplayableDose((int) scheduleItem.dose(), med, r));
+            ((TextView) entry.findViewById(R.id.med_item_name)).setText(med.name());
+            ((ImageView) entry.findViewById(R.id.imageView)).setImageResource(med.presentation().getDrawable());
+            ((TextView) entry.findViewById(R.id.med_item_dose)).setText(getDisplayableDose((int) scheduleItem.dose(), med, r));
 
             entry.setTag(dsi);
 
@@ -94,8 +109,10 @@ public class AgendaDetailActivity extends Activity {
                 public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                     background.setSelected(checked);
                     DailyScheduleItem dailyScheduleItem = (DailyScheduleItem) entry.getTag();
-                    dailyScheduleItem.setTakenToday(true);
+                    dailyScheduleItem.setTakenToday(checked);
                     dailyScheduleItem.save();
+
+                    Log.d("Detail", dailyScheduleItem.scheduleItem().schedule().medicine().name() + " taken: " + checked);
                 }
             });
 

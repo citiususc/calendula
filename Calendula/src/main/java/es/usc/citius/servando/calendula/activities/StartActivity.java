@@ -148,7 +148,7 @@ public class StartActivity extends Activity {
             if (STATUS_SESSION_OPEN.equals(result) || STATUS_SESSION_RESUMED.equals(result)) {
                 switch (action) {
                     case ACTION_SHOW_REMINDERS:
-                        Intent i = new Intent(getBaseContext(), ReminderActivity.class);
+                        Intent i = new Intent(getBaseContext(), HomeActivity.class);
                         i.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1));
                         startActivity(i);
                         break;

@@ -39,9 +39,6 @@ public class MedicinesListFragment extends Fragment {
         mMedicines = Medicine.findAll();
         adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
         listview.setAdapter(adapter);
-
-        //MedicineStore.instance().addListener(this);
-
         rootView.findViewById(R.id.medicine_add_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,12 +50,9 @@ public class MedicinesListFragment extends Fragment {
     }
 
     public void notifyDataChange() {
-        Log.d(getTag(), "Notify data change");
-        mMedicines = Medicine.findAll();
-        adapter.clear();
-        for (Medicine m : mMedicines) {
-            adapter.add(m);
-        }
+        Log.d(getTag(), "Medicines - Notify data change");
+        mMedicines.clear();
+        mMedicines.addAll(Medicine.findAll());
         adapter.notifyDataSetChanged();
     }
 
@@ -84,7 +78,6 @@ public class MedicinesListFragment extends Fragment {
                 } else {
                     Log.d(getTag(), "No callback set");
                 }
-
             }
         };
 
@@ -131,16 +124,12 @@ public class MedicinesListFragment extends Fragment {
             final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
             return createMedicineListItem(layoutInflater, mMedicines.get(position));
         }
-
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
-        Log.d(getTag(), "Activity " + activity.getClass().getName() + ", " + (activity instanceof OnMedicineSelectedListener));
-        // If the container activity has implemented
-        // the callback interface, set it as listener
+        // If the container activity has implemented the callback interface, set it as listener
         if (activity instanceof OnMedicineSelectedListener) {
             mMedicineSelectedCallback = (OnMedicineSelectedListener) activity;
         }
@@ -155,10 +144,11 @@ public class MedicinesListFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        MedicineStore.instance().removeListener(this);
     }
 
+    //
     // Container Activity must implement this interface
+    //
     public interface OnMedicineSelectedListener {
         public void onMedicineSelected(Medicine m);
 
