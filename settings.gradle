@@ -1,1 +1,1 @@
-include ':Calendula', ':libraries:ExpandableListview', ':libraries:ShowcaseView'
+include ':Calendula', ':libraries:ExpandableListview'

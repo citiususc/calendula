@@ -33,9 +33,10 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.espian.showcaseview.OnShowcaseEventListener;
-import com.espian.showcaseview.ShowcaseView;
-import com.espian.showcaseview.targets.PointTarget;
+import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
+import com.github.amlcurran.showcaseview.targets.PointTarget;
 
 import java.util.Arrays;
 import java.util.List;
@@ -51,7 +52,6 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.user.Session;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Screen;
-
 
 public class HomeActivity extends ActionBarActivity implements
         ViewPager.OnPageChangeListener,
@@ -139,8 +139,9 @@ public class HomeActivity extends ActionBarActivity implements
 
         boolean welcome = getIntent().getBooleanExtra("welcome",false);
         if(welcome) {
-            Toast.makeText(getBaseContext(), "Welcome to calendula!", Toast.LENGTH_SHORT).show();
+            showShowCase();
         }
+
 
 
     }
@@ -368,30 +369,67 @@ public class HomeActivity extends ActionBarActivity implements
 
 
     private void showShowCase() {
-        if (!showcaseShown) {
-            ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
-            co.hideOnClickOutside = true;
-            PointTarget pt = new PointTarget((int) Screen.getDpSize(this).x * 2, (int) Screen.getDpSize(this).y);
-            sv = ShowcaseView.insertShowcaseView(pt, HomeActivity.this, "Daily agenda", "Swipe left to se the full agenda", co);
-            sv.setOnShowcaseEventListener(new OnShowcaseEventListener() {
-                @Override
-                public void onShowcaseViewHide(ShowcaseView showcaseView) {
-                    Log.d("SV", "Hide showcase at home");
-                    sv = null;
-                }
+//        if (!showcaseShown) {
+//            ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
+//            co.hideOnClickOutside = true;
+//            PointTarget pt = new PointTarget((int) Screen.getDpSize(this).x * 2, (int) Screen.getDpSize(this).y);
+//            sv = ShowcaseView.insertShowcaseView(pt, HomeActivity.this, "Daily agenda", "Swipe left to se the full agenda", co);
+//            sv.setOnShowcaseEventListener(new OnShowcaseEventListener() {
+//                @Override
+//                public void onShowcaseViewHide(ShowcaseView showcaseView) {
+//                    Log.d("SV", "Hide showcase at home");
+//                    sv = null;
+//                }
+//
+//                @Override
+//                public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+//                    Log.d("SV", "DidHide showcase at home");
+//                }
+//
+//                @Override
+//                public void onShowcaseViewShow(ShowcaseView showcaseView) {
+//                    Log.d("SV", "Show showcase at home");
+//                    showcaseShown = true;
+//                }
+//            });
 
-                @Override
-                public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
-                    Log.d("SV", "DidHide showcase at home");
-                }
+        ShowcaseView sv = new ShowcaseView.Builder(this)
+                    .setTarget(new ActionViewTarget(this, ActionViewTarget.Type.HOME))
+                    .setContentTitle("Welcome to Calendula!")
+                    .setContentText("See the menu to ...")
+                    .hideOnTouchOutside()
+                    .build();
 
-                @Override
-                public void onShowcaseViewShow(ShowcaseView showcaseView) {
-                    Log.d("SV", "Show showcase at home");
-                    showcaseShown = true;
-                }
-            });
-        }
+        sv.setOnShowcaseEventListener(new OnShowcaseEventListener() {
+            @Override
+            public void onShowcaseViewHide(ShowcaseView showcaseView) {
+                new ShowcaseView.Builder(HomeActivity.this)
+                        .setTarget(new PointTarget(
+                                (int) Screen.getDpSize(HomeActivity.this).x * 2,
+                                (int) Screen.getDpSize(HomeActivity.this).y))
+                        .setContentTitle("Discover")
+                        .doNotBlockTouches()
+                        .setContentText("Swipe left to see...")
+                        .hideOnTouchOutside()
+                        .build().show();
+            }
+
+            @Override
+            public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+
+            }
+
+            @Override
+            public void onShowcaseViewShow(ShowcaseView showcaseView) {
+
+            }
+        });
+
+        sv.show();
+
+
+
+//        }
     }
 
     @Override

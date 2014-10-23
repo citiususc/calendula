@@ -19,11 +19,6 @@ import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
-import com.espian.showcaseview.OnShowcaseEventListener;
-import com.espian.showcaseview.ShowcaseView;
-import com.espian.showcaseview.targets.PointTarget;
-import com.espian.showcaseview.targets.ViewTarget;
-
 import java.util.ArrayList;
 
 import es.usc.citius.servando.calendula.R;
@@ -47,7 +42,6 @@ public class MedicineCreateOrEditFragment extends Fragment {
     Presentation selectedPresentation;
     HorizontalScrollView presentationScroll;
 
-    ShowcaseView sv;
     boolean showcaseShown = false;
 
 
@@ -339,37 +333,6 @@ public class MedicineCreateOrEditFragment extends Fragment {
     void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mNameTextView.getWindowToken(), 0);
-    }
-
-
-    void showShowCase() {
-        if (!showcaseShown) {
-            ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
-            co.hideOnClickOutside = true;
-//            co.centerText = true;
-            ViewTarget target = new ViewTarget(R.id.med_presentation, getActivity());
-            sv = ShowcaseView.insertShowcaseView(target, getActivity(), "Daily agenda", "Swipe left to se the full agenda", co);
-            PointTarget pt = new PointTarget((int) Screen.getDpSize(getActivity()).x, (int) (Screen.getDpSize(getActivity()).y * 1.2));
-            sv = ShowcaseView.insertShowcaseView(pt, getActivity(), "Medicine presentation", "Scroll to see all available types", co);
-            sv.setOnShowcaseEventListener(new OnShowcaseEventListener() {
-                @Override
-                public void onShowcaseViewHide(ShowcaseView showcaseView) {
-                    Log.d("SV", "Hide showcase at med");
-                    sv = null;
-                }
-
-                @Override
-                public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
-                    Log.d("SV", "DidHide showcase at med");
-                }
-
-                @Override
-                public void onShowcaseViewShow(ShowcaseView showcaseView) {
-                    Log.d("SV", "Show showcase at med");
-                    showcaseShown = true;
-                }
-            });
-        }
     }
 
 
