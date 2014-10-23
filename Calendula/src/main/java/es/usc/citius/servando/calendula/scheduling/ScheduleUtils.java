@@ -1,10 +1,14 @@
 package es.usc.citius.servando.calendula.scheduling;
 
+import android.content.Context;
+
 import org.joda.time.DateTime;
 
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
@@ -16,25 +20,33 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
  */
 public class ScheduleUtils {
 
+
     public static String[] dayNames = new String[]{"Mon", "Tue", "Wed", "Thu", "Fry", "Sat", "Sun"}; // 7 days
 
-    public static String getTimesStr(int items) {
+    static {
+        DateFormatSymbols symbols = new DateFormatSymbols();
+        dayNames = symbols.getShortWeekdays();
+        for (int i = 0; i < dayNames.length; i++) {
+            dayNames[i] = dayNames[i].toUpperCase();
+        }
+    }
+
+    public static String getTimesStr(int items, Context ctx) {
+
 
         switch (items) {
             case 0:
-                return "Never";
+                return ctx.getString(R.string.never);
             case 1:
-                return "Once a day";
+                return ctx.getString(R.string.once_a_day);
             case 2:
-                return "Twice a day";
+                return ctx.getString(R.string.twice_a_day);
             case 3:
-                return "Three times a day";
+                return ctx.getString(R.string.tree_times_a_day);
             case 4:
-                return "Four times a day";
-            case 5:
-                return "Five times a day";
+                return ctx.getString(R.string.four_times_a_day);
             default:
-                return items + " times a day";
+                return items + ctx.getString(R.string.times_a_day);
         }
 
     }
@@ -81,33 +93,34 @@ public class ScheduleUtils {
         return doses;
     }
 
-    public static String stringifyDays(String[] days) {
+    public static String stringifyDays(String[] days, Context ctx) {
         String dayStr = "";
         for (int i = 0; i < days.length - 1; i++) {
             if (i > 0)
                 dayStr += ", ";
             dayStr += days[i];
         }
-        return dayStr + ((days.length > 1 ? " and " : "") + days[days.length - 1]);
+        return dayStr + ((days.length > 1 ? " " + ctx.getString(R.string.and) + " " : "") + days[days.length - 1]);
     }
 
-    public static String stringifyDays(boolean[] checkedDays) {
+    public static String stringifyDays(boolean[] checkedDays, Context ctx) {
 
         String[] days = getSelectedDays(checkedDays);
 
         if (days.length == 7) {
-            return "Every day";//TODO get from resources
+            return ctx.getString(R.string.every_day);
         } else if (days.length == 0) {
-            return "Never";//TODO get from resources
+            return ctx.getString(R.string.never);
         }
 
         String dayStr = "";
         for (int i = 0; i < days.length - 1; i++) {
-            if (i > 0)
+            if (i > 0) {
                 dayStr += ", ";
+            }
             dayStr += days[i];
         }
-        return dayStr + ((days.length > 1 ? " and " : "") + days[days.length - 1]);
+        return dayStr + ((days.length > 1 ? " " + ctx.getString(R.string.and) + " " : "") + days[days.length - 1]);
     }
 
     public static String[] getSelectedDays(boolean[] days) {

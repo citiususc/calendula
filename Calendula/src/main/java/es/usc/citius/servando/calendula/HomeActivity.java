@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -132,27 +133,16 @@ public class HomeActivity extends ActionBarActivity implements
         mActionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
         mViewPager.setOnPageChangeListener(this);
 
-
-//        actionBarImage=(ImageView)findViewById(R.id.action_bar_profile_image);
-//        actionBarImage.setImageBitmap(Session.instance().getUserProfileImage(this));
-//        actionBarImage.setVisibility(View.INVISIBLE);
-//        actionBarImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ((DailyAgendaFragment)getViewPagerFragment(0)).editProfile();
-//            }
-//        });
         addButton = findViewById(R.id.add_button);
         addButton.setOnClickListener(this);
-
-//        SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
-//        mViewPager.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
-//        mDrawerList.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
+        hideAddButton();
 
         boolean welcome = getIntent().getBooleanExtra("welcome",false);
         if(welcome) {
             Toast.makeText(getBaseContext(), "Welcome to calendula!", Toast.LENGTH_SHORT).show();
         }
+
+
     }
 
     @TargetApi(19)
@@ -173,13 +163,13 @@ public class HomeActivity extends ActionBarActivity implements
             case 0:
                 return R.drawable.ic_small_home_w;
             case 2:
-                return R.drawable.ic_small_alarm;
-            case 4:
-                return R.drawable.ic_pill;
+                return R.drawable.ic_alarm_white_48dp;
             case 3:
-                return R.drawable.ic_small_calendar_w;
+                return R.drawable.ic_pill;
+            case 4:
+                return R.drawable.ic_event_white_48dp;
             case 6:
-                return R.drawable.ic_small_pin_w;
+                return R.drawable.ic_room_white_48dp;
             case 7:
                 return R.drawable.ic_small_plane_w;
             default:
@@ -357,13 +347,24 @@ public class HomeActivity extends ActionBarActivity implements
 
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        long remindRoutineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l);
+        if (remindRoutineId != -1) {
+            showReminder(remindRoutineId);
+            Log.d("Home", (mViewPager == null) + ", " + mViewPager.getCurrentItem() + ", " + mViewPager.getAdapter().getCount());
+        }
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        long remindRoutineId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l);
+        if (remindRoutineId != -1) {
+            showReminder(remindRoutineId);
+            Log.d("Home", (mViewPager == null) + ", " + mViewPager.getCurrentItem() + ", " + mViewPager.getAdapter().getCount());
+        }
+    }
 
 
     private void showShowCase() {
@@ -405,7 +406,13 @@ public class HomeActivity extends ActionBarActivity implements
     public boolean onPrepareOptionsMenu(Menu menu) {
         int pageNum = mViewPager.getCurrentItem();
         if (pageNum == 0) {
+
+            boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
             menu.findItem(R.id.action_expand).setVisible(true);
+            menu.findItem(R.id.action_expand).setIcon(
+                    getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_white_48dp : R.drawable.ic_unfold_more_white_48dp)
+            );
+
 
         } else {
             menu.findItem(R.id.action_expand).setVisible(false);
@@ -428,6 +435,11 @@ public class HomeActivity extends ActionBarActivity implements
                 return true;
             case R.id.action_expand:
                 ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
+                boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
+                item.setIcon(
+                        getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_white_48dp : R.drawable.ic_unfold_more_white_48dp)
+                );
+
                 return true;
 
         }
@@ -458,9 +470,17 @@ public class HomeActivity extends ActionBarActivity implements
 
     @Override
     public void onBackPressed() {
+
+        boolean backProcesed = false;
+
+        Fragment current = getViewPagerFragment(mViewPager.getCurrentItem());
+        if (current instanceof OnBackPressedListener) {
+            backProcesed = ((OnBackPressedListener) current).doBack();
+        }
+
         if (mViewPager.getCurrentItem() != 0)
             mViewPager.setCurrentItem(0);
-        else {
+        else if (!backProcesed) {
             super.onBackPressed();
         }
     }
@@ -478,10 +498,24 @@ public class HomeActivity extends ActionBarActivity implements
 
     }
 
+    void showReminder(Long routineId) {
+        final Routine r = Routine.findById(routineId);
+        Toast.makeText(this, "Take your meds (" + r.name() + ")", Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mViewPager.setCurrentItem(0);
+                ((DailyAgendaFragment) getViewPagerFragment(0)).showReminder(r);
+            }
+        }, 1000);
+
+    }
+
     @Override
     public void onPageSelected(int i) {
 
         invalidateOptionsMenu();
+
         if (i == 0) {
             hideAddButton();
         } else {
@@ -501,15 +535,15 @@ public class HomeActivity extends ActionBarActivity implements
 
     public void hideAddButton(boolean showProfile) {
 //        this.profileShown = showProfile;
-        hideAddButton();
+//        hideAddButton();
     }
 
     public void showAddButton(boolean showProfile) {
 //        this.profileShown = showProfile;
-        showAddButton();
+//        showAddButton();
     }
 
-    public void hideAddButton() {
+    private void hideAddButton() {
         if (addButtonShown) {
             addButtonShown = false;
             Animation slideDown = AnimationUtils.loadAnimation(this, R.anim.anim_slide_down_2);
@@ -538,7 +572,7 @@ public class HomeActivity extends ActionBarActivity implements
         }
     }
 
-    public void showAddButton() {
+    private void showAddButton() {
 
         if (!addButtonShown) {
             addButtonShown = true;
@@ -570,6 +604,11 @@ public class HomeActivity extends ActionBarActivity implements
 
     public void setCustomTitle(String title) {
         ((TextView) findViewById(R.id.action_bar_custom_title)).setText(title);
+    }
+
+
+    public interface OnBackPressedListener {
+        public boolean doBack();
     }
 
 

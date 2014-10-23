@@ -36,4 +36,35 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/transparent_black_overlay_transition"
+        android:visibility="invisible"
+        android:id="@+id/zoom_container"
+        android:padding="20dp">
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/shape_list_item"
+            android:visibility="visible"
+            android:padding="10dp"
+            android:id="@+id/content_wrapper">
+
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/shape_list_item"
+                android:visibility="invisible"
+                android:id="@+id/content">
+
+                <include
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    layout="@layout/activity_agenda_zoom" />
+            </FrameLayout>
+        </FrameLayout>
+    </FrameLayout>
+
 </RelativeLayout>

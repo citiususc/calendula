@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Calendula</string>
+    <string name="title_home">Inicio</string>
+    <string name="title_daily_agenda">Hoy</string>
+    <string name="action_settings">Opciones</string>
+    <string name="action_remove">Eliminar</string>
+    <string name="action_remove_all">Eliminar todo all</string>
+
+    <string name="action_exit">Salir</string>
+    <string name="home_menu_routines">RUTINAS</string>
+    <string name="home_menu_medicines">MEDICINAS</string>
+    <string name="home_menu_schedules">PAUTAS</string>
+    <string name="home_menu_pharmacies">FARMACIAS</string>
+    <string name="home_menu_plantrip">PLAN DE VIAJE</string>
+    <string name="action_bar_title_today">Hoy</string>
+    <string name="action_bar_title_home">Inicio</string>
+    <string name="medicine">medicina</string>
+    <string-array name="home_action_list">
+        <item>Calendula</item>
+        <item>Rutinas</item>
+        <item>Medicinas</item>
+        <item>Pautas</item>
+    </string-array>
+
+    <string name="drawer_menu_option">Menú</string>
+    <string name="drawer_services_option">Herramientas</string>
+
+    <string-array name="home_drawer_actions">
+        <item>Inicio</item>
+        <item>@string/drawer_menu_option</item>
+        <item>Rutinas</item>
+        <item>Medicinas</item>
+        <item>Pautas</item>
+        <item>@string/drawer_services_option</item>
+        <item>Farmacias</item>
+        <item>Plan de viaje</item>
+    </string-array>
+
+    <string name="title_activity_routines">Rutinas</string>
+    <string name="title_edit_routine_activity">Editar rutina</string>
+    <string name="title_create_routine_activity">Crer rutina</string>
+    <string name="title_activity_medicines">Medicinas</string>
+    <string name="title_edit_medicine_activity">Editar medicina</string>
+    <string name="title_create_medicine_activity">Nueva medicina</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="routine_name">Nombre de la rutina</string>
+    <string name="routine_time">Hora</string>
+    <string name="edit_routine_button_text">Guardar cambios</string>
+    <string name="create_routine_button_text">Crear rutina</string>
+    <string name="create_new_routine">Crear nueva rutina...</string>
+    <string name="add_routine_button">AÑADIR RUTINA</string>
+    <string name="medicine_name">Nombre</string>
+    <string name="medicine_presentation">Presentación</string>
+    <string name="edit_medicine_button_text">Guardar cambios</string>
+    <string name="create_medicine_button_text">Crear medicina</string>
+    <string name="add_medicine_button">AÑADIR MEDICINA</string>
+    <string name="no_stock_info_msg">Sin información de stock</string>
+    <string name="title_activity_schedules">Pautas</string>
+    <string name="prev">ATRÁS</string>
+    <string name="next">SIGUIENTE</string>
+    <string name="delay">RETRASAR</string>
+    <string name="done">HECHO</string>
+    <string name="confirm">CONFIRMAR</string>
+    <string name="meds_time">Recuerda tomar tus medicina</string>
+
+    <!-- Schedule creation -->
+    <string name="summary_title">Revisa y confirma</string>
+    <string name="title_activity_schedule_list">Pautas</string>
+    <string name="add_schedule_button">AÑADIR PAUTA</string>
+
+    <!-- Med presentations -->
+    <string name="injections">Inyecciones</string>
+    <string name="pills">Pastillas</string>
+    <string name="capsules">Cápsulas</string>
+    <string name="inhaler">Inhalador</string>
+    <string name="drops">Gotas</string>
+    <string name="syrup">Jarabe</string>
+    <string name="unknown">Desconocido</string>
+    <string name="effervescent">Efervscente</string>
+    <string name="schedule">Pauta</string>
+
+    <!-- Med presentation units -->
+    <string name="injections_units">inyeccion</string>
+    <string name="pills_units">pastilla</string>
+    <string name="capsules_units">cápsula</string>
+    <string name="inhaler_units">inhalación</string>
+    <string name="drops_units">gota</string>
+    <string name="syrup_units">cucharada</string>
+    <string name="unknown_units">Desconocido</string>
+    <string name="effervescent_units">sobre</string>
+
+    <string name="never">Nunca</string>
+    <string name="every_day">Todos los días</string>
+    <string name="once_a_day">Una vez al día</string>
+    <string name="twice_a_day">Dos veces al día</string>
+    <string name="tree_times_a_day">Tres veces al día</string>
+    <string name="four_times_a_day">Cuatro veces al día</string>
+    <string name="times_a_day">veces al día</string>
+    <string name="and">y</string>
+
+    <!-- Med schedules -->
+    <string-array name="schedules_array">
+        <item>@string/once_a_day</item>
+        <item>@string/twice_a_day</item>
+        <item>@string/tree_times_a_day</item>
+        <item>@string/four_times_a_day</item>
+    </string-array>
+
+    <!-- Med schedules -->
+    <string-array name="delays_array">
+        <item>Selecciona un retardo:</item>
+        <item>5 min</item>
+        <item>15 min</item>
+        <item>30 min</item>
+        <item>60 min</item>
+    </string-array>
+
+    <!-- Default routines -->
+    <string name="routine_breakfast">Desayuno</string>
+    <string name="routine_lunch">Comida</string>
+    <string name="routine_dinner">Cena</string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="message_notification_title_template">%1$s</string>
+    <string name="message_notification_placeholder_text_template">You said %1$s and lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis. Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec tortor.</string>
+    <string name="action_take_now">Tomar ahora</string>
+    <string name="action_delay">Retrasar</string>
+    <string name="title_activity_start">StartActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_reminder">ReminderActivity</string>
+    <string name="title_activity_agenda_detail">AgendaDetailActivity</string>
+
+
+    <string name="drawer_open">Abrir menu</string>
+    <string name="drawer_close">Cerrar menú</string>
+</resources>
+

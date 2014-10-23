@@ -16,7 +16,7 @@ import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 
-public class MedicinesActivity extends ActionBarActivity implements MedicinesListFragment.OnMedicineSelectedListener, MedicineCreateOrEditFragment.OnMedicineEditListener {
+public class MedicinesActivity extends ActionBarActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -49,9 +49,9 @@ public class MedicinesActivity extends ActionBarActivity implements MedicinesLis
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        boolean create = getIntent().getBooleanExtra("create",false);
+        boolean create = getIntent().getBooleanExtra("create", false);
 
-        if(create){
+        if (create) {
             //mViewPager.setCurrentItem(1);
         }
     }
@@ -77,19 +77,19 @@ public class MedicinesActivity extends ActionBarActivity implements MedicinesLis
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onMedicineSelected(Medicine m) {
-        mViewPager.setCurrentItem(1);
-        ((MedicineCreateOrEditFragment) getViewPagerFragment(1)).setMedicne(m);
-        setTitle(R.string.title_edit_medicine_activity);
-    }
-
-    @Override
-    public void onCreateMedicine() {
-        mViewPager.setCurrentItem(1);
-        ((MedicineCreateOrEditFragment) getViewPagerFragment(1)).clear();
-        setTitle(R.string.title_create_medicine_activity);
-    }
+//    @Override
+//    public void onMedicineSelected(Medicine m) {
+//        mViewPager.setCurrentItem(1);
+//        ((MedicineCreateOrEditFragment) getViewPagerFragment(1)).setMedicne(m);
+//        setTitle(R.string.title_edit_medicine_activity);
+//    }
+//
+//    @Override
+//    public void onCreateMedicine() {
+//        mViewPager.setCurrentItem(1);
+//        ((MedicineCreateOrEditFragment) getViewPagerFragment(1)).clear();
+//        setTitle(R.string.title_create_medicine_activity);
+//    }
 
     @Override
     public void onMedicineEdited(Medicine m) {
@@ -123,17 +123,11 @@ public class MedicinesActivity extends ActionBarActivity implements MedicinesLis
         @Override
         public Fragment getItem(int position) {
             return new MedicineCreateOrEditFragment();
-            // getItem is called to instantiate the fragment for the given page.
-//            if (position == 0) {
-//                return new MedicinesListFragment();
-//            } else {
-//                return new MedicineCreateOrEditFragment();
-//            }
         }
 
         @Override
         public int getCount() {
-            // Show 2 total pages.
+            // Show 1 total pages.
             return 1;
         }
 
