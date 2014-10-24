@@ -76,5 +76,21 @@ public class Schedule extends Model {
                 .orderBy(COLUMN_MEDICINE + " ASC")
                 .execute();
     }
+
+    public static Schedule findById(long id) {
+        return new Select().from(Schedule.class)
+                .where("id = ?", id)
+                .executeSingle();
+    }
+
+    public void deleteCascade() {
+        for (ScheduleItem i : items()) {
+            i.setSchedule(null);
+            i.setRoutine(null);
+            i.save();
+            //i.delete();
+        }
+        this.delete();
+    }
 }
 

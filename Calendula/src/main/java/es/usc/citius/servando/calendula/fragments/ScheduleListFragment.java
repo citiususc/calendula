@@ -129,7 +129,7 @@ public class ScheduleListFragment extends Fragment {
                 .setCancelable(true)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        s.delete();
+                        s.deleteCascade();
                         notifyDataChange();
                     }
                 })

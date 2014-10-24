@@ -19,6 +19,7 @@ import com.activeandroid.ActiveAndroid;
 
 import java.util.Locale;
 
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleSummaryFragment;
@@ -54,17 +55,21 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
     // Medicine reference that will be created and returned by the createOrEdit fragment
     Medicine med;
+    Schedule mSchedule;
 
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+    long mScheduleId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedules);
+
+        processIntent();
 
         normalPageIndicatorColor = getResources().getColor(R.color.android_blue_light);
         currentPageIndicatorColor = getResources().getColor(R.color.android_blue_dark);
@@ -86,6 +91,19 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         setCurrentPageIndicator(0);
     }
 
+    private void processIntent() {
+        mScheduleId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1);
+        if (mScheduleId != -1) {
+            Schedule s = Schedule.findById(mScheduleId);
+            ScheduleCreationHelper.instance().setSelectedMed(s.medicine());
+            ScheduleCreationHelper.instance().setSelectedDays(s.days());
+            ScheduleCreationHelper.instance().setTimesPerDay(s.items().size());
+            ScheduleCreationHelper.instance().setSelectedScheduleIdx(s.items().size() - 1);
+            ScheduleCreationHelper.instance().setScheduleItems(s.items());
+            mSchedule = s;
+        }
+    }
+
 
     public void saveSchedule() {
 
@@ -95,7 +113,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             Medicine m = ScheduleCreationHelper.instance().getSelectedMed();
             m.save();
 
-            Schedule s = new es.usc.citius.servando.calendula.persistence.Schedule();
+            Schedule s = mSchedule != null ? mSchedule : new es.usc.citius.servando.calendula.persistence.Schedule();
             s.setMedicine(m);
             s.setDays(ScheduleCreationHelper.instance().getSelectedDays());
             s.save();

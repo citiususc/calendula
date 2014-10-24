@@ -14,10 +14,11 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+        <!--android:launchMode="singleInstance"-->
         <activity
             android:name="es.usc.citius.servando.calendula.HomeActivity"
             android:screenOrientation="portrait"
-            android:launchMode="singleInstance"
+
             android:theme="@style/AppTheme"
             android:label="@string/app_name"></activity>
         <activity

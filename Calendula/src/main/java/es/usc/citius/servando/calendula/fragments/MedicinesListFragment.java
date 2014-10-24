@@ -49,6 +49,7 @@ public class MedicinesListFragment extends Fragment {
         return rootView;
     }
 
+
     public void notifyDataChange() {
         Log.d(getTag(), "Medicines - Notify data change");
         mMedicines.clear();

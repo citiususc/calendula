@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/activity_background_color">
 
     <!--<ImageView-->
     <!--android:layout_width="fill_parent"-->
@@ -22,27 +23,29 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_toEndOf="@+id/profile_image"
-        android:text="Profile"
+        android:text="Profile Photo"
         style="@style/dark_text_big"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_marginTop="20dp"
-        android:gravity="center" />
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:textColor="@color/android_blue_dark"
+        android:textAllCaps="true"
+        android:gravity="left" />
 
     <RelativeLayout
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:id="@+id/profile_image_container"
         android:background="@drawable/rounded_profile_image_container"
         android:orientation="horizontal"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="15dp"
         android:layout_marginLeft="10dp"
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true">
 
 
         <com.makeramen.RoundedImageView
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="fill_parent"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:src="@drawable/default_avatar"
@@ -60,17 +63,35 @@
 
     </RelativeLayout>
 
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="PROFILE NAME"
+        style="@style/dark_text_big"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/profile_image_container"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:textColor="@color/android_blue_dark"
+        android:textAllCaps="true"
+        android:gravity="left" />
+
+
     <EditText
-        android:id="@+id/profile_username"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:id="@+id/edit_profile_username"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:text="Walter"
-        android:layout_centerVertical="true"
-        android:layout_below="@+id/profile_image_container"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/dark_grey_home" />
+        android:textColor="@color/dark_grey_home"
+        android:layout_below="@+id/textView3"
+        android:layout_marginTop="20dp" />
 
     <Button
         android:id="@+id/profile_button_ok"

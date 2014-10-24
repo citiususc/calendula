@@ -47,8 +47,12 @@ import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
 import es.usc.citius.servando.calendula.fragments.DailyAgendaFragment;
+import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
 import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
+import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
+import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Routine;
+import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.user.Session;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Screen;
@@ -57,7 +61,9 @@ public class HomeActivity extends ActionBarActivity implements
         ViewPager.OnPageChangeListener,
         ActionBar.OnNavigationListener,
         View.OnClickListener,
-        RoutinesListFragment.OnRoutineSelectedListener {
+        RoutinesListFragment.OnRoutineSelectedListener,
+        MedicinesListFragment.OnMedicineSelectedListener,
+        ScheduleListFragment.OnScheduleSelectedListener {
 
     public static final int ROUTINES_ACTIVITY_RQ = 1;
     public static final int SCHEDULES_ACTIVITY_RQ = 2;
@@ -252,6 +258,30 @@ public class HomeActivity extends ActionBarActivity implements
         //do nothing
     }
 
+    @Override
+    public void onMedicineSelected(Medicine m) {
+        Intent i = new Intent(this, MedicinesActivity.class);
+        i.putExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, m.getId());
+        launchActivity(i);
+    }
+
+    @Override
+    public void onCreateMedicine() {
+        //do nothing
+    }
+
+    @Override
+    public void onScheduleSelected(Schedule r) {
+        Intent i = new Intent(this, ScheduleCreationActivity.class);
+        i.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, r.getId());
+        launchActivity(i);
+    }
+
+    @Override
+    public void onCreateSchedule() {
+
+    }
+
 
     class DrawerListAdapter extends ArrayAdapter<String> {
 
@@ -307,16 +337,16 @@ public class HomeActivity extends ActionBarActivity implements
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
 
-        Log.d("Home", "onActivityResult: " + requestCode + ", " + resultCode + ", " + data.toString());
-        switch (requestCode) {
-            case ROUTINES_ACTIVITY_RQ:
-                ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
-        }
-    }
+//        Log.d("Home", "onActivityResult: " + requestCode + ", " + resultCode + ", " + data.toString());
+//        switch (requestCode) {
+//            case ROUTINES_ACTIVITY_RQ:
+//                ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
+//        }
+//    }
 
     private void launchActivity(Intent i) {
         startActivity(i);

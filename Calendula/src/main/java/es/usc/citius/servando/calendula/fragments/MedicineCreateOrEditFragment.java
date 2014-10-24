@@ -21,12 +21,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
-import es.usc.citius.servando.calendula.util.Screen;
 
 /**
  * Created by joseangel.pineiro on 12/4/13.
@@ -43,6 +43,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
     HorizontalScrollView presentationScroll;
 
     boolean showcaseShown = false;
+    long mMedicineId;
 
 
     @Override
@@ -79,13 +80,23 @@ public class MedicineCreateOrEditFragment extends Fragment {
             mConfirmButton.setVisibility(View.GONE);
         }
 
-        if (savedInstanceState != null && savedInstanceState.containsKey("medicine")) {
-            mMedicine = Medicine.findById(savedInstanceState.getLong("medicine"));
-            if (mMedicine != null)
-                mConfirmButton.setText(getString(R.string.edit_routine_button_text));
+        Log.d(getTag(), "Arguments:  " + (getArguments() != null) + ", savedState: " + (savedInstanceState != null));
+        if (getArguments() != null) {
+
+            mMedicineId = getArguments().getLong(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, -1);
+        }
+
+        if (mMedicineId == -1 && savedInstanceState != null) {
+            mMedicineId = savedInstanceState.getLong(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, -1);
+        }
+
+        if (mMedicineId != -1) {
+            mMedicine = Medicine.findById(mMedicineId);
+            mConfirmButton.setText(getString(R.string.edit_routine_button_text));
         }
 
         setupMedPresentationChooser(rootView);
+
         return rootView;
     }
 
@@ -94,13 +105,14 @@ public class MedicineCreateOrEditFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (ScheduleCreationHelper.instance().getSelectedMed() != null) {
             setMedicne(ScheduleCreationHelper.instance().getSelectedMed());
+        } else if (mMedicine != null) {
+            setMedicne(mMedicine);
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-//        showShowCase();
     }
 
     public boolean validate() {
@@ -214,7 +226,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mMedicine != null)
-            outState.putLong("medicine", mMedicine.getId());
+            outState.putLong(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, mMedicine.getId());
     }
 
     public void setMedicne(Medicine r) {

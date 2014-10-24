@@ -10,9 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
-import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 
@@ -35,12 +35,13 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
      */
     ViewPager mViewPager;
 
+    Long mMedicineId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicines);
-
-
+        processIntent();
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -54,6 +55,11 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
         if (create) {
             //mViewPager.setCurrentItem(1);
         }
+    }
+
+
+    private void processIntent() {
+        mMedicineId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, -1);
     }
 
 
@@ -77,36 +83,18 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
         return super.onOptionsItemSelected(item);
     }
 
-//    @Override
-//    public void onMedicineSelected(Medicine m) {
-//        mViewPager.setCurrentItem(1);
-//        ((MedicineCreateOrEditFragment) getViewPagerFragment(1)).setMedicne(m);
-//        setTitle(R.string.title_edit_medicine_activity);
-//    }
-//
-//    @Override
-//    public void onCreateMedicine() {
-//        mViewPager.setCurrentItem(1);
-//        ((MedicineCreateOrEditFragment) getViewPagerFragment(1)).clear();
-//        setTitle(R.string.title_create_medicine_activity);
-//    }
-
     @Override
     public void onMedicineEdited(Medicine m) {
         m.save();
         Toast.makeText(this, "Changes saved!", Toast.LENGTH_SHORT).show();
-        mViewPager.setCurrentItem(0);
-        ((MedicinesListFragment) getViewPagerFragment(0)).notifyDataChange();
-        setTitle(R.string.title_activity_medicines);
+        finish();
     }
 
     @Override
     public void onMedicineCreated(Medicine m) {
         m.save();
         Toast.makeText(this, "Medicine created!", Toast.LENGTH_SHORT).show();
-        mViewPager.setCurrentItem(0);
-        ((MedicinesListFragment) getViewPagerFragment(0)).notifyDataChange();
-        setTitle(R.string.title_activity_medicines);
+        finish();
     }
 
 
@@ -122,7 +110,12 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
 
         @Override
         public Fragment getItem(int position) {
-            return new MedicineCreateOrEditFragment();
+
+            Fragment f = new MedicineCreateOrEditFragment();
+            Bundle args = new Bundle();
+            args.putLong(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, mMedicineId);
+            f.setArguments(args);
+            return f;
         }
 
         @Override

@@ -16,26 +16,29 @@ public class ScheduleItem extends Model {
     public static final String COLUMN_ROUTINE = "Routine";
     public static final String COLUMN_DOSE = "Dose";
 
-    @Column(name = COLUMN_SCHEDULE)
+    @Column(name = COLUMN_SCHEDULE, onDelete = Column.ForeignKeyAction.CASCADE)
     private Schedule schedule;
 
-    @Column(name = COLUMN_ROUTINE)
+
+    @Column(name = COLUMN_ROUTINE, onDelete = Column.ForeignKeyAction.CASCADE)
     private Routine routine;
 
     @Column(name = COLUMN_DOSE)
     private float dose;
 
     public ScheduleItem() {
-
+        super();
     }
 
     public ScheduleItem(Schedule schedule, Routine routine, float dose) {
+        this();
         this.schedule = schedule;
         this.routine = routine;
         this.dose = dose;
     }
 
     public ScheduleItem(Schedule schedule, Routine routine) {
+        this();
         this.schedule = schedule;
         this.routine = routine;
     }

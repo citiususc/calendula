@@ -121,7 +121,7 @@ public class RoutinesListFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int id) {
                         // cancel routine alarm and delete it
                         AlarmScheduler.instance().cancelAlarm(r, getActivity());
-                        r.delete();
+                        r.deleteCascade();
                         notifyDataChange();
                     }
                 })

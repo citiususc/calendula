@@ -93,4 +93,14 @@ public class Routine extends Model {
                 .execute();
     }
 
+    public void deleteCascade() {
+        for (ScheduleItem i : scheduleItems()) {
+            i.setSchedule(null);
+            i.setRoutine(null);
+            i.save();
+            //i.delete();
+        }
+        this.delete();
+    }
+
 }
