@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
 
-        <!-- Customize your theme here. -->
-        <item name="android:spinnerDropDownItemStyle">@style/DropDownItemStyle</item>
-        <item name="android:actionBarStyle">@style/MyActionBar</item>
-        <item name="showcaseViewStyle">@style/CustomShowcaseTheme</item>
-        <item name="android:windowActionBarOverlay">true</item>
-        <!-- Support library compatibility -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <!-- Set AppCompat’s actionBarStyle -->
         <item name="actionBarStyle">@style/MyActionBar</item>
-        <item name="windowActionBarOverlay">true</item>
+        <item name="windowActionBar">false</item>
+
+        <!-- Set AppCompat’s color theming attrs -->
+        <item name="colorPrimary">@color/android_blue_dark</item>
+        <item name="colorPrimaryDark">@color/android_blue_darker</item>
+
+        <!-- The rest of your attributes -->
     </style>
+
+    <!-- Base application theme. -->
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+
+    <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+    <!--&lt;!&ndash;<item name="android:spinnerDropDownItemStyle">@style/DropDownItemStyle</item>&ndash;&gt;-->
+    <!--<item name="android:actionBarStyle">@style/MyActionBar</item>-->
+    <!--<item name="showcaseViewStyle">@style/CustomShowcaseTheme</item>-->
+    <!--<item name="android:windowActionBarOverlay">true</item>-->
+    <!--&lt;!&ndash; Support library compatibility &ndash;&gt;-->
+    <!--<item name="actionBarStyle">@style/MyActionBar</item>-->
+    <!--<item name="windowActionBarOverlay">true</item>-->
+    <!--</style>-->
 
     <!-- ActionBar styles -->
     <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
@@ -25,9 +38,9 @@
     </style>
 
 
-    <style name="DropDownItemStyle" parent="Widget.AppCompat.Base.DropDownItem.Spinner">
-        <item name="android:textAppearance">@style/DropDownItemTextStyle</item>
-    </style>
+    <!--<style name="DropDownItemStyle" parent="Widget.AppCompat.Base.DropDownItem.Spinner">-->
+    <!--<item name="android:textAppearance">@style/DropDownItemTextStyle</item>-->
+    <!--</style>-->
 
     <!-- Theme without ActionBar shadow (inherits main theme) -->
     <!--<style name="MyActionBarNoShadowTheme" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">-->
@@ -119,20 +132,20 @@
         <item name="android:textSize">18dp</item>
     </style>
 
-    <style name="CustomShowcaseTheme" parent="ShowcaseView.Light">
-        <item name="sv_titleTextColor">@color/white</item>
-        <item name="sv_detailTextColor">@color/white</item>
-        <item name="sv_backgroundColor">#cc111111</item>
-        <item name="sv_buttonBackgroundColor">#ffffff</item>
-        <item name="sv_buttonText">Close</item>
-        <item name="sv_detailTextAppearance">@style/CustomShowcaseDetail</item>
-    </style>
+    <!--<style name="CustomShowcaseTheme" parent="ShowcaseView.Light">-->
+    <!--<item name="sv_titleTextColor">@color/white</item>-->
+    <!--<item name="sv_detailTextColor">@color/white</item>-->
+    <!--<item name="sv_backgroundColor">#cc111111</item>-->
+    <!--<item name="sv_buttonBackgroundColor">#ffffff</item>-->
+    <!--<item name="sv_buttonText">Close</item>-->
+    <!--<item name="sv_detailTextAppearance">@style/CustomShowcaseDetail</item>-->
+    <!--</style>-->
 
-    <style name="CustomShowcaseDetail" parent="TextAppearance.ShowcaseView.Detail.Light">
-        <item name="android:textColor">#ffffff</item>
-        <item name="android:shadowColor">#FF0000</item>
-        <item name="android:shadowRadius">0</item>
-    </style>
+    <!--<style name="CustomShowcaseDetail" parent="TextAppearance.ShowcaseView.Detail.Light">-->
+    <!--<item name="android:textColor">#ffffff</item>-->
+    <!--<item name="android:shadowColor">#FF0000</item>-->
+    <!--<item name="android:shadowRadius">0</item>-->
+    <!--</style>-->
 
     <style name="schedule_day_unselected">
         <item name="android:layout_width">0dp</item>

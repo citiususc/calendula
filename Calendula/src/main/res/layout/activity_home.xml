@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
+
+
     <!-- The main content view -->
     <FrameLayout
         android:id="@+id/content_frame"
@@ -13,16 +15,24 @@
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:paddingTop="@dimen/action_bar_height"
+
             android:layout_height="match_parent">
 
 
+            <!--android:layout_marginTop="56dp"-->
             <android.support.v4.view.ViewPager
                 android:id="@+id/pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 tools:context=".HomeActivity" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:background="@color/transparent"
+                android:elevation="3dp"
+                android:layout_width="match_parent"
+                android:layout_height="56dp" />
 
             <com.shamanland.fab.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="65dp"
@@ -43,7 +53,7 @@
     </FrameLayout>
     <!-- The navigation drawer -->
     <ListView
-        android:paddingTop="@dimen/action_bar_height"
+
         android:id="@+id/left_drawer"
         android:layout_width="240dp"
         android:layout_height="match_parent"

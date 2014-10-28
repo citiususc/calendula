@@ -15,9 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.doomonafireball.betterpickers.radialtimepicker.RadialPickerLayout;
-import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
-
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
@@ -25,10 +22,14 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Routine;
 
+//import com.doomonafireball.betterpickers.radialtimepicker.RadialPickerLayout;
+//import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
+
 /**
  * Created by joseangel.pineiro on 12/4/13.
  */
-public class RoutineCreateOrEditFragment extends DialogFragment implements RadialTimePickerDialog.OnTimeSetListener {
+public class RoutineCreateOrEditFragment extends DialogFragment {
+//        implements RadialTimePickerDialog.OnTimeSetListener {
 
     OnRoutineEditListener mRoutineEditCallback;
     Routine mRoutine;
@@ -95,10 +96,10 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
 //                tpb.show();
 
 
-                DateTime now = DateTime.now();
-                RadialTimePickerDialog timePickerDialog = RadialTimePickerDialog
-                        .newInstance(RoutineCreateOrEditFragment.this, hour, minute, true);
-                timePickerDialog.show(getChildFragmentManager(), "111");
+//                DateTime now = DateTime.now();
+//                RadialTimePickerDialog timePickerDialog = RadialTimePickerDialog
+//                        .newInstance(RoutineCreateOrEditFragment.this, hour, minute, true);
+//                timePickerDialog.show(getChildFragmentManager(), "111");
             }
         });
 
@@ -232,12 +233,12 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
         mRoutineEditCallback = l;
     }
 
-    @Override
-    public void onTimeSet(RadialPickerLayout radialPickerLayout, int hourOfDay, int minute) {
-        this.hour = hourOfDay;
-        this.minute = minute;
-        updateTime();
-    }
+//    @Override
+//    public void onTimeSet(RadialPickerLayout radialPickerLayout, int hourOfDay, int minute) {
+//        this.hour = hourOfDay;
+//        this.minute = minute;
+//        updateTime();
+//    }
 
     // Container Activity must implement this interface
     public interface OnRoutineEditListener {

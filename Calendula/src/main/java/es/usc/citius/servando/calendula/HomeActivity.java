@@ -15,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,11 +34,6 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
-import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
-import com.github.amlcurran.showcaseview.targets.PointTarget;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,7 +51,11 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.user.Session;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
-import es.usc.citius.servando.calendula.util.Screen;
+
+//import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
+//import com.github.amlcurran.showcaseview.ShowcaseView;
+//import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
+//import com.github.amlcurran.showcaseview.targets.PointTarget;
 
 public class HomeActivity extends ActionBarActivity implements
         ViewPager.OnPageChangeListener,
@@ -89,13 +89,13 @@ public class HomeActivity extends ActionBarActivity implements
     //boolean profileShown = true;
     String[] titles;
 
-
+    Toolbar toolbar;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
-    ShowcaseView sv;
+    //    ShowcaseView sv;
     boolean showcaseShown = false;
 
     @Override
@@ -122,12 +122,16 @@ public class HomeActivity extends ActionBarActivity implements
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_launcher_white);
+        setSupportActionBar(toolbar);
         mActionBar = getSupportActionBar();
         //mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setDisplayShowTitleEnabled(false);
-        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        //mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         mActionBar.setDisplayShowCustomEnabled(true);
-        mActionBar.setCustomView(R.layout.action_bar);
+
+//        mActionBar.setCustomView(R.layout.action_bar);
         //mActionBar.hide();
         initializeDrawer();
 
@@ -136,7 +140,7 @@ public class HomeActivity extends ActionBarActivity implements
         SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.home_action_list,
                 android.R.layout.simple_spinner_dropdown_item);
 
-        mActionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
+        //mActionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
         mViewPager.setOnPageChangeListener(this);
 
         addButton = findViewById(R.id.add_button);
@@ -423,39 +427,39 @@ public class HomeActivity extends ActionBarActivity implements
 //                }
 //            });
 
-        ShowcaseView sv = new ShowcaseView.Builder(this)
-                    .setTarget(new ActionViewTarget(this, ActionViewTarget.Type.HOME))
-                    .setContentTitle("Welcome to Calendula!")
-                    .setContentText("See the menu to ...")
-                    .hideOnTouchOutside()
-                    .build();
-
-        sv.setOnShowcaseEventListener(new OnShowcaseEventListener() {
-            @Override
-            public void onShowcaseViewHide(ShowcaseView showcaseView) {
-                new ShowcaseView.Builder(HomeActivity.this)
-                        .setTarget(new PointTarget(
-                                (int) Screen.getDpSize(HomeActivity.this).x * 2,
-                                (int) Screen.getDpSize(HomeActivity.this).y))
-                        .setContentTitle("Discover")
-                        .doNotBlockTouches()
-                        .setContentText("Swipe left to see...")
-                        .hideOnTouchOutside()
-                        .build().show();
-            }
-
-            @Override
-            public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
-
-            }
-
-            @Override
-            public void onShowcaseViewShow(ShowcaseView showcaseView) {
-
-            }
-        });
-
-        sv.show();
+//        ShowcaseView sv = new ShowcaseView.Builder(this)
+//                    .setTarget(new ActionViewTarget(this, ActionViewTarget.Type.HOME))
+//                    .setContentTitle("Welcome to Calendula!")
+//                    .setContentText("See the menu to ...")
+//                    .hideOnTouchOutside()
+//                    .build();
+//
+//        sv.setOnShowcaseEventListener(new OnShowcaseEventListener() {
+//            @Override
+//            public void onShowcaseViewHide(ShowcaseView showcaseView) {
+//                new ShowcaseView.Builder(HomeActivity.this)
+//                        .setTarget(new PointTarget(
+//                                (int) Screen.getDpSize(HomeActivity.this).x * 2,
+//                                (int) Screen.getDpSize(HomeActivity.this).y))
+//                        .setContentTitle("Discover")
+//                        .doNotBlockTouches()
+//                        .setContentText("Swipe left to see...")
+//                        .hideOnTouchOutside()
+//                        .build().show();
+//            }
+//
+//            @Override
+//            public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+//
+//            }
+//
+//            @Override
+//            public void onShowcaseViewShow(ShowcaseView showcaseView) {
+//
+//            }
+//        });
+//
+//        sv.show();
 
 
 
@@ -478,7 +482,7 @@ public class HomeActivity extends ActionBarActivity implements
             boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
             menu.findItem(R.id.action_expand).setVisible(true);
             menu.findItem(R.id.action_expand).setIcon(
-                    getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_white_48dp : R.drawable.ic_unfold_more_white_48dp)
+                    getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_black_48dp : R.drawable.ic_unfold_more_black_48dp)
             );
 
 
@@ -505,7 +509,7 @@ public class HomeActivity extends ActionBarActivity implements
                 ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
                 boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
                 item.setIcon(
-                        getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_white_48dp : R.drawable.ic_unfold_more_white_48dp)
+                        getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_black_48dp : R.drawable.ic_unfold_more_black_48dp)
                 );
 
                 return true;
@@ -671,7 +675,7 @@ public class HomeActivity extends ActionBarActivity implements
     }
 
     public void setCustomTitle(String title) {
-        ((TextView) findViewById(R.id.action_bar_custom_title)).setText(title);
+//        ((TextView) findViewById(R.id.action_bar_custom_title)).setText(title);
     }
 
 

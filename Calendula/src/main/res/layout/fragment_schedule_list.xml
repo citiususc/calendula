@@ -11,15 +11,15 @@
         android:dividerHeight="0dp"
         android:id="@+id/schedule_list" />
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="5dp"
-        android:id="@+id/imageView2a"
-        android:src="@drawable/daily_view_list_item_tab_shadow_top"
-        android:scaleType="fitXY"
-        android:layout_alignParentTop="true"
-        android:visibility="visible"
-        android:alpha="0.7" />
+    <!--<ImageView-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="5dp"-->
+    <!--android:id="@+id/imageView2a"-->
+    <!--android:src="@drawable/daily_view_list_item_tab_shadow_top"-->
+    <!--android:scaleType="fitXY"-->
+    <!--android:layout_alignParentTop="true"-->
+    <!--android:visibility="visible"-->
+    <!--android:alpha="0.7" />-->
 
     <!--<ImageView-->
     <!--android:layout_width="fill_parent"-->
