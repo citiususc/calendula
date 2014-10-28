@@ -18,6 +18,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -259,7 +260,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
     private void onEdit() {
 
         String name = mNameTextView.getText().toString();
-
+        if(!name.trim().equals("")){
         // if editing
         if (mMedicine != null) {
             mMedicine.setName(name);
@@ -277,6 +278,9 @@ public class MedicineCreateOrEditFragment extends Fragment {
             if (mMedicineEditCallback != null) {
                 mMedicineEditCallback.onMedicineCreated(m);
             }
+        }}else{
+
+            mNameTextView.setError("Name field must be filled");
         }
     }
 
