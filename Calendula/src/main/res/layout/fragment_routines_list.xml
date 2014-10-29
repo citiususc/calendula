@@ -1,5 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+    android:paddingTop="@dimen/action_bar_height"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
     android:background="#E0EAEF">
@@ -11,8 +11,8 @@
         android:id="@+id/routines_list"
         android:background="@null"
         android:scrollbars="none"
-        android:divider="#E0EAEF"
-        android:layout_marginBottom="5dp" />
+        android:layout_marginBottom="5dp"
+        android:divider="#E0EAEF" />
 
     <!--<ImageView-->
     <!--android:layout_width="fill_parent"-->

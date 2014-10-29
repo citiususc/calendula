@@ -4,7 +4,7 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Set AppCompat’s actionBarStyle -->
-        <item name="actionBarStyle">@style/MyActionBar</item>
+        <!--<item name="actionBarStyle">@style/MyActionBar</item>-->
         <item name="windowActionBar">false</item>
 
         <!-- Set AppCompat’s color theming attrs -->
@@ -12,6 +12,12 @@
         <item name="colorPrimaryDark">@color/android_blue_darker</item>
 
         <!-- The rest of your attributes -->
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    </style>
+
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@android:color/white</item>
     </style>
 
     <!-- Base application theme. -->
@@ -27,15 +33,15 @@
     <!--<item name="windowActionBarOverlay">true</item>-->
     <!--</style>-->
 
-    <!-- ActionBar styles -->
-    <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/actionbar_background_color</item>
-        <item name="android:height">@dimen/action_bar_height</item>
-        <item name="android:icon">@drawable/ic_launcher_white</item>
+    <!--&lt;!&ndash; ActionBar styles &ndash;&gt;-->
+    <!--<style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">-->
+    <!--<item name="android:background">@color/actionbar_background_color</item>-->
+    <!--<item name="android:height">@dimen/action_bar_height</item>-->
+    <!--<item name="android:icon">@drawable/ic_launcher_white</item>-->
 
-        <!-- Support library compatibility -->
-        <item name="background">@color/actionbar_background_color</item>
-    </style>
+    <!--&lt;!&ndash; Support library compatibility &ndash;&gt;-->
+    <!--<item name="background">@color/actionbar_background_color</item>-->
+    <!--</style>-->
 
 
     <!--<style name="DropDownItemStyle" parent="Widget.AppCompat.Base.DropDownItem.Spinner">-->

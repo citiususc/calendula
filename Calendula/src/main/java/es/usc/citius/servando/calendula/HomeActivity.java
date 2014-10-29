@@ -1,20 +1,22 @@
 package es.usc.citius.servando.calendula;
 
-import android.annotation.TargetApi;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,15 +24,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,11 +77,12 @@ public class HomeActivity extends ActionBarActivity implements
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     HomePageAdapter mSectionsPagerAdapter;
-    ActionBar mActionBar;
+    //    ActionBar mActionBar;
     DrawerLayout mDrawerLayout;
     ListView mDrawerList;
     ActionBarDrawerToggle mDrawerToggle;
-//    ImageView actionBarImage;
+    int currentActionBarColor;
+    int previousActionBarColor;
 
     View addButton;
     boolean addButtonShown = true;
@@ -97,76 +97,42 @@ public class HomeActivity extends ActionBarActivity implements
     ViewPager mViewPager;
     //    ShowcaseView sv;
     boolean showcaseShown = false;
+    private boolean toolbarVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // set the content view layout
         setContentView(R.layout.activity_home);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            setTranslucentStatus(true);
-        }
-        // create our manager instance after the content view is set
-//        SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        // enable status bar tint
-//        tintManager.setStatusBarTintEnabled(true);
-//        tintManager.setTintColor(Color.parseColor("#0099CC"));
-        // enable navigation bar tint
-        //tintManager.setNavigationBarTintEnabled(true);
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+        // initialize current and previous action bar colors
+        currentActionBarColor = getResources().getColor(R.color.transparent);
+        previousActionBarColor = getResources().getColor(R.color.transparent);
+        // Create the adapter that will manage sections
         mSectionsPagerAdapter = new HomePageAdapter(getSupportFragmentManager(), this, this);
-
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
+        mViewPager.setOnPageChangeListener(this);
+        // set up the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_launcher_white);
+        // configure toolbar as action bar
         setSupportActionBar(toolbar);
-        mActionBar = getSupportActionBar();
-        //mActionBar.setDisplayHomeAsUpEnabled(true);
-        mActionBar.setDisplayShowTitleEnabled(false);
-        //mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        mActionBar.setDisplayShowCustomEnabled(true);
-
-//        mActionBar.setCustomView(R.layout.action_bar);
-        //mActionBar.hide();
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        // initialize left drawer
         initializeDrawer();
 
         titles = getResources().getStringArray(R.array.home_action_list);
-
-        SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.home_action_list,
-                android.R.layout.simple_spinner_dropdown_item);
-
-        //mActionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
-        mViewPager.setOnPageChangeListener(this);
-
         addButton = findViewById(R.id.add_button);
         addButton.setOnClickListener(this);
+
         hideAddButton();
 
         boolean welcome = getIntent().getBooleanExtra("welcome",false);
         if(welcome) {
             showShowCase();
         }
-
-
-
-    }
-
-    @TargetApi(19)
-    private void setTranslucentStatus(boolean on) {
-        Window win = getWindow();
-        WindowManager.LayoutParams winParams = win.getAttributes();
-        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
-        if (on) {
-            winParams.flags |= bits;
-        } else {
-            winParams.flags &= ~bits;
-        }
-        win.setAttributes(winParams);
     }
 
     public int getActionDrawable(int index){
@@ -223,7 +189,7 @@ public class HomeActivity extends ActionBarActivity implements
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
-                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+                toolbar,//R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
                 R.string.drawer_open,  /* "open drawer" description */
                 R.string.drawer_close  /* "close drawer" description */
         ) {
@@ -231,13 +197,15 @@ public class HomeActivity extends ActionBarActivity implements
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                //   getActionBar().setTitle(t);
+                if (mViewPager.getCurrentItem() == 0 && !toolbarVisible)
+                    setActionBarColor(getResources().getColor(R.color.transparent));
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                // getActionBar().setTitle(mDrawerTitle);
+                if (mViewPager.getCurrentItem() == 0 && !toolbarVisible)
+                    setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
             }
         };
 
@@ -286,6 +254,11 @@ public class HomeActivity extends ActionBarActivity implements
 
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
 
     class DrawerListAdapter extends ArrayAdapter<String> {
 
@@ -482,7 +455,7 @@ public class HomeActivity extends ActionBarActivity implements
             boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
             menu.findItem(R.id.action_expand).setVisible(true);
             menu.findItem(R.id.action_expand).setIcon(
-                    getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_black_48dp : R.drawable.ic_unfold_more_black_48dp)
+                    getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_white_48dp : R.drawable.ic_unfold_more_white_48dp)
             );
 
 
@@ -509,7 +482,7 @@ public class HomeActivity extends ActionBarActivity implements
                 ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
                 boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
                 item.setIcon(
-                        getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_black_48dp : R.drawable.ic_unfold_more_black_48dp)
+                        getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_white_48dp : R.drawable.ic_unfold_more_white_48dp)
                 );
 
                 return true;
@@ -584,19 +557,16 @@ public class HomeActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void onPageSelected(int i) {
-
+    public void onPageSelected(int page) {
         invalidateOptionsMenu();
+        updateToolBar(page);
+    }
 
-        if (i == 0) {
-            hideAddButton();
-        } else {
-            setCustomTitle(titles[i]);
-        }
-
-        if(i > 0){
-            showAddButton();
-//            actionBarImage.setVisibility(View.VISIBLE);
+    private void updateToolBar(int page) {
+        if (page == 0 && !toolbarVisible) {
+            setActionBarColor(getResources().getColor(R.color.transparent));
+        } else if (currentActionBarColor != getResources().getColor(R.color.toolbar_dark_background)) {
+            setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
         }
     }
 
@@ -605,15 +575,6 @@ public class HomeActivity extends ActionBarActivity implements
 
     }
 
-    public void hideAddButton(boolean showProfile) {
-//        this.profileShown = showProfile;
-//        hideAddButton();
-    }
-
-    public void showAddButton(boolean showProfile) {
-//        this.profileShown = showProfile;
-//        showAddButton();
-    }
 
     private void hideAddButton() {
         if (addButtonShown) {
@@ -675,6 +636,7 @@ public class HomeActivity extends ActionBarActivity implements
     }
 
     public void setCustomTitle(String title) {
+        setTitle(title);
 //        ((TextView) findViewById(R.id.action_bar_custom_title)).setText(title);
     }
 
@@ -683,6 +645,44 @@ public class HomeActivity extends ActionBarActivity implements
         public boolean doBack();
     }
 
+
+    public void hideToolbar() {
+        if (toolbarVisible) {
+            toolbarVisible = false;
+            Log.d("Home", "HideToolbar");
+            setActionBarColor(getResources().getColor(R.color.transparent));
+        }
+
+    }
+
+    public void showToolbar() {
+        if (!toolbarVisible) {
+            Log.d("Home", "ShowToolbar");
+            toolbarVisible = true;
+            setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
+        }
+
+    }
+
+
+    private void setActionBarColor(final int color) {
+        previousActionBarColor = currentActionBarColor;
+        final ObjectAnimator backgroundColorAnimator = ObjectAnimator.ofObject(toolbar,
+                "backgroundColor",
+                new ArgbEvaluator(),
+                currentActionBarColor,
+                color);
+        backgroundColorAnimator.setDuration(250);
+        backgroundColorAnimator.start();
+        backgroundColorAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                currentActionBarColor = color;
+            }
+        });
+
+    }
 
 
 }

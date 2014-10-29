@@ -29,6 +29,7 @@
     <color name="splash_background">#151515</color>
     <color name="white">#FFFFFF</color>
     <color name="dark_grey_home">#272727</color>
+    <color name="toolbar_dark_background">#373737</color>
     <color name="green_hour_expanded_left">#2299CC00</color>
     <color name="green_hour_expanded_right">#CC99CC00</color>
     <color name="list_item_active_background">#22eeeeff</color>

@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.joda.time.DateTime;
+
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.user.Session;
 import es.usc.citius.servando.calendula.user.User;
@@ -23,7 +25,7 @@ import es.usc.citius.servando.calendula.user.User;
 public class HomeUserInfoFragment extends Fragment {
 
 
-    ImageView profileImageView;
+    ImageView background;
     View profileImageContainer;
     TextView profileUsername;
     RelativeLayout profileContainer;
@@ -43,17 +45,14 @@ public class HomeUserInfoFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         profileContainer = (RelativeLayout) view.findViewById(R.id.profile_container);
         profileImageContainer = view.findViewById(R.id.profile_image_container);
-        profileImageView = (ImageView) view.findViewById(R.id.profile_image);
+        background = (ImageView) view.findViewById(R.id.imageView);
+        background.setImageResource(getBackgroundResource());
         profileUsername = (TextView) view.findViewById(R.id.profile_username);
         updateProfileInfo();
-        profileImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showEditProfileDialog();
-            }
-        });
+
     }
 
     void updateProfileInfo() {
@@ -62,7 +61,7 @@ public class HomeUserInfoFragment extends Fragment {
         profileUsername.setText(u.getName());
         Bitmap profileImage = Session.instance().getUserProfileImage(getActivity());
         if (profileImage != null) {
-            profileImageView.setImageBitmap(profileImage);
+//            profileImageView.setImageBitmap(profileImage);
         }
 
     }
@@ -82,5 +81,19 @@ public class HomeUserInfoFragment extends Fragment {
 
     public static HomeUserInfoFragment newInstance() {
         return new HomeUserInfoFragment();
+    }
+
+    int getBackgroundResource() {
+        int hour = DateTime.now().getHourOfDay();
+        //
+        if ((hour >= 7 && hour <= 9) || (hour >= 19 && hour <= 21)) {
+            return R.drawable.home_bg_sunset;
+        } else if (hour > 9 && hour < 19) {
+            return R.drawable.home_bg_day;
+        } else {
+            return R.drawable.home_bg_1;
+        }
+
+
     }
 }

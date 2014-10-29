@@ -1,5 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+    android:paddingTop="@dimen/action_bar_height"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
     android:background="#E0EAEF">
@@ -9,7 +9,8 @@
         android:layout_height="wrap_content"
         android:divider="#E0EAEF"
         android:dividerHeight="0dp"
-        android:id="@+id/medicines_list" />
+        android:id="@+id/medicines_list"
+        android:scrollbars="none" />
 
     <!--<ImageView-->
     <!--android:layout_width="fill_parent"-->
