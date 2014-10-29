@@ -40,10 +40,12 @@
                 android:textSize="20dp"
                 android:layout_toEndOf="@+id/linearLayout"
                 android:layout_toRightOf="@+id/linearLayout"
-                android:layout_marginTop="5dp"
                 android:layout_marginLeft="20dp"
                 android:textAllCaps="true"
-                android:ellipsize="end" />
+                android:ellipsize="end"
+                android:layout_alignBottom="@+id/linearLayout"
+                android:layout_alignTop="@+id/linearLayout"
+                android:gravity="center_vertical" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -55,7 +57,7 @@
 
                 <ImageButton
                     android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_height="fill_parent"
                     android:id="@+id/imageButton2"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_alarm_black_48dp"
@@ -73,8 +75,9 @@
                     android:layout_marginLeft="10dp"
                     android:textColor="@color/dark_grey_text"
                     android:textStyle="bold"
-                    android:textSize="22dp"
-                    android:layout_gravity="center_vertical" />
+                    android:textSize="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="bottom" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -84,7 +87,8 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/routines_list_item_hour"
                     android:textColor="@color/dark_grey_text"
-                    android:textSize="22dp" />
+                    android:textSize="20dp"
+                    android:gravity="bottom" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -93,7 +97,8 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/routines_list_item_minute"
                     android:textColor="@color/dark_grey_text"
-                    android:textSize="22dp" />
+                    android:textSize="20dp"
+                    android:gravity="bottom" />
 
             </LinearLayout>
 
