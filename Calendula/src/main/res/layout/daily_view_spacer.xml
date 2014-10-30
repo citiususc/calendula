@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
     <!--android:background="@color/android_blue_dark"-->
 
     <RelativeLayout
@@ -16,8 +15,9 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="130dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="225dp"
         android:visibility="visible"
         android:id="@+id/top"
 
@@ -41,7 +41,6 @@
         </RelativeLayout>
 
     </RelativeLayout>
-
 
 
 </LinearLayout>

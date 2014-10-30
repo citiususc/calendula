@@ -50,12 +50,13 @@
         android:gravity="center_vertical"
         android:spinnerMode="dialog" />
 
+    <!--android:src="@drawable/abc_ic_clear_holo_light"-->
     <ImageButton
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:id="@+id/entry_remove"
         android:layout_weight="0.1"
-        android:src="@drawable/abc_ic_clear_holo_light"
+
         android:background="@null"
         android:scaleType="center"
         android:baselineAlignBottom="false"

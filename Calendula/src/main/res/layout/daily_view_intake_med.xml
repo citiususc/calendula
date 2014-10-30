@@ -3,36 +3,40 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="30dp"
+    android:layout_height="40dp"
     android:id="@+id/daily_agenda_item_med_right"
     android:padding="5dp">
 
     <ImageView
         android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_height="30dp"
         android:id="@+id/imageView"
         android:src="@drawable/ic_presentation_2"
-        android:scaleType="fitCenter" />
+        android:scaleType="fitCenter"
+        android:cropToPadding="false"
+        android:layout_marginLeft="5dp"
+        android:layout_centerVertical="true" />
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="30dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Ibuprofeno"
         android:id="@+id/med_item_name"
         android:fontFamily="sans-serif-light"
         android:textColor="@color/dark_grey_text"
         android:textStyle="bold"
-        android:gravity="center_vertical"
 
-        android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageView"
         android:layout_toEndOf="@+id/imageView"
-        android:layout_marginLeft="5dp" />
+        android:layout_marginLeft="5dp"
+        android:gravity="bottom"
+        android:layout_centerVertical="true"
+        android:paddingBottom="3dp" />
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="30dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="(1 capsule)"
         android:fontFamily="sans-serif-condensed"
@@ -41,9 +45,9 @@
         android:textStyle="bold"
         android:gravity="center_vertical"
 
-        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>
 

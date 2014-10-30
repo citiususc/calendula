@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="CustomAppTheme" parent="android:Theme.Holo.Light">
-        <item name="showcaseViewStyle">@style/CustomShowcaseTheme</item>
-    </style>
-
-</resources>

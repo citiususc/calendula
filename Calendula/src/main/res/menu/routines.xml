@@ -7,4 +7,12 @@
         android:icon="@drawable/content_discard"
         android:orderInCategory="100"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_done"
+        android:title="@string/action_remove"
+        android:icon="@drawable/ic_done_white_48dp"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+
 </menu>

@@ -2,16 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="0dp"
-    android:paddingTop="0dp"
-    android:paddingRight="0dp"
-    android:paddingBottom="1dp">
+    android:paddingLeft="4dp"
+    android:paddingTop="4dp"
+    android:paddingRight="4dp">
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="90dp"
         android:background="@drawable/shape_list_item"
-        android:layout_margin="7dp"
         android:id="@+id/medicines_list_item_container">
 
         <ImageButton

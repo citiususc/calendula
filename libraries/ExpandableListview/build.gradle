@@ -13,11 +13,11 @@ repositories {
 }
 
 android {
-    compileSdkVersion 18
-    buildToolsVersion "19.1.0"
+    compileSdkVersion 21
+    buildToolsVersion "21.0.2"
 
 }
 
 dependencies {
-	compile 'com.android.support:appcompat-v7:20.0.0'
+    compile "com.android.support:appcompat-v7:21.0.+"
 }

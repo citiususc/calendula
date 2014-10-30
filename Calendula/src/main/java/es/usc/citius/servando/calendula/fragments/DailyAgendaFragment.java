@@ -1,6 +1,8 @@
 package es.usc.citius.servando.calendula.fragments;
 
 
+import android.animation.FloatEvaluator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.AbsListView;
@@ -27,6 +28,8 @@ import org.joda.time.DateTime;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
@@ -48,17 +51,16 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
     ArrayAdapter adapter = null;
     ListView listview = null;
     int lastScroll = 0;
-    int lastFirstVisibleItem = 0;
     View userInfoFragment;
     boolean profileShown = true;
     boolean expanded = false;
     int profileFragmentHeight = 0;
-    private SlideExpandableListAdapter slideAdapter;
-    private int profileHeight;
-
     View zoomContainer;
     AgendaZoomHelper zoomHelper;
-
+    private SlideExpandableListAdapter slideAdapter;
+    private int toolbarHeight;
+    private int lastVisibleItemCount;
+    private Dictionary<Integer, Integer> listViewItemHeights = new Hashtable<Integer, Integer>();
 
     @Override
     public void onDetach() {
@@ -94,9 +96,10 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
 
         inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
-
         Log.d(getTag(), "Fragments: " + (getChildFragmentManager().getFragments() != null ? getChildFragmentManager().getFragments().size() : 0));
         userProInfoFragment = HomeUserInfoFragment.newInstance();
+        profileFragmentHeight = (int) getResources().getDimension(R.dimen.header_height);
+        toolbarHeight = (int) getResources().getDimension(R.dimen.action_bar_height);
 
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.user_info_fragment, userProInfoFragment)
@@ -117,8 +120,18 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                 items.addAll(buildItems()); // allow user to change day
                 adapter.notifyDataSetChanged();
             }
-        });
 
+
+            @Override
+            public void onHide() {
+                updateBackground(DateTime.now());
+            }
+
+            @Override
+            public void onShow(Routine r) {
+                updateBackground(r.time().toDateTimeToday());
+            }
+        });
 
 
         listview.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -130,21 +143,41 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
 
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (expanded) {
-                    listview.computeScroll();
-                    int scrollPosition = listview.getScrollY();
-                    Log.d(getTag(), "Scroll Y: " + scrollPosition + " firstItem: " + firstVisibleItem);
 
-                    if (firstVisibleItem > 0 && firstVisibleItem > lastFirstVisibleItem) {
-                        hideProfile();
-                    } else if (firstVisibleItem < lastFirstVisibleItem) {
-                        showProfile();
+                if (expanded && getUserVisibleHint()) { // expanded and visible
+//                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)userInfoFragment.getLayoutParams();
+                    int scrollY = getScroll();
+                    int scrollDiff = (scrollY - lastScroll);
+
+
+                    if (lastVisibleItemCount == visibleItemCount) {
+
+                        int translationY = (int) (userInfoFragment.getTranslationY() - scrollDiff);
+                        Log.d(getTag(), "Scroll Y: " + scrollY + ", translationY: " + translationY + ", firstItem: " + firstVisibleItem + ", profileHeight: " + profileFragmentHeight);
+
+                        if (translationY < -profileFragmentHeight) {
+                            translationY = -profileFragmentHeight;
+                        } else if (translationY >= 0) {
+                            translationY = 0;
+                        }
+
+                        if (translationY < toolbarHeight - profileFragmentHeight) {
+//                            ((HomeActivity) getActivity()).disableToolbarTransparency();
+                            ((HomeActivity) getActivity()).hideAddButton();
+                            ((HomeActivity) getActivity()).hideToolbar();
+                        } else if (translationY > (toolbarHeight - profileFragmentHeight)) {
+                            ((HomeActivity) getActivity()).enableToolbarTransparency();
+                            ((HomeActivity) getActivity()).showAddButton();
+                            ((HomeActivity) getActivity()).showToolbar();
+                        }
+                        userInfoFragment.setTranslationY(translationY);
                     }
+                    lastScroll = scrollY;
 
-                    lastFirstVisibleItem = firstVisibleItem;
-                    lastScroll = scrollPosition;
                 }
+                lastVisibleItemCount = visibleItemCount;
             }
+
         });
 
         LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.list_animation);
@@ -152,9 +185,25 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         return rootView;
     }
 
+    private int getScroll() {
+        View c = listview.getChildAt(0); //this is the first visible row
+        if (c != null) {
+            int scrollY = -c.getTop();
+            listViewItemHeights.put(listview.getFirstVisiblePosition(), c.getHeight());
+            for (int i = 0; i < listview.getFirstVisiblePosition(); ++i) {
+                if (listViewItemHeights.get(i) != null) // (this is a sanity check)
+                    scrollY += listViewItemHeights.get(i); //add all heights of the views that are gone
+            }
+            return scrollY;
+        }
+        return 0;
+
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
     }
 
     @Override
@@ -162,7 +211,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         super.onResume();
         // Restore preferences
         SharedPreferences settings = getActivity().getSharedPreferences(CalendulaApp.PREFERENCES_NAME, 0);
-        lastFirstVisibleItem = settings.getInt("agenda_last_visible_item", 0);
+
 
         items.clear();
         items.addAll(buildItems()); // allow user to change day
@@ -172,8 +221,8 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
 
     public String getNextRoutineHour() {
         int now = DateTime.now().getHourOfDay();
-        for(Routine r : Routine.findAll()){
-            if(r.time().getHourOfDay() >= now){
+        for (Routine r : Routine.findAll()) {
+            if (r.time().getHourOfDay() >= now) {
                 return r.time().toString("kk:mm");
             }
         }
@@ -196,7 +245,6 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-
             Log.d(getTag(), "Visible to user");
             if (profileShown)
                 ((HomeActivity) getActivity()).setCustomTitle("Calendula");
@@ -231,26 +279,39 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
     }
 
     public void toggleViewMode() {
-
+        //update expand/collapse flag
         expanded = !expanded;
+        // get next routine item index
+        final int nextRoutineHour = getNextRoutinePosition();
+        // restore header if not expanded
+        if (!expanded) {
+            restoreHeader();
+            ((HomeActivity) getActivity()).hideAddButton();
+        }
 
-        if(expanded)
-            hideProfile();
-        else
-            showProfile();
-
-        int nextRoutineHour = getNextRoutinePosition();
+        // refresh adapter items
         items.clear();
         items.addAll(buildItems());
+        // set expand/collapse animation
         listview.setLayoutAnimation(getAnimationController(expanded));
+        // perform update
         adapter.notifyDataSetChanged();
+        // open next routine item
         slideAdapter.setLastOpenPosition(expanded ? nextRoutineHour + 1 : 1);
-        listview.setSelection(nextRoutineHour+1);
+//        listViewItemHeights = new Hashtable<Integer, Integer>();
+//        lastScroll = getScroll();
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                listview.setSelection(nextRoutineHour+1);
+//            }
+//        }, 1000);
+
     }
 
 
-
-    LayoutAnimationController getAnimationController(boolean expand){
+    LayoutAnimationController getAnimationController(boolean expand) {
         return AnimationUtils.loadLayoutAnimation(getActivity(), expand ? R.anim.list_animation_expand : R.anim.list_animation);
     }
 
@@ -279,12 +340,6 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
 
         } else {
             v = layoutInflater.inflate(R.layout.daily_view_intake, null);
-//            if (!item.hasColors) {
-//                int colorIndex = RandomColorChooser.getFixedColorIdx(new Integer(item.hour));
-//                item.primaryColor = RandomColorChooser.getPrimaryColor(colorIndex, getResources());
-//                item.secondaryColor = RandomColorChooser.getSecondaryColor(colorIndex, getResources());
-//                item.hasColors = true;
-//            }
             LinearLayout medList = (LinearLayout) v.findViewById(R.id.med_item_list);
 
             for (DailyAgendaItemStub.DailyAgendaItemStubElement element : item.meds) {
@@ -315,61 +370,23 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         Toast.makeText(getActivity(), " Add new routine or med here!", Toast.LENGTH_SHORT).show();
     }
 
-    public void hideProfile() {
-        ((HomeActivity) getActivity()).setCustomTitle(Session.instance().getUser().getName());
-        if (profileShown) {
+    private void restoreHeader() {
+        // translate header to its original position (y=0)
+        ObjectAnimator.ofObject(userInfoFragment,
+                "translationY", new FloatEvaluator(),
+                (int) userInfoFragment.getTranslationY(), 0)
+                .setDuration(500)
+                .start();
 
-            profileShown = false;
-            final Animation slideUp = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_slide_up);
-            slideUp.setFillAfter(true);
-            slideUp.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    if(profileFragmentHeight==0){
-                        profileFragmentHeight=userInfoFragment.getRootView().getHeight();
-                    }
-//                    userInfoFragment.setVisibility(View.GONE);
-                    // set 0 height
-                    ViewGroup.LayoutParams params = userInfoFragment.getLayoutParams();
-                    params.height = 0;
-                    userInfoFragment.setLayoutParams(params);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-            userInfoFragment.startAnimation(slideUp);
-        }
-    }
-
-    private void showProfile() {
-        ((HomeActivity) getActivity()).setCustomTitle("Calendula");
-        if (!profileShown) {
-            profileShown = true;
-            // reset height
-            ViewGroup.LayoutParams params = userInfoFragment.getLayoutParams();
-            params.height = profileFragmentHeight;
-            userInfoFragment.setLayoutParams(params);
-//            userInfoFragment.getLayoutParams().height=
-//            userInfoFragment.setVisibility(View.VISIBLE);
-            Animation slideDown = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_slide_down);
-            slideDown.setFillAfter(true);
-            userInfoFragment.startAnimation(slideDown);
-        }
+        // fade home toolbar
+        ((HomeActivity) getActivity()).enableToolbarTransparency();
     }
 
     void updatePrefs() {
         SharedPreferences settings = getActivity().getSharedPreferences(CalendulaApp.PREFERENCES_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putInt("agenda_last_visible_item", lastFirstVisibleItem);
-        //editor.putBoolean("profile_shown", !profileShown && expanded);
+
+
         editor.commit();
     }
 
@@ -403,6 +420,11 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         public View getView(int position, View convertView, ViewGroup parent) {
             return getAgendaItemView(position, convertView, parent);
         }
+    }
+
+    public void updateBackground(DateTime time) {
+        if (userProInfoFragment != null)
+            userProInfoFragment.updateBackground(time);
     }
 
 }

@@ -1,5 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+    android:paddingTop="@dimen/action_bar_height"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
     android:background="#E0EAEF">
@@ -9,17 +9,18 @@
         android:layout_height="wrap_content"
         android:divider="#E0EAEF"
         android:dividerHeight="0dp"
-        android:id="@+id/medicines_list" />
+        android:id="@+id/medicines_list"
+        android:scrollbars="none" />
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="5dp"
-        android:id="@+id/imageView2a"
-        android:src="@drawable/daily_view_list_item_tab_shadow_top"
-        android:scaleType="fitXY"
-        android:layout_alignParentTop="true"
-        android:visibility="visible"
-        android:alpha="0.7" />
+    <!--<ImageView-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="5dp"-->
+    <!--android:id="@+id/imageView2a"-->
+    <!--android:src="@drawable/daily_view_list_item_tab_shadow_top"-->
+    <!--android:scaleType="fitXY"-->
+    <!--android:layout_alignParentTop="true"-->
+    <!--android:visibility="visible"-->
+    <!--android:alpha="0.7" />-->
 
     <!--<ImageView-->
     <!--android:layout_width="fill_parent"-->
@@ -42,20 +43,21 @@
     <!--style="@style/ok_button"-->
     <!--android:background="@drawable/ok_button_selector" />-->
 
-    <com.shamanland.fab.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:src="@drawable/ic_action_add"
-        android:scaleType="fitCenter"
-        app:floatingActionButtonColor="@color/android_blue"
-        app:floatingActionButtonSize="normal"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/medicine_add_button"
-        android:layout_margin="10dp"
-        android:visibility="gone"
-        android:adjustViewBounds="true"
-        android:padding="10dip" />
+
+    <!--<com.shamanland.fab.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--android:layout_width="70dp"-->
+    <!--android:layout_height="70dp"-->
+    <!--android:src="@drawable/ic_action_add"-->
+    <!--android:scaleType="fitCenter"-->
+    <!--app:floatingActionButtonColor="@color/android_blue"-->
+    <!--app:floatingActionButtonSize="normal"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:id="@+id/medicine_add_button"-->
+    <!--android:layout_margin="10dp"-->
+    <!--android:visibility="gone"-->
+    <!--android:adjustViewBounds="true"-->
+    <!--android:padding="10dip" />-->
 
 </RelativeLayout>

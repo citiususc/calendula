@@ -129,7 +129,7 @@ public class StartActivity extends Activity {
                     }
                     // create default session
                     User defaultUser = new User();
-                    defaultUser.setName("Walter");
+                    defaultUser.setName("Calendula");
                     Session.instance().create(getApplicationContext(), defaultUser);
                     return STATUS_NO_SESSION;
                 }

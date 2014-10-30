@@ -12,6 +12,7 @@ import org.joda.time.LocalTime;
 
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
+import es.usc.citius.servando.calendula.util.Screen;
 
 /**
  * Created by castrelo on 4/10/14.
@@ -43,6 +44,8 @@ public class CalendulaApp extends Application {
         DailyAgenda.instance().setupForToday(this);
         // setup alarm for daily agenda update
         setupUpdateDailyAgendaAlarm();
+        // create app palette
+        Screen.createPalette(this, Screen.drawableToBitmap(getResources().getDrawable(R.drawable.home_bg_1)));
 
     }
 

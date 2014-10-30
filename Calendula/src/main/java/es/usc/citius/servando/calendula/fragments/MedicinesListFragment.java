@@ -39,13 +39,13 @@ public class MedicinesListFragment extends Fragment {
         mMedicines = Medicine.findAll();
         adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
         listview.setAdapter(adapter);
-        rootView.findViewById(R.id.medicine_add_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mMedicineSelectedCallback != null)
-                    mMedicineSelectedCallback.onCreateMedicine();
-            }
-        });
+//        rootView.findViewById(R.id.medicine_add_button).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (mMedicineSelectedCallback != null)
+//                    mMedicineSelectedCallback.onCreateMedicine();
+//            }
+//        });
         return rootView;
     }
 
