@@ -120,6 +120,17 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                 items.addAll(buildItems()); // allow user to change day
                 adapter.notifyDataSetChanged();
             }
+
+
+            @Override
+            public void onHide() {
+                updateBackground(DateTime.now());
+            }
+
+            @Override
+            public void onShow(Routine r) {
+                updateBackground(r.time().toDateTimeToday());
+            }
         });
 
 
@@ -133,7 +144,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
-                if (expanded) {
+                if (expanded && getUserVisibleHint()) { // expanded and visible
 //                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)userInfoFragment.getLayoutParams();
                     int scrollY = getScroll();
                     int scrollDiff = (scrollY - lastScroll);
@@ -151,11 +162,13 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                         }
 
                         if (translationY < toolbarHeight - profileFragmentHeight) {
-                            ((HomeActivity) getActivity()).showToolbar();
+//                            ((HomeActivity) getActivity()).disableToolbarTransparency();
                             ((HomeActivity) getActivity()).hideAddButton();
-                        } else if (translationY > (toolbarHeight - profileFragmentHeight)) {
                             ((HomeActivity) getActivity()).hideToolbar();
+                        } else if (translationY > (toolbarHeight - profileFragmentHeight)) {
+                            ((HomeActivity) getActivity()).enableToolbarTransparency();
                             ((HomeActivity) getActivity()).showAddButton();
+                            ((HomeActivity) getActivity()).showToolbar();
                         }
                         userInfoFragment.setTranslationY(translationY);
                     }
@@ -232,7 +245,6 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-
             Log.d(getTag(), "Visible to user");
             if (profileShown)
                 ((HomeActivity) getActivity()).setCustomTitle("Calendula");
@@ -367,7 +379,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                 .start();
 
         // fade home toolbar
-        ((HomeActivity) getActivity()).hideToolbar();
+        ((HomeActivity) getActivity()).enableToolbarTransparency();
     }
 
     void updatePrefs() {
@@ -410,5 +422,9 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         }
     }
 
+    public void updateBackground(DateTime time) {
+        if (userProInfoFragment != null)
+            userProInfoFragment.updateBackground(time);
+    }
 
 }

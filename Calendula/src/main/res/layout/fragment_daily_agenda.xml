@@ -51,9 +51,9 @@
             android:visibility="visible"
             android:padding="10dp"
             android:id="@+id/content_wrapper"
-            android:layout_marginTop="56dp">
+            android:layout_marginTop="65dp">
 
-            <FrameLayout
+        <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="@drawable/shape_list_item"

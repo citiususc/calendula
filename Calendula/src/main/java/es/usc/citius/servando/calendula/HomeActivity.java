@@ -559,20 +559,18 @@ public class HomeActivity extends ActionBarActivity implements
     @Override
     public void onPageSelected(int page) {
         invalidateOptionsMenu();
-        updateToolBar(page);
-        if (page == 0 && !toolbarVisible) {
-            hideAddButton();
-        } else
-            showAddButton();
-    }
-
-    private void updateToolBar(int page) {
-        if (page == 0 && !toolbarVisible) {
+        if (page == 0) {
             setActionBarColor(getResources().getColor(R.color.transparent));
-        } else if (currentActionBarColor != getResources().getColor(R.color.toolbar_dark_background)) {
+            //hideAddButton();
+        } else {
+            showAddButton();
+            if (toolbar.getVisibility() != View.VISIBLE) {
+                toolbar.setVisibility(View.VISIBLE);
+            }
             setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
         }
     }
+
 
     @Override
     public void onPageScrollStateChanged(int i) {
@@ -603,23 +601,30 @@ public class HomeActivity extends ActionBarActivity implements
     }
 
 
-    public void hideToolbar() {
-        if (toolbarVisible) {
-            toolbarVisible = false;
-            Log.d("Home", "HideToolbar");
+    public void enableToolbarTransparency() {
+//        if (toolbarVisible) {
+//            toolbarVisible = false;
+//            Log.d("Home", "HideToolbar");
             setActionBarColor(getResources().getColor(R.color.transparent));
-        }
+//        }
 
     }
 
-    public void showToolbar() {
-        if (!toolbarVisible) {
-            Log.d("Home", "ShowToolbar");
-            ((FloatingActionButton) (addButton)).show(true);
-            toolbarVisible = true;
-            setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
-        }
+    public void disableToolbarTransparency() {
+//        if (!toolbarVisible) {
+//            Log.d("Home", "ShowToolbar");
+//            ((FloatingActionButton) (addButton)).show(true);
+//            toolbarVisible = true;
+//            setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
+//        }
+    }
 
+    public void hideToolbar() {
+        toolbar.setVisibility(View.GONE);
+    }
+
+    public void showToolbar() {
+        toolbar.setVisibility(View.VISIBLE);
     }
 
 

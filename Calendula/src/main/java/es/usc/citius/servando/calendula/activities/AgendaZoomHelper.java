@@ -74,6 +74,8 @@ public class AgendaZoomHelper {
             String hr = new PrettyTime().format(r.time().toDateTimeToday().toDate());
             ((TextView) v.findViewById(R.id.meds_time_view)).setText(hr.replaceFirst(hr.charAt(0) + "", (hr.charAt(0) + "").toUpperCase()));
             zoomInView(from, activity);
+            if (mListener != null)
+                mListener.onShow(r);
         }
     }
 
@@ -93,7 +95,9 @@ public class AgendaZoomHelper {
         if (somethingChanged) {
             mListener.onChange();
         }
+        mListener.onHide();
         zoomOutView();
+
     }
 
     private void zoomOutView() {
@@ -238,6 +242,10 @@ public class AgendaZoomHelper {
 
     public interface ZoomHelperListener {
         void onChange();
+
+        void onHide();
+
+        void onShow(Routine r);
     }
 
     public ZoomHelperListener mListener;

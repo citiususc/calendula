@@ -35,6 +35,7 @@
         <activity
             android:name="es.usc.citius.servando.calendula.activities.ScheduleCreationActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Translucent"
             android:label="@string/title_activity_schedules" />
         <activity
             android:name="es.usc.citius.servando.calendula.activities.SchedulesActivity"
