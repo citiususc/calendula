@@ -40,7 +40,7 @@ android {
 dependencies {
     compile 'com.google.code.gson:gson'
     compile project(':libraries:ExpandableListview')
-    //compile project(':libraries:ShowcaseView')
+    compile project(':libraries:BetterPickersLib')
 //    compile 'com.github.amlcurran.showcaseview:library:5.0.0'
     //compile 'com.android.support:appcompat-v7:20.0.0'
     compile "com.android.support:appcompat-v7:21.0.+"

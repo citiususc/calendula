@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
+
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
@@ -22,22 +24,18 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Routine;
 
-//import com.doomonafireball.betterpickers.radialtimepicker.RadialPickerLayout;
-//import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
 
 /**
  * Created by joseangel.pineiro on 12/4/13.
  */
-public class RoutineCreateOrEditFragment extends DialogFragment {
-//        implements RadialTimePickerDialog.OnTimeSetListener {
+public class RoutineCreateOrEditFragment extends DialogFragment implements RadialTimePickerDialog.OnTimeSetListener {
 
     OnRoutineEditListener mRoutineEditCallback;
     Routine mRoutine;
 
-    //    timepicker mtimepicker;
     Button timeButton;
     TextView mNameTextView;
-    Button mConfirmButton;
+//    Button mConfirmButton;
 
     int hour;
     int minute;
@@ -45,18 +43,17 @@ public class RoutineCreateOrEditFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_or_edit_routine, container, false);
-//        mTimePicker = (TimePicker) rootView.findViewById(R.id.routine_time_picker);
         mNameTextView = (TextView) rootView.findViewById(R.id.routine_edit_name);
-        mConfirmButton = (Button) rootView.findViewById(R.id.routine_button_ok);
+//        mConfirmButton = (Button) rootView.findViewById(R.id.routine_button_ok);
         timeButton = (Button) rootView.findViewById(R.id.button2);
 //        mTimePicker.setIs24HourView(true);
-        mConfirmButton.setText(getString(mRoutine == null ? R.string.create_routine_button_text : R.string.edit_routine_button_text));
-        mConfirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onEdit();
-            }
-        });
+//        mConfirmButton.setText(getString(mRoutine == null ? R.string.create_routine_button_text : R.string.edit_routine_button_text));
+//        mConfirmButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                onEdit();
+//            }
+//        });
 
 
         long routineId = -1;
@@ -74,7 +71,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment {
             setRoutine(mRoutine);
             hour = mRoutine.time().getHourOfDay();
             minute = mRoutine.time().getMinuteOfHour();
-            mConfirmButton.setText(getString(R.string.edit_routine_button_text));
+//            mConfirmButton.setText(getString(R.string.edit_routine_button_text));
         } else {
             DateTime now = DateTime.now();
             hour = now.getHourOfDay();
@@ -89,17 +86,9 @@ public class RoutineCreateOrEditFragment extends DialogFragment {
         timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                TimePickerBuilder tpb = new TimePickerBuilder()
-//                        .setFragmentManager(getChildFragmentManager())
-//                        .setStyleResId(R.style.BetterPickersDialogFragment_Light)
-//                        .setTargetFragment(RoutineCreateOrEditFragment.this);
-//                tpb.show();
-
-
-//                DateTime now = DateTime.now();
-//                RadialTimePickerDialog timePickerDialog = RadialTimePickerDialog
-//                        .newInstance(RoutineCreateOrEditFragment.this, hour, minute, true);
-//                timePickerDialog.show(getChildFragmentManager(), "111");
+                RadialTimePickerDialog timePickerDialog = RadialTimePickerDialog
+                        .newInstance(RoutineCreateOrEditFragment.this, hour, minute, true);
+                timePickerDialog.show(getChildFragmentManager(), "111");
             }
         });
 
@@ -122,7 +111,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment {
         mRoutine = r;
         mNameTextView.setText(mRoutine.name());
         updateTime();
-        mConfirmButton.setText(getString(R.string.edit_routine_button_text));
+//        mConfirmButton.setText(getString(R.string.edit_routine_button_text));
 
     }
 
@@ -136,10 +125,10 @@ public class RoutineCreateOrEditFragment extends DialogFragment {
 
 
     void updateTime() {
-        timeButton.setText(new LocalTime(hour, minute).toString("kk:mm") + "h");
+        timeButton.setText(new LocalTime(hour, minute).toString("kk:mm"));
     }
 
-    private void onEdit() {
+    public void onEdit() {
 
         String name = mNameTextView.getText().toString();
 
@@ -233,12 +222,12 @@ public class RoutineCreateOrEditFragment extends DialogFragment {
         mRoutineEditCallback = l;
     }
 
-//    @Override
-//    public void onTimeSet(RadialPickerLayout radialPickerLayout, int hourOfDay, int minute) {
-//        this.hour = hourOfDay;
-//        this.minute = minute;
-//        updateTime();
-//    }
+    @Override
+    public void onTimeSet(RadialTimePickerDialog dialog, int hourOfDay, int minute) {
+        this.hour = hourOfDay;
+        this.minute = minute;
+        updateTime();
+    }
 
     // Container Activity must implement this interface
     public interface OnRoutineEditListener {

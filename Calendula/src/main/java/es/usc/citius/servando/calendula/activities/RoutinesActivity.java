@@ -1,11 +1,13 @@
 package es.usc.citius.servando.calendula.activities;
 
+import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,18 +39,24 @@ public class RoutinesActivity extends ActionBarActivity implements RoutineCreate
 
     long mRoutineId;
 
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routines);
         processIntent();
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(getString(R.string.title_activity_routines));
+        toolbar.setSubtitle(getString(mRoutineId != -1 ? R.string.title_edit_routine_activity : R.string.create_routine_button_text));
+        toolbar.setNavigationIcon(new InsetDrawable(getResources().getDrawable(R.drawable.ic_alarm_white_48dp), 15, 15, 15, 15));
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
     }
 
 
@@ -71,8 +79,14 @@ public class RoutinesActivity extends ActionBarActivity implements RoutineCreate
             case R.id.action_remove:
                 ((RoutineCreateOrEditFragment) getViewPagerFragment(0)).showDeleteConfirmationDialog(Routine.findById(mRoutineId));
                 return true;
+            case R.id.action_done:
+                ((RoutineCreateOrEditFragment) getViewPagerFragment(0)).onEdit();
+                return true;
+            default:
+                finish();
+                return true;
         }
-        return super.onOptionsItemSelected(item);
+        //return super.onOptionsItemSelected(item);
     }
 
     @Override

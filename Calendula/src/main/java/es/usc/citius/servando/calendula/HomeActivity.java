@@ -559,6 +559,7 @@ public class HomeActivity extends ActionBarActivity implements
     @Override
     public void onPageSelected(int page) {
         invalidateOptionsMenu();
+        updateTitle(page);
         if (page == 0) {
             setActionBarColor(getResources().getColor(R.color.transparent));
             //hideAddButton();
@@ -569,6 +570,23 @@ public class HomeActivity extends ActionBarActivity implements
             }
             setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
         }
+
+    }
+
+    private void updateTitle(int page) {
+        String title = "";
+
+        switch (page) {
+            case 1:
+                title = getString(R.string.title_activity_routines);
+                break;
+            case 2:
+                title = getString(R.string.title_activity_medicines);
+                break;
+            case 4:
+                title = getString(R.string.title_activity_schedules);
+        }
+        toolbar.setTitle(title);
     }
 
 
