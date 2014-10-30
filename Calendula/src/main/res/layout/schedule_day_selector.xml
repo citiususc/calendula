@@ -79,7 +79,7 @@
             android:id="@+id/day_check_all"
             android:layout_weight="1.5"
             android:textColor="@color/android_blue"
-            android:visibility="invisible" />
+            android:visibility="visible" />
 
     </LinearLayout>
 </RelativeLayout>

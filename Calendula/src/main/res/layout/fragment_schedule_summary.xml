@@ -17,37 +17,38 @@
         android:textColor="@color/android_blue" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="MedName"
         android:id="@+id/sched_summary_medname"
         android:layout_below="@+id/summaryTitle"
-        android:layout_alignLeft="@+id/summaryTitle"
-        android:layout_alignStart="@+id/summaryTitle"
         android:textStyle="bold"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:textColor="@color/android_blue_dark"
-        android:textSize="32dp" />
+        android:textSize="32dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:gravity="center" />
 
     <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:id="@+id/sched_summary_medicon"
-        android:layout_alignBottom="@+id/sched_summary_medname"
-        android:layout_alignRight="@+id/summaryTitle" />
+        android:layout_below="@+id/sched_summary_medname"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Every day"
         android:id="@+id/sched_summary_medi_days"
-        android:layout_below="@+id/sched_summary_medname"
-        android:textSize="25dp"
+        android:textSize="22sp"
         android:textColor="@color/android_blue"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="30dp" />
+        android:layout_below="@+id/sched_summary_medicon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -55,10 +56,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Three times a day"
         android:id="@+id/sched_summary_medi_dailyfreq"
-        android:textSize="25dp"
+        android:textSize="22dp"
         android:textColor="@color/android_blue"
         android:layout_below="@+id/sched_summary_medi_days"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="30dp" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
 
 </RelativeLayout>

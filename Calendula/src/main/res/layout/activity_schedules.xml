@@ -1,7 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/action_bar_height"
     android:background="@color/white">
 
     <LinearLayout
@@ -9,9 +8,10 @@
         android:layout_height="7dp"
         android:orientation="horizontal"
         android:gravity="center|center_vertical"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
+        android:layout_marginTop="5dp"
+        android:id="@+id/linearLayout2"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
 
         <ImageView
             android:layout_width="100dp"
@@ -49,8 +49,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".SchedulesActivity"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="80dp" />
+        android:layout_above="@+id/schedules_prev_button"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -58,10 +60,10 @@
         android:orientation="horizontal"
         android:gravity="center|center_vertical"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:id="@+id/linearLayout">
+        android:id="@+id/linearLayout"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp">
 
         <ImageView
             android:layout_width="100dp"
@@ -103,33 +105,40 @@
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:text="@string/prev"
         android:id="@+id/schedules_prev_button"
         android:layout_weight=".5"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="5dp"
         style="@style/prev_button"
         android:layout_marginRight="1dp"
         android:layout_alignParentBottom="true"
         android:gravity="center_horizontal|center_vertical"
         android:layout_toLeftOf="@id/spacer_center"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="25dp" />
+        android:layout_marginBottom="15dp" />
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:text="@string/confirm"
         android:id="@+id/schedules_next_button"
         android:layout_weight=".5"
         android:layout_toRightOf="@id/spacer_center"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="5dp"
         style="@style/next_button"
         android:layout_marginLeft="1dp"
         android:gravity="center"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="25dp" />
+        android:layout_marginBottom="15dp" />
+
+    <!--<android.support.v7.widget.Toolbar-->
+    <!--android:id="@+id/toolbar"-->
+    <!--android:background="@color/android_blue_dark"-->
+    <!--android:elevation="3dp"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="56dp" />-->
 
 
 </RelativeLayout>

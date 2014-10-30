@@ -152,8 +152,10 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
 
                         if (translationY < toolbarHeight - profileFragmentHeight) {
                             ((HomeActivity) getActivity()).showToolbar();
+                            ((HomeActivity) getActivity()).hideAddButton();
                         } else if (translationY > (toolbarHeight - profileFragmentHeight)) {
                             ((HomeActivity) getActivity()).hideToolbar();
+                            ((HomeActivity) getActivity()).showAddButton();
                         }
                         userInfoFragment.setTranslationY(translationY);
                     }
@@ -270,8 +272,10 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         // get next routine item index
         final int nextRoutineHour = getNextRoutinePosition();
         // restore header if not expanded
-        if (!expanded)
+        if (!expanded) {
             restoreHeader();
+            ((HomeActivity) getActivity()).hideAddButton();
+        }
 
         // refresh adapter items
         items.clear();

@@ -43,13 +43,13 @@ public class ScheduleListFragment extends Fragment {
         adapter = new ScheduleListAdapter(getActivity(), R.layout.schedules_list_item, mSchedules);
         listview.setAdapter(adapter);
 
-        rootView.findViewById(R.id.schedule_add_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mScheduleSelectedCallback != null)
-                    mScheduleSelectedCallback.onCreateSchedule();
-            }
-        });
+//        rootView.findViewById(R.id.schedule_add_button).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (mScheduleSelectedCallback != null)
+//                    mScheduleSelectedCallback.onCreateSchedule();
+//            }
+//        });
 
 
         return rootView;

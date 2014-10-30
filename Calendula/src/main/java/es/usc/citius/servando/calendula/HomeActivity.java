@@ -24,14 +24,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.Arrays;
 import java.util.List;
@@ -560,6 +560,10 @@ public class HomeActivity extends ActionBarActivity implements
     public void onPageSelected(int page) {
         invalidateOptionsMenu();
         updateToolBar(page);
+        if (page == 0 && !toolbarVisible) {
+            hideAddButton();
+        } else
+            showAddButton();
     }
 
     private void updateToolBar(int page) {
@@ -576,59 +580,12 @@ public class HomeActivity extends ActionBarActivity implements
     }
 
 
-    private void hideAddButton() {
-        if (addButtonShown) {
-            addButtonShown = false;
-            Animation slideDown = AnimationUtils.loadAnimation(this, R.anim.anim_slide_down_2);
-            slideDown.setFillAfter(true);
-            addButton.startAnimation(slideDown);
-
-            slideDown.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    setCustomTitle(Session.instance().getUser().getName());
-//                    actionBarImage.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-
-
-        }
+    public void hideAddButton() {
+        ((FloatingActionButton) (addButton)).hide(true);
     }
 
-    private void showAddButton() {
-
-        if (!addButtonShown) {
-            addButtonShown = true;
-            Animation slideUp = AnimationUtils.loadAnimation(this, R.anim.anim_slide_up_2);
-            slideUp.setFillAfter(true);
-            slideUp.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    addButton.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-            addButton.startAnimation(slideUp);
-        }
+    public void showAddButton() {
+        ((FloatingActionButton) (addButton)).show(true);
     }
 
     Fragment getViewPagerFragment(int position) {
@@ -658,6 +615,7 @@ public class HomeActivity extends ActionBarActivity implements
     public void showToolbar() {
         if (!toolbarVisible) {
             Log.d("Home", "ShowToolbar");
+            ((FloatingActionButton) (addButton)).show(true);
             toolbarVisible = true;
             setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
         }

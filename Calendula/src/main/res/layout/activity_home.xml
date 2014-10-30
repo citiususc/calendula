@@ -28,20 +28,18 @@
                     android:background="@android:color/transparent"
                     tools:context=".HomeActivity" />
 
-                <com.shamanland.fab.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:src="@drawable/ic_action_add"
-                    android:scaleType="fitCenter"
-                    app:floatingActionButtonColor="@color/android_blue"
-                    app:floatingActionButtonSize="normal"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
+                <com.melnykov.fab.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/add_button"
-                    android:layout_margin="10dp"
-                    android:adjustViewBounds="true"
-                    android:padding="10dip" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    android:layout_margin="16dp"
+                    android:src="@drawable/ic_action_add"
+                    fab:fab_colorNormal="@color/android_blue_dark"
+                    fab:fab_colorPressed="@color/android_blue"
+                    fab:fab_colorRipple="@color/android_blue_light"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true" />
 
             </RelativeLayout>
         </FrameLayout>

@@ -94,10 +94,13 @@ public class ScheduleUtils {
     }
 
     public static String stringifyDays(String[] days, Context ctx) {
+
+
         String dayStr = "";
         for (int i = 0; i < days.length - 1; i++) {
-            if (i > 0)
+            if (i > 0) {
                 dayStr += ", ";
+            }
             dayStr += days[i];
         }
         return dayStr + ((days.length > 1 ? " " + ctx.getString(R.string.and) + " " : "") + days[days.length - 1]);

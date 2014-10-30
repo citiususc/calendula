@@ -44,20 +44,20 @@
     <!--android:background="@drawable/ok_button_selector" />-->
 
 
-    <com.shamanland.fab.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:src="@drawable/ic_action_add"
-        android:scaleType="fitCenter"
-        app:floatingActionButtonColor="@color/android_blue"
-        app:floatingActionButtonSize="normal"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/medicine_add_button"
-        android:layout_margin="10dp"
-        android:visibility="gone"
-        android:adjustViewBounds="true"
-        android:padding="10dip" />
+    <!--<com.shamanland.fab.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--android:layout_width="70dp"-->
+    <!--android:layout_height="70dp"-->
+    <!--android:src="@drawable/ic_action_add"-->
+    <!--android:scaleType="fitCenter"-->
+    <!--app:floatingActionButtonColor="@color/android_blue"-->
+    <!--app:floatingActionButtonSize="normal"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:id="@+id/medicine_add_button"-->
+    <!--android:layout_margin="10dp"-->
+    <!--android:visibility="gone"-->
+    <!--android:adjustViewBounds="true"-->
+    <!--android:padding="10dip" />-->
 
 </RelativeLayout>
