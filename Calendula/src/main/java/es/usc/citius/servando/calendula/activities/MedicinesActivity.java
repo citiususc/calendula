@@ -1,5 +1,6 @@
 package es.usc.citius.servando.calendula.activities;
 
+import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -38,6 +39,7 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
 
     Long mMedicineId;
     Toolbar toolbar;
+    MenuItem removeItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +49,11 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle(getString(R.string.title_activity_routines));
+        toolbar.setSubtitle(getString(mMedicineId != -1 ? R.string.title_edit_medicine_activity : R.string.create_medicine_button_text));
+        toolbar.setNavigationIcon(new InsetDrawable(getResources().getDrawable(R.drawable.ic_pill_48dp), 15, 15, 15, 15));
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -72,19 +76,24 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.medicines, menu);
+        removeItem = menu.findItem(R.id.action_remove);
+        removeItem.setVisible(mMedicineId != -1 ? true : false);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            case R.id.action_remove:
+                ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).showDeleteConfirmationDialog(Medicine.findById(mMedicineId));
+                return true;
+            case R.id.action_done:
+                ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).onEdit();
+                return true;
+            default:
+                finish();
                 return true;
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -98,6 +107,13 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
     public void onMedicineCreated(Medicine m) {
         m.save();
         Toast.makeText(this, "Medicine created!", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    @Override
+    public void onMedicineDeleted(Medicine m) {
+        Toast.makeText(this, "Medicine deleted!", Toast.LENGTH_SHORT).show();
+        m.deleteCascade();
         finish();
     }
 

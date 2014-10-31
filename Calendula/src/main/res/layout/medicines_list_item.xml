@@ -51,12 +51,11 @@
             android:textColor="@color/android_blue" />
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="fill_parent"
             android:id="@+id/imageView"
-            android:src="@drawable/ic_settings"
+            android:src="@drawable/ic_edit_black_48dp"
             android:alpha="0.6"
-            android:layout_alignBottom="@+id/imageButton"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="23dp" />

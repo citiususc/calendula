@@ -64,10 +64,10 @@
             android:layout_marginTop="0dp" />
 
         <ImageView
-            android:layout_width="20dp"
+            android:layout_width="30dp"
             android:layout_height="fill_parent"
             android:id="@+id/imageView"
-            android:src="@drawable/ic_settings"
+            android:src="@drawable/ic_edit_black_48dp"
             android:alpha="0.6"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"

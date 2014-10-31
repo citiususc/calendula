@@ -84,5 +84,13 @@ public class Medicine extends Model {
                 .executeSingle();
     }
 
+    public void deleteCascade() {
+        List<Schedule> schedules = Schedule.findByMedicine(this);
+        for (Schedule s : schedules) {
+            s.deleteCascade();
+        }
+        this.delete();
+    }
+
 
 }

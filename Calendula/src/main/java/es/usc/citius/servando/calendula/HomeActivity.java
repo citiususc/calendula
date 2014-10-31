@@ -583,7 +583,7 @@ public class HomeActivity extends ActionBarActivity implements
             case 2:
                 title = getString(R.string.title_activity_medicines);
                 break;
-            case 4:
+            case 3:
                 title = getString(R.string.title_activity_schedules);
         }
         toolbar.setTitle(title);

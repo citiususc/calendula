@@ -33,16 +33,6 @@
         android:lines="1"
         android:maxLines="1" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/edit_medicine_button_text"
-        android:id="@+id/medicine_button_ok"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        style="@style/ok_button"
-        android:background="@drawable/ok_button_selector" />
-
 
     <TextView
         android:layout_width="wrap_content"

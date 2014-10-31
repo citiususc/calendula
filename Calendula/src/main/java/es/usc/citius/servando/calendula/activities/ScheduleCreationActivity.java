@@ -309,6 +309,11 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         mViewPager.setCurrentItem(1);
     }
 
+    @Override
+    public void onMedicineDeleted(Medicine r) {
+
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.

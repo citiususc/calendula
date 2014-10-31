@@ -5,7 +5,6 @@
     <es.usc.citius.servando.calendula.util.view.NonSwipeableViewPager xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:paddingTop="@dimen/action_bar_height"
         android:layout_height="match_parent"
         tools:context=".RoutinesActivity"
         android:layout_below="@+id/toolbar" />
@@ -15,5 +14,8 @@
         android:background="@color/android_blue_dark"
         android:elevation="3dp"
         android:layout_width="match_parent"
-        android:layout_height="56dp" />
+        android:layout_height="56dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 </RelativeLayout>

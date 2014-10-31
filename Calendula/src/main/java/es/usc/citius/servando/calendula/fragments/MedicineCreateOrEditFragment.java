@@ -2,7 +2,9 @@ package es.usc.citius.servando.calendula.fragments;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -15,7 +17,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
@@ -38,7 +39,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
 
     Boolean showConfirmButton = true;
     TextView mNameTextView;
-    Button mConfirmButton;
+    //    Button mConfirmButton;
     Presentation selectedPresentation;
     HorizontalScrollView presentationScroll;
 
@@ -67,18 +68,18 @@ public class MedicineCreateOrEditFragment extends Fragment {
         });
 
         presentationScroll = (HorizontalScrollView) rootView.findViewById(R.id.med_presentation_scroll);
-        mConfirmButton = (Button) rootView.findViewById(R.id.medicine_button_ok);
-        if (showConfirmButton) {
-            mConfirmButton.setText(getString(mMedicine == null ? R.string.create_medicine_button_text : R.string.edit_medicine_button_text));
-            mConfirmButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onEdit();
-                }
-            });
-        } else {
-            mConfirmButton.setVisibility(View.GONE);
-        }
+//        mConfirmButton = (Button) rootView.findViewById(R.id.medicine_button_ok);
+//        if (showConfirmButton) {
+//            mConfirmButton.setText(getString(mMedicine == null ? R.string.create_medicine_button_text : R.string.edit_medicine_button_text));
+//            mConfirmButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    onEdit();
+//                }
+//            });
+//        } else {
+//            mConfirmButton.setVisibility(View.GONE);
+//        }
 
         Log.d(getTag(), "Arguments:  " + (getArguments() != null) + ", savedState: " + (savedInstanceState != null));
         if (getArguments() != null) {
@@ -92,12 +93,31 @@ public class MedicineCreateOrEditFragment extends Fragment {
 
         if (mMedicineId != -1) {
             mMedicine = Medicine.findById(mMedicineId);
-            mConfirmButton.setText(getString(R.string.edit_routine_button_text));
+//            mConfirmButton.setText(getString(R.string.edit_routine_button_text));
         }
 
         setupMedPresentationChooser(rootView);
 
         return rootView;
+    }
+
+    public void showDeleteConfirmationDialog(final Medicine m) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Remove " + m.name() + "?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (mMedicineEditCallback != null)
+                            mMedicineEditCallback.onMedicineDeleted(m);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override
@@ -233,7 +253,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
         Log.d(getTag(), "Medicine set: " + r.name());
         mMedicine = r;
         mNameTextView.setText(mMedicine.name());
-        mConfirmButton.setText(getString(R.string.edit_medicine_button_text));
+//        mConfirmButton.setText(getString(R.string.edit_medicine_button_text));
         selectPresentation(mMedicine.presentation());
     }
 
@@ -252,31 +272,51 @@ public class MedicineCreateOrEditFragment extends Fragment {
     public void clear() {
         mMedicine = null;
         mNameTextView.setText("");
-        mConfirmButton.setText(getString(R.string.create_medicine_button_text));
+//        mConfirmButton.setText(getString(R.string.create_medicine_button_text));
     }
 
 
-    private void onEdit() {
+    public void onEdit() {
 
         String name = mNameTextView.getText().toString();
 
-        // if editing
-        if (mMedicine != null) {
-            mMedicine.setName(name);
-            if (selectedPresentation != null) {
-                mMedicine.setPresentation(selectedPresentation);
+        if (name != null && name.length() > 0) {
+
+            // if editing
+            if (mMedicine != null) {
+                mMedicine.setName(name);
+                if (selectedPresentation != null) {
+                    mMedicine.setPresentation(selectedPresentation);
+                }
+                if (mMedicineEditCallback != null) {
+                    mMedicineEditCallback.onMedicineEdited(mMedicine);
+                }
             }
-            if (mMedicineEditCallback != null) {
-                mMedicineEditCallback.onMedicineEdited(mMedicine);
+            // if creating
+            else {
+                Medicine m = new Medicine(name);
+                m.setPresentation(selectedPresentation != null ? selectedPresentation : Presentation.UNKNOWN);
+                if (mMedicineEditCallback != null) {
+                    mMedicineEditCallback.onMedicineCreated(m);
+                }
             }
-        }
-        // if creating
-        else {
-            Medicine m = new Medicine(name);
-            m.setPresentation(selectedPresentation != null ? selectedPresentation : Presentation.UNKNOWN);
-            if (mMedicineEditCallback != null) {
-                mMedicineEditCallback.onMedicineCreated(m);
-            }
+        } else {
+            mNameTextView.setError("Please, type a name");
+            mNameTextView.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                    mNameTextView.setError(null);
+                    mNameTextView.removeTextChangedListener(this);
+                }
+
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                }
+            });
         }
     }
 
@@ -353,6 +393,8 @@ public class MedicineCreateOrEditFragment extends Fragment {
         public void onMedicineEdited(Medicine r);
 
         public void onMedicineCreated(Medicine r);
+
+        public void onMedicineDeleted(Medicine r);
     }
 
 }

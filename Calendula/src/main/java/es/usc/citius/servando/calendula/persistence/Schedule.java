@@ -78,6 +78,13 @@ public class Schedule extends Model {
                 .execute();
     }
 
+    public static List<Schedule> findByMedicine(Medicine med) {
+        return new Select().from(Schedule.class)
+                .where(COLUMN_MEDICINE + " = ?", med.getId())
+                .execute();
+    }
+
+
     public static Schedule findById(long id) {
         return new Select().from(Schedule.class)
                 .where(COLUMN_ID + " = ?", id)
