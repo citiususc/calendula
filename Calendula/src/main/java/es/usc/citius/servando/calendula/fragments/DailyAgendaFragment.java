@@ -149,8 +149,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                     int scrollY = getScroll();
                     int scrollDiff = (scrollY - lastScroll);
 
-
-                    if (lastVisibleItemCount == visibleItemCount) {
+                    if (Math.abs(lastVisibleItemCount - visibleItemCount) <= 5) {
 
                         int translationY = (int) (userInfoFragment.getTranslationY() - scrollDiff);
                         Log.d(getTag(), "Scroll Y: " + scrollY + ", translationY: " + translationY + ", firstItem: " + firstVisibleItem + ", profileHeight: " + profileFragmentHeight);
