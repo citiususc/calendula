@@ -9,18 +9,18 @@ import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 /**
  * Created by joseangel.pineiro on 7/9/14.
  */
-@Table(name = "ScheduleItems")
+@Table(name = "ScheduleItems", id = ScheduleItem.COLUMN_ID)
 public class ScheduleItem extends Model {
-
+    public static final String COLUMN_ID = "_id";
     public static final String COLUMN_SCHEDULE = "Schedule";
     public static final String COLUMN_ROUTINE = "Routine";
     public static final String COLUMN_DOSE = "Dose";
 
-    @Column(name = COLUMN_SCHEDULE, onDelete = Column.ForeignKeyAction.CASCADE)
+    @Column(name = COLUMN_SCHEDULE, onDelete = Column.ForeignKeyAction.NO_ACTION, onUpdate = Column.ForeignKeyAction.NO_ACTION)
     private Schedule schedule;
 
 
-    @Column(name = COLUMN_ROUTINE, onDelete = Column.ForeignKeyAction.CASCADE)
+    @Column(name = COLUMN_ROUTINE, onDelete = Column.ForeignKeyAction.NO_ACTION, onUpdate = Column.ForeignKeyAction.NO_ACTION)
     private Routine routine;
 
     @Column(name = COLUMN_DOSE)
@@ -70,6 +70,13 @@ public class ScheduleItem extends Model {
 
     public void setDose(float dose) {
         this.dose = dose;
+    }
+
+
+    public void deleteCascade() {
+        DailyScheduleItem item = DailyScheduleItem.findByScheduleItem(this);
+        item.delete();
+        this.delete();
     }
 
 

@@ -13,10 +13,12 @@ import java.util.List;
 /**
  * Created by castrelo on 4/10/14.
  */
-@Table(name = "DailyScheduleItems")
+@Table(name = "DailyScheduleItems", id = DailyScheduleItem.COLUMN_ID)
 public class DailyScheduleItem extends Model {
 
-    public static final String COLUMN_DAILY_SCHEDULE_ITEM = "DailyScheduleItem";
+    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_SCHEDULE_ITEM = "ScheduleItem";
+
     public static final String COLUMN_DATE = "Date";
     public static final String COLUMN_TAKEN_TODAY = "TakenToday";
     public static final String COLUMN_TIME_TAKEN = "TimeTaken";
@@ -24,7 +26,7 @@ public class DailyScheduleItem extends Model {
     @Column(name = COLUMN_DATE)
     private DateTime date;
 
-    @Column(name = COLUMN_DAILY_SCHEDULE_ITEM)
+    @Column(name = COLUMN_SCHEDULE_ITEM, onDelete = Column.ForeignKeyAction.NO_ACTION, onUpdate = Column.ForeignKeyAction.NO_ACTION)
     private ScheduleItem scheduleItem;
 
     @Column(name = COLUMN_TAKEN_TODAY)
@@ -90,7 +92,7 @@ public class DailyScheduleItem extends Model {
 
     public static DailyScheduleItem findById(long id) {
         return new Select().from(DailyScheduleItem.class)
-                .where("id = ?", id)
+                .where(COLUMN_ID + " = ?", id)
                 .executeSingle();
     }
 
@@ -102,7 +104,7 @@ public class DailyScheduleItem extends Model {
 
     public static DailyScheduleItem findByScheduleItem(ScheduleItem item) {
         return new Select().from(DailyScheduleItem.class)
-                .where(COLUMN_DAILY_SCHEDULE_ITEM + " = ?", item.getId())
+                .where(COLUMN_SCHEDULE_ITEM + " = ?", item.getId())
                 .executeSingle();
     }
 

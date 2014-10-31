@@ -5,10 +5,18 @@ import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.activeandroid.ActiveAndroid;
 
 import org.joda.time.LocalTime;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
@@ -18,6 +26,9 @@ import es.usc.citius.servando.calendula.util.Screen;
  * Created by castrelo on 4/10/14.
  */
 public class CalendulaApp extends Application {
+
+
+    private static final String DB_NAME = "calendula.db";
 
     // PREFERENCES
     public static final String PREFERENCES_NAME = "CalendulaPreferences";
@@ -37,25 +48,26 @@ public class CalendulaApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         // initialize sqlite engine
-        ActiveAndroid.initialize(this);
+        ActiveAndroid.initialize(this, true);
         // initialize daily agenda
         DailyAgenda.instance().setupForToday(this);
         // setup alarm for daily agenda update
         setupUpdateDailyAgendaAlarm();
         // create app palette
         Screen.createPalette(this, Screen.drawableToBitmap(getResources().getDrawable(R.drawable.home_bg_1)));
+        // export database to db
+        // exportDatabase(this,DB_NAME,new File(Environment.getExternalStorageDirectory()+File.separator+DB_NAME));
 
     }
 
+    @Override
+    public void onTerminate() {
+        ActiveAndroid.dispose();
+        super.onTerminate();
+    }
+
     public void setupUpdateDailyAgendaAlarm() {
-
-//        SharedPreferences settings = getSharedPreferences(PREFERENCES_NAME, 0);
-//        boolean alarmAlreadySettled = settings.getBoolean(PREF_ALARM_SETTLED,false);
-
-        //if(!alarmAlreadySettled){
-
         // intent our receiver will receive
         Intent intent = new Intent(this, AlarmReceiver.class);
         // indicate thar is for a routine
@@ -70,13 +82,36 @@ public class CalendulaApp extends Application {
             // set a repeating alarm every day at 00:00
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, new LocalTime(0, 0).toDateTimeToday().getMillis(), AlarmManager.INTERVAL_DAY, routinePendingIntent);
         }
-        // Update preferences
-//            SharedPreferences.Editor editor = settings.edit();
-//            editor.putBoolean(PREF_ALARM_SETTLED,true);
-//            editor.commit();
-        //}
-
-
     }
+
+    public void exportDatabase(Context context, String databaseName, File out) {
+        final File dbPath = context.getDatabasePath(databaseName);
+
+        // If the database already exists, return
+        if (!dbPath.exists()) {
+            Log.d("APP", "Database not found");
+            return;
+        }
+
+        // Try to copy database file
+        try {
+            final InputStream inputStream = new FileInputStream(dbPath);
+            final OutputStream output = new FileOutputStream(out);
+
+            byte[] buffer = new byte[8192];
+            int length;
+
+            while ((length = inputStream.read(buffer, 0, 8192)) > 0) {
+                output.write(buffer, 0, length);
+            }
+
+            output.flush();
+            output.close();
+            inputStream.close();
+        } catch (IOException e) {
+            Log.e("APP", "Failed to export database", e);
+        }
+    }
+
 
 }

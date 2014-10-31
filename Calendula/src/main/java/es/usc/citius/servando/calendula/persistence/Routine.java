@@ -12,9 +12,10 @@ import java.util.List;
 /**
  * Created by joseangel.pineiro on 10/9/14.
  */
-@Table(name = "Routines")
+@Table(name = "Routines", id = Routine.COLUMN_ID)
 public class Routine extends Model {
 
+    public static final String COLUMN_ID = "_id";
     public static final String COLUMN_TIME = "Time";
     public static final String COLUMN_NAME = "Name";
 
@@ -70,7 +71,7 @@ public class Routine extends Model {
 
     public static Routine findById(long id) {
         return new Select().from(Routine.class)
-                .where("id = ?", id)
+                .where(COLUMN_ID + " = ?", id)
                 .executeSingle();
     }
 
@@ -94,11 +95,16 @@ public class Routine extends Model {
     }
 
     public void deleteCascade() {
-        for (ScheduleItem i : scheduleItems()) {
-            i.setSchedule(null);
-            i.setRoutine(null);
-            i.save();
-            //i.delete();
+
+        // Temporal fix for https://github.com/pardom/ActiveAndroid/issues/188.
+        // Set schedule and routine foreign keys to null
+
+        List<ScheduleItem> items = scheduleItems();
+        for (ScheduleItem i : items) {
+//            i.setSchedule(null);
+//            i.setRoutine(null);
+//            i.save();
+            i.deleteCascade();
         }
         this.delete();
     }

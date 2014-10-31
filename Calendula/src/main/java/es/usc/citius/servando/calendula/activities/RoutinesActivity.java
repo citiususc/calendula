@@ -98,7 +98,7 @@ public class RoutinesActivity extends ActionBarActivity implements RoutineCreate
 
     @Override
     public void onRoutineDeleted(Routine r) {
-        r.delete();
+        r.deleteCascade();
         AlarmScheduler.instance().cancelAlarm(r, this);
         Toast.makeText(this, "Routine deleted!", Toast.LENGTH_SHORT).show();
         finish();

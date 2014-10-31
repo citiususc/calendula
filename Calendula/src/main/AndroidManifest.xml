@@ -79,7 +79,7 @@
             android:value="calendula.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="6" />
+            android:value="9" />
         <meta-data
             android:name="AA_SERIALIZERS"
             android:value="es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimeSerializer,

@@ -11,9 +11,10 @@ import java.util.List;
 /**
  * Created by joseangel.pineiro on 12/17/13.
  */
-@Table(name = "Schedules")
+@Table(name = "Schedules", id = Schedule.COLUMN_ID)
 public class Schedule extends Model {
 
+    public static final String COLUMN_ID = "_id";
     public static final String COLUMN_MEDICINE = "Medicine";
     public static final String COLUMN_DAYS = "Days";
 
@@ -79,16 +80,16 @@ public class Schedule extends Model {
 
     public static Schedule findById(long id) {
         return new Select().from(Schedule.class)
-                .where("id = ?", id)
+                .where(COLUMN_ID + " = ?", id)
                 .executeSingle();
     }
 
     public void deleteCascade() {
         for (ScheduleItem i : items()) {
-            i.setSchedule(null);
-            i.setRoutine(null);
-            i.save();
-            //i.delete();
+//            i.setSchedule(null);
+//            i.setRoutine(null);
+//            i.save();
+            i.deleteCascade();
         }
         this.delete();
     }

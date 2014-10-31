@@ -12,9 +12,10 @@ import java.util.List;
 /**
  * Created by joseangel.pineiro on 12/5/13.
  */
-@Table(name = "Medicines")
+@Table(name = "Medicines", id = Medicine.COLUMN_ID)
 public class Medicine extends Model {
 
+    public static final String COLUMN_ID = "_id";
     public static final String COLUMN_NAME = "Name";
     public static final String COLUMN_PRESENTATION = "Presentation";
 
@@ -72,7 +73,7 @@ public class Medicine extends Model {
 
     public static Medicine findById(long id) {
         return new Select().from(Medicine.class)
-                .where("id = ?", id)
+                .where(COLUMN_ID + " = ?", id)
                 .executeSingle();
     }
 
