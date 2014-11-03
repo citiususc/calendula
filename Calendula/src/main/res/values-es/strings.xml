@@ -65,7 +65,7 @@
     <string name="delay">RETRASAR</string>
     <string name="done">HECHO</string>
     <string name="confirm">CONFIRMAR</string>
-    <string name="meds_time">Recuerda tomar tus medicina</string>
+    <string name="meds_time">Recuerda tomar tus medicinas</string>
 
     <!-- Schedule creation -->
     <string name="summary_title">Revisa y confirma</string>

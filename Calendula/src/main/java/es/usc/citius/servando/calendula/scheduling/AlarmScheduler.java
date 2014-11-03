@@ -25,17 +25,18 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
  */
 public class AlarmScheduler {
 
-    private static final String TAG = AlarmScheduler.class.getName();
+    public static final int ALARM_AUTO_DELAY_MILLIS = 5 * 60 * 1000;  // 5 mins
+    public static final int ALARM_USER_DELAY_MILLIS = 60 * 60 * 1000; // 1 hour
 
-    // TODO: Handle routine time changes!
+    private static final String TAG = AlarmScheduler.class.getName();
 
     /**
      * Set an alarm to an specific routine time using the
-     * android AlarmManager service. This alarm will
+     * android AlarmManager service.
      *
      * @param routine The routine whose alarm will be set
      */
-    public void setAlarm(Routine routine, Context ctx) {
+    private void setAlarm(Routine routine, Context ctx) {
 
         // set the routine alarm only if there are schedules associated
         if (ScheduleUtils.getRoutineScheduleItems(routine, false).size() > 0) {
@@ -64,11 +65,11 @@ public class AlarmScheduler {
 
     /**
      * Set an alarm to an specific routine time using the
-     * android AlarmManager service. This alarm will
+     * android AlarmManager service.
      *
      * @param routine The routine whose alarm will be set
      */
-    public void delayAlarm(Routine routine, int millis, Context ctx) {
+    private void delayAlarm(Routine routine, int millis, Context ctx) {
 
         // set the routine alarm only if there are schedules associated
         if (ScheduleUtils.getRoutineScheduleItems(routine, false).size() > 0) {
@@ -76,11 +77,11 @@ public class AlarmScheduler {
             // intent our receiver will receive
             Intent intent = new Intent(ctx, AlarmReceiver.class);
             // indicate thar is for a routine
-            intent.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_ROUTINE_TIME);
+            intent.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_ROUTINE_DELAYED_TIME);
             // pass the routine id (hash code)
             intent.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, routine.getId());
             // create pending intent
-            int intent_id = routine.getId().hashCode();
+            int intent_id = routine.getId().hashCode() + 1;
             PendingIntent routinePendingIntent = PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             // Get the AlarmManager service
             AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
@@ -93,7 +94,7 @@ public class AlarmScheduler {
     }
 
 
-    public void cancelAlarm(Routine routine, Context ctx) {
+    private void cancelAlarm(Routine routine, Context ctx) {
         // intent we have sent to set the alarm
         Intent intent = new Intent(ctx, AlarmReceiver.class);
         // indicate thar is for a routine
@@ -111,6 +112,24 @@ public class AlarmScheduler {
         }
     }
 
+    private void cancelDelayedAlarm(Routine routine, Context ctx) {
+        // intent we have sent to set the alarm
+        Intent intent = new Intent(ctx, AlarmReceiver.class);
+        // indicate thar is for a routine
+        intent.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_ROUTINE_DELAYED_TIME);
+        // pass the routine id
+        intent.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, routine.getId());
+        // create pending intent
+        int intent_id = routine.getId().hashCode() + 1;
+        PendingIntent routinePendingIntent = PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Get the AlarmManager service
+        AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.cancel(routinePendingIntent);
+        }
+    }
+
 
     /**
      * Set the alarms for the routines of an specific schedule
@@ -118,53 +137,10 @@ public class AlarmScheduler {
      *
      * @param schedule The routine whose alarm will be set
      */
-    public void setAlarmsIfNeeded(Schedule schedule, Context ctx) {
+    private void setAlarmsIfNeeded(Schedule schedule, Context ctx) {
         Log.d(TAG, "Setting alarm for schedule [" + schedule.medicine().name() + "] with " + schedule.items().size() + " items");
         for (ScheduleItem scheduleItem : schedule.items()) {
             setAlarm(scheduleItem.routine(), ctx);
-        }
-    }
-
-    /**
-     * Set the alarms for the daily routines for the current
-     * data. This will be called everyday at 00:00h
-     */
-    public void scheduleDailyAlarms(Context ctx) {
-        for (Routine r : Routine.findAll()) {
-            setAlarm(r, ctx);
-        }
-    }
-
-    /**
-     * Cancels the alarms of the daily routines
-     */
-    public void cancelDailyAlarms(Context ctx) {
-        for (Routine r : Routine.findAll()) {
-            cancelAlarm(r, ctx);
-        }
-    }
-
-    /**
-     * Called by the when an previously established alarm is received.
-     *
-     * @param routineId the id of a routine
-     */
-    public void onAlarmReceived(Long routineId, Context ctx) {
-
-        Routine routine = Routine.findById(routineId);
-        if (routine != null) {
-            LocalTime now = LocalTime.now();
-            LocalTime time = routine.time();
-            if (time.isBefore(now.minusMinutes(60))) {
-                // we are receiving an alarm for a routine that is in the past,
-                // probably because the application has started just now.
-                // We need to log and inform user
-                onRoutineLost(routine);
-            } else {
-                onRoutineTime(routine, ctx);
-            }
-
-
         }
     }
 
@@ -178,11 +154,14 @@ public class AlarmScheduler {
 
         // get the schedule items for the current routine, excluding already taken
         List<ScheduleItem> doses = ScheduleUtils.getRoutineScheduleItems(routine, false);
-        final Intent intent = new Intent(ctx, StartActivity.class);
-        intent.putExtra("action", StartActivity.ACTION_SHOW_REMINDERS);
-        intent.putExtra("routine_id", routine.getId());
-        ReminderNotification.notify(ctx, ctx.getResources().getString(R.string.meds_time), routine, doses, intent);
-
+        if (!doses.isEmpty()) {
+            final Intent intent = new Intent(ctx, StartActivity.class);
+            intent.putExtra("action", StartActivity.ACTION_SHOW_REMINDERS);
+            intent.putExtra("routine_id", routine.getId());
+            ReminderNotification.notify(ctx, ctx.getResources().getString(R.string.meds_time), routine, doses, intent);
+            // set auto delay for within 5 minutes
+            delayAlarm(routine, ALARM_AUTO_DELAY_MILLIS, ctx);
+        }
     }
 
     /**
@@ -197,6 +176,91 @@ public class AlarmScheduler {
         Log.d(TAG, doses + " deses lost today!"); // TODO: handle this
     }
 
+    // PUBLIC INTERFACE
+
+    /**
+     * Called by the when an previously established alarm is received.
+     *
+     * @param routineId the id of a routine
+     */
+    public void onAlarmReceived(Long routineId, Context ctx) {
+
+
+        Routine routine = Routine.findById(routineId);
+        if (routine != null) {
+            Log.d(TAG, "onAlarmReceived: " + routine.getId() + ", " + routine.name());
+            LocalTime now = LocalTime.now();
+            LocalTime time = routine.time();
+            if (time.isBefore(now.minusMinutes(60))) {
+                // we are receiving an alarm for a routine that is in the past,
+                // probably because the application has started just now.
+                // We need to log and inform user
+                onRoutineLost(routine);
+            } else {
+                onRoutineTime(routine, ctx);
+            }
+        } else {
+            Log.d(TAG, "onAlarmReceived: " + routineId + ", null routine");
+        }
+    }
+
+
+    /**
+     * @param r
+     */
+    public void onCreateOrUpdateRoutine(Routine r, Context ctx) {
+        Log.d(TAG, "onCreateOrUpdateRoutine: " + r.getId() + ", " + r.name());
+        setAlarm(r, ctx);
+    }
+
+    /**
+     *
+     * @param s
+     */
+    public void onCreateOrUpdateSchedule(Schedule s, Context ctx) {
+        Log.d(TAG, "onCreateOrUpdateSchedule: " + s.getId() + ", " + s.medicine().name());
+        setAlarmsIfNeeded(s, ctx);
+    }
+
+    /**
+     *
+     * @param r
+     */
+    public void onDeleteRoutine(Routine r, Context ctx) {
+        Log.d(TAG, "onDeleteRoutine: " + r.getId() + ", " + r.name());
+        cancelAlarm(r, ctx);
+    }
+
+    /**
+     *
+     * @param r
+     */
+    public void onDelayRoutine(Routine r, Context ctx, int delay) {
+        Log.d(TAG, "onDelayRoutine: " + r.getId() + ", " + r.name());
+        delayAlarm(r, delay, ctx);
+        ReminderNotification.cancel(ctx);
+    }
+
+    /**
+     *
+     * @param rId
+     */
+    public void onDelayRoutine(long rId, Context ctx, int delay) {
+        Routine r = Routine.findById(rId);
+        if (r != null) {
+            Log.d(TAG, "onDelayRoutine: " + r.getId() + ", " + r.name());
+            delayAlarm(r, delay, ctx);
+        }
+    }
+
+    public void onCancelRoutineNotifications(Routine r, Context ctx) {
+        Log.d(TAG, "onCancelRoutineNotifications: " + r.getId() + ", " + r.name());
+        // canclel alarms related to delayed notifications
+        cancelDelayedAlarm(r, ctx);
+        // cancel notification
+        ReminderNotification.cancel(ctx);
+    }
+
     // SINGLETON
 
     private AlarmScheduler() {
@@ -209,5 +273,8 @@ public class AlarmScheduler {
     public static AlarmScheduler instance() {
         return instance;
     }
+
+
+
 
 }

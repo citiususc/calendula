@@ -127,7 +127,7 @@ public class ReminderActivity extends FragmentActivity {
 
     void delay(int minutes) {
         ReminderNotification.cancel(getApplicationContext());
-        AlarmScheduler.instance().delayAlarm(routine, minutes * 60 * 1000, getApplicationContext());
+        AlarmScheduler.instance().onDelayRoutine(routine, getApplicationContext(), minutes * 60 * 1000);
         Toast.makeText(getApplicationContext(), "Reminder delayed " + minutes + " mins", Toast.LENGTH_SHORT).show();
         finish();
     }

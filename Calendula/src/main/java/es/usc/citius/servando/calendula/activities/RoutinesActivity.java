@@ -91,21 +91,22 @@ public class RoutinesActivity extends ActionBarActivity implements RoutineCreate
 
     @Override
     public void onRoutineEdited(Routine r) {
-        AlarmScheduler.instance().setAlarm(r, this);
+        AlarmScheduler.instance().onCreateOrUpdateRoutine(r, this);
         Toast.makeText(this, "Changes saved!", Toast.LENGTH_SHORT).show();
         finish();
     }
 
     @Override
     public void onRoutineDeleted(Routine r) {
+        AlarmScheduler.instance().onDeleteRoutine(r, this);
         r.deleteCascade();
-        AlarmScheduler.instance().cancelAlarm(r, this);
         Toast.makeText(this, "Routine deleted!", Toast.LENGTH_SHORT).show();
         finish();
     }
 
     @Override
     public void onRoutineCreated(Routine r) {
+        AlarmScheduler.instance().onCreateOrUpdateRoutine(r, this);
         Toast.makeText(this, "Routine created!", Toast.LENGTH_SHORT).show();
         // send result to caller activity
         finish();

@@ -56,8 +56,8 @@ public class ReminderNotification {
 
         // This image is used as the notification's large icon (thumbnail).
         // TODO: Remove this if your notification has no relevant thumbnail.
-        final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.ic_launcher);
-        final Bitmap largeIcon = BitmapFactory.decodeResource(res, R.drawable.ic_pill_small);
+        final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.ic_pill_48dp);
+        final Bitmap largeIcon = BitmapFactory.decodeResource(res, R.drawable.ic_pill_48dp);
         final String title = res.getString(R.string.message_notification_title_template, exampleString);
 
         NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
@@ -81,6 +81,33 @@ public class ReminderNotification {
         final String text = res.getString(
                 R.string.message_notification_placeholder_text_template, exampleString);
 
+        PendingIntent defaultIntent = PendingIntent.getActivity(
+                context,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        final Intent delay = new Intent(context, StartActivity.class);
+        delay.putExtra("action", StartActivity.ACTION_DELAY_ROUTINE);
+        delay.putExtra("routine_id", r.getId());
+
+        PendingIntent delayIntent = PendingIntent.getActivity(
+                context,
+                1,
+                delay,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        final Intent cancel = new Intent(context, StartActivity.class);
+        cancel.putExtra("action", StartActivity.ACTION_CANCEL_ROUTINE);
+        cancel.putExtra("routine_id", r.getId());
+
+        PendingIntent cancelIntent = PendingIntent.getActivity(
+                context,
+                2,
+                cancel,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 
                 // Set appropriate defaults for the notification light, sound,
@@ -93,9 +120,8 @@ public class ReminderNotification {
                 .setLargeIcon(picture)
                 .setContentTitle(title)
                 .setContentText(text)
-
+                .setAutoCancel(true)
                         // All fields below this line are optional.
-
                         // Use a default priority (recognized on devices running Android
                         // 4.1 or later)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -122,14 +148,11 @@ public class ReminderNotification {
 
                         // Set the pending intent to be initiated when the user touches
                         // the notification.
-                .setContentIntent(
-                        PendingIntent.getActivity(
-                                context,
-                                0,
-                                intent,
-                                PendingIntent.FLAG_UPDATE_CURRENT)
-                )
-
+                .setContentIntent(defaultIntent)
+                        //.setOngoing(true)
+                        // add delay button
+                .addAction(R.drawable.ic_history_white_24dp, "Delay 1 hour", delayIntent)
+                .addAction(R.drawable.ic_alarm_off_white_24dp, "Cancel reminder", cancelIntent)
                         // Show an expanded list of items on devices running Android 4.1
                         // or later.
                 .setStyle(style)

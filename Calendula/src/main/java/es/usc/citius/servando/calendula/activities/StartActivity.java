@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -11,12 +12,14 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.DefaultDataGenerator;
 import es.usc.citius.servando.calendula.HomeActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Routine;
+import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.user.Session;
 import es.usc.citius.servando.calendula.user.User;
 
@@ -42,9 +45,12 @@ public class StartActivity extends Activity {
 
     public static final int ACTION_DEFAULT = 1;
     public static final int ACTION_SHOW_REMINDERS = 2;
+    public static final int ACTION_DELAY_ROUTINE = 3;
+    public static final int ACTION_CANCEL_ROUTINE = 4;
 
 
     int action = ACTION_DEFAULT;
+    boolean mustShowSplash;
 
 
     @Override
@@ -54,7 +60,15 @@ public class StartActivity extends Activity {
         setContentView(R.layout.activity_start);
         action = getIntent().getIntExtra("action", ACTION_DEFAULT);
         new UserResumeSessionTask().execute((Void) null);
-        startAnimations();
+        mustShowSplash = mustShowSplashForAction(action);
+
+        if (mustShowSplash) {
+            startAnimations();
+        }
+    }
+
+    private boolean mustShowSplashForAction(int action) {
+        return !(action == ACTION_DELAY_ROUTINE || action == ACTION_CANCEL_ROUTINE);
     }
 
     private void startAnimations() {
@@ -96,6 +110,9 @@ public class StartActivity extends Activity {
      */
     public class UserResumeSessionTask extends AsyncTask<Void, Void, String> {
 
+        boolean sessionIsOpen;
+
+
         private void keepSplashVisible(int seconds) {
             // Show splash
             try {
@@ -106,9 +123,14 @@ public class StartActivity extends Activity {
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            sessionIsOpen = Session.instance().isOpen();
+        }
+
+        @Override
         protected String doInBackground(Void... params) {
 
-            boolean sessionIsOpen = Session.instance().isOpen();
             try {
                 // session is open
                 if (sessionIsOpen) {
@@ -116,12 +138,16 @@ public class StartActivity extends Activity {
                 }
                 // session is closed but there is a session stored
                 else if (Session.instance().open(getApplicationContext())) {
-                    keepSplashVisible(1);
+                    if (mustShowSplash) {
+                        keepSplashVisible(1);
+                    }
                     return STATUS_SESSION_RESUMED;
                 }
                 // there is no previous session
                 else {
-                    keepSplashVisible(2);
+                    if (mustShowSplash) {
+                        keepSplashVisible(1);
+                    }
 
                     // Add some default data
                     if (Routine.findAll().size() == 0) {
@@ -143,14 +169,34 @@ public class StartActivity extends Activity {
         @Override
         protected void onPostExecute(final String result) {
 
-            stopAnimations();
+            if (mustShowSplash) {
+                stopAnimations();
+            }
 
             if (STATUS_SESSION_OPEN.equals(result) || STATUS_SESSION_RESUMED.equals(result)) {
+                Log.d("StartActivity", "Action: " + action);
+                long routineId;
                 switch (action) {
+
                     case ACTION_SHOW_REMINDERS:
                         Intent i = new Intent(getBaseContext(), HomeActivity.class);
                         i.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1));
+                        ReminderNotification.cancel(StartActivity.this);
                         startActivity(i);
+                        break;
+                    case ACTION_DELAY_ROUTINE:
+                        routineId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
+                        if (routineId != -1) {
+                            AlarmScheduler.instance().onDelayRoutine(routineId, StartActivity.this, AlarmScheduler.ALARM_USER_DELAY_MILLIS); // TODO: read from preferences
+                            Toast.makeText(StartActivity.this, "Routine delayed 1 hour", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    case ACTION_CANCEL_ROUTINE:
+                        routineId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
+                        if (routineId != -1) {
+                            AlarmScheduler.instance().onCancelRoutineNotifications(Routine.findById(routineId), StartActivity.this);
+                            Toast.makeText(StartActivity.this, "Reminder cancelled", Toast.LENGTH_SHORT).show();
+                        }
                         break;
                     default:
                         startActivity(new Intent(getBaseContext(), HomeActivity.class));

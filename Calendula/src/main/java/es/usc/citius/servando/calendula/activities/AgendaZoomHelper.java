@@ -33,6 +33,7 @@ import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 
 /**
@@ -43,6 +44,7 @@ public class AgendaZoomHelper {
     Routine r = null;
     LinearLayout list;
     ImageButton doneButton = null;
+    Routine routine;
     List<ScheduleItem> doses;
     boolean totalChecked;
     View v;
@@ -67,6 +69,7 @@ public class AgendaZoomHelper {
 
     public void show(Activity activity, View from, Routine r) {
         if (animator == null) {
+            routine = r;
             doses = ScheduleUtils.getRoutineScheduleItems(r, true);
             list.removeAllViews();
             ((TextView) v.findViewById(R.id.clock)).setText(r.time().toString("kk:mm"));
@@ -81,6 +84,7 @@ public class AgendaZoomHelper {
 
     public void remind(Activity activity, Routine r) {
         if (animator == null) {
+            routine = r;
             doses = ScheduleUtils.getRoutineScheduleItems(r, true);
             list.removeAllViews();
             ((TextView) v.findViewById(R.id.clock)).setText(DateTime.now().toString("kk:mm"));
@@ -187,7 +191,7 @@ public class AgendaZoomHelper {
     }
 
 
-    void fillReminderList(Activity activity) {
+    void fillReminderList(final Activity activity) {
 
         LayoutInflater inflater = activity.getLayoutInflater();
 
@@ -220,6 +224,7 @@ public class AgendaZoomHelper {
                     dailyScheduleItem.setTakenToday(checked);
                     dailyScheduleItem.save();
                     somethingChanged = true;
+                    onReminderChecked(activity);
                     Log.d("Detail", dailyScheduleItem.scheduleItem().schedule().medicine().name() + " taken: " + checked);
                 }
             });
@@ -240,6 +245,27 @@ public class AgendaZoomHelper {
         }
     }
 
+    private void onReminderChecked(Activity activity) {
+
+        int total = doses.size();
+        int checked = 0;
+
+        for (ScheduleItem s : doses) {
+            boolean taken = DailyScheduleItem.findByScheduleItem(s).takenToday();
+            if (taken)
+                checked++;
+        }
+
+        if (checked == total) {
+            totalChecked = true;
+            AlarmScheduler.instance().onCancelRoutineNotifications(routine, activity);
+        } else {
+            AlarmScheduler.instance().onDelayRoutine(routine, activity, 1 * 60 * 1000); // TODO: read from preferences
+            totalChecked = false;
+        }
+    }
+
+
     public interface ZoomHelperListener {
         void onChange();
 
@@ -249,24 +275,7 @@ public class AgendaZoomHelper {
     }
 
     public ZoomHelperListener mListener;
-//
-//    private void onReminderChecked() {
-//        int total = doses.size();
-//        int checked = 0;
-//
-//        for (ScheduleItem s : doses) {
-//            boolean taken = DailyScheduleItem.findByScheduleItem(s).takenToday();
-//            if (taken)
-//                checked++;
-//        }
-//        if (checked == total) {
-//            doneButton.getBackground().setLevel(1);
-//            totalChecked = true;
-//        } else {
-//            doneButton.getBackground().setLevel(0);
-//            totalChecked = false;
-//        }
-//    }
+
 
 }
 

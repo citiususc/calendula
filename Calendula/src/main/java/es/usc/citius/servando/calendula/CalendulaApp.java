@@ -43,6 +43,11 @@ public class CalendulaApp extends Application {
     // ACTIONS
     public static final int ACTION_ROUTINE_TIME = 1;
     public static final int ACTION_DAILY_ALARM = 2;
+    public static final int ACTION_ROUTINE_DELAYED_TIME = 3;
+
+    // REQUEST CODES
+    public static final int RQ_SHOW_ROUTINE = 1;
+    public static final int RQ_DELAY_ROUTINE = 2;
 
 
     @Override

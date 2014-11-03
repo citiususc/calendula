@@ -139,8 +139,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
             Log.d(TAG, "Schedule saved successfully!");
             ActiveAndroid.setTransactionSuccessful();
-
-            AlarmScheduler.instance().setAlarmsIfNeeded(s, getBaseContext());
+            AlarmScheduler.instance().onCreateOrUpdateSchedule(s, this);
             ScheduleCreationHelper.instance().clear();
             Toast.makeText(ScheduleCreationActivity.this, "Schedule created!", Toast.LENGTH_LONG).show();
 

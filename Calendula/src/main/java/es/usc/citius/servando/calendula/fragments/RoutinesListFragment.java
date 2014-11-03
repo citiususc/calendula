@@ -120,7 +120,7 @@ public class RoutinesListFragment extends Fragment {
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // cancel routine alarm and delete it
-                        AlarmScheduler.instance().cancelAlarm(r, getActivity());
+                        AlarmScheduler.instance().onDeleteRoutine(r, getActivity());
                         r.deleteCascade();
                         notifyDataChange();
                     }

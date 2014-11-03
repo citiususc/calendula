@@ -23,9 +23,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
             Log.d(TAG, "Alarm received - Action : " + action);
 
-            // routine time
-            if (action == CalendulaApp.ACTION_ROUTINE_TIME) {
-
+            // routine time or routine delayed reminder
+            if ((action == CalendulaApp.ACTION_ROUTINE_TIME) || (action == CalendulaApp.ACTION_ROUTINE_DELAYED_TIME)) {
                 // get the routine hash code from the intent
                 Long routineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
                 Log.d(TAG, "Routine id: " + routineId);
