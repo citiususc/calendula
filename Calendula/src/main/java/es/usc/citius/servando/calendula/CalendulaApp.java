@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.Screen;
@@ -50,6 +51,8 @@ public class CalendulaApp extends Application {
     public static final int RQ_DELAY_ROUTINE = 2;
 
 
+    private static EventBus eventBus = EventBus.getDefault();
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -63,8 +66,8 @@ public class CalendulaApp extends Application {
         Screen.createPalette(this, Screen.drawableToBitmap(getResources().getDrawable(R.drawable.home_bg_1)));
         // export database to db
         // exportDatabase(this,DB_NAME,new File(Environment.getExternalStorageDirectory()+File.separator+DB_NAME));
-
     }
+
 
     @Override
     public void onTerminate() {
@@ -116,6 +119,10 @@ public class CalendulaApp extends Application {
         } catch (IOException e) {
             Log.e("APP", "Failed to export database", e);
         }
+    }
+
+    public static EventBus eventBus() {
+        return eventBus;
     }
 
 

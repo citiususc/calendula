@@ -22,6 +22,7 @@ import org.joda.time.LocalTime;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.persistence.Persistence;
 import es.usc.citius.servando.calendula.persistence.Routine;
 
 
@@ -139,7 +140,8 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
             if (mRoutine != null) {
                 mRoutine.setName(name);
                 mRoutine.setTime(new LocalTime(hour, minute));
-                mRoutine.save();
+                Persistence.instance().save(mRoutine);
+                //mRoutine.save();
                 if (mRoutineEditCallback != null) {
                     mRoutineEditCallback.onRoutineEdited(mRoutine);
                 }
@@ -148,7 +150,8 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
             else {
                 mRoutine = new Routine(new LocalTime(hour, minute), name);
                 Log.d(getTag(), "Routine created");
-                mRoutine.save();
+                Persistence.instance().save(mRoutine);
+                //mRoutine.save();
                 if (mRoutineEditCallback != null) {
                     mRoutineEditCallback.onRoutineCreated(mRoutine);
                 }

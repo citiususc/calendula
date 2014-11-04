@@ -112,7 +112,7 @@ public class SchedulesActivity extends ActionBarActivity implements ScheduleList
             if (resultCode == RESULT_OK) {
                 boolean scheduleCreated = data.getBooleanExtra("schedule_created", false);
                 if (scheduleCreated) {
-                    ((ScheduleListFragment) getViewPagerFragment(0)).notifyDataChange();
+//                    ((ScheduleListFragment) getViewPagerFragment(0)).notifyDataChange();
                 }
             }
         }

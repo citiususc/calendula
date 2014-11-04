@@ -16,6 +16,7 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Persistence;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 
 public class MedicinesActivity extends ActionBarActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
@@ -105,7 +106,7 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
 
     @Override
     public void onMedicineCreated(Medicine m) {
-        m.save();
+        Persistence.instance().save(m);
         Toast.makeText(this, "Medicine created!", Toast.LENGTH_SHORT).show();
         finish();
     }

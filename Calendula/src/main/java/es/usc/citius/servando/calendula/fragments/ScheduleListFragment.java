@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -38,57 +39,42 @@ public class ScheduleListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_schedule_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.schedule_list);
-
         mSchedules = Schedule.findAll();
         adapter = new ScheduleListAdapter(getActivity(), R.layout.schedules_list_item, mSchedules);
         listview.setAdapter(adapter);
-
-//        rootView.findViewById(R.id.schedule_add_button).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (mScheduleSelectedCallback != null)
-//                    mScheduleSelectedCallback.onCreateSchedule();
-//            }
-//        });
-
-
         return rootView;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        notifyDataChange();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
     public void notifyDataChange() {
-        mSchedules = Schedule.findAll();
-        adapter.clear();
-        for (Schedule r : mSchedules) {
-            adapter.add(r);
+        Log.d(getTag(), "Schedules - Notify data change");
+        new ReloadItemsTask().execute();
+    }
+
+    private class ReloadItemsTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            mSchedules = Schedule.findAll();
+
+            return null;
         }
-        adapter.notifyDataSetChanged();
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            adapter.clear();
+            for (Schedule s : mSchedules) {
+                adapter.add(s);
+            }
+            adapter.notifyDataSetChanged();
+        }
     }
 
     private View createScheduleListItem(LayoutInflater inflater, final Schedule schedule) {
 
         View item = inflater.inflate(R.layout.schedules_list_item, null);
-
-
         ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
         icon.setImageDrawable(getResources().getDrawable(schedule.medicine().presentation().getDrawable()));
-
         ((TextView) item.findViewById(R.id.schedules_list_item_medname)).setText(schedule.medicine().name());
         ((TextView) item.findViewById(R.id.schedules_list_item_times)).setText(ScheduleUtils.getTimesStr(schedule.items().size(), getActivity()));
         ((TextView) item.findViewById(R.id.schedules_list_item_days)).setText(ScheduleUtils.stringifyDays(schedule.days(), getActivity()));
@@ -121,7 +107,6 @@ public class ScheduleListFragment extends Fragment {
         });
         return item;
     }
-
 
     void showDeleteConfirmationDialog(final Schedule s) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

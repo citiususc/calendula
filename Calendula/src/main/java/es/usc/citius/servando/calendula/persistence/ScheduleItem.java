@@ -79,5 +79,4 @@ public class ScheduleItem extends Model {
         this.delete();
     }
 
-
 }

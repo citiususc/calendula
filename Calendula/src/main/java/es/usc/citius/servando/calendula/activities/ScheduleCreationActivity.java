@@ -27,6 +27,7 @@ import es.usc.citius.servando.calendula.fragments.ScheduleSummaryFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleTimetableFragment;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Persistence;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
@@ -122,7 +123,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             ActiveAndroid.beginTransaction();
 
             Medicine m = ScheduleCreationHelper.instance().getSelectedMed();
-            m.save();
+            Persistence.instance().save(m);
 
             Schedule s = mSchedule != null ? mSchedule : new es.usc.citius.servando.calendula.persistence.Schedule();
             s.setMedicine(m);
@@ -137,12 +138,12 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
                 Log.d(TAG, "Add item: " + s.getId() + ", " + item.getId());
             }
 
+            Persistence.instance().save(s);
             Log.d(TAG, "Schedule saved successfully!");
             ActiveAndroid.setTransactionSuccessful();
             AlarmScheduler.instance().onCreateOrUpdateSchedule(s, this);
             ScheduleCreationHelper.instance().clear();
             Toast.makeText(ScheduleCreationActivity.this, "Schedule created!", Toast.LENGTH_LONG).show();
-
             // send result to caller activity
             Intent returnIntent = new Intent();
             returnIntent.putExtra("schedule_created", true);

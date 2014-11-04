@@ -44,6 +44,7 @@ import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
+import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.DailyAgendaFragment;
 import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
 import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
@@ -154,14 +155,17 @@ public class HomeActivity extends ActionBarActivity implements
 
         hideAddButton();
 
-        boolean welcome = getIntent().getBooleanExtra("welcome",false);
-        if(welcome) {
+        boolean welcome = getIntent().getBooleanExtra("welcome", false);
+        if (welcome) {
             showShowCase();
         }
+
+        CalendulaApp.eventBus().register(this);
+
     }
 
-    public int getActionDrawable(int index){
-        switch (index){
+    public int getActionDrawable(int index) {
+        switch (index) {
             case 0:
                 return R.drawable.ic_small_home_w;
             case 2:
@@ -180,8 +184,8 @@ public class HomeActivity extends ActionBarActivity implements
         }
     }
 
-    public int getActionColor(int index){
-        switch (index){
+    public int getActionColor(int index) {
+        switch (index) {
             case 2:
                 return R.color.android_blue;
             case 3:
@@ -264,6 +268,7 @@ public class HomeActivity extends ActionBarActivity implements
 
     @Override
     public void onCreateMedicine() {
+
         //do nothing
     }
 
@@ -288,7 +293,7 @@ public class HomeActivity extends ActionBarActivity implements
     class DrawerListAdapter extends ArrayAdapter<String> {
 
         public DrawerListAdapter(Context context, int resource, List<String> items) {
-            super(context, resource,items);
+            super(context, resource, items);
         }
 
         @Override
@@ -313,11 +318,10 @@ public class HomeActivity extends ActionBarActivity implements
     }
 
 
-
     @Override
     public void onClick(View view) {
 
-        if(view.getId()==R.id.add_button) {
+        if (view.getId() == R.id.add_button) {
             Intent i;
             switch (mViewPager.getCurrentItem()) {
                 case 0: // agenda
@@ -338,17 +342,6 @@ public class HomeActivity extends ActionBarActivity implements
             }
         }
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-
-//        Log.d("Home", "onActivityResult: " + requestCode + ", " + resultCode + ", " + data.toString());
-//        switch (requestCode) {
-//            case ROUTINES_ACTIVITY_RQ:
-//                ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
-//        }
-//    }
 
     private void launchActivity(Intent i) {
         startActivity(i);
@@ -399,6 +392,11 @@ public class HomeActivity extends ActionBarActivity implements
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        CalendulaApp.eventBus().unregister(this);
+        super.onDestroy();
+    }
 
     private void showShowCase() {
 //        if (!showcaseShown) {
@@ -460,7 +458,6 @@ public class HomeActivity extends ActionBarActivity implements
 //        sv.show();
 
 
-
 //        }
     }
 
@@ -517,7 +514,7 @@ public class HomeActivity extends ActionBarActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    void logout(){
+    void logout() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -530,7 +527,7 @@ public class HomeActivity extends ActionBarActivity implements
                         finish();
                     }
                 })
-                .setNegativeButton("No, cancel",new DialogInterface.OnClickListener() {
+                .setNegativeButton("No, cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
                         dialog.dismiss();
@@ -647,7 +644,7 @@ public class HomeActivity extends ActionBarActivity implements
 //        if (toolbarVisible) {
 //            toolbarVisible = false;
 //            Log.d("Home", "HideToolbar");
-            setActionBarColor(getResources().getColor(R.color.transparent));
+        setActionBarColor(getResources().getColor(R.color.transparent));
 //        }
 
     }
@@ -724,6 +721,17 @@ public class HomeActivity extends ActionBarActivity implements
             }
         });
 
+    }
+
+    // Method called from the event bus
+    public void onEvent(PersistenceEvents.ModelCreateOrUpdateEvent event) {
+        if (event.clazz.equals(Routine.class)) {
+            ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
+        } else if (event.clazz.equals(Medicine.class)) {
+            ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
+        } else if (event.clazz.equals(Schedule.class)) {
+            ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
+        }
     }
 
 }

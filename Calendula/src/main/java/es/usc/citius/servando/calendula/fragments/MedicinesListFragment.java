@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -39,22 +40,33 @@ public class MedicinesListFragment extends Fragment {
         mMedicines = Medicine.findAll();
         adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
         listview.setAdapter(adapter);
-//        rootView.findViewById(R.id.medicine_add_button).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (mMedicineSelectedCallback != null)
-//                    mMedicineSelectedCallback.onCreateMedicine();
-//            }
-//        });
         return rootView;
     }
 
 
     public void notifyDataChange() {
         Log.d(getTag(), "Medicines - Notify data change");
-        mMedicines.clear();
-        mMedicines.addAll(Medicine.findAll());
-        adapter.notifyDataSetChanged();
+        new ReloadItemsTask().execute();
+    }
+
+    private class ReloadItemsTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            mMedicines = Medicine.findAll();
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            adapter.clear();
+            for (Medicine m : mMedicines) {
+                adapter.add(m);
+            }
+            adapter.notifyDataSetChanged();
+        }
     }
 
     private View createMedicineListItem(LayoutInflater inflater, final Medicine medicine) {
@@ -101,7 +113,7 @@ public class MedicinesListFragment extends Fragment {
                 .setCancelable(true)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        m.delete();
+                        m.deleteCascade();
                         notifyDataChange();
                     }
                 })
@@ -134,17 +146,6 @@ public class MedicinesListFragment extends Fragment {
         if (activity instanceof OnMedicineSelectedListener) {
             mMedicineSelectedCallback = (OnMedicineSelectedListener) activity;
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        notifyDataChange();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     //
