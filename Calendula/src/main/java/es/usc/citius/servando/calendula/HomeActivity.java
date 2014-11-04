@@ -128,7 +128,11 @@ public class HomeActivity extends ActionBarActivity implements
         tabs.setOnPageChangeListener(this);
         tabs.setShouldExpand(true);
         tabs.setAllCaps(false);
+        tabs.setTabPaddingLeftRight(30);
+        tabs.setShouldExpand(true);
         tabs.setDividerColor(getResources().getColor(R.color.white_50));
+        tabs.setDividerColor(getResources().getColor(R.color.transparent));
+        tabs.setIndicatorHeight(10);
         tabs.setIndicatorColor(getResources().getColor(R.color.white));
         tabs.setTextColor(getResources().getColor(R.color.white_80));
         tabs.setUnderlineColor(getResources().getColor(R.color.android_blue_darker));
