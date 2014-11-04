@@ -25,7 +25,8 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
  */
 public class AlarmScheduler {
 
-    public static final int ALARM_AUTO_DELAY_MILLIS = 5 * 60 * 1000;  // 5 mins
+    public static final int DEFAULT_ALARM_TIME_MARGIN = 2 * 60 * 1000; // 2 hours
+    public static final int ALARM_AUTO_DELAY_MILLIS = 1 * 60 * 1000;  // 5 mins
     public static final int ALARM_USER_DELAY_MILLIS = 60 * 60 * 1000; // 1 hour
 
     private static final String TAG = AlarmScheduler.class.getName();
@@ -41,16 +42,8 @@ public class AlarmScheduler {
         // set the routine alarm only if there are schedules associated
         if (ScheduleUtils.getRoutineScheduleItems(routine, false).size() > 0) {
             Log.d(TAG, "Updating routine alarm [" + routine.name() + "]");
-            // intent our receiver will receive
-            Intent intent = new Intent(ctx, AlarmReceiver.class);
-            // indicate thar is for a routine
-            intent.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_ROUTINE_TIME);
-            // pass the routine id (hash code)
-            Log.d(TAG, "Put extra " + CalendulaApp.INTENT_EXTRA_ROUTINE_ID + ": " + routine.getId());
-            intent.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, routine.getId());
-            // create pending intent
-            int intent_id = routine.getId().hashCode();
-            PendingIntent routinePendingIntent = PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            // get routine pending intent
+            PendingIntent routinePendingIntent = alarmPendingIntent(ctx, routine);
             // Get the AlarmManager service
             AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
             // set the routine alarm, with repetition every day
@@ -59,6 +52,16 @@ public class AlarmScheduler {
                 Duration timeToAlarm = new Duration(LocalTime.now().toDateTimeToday(), routine.time().toDateTimeToday());
                 Log.d(TAG, "Alarm scheduled to " + timeToAlarm.getMillis() + " millis");
             }
+        }
+    }
+
+    private void cancelAlarm(Routine routine, Context ctx) {
+        // get routine pending intent
+        PendingIntent routinePendingIntent = alarmPendingIntent(ctx, routine);
+        // Get the AlarmManager service
+        AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.cancel(routinePendingIntent);
         }
     }
 
@@ -74,15 +77,8 @@ public class AlarmScheduler {
         // set the routine alarm only if there are schedules associated
         if (ScheduleUtils.getRoutineScheduleItems(routine, false).size() > 0) {
             Log.d(TAG, "Updating routine alarm [" + routine.name() + "]");
-            // intent our receiver will receive
-            Intent intent = new Intent(ctx, AlarmReceiver.class);
-            // indicate thar is for a routine
-            intent.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_ROUTINE_DELAYED_TIME);
-            // pass the routine id (hash code)
-            intent.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, routine.getId());
-            // create pending intent
-            int intent_id = routine.getId().hashCode() + 1;
-            PendingIntent routinePendingIntent = PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            // get delay routine pending intent
+            PendingIntent routinePendingIntent = alarmDelayPendingIntent(ctx, routine);
             // Get the AlarmManager service
             AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
             // set the routine alarm, with repetition every day
@@ -93,36 +89,9 @@ public class AlarmScheduler {
         }
     }
 
-
-    private void cancelAlarm(Routine routine, Context ctx) {
-        // intent we have sent to set the alarm
-        Intent intent = new Intent(ctx, AlarmReceiver.class);
-        // indicate thar is for a routine
-        intent.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_ROUTINE_TIME);
-        // pass the routine id
-        intent.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, routine.getId());
-        // create pending intent
-        int intent_id = routine.getId().hashCode();
-        PendingIntent routinePendingIntent = PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        // Get the AlarmManager service
-        AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.cancel(routinePendingIntent);
-        }
-    }
-
     private void cancelDelayedAlarm(Routine routine, Context ctx) {
-        // intent we have sent to set the alarm
-        Intent intent = new Intent(ctx, AlarmReceiver.class);
-        // indicate thar is for a routine
-        intent.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_ROUTINE_DELAYED_TIME);
-        // pass the routine id
-        intent.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, routine.getId());
-        // create pending intent
-        int intent_id = routine.getId().hashCode() + 1;
-        PendingIntent routinePendingIntent = PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
+        // get delay routine pending intent
+        PendingIntent routinePendingIntent = alarmDelayPendingIntent(ctx, routine);
         // Get the AlarmManager service
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
@@ -159,6 +128,7 @@ public class AlarmScheduler {
             intent.putExtra("action", StartActivity.ACTION_SHOW_REMINDERS);
             intent.putExtra("routine_id", routine.getId());
             ReminderNotification.notify(ctx, ctx.getResources().getString(R.string.meds_time), routine, doses, intent);
+
             // set auto delay for within 5 minutes
             delayAlarm(routine, ALARM_AUTO_DELAY_MILLIS, ctx);
         }
@@ -189,12 +159,7 @@ public class AlarmScheduler {
         Routine routine = Routine.findById(routineId);
         if (routine != null) {
             Log.d(TAG, "onAlarmReceived: " + routine.getId() + ", " + routine.name());
-            LocalTime now = LocalTime.now();
-            LocalTime time = routine.time();
-            if (time.isBefore(now.minusMinutes(60))) {
-                // we are receiving an alarm for a routine that is in the past,
-                // probably because the application has started just now.
-                // We need to log and inform user
+            if (isWithinDefaultMargins(routine)) {
                 onRoutineLost(routine);
             } else {
                 onRoutineTime(routine, ctx);
@@ -237,8 +202,11 @@ public class AlarmScheduler {
      */
     public void onDelayRoutine(Routine r, Context ctx, int delay) {
         Log.d(TAG, "onDelayRoutine: " + r.getId() + ", " + r.name());
-        delayAlarm(r, delay, ctx);
-        ReminderNotification.cancel(ctx);
+        // check this routine is not future
+        if (isWithinDefaultMargins(r)) {
+            delayAlarm(r, delay, ctx);
+            ReminderNotification.cancel(ctx);
+        }
     }
 
     /**
@@ -248,8 +216,7 @@ public class AlarmScheduler {
     public void onDelayRoutine(long rId, Context ctx, int delay) {
         Routine r = Routine.findById(rId);
         if (r != null) {
-            Log.d(TAG, "onDelayRoutine: " + r.getId() + ", " + r.name());
-            delayAlarm(r, delay, ctx);
+            onDelayRoutine(r, ctx, delay);
         }
     }
 
@@ -259,6 +226,45 @@ public class AlarmScheduler {
         cancelDelayedAlarm(r, ctx);
         // cancel notification
         ReminderNotification.cancel(ctx);
+    }
+
+    /**
+     * Check if the current time is in the time interval specified by the routine time and
+     * routine time + DEFAULT_ALARM_TIME_MARGIN
+     *
+     * @param r
+     * @return
+     */
+    private boolean isWithinDefaultMargins(Routine r) {
+        DateTime now = DateTime.now();
+        DateTime routineTime = r.time().toDateTimeToday();
+        return routineTime.isBefore(now) && routineTime.plusMillis(DEFAULT_ALARM_TIME_MARGIN).isAfter(now);
+    }
+
+
+    public static PendingIntent alarmPendingIntent(Context ctx, Routine routine) {
+        // intent our receiver will receive
+        Intent intent = new Intent(ctx, AlarmReceiver.class);
+        // indicate thar is for a routine
+        intent.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_ROUTINE_TIME);
+        // pass the routine id (hash code)
+        Log.d(TAG, "Put extra " + CalendulaApp.INTENT_EXTRA_ROUTINE_ID + ": " + routine.getId());
+        intent.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, routine.getId());
+        // create pending intent
+        int intent_id = routine.getId().hashCode();
+        return PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    public static PendingIntent alarmDelayPendingIntent(Context ctx, Routine routine) {
+        // intent our receiver will receive
+        Intent intent = new Intent(ctx, AlarmReceiver.class);
+        // indicate thar is for a routine
+        intent.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_ROUTINE_DELAYED_TIME);
+        // pass the routine id (hash code)
+        intent.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, routine.getId());
+        // create pending intent
+        int intent_id = routine.getId().hashCode() + 100;
+        return PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     // SINGLETON
