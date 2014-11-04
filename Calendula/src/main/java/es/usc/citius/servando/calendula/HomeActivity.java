@@ -24,6 +24,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -31,6 +33,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.Arrays;
@@ -68,6 +71,8 @@ public class HomeActivity extends ActionBarActivity implements
     public static final int SCHEDULES_ACTIVITY_RQ = 2;
     public static final int MEDICINES_ACTIVITY_RQ = 3;
 
+    public static final int ANIM_ACTION_BAR_DURATION = 150;
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -90,6 +95,8 @@ public class HomeActivity extends ActionBarActivity implements
     String[] titles;
 
     Toolbar toolbar;
+    PagerSlidingTabStrip tabs;
+    Handler mHandler;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -104,6 +111,7 @@ public class HomeActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         // set the content view layout
         setContentView(R.layout.activity_home);
+        mHandler = new Handler();
         // initialize current and previous action bar colors
         currentActionBarColor = getResources().getColor(R.color.transparent);
         previousActionBarColor = getResources().getColor(R.color.transparent);
@@ -111,8 +119,21 @@ public class HomeActivity extends ActionBarActivity implements
         mSectionsPagerAdapter = new HomePageAdapter(getSupportFragmentManager(), this, this);
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
+        tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOnPageChangeListener(this);
+        mViewPager.setOffscreenPageLimit(5);
+
+
+        tabs.setViewPager(mViewPager);
+        tabs.setOnPageChangeListener(this);
+        tabs.setShouldExpand(true);
+        tabs.setAllCaps(false);
+        tabs.setDividerColor(getResources().getColor(R.color.white_50));
+        tabs.setIndicatorColor(getResources().getColor(R.color.white));
+        tabs.setTextColor(getResources().getColor(R.color.white_80));
+        tabs.setUnderlineColor(getResources().getColor(R.color.android_blue_darker));
+        tabs.setBackgroundColor(getResources().getColor(R.color.android_blue_darker));
+        tabs.setVisibility(View.GONE);
         // set up the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_launcher_white);
@@ -479,6 +500,7 @@ public class HomeActivity extends ActionBarActivity implements
             case R.id.action_settings:
                 return true;
             case R.id.action_expand:
+                Log.d("Home", "ToogleExpand");
                 ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
                 boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
                 item.setIcon(
@@ -538,9 +560,7 @@ public class HomeActivity extends ActionBarActivity implements
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        Log.d("Home", position + ", " + positionOffset + ", " + positionOffsetPixels);
-
-
+        //Log.d("Home", position + ", " + positionOffset + ", " + positionOffsetPixels);
     }
 
     void showReminder(Long routineId) {
@@ -561,14 +581,14 @@ public class HomeActivity extends ActionBarActivity implements
         invalidateOptionsMenu();
         updateTitle(page);
         if (page == 0) {
-            setActionBarColor(getResources().getColor(R.color.transparent));
-            //hideAddButton();
+            hideTabs();
         } else {
             showAddButton();
             if (toolbar.getVisibility() != View.VISIBLE) {
                 toolbar.setVisibility(View.VISIBLE);
             }
             setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
+            showTabs();
         }
 
     }
@@ -628,14 +648,6 @@ public class HomeActivity extends ActionBarActivity implements
 
     }
 
-    public void disableToolbarTransparency() {
-//        if (!toolbarVisible) {
-//            Log.d("Home", "ShowToolbar");
-//            ((FloatingActionButton) (addButton)).show(true);
-//            toolbarVisible = true;
-//            setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
-//        }
-    }
 
     public void hideToolbar() {
         toolbar.setVisibility(View.GONE);
@@ -646,14 +658,59 @@ public class HomeActivity extends ActionBarActivity implements
     }
 
 
+    public void showTabs() {
+        if (!(tabs.getVisibility() == View.VISIBLE)) {
+            final Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_show_tabs);
+            slide.setDuration(ANIM_ACTION_BAR_DURATION);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    tabs.setVisibility(View.VISIBLE);
+                    tabs.startAnimation(slide);
+                }
+            }, ANIM_ACTION_BAR_DURATION);
+
+        }
+
+    }
+
+    public void hideTabs() {
+        if (!(tabs.getVisibility() == View.GONE)) {
+            Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_hide_tabs);
+            slide.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    tabs.setVisibility(View.GONE);
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            setActionBarColor(getResources().getColor(R.color.transparent));
+            tabs.startAnimation(slide);
+        }
+    }
+
+
     private void setActionBarColor(final int color) {
+
+//        toolbar.setBackgroundColor(color);
+
         previousActionBarColor = currentActionBarColor;
         final ObjectAnimator backgroundColorAnimator = ObjectAnimator.ofObject(toolbar,
                 "backgroundColor",
                 new ArgbEvaluator(),
                 currentActionBarColor,
                 color);
-        backgroundColorAnimator.setDuration(250);
+        backgroundColorAnimator.setDuration(ANIM_ACTION_BAR_DURATION);
         backgroundColorAnimator.start();
         backgroundColorAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -664,6 +721,5 @@ public class HomeActivity extends ActionBarActivity implements
         });
 
     }
-
 
 }

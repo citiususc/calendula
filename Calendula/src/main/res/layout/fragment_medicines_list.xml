@@ -5,6 +5,7 @@
     android:background="#E0EAEF">
 
     <ListView
+        android:layout_marginTop="@dimen/tabs_height"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:divider="#E0EAEF"

@@ -6,8 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.fragments.DailyAgendaFragment;
-import es.usc.citius.servando.calendula.fragments.HomeFragment;
 import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
 import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
@@ -19,11 +19,19 @@ import es.usc.citius.servando.calendula.util.Screen;
 public class HomePageAdapter extends FragmentPagerAdapter {
 
     private float dpWidth;
+    String[] titles;
 
     public HomePageAdapter(FragmentManager fm, Context ctx, Activity activity) {
         super(fm);
         // obtain the window width in dp to use later
         dpWidth = Screen.getDpSize(activity).x;
+
+        titles = new String[]{
+                ctx.getString(R.string.title_home),
+                ctx.getString(R.string.title_activity_routines),
+                ctx.getString(R.string.title_activity_medicines),
+                ctx.getString(R.string.title_activity_schedules)
+        };
     }
 
     @Override
@@ -61,5 +69,10 @@ public class HomePageAdapter extends FragmentPagerAdapter {
     public int getCount() {
         // Show 2 total pages. Home and agenda
         return 4;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return titles[position];
     }
 }

@@ -18,6 +18,7 @@
     <color name="android_blue_dark">#0099CC</color>
     <color name="android_blue_darker">#0077aa</color>
     <color name="android_blue_light">#5533B5E5</color>
+    <color name="white_80">#CCFFFFFF</color>
     <color name="white_50">#55FFFFFF</color>
     <color name="white_20">#22FFFFFF</color>
     <color name="black_20">#22000000</color>

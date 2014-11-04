@@ -212,9 +212,9 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         SharedPreferences settings = getActivity().getSharedPreferences(CalendulaApp.PREFERENCES_NAME, 0);
 
 
-        items.clear();
-        items.addAll(buildItems()); // allow user to change day
-        adapter.notifyDataSetChanged();
+//        items.clear();
+//        items.addAll(buildItems()); // allow user to change day
+//        adapter.notifyDataSetChanged();
     }
 
 
