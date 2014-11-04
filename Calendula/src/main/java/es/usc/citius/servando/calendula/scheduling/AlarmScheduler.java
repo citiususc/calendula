@@ -25,7 +25,7 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
  */
 public class AlarmScheduler {
 
-    public static final int DEFAULT_ALARM_TIME_MARGIN = 2 * 60 * 1000; // 2 hours
+    public static final int DEFAULT_ALARM_TIME_MARGIN = 2 * 60 * 60 * 1000; // 2 hours
     public static final int ALARM_AUTO_DELAY_MILLIS = 1 * 60 * 1000;  // 5 mins
     public static final int ALARM_USER_DELAY_MILLIS = 60 * 60 * 1000; // 1 hour
 
@@ -73,7 +73,7 @@ public class AlarmScheduler {
      * @param routine The routine whose alarm will be set
      */
     private void delayAlarm(Routine routine, int millis, Context ctx) {
-
+        Log.d(TAG, "Delaying routine alarm [" + routine.name() + ", " + millis + "]");
         // set the routine alarm only if there are schedules associated
         if (ScheduleUtils.getRoutineScheduleItems(routine, false).size() > 0) {
             Log.d(TAG, "Updating routine alarm [" + routine.name() + "]");
@@ -160,9 +160,9 @@ public class AlarmScheduler {
         if (routine != null) {
             Log.d(TAG, "onAlarmReceived: " + routine.getId() + ", " + routine.name());
             if (isWithinDefaultMargins(routine)) {
-                onRoutineLost(routine);
-            } else {
                 onRoutineTime(routine, ctx);
+            } else {
+                onRoutineLost(routine);
             }
         } else {
             Log.d(TAG, "onAlarmReceived: " + routineId + ", null routine");
@@ -238,7 +238,9 @@ public class AlarmScheduler {
     private boolean isWithinDefaultMargins(Routine r) {
         DateTime now = DateTime.now();
         DateTime routineTime = r.time().toDateTimeToday();
-        return routineTime.isBefore(now) && routineTime.plusMillis(DEFAULT_ALARM_TIME_MARGIN).isAfter(now);
+        boolean result = routineTime.isBefore(now) && routineTime.plusMillis(DEFAULT_ALARM_TIME_MARGIN).isAfter(now);
+        Log.d(TAG, "isWithinDefaultMargins: " + result);
+        return result;
     }
 
 
