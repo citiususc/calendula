@@ -18,11 +18,11 @@
     <color name="android_blue_dark">#0099CC</color>
     <color name="android_blue_darker">#0077aa</color>
     <color name="android_blue_light">#5533B5E5</color>
-    <color name="white_80">#CCFFFFFF</color>
+    <color name="white_80">#EEFFFFFF</color>
     <color name="white_50">#55FFFFFF</color>
     <color name="white_20">#22FFFFFF</color>
     <color name="black_20">#22000000</color>
-    <color name="list_item_shadow">#11444444</color>
+    <color name="list_item_shadow">#11222222</color>
     <color name="transparent">#00000000</color>
 
 
@@ -33,7 +33,7 @@
     <color name="toolbar_dark_background">#0077aa</color>
     <color name="green_hour_expanded_left">#2299CC00</color>
     <color name="green_hour_expanded_right">#CC99CC00</color>
-    <color name="list_item_active_background">#22eeeeff</color>
+    <color name="list_item_active_background">#11eeeeff</color>
     <color name="click_highlight">#2233B5E5</color>
 
     <!-- List items -->

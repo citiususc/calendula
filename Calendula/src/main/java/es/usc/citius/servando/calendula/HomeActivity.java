@@ -68,11 +68,8 @@ public class HomeActivity extends ActionBarActivity implements
         MedicinesListFragment.OnMedicineSelectedListener,
         ScheduleListFragment.OnScheduleSelectedListener {
 
-    public static final int ROUTINES_ACTIVITY_RQ = 1;
-    public static final int SCHEDULES_ACTIVITY_RQ = 2;
-    public static final int MEDICINES_ACTIVITY_RQ = 3;
-
-    public static final int ANIM_ACTION_BAR_DURATION = 150;
+    public static final int ANIM_ACTION_BAR_DURATION = 250;
+    public static final int ANIM_TABS_DURATION = 400;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -662,7 +659,7 @@ public class HomeActivity extends ActionBarActivity implements
     public void showTabs() {
         if (!(tabs.getVisibility() == View.VISIBLE)) {
             final Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_show_tabs);
-            slide.setDuration(ANIM_ACTION_BAR_DURATION);
+            slide.setDuration(ANIM_TABS_DURATION);
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
