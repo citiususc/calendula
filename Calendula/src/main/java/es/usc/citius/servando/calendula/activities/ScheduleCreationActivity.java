@@ -1,12 +1,12 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -46,7 +46,6 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
-    ActionBar mActionBar;
 
     Button prevButton;
     Button nextButton;
@@ -83,18 +82,15 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
         setFormOnClickListeners();
 
-//        getSupportActionBar().hide();
-
-//        toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        toolbar.setNavigationIcon(R.drawable.ic_launcher_white);
-//        // configure toolbar as action bar
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayShowTitleEnabled(true);
-//        getSupportActionBar().setDisplayShowCustomEnabled(false);
-
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(getString(R.string.title_activity_schedules));
+        toolbar.setSubtitle(getString(mScheduleId != -1 ? R.string.title_edit_schedule_activity : R.string.title_create_schedule_activity));
+        toolbar.setNavigationIcon(new InsetDrawable(getResources().getDrawable(R.drawable.ic_event_white_48dp), 16, 16, 16, 16));
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);

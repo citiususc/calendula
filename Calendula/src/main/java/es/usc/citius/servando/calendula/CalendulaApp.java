@@ -20,6 +20,7 @@ import java.io.OutputStream;
 
 import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
+import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.Screen;
 
@@ -62,6 +63,8 @@ public class CalendulaApp extends Application {
         DailyAgenda.instance().setupForToday(this);
         // setup alarm for daily agenda update
         setupUpdateDailyAgendaAlarm();
+        // Update alarms
+        AlarmScheduler.instance().updateAllAlarms(this);
         // create app palette
         Screen.createPalette(this, Screen.drawableToBitmap(getResources().getDrawable(R.drawable.home_bg_1)));
         // export database to db

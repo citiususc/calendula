@@ -69,7 +69,7 @@ public class HomeActivity extends ActionBarActivity implements
         ScheduleListFragment.OnScheduleSelectedListener {
 
     public static final int ANIM_ACTION_BAR_DURATION = 250;
-    public static final int ANIM_TABS_DURATION = 400;
+    public static final int ANIM_TABS_DURATION = 250;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -585,8 +585,9 @@ public class HomeActivity extends ActionBarActivity implements
             if (toolbar.getVisibility() != View.VISIBLE) {
                 toolbar.setVisibility(View.VISIBLE);
             }
-            setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
             showTabs();
+            setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
+
         }
 
     }

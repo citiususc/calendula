@@ -44,6 +44,8 @@
     <string name="title_activity_medicines">Medicinas</string>
     <string name="title_edit_medicine_activity">Editar medicina</string>
     <string name="title_create_medicine_activity">Nueva medicina</string>
+    <string name="title_edit_schedule_activity">Editar pauta</string>
+    <string name="title_create_schedule_activity">Crear pauta</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>

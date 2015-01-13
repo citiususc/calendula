@@ -130,7 +130,8 @@
         android:src="@drawable/presentation_box_left"
         android:adjustViewBounds="false"
         android:cropToPadding="false"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"
+        android:visibility="invisible" />
 
     <ImageView
         android:layout_width="50dp"
@@ -140,7 +141,8 @@
         android:adjustViewBounds="false"
         android:layout_alignParentRight="true"
         android:cropToPadding="false"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"
+        android:visibility="invisible" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -150,7 +152,8 @@
         android:scaleType="fitXY"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:layout_marginTop="4dp" />
+        android:layout_marginTop="4dp"
+        android:visibility="invisible" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -161,6 +164,7 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_alignParentBottom="false"
-        android:layout_marginTop="113dp" />
+        android:layout_marginTop="113dp"
+        android:visibility="invisible" />
 
 </RelativeLayout>

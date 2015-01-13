@@ -244,6 +244,19 @@ public class AlarmScheduler {
     }
 
 
+    /**
+     * Update alarms for all schedules if needed
+     *
+     * @param ctx
+     * @return
+     */
+    public void updateAllAlarms(Context ctx) {
+        for (Schedule schedule : Schedule.findAll()) {
+            setAlarmsIfNeeded(schedule, ctx);
+        }
+    }
+
+
     public static PendingIntent alarmPendingIntent(Context ctx, Routine routine) {
         // intent our receiver will receive
         Intent intent = new Intent(ctx, AlarmReceiver.class);

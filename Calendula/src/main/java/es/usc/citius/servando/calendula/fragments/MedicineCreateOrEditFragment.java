@@ -219,7 +219,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
         if (amount < (0.8 * presentationScroll.getWidth())) {
             amount -= 30;
         }
-        presentationScroll.scrollTo(amount, 0);
+        presentationScroll.smoothScrollTo(amount, 0);
 
     }
 

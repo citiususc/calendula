@@ -35,6 +35,7 @@ public class DailyAgenda {
 
         // we need to update daily agenda
         if (!today.contains(lastDate)) {
+
             // Start transaction
             ActiveAndroid.beginTransaction();
             // delete old items
@@ -48,18 +49,23 @@ public class DailyAgenda {
             // End transaction
             ActiveAndroid.setTransactionSuccessful();
             ActiveAndroid.endTransaction();
+        } else {
+            Log.d(TAG, "No need to update daily schedule (" + DailyScheduleItem.findAll().size() + " items found for today)");
         }
     }
 
     public void createDailySchedule(DateTime d) {
+        int items = 0;
         // create a list with all day doses
         for (Routine r : Routine.findAll()) {
             for (ScheduleItem s : r.scheduleItems()) {
                 s.schedule().enabledFor(d.getDayOfWeek());
                 // create a dailyScheduleItem and save it
                 new DailyScheduleItem(s).save();
+                items++;
             }
         }
+        Log.d(TAG, items + " items added to daily schedule");
     }
 
     public void updateDailySchedule(ScheduleItem item) {
