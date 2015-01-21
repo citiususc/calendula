@@ -5,6 +5,8 @@ import android.animation.FloatEvaluator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -108,10 +110,16 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         userInfoFragment = rootView.findViewById(R.id.user_info_fragment);
         zoomContainer = rootView.findViewById(R.id.zoom_container);
 
-        items = buildItems(); // allow user to change day
-        adapter = new AgendaItemAdapter(getActivity(), R.layout.daily_view_hour, items);
-        slideAdapter = new SlideExpandableListAdapter(adapter, R.id.count_container, R.id.bottom, 1);
-        listview.setAdapter(slideAdapter);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                items = buildItems(); // allow user to change day
+//                adapter = new AgendaItemAdapter(getActivity(), R.layout.daily_view_hour, items);
+//                slideAdapter = new SlideExpandableListAdapter(adapter, R.id.count_container, R.id.bottom, 1);
+//                listview.setAdapter(slideAdapter);
+//
+//            }
+//        },1000);
 
         zoomHelper = new AgendaZoomHelper(zoomContainer, new AgendaZoomHelper.ZoomHelperListener() {
             @Override
@@ -124,63 +132,69 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
 
             @Override
             public void onHide() {
-                updateBackground(DateTime.now());
+                //updateBackground(DateTime.now());
             }
 
             @Override
             public void onShow(Routine r) {
-                updateBackground(r.time().toDateTimeToday());
+                // updateBackground(r.time().toDateTimeToday());
             }
         });
 
 
-        listview.setOnScrollListener(new AbsListView.OnScrollListener() {
+        if (Build.VERSION.SDK_INT >= 11) {
+            listview.setOnScrollListener(new AbsListView.OnScrollListener() {
 
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-                if (expanded && getUserVisibleHint()) { // expanded and visible
-//                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)userInfoFragment.getLayoutParams();
-                    int scrollY = getScroll();
-                    int scrollDiff = (scrollY - lastScroll);
-
-                    if (Math.abs(lastVisibleItemCount - visibleItemCount) <= 5) {
-
-                        int translationY = (int) (userInfoFragment.getTranslationY() - scrollDiff);
-                        Log.d(getTag(), "Scroll Y: " + scrollY + ", translationY: " + translationY + ", firstItem: " + firstVisibleItem + ", profileHeight: " + profileFragmentHeight);
-
-                        if (translationY < -profileFragmentHeight) {
-                            translationY = -profileFragmentHeight;
-                        } else if (translationY >= 0) {
-                            translationY = 0;
-                        }
-
-                        if (translationY < toolbarHeight - profileFragmentHeight) {
-//                            ((HomeActivity) getActivity()).disableToolbarTransparency();
-                            ((HomeActivity) getActivity()).hideAddButton();
-                            ((HomeActivity) getActivity()).hideToolbar();
-                        } else if (translationY > (toolbarHeight - profileFragmentHeight)) {
-                            ((HomeActivity) getActivity()).enableToolbarTransparency();
-                            ((HomeActivity) getActivity()).showAddButton();
-                            ((HomeActivity) getActivity()).showToolbar();
-                        }
-                        userInfoFragment.setTranslationY(translationY);
-                    }
-                    lastScroll = scrollY;
+                @Override
+                public void onScrollStateChanged(AbsListView absListView, int i) {
 
                 }
-                lastVisibleItemCount = visibleItemCount;
-            }
 
-        });
+                @Override
+                public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                    if (expanded && getUserVisibleHint()) { // expanded and visible
+//                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)userInfoFragment.getLayoutParams();
+                        int scrollY = getScroll();
+                        int scrollDiff = (scrollY - lastScroll);
+
+                        if (Math.abs(lastVisibleItemCount - visibleItemCount) <= 5) {
+
+                            int translationY = (int) (userInfoFragment.getTranslationY() - scrollDiff);
+
+                            Log.d(getTag(), "Scroll Y: " + scrollY + ", translationY: " + translationY + ", firstItem: " + firstVisibleItem + ", profileHeight: " + profileFragmentHeight);
+
+                            if (translationY < -profileFragmentHeight) {
+                                translationY = -profileFragmentHeight;
+                            } else if (translationY >= 0) {
+                                translationY = 0;
+                            }
+
+                            if (translationY < toolbarHeight - profileFragmentHeight) {
+//                            ((HomeActivity) getActivity()).disableToolbarTransparency();
+                                ((HomeActivity) getActivity()).hideAddButton();
+                                ((HomeActivity) getActivity()).hideToolbar();
+                            } else if (translationY > (toolbarHeight - profileFragmentHeight)) {
+                                ((HomeActivity) getActivity()).enableToolbarTransparency();
+                                ((HomeActivity) getActivity()).showAddButton();
+                                ((HomeActivity) getActivity()).showToolbar();
+                            }
+                            userInfoFragment.setTranslationY(translationY);
+                        }
+                        lastScroll = scrollY;
+
+                    }
+                    lastVisibleItemCount = visibleItemCount;
+                }
+
+            });
+        }
 
         LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.list_animation);
         listview.setLayoutAnimation(controller);
+
+        new LoadDailyAgendaTask().execute(null, null, null);
+
         return rootView;
     }
 
@@ -351,8 +365,8 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
             }
 
             ((TextView) v.findViewById(R.id.routines_list_item_name)).setText(item.title);
-            ((TextView) v.findViewById(R.id.routines_list_item_hour)).setText(item.hour + ":");
-            ((TextView) v.findViewById(R.id.routines_list_item_minute)).setText(item.minute + "");
+            ((TextView) v.findViewById(R.id.routines_list_item_hour)).setText((item.hour > 9 ? item.hour : "0" + item.hour) + ":");
+            ((TextView) v.findViewById(R.id.routines_list_item_minute)).setText((item.minute > 9 ? item.minute : "0" + item.minute) + "");
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -421,9 +435,26 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         }
     }
 
-    public void updateBackground(DateTime time) {
+    public void updateBackground() {
         if (userProInfoFragment != null)
-            userProInfoFragment.updateBackground(time);
+            userProInfoFragment.updateBackground();
+    }
+
+
+    public class LoadDailyAgendaTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            items = buildItems(); // allow user to change day
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final Void result) {
+            adapter = new AgendaItemAdapter(getActivity(), R.layout.daily_view_hour, items);
+            slideAdapter = new SlideExpandableListAdapter(adapter, R.id.count_container, R.id.bottom, 1);
+            listview.setAdapter(slideAdapter);
+        }
     }
 
 }

@@ -1,15 +1,12 @@
 package com.tjerkw.slideexpandable.library;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.SparseIntArray;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
-import android.view.animation.Interpolator;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 
@@ -242,7 +239,9 @@ public abstract class AbstractSlideExpandableListAdapter extends WrapperListAdap
         if (openItems.get(position)) {
             target.setVisibility(View.VISIBLE);
             params.bottomMargin = 0;
-            button.setRotation(180);
+            if (Build.VERSION.SDK_INT >= 11) {
+                button.setRotation(180);
+            }
         } else {
             target.setVisibility(View.GONE);
             params.bottomMargin = 0 - viewHeights.get(position);
@@ -268,10 +267,11 @@ public abstract class AbstractSlideExpandableListAdapter extends WrapperListAdap
 
     protected void animateButton(final View button, int type){
 
-        final int from = button.getRotation()==0?0:180;
-        final int to = button.getRotation()==0?180:0;
-
-        button.setRotation(to);
+        if (Build.VERSION.SDK_INT >= 11) {
+            final int from = button.getRotation() == 0 ? 0 : 180;
+            final int to = button.getRotation() == 0 ? 180 : 0;
+            button.setRotation(to);
+        }
 
 //        RotateAnimation anim = new RotateAnimation(from,to,Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
 //        anim.setDuration(200);

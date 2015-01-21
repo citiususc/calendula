@@ -5,6 +5,7 @@ import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.activeandroid.ActiveAndroid;
@@ -17,12 +18,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
-import es.usc.citius.servando.calendula.util.Screen;
 
 /**
  * Created by castrelo on 4/10/14.
@@ -46,6 +47,9 @@ public class CalendulaApp extends Application {
     public static final int ACTION_ROUTINE_TIME = 1;
     public static final int ACTION_DAILY_ALARM = 2;
     public static final int ACTION_ROUTINE_DELAYED_TIME = 3;
+    public static final int ACTION_DELAY_ROUTINE = 4;
+    public static final int ACTION_CANCEL_ROUTINE = 5;
+
 
     // REQUEST CODES
     public static final int RQ_SHOW_ROUTINE = 1;
@@ -59,16 +63,24 @@ public class CalendulaApp extends Application {
         super.onCreate();
         // initialize sqlite engine
         ActiveAndroid.initialize(this, true);
-        // initialize daily agenda
-        DailyAgenda.instance().setupForToday(this);
-        // setup alarm for daily agenda update
-        setupUpdateDailyAgendaAlarm();
-        // Update alarms
-        AlarmScheduler.instance().updateAllAlarms(this);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // initialize daily agenda
+                DailyAgenda.instance().setupForToday(CalendulaApp.this);
+                // setup alarm for daily agenda update
+                setupUpdateDailyAgendaAlarm();
+                // Update alarms
+                AlarmScheduler.instance().updateAllAlarms(CalendulaApp.this);
+            }
+        }).start();
+
         // create app palette
-        Screen.createPalette(this, Screen.drawableToBitmap(getResources().getDrawable(R.drawable.home_bg_1)));
+        //Screen.createPalette(this, Screen.drawableToBitmap(getResources().getDrawable(R.drawable.home_bg_1)));
         // export database to db
         // exportDatabase(this,DB_NAME,new File(Environment.getExternalStorageDirectory()+File.separator+DB_NAME));
+
+        Log.d("APP", Arrays.toString(PreferenceManager.getDefaultSharedPreferences(this).getAll().keySet().toArray()));
     }
 
 

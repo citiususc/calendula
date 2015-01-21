@@ -1,11 +1,12 @@
 package es.usc.citius.servando.calendula.scheduling;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.joda.time.DateTime;
 
-import java.text.DateFormatSymbols;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
@@ -21,15 +22,15 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 public class ScheduleUtils {
 
 
-    public static String[] dayNames = new String[]{"Mon", "Tue", "Wed", "Thu", "Fry", "Sat", "Sun"}; // 7 days
-
-    static {
-        DateFormatSymbols symbols = new DateFormatSymbols();
-        dayNames = symbols.getShortWeekdays();
-        for (int i = 0; i < dayNames.length; i++) {
-            dayNames[i] = dayNames[i].toUpperCase();
-        }
-    }
+//    public static String[] dayNames = new String[]{"Mon", "Tue", "Wed", "Thu", "Fry", "Sat", "Sun"}; // 7 days
+//
+//    static {
+//        DateFormatSymbols symbols = new DateFormatSymbols();
+//        dayNames = symbols.getShortWeekdays();
+//        for (int i = 0; i < dayNames.length; i++) {
+//            dayNames[i] = dayNames[i].toUpperCase();
+//        }
+//    }
 
     public static String getTimesStr(int items, Context ctx) {
 
@@ -96,6 +97,7 @@ public class ScheduleUtils {
     public static String stringifyDays(String[] days, Context ctx) {
 
 
+        Log.d("DAYS", Arrays.toString(days));
         String dayStr = "";
         for (int i = 0; i < days.length - 1; i++) {
             if (i > 0) {
@@ -108,7 +110,7 @@ public class ScheduleUtils {
 
     public static String stringifyDays(boolean[] checkedDays, Context ctx) {
 
-        String[] days = getSelectedDays(checkedDays);
+        String[] days = getSelectedDays(checkedDays, ctx);
 
         if (days.length == 7) {
             return ctx.getString(R.string.every_day);
@@ -126,15 +128,21 @@ public class ScheduleUtils {
         return dayStr + ((days.length > 1 ? " " + ctx.getString(R.string.and) + " " : "") + days[days.length - 1]);
     }
 
-    public static String[] getSelectedDays(boolean[] days) {
+    public static String[] getSelectedDays(boolean[] days, Context ctx) {
+
+        String[] dayNames = ctx.getResources().getStringArray(R.array.day_names);
         ArrayList<String> sdays = new ArrayList<String>();
         for (int i = 0; i < days.length; i++) {
             if (days[i]) {
-                sdays.add(ScheduleUtils.dayNames[i]);
+                sdays.add(dayNames[i]);
             }
         }
         return sdays.toArray(new String[sdays.size()]);
 
+    }
+
+    public static String[] dayNames(Context ctx) {
+        return ctx.getResources().getStringArray(R.array.day_names);
     }
 
 }

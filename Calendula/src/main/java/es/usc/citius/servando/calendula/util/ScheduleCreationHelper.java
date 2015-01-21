@@ -1,5 +1,6 @@
 package es.usc.citius.servando.calendula.util;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -92,16 +93,21 @@ public class ScheduleCreationHelper {
                 '}';
     }
 
-    public String[] getDays() {
+    public String[] getDays(Context ctx) {
         ArrayList<String> days = new ArrayList<String>();
+        String[] dayNames = ScheduleUtils.dayNames(ctx);
+        Log.d("DAYS bool: ", Arrays.toString(selectedDays));
 
         for (int i = 0; i < selectedDays.length; i++) {
             if (selectedDays[i]) {
-                days.add(ScheduleUtils.dayNames[i]);
+                Log.d("DAYS", "Add " + i + "( " + dayNames[i] + ") to list");
+                days.add(dayNames[i]);
             }
         }
 
-        return days.toArray(new String[days.size()]);
+        String[] d = days.toArray(new String[days.size()]);
+        Log.d("DAYS bool 2: ", Arrays.toString(d));
+        return d;
 
     }
 

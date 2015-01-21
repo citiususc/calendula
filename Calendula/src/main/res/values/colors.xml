@@ -22,9 +22,9 @@
     <color name="white_50">#55FFFFFF</color>
     <color name="white_20">#22FFFFFF</color>
     <color name="black_20">#22000000</color>
+    <color name="black_40">#44000000</color>
     <color name="list_item_shadow">#11222222</color>
     <color name="transparent">#00000000</color>
-
 
     <!-- Other colors -->
     <color name="splash_background">#151515</color>

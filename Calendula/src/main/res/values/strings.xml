@@ -30,13 +30,15 @@
 
     <string-array name="home_drawer_actions">
         <item>Home</item>
+        <item>Settings</item>
         <item>@string/drawer_menu_option</item>
         <item>Routines</item>
-        <item>Medicines</item>
+        <item>@string/title_activity_medicines</item>
         <item>Schedules</item>
         <item>@string/drawer_services_option</item>
         <item>Pharmacies</item>
         <item>Plan trip</item>
+
     </string-array>
 
     <string name="title_activity_routines">Routines</string>
@@ -131,7 +133,7 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="message_notification_title_template">%1$s</string>
-    <string name="message_notification_placeholder_text_template">You said %1$s and lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis. Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec tortor.</string>
+    <string name="message_notification_placeholder_text_template">%1$s</string>
     <string name="action_take_now">Take now</string>
     <string name="action_delay">Delay</string>
     <string name="title_activity_start">StartActivity</string>
@@ -144,5 +146,17 @@
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="splash_quote">Therapy management made easy</string>
+    <string name="toolbar_menu_title">Menu</string>
+    <!-- Day Names -->
+    <string-array name="day_names">
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+        <item>Sun</item>
+    </string-array>
 </resources>
 

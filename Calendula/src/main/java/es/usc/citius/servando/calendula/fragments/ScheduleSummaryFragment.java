@@ -57,7 +57,7 @@ public class ScheduleSummaryFragment extends Fragment {
         String medName = ScheduleCreationHelper.instance().getSelectedMed().name();
         int medIcon = ScheduleCreationHelper.instance().getSelectedMed().presentation().getDrawable();
         String freq = ScheduleUtils.getTimesStr(ScheduleCreationHelper.instance().getScheduleItems().size(), getActivity());
-        String days[] = ScheduleCreationHelper.instance().getDays();
+        String days[] = ScheduleCreationHelper.instance().getDays(getActivity());
         String dayStr = ScheduleUtils.stringifyDays(days, getActivity());
 
         medNameTv.setText(medName);

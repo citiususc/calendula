@@ -6,21 +6,28 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
+import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 
+import org.joda.time.DateTime;
+
 import java.util.List;
 
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.scheduling.NotificationEventReceiver;
 
 /**
  * Helper class for showing and canceling message
@@ -30,6 +37,8 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
  * class to create notifications in a backward-compatible way.
  */
 public class ReminderNotification {
+
+    public static final String TAG = ReminderNotification.class.getName();
     /**
      * The unique identifier for this type of notification.
      */
@@ -52,12 +61,29 @@ public class ReminderNotification {
      */
     public static void notify(final Context context,
                               final String exampleString, Routine r, List<ScheduleItem> doses, Intent intent) {
+
+        // if notifications are disabled, exit
+        boolean notifications = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("alarm_notifications", true);
+        if (!notifications) {
+            return;
+        }
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
+        boolean inistentNotifications = prefs.getBoolean("alarm_insistent", false);
+        long delayMinutes = Long.parseLong(delayMinutesStr);
+
+//        if(delayMinutes < 0){
+//            delayMinutes = 15;
+//        }
+
+
         final Resources res = context.getResources();
 
         // This image is used as the notification's large icon (thumbnail).
         // TODO: Remove this if your notification has no relevant thumbnail.
         final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.ic_pill_48dp);
-        final Bitmap largeIcon = BitmapFactory.decodeResource(res, R.drawable.ic_pill_48dp);
+        //final Bitmap largeIcon = BitmapFactory.decodeResource(res, R.drawable.ic_pill_48dp);
         final String title = res.getString(R.string.message_notification_title_template, exampleString);
 
         NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
@@ -73,7 +99,13 @@ public class ReminderNotification {
             style.addLine(SpItem);
         }
         style.setBigContentTitle(title);
-        style.setSummaryText(doses.size() + " meds to take now");
+
+        if (delayMinutes > 0) {
+            String repeatTime = DateTime.now().plusMinutes((int) delayMinutes).toString("HH:mm");
+            style.setSummaryText("Alarm will be repeated at " + repeatTime);
+        } else {
+            style.setSummaryText(doses.size() + " meds to take at " + r.name());
+        }
 
 
         final String ticker = exampleString;
@@ -85,28 +117,29 @@ public class ReminderNotification {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_CANCEL_CURRENT);
 
-        final Intent delay = new Intent(context, StartActivity.class);
-        delay.putExtra("action", StartActivity.ACTION_DELAY_ROUTINE);
-        delay.putExtra("routine_id", r.getId());
+        final Intent delay = new Intent(context, NotificationEventReceiver.class);
+        delay.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_DELAY_ROUTINE);
+        delay.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, r.getId());
 
-        PendingIntent delayIntent = PendingIntent.getActivity(
+        PendingIntent delayIntent = PendingIntent.getBroadcast(
                 context,
                 1,
                 delay,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_CANCEL_CURRENT);
 
 
-        final Intent cancel = new Intent(context, StartActivity.class);
-        cancel.putExtra("action", StartActivity.ACTION_CANCEL_ROUTINE);
-        cancel.putExtra("routine_id", r.getId());
+        final Intent cancel = new Intent(context, NotificationEventReceiver.class);
+        cancel.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_CANCEL_ROUTINE);
+        cancel.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, r.getId());
 
-        PendingIntent cancelIntent = PendingIntent.getActivity(
+        PendingIntent cancelIntent = PendingIntent.getBroadcast(
                 context,
                 2,
                 cancel,
                 PendingIntent.FLAG_UPDATE_CURRENT);
+
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 
@@ -151,16 +184,30 @@ public class ReminderNotification {
                 .setContentIntent(defaultIntent)
                         //.setOngoing(true)
                         // add delay button
-                .addAction(R.drawable.ic_history_white_24dp, "Delay 1 hour", delayIntent)
-                .addAction(R.drawable.ic_alarm_off_white_24dp, "Cancel reminder", cancelIntent)
+                        //.addAction(R.drawable.ic_history_white_24dp, "Delay " + delayMinutes + " minutes", delayIntent)
+                .addAction(R.drawable.ic_alarm_off_white_24dp, "Cancel now", cancelIntent)
                         // Show an expanded list of items on devices running Android 4.1
                         // or later.
                 .setStyle(style)
-
+                        //.setLights(0x00ff0000, 500, 1000)
+                .setPriority(Notification.PRIORITY_MAX)
+                .setVibrate(new long[]{1000, 500, 200, 500, 200, 500})
+                .setSound(Settings.System.DEFAULT_RINGTONE_URI)
                         // Automatically dismiss the notification when it is touched.
                 .setAutoCancel(false);
 
-        notify(context, builder.build());
+
+        Notification n = builder.build();
+        n.defaults = 0;
+        n.ledARGB = 0x00ffa500;
+        n.ledOnMS = 1000;
+        n.ledOffMS = 2000;
+
+        if (inistentNotifications) {
+            n.flags |= Notification.FLAG_INSISTENT;
+        }
+
+        notify(context, n);
     }
 
     @TargetApi(Build.VERSION_CODES.ECLAIR)

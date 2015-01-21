@@ -49,7 +49,8 @@
 
             <FrameLayout
                 android:layout_width="fill_parent"
-                android:layout_height="@dimen/header_height"></FrameLayout>
+                android:layout_height="@dimen/header_height"
+                android:background="@drawable/transparent_black_overlay_transition"></FrameLayout>
 
             <TextView
                 android:layout_width="fill_parent"

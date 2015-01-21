@@ -260,7 +260,7 @@ public class AgendaZoomHelper {
             totalChecked = true;
             AlarmScheduler.instance().onCancelRoutineNotifications(routine, activity);
         } else {
-            AlarmScheduler.instance().onDelayRoutine(routine, activity, 1 * 60 * 1000); // TODO: read from preferences
+            AlarmScheduler.instance().onDelayRoutine(routine, activity);
             totalChecked = false;
         }
     }

@@ -194,6 +194,11 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             } else {
                 return false;
             }
+        } else if (page == 1) {
+            if (ScheduleCreationHelper.instance().getDays(this).length <= 0) {
+                Toast.makeText(this, "You must specify at least one day", Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
         return true;
     }

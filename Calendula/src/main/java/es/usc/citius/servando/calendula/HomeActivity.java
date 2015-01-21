@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -39,10 +40,10 @@ import com.melnykov.fab.FloatingActionButton;
 import java.util.Arrays;
 import java.util.List;
 
-import es.usc.citius.servando.calendula.activities.AlertFullScreenActivity;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
+import es.usc.citius.servando.calendula.activities.SettingsActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.DailyAgendaFragment;
@@ -165,15 +166,17 @@ public class HomeActivity extends ActionBarActivity implements
         switch (index) {
             case 0:
                 return R.drawable.ic_small_home_w;
-            case 2:
-                return R.drawable.ic_alarm_white_48dp;
+            case 1:
+                return R.drawable.ic_settings_white;
             case 3:
-                return R.drawable.ic_pill;
+                return R.drawable.ic_alarm_white_48dp;
             case 4:
+                return R.drawable.ic_pill;
+            case 5:
                 return R.drawable.ic_event_white_48dp;
-            case 6:
-                return R.drawable.ic_room_white_48dp;
             case 7:
+                return R.drawable.ic_room_white_48dp;
+            case 8:
                 return R.drawable.ic_small_plane_w;
             default:
                 return R.drawable.ic_small_home_w;
@@ -183,15 +186,15 @@ public class HomeActivity extends ActionBarActivity implements
 
     public int getActionColor(int index) {
         switch (index) {
-            case 2:
-                return R.color.android_blue;
             case 3:
-                return R.color.android_pink;
+                return R.color.android_blue;
             case 4:
+                return R.color.android_pink;
+            case 5:
                 return R.color.android_green;
-            case 6:
-                return R.color.android_orange;
             case 7:
+                return R.color.android_orange;
+            case 8:
                 return R.color.android_red;
             default:
                 return R.color.dark_grey_home;
@@ -225,6 +228,7 @@ public class HomeActivity extends ActionBarActivity implements
                 super.onDrawerClosed(view);
                 if (mViewPager.getCurrentItem() == 0 && !toolbarVisible)
                     setActionBarColor(getResources().getColor(R.color.transparent));
+                updateTitle(mViewPager.getCurrentItem());
             }
 
             /** Called when a drawer has settled in a completely open state. */
@@ -232,6 +236,7 @@ public class HomeActivity extends ActionBarActivity implements
                 super.onDrawerOpened(drawerView);
                 if (mViewPager.getCurrentItem() == 0 && !toolbarVisible)
                     setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
+                toolbar.setTitle(R.string.toolbar_menu_title);
             }
         };
 
@@ -303,12 +308,17 @@ public class HomeActivity extends ActionBarActivity implements
                     item.equalsIgnoreCase(getString(R.string.drawer_services_option))) {
                 View v = layoutInflater.inflate(R.layout.drawer_list_item_spacer, null);
                 ((TextView) v.findViewById(R.id.text)).setText(item);
+                v.setEnabled(false);
                 return v;
             } else {
                 View v = layoutInflater.inflate(R.layout.drawer_list_item, null);
                 ((TextView) v.findViewById(R.id.text)).setText(item);
                 ((ImageView) v.findViewById(R.id.imageView)).setImageResource(getActionDrawable(position));
                 ((ImageView) v.findViewById(R.id.imageViewbg)).setImageResource(getActionColor(position));
+
+                if (position == 8 || position == 9)
+                    v.setEnabled(false);
+
                 return v;
             }
         }
@@ -359,12 +369,13 @@ public class HomeActivity extends ActionBarActivity implements
         Log.d("Agenda", "Position :" + position);
         if (position == 0)
             mViewPager.setCurrentItem(0);
-        else if (position > 1 && position < 5)
-            mViewPager.setCurrentItem(position - 1);
-        else
-            launchActivity(new Intent(this, AlertFullScreenActivity.class));
-        //Toast.makeText(this,"Working on it!",Toast.LENGTH_SHORT).show();
-
+        else if (position == 1)
+            launchActivity(new Intent(this, SettingsActivity.class));
+        else if (position > 2 && position < 6)
+            mViewPager.setCurrentItem(position - 2);
+        else if (position > 6 && position < 9) {
+            Toast.makeText(this, "Working on it!", Toast.LENGTH_SHORT).show();
+        }
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
@@ -561,12 +572,12 @@ public class HomeActivity extends ActionBarActivity implements
         //Log.d("Home", position + ", " + positionOffset + ", " + positionOffsetPixels);
     }
 
-    void showReminder(Long routineId) {
-        final Routine r = Routine.findById(routineId);
-        Toast.makeText(this, "Take your meds (" + r.name() + ")", Toast.LENGTH_SHORT).show();
+    void showReminder(final Long routineId) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                final Routine r = Routine.findById(routineId);
+                Toast.makeText(HomeActivity.this, "Take your meds (" + r.name() + ")", Toast.LENGTH_SHORT).show();
                 mViewPager.setCurrentItem(0);
                 ((DailyAgendaFragment) getViewPagerFragment(0)).showReminder(r);
             }
@@ -579,6 +590,7 @@ public class HomeActivity extends ActionBarActivity implements
         invalidateOptionsMenu();
         updateTitle(page);
         if (page == 0) {
+            hideAddButton();
             hideTabs();
         } else {
             showAddButton();
@@ -604,6 +616,10 @@ public class HomeActivity extends ActionBarActivity implements
                 break;
             case 3:
                 title = getString(R.string.title_activity_schedules);
+                break;
+            default:
+                title = "";
+                break;
         }
         toolbar.setTitle(title);
     }
@@ -675,49 +691,60 @@ public class HomeActivity extends ActionBarActivity implements
 
     public void hideTabs() {
         if (!(tabs.getVisibility() == View.GONE)) {
-            Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_hide_tabs);
-            slide.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
 
-                }
+            if (Build.VERSION.SDK_INT >= 11) {
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    tabs.setVisibility(View.GONE);
+                Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_hide_tabs);
+                slide.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
 
-                }
+                    }
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        tabs.setVisibility(View.GONE);
 
-                }
-            });
-            setActionBarColor(getResources().getColor(R.color.transparent));
-            tabs.startAnimation(slide);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                setActionBarColor(getResources().getColor(R.color.transparent));
+                tabs.startAnimation(slide);
+            } else {
+                setActionBarColor(getResources().getColor(R.color.transparent));
+                tabs.setVisibility(View.GONE);
+
+            }
         }
     }
 
 
     private void setActionBarColor(final int color) {
 
-//        toolbar.setBackgroundColor(color);
-
-        previousActionBarColor = currentActionBarColor;
-        final ObjectAnimator backgroundColorAnimator = ObjectAnimator.ofObject(toolbar,
-                "backgroundColor",
-                new ArgbEvaluator(),
-                currentActionBarColor,
-                color);
-        backgroundColorAnimator.setDuration(ANIM_ACTION_BAR_DURATION);
-        backgroundColorAnimator.start();
-        backgroundColorAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                currentActionBarColor = color;
-            }
-        });
+        if (Build.VERSION.SDK_INT >= 11) {
+            previousActionBarColor = currentActionBarColor;
+            final ObjectAnimator backgroundColorAnimator = ObjectAnimator.ofObject(
+                    toolbar,
+                    "backgroundColor",
+                    new ArgbEvaluator(),
+                    currentActionBarColor,
+                    color);
+            backgroundColorAnimator.setDuration(ANIM_ACTION_BAR_DURATION);
+            backgroundColorAnimator.start();
+            backgroundColorAnimator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    currentActionBarColor = color;
+                }
+            });
+        } else {
+            toolbar.setBackgroundColor(color);
+        }
 
     }
 

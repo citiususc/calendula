@@ -10,7 +10,7 @@
     android:background="@color/activity_background_color">
 
 
-<ImageView
+    <ImageView
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:id="@+id/splash_logo"
@@ -27,6 +27,22 @@
         android:layout_below="@id/splash_logo"
         android:layout_centerHorizontal="true"
         android:src="@drawable/marca"
-        android:layout_marginRight="70dp"
-        android:layout_marginLeft="70dp" />
+        android:layout_marginRight="80dp"
+        android:layout_marginLeft="80dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/splash_quote"
+        android:id="@+id/splash_quote"
+        android:fontFamily="sans-serif-light"
+        android:layout_below="@+id/splash_brand"
+        android:textColor="@color/android_orange"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center"
+        android:layout_marginTop="30dp" />
 </RelativeLayout>

@@ -53,7 +53,7 @@
             android:id="@+id/content_wrapper"
             android:layout_marginTop="65dp">
 
-        <FrameLayout
+            <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="@drawable/shape_list_item"
@@ -64,6 +64,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     layout="@layout/activity_agenda_zoom" />
+
             </FrameLayout>
         </FrameLayout>
     </FrameLayout>

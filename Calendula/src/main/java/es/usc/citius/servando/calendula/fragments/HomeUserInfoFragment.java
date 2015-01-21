@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.fragments;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,11 +17,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import org.joda.time.DateTime;
-
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.user.Session;
 import es.usc.citius.servando.calendula.user.User;
+import es.usc.citius.servando.calendula.util.Screen;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,16 +43,11 @@ public class HomeUserInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home_user_info, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
+        View view = inflater.inflate(R.layout.fragment_home_user_info, container, false);
         Animation in = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
         Animation out = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
 
+        profileUsername = (TextView) view.findViewById(R.id.profile_username);
         profileContainer = (RelativeLayout) view.findViewById(R.id.profile_container);
         profileImageContainer = view.findViewById(R.id.profile_image_container);
         background = (ImageSwitcher) view.findViewById(R.id.image_switcher);
@@ -71,23 +66,30 @@ public class HomeUserInfoFragment extends Fragment {
             }
         });
 
-        background.setImageDrawable(getResources().getDrawable(R.drawable.home_bg_day));
-
-
-        updateBackground(DateTime.now());
-        profileUsername = (TextView) view.findViewById(R.id.profile_username);
+        background.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateBackground();
+            }
+        });
         updateProfileInfo();
 
+        return view;
     }
 
-    public void updateBackground(DateTime time) {
-        background.setImageResource(getBackgroundResource(time));
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        updateBackground();
     }
 
+    public void updateBackground() {
+        background.setImageDrawable(new BitmapDrawable(getBackgroundBitmap()));
+    }
     void updateProfileInfo() {
 
         User u = Session.instance().getUser();
-        profileUsername.setText(u.getName());
+        profileUsername.setText(u.getName() + " *** ");
         Bitmap profileImage = Session.instance().getUserProfileImage(getActivity());
         if (profileImage != null) {
 //            profileImageView.setImageBitmap(profileImage);
@@ -112,20 +114,14 @@ public class HomeUserInfoFragment extends Fragment {
         return new HomeUserInfoFragment();
     }
 
-    int getBackgroundResource(DateTime time) {
-        int hour = time.getHourOfDay();
-        //
-        if ((hour >= 7 && hour <= 9) || (hour >= 19 && hour <= 21)) {
-            return R.drawable.home_bg_sunset;
-//            return R.drawable.home_bg_calendula;
-        } else if (hour > 9 && hour < 19) {
-//            return R.drawable.home_bg_calendula;
-            return R.drawable.home_bg_day;
-        } else {
-//            return R.drawable.home_bg_calendula;
-            return R.drawable.home_bg_1;
-        }
-    }
+    Bitmap getBackgroundBitmap() {
 
+        int width = (int) Screen.getDpSize(getActivity()).x;
+        int height = getResources().getDimensionPixelSize(R.dimen.header_height);
+
+        int rand = (((int) (Math.random() * 1000)) % 8) + 1;
+
+        return Screen.getResizedBitmap(getActivity(), "home_bg_" + rand + ".jpg", width, height);
+    }
 
 }

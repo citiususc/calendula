@@ -12,14 +12,13 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.DefaultDataGenerator;
 import es.usc.citius.servando.calendula.HomeActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Routine;
-import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.user.Session;
 import es.usc.citius.servando.calendula.user.User;
 
@@ -36,6 +35,7 @@ import es.usc.citius.servando.calendula.user.User;
 public class StartActivity extends Activity {
 
     ImageView brand;
+    TextView quote;
     ImageView splashLogo;
 
     public static final String STATUS_SESSION_OPEN = "STATUS_SESSION_OPEN";
@@ -45,8 +45,6 @@ public class StartActivity extends Activity {
 
     public static final int ACTION_DEFAULT = 1;
     public static final int ACTION_SHOW_REMINDERS = 2;
-    public static final int ACTION_DELAY_ROUTINE = 3;
-    public static final int ACTION_CANCEL_ROUTINE = 4;
 
 
     int action = ACTION_DEFAULT;
@@ -68,7 +66,7 @@ public class StartActivity extends Activity {
     }
 
     private boolean mustShowSplashForAction(int action) {
-        return !(action == ACTION_DELAY_ROUTINE || action == ACTION_CANCEL_ROUTINE);
+        return true;//!(action == ACTION_DELAY_ROUTINE || action == ACTION_CANCEL_ROUTINE);
     }
 
     private void startAnimations() {
@@ -92,11 +90,13 @@ public class StartActivity extends Activity {
         splashLogo.startAnimation(animation);
 
         brand = (ImageView) findViewById(R.id.splash_brand);
+        quote = (TextView) findViewById(R.id.splash_quote);
         Animation brandFaceIn = new AlphaAnimation(0, 1);
         brandFaceIn.setInterpolator(new DecelerateInterpolator());
         brandFaceIn.setStartOffset(500);
         brandFaceIn.setDuration(1000);
         brand.startAnimation(brandFaceIn);
+        quote.startAnimation(brandFaceIn);
     }
 
     private void stopAnimations() {
@@ -139,7 +139,7 @@ public class StartActivity extends Activity {
                 // session is closed but there is a session stored
                 else if (Session.instance().open(getApplicationContext())) {
                     if (mustShowSplash) {
-                        keepSplashVisible(1);
+                        keepSplashVisible(3);
                     }
                     return STATUS_SESSION_RESUMED;
                 }
@@ -184,20 +184,29 @@ public class StartActivity extends Activity {
                         ReminderNotification.cancel(StartActivity.this);
                         startActivity(i);
                         break;
-                    case ACTION_DELAY_ROUTINE:
-                        routineId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
-                        if (routineId != -1) {
-                            AlarmScheduler.instance().onDelayRoutine(routineId, StartActivity.this, AlarmScheduler.ALARM_USER_DELAY_MILLIS); // TODO: read from preferences
-                            Toast.makeText(StartActivity.this, "Routine delayed 1 hour", Toast.LENGTH_SHORT).show();
-                        }
-                        break;
-                    case ACTION_CANCEL_ROUTINE:
-                        routineId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
-                        if (routineId != -1) {
-                            AlarmScheduler.instance().onCancelRoutineNotifications(Routine.findById(routineId), StartActivity.this);
-                            Toast.makeText(StartActivity.this, "Reminder cancelled", Toast.LENGTH_SHORT).show();
-                        }
-                        break;
+//                    case ACTION_DELAY_ROUTINE:
+//                        routineId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
+//                        if (routineId != -1) {
+//
+//                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(StartActivity.this);
+//                            String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
+//                            long delay = Long.parseLong(delayMinutesStr);
+//
+//                            if(delay < 0){
+//                                delay = 15;
+//                            }
+//
+//                            AlarmScheduler.instance().onDelayRoutine(routineId, StartActivity.this, (int)delay*60*1000);
+//                            Toast.makeText(StartActivity.this, "Routine delayed 1 hour", Toast.LENGTH_SHORT).show();
+//                        }
+//                        break;
+//                    case ACTION_CANCEL_ROUTINE:
+//                        routineId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
+//                        if (routineId != -1) {
+//                            AlarmScheduler.instance().onCancelRoutineNotifications(Routine.findById(routineId), StartActivity.this);
+//                            Toast.makeText(StartActivity.this, "Reminder cancelled", Toast.LENGTH_SHORT).show();
+//                        }
+//                        break;
                     default:
                         startActivity(new Intent(getBaseContext(), HomeActivity.class));
                         break;
