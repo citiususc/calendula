@@ -1,20 +1,30 @@
 ![Calendula logo](https://dl.dropboxusercontent.com/u/4213618/calendula/calendula-logo.png)
 
-Calendula is an android app whose main goal is to allow users to manage their own medical prescription through a nice, simple and intuitive interface.
+Calendula is an android that allows users to manage their medical prescription through a nice, simple and intuitive interface. Users can easily
+define their own daily routines (wake up, lunch, dinner, ...) and then link medication intakes to them.
 
 Core ideas
 ===========
-- Easy prescription input (ideally automatic via barcode or QR scan)
+- Easy prescription input
 - Alarms and reminders
 - Fit user habits and routines
-- Simple, user focused, and visually attractive interface ([Take a look at this preview](https://dl.dropboxusercontent.com/u/4213618/calendula/calendula-ui.pdf))
+- Simple, user focused, and visually attractive interface.
 
-Related goals
+Future work
 =============
 - Medicine stock management and refill warnings
 - Gamification concepts to improve prescription adherence
 - Trip assistance (how many pills I need for the weekend?)
 - Nearby pharmacies information
+
+Screenshots
+=============
+![Splash screen](https://dl.dropboxusercontent.com/u/4213618/calendula/screenshots/9.png)
+![Home Screen](https://dl.dropboxusercontent.com/u/4213618/calendula/screenshots/1.png)
+![Home Screen Detail](https://dl.dropboxusercontent.com/u/4213618/calendula/screenshots/2.png)
+![Schedules](https://dl.dropboxusercontent.com/u/4213618/calendula/screenshots/4.png)
+![Schedules Detail](https://dl.dropboxusercontent.com/u/4213618/calendula/screenshots/5.png)
+
 
 Contribute
 ==========
