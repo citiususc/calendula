@@ -3,6 +3,8 @@
 Calendula is an android that allows users to manage their medical prescription through a nice, simple and intuitive interface. Users can easily
 define their own daily routines (wake up, lunch, dinner, ...) and then link medication intakes to them.
 
+Try development version: [Download APK](https://dl.dropboxusercontent.com/u/4213618/calendula/Calendula.apk)
+
 Core ideas
 ===========
 - Easy prescription input
