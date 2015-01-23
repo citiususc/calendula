@@ -32,8 +32,8 @@
         <item>Opciones</item>
         <item>@string/drawer_menu_option</item>
         <item>Rutinas</item>
-        <item>Pautas</item>
         <item>@string/title_activity_medicines</item>
+        <item>Pautas</item>
         <item>@string/drawer_services_option</item>
         <item>Farmacias</item>
         <item>Plan de viaje</item>
