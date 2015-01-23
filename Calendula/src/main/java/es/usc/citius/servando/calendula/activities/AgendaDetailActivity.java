@@ -69,7 +69,7 @@ public class AgendaDetailActivity extends FragmentActivity {
         list.getLayoutAnimation().start();
     }
 
-    public String getDisplayableDose(int dose, Medicine m, Routine r) {
+    public String getDisplayableDose(String dose, Medicine m, Routine r) {
         return dose
                 + " "
                 + m.presentation().units(getResources())
@@ -100,7 +100,7 @@ public class AgendaDetailActivity extends FragmentActivity {
 
             ((TextView) entry.findViewById(R.id.med_item_name)).setText(med.name());
             ((ImageView) entry.findViewById(R.id.imageView)).setImageResource(med.presentation().getDrawable());
-            ((TextView) entry.findViewById(R.id.med_item_dose)).setText(getDisplayableDose((int) scheduleItem.dose(), med, r));
+            ((TextView) entry.findViewById(R.id.med_item_dose)).setText(getDisplayableDose("" + scheduleItem.displayDose(), med, r));
 
             entry.setTag(dsi);
 

@@ -358,7 +358,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
             for (DailyAgendaItemStub.DailyAgendaItemStubElement element : item.meds) {
                 View medNameView = layoutInflater.inflate(R.layout.daily_view_intake_med, null);
                 ((TextView) medNameView.findViewById(R.id.med_item_name)).setText(element.medName + (element.taken ? " ✔" : ""));
-                ((TextView) medNameView.findViewById(R.id.med_item_dose)).setText(element.dose + " " +
+                ((TextView) medNameView.findViewById(R.id.med_item_dose)).setText(element.displayDose + " " +
                         (element.presentation.units(getResources())) + (element.dose > 1 ? "s" : ""));
                 ((ImageView) medNameView.findViewById(R.id.imageView)).setImageResource(element.res);
                 medList.addView(medNameView);

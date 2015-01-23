@@ -12,12 +12,11 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="08:"
         android:id="@+id/hour_text"
-        android:paddingTop="10dp"
         android:textColor="@color/android_blue"
         android:textStyle="bold"
-        android:textSize="25dp"
-        android:gravity="bottom|right"
-        android:layout_weight="0.12"
+        android:textSize="23dp"
+        android:gravity="center_vertical|right"
+        android:layout_weight="0.10"
         android:layout_gravity="right" />
 
     <TextView
@@ -26,40 +25,50 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="00"
         android:id="@+id/minute_text"
-        android:paddingTop="10dp"
         android:textColor="@color/android_blue"
-        android:textSize="25dp"
-        android:gravity="bottom|left"
-        android:layout_weight="0.12" />
+        android:textSize="23dp"
+        android:gravity="center_vertical|left"
+        android:layout_weight="0.10"
+        android:textAlignment="center" />
 
     <Spinner
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:tag="routine_spinner"
         android:id="@+id/entry_routine_spinner"
-        android:layout_weight="0.46"
+        android:layout_weight="0.45"
         android:gravity="center_vertical"
-        android:spinnerMode="dialog" />
+        android:spinnerMode="dialog"
+        android:textAlignment="gravity" />
 
-    <Spinner
+    <!--<Spinner-->
+    <!--android:layout_width="0dp"-->
+    <!--android:tag="dose_spinner"-->
+    <!--android:layout_height="fill_parent"-->
+    <!--android:id="@+id/entry_dose_spinner"-->
+    <!--android:layout_weight="0.20"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:spinnerMode="dialog" />-->
+
+    <TextView
         android:layout_width="0dp"
-        android:tag="dose_spinner"
         android:layout_height="fill_parent"
-        android:id="@+id/entry_dose_spinner"
+        android:id="@+id/entry_dose_textview"
         android:layout_weight="0.20"
-        android:gravity="center_vertical"
-        android:spinnerMode="dialog" />
+        android:text="N/A"
+        android:textAlignment="center"
+        android:gravity="center_vertical|center_horizontal" />
 
     <!--android:src="@drawable/abc_ic_clear_holo_light"-->
     <ImageButton
         android:layout_width="0dp"
-        android:layout_height="20dp"
+        android:layout_height="25dp"
         android:id="@+id/entry_remove"
-        android:layout_weight="0.1"
-
-        android:background="@null"
-        android:scaleType="center"
+        android:layout_weight="0.05"
+        android:src="@drawable/ic_backspace_normal_light"
+        android:scaleType="fitStart"
         android:baselineAlignBottom="false"
-        android:layout_marginTop="10dp" />
+        android:visibility="visible"
+        android:background="@null" />
 
 </LinearLayout>

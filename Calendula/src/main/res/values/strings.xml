@@ -71,6 +71,7 @@
     <string name="done">DONE</string>
     <string name="confirm">CONFIRM</string>
     <string name="meds_time">Remember to take your meds</string>
+    <string name="title_select_dose_dialog">Introduce a dose</string>
 
     <!-- Schedule creation -->
     <string name="summary_title">Check and confirm</string>

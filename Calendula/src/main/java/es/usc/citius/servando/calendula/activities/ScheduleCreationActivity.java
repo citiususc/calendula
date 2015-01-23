@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
@@ -115,8 +116,14 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
     public void saveSchedule() {
 
+        for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems()) {
+            Log.d(TAG, "ScheduleCreationHelper before save : " + i.getId() + ", " + i.routine().name() + ", " + i.dose());
+        }
+
         try {
             ActiveAndroid.beginTransaction();
+
+            ArrayList<Long> scheduleItemIds = new ArrayList<Long>();
 
             Medicine m = ScheduleCreationHelper.instance().getSelectedMed();
             Persistence.instance().save(m);
@@ -129,9 +136,23 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             for (ScheduleItem item : ScheduleCreationHelper.instance().getScheduleItems()) {
                 item.setSchedule(s);
                 item.save();
+                scheduleItemIds.add(item.getId());
                 // for each item, add a new DailyScheduleItem item for it
-                new DailyScheduleItem(item).save();
+                if (DailyScheduleItem.findByScheduleItem(item) == null) {
+                    Log.d(TAG, "Creating daily schedule item for " + item.routine().name());
+                    new DailyScheduleItem(item).save();
+                } else {
+                    Log.d(TAG, "Not creating daily schedule item for " + item.routine().name());
+                }
+
                 Log.d(TAG, "Add item: " + s.getId() + ", " + item.getId());
+            }
+
+            for (ScheduleItem scheduleItem : s.items()) {
+                if (!ScheduleCreationHelper.instance().getScheduleItems().contains(scheduleItem)) {
+                    Log.d(TAG, "Item to remove : " + scheduleItem.getId() + ", " + scheduleItem.routine().name() + ", " + scheduleItem.dose());
+                    scheduleItem.deleteCascade();
+                }
             }
 
             Persistence.instance().save(s);
@@ -144,9 +165,6 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             Intent returnIntent = new Intent();
             returnIntent.putExtra("schedule_created", true);
             setResult(RESULT_OK, returnIntent);
-            finish();
-
-
             finish();
 
         } catch (Exception e) {

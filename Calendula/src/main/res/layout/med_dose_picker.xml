@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ppv="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:gravity="center_vertical">
+
+    <LinearLayout
+        android:id="@+id/pickers_layout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <NumberPicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dosePickerInteger" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="+"
+            android:id="@+id/textView"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+
+        <NumberPicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dosePickerDecimal" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/picker_progress"
+        android:padding="20dp"
+
+        android:layout_below="@id/pickers_layout"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+        <!--android:text="+"-->
+        <!--android:layout_weight="1"-->
+        <!--android:id="@+id/text_progress_1"-->
+        <!--android:textStyle="bold"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_marginRight="10dp" />-->
+
+        <com.filippudak.ProgressPieView.ProgressPieView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_margin="5dp"
+            android:textSize="20sp"
+            ppv:ppvStrokeWidth="1dp"
+            ppv:ppvStrokeColor="@color/android_blue"
+            android:textColor="@color/android_blue_darker"
+            android:layout_gravity="center"
+            android:id="@+id/progressPieView" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="+"
+            android:id="@+id/text_progress_2"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+
+        <com.filippudak.ProgressPieView.ProgressPieView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_margin="5dp"
+            android:textSize="20sp"
+            ppv:ppvStrokeWidth="1dp"
+            ppv:ppvStrokeColor="@color/android_blue"
+            android:textColor="@color/android_blue_darker"
+            android:layout_gravity="center"
+            android:id="@+id/progressPieView2" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

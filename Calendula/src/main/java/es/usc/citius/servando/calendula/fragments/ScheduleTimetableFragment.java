@@ -34,7 +34,7 @@ public class ScheduleTimetableFragment extends Fragment {
     public static final String TAG = ScheduleTimetableFragment.class.getName();
 
     LinearLayout timetableContainer;
-    Integer doses[] = new Integer[]{1, 2, 3, 4, 5, 6};
+    String doses[] = new String[]{"1", "2", "3", "Specify"};
     int timesPerDay = 1;
 
     Spinner scheduleSpinner;
@@ -51,7 +51,6 @@ public class ScheduleTimetableFragment extends Fragment {
         return rootView;
     }
 
-    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         timesPerDay = ScheduleCreationHelper.instance().getTimesPerDay();
@@ -171,6 +170,11 @@ public class ScheduleTimetableFragment extends Fragment {
 
     void addTimetableEntries(int timesPerDay, List<Routine> routines) {
 
+        Collections.sort(ScheduleCreationHelper.instance().getScheduleItems(), scheduleItemComparator);
+
+        for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems())
+            Log.d(TAG, "addTimetableEntries (start) : " + i.getId() + ", " + i.routine().name() + ", " + i.dose());
+
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -179,7 +183,6 @@ public class ScheduleTimetableFragment extends Fragment {
         String[] routineNames = getUpdatedRoutineNames();
         timetableContainer.removeAllViews();
 
-        Collections.sort(ScheduleCreationHelper.instance().getScheduleItems(), scheduleItemComparator);
 
         List<ScheduleItem> scheduleItems = new ArrayList<ScheduleItem>();
 
@@ -190,9 +193,8 @@ public class ScheduleTimetableFragment extends Fragment {
             ScheduleItem s = (i < ScheduleCreationHelper.instance().getScheduleItems().size()) ?
                     ScheduleCreationHelper.instance().getScheduleItems().get(i) : null;
 
-            // if null, get it from the store if possible
 
-            Log.d("ROUTINES", "Routines: " + routines.size() + ", i:" + i);
+            // if null, get it from the store if possible
 
             if (s == null) {
                 s = new ScheduleItem(null, (i < routines.size()) ? routines.get(i) : null, 1);
@@ -207,6 +209,9 @@ public class ScheduleTimetableFragment extends Fragment {
         }
 
         ScheduleCreationHelper.instance().setScheduleItems(scheduleItems);
+
+        for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems())
+            Log.d(TAG, "addTimetableEntries (end): " + i.getId() + ", " + i.routine().name() + ", " + i.dose());
 
     }
 
@@ -257,16 +262,16 @@ public class ScheduleTimetableFragment extends Fragment {
     private void setupScheduleEntrySpinners(final View entryView, ScheduleItem scheduleItem, String[] routineNames) {
 
         final Spinner routineSpinner = (Spinner) entryView.findViewById(R.id.entry_routine_spinner);
-        final Spinner doseSpinner = (Spinner) entryView.findViewById(R.id.entry_dose_spinner);
+        final TextView doseTv = (TextView) entryView.findViewById(R.id.entry_dose_textview);
+//        final Spinner doseSpinner = (Spinner) entryView.findViewById(R.id.entry_dose_spinner);
 
-        doseSpinner.setTag(scheduleItem);
+        doseTv.setTag(scheduleItem);
         routineSpinner.setTag(scheduleItem);
 
         // set up the routine selection adapter
         updateRoutineSelectionAdapter(entryView, routineSpinner, routineNames);
 
         if (scheduleItem != null && scheduleItem.routine() != null) {
-            Log.d("ROUTINES", "BeforeNull: " + scheduleItem.toString());
             String routineName = scheduleItem.routine().name();
             int index = Arrays.asList(routineNames).indexOf(routineName);
             routineSpinner.setSelection(index);
@@ -274,12 +279,22 @@ public class ScheduleTimetableFragment extends Fragment {
             routineSpinner.setSelection(routineNames.length - 1);
         }
 
+
+        doseTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDosePickerDialog((ScheduleItem) v.getTag(), (TextView) v);
+            }
+        });
+
         // set up the dose selection adapter
-        ArrayAdapter<Integer> doseAdapter = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_spinner_item, doses);
-        doseAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        doseSpinner.setAdapter(doseAdapter);
+//        ArrayAdapter<String> doseAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, doses);
+//        doseAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+//        doseSpinner.setAdapter(doseAdapter);
         // select 1 pill by default
-        doseSpinner.setSelection((int) scheduleItem.dose() - 1); // dose "1" is located at the index "0", and so on
+//        doseSpinner.setSelection((int) scheduleItem.dose() - 1); // dose "1" is located at the index "0", and so on
+
+        doseTv.setText(scheduleItem.displayDose());
 
         // setup listeners
         routineSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -287,22 +302,26 @@ public class ScheduleTimetableFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String selected = (String) adapterView.getItemAtPosition(i);
                 Routine r = Routine.findByName(selected);
-                ScheduleItem item = ((ScheduleItem) doseSpinner.getTag());
+                ScheduleItem item = ((ScheduleItem) routineSpinner.getTag());
 
                 if (r != null) {
                     updateEntryTime(r, entryView);
                     item.setRoutine(r);
+                    Log.d(TAG, "Updated routine to " + r.name() + " on item " + item.getId());
+                    for (ScheduleItem si : ScheduleCreationHelper.instance().getScheduleItems()) {
+                        Log.d(TAG, "ScheduleCreationHelper : " + si.getId() + ", " + si.routine().name() + ", " + si.dose());
+                    }
                 } else {
                     updateEntryTime(null, entryView);
                     showAddNewRoutineDialog(entryView);
                 }
 
-                int idx = timetableContainer.indexOfChild(entryView);
-                if (ScheduleCreationHelper.instance().getScheduleItems().size() > idx) {
-                    ScheduleCreationHelper.instance().getScheduleItems().remove(idx);
-                }
-                // r can be null, yes
-                ScheduleCreationHelper.instance().getScheduleItems().add(idx, new ScheduleItem(null, r, item.dose()));
+//                int idx = timetableContainer.indexOfChild(entryView);
+//                if (ScheduleCreationHelper.instance().getScheduleItems().size() > idx) {
+//                    ScheduleCreationHelper.instance().getScheduleItems().remove(idx);
+//                }
+//                // r can be null, yes
+//                ScheduleCreationHelper.instance().getScheduleItems().add(idx, new ScheduleItem(null, r, item.dose()));
             }
 
             @Override
@@ -325,21 +344,6 @@ public class ScheduleTimetableFragment extends Fragment {
             }
         });
 
-
-        doseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Integer selected = (Integer) adapterView.getItemAtPosition(i);
-                ScheduleItem item = ((ScheduleItem) doseSpinner.getTag());
-                item.setDose(selected);
-                Log.d(TAG, "Set dose " + selected + " for scheduleItem " + item.getId());
-                //Log.d(TAG, GsonUtil.get().toJson(ScheduleCreationHelper.instance().getScheduleItems()));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
     }
 
 
@@ -380,9 +384,9 @@ public class ScheduleTimetableFragment extends Fragment {
                 String names[] = getUpdatedRoutineNames();
                 updateRoutineSelectionAdapter(entryView, rSpinner, names);
 
-                Log.d(getTag(), "Routine name: " + r.name());
-                Log.d(getTag(), "Routine time: " + r.time().toString("hh:mm"));
-                Log.d(getTag(), "Names: " + Arrays.toString(names));
+                Log.d(TAG, "Routine name: " + r.name());
+                Log.d(TAG, "Routine time: " + r.time().toString("hh:mm"));
+                Log.d(TAG, "Names: " + Arrays.toString(names));
 
                 int selection = Arrays.asList(names).indexOf(r.name());
                 rSpinner.setSelection(selection);
@@ -393,6 +397,24 @@ public class ScheduleTimetableFragment extends Fragment {
         });
 
         addRoutineFragment.show(fm, "fragment_edit_name");
+    }
+
+    void showDosePickerDialog(final ScheduleItem item, final TextView tv) {
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        final DosePickerFragment dosePickerFragment = new DosePickerFragment();
+        Bundle arguments = new Bundle();
+        arguments.putDouble("dose", item.dose());
+        dosePickerFragment.setArguments(arguments);
+
+        dosePickerFragment.setOnDoseSelectedListener(new DosePickerFragment.OnDoseSelectedListener() {
+            @Override
+            public void onDoseSelected(double dose) {
+                Log.d(TAG, "Set dose " + dose + " to item " + item.routine().name() + ", " + item.getId());
+                item.setDose((float) dose);
+                tv.setText(item.displayDose());
+            }
+        });
+        dosePickerFragment.show(fm, "fragment_select_dose");
     }
 
     void checkSelectedDays(View rootView, boolean[] days) {
@@ -413,5 +435,6 @@ public class ScheduleTimetableFragment extends Fragment {
                 days[6] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
 
     }
+
 
 }

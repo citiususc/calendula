@@ -181,7 +181,7 @@ public class AgendaZoomHelper {
     }
 
 
-    public String getDisplayableDose(Activity activity, int dose, Medicine m, Routine r) {
+    public String getDisplayableDose(Activity activity, String dose, Medicine m, Routine r) {
         return dose
                 + " "
                 + m.presentation().units(activity.getResources())
@@ -212,7 +212,7 @@ public class AgendaZoomHelper {
 
             ((TextView) entry.findViewById(R.id.med_item_name)).setText(med.name());
             ((ImageView) entry.findViewById(R.id.imageView)).setImageResource(med.presentation().getDrawable());
-            ((TextView) entry.findViewById(R.id.med_item_dose)).setText(getDisplayableDose(activity, (int) scheduleItem.dose(), med, r));
+            ((TextView) entry.findViewById(R.id.med_item_dose)).setText(getDisplayableDose(activity, scheduleItem.displayDose(), med, r));
 
             entry.setTag(dsi);
 

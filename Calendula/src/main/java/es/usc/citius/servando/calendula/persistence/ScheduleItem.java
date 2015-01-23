@@ -68,6 +68,27 @@ public class ScheduleItem extends Model {
         return dose;
     }
 
+    public String displayDose() {
+        int integerPart = (int) dose;
+        double fraction = dose - integerPart;
+
+        String fractionRational;
+        if (fraction == 0.125)
+            fractionRational = "1/8";
+        else if (fraction == 0.25)
+            fractionRational = "1/4";
+        else if (fraction == 0.5)
+            fractionRational = "1/2";
+        else if (fraction == 0.75)
+            fractionRational = "3/4";
+        else if (fraction == 0)
+            return "" + ((int) dose);
+        else
+            return "" + dose;
+        return integerPart + "+" + fractionRational;
+
+    }
+
     public void setDose(float dose) {
         this.dose = dose;
     }

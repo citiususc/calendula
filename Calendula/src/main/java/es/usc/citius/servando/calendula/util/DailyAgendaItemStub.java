@@ -65,7 +65,8 @@ public class DailyAgendaItemStub {
                         Medicine med = scheduleItem.schedule().medicine();
                         DailyAgendaItemStubElement el = new DailyAgendaItemStubElement();
                         el.medName = med.name();
-                        el.dose = (int) scheduleItem.dose();
+                        el.dose = scheduleItem.dose();
+                        el.displayDose = scheduleItem.displayDose();
                         el.res = med.presentation().getDrawable();
                         el.presentation = med.presentation();
                         el.minute = minute < 10 ? "0" + minute : String.valueOf(minute);
@@ -118,7 +119,9 @@ public class DailyAgendaItemStub {
 
         public String medName;
         public String minute;
-        public int dose;
+        public String displayDose;
+        public double dose;
+
         public boolean taken;
         public Presentation presentation;
         public int res;

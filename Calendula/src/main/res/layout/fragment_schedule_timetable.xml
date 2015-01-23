@@ -65,7 +65,7 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.20"
+            android:layout_weight="0.25"
             android:layout_marginLeft="2dp">
 
             <TextView
@@ -90,7 +90,7 @@
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.10"
+            android:layout_weight="0.05"
             android:layout_marginLeft="2dp">
 
         </RelativeLayout>
