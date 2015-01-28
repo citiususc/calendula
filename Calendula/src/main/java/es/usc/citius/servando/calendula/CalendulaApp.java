@@ -97,7 +97,7 @@ public class CalendulaApp extends Application {
         intent.putExtra(INTENT_EXTRA_ACTION, ACTION_DAILY_ALARM);
         // create pending intent
         int intent_id = 1234567890;
-        PendingIntent routinePendingIntent = PendingIntent.getBroadcast(this, intent_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent routinePendingIntent = PendingIntent.getBroadcast(this, intent_id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         // Get the AlarmManager service
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         // set the routine alarm, with repetition every day
