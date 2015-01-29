@@ -5,7 +5,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
+
+import org.joda.time.DateTime;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.user.Session;
@@ -34,6 +35,9 @@ public class HomeUserInfoFragment extends Fragment {
     TextView profileUsername;
     RelativeLayout profileContainer;
 
+    TextView monthTv;
+    TextView dayTv;
+
     public HomeUserInfoFragment() {
         // Required empty public constructor
     }
@@ -47,6 +51,9 @@ public class HomeUserInfoFragment extends Fragment {
         Animation in = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
         Animation out = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
 
+        monthTv = (TextView) view.findViewById(R.id.month_text);
+        dayTv = (TextView) view.findViewById(R.id.day_text);
+        
         profileUsername = (TextView) view.findViewById(R.id.profile_username);
         profileContainer = (RelativeLayout) view.findViewById(R.id.profile_container);
         profileImageContainer = view.findViewById(R.id.profile_image_container);
@@ -89,26 +96,30 @@ public class HomeUserInfoFragment extends Fragment {
     void updateProfileInfo() {
 
         User u = Session.instance().getUser();
-        profileUsername.setText(u.getName() + " *** ");
-        Bitmap profileImage = Session.instance().getUserProfileImage(getActivity());
-        if (profileImage != null) {
-//            profileImageView.setImageBitmap(profileImage);
-        }
+        profileUsername.setText(u.getName());
+        //Bitmap profileImage = Session.instance().getUserProfileImage(getActivity());
 
+        DateTime dt = DateTime.now();
+
+        String dayStr = dt.dayOfMonth().getAsShortText();
+        String monthStr = dt.monthOfYear().getAsShortText().toUpperCase();
+
+        dayTv.setText(dayStr);
+        monthTv.setText(monthStr);
     }
 
-    public void showEditProfileDialog() {
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        final EditUserProfileFragment editUserProfileFragment = new EditUserProfileFragment();
-        editUserProfileFragment.setOnProfileEditListener(new EditUserProfileFragment.OnProfileEditListener() {
-            @Override
-            public void onProfileEdited(User u) {
-                editUserProfileFragment.dismiss();
-                updateProfileInfo();
-            }
-        });
-        editUserProfileFragment.show(fm, "fragment_edit_profile");
-    }
+//    public void showEditProfileDialog() {
+//        FragmentManager fm = getActivity().getSupportFragmentManager();
+//        final EditUserProfileFragment editUserProfileFragment = new EditUserProfileFragment();
+//        editUserProfileFragment.setOnProfileEditListener(new EditUserProfileFragment.OnProfileEditListener() {
+//            @Override
+//            public void onProfileEdited(User u) {
+//                editUserProfileFragment.dismiss();
+//                updateProfileInfo();
+//            }
+//        });
+//        editUserProfileFragment.show(fm, "fragment_edit_profile");
+//    }
 
     public static HomeUserInfoFragment newInstance() {
         return new HomeUserInfoFragment();
