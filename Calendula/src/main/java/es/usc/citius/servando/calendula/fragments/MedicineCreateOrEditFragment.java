@@ -245,7 +245,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mMedicine != null)
+        if (mMedicine != null && mMedicine.getId() != null)
             outState.putLong(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, mMedicine.getId());
     }
 

@@ -44,7 +44,7 @@ public class AlarmScheduler {
         intent.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, routine.getId());
         // create pending intent
         int intent_id = routine.getId().hashCode();
-        return PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        return PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public static PendingIntent alarmDelayPendingIntent(Context ctx, Routine routine) {
@@ -56,7 +56,7 @@ public class AlarmScheduler {
         intent.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, routine.getId());
         // create pending intent
         int intent_id = routine.getId().hashCode() + 33;
-        return PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        return PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     // static method to get the AlarmScheduler instance
