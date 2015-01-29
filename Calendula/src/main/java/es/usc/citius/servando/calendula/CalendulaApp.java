@@ -66,6 +66,7 @@ public class CalendulaApp extends Application {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                DefaultDataGenerator.fillDBWithDummyData(getApplicationContext());
                 // initialize daily agenda
                 DailyAgenda.instance().setupForToday(CalendulaApp.this);
                 // setup alarm for daily agenda update

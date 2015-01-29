@@ -15,10 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
-import es.usc.citius.servando.calendula.DefaultDataGenerator;
 import es.usc.citius.servando.calendula.HomeActivity;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.user.Session;
 import es.usc.citius.servando.calendula.user.User;
 
@@ -145,14 +143,11 @@ public class StartActivity extends Activity {
                 }
                 // there is no previous session
                 else {
+
                     if (mustShowSplash) {
                         keepSplashVisible(1);
                     }
 
-                    // Add some default data
-                    if (Routine.findAll().size() == 0) {
-                        DefaultDataGenerator.fillRoutineStore(getApplicationContext());
-                    }
                     // create default session
                     User defaultUser = new User();
                     defaultUser.setName("Calendula");

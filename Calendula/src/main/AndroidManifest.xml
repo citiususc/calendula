@@ -116,7 +116,16 @@
             android:value="calendula.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="9" />
+            android:value="1" />
+
+        <meta-data
+            android:name="AA_MODELS"
+            android:value="es.usc.citius.servando.calendula.persistence.DailyScheduleItem,
+             es.usc.citius.servando.calendula.persistence.Medicine,
+             es.usc.citius.servando.calendula.persistence.Routine,
+             es.usc.citius.servando.calendula.persistence.Schedule,
+             es.usc.citius.servando.calendula.persistence.ScheduleItem" />
+
         <meta-data
             android:name="AA_SERIALIZERS"
             android:value="es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimeSerializer,
