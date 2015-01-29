@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
+import com.doomonafireball.betterpickers.timepicker.TimePickerBuilder;
+import com.doomonafireball.betterpickers.timepicker.TimePickerDialogFragment;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -29,7 +32,7 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 /**
  * Created by joseangel.pineiro on 12/4/13.
  */
-public class RoutineCreateOrEditFragment extends DialogFragment implements RadialTimePickerDialog.OnTimeSetListener {
+public class RoutineCreateOrEditFragment extends DialogFragment implements RadialTimePickerDialog.OnTimeSetListener, TimePickerDialogFragment.TimePickerDialogHandler {
 
     OnRoutineEditListener mRoutineEditCallback;
     Routine mRoutine;
@@ -87,9 +90,21 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
         timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RadialTimePickerDialog timePickerDialog = RadialTimePickerDialog
-                        .newInstance(RoutineCreateOrEditFragment.this, hour, minute, true);
-                timePickerDialog.show(getChildFragmentManager(), "111");
+
+                float density = getResources().getDisplayMetrics().densityDpi;
+                Log.d("RoutineCreateOrEditFragment", "Density: " + density);
+                if (density >= DisplayMetrics.DENSITY_XHIGH) {
+                    RadialTimePickerDialog timePickerDialog = RadialTimePickerDialog
+                            .newInstance(RoutineCreateOrEditFragment.this, hour, minute, true);
+                    timePickerDialog.show(getChildFragmentManager(), "111");
+                } else {
+                    TimePickerBuilder tpb = new TimePickerBuilder()
+                            .setFragmentManager(getChildFragmentManager())
+                            .setStyleResId(R.style.BetterPickersDialogFragment_Light);
+                    tpb.addTimePickerDialogHandler(RoutineCreateOrEditFragment.this);
+                    tpb.show();
+                }
+                
             }
         });
 
@@ -230,6 +245,11 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
         this.hour = hourOfDay;
         this.minute = minute;
         updateTime();
+    }
+
+    @Override
+    public void onDialogTimeSet(int ref, int hour, int minute) {
+        onTimeSet(null, hour, minute);
     }
 
     // Container Activity must implement this interface

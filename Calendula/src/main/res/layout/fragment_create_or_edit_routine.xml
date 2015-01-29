@@ -59,12 +59,12 @@
         android:layout_height="wrap_content"
         android:text="18:30h"
         android:id="@+id/button2"
-        android:textSize="60sp"
+        android:textSize="@dimen/create_routine_time_label_size"
         android:textColor="@color/dark_grey_text"
-        android:background="@drawable/shape_list_item"
+        android:background="@null"
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:padding="10dp" />
 
 

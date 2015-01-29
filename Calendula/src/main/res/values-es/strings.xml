@@ -41,7 +41,7 @@
 
     <string name="title_activity_routines">Rutinas</string>
     <string name="title_edit_routine_activity">Editar rutina</string>
-    <string name="title_create_routine_activity">Crer rutina</string>
+    <string name="title_create_routine_activity">Crear rutina</string>
     <string name="title_activity_medicines">Botiquín</string>
     <string name="title_edit_medicine_activity">Editar medicina</string>
     <string name="title_create_medicine_activity">Nueva medicina</string>

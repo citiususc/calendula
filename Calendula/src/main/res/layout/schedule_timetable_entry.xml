@@ -14,7 +14,7 @@
         android:id="@+id/hour_text"
         android:textColor="@color/android_blue"
         android:textStyle="bold"
-        android:textSize="23dp"
+        android:textSize="@dimen/routine_label_from_schedule_creation"
         android:gravity="center_vertical|right"
         android:layout_weight="0.10"
         android:layout_gravity="right" />
@@ -26,10 +26,11 @@
         android:text="00"
         android:id="@+id/minute_text"
         android:textColor="@color/android_blue"
-        android:textSize="23dp"
+        android:textSize="@dimen/routine_label_from_schedule_creation"
         android:gravity="center_vertical|left"
         android:layout_weight="0.10"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:layout_gravity="left" />
 
     <Spinner
         android:layout_width="0dp"

@@ -12,7 +12,7 @@
     <dimen name="fragment_tabs_margin_top">130dp</dimen>
 
     <dimen name="header_height">220dp</dimen>
-    <dimen name="create_routine_time_label_size">60sp</dimen>
-    <dimen name="routine_label_from_schedule_creation">23sp</dimen>
+    <dimen name="create_routine_time_label_size">70sp</dimen>
+    <dimen name="routine_label_from_schedule_creation">25sp</dimen>
 
 </resources>
