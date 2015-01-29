@@ -39,7 +39,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
 
     Button timeButton;
     TextView mNameTextView;
-//    Button mConfirmButton;
+    Button mConfirmButton;
 
     int hour;
     int minute;
@@ -48,16 +48,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_or_edit_routine, container, false);
         mNameTextView = (TextView) rootView.findViewById(R.id.routine_edit_name);
-//        mConfirmButton = (Button) rootView.findViewById(R.id.routine_button_ok);
         timeButton = (Button) rootView.findViewById(R.id.button2);
-//        mTimePicker.setIs24HourView(true);
-//        mConfirmButton.setText(getString(mRoutine == null ? R.string.create_routine_button_text : R.string.edit_routine_button_text));
-//        mConfirmButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                onEdit();
-//            }
-//        });
 
 
         long routineId = -1;
@@ -84,6 +75,14 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
 
         if (getDialog() != null) {
             getDialog().setTitle(R.string.title_create_routine_activity);
+            mConfirmButton = (Button) rootView.findViewById(R.id.done_button);
+            mConfirmButton.setVisibility(View.VISIBLE);
+            mConfirmButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onEdit();
+                }
+            });
         }
 
 
@@ -104,7 +103,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
                     tpb.addTimePickerDialogHandler(RoutineCreateOrEditFragment.this);
                     tpb.show();
                 }
-                
+
             }
         });
 

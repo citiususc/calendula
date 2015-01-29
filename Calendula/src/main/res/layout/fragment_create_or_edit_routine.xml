@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
@@ -66,6 +66,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:padding="10dp" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:id="@+id/done_button"
+        android:layout_height="50dp"
+        style="@style/next_button"
+        android:text="@string/done"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
 
 
 </RelativeLayout>
