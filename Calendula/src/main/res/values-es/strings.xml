@@ -155,5 +155,38 @@
         <item>Sab</item>
         <item>Dom</item>
     </string-array>
+    <string name="action_sign_in">Iniciar sesión o registrarse</string>
+    <string name="action_sign_in_short">Iniciar sesión</string>
+    <string name="error_field_required">Campo obligatorio</string>
+    <string name="error_incorrect_password">Contraseña incorrecta</string>
+    <string name="error_invalid_email">Email inválido</string>
+    <string name="error_invalid_password">Contraseña demasiado corta</string>
+    <string name="pref_default_display_name">Calendula</string>
+    <string name="pref_header_general">General</string>
+    <string name="pref_header_notifications">Notificaciones</string>
+    <string name="pref_title_display_name">Nombre</string>
+    <string name="pref_title_insistent_alarms">Notificaciones insistentes</string>
+    <string name="pref_title_new_alarm_notification">Alarmas</string>
+    <string name="pref_title_reminder_window">Período de repetición</string>
+    <string name="pref_title_sync_frequency">Repetir alarmas</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Contraseña (opcional)</string>
+    <string name="splash_quote">Controla tu terapia de forma sencilla</string>
+    <string name="title_activity_login">Entrar</string>
+    <string name="title_activity_settings">Opciones</string>
+    <string name="title_select_dose_dialog">Introduce una dósis</string>
+    <string name="schedule_timetable_time_column">HORA</string>
+    <string name="schedule_timetable_dose_column">DÓSIS</string>
+    <string name="schedule_day_selector_take">Días:</string>
+
+    <string name="schedule_day_selector_mo">LU</string>
+    <string name="schedule_day_selector_tu">MA</string>
+    <string name="schedule_day_selector_we">MI</string>
+    <string name="schedule_day_selector_th">JU</string>
+    <string name="schedule_day_selector_fr">VI</string>
+    <string name="schedule_day_selector_sa">SA</string>
+    <string name="schedule_day_selector_su">DO</string>
+    <string name="agenda_zoom_meds_time">Tómate tus medicinas!</string>
+
 </resources>
 

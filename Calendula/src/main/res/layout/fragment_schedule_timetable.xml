@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="TIME"
+                android:text="@string/schedule_timetable_time_column"
                 android:id="@+id/textView2"
                 android:textColor="@color/android_blue_dark"
                 android:textSize="12dp" />
@@ -72,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="DOSE"
+                android:text="@string/schedule_timetable_dose_column"
                 android:id="@+id/textView3"
                 android:textColor="@color/android_blue_dark"
                 android:textSize="12dp" />

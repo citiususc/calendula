@@ -48,7 +48,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="It's time to take some meds!"
+            android:text="@string/agenda_zoom_meds_time"
             android:layout_below="@+id/prof_container"
             android:id="@+id/meds_time_view"
             android:fontFamily="sans-serif-light"

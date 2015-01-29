@@ -149,6 +149,9 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="splash_quote">Therapy management made easy</string>
     <string name="toolbar_menu_title">Menu</string>
+    <string name="schedule_timetable_time_column">TIME</string>
+    <string name="schedule_timetable_dose_column">DOSE</string>
+    <string name="schedule_day_selector_take">Take:</string>
     <!-- Day Names -->
     <string-array name="day_names">
         <item>Mon</item>
@@ -159,5 +162,14 @@
         <item>Sat</item>
         <item>Sun</item>
     </string-array>
+    <string name="schedule_day_selector_mo">MO</string>
+    <string name="schedule_day_selector_tu">TU</string>
+    <string name="schedule_day_selector_we">WE</string>
+    <string name="schedule_day_selector_th">TH</string>
+    <string name="schedule_day_selector_fr">FR</string>
+    <string name="schedule_day_selector_sa">SA</string>
+    <string name="schedule_day_selector_su">SU</string>
+    <string name="agenda_zoom_meds_time">It\'s time to take some meds!</string>
+
 </resources>
 

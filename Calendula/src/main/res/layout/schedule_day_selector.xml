@@ -13,24 +13,24 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Take:"
+            android:text="@string/schedule_day_selector_take"
             android:textColor="@color/android_blue"
             android:layout_weight="1.5" />
 
         <TextView
-            android:text="MO"
+            android:text="@string/schedule_day_selector_mo"
             android:id="@+id/day_mo"
             style="@style/schedule_day_selected" />
 
         <TextView
-            android:text="TU"
+            android:text="@string/schedule_day_selector_tu"
             android:id="@+id/day_tu"
             style="@style/schedule_day_selected" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="WE"
+            android:text="@string/schedule_day_selector_we"
             android:id="@+id/day_we"
             android:layout_weight="1"
             android:gravity="center"
@@ -39,7 +39,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="TH"
+            android:text="@string/schedule_day_selector_th"
             android:id="@+id/day_th"
             android:layout_weight="1"
             android:gravity="center"
@@ -48,7 +48,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="FR"
+            android:text="@string/schedule_day_selector_fr"
             android:id="@+id/day_fr"
             android:layout_weight="1"
             android:gravity="center"
@@ -57,7 +57,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="SA"
+            android:text="@string/schedule_day_selector_sa"
             android:id="@+id/day_sa"
             android:layout_weight="1"
             android:gravity="center"
@@ -66,7 +66,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="SU"
+            android:text="@string/schedule_day_selector_su"
             android:id="@+id/day_su"
             android:layout_weight="1"
             android:gravity="center"
@@ -79,7 +79,7 @@
             android:id="@+id/day_check_all"
             android:layout_weight="1.5"
             android:textColor="@color/android_blue"
-            android:visibility="invisible" />
+            android:visibility="gone" />
 
     </LinearLayout>
 </RelativeLayout>
