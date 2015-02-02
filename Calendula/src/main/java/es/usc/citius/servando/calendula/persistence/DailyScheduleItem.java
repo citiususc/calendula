@@ -23,8 +23,8 @@ public class DailyScheduleItem extends Model {
     public static final String COLUMN_TAKEN_TODAY = "TakenToday";
     public static final String COLUMN_TIME_TAKEN = "TimeTaken";
 
-    @Column(name = COLUMN_DATE)
-    private DateTime date;
+//    @Column(name = COLUMN_DATE)
+//    private DateTime date;
 
     @Column(name = COLUMN_SCHEDULE_ITEM, onDelete = Column.ForeignKeyAction.NO_ACTION, onUpdate = Column.ForeignKeyAction.NO_ACTION)
     private ScheduleItem scheduleItem;
@@ -39,12 +39,12 @@ public class DailyScheduleItem extends Model {
     }
 
     public DailyScheduleItem(DateTime date, ScheduleItem scheduleItem) {
-        this.date = date;
+//        this.date = date;
         this.scheduleItem = scheduleItem;
     }
 
     public DailyScheduleItem(ScheduleItem scheduleItem) {
-        this.date = scheduleItem.routine().time().toDateTimeToday();
+//        this.date = scheduleItem.routine().time().toDateTimeToday();
         this.scheduleItem = scheduleItem;
     }
 
@@ -64,9 +64,9 @@ public class DailyScheduleItem extends Model {
 //        return date;
 //    }
 
-    public void setDate(DateTime date) {
-        this.date = date;
-    }
+//    public void setDate(DateTime date) {
+//        this.date = date;
+//    }
 
     public boolean takenToday() {
         return takenToday;
