@@ -21,6 +21,7 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Persistence;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -113,7 +114,7 @@ public class MedicinesListFragment extends Fragment {
                 .setCancelable(true)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        m.deleteCascade();
+                        Persistence.instance().deleteCascade(m);
                         notifyDataChange();
                     }
                 })

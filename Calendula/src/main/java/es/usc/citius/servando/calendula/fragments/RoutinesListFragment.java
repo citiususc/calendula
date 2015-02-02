@@ -144,6 +144,7 @@ public class RoutinesListFragment extends Fragment {
     }
 
     public void notifyDataChange() {
+        Log.d(getTag(), "Routines - Notify data change");
         new ReloadItemsTask().execute();
     }
 

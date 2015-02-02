@@ -66,7 +66,7 @@ public class RoutinesActivity extends ActionBarActivity implements RoutineCreate
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the menu; this adds items to the action bar if it is present.telt
         getMenuInflater().inflate(R.menu.routines, menu);
         removeItem = menu.findItem(R.id.action_remove);
         removeItem.setVisible(mRoutineId != -1 ? true : false);

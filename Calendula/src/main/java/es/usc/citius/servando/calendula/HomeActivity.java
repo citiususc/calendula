@@ -69,6 +69,9 @@ public class HomeActivity extends ActionBarActivity implements
         MedicinesListFragment.OnMedicineSelectedListener,
         ScheduleListFragment.OnScheduleSelectedListener {
 
+
+    private static final String TAG = "HomeActivity";
+    
     public static final int ANIM_ACTION_BAR_DURATION = 250;
     public static final int ANIM_TABS_DURATION = 250;
 
@@ -750,13 +753,18 @@ public class HomeActivity extends ActionBarActivity implements
 
     // Method called from the event bus
     public void onEvent(PersistenceEvents.ModelCreateOrUpdateEvent event) {
-        if (event.clazz.equals(Routine.class)) {
-            ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
-        } else if (event.clazz.equals(Medicine.class)) {
-            ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
-        } else if (event.clazz.equals(Schedule.class)) {
-            ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
-        }
+//        if (event.clazz.equals(Routine.class)) {
+//            ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
+//        } else if (event.clazz.equals(Medicine.class)) {
+//            ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
+//        } else if (event.clazz.equals(Schedule.class)) {
+//            ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
+//        }
+        Log.d(TAG, "onEvent: " + event.clazz.getName());
+        ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
+        ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
+        ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
+        ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
     }
 
 }

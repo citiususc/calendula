@@ -54,7 +54,8 @@ public class ScheduleSummaryFragment extends Fragment {
         final ImageView medIconImage = (ImageView) rootView.findViewById(R.id.sched_summary_medicon);
 
 
-        String medName = ScheduleCreationHelper.instance().getSelectedMed().name();
+        String medName = ScheduleCreationHelper.instance().getMedNameToChange() != null ? ScheduleCreationHelper.instance().getMedNameToChange()
+                : ScheduleCreationHelper.instance().getSelectedMed().name();
         int medIcon = ScheduleCreationHelper.instance().getSelectedMed().presentation().getDrawable();
         String freq = ScheduleUtils.getTimesStr(ScheduleCreationHelper.instance().getScheduleItems().size(), getActivity());
         String days[] = ScheduleCreationHelper.instance().getDays(getActivity());

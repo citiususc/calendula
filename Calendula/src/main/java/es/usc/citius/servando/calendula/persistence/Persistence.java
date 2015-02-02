@@ -10,6 +10,8 @@ import es.usc.citius.servando.calendula.events.PersistenceEvents;
  */
 public class Persistence {
 
+    // CREATE OR UPDTAE 
+
     public void save(Routine m) {
         saveModel(m);
         CalendulaApp.eventBus().post(PersistenceEvents.ROUTINE_EVENT);
@@ -24,6 +26,25 @@ public class Persistence {
         saveModel(m);
         CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
     }
+
+    // DELETE 
+
+    public void deleteCascade(Schedule m) {
+        m.deleteCascade();
+        CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
+    }
+
+    public void deleteCascade(Medicine m) {
+        m.deleteCascade();
+        CalendulaApp.eventBus().post(PersistenceEvents.MEDICINE_EVENT);
+    }
+
+    public void deleteCascade(Routine m) {
+        m.deleteCascade();
+        CalendulaApp.eventBus().post(PersistenceEvents.ROUTINE_EVENT);
+    }
+
+    // PRIVATE METHODS
 
     private void saveModel(Model m) {
         m.save();

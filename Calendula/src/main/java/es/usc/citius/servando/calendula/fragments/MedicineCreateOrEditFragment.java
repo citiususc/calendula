@@ -137,6 +137,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
 
     public boolean validate() {
         if (mNameTextView.getText() != null && mNameTextView.getText().length() > 0) {
+            ScheduleCreationHelper.instance().setMedNameToChange(mNameTextView.getText().toString());
             return true;
         } else {
             mNameTextView.setError("Please, type a name");

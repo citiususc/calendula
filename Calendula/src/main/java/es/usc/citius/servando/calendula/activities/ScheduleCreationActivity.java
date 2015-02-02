@@ -104,12 +104,16 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         mScheduleId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1);
         if (mScheduleId != -1) {
             Schedule s = Schedule.findById(mScheduleId);
-            ScheduleCreationHelper.instance().setSelectedMed(s.medicine());
-            ScheduleCreationHelper.instance().setSelectedDays(s.days());
-            ScheduleCreationHelper.instance().setTimesPerDay(s.items().size());
-            ScheduleCreationHelper.instance().setSelectedScheduleIdx(s.items().size() - 1);
-            ScheduleCreationHelper.instance().setScheduleItems(s.items());
-            mSchedule = s;
+            if (s != null) {
+                ScheduleCreationHelper.instance().setSelectedMed(s.medicine());
+                ScheduleCreationHelper.instance().setSelectedDays(s.days());
+                ScheduleCreationHelper.instance().setTimesPerDay(s.items().size());
+                ScheduleCreationHelper.instance().setSelectedScheduleIdx(s.items().size() - 1);
+                ScheduleCreationHelper.instance().setScheduleItems(s.items());
+                mSchedule = s;
+            } else {
+                Toast.makeText(this, "Schedule not found :(", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -126,8 +130,10 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             ArrayList<Long> scheduleItemIds = new ArrayList<Long>();
 
             Medicine m = ScheduleCreationHelper.instance().getSelectedMed();
+            if (ScheduleCreationHelper.instance().getMedNameToChange() != null) {
+                m.setName(ScheduleCreationHelper.instance().getMedNameToChange());
+            }
             Persistence.instance().save(m);
-
             Schedule s = mSchedule != null ? mSchedule : new es.usc.citius.servando.calendula.persistence.Schedule();
             s.setMedicine(m);
             s.setDays(ScheduleCreationHelper.instance().getSelectedDays());
