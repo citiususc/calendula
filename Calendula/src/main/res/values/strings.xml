@@ -170,6 +170,8 @@
     <string name="schedule_day_selector_sa">SA</string>
     <string name="schedule_day_selector_su">SU</string>
     <string name="agenda_zoom_meds_time">It\'s time to take some meds!</string>
+    <string name="create_schedule_incomplete_items">The given schedule is incomplete. Please check it!</string>
+
 
 </resources>
 

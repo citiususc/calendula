@@ -120,10 +120,6 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
     public void saveSchedule() {
 
-        for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems()) {
-            Log.d(TAG, "ScheduleCreationHelper before save : " + i.getId() + ", " + i.routine().name() + ", " + i.dose());
-        }
-
         try {
             ActiveAndroid.beginTransaction();
 
@@ -219,6 +215,14 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
                 return false;
             }
         } else if (page == 1) {
+
+            for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems()) {
+                if (i.routine() == null) {
+                    Toast.makeText(this, R.string.create_schedule_incomplete_items, Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+            
             if (ScheduleCreationHelper.instance().getDays(this).length <= 0) {
                 Toast.makeText(this, "You must specify at least one day", Toast.LENGTH_SHORT).show();
                 return false;

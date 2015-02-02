@@ -187,6 +187,7 @@
     <string name="schedule_day_selector_sa">SA</string>
     <string name="schedule_day_selector_su">DO</string>
     <string name="agenda_zoom_meds_time">Tómate tus medicinas!</string>
+    <string name="create_schedule_incomplete_items">La pauta indicada está incompleta. Revísela, por favor!</string>
 
 </resources>
 
