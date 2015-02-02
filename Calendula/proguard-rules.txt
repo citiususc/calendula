@@ -1,0 +1,13 @@
+-dontobfuscate
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*,!code/allocation/variable
+
+-dontwarn org.joda.convert.**
+-dontwarn org.ocpsoft.pretty.time.**
+-dontwarn javax.faces.**
+-dontwarn com.squareup.picasso.**
+
+#-assumenosideeffects class android.util.Log { *; }
+
+-keepclassmembers class ** {
+    public void onEvent(**);
+}
