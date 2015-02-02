@@ -210,8 +210,8 @@ public class ScheduleTimetableFragment extends Fragment {
 
         ScheduleCreationHelper.instance().setScheduleItems(scheduleItems);
 
-        for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems())
-            Log.d(TAG, "addTimetableEntries (end): " + i.getId() + ", " + i.routine().name() + ", " + i.dose());
+//        for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems())
+//            Log.d(TAG, "addTimetableEntries (end): " + i.getId() + ", " + i.routine().name() + ", " + i.dose());
 
     }
 
@@ -308,9 +308,9 @@ public class ScheduleTimetableFragment extends Fragment {
                     updateEntryTime(r, entryView);
                     item.setRoutine(r);
                     Log.d(TAG, "Updated routine to " + r.name() + " on item " + item.getId());
-                    for (ScheduleItem si : ScheduleCreationHelper.instance().getScheduleItems()) {
-                        Log.d(TAG, "ScheduleCreationHelper : " + si.getId() + ", " + si.routine().name() + ", " + si.dose());
-                    }
+//                    for (ScheduleItem si : ScheduleCreationHelper.instance().getScheduleItems()) {
+//                        Log.d(TAG, "ScheduleCreationHelper : " + si.getId() + ", " + si.routine().name() + ", " + si.dose());
+//                    }
                 } else {
                     updateEntryTime(null, entryView);
                     showAddNewRoutineDialog(entryView);
