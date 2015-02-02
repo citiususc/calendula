@@ -1,8 +1,11 @@
 package es.usc.citius.servando.calendula.fragments;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,8 +22,6 @@ import android.widget.ViewSwitcher;
 import org.joda.time.DateTime;
 
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.user.Session;
-import es.usc.citius.servando.calendula.user.User;
 import es.usc.citius.servando.calendula.util.Screen;
 
 /**
@@ -37,6 +38,7 @@ public class HomeUserInfoFragment extends Fragment {
 
     TextView monthTv;
     TextView dayTv;
+
 
     public HomeUserInfoFragment() {
         // Required empty public constructor
@@ -93,11 +95,12 @@ public class HomeUserInfoFragment extends Fragment {
     public void updateBackground() {
         background.setImageDrawable(new BitmapDrawable(getBackgroundBitmap()));
     }
-    void updateProfileInfo() {
 
-        User u = Session.instance().getUser();
-        profileUsername.setText(u.getName());
-        //Bitmap profileImage = Session.instance().getUserProfileImage(getActivity());
+    void updateProfileInfo() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String displayName = prefs.getString("display_name", "Calendula");
+        profileUsername.setText(displayName);
+
 
         DateTime dt = DateTime.now();
 
@@ -134,5 +137,35 @@ public class HomeUserInfoFragment extends Fragment {
 
         return Screen.getResizedBitmap(getActivity(), "home_bg_" + rand + ".jpg", width, height);
     }
+
+
+    public SharedPreferences mSharedPreferences;
+
+    // Listener defined by anonymous inner class.
+    public SharedPreferences.OnSharedPreferenceChangeListener mListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if ("display_name".equals(key) && profileUsername != null) {
+                profileUsername.setText(mSharedPreferences.getString("display_name", "Calendula"));
+            }
+        }
+    };
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mSharedPreferences.registerOnSharedPreferenceChangeListener(mListener);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mSharedPreferences.unregisterOnSharedPreferenceChangeListener(mListener);
+    }
+    
+    
+
 
 }

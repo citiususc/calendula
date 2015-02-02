@@ -39,7 +39,6 @@ import es.usc.citius.servando.calendula.HomeActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.AgendaZoomHelper;
 import es.usc.citius.servando.calendula.persistence.Routine;
-import es.usc.citius.servando.calendula.user.Session;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 
 /**
@@ -259,10 +258,10 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             Log.d(getTag(), "Visible to user");
-            if (profileShown)
-                ((HomeActivity) getActivity()).setCustomTitle("Calendula");
-            else
-                ((HomeActivity) getActivity()).setCustomTitle(Session.instance().getUser().getName());
+//            if (profileShown)
+//                ((HomeActivity) getActivity()).setCustomTitle("Calendula");
+//            else
+//                ((HomeActivity) getActivity()).setCustomTitle(Session.instance().getUser().getName());
         }
     }
 

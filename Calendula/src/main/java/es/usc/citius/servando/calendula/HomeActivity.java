@@ -4,9 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -53,7 +51,6 @@ import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
-import es.usc.citius.servando.calendula.user.Session;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 
 //import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
@@ -525,27 +522,27 @@ public class HomeActivity extends ActionBarActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    void logout() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("Session will be closed, continue?")
-                .setPositiveButton("Yes, close", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        dialog.dismiss();
-                        Session.instance().close(getApplicationContext());
-                        finish();
-                    }
-                })
-                .setNegativeButton("No, cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        dialog.dismiss();
-                    }
-                }).show();
-
-    }
+//    void logout() {
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//
+//        builder.setTitle("Session will be closed, continue?")
+//                .setPositiveButton("Yes, close", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int i) {
+//                        dialog.dismiss();
+//                        Session.instance().close(getApplicationContext());
+//                        finish();
+//                    }
+//                })
+//                .setNegativeButton("No, cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int i) {
+//                        dialog.dismiss();
+//                    }
+//                }).show();
+//
+//    }
 
     @Override
     public void onBackPressed() {

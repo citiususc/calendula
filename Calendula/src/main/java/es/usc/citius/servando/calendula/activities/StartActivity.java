@@ -18,7 +18,6 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.HomeActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.user.Session;
-import es.usc.citius.servando.calendula.user.User;
 
 /**
  * Start activity:
@@ -137,21 +136,19 @@ public class StartActivity extends Activity {
                 // session is closed but there is a session stored
                 else if (Session.instance().open(getApplicationContext())) {
                     if (mustShowSplash) {
-                        keepSplashVisible(3);
+                        keepSplashVisible(1);
                     }
                     return STATUS_SESSION_RESUMED;
                 }
                 // there is no previous session
                 else {
-
                     if (mustShowSplash) {
                         keepSplashVisible(1);
                     }
-
                     // create default session
-                    User defaultUser = new User();
-                    defaultUser.setName("Calendula");
-                    Session.instance().create(getApplicationContext(), defaultUser);
+                    //User defaultUser = new User();
+                    //defaultUser.setName("Calendula");
+                    Session.instance().open(getApplicationContext());
                     return STATUS_NO_SESSION;
                 }
             } catch (Exception e) {
