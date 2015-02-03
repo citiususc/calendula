@@ -10,8 +10,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -162,7 +160,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             ActiveAndroid.setTransactionSuccessful();
             AlarmScheduler.instance().onCreateOrUpdateSchedule(s, this);
             ScheduleCreationHelper.instance().clear();
-            Toast.makeText(ScheduleCreationActivity.this, "Schedule created!", Toast.LENGTH_LONG).show();
+            Toast.makeText(ScheduleCreationActivity.this, getString(R.string.schedule_created_message), Toast.LENGTH_LONG).show();
             // send result to caller activity
             Intent returnIntent = new Intent();
             returnIntent.putExtra("schedule_created", true);
@@ -224,32 +222,32 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             }
             
             if (ScheduleCreationHelper.instance().getDays(this).length <= 0) {
-                Toast.makeText(this, "You must specify at least one day", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.schedule_no_day_specified_message), Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
         return true;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.schedules, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.schedules, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        switch (item.getItemId()) {
+//            case R.id.action_settings:
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
 
     void setCurrentPageIndicator(int page) {
