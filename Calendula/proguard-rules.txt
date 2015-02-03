@@ -1,13 +1,28 @@
 -dontobfuscate
--optimizations !code/simplification/arithmetic,!field/*,!class/merging/*,!code/allocation/variable
-
+-dontoptimize
+#-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*,!code/allocation/variable
 -dontwarn org.joda.convert.**
--dontwarn org.ocpsoft.pretty.time.**
 -dontwarn javax.faces.**
 -dontwarn com.squareup.picasso.**
 
-#-assumenosideeffects class android.util.Log { *; }
+# remove logs
+-assumenosideeffects class android.util.Log { *; }
 
+-keep class org.ocpsoft.prettytime.i18n.**{
+    *;
+}
+
+# EventBus
 -keepclassmembers class ** {
     public void onEvent(**);
 }
+
+
+# ActiveAndroid Library
+-keep class com.activeandroid.**{
+     *;
+}     
+-keep public class es.usc.citius.servando.calendula.persistence.**{
+    *;
+}
+-keepattributes *Annotation*

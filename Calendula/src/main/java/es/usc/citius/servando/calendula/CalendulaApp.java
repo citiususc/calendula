@@ -62,7 +62,7 @@ public class CalendulaApp extends Application {
     public void onCreate() {
         super.onCreate();
         // initialize sqlite engine
-        ActiveAndroid.initialize(this, true);
+        ActiveAndroid.initialize(this, false);
         new Thread(new Runnable() {
             @Override
             public void run() {
