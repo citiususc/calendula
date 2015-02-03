@@ -374,7 +374,7 @@ public class HomeActivity extends ActionBarActivity implements
         else if (position > 2 && position < 6)
             mViewPager.setCurrentItem(position - 2);
         else if (position > 6 && position < 9) {
-            Toast.makeText(this, "Working on it!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.work_in_progress), Toast.LENGTH_SHORT).show();
         }
         mDrawerLayout.closeDrawer(mDrawerList);
     }
@@ -577,7 +577,7 @@ public class HomeActivity extends ActionBarActivity implements
             @Override
             public void run() {
                 final Routine r = Routine.findById(routineId);
-                Toast.makeText(HomeActivity.this, "Take your meds (" + r.name() + ")", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(HomeActivity.this, "Take your meds (" + r.name() + ")", Toast.LENGTH_SHORT).show();
                 mViewPager.setCurrentItem(0);
                 ((DailyAgendaFragment) getViewPagerFragment(0)).showReminder(r);
             }

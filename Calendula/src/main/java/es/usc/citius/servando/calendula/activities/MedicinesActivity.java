@@ -100,20 +100,20 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
     @Override
     public void onMedicineEdited(Medicine m) {
         Persistence.instance().save(m);
-        Toast.makeText(this, "Changes saved!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.medicine_edited_message), Toast.LENGTH_SHORT).show();
         finish();
     }
 
     @Override
     public void onMedicineCreated(Medicine m) {
         Persistence.instance().save(m);
-        Toast.makeText(this, "Medicine created!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.medicine_created_message), Toast.LENGTH_SHORT).show();
         finish();
     }
 
     @Override
     public void onMedicineDeleted(Medicine m) {
-        Toast.makeText(this, "Medicine deleted!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.medicine_deleted_message), Toast.LENGTH_SHORT).show();
         Persistence.instance().deleteCascade(m);
         finish();
     }

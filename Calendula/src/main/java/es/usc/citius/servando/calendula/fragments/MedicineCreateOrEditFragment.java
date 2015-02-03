@@ -103,15 +103,16 @@ public class MedicineCreateOrEditFragment extends Fragment {
 
     public void showDeleteConfirmationDialog(final Medicine m) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Remove " + m.name() + "?")
+        // "Remove " + m.name() + "?"
+        builder.setMessage(String.format(getString(R.string.remove_medicine_message_short), m.name()))
                 .setCancelable(true)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (mMedicineEditCallback != null)
                             mMedicineEditCallback.onMedicineDeleted(m);
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
@@ -140,7 +141,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
             ScheduleCreationHelper.instance().setMedNameToChange(mNameTextView.getText().toString());
             return true;
         } else {
-            mNameTextView.setError("Please, type a name");
+            mNameTextView.setError(getString(R.string.medicine_no_name_error_message));
             mNameTextView.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -302,7 +303,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
                 }
             }
         } else {
-            mNameTextView.setError("Please, type a name");
+            mNameTextView.setError(getString(R.string.medicine_no_name_error_message));
             mNameTextView.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {

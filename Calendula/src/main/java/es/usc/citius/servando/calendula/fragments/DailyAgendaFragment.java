@@ -22,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.tjerkw.slideexpandable.library.SlideExpandableListAdapter;
 
@@ -393,7 +392,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
     }
 
     private void onClickEmptyHour(int hour) {
-        Toast.makeText(getActivity(), " Add new routine or med here!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), " Add new routine or med here!", Toast.LENGTH_SHORT).show();
     }
 
     private void restoreHeader() {

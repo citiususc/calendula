@@ -197,22 +197,24 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
         String message;
 
         if (r.scheduleItems().size() > 0) {
-            message = "The routine " + r.name() + " has associated schedules that will be lost if you delete it. Do you want to remove it anyway?";
+            message = String.format(getString(R.string.remove_routine_message_long), r.name());
+            //message = "The routine " + r.name() + " has associated schedules that will be lost if you delete it. Do you want to remove it anyway?";
         } else {
-            message = "Remove " + r.name() + " routine?";
+            //message = "Remove " + r.name() + " routine?";
+            message = String.format(getString(R.string.remove_routine_message_short), r.name());
         }
 
         builder.setMessage(message)
                 .setCancelable(true)
-                .setTitle("Remove routine")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setTitle(getString(R.string.remove_routine_dialog_title))
+                .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (mRoutineEditCallback != null) {
                             mRoutineEditCallback.onRoutineDeleted(mRoutine);
                         }
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }

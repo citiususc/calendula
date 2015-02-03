@@ -112,15 +112,15 @@ public class ScheduleListFragment extends Fragment {
 
     void showDeleteConfirmationDialog(final Schedule s) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Remove " + s.medicine().name() + " schedule?")
+        builder.setMessage(String.format(getString(R.string.remove_medicine_message_short), s.medicine().name()))
                 .setCancelable(true)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Persistence.instance().deleteCascade(s);
                         notifyDataChange();
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }

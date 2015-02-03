@@ -92,7 +92,7 @@ public class RoutinesActivity extends ActionBarActivity implements RoutineCreate
     @Override
     public void onRoutineEdited(Routine r) {
         AlarmScheduler.instance().onCreateOrUpdateRoutine(r, this);
-        Toast.makeText(this, "Changes saved!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.routine_edited_message), Toast.LENGTH_SHORT).show();
         finish();
     }
 
@@ -100,14 +100,14 @@ public class RoutinesActivity extends ActionBarActivity implements RoutineCreate
     public void onRoutineDeleted(Routine r) {
         AlarmScheduler.instance().onDeleteRoutine(r, this);
         r.deleteCascade();
-        Toast.makeText(this, "Routine deleted!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.routine_deleted_message), Toast.LENGTH_SHORT).show();
         finish();
     }
 
     @Override
     public void onRoutineCreated(Routine r) {
         AlarmScheduler.instance().onCreateOrUpdateRoutine(r, this);
-        Toast.makeText(this, "Routine created!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.routine_created_message), Toast.LENGTH_SHORT).show();
         // send result to caller activity
         finish();
     }

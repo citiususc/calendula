@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Routine;
 
 /**
@@ -41,7 +42,7 @@ public class NotificationEventReceiver extends BroadcastReceiver {
                             delay = 15;
                         }
                         AlarmScheduler.instance().onDelayRoutine(routineId, context, (int) delay);
-                        Toast.makeText(context, "Routine delayed " + delay + " minutes", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, context.getString(R.string.reminder_delayed_message), Toast.LENGTH_SHORT).show();
 
                     }
                     break;
@@ -50,7 +51,7 @@ public class NotificationEventReceiver extends BroadcastReceiver {
                     routineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
                     if (routineId != -1) {
                         AlarmScheduler.instance().onCancelRoutineNotifications(Routine.findById(routineId), context);
-                        Toast.makeText(context, "Reminder cancelled", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, context.getString(R.string.reminder_cancelled_message), Toast.LENGTH_SHORT).show();
                     }
                     break;
             }

@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/imageView_ok"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="No hai medicinas para tomar durante el resto del día"
+            android:text="@string/home_no_pending_meds_message"
             android:id="@+id/textView3"
             android:gravity="center"
             android:padding="20dp"
