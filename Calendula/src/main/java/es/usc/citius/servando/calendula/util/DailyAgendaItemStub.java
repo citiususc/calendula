@@ -20,6 +20,7 @@ public class DailyAgendaItemStub {
 
     public static final String TAG = DailyAgendaItemStub.class.getName();
     public boolean isSpacer = false;
+    public boolean isEmptyPlaceholder = false;
     public boolean isNext = false;
     //public int hour;
     public boolean hasEvents;

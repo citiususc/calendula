@@ -281,7 +281,19 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                 }
             }
         }
+
+        Log.d(getTag(), "Items: " + items.size());
+
+        if (items.size() == 1) {
+            addEmptyPlaceholder(items);
+        }
         return items;
+    }
+
+    private void addEmptyPlaceholder(ArrayList<DailyAgendaItemStub> items) {
+        DailyAgendaItemStub spacer = new DailyAgendaItemStub("");
+        spacer.isEmptyPlaceholder = true;
+        items.add(spacer);
     }
 
     private void addSpacerTop(ArrayList<DailyAgendaItemStub> items) {
@@ -337,6 +349,8 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
 
         if (item.isSpacer) {
             v = layoutInflater.inflate(R.layout.daily_view_spacer, null);
+        } else if (item.isEmptyPlaceholder) {
+            v = layoutInflater.inflate(R.layout.daily_view_empty_placeholder, null);
         } else if (!item.hasEvents && expanded) {
             v = layoutInflater.inflate(R.layout.daily_view_empty_hour, null);
             // select the correct layout
