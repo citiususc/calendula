@@ -133,7 +133,7 @@ public class HomeUserInfoFragment extends Fragment {
         int width = (int) Screen.getDpSize(getActivity()).x;
         int height = getResources().getDimensionPixelSize(R.dimen.header_height);
 
-        int rand = (((int) (Math.random() * 1000)) % 8) + 1;
+        int rand = (((int) (Math.random() * 1000)) % 5) + 1;
 
         return Screen.getResizedBitmap(getActivity(), "home_bg_" + rand + ".jpg", width, height);
     }

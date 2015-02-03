@@ -12,7 +12,7 @@ import es.usc.citius.servando.calendula.CalendulaApp;
  */
 public class AlarmReceiver extends BroadcastReceiver {
 
-    public static final String TAG = AlarmReceiver.class.getName();
+    public static final String TAG = "AlarmReceiver.class";
 
 
     @Override
