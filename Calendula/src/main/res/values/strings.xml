@@ -171,7 +171,28 @@
     <string name="schedule_day_selector_su">SU</string>
     <string name="agenda_zoom_meds_time">It\'s time to take some meds!</string>
     <string name="create_schedule_incomplete_items">The given schedule is incomplete. Please check it!</string>
+    <string name="home_no_pending_meds_message">There are no pending meds for today</string>
+    <string name="work_in_progress">This feature will be available in future versions. Thanks you!</string>
+    <string name="medicine_created_message">Med created!</string>
+    <string name="medicine_deleted_message">Med deleted!</string>
+    <string name="medicine_edited_message">Med updated!</string>
 
+    <string name="routine_created_message">Routine created!</string>
+    <string name="routine_deleted_message">Routine deleted!</string>
+    <string name="routine_edited_message">Routine updated!</string>
+    <string name="schedule_created_message">Schedule created!</string>
+    <string name="schedule_no_day_specified_message">You must specify at least one day</string>
+    <string name="reminder_delayed_message">Routine delayed </string>
+    <string name="reminder_cancelled_message">Reminder cancelled</string>
+    <string name="remove_routine_message_long">The routine %1$s has associated schedules that will be lost if you delete it. Do you want to remove it anyway?</string>
+    <string name="remove_routine_message_short">Remove %1$s routine?</string>
+    <string name="remove_medicine_message_short">Remove %1$s?</string>
+    <string name="remove_routine_dialog_title">Remove routine</string>
+    
+    <string name="dialog_yes_option">Yes</string>
+    <string name="dialog_no_option">No</string>
+
+    <string name="medicine_no_name_error_message">Please, type a name</string>
 
 </resources>
 

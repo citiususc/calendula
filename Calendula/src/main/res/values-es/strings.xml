@@ -178,7 +178,6 @@
     <string name="schedule_timetable_time_column">HORA</string>
     <string name="schedule_timetable_dose_column">DÓSIS</string>
     <string name="schedule_day_selector_take">Días:</string>
-
     <string name="schedule_day_selector_mo">LU</string>
     <string name="schedule_day_selector_tu">MA</string>
     <string name="schedule_day_selector_we">MI</string>
@@ -188,6 +187,26 @@
     <string name="schedule_day_selector_su">DO</string>
     <string name="agenda_zoom_meds_time">Tómate tus medicinas!</string>
     <string name="create_schedule_incomplete_items">La pauta indicada está incompleta. Revísela, por favor!</string>
+    <string name="home_no_pending_meds_message">No hai medicinas pendientes durante el resto del día</string>
+    <string name="work_in_progress">Esta funcionalidad estará disponible en futuras versiones. Gracias!</string>
+    <string name="medicine_created_message">Medicina añadida al botiquín!</string>
+    <string name="medicine_deleted_message">Medicina eliminada!</string>
+    <string name="medicine_edited_message">Medicina actualizada!</string>
+    <string name="routine_created_message">Rutina creada!</string>
+    <string name="routine_deleted_message">Rutina eliminada!</string>
+    <string name="routine_edited_message">Rutina actualizada!</string>
+    <string name="schedule_created_message">Pauta creada!</string>
+    <string name="schedule_no_day_specified_message">Debes indicar al menos un día!</string>
+    <string name="reminder_delayed_message">Recordatorio pospuesto</string>
+    <string name="reminder_cancelled_message">Recordatorio cancelado</string>
+    <string name="remove_routine_message_long">La rutina %1$s tiene pautas asociadas que se perderán al eliminarla. Deseas eliminarla de todas formas?</string>
+    <string name="remove_routine_message_short">Eliminar la rutina %1$s?</string>
+    <string name="remove_medicine_message_short">Eliminar %1$s?</string>
+    <string name="remove_routine_dialog_title">Eliminar rutina</string>
+    <string name="dialog_yes_option">Si</string>
+    <string name="dialog_no_option">No</string>
+    <string name="medicine_no_name_error_message">Indica un nombre, por favor</string>
+
 
 </resources>
 
