@@ -16,7 +16,7 @@
 
 
     <string name="pref_title_sync_frequency">Repeat alarms</string>
-    <string name="pref_title_reminder_window">Alarm repeat period</string>
+    <string name="pref_title_reminder_window">Alarm repetition limit</string>
 
 
     <string-array name="pref_alarm_repeat_titles">

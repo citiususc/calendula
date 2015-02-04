@@ -167,7 +167,7 @@
     <string name="pref_title_display_name">Nombre</string>
     <string name="pref_title_insistent_alarms">Notificaciones insistentes</string>
     <string name="pref_title_new_alarm_notification">Alarmas</string>
-    <string name="pref_title_reminder_window">Período de repetición</string>
+    <string name="pref_title_reminder_window">Límite de repetición de alarmas</string>
     <string name="pref_title_sync_frequency">Repetir alarmas</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Contraseña (opcional)</string>
