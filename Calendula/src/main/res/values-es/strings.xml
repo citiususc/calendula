@@ -37,6 +37,7 @@
         <item>@string/drawer_services_option</item>
         <item>Farmacias</item>
         <item>Plan de viaje</item>
+        <item>Ayuda</item>
     </string-array>
 
     <string name="title_activity_routines">Rutinas</string>
@@ -207,6 +208,23 @@
     <string name="dialog_no_option">No</string>
     <string name="medicine_no_name_error_message">Indica un nombre, por favor</string>
 
+
+    <string name="tutorial_welcome_title">Bienvenido a Caléndula!</string>
+    <string name="tutorial_welcome_text">Caléndula te permitirá gestionar fácilmente tu pauta terapéutica. Desde esta pantalla podrás ver tus medicinas pendientes para hoy.</string>
+
+    <string name="tutorial_homeinfo_title">Explora!</string>
+    <string name="tutorial_homeinfo_text">A través del menú puedes acceder a las diferentes opciones de Caléndula. También puedes llegar a las opciones más comunes deslizándote a la derecha!</string>
+
+    <string name="tutorial_routine_title">Potencia los buenos hábitos</string>
+    <string name="tutorial_routine_text">Las rutinas te permiten asociar la toma de medicamentos con tus actividades diarias. Añade tus propias rutinas y consigue que la terapia no sea una interferencia</string>
+
+    <string name="tutorial_meds_title">Administra tus medicinas</string>
+    <string name="tutorial_meds_text">Mantén el control de tus medicinas añadiéndolas al botiquín. En próximas versiones incluiremos una gestión de stock más avanzada!</string>
+
+    <string name="tutorial_schedule_title">Gestiona tus pautas!</string>
+    <string name="tutorial_schedule_text">Las pautas nos permiten avisarte cuando es hora de tomar tus medicinas. Añade tus dosis y horarios y no vuelvas a olvidarte nunca!</string>
+
+    <string name="tutorial_next">Entendido</string>
 
 </resources>
 

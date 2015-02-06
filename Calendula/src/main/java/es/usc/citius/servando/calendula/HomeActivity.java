@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.makeramen.RoundedImageView;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.Arrays;
@@ -51,6 +52,7 @@ import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
+import es.usc.citius.servando.calendula.util.AppTutorial;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 
 //import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
@@ -105,6 +107,11 @@ public class HomeActivity extends ActionBarActivity implements
     boolean showcaseShown = false;
     private boolean toolbarVisible;
 
+//    ShowcaseView sv;
+
+    AppTutorial tutorial;
+    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,6 +146,7 @@ public class HomeActivity extends ActionBarActivity implements
         tabs.setVisibility(View.GONE);
         // set up the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         toolbar.setNavigationIcon(R.drawable.ic_launcher_white);
         // configure toolbar as action bar
         setSupportActionBar(toolbar);
@@ -152,14 +160,13 @@ public class HomeActivity extends ActionBarActivity implements
         addButton.setOnClickListener(this);
 
         hideAddButton();
-
-        boolean welcome = getIntent().getBooleanExtra("welcome", false);
-        if (welcome) {
-            showShowCase();
-        }
-
         CalendulaApp.eventBus().register(this);
 
+        tutorial = new AppTutorial();
+        tutorial.init(this, tabs);
+
+        startTutorialIfNeeded();
+        
     }
 
     public int getActionDrawable(int index) {
@@ -178,6 +185,8 @@ public class HomeActivity extends ActionBarActivity implements
                 return R.drawable.ic_room_white_48dp;
             case 8:
                 return R.drawable.ic_small_plane_w;
+            case 9:
+                return R.drawable.ic_help_white_48dp;
             default:
                 return R.drawable.ic_small_home_w;
 
@@ -237,6 +246,7 @@ public class HomeActivity extends ActionBarActivity implements
                 if (mViewPager.getCurrentItem() == 0 && !toolbarVisible)
                     setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
                 toolbar.setTitle(R.string.toolbar_menu_title);
+                //tutorial.hide();
             }
         };
 
@@ -314,7 +324,8 @@ public class HomeActivity extends ActionBarActivity implements
                 View v = layoutInflater.inflate(R.layout.drawer_list_item, null);
                 ((TextView) v.findViewById(R.id.text)).setText(item);
                 ((ImageView) v.findViewById(R.id.imageView)).setImageResource(getActionDrawable(position));
-                ((ImageView) v.findViewById(R.id.imageViewbg)).setImageResource(getActionColor(position));
+                ((RoundedImageView) v.findViewById(R.id.imageViewbg)).setImageResource(getActionColor(position));
+                ((RoundedImageView) v.findViewById(R.id.imageViewbg)).setMutateBackground(true);
 
                 if (position == 8 || position == 9)
                     v.setEnabled(false);
@@ -365,7 +376,7 @@ public class HomeActivity extends ActionBarActivity implements
     /**
      * Swaps fragments in the main content view
      */
-    private void selectItem(int position) {
+    public void selectItem(int position) {
         Log.d("Agenda", "Position :" + position);
         if (position == 0)
             mViewPager.setCurrentItem(0);
@@ -375,7 +386,11 @@ public class HomeActivity extends ActionBarActivity implements
             mViewPager.setCurrentItem(position - 2);
         else if (position > 6 && position < 9) {
             Toast.makeText(this, getString(R.string.work_in_progress), Toast.LENGTH_SHORT).show();
+        } else if (position == 9) {
+            tutorial.reset(this);
+            tutorial.show(AppTutorial.WELCOME, AppTutorial.HOME_INFO, this);
         }
+
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
@@ -404,69 +419,6 @@ public class HomeActivity extends ActionBarActivity implements
     protected void onDestroy() {
         CalendulaApp.eventBus().unregister(this);
         super.onDestroy();
-    }
-
-    private void showShowCase() {
-//        if (!showcaseShown) {
-//            ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
-//            co.hideOnClickOutside = true;
-//            PointTarget pt = new PointTarget((int) Screen.getDpSize(this).x * 2, (int) Screen.getDpSize(this).y);
-//            sv = ShowcaseView.insertShowcaseView(pt, HomeActivity.this, "Daily agenda", "Swipe left to se the full agenda", co);
-//            sv.setOnShowcaseEventListener(new OnShowcaseEventListener() {
-//                @Override
-//                public void onShowcaseViewHide(ShowcaseView showcaseView) {
-//                    Log.d("SV", "Hide showcase at home");
-//                    sv = null;
-//                }
-//
-//                @Override
-//                public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
-//                    Log.d("SV", "DidHide showcase at home");
-//                }
-//
-//                @Override
-//                public void onShowcaseViewShow(ShowcaseView showcaseView) {
-//                    Log.d("SV", "Show showcase at home");
-//                    showcaseShown = true;
-//                }
-//            });
-
-//        ShowcaseView sv = new ShowcaseView.Builder(this)
-//                    .setTarget(new ActionViewTarget(this, ActionViewTarget.Type.HOME))
-//                    .setContentTitle("Welcome to Calendula!")
-//                    .setContentText("See the menu to ...")
-//                    .hideOnTouchOutside()
-//                    .build();
-//
-//        sv.setOnShowcaseEventListener(new OnShowcaseEventListener() {
-//            @Override
-//            public void onShowcaseViewHide(ShowcaseView showcaseView) {
-//                new ShowcaseView.Builder(HomeActivity.this)
-//                        .setTarget(new PointTarget(
-//                                (int) Screen.getDpSize(HomeActivity.this).x * 2,
-//                                (int) Screen.getDpSize(HomeActivity.this).y))
-//                        .setContentTitle("Discover")
-//                        .doNotBlockTouches()
-//                        .setContentText("Swipe left to see...")
-//                        .hideOnTouchOutside()
-//                        .build().show();
-//            }
-//
-//            @Override
-//            public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
-//
-//            }
-//
-//            @Override
-//            public void onShowcaseViewShow(ShowcaseView showcaseView) {
-//
-//            }
-//        });
-//
-//        sv.show();
-
-
-//        }
     }
 
     @Override
@@ -589,7 +541,9 @@ public class HomeActivity extends ActionBarActivity implements
     public void onPageSelected(int page) {
         invalidateOptionsMenu();
         updateTitle(page);
+        showTutorialStage(page);
         if (page == 0) {
+
             hideAddButton();
             hideTabs();
         } else {
@@ -763,5 +717,35 @@ public class HomeActivity extends ActionBarActivity implements
         ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
         ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
     }
+
+
+    private void startTutorialIfNeeded() {
+        tutorial.show(AppTutorial.WELCOME, AppTutorial.HOME_INFO, this);
+    }
+
+    private void showTutorialStage(int step) {
+        switch (step) {
+            case 0:
+                //Home
+                tutorial.show(AppTutorial.HOME_INFO, this);
+                break;
+            case 1:
+                // routines
+                tutorial.show(AppTutorial.ROUTINES_INFO, this);
+                break;
+            case 2:
+                // meds
+                tutorial.show(AppTutorial.MEDICINES_INFO, this);
+                break;
+            case 3:
+                // schedules
+                tutorial.show(AppTutorial.SCHEDULES_INFO, this);
+                break;
+            default:
+                break;
+        }
+
+    }
+
 
 }

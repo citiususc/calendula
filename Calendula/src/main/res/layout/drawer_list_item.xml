@@ -7,7 +7,7 @@
         android:id="@+id/text"
         android:text="Option text"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_height="55dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:gravity="center_vertical"
         android:paddingLeft="16dp"

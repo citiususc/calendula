@@ -145,21 +145,6 @@
         <item name="android:textSize">18dp</item>
     </style>
 
-    <!--<style name="CustomShowcaseTheme" parent="ShowcaseView.Light">-->
-    <!--<item name="sv_titleTextColor">@color/white</item>-->
-    <!--<item name="sv_detailTextColor">@color/white</item>-->
-    <!--<item name="sv_backgroundColor">#cc111111</item>-->
-    <!--<item name="sv_buttonBackgroundColor">#ffffff</item>-->
-    <!--<item name="sv_buttonText">Close</item>-->
-    <!--<item name="sv_detailTextAppearance">@style/CustomShowcaseDetail</item>-->
-    <!--</style>-->
-
-    <!--<style name="CustomShowcaseDetail" parent="TextAppearance.ShowcaseView.Detail.Light">-->
-    <!--<item name="android:textColor">#ffffff</item>-->
-    <!--<item name="android:shadowColor">#FF0000</item>-->
-    <!--<item name="android:shadowRadius">0</item>-->
-    <!--</style>-->
-
     <style name="schedule_day_unselected">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -192,5 +177,37 @@
         <item name="android:layout_height">80dp</item>
         <item name="android:layout_marginBottom">5dp</item>
     </style>
+
+
+    <style name="CustomShowcaseTheme" parent="ShowcaseView.Light">
+        <item name="sv_backgroundColor">#bb151515</item>
+        <item name="sv_showcaseColor">@color/android_blue</item>
+        <item name="sv_detailTextColor">@color/android_blue</item>
+        <item name="sv_buttonText">Entendido</item>
+        <item name="sv_tintButtonColor">true</item>
+        <item name="sv_titleTextAppearance">@style/CustomTitle</item>
+        <item name="sv_detailTextAppearance">@style/CustomDetail</item>
+    </style>
+
+    <style name="CustomShowcaseTheme2" parent="ShowcaseView.Light">
+        <item name="sv_backgroundColor">#cc151515</item>
+        <item name="sv_showcaseColor">@color/android_blue</item>
+        <item name="sv_detailTextColor">@color/android_blue</item>
+        <item name="sv_buttonText">Continuar</item>
+        <item name="sv_tintButtonColor">true</item>
+        <item name="sv_titleTextAppearance">@style/CustomTitle</item>
+        <item name="sv_detailTextAppearance">@style/CustomDetail</item>
+    </style>
+
+    <style name="CustomTitle" parent="TextAppearance.ShowcaseView.Title">
+        <item name="android:textColor">@color/android_blue</item>
+        <item name="android:textSize">26sp</item>
+    </style>
+
+    <style name="CustomDetail" parent="TextAppearance.ShowcaseView.Detail">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
 
 </resources>
