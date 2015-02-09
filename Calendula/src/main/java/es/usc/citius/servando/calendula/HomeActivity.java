@@ -165,6 +165,9 @@ public class HomeActivity extends ActionBarActivity implements
         setTutorial(new AppTutorial());
         getTutorial().init(this, tabs);
 
+        Log.d(TAG, "OnCreate  - Routine Id Extra: " + getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l));
+        checkReminder(getIntent());
+        
         startTutorialIfNeeded();
         
     }
@@ -402,25 +405,19 @@ public class HomeActivity extends ActionBarActivity implements
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
-
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        checkReminder(intent);
+    }
+
+    private void checkReminder(Intent intent) {
+        Log.d(TAG, "CheckReminder - Routine Id Extra: " + intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l));
         long remindRoutineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l);
         if (remindRoutineId != -1) {
             showReminder(remindRoutineId);
-            Log.d("Home", (mViewPager == null) + ", " + mViewPager.getCurrentItem() + ", " + mViewPager.getAdapter().getCount());
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        long remindRoutineId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l);
-        if (remindRoutineId != -1) {
-            showReminder(remindRoutineId);
-            Log.d("Home", (mViewPager == null) + ", " + mViewPager.getCurrentItem() + ", " + mViewPager.getAdapter().getCount());
-        }
+            getIntent().removeExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID);
+        }        
     }
 
     @Override
