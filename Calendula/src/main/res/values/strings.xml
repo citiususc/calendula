@@ -194,5 +194,21 @@
 
     <string name="medicine_no_name_error_message">Please, type a name</string>
 
+    <!-- App Tutorial-->
+    <string name="tutorial_welcome_title">Welcome to Calendula!</string>
+    <string name="tutorial_welcome_text">Calendula will help you manage your therapeutic schedule. Pending meds for today are shown in this screen.</string>
+    <string name="tutorial_homeinfo_title">Explore!</string>
+    <string name="tutorial_homeinfo_text">You can access to all Calendula features through the menu. You can also reach the most common options by swiping right!</string>
+    <string name="tutorial_routine_title">Make good habits</string>
+    <string name="tutorial_routine_text">Routines allow you to associate medication intakes with your daily activities. Add your own routines and don\'t worry about therapy interferences!</string>
+    <string name="tutorial_meds_title">Manage your medicines</string>
+    <string name="tutorial_meds_text">Keep track of your medicines by adding them to the medical kit. Future versions will include a more advanced stock management!</string>
+    <string name="tutorial_schedule_title">Manage your schedules!</string>
+    <string name="tutorial_schedule_text">Schedules allow us to notify you when it is time to take your meds. Add your timetables and doses and  don\'t ever forget again!</string>
+    <string name="tutorial_next">Coninue</string>
+    <string name="tutorial_understood">Got it</string>
+    <string name="tutorial_notifications_title">Check taken meds!</string>
+    <string name="tutorial_notifications_text">Remember to confirm your intakes or we will continue reminding you. You can change the notification settings in the options menu. </string>
+
 </resources>
 

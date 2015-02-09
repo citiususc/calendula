@@ -13,6 +13,7 @@ import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.PointTarget;
 import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import java.util.HashMap;
 
@@ -29,12 +30,19 @@ public class AppTutorial {
     public static final String ROUTINES_INFO = "ROUTINES_INFO";
     public static final String MEDICINES_INFO = "MEDICINES_INFO";
     public static final String SCHEDULES_INFO = "SCHEDULES_INFO";
+    public static final String NOTIFICATION_INFO = "NOTIFICATION_INFO";
     private static final String TAG = "AppTutorial";
     ShowcaseView showcaseView;
     HashMap<String, ShowcaseInfo> stages = new HashMap<String, ShowcaseInfo>();
 
+    boolean open = false;
 
     public void show(final String stage, Activity activity) {
+        show(stage, -1, activity);
+
+    }
+
+    public void show(final String stage, int target, Activity activity) {
 
         Log.d(TAG, "Showing stage " + stage);
 
@@ -54,8 +62,17 @@ public class AppTutorial {
 
             final ShowcaseInfo info = stages.get(stage);
 
-            showcaseView = new ShowcaseView.Builder(activity)
-                    .setTarget(info.target != null ? info.target : Target.NONE)
+            Target t;
+
+            if (target != -1) {
+                t = new ViewTarget(target, activity);
+            } else {
+                t = info.target != null ? info.target : Target.NONE;
+            }
+
+            open = true;
+            showcaseView = new ShowcaseView.Builder(activity, true)
+                    .setTarget(t)
                     .setStyle(R.style.CustomShowcaseTheme)
                     .setContentTitle(info.title)
                     .setContentText(info.detail)
@@ -63,6 +80,7 @@ public class AppTutorial {
                         @Override
                         public void onShowcaseViewHide(ShowcaseView showcaseView) {
                             prefs.edit().putBoolean(preference_key, true).commit();
+                            open = false;
                             if (info.listener != null) {
                                 Log.d(TAG, "Call listener onHide");
                                 info.listener.onHide();
@@ -106,15 +124,17 @@ public class AppTutorial {
 
             final ShowcaseInfo info = stages.get(firstStage);
 
-            showcaseView = new ShowcaseView.Builder(activity)
+            open = true;
+            showcaseView = new ShowcaseView.Builder(activity, true)
                     .setTarget(info.target != null ? info.target : Target.NONE)
                     .setStyle(R.style.CustomShowcaseTheme2)
                     .setContentTitle(info.title)
                     .setContentText(info.detail)
                     .setShowcaseEventListener(new OnShowcaseEventListener() {
                         @Override
-                        public void onShowcaseViewHide(ShowcaseView showcaseView) {
+                        public void onShowcaseViewHide(ShowcaseView showcaseView) {                            
                             prefs.edit().putBoolean(preference_key, true).commit();
+                            open = false;
                             show(secondStage, activity);
                         }
 
@@ -144,12 +164,14 @@ public class AppTutorial {
         editor.putBoolean("tutorial_" + ROUTINES_INFO + "_shown", false);
         editor.putBoolean("tutorial_" + MEDICINES_INFO + "_shown", false);
         editor.putBoolean("tutorial_" + SCHEDULES_INFO + "_shown", false);
+        editor.putBoolean("tutorial_" + NOTIFICATION_INFO + "_shown", false);
         editor.commit();
     }
 
 
     public void hide() {
         if (showcaseView != null) {
+            open = false;
             showcaseView.hide();
         }
     }
@@ -159,10 +181,12 @@ public class AppTutorial {
 
         PointF size = Screen.getDpSize(activity);
         int width = (int) (size.x * Screen.getDensity(activity));
+        int height = (int) (size.y * Screen.getDensity(activity));
         int gap = width / 8;
         int pointY = gap * 2;
 
-        PointTarget pth = new PointTarget(new Point(width / 2, width / 3));
+        PointTarget pth = new PointTarget(new Point(width / 2, height / 4));
+        PointTarget pti = new PointTarget(new Point(gap * 7, height / 2 + height / 4));//+ width / 4
         PointTarget ptr = new PointTarget(new Point(gap * 3, pointY));
         PointTarget ptm = new PointTarget(new Point(gap * 5, pointY));
         PointTarget pts = new PointTarget(new Point(gap * 7, pointY));
@@ -170,7 +194,10 @@ public class AppTutorial {
         Log.d(TAG, "Point " + pointY + ", " + tabs.getScrollOffset() + ", " + tabs.getChildAt(0).getId());
 
         stages.put(WELCOME, new ShowcaseInfo(R.string.tutorial_welcome_title, R.string.tutorial_welcome_text, pth));
-        stages.put(HOME_INFO, new ShowcaseInfo(R.string.tutorial_homeinfo_title, R.string.tutorial_homeinfo_text, new PointTarget(new Point(0, 0)), new ShowcaseListener() {
+
+        //new ViewTarget()
+
+        stages.put(HOME_INFO, new ShowcaseInfo(R.string.tutorial_homeinfo_title, R.string.tutorial_homeinfo_text, new PointTarget(new Point(gap, gap)), new ShowcaseListener() {
             @Override
             public void onHide() {
                 Log.d(TAG, "Called listener onHide");
@@ -199,8 +226,15 @@ public class AppTutorial {
         }));
         stages.put(SCHEDULES_INFO, new ShowcaseInfo(R.string.tutorial_schedule_title, R.string.tutorial_schedule_text, pts));
 
+        stages.put(NOTIFICATION_INFO, new ShowcaseInfo(R.string.tutorial_notifications_title, R.string.tutorial_notifications_text, pti, R.style.CustomShowcaseTheme2));
+
+        new ShowcaseInfo(R.string.tutorial_notifications_title, R.string.tutorial_notifications_text, pti, R.style.CustomShowcaseTheme3);
+
     }
 
+    public boolean isOpen() {
+        return open;
+    }
 
     private interface ShowcaseListener {
         void onHide();
@@ -212,18 +246,26 @@ public class AppTutorial {
         public int detail;
         public Target target;
         public ShowcaseListener listener;
+        public int theme = R.style.CustomShowcaseTheme2;
 
-        private ShowcaseInfo(int title, int detail, Target target) {
+        public ShowcaseInfo(int title, int detail, Target target) {
             this.title = title;
             this.detail = detail;
             this.target = target;
         }
 
-        private ShowcaseInfo(int title, int detail, Target target, ShowcaseListener l) {
+        public ShowcaseInfo(int title, int detail, Target target, ShowcaseListener l) {
             this.title = title;
             this.detail = detail;
             this.target = target;
             this.listener = l;
+        }
+
+        public ShowcaseInfo(int title, int detail, Target target, int theme) {
+            this.title = title;
+            this.detail = detail;
+            this.target = target;
+            this.theme = theme;
         }
 
 

@@ -109,7 +109,7 @@ public class HomeActivity extends ActionBarActivity implements
 
 //    ShowcaseView sv;
 
-    AppTutorial tutorial;
+    private AppTutorial tutorial;
     
 
     @Override
@@ -162,8 +162,8 @@ public class HomeActivity extends ActionBarActivity implements
         hideAddButton();
         CalendulaApp.eventBus().register(this);
 
-        tutorial = new AppTutorial();
-        tutorial.init(this, tabs);
+        setTutorial(new AppTutorial());
+        getTutorial().init(this, tabs);
 
         startTutorialIfNeeded();
         
@@ -302,6 +302,14 @@ public class HomeActivity extends ActionBarActivity implements
         mDrawerToggle.syncState();
     }
 
+    public AppTutorial getTutorial() {
+        return tutorial;
+    }
+
+    public void setTutorial(AppTutorial tutorial) {
+        this.tutorial = tutorial;
+    }
+
     class DrawerListAdapter extends ArrayAdapter<String> {
 
         public DrawerListAdapter(Context context, int resource, List<String> items) {
@@ -387,8 +395,8 @@ public class HomeActivity extends ActionBarActivity implements
         else if (position > 6 && position < 9) {
             Toast.makeText(this, getString(R.string.work_in_progress), Toast.LENGTH_SHORT).show();
         } else if (position == 9) {
-            tutorial.reset(this);
-            tutorial.show(AppTutorial.WELCOME, AppTutorial.HOME_INFO, this);
+            getTutorial().reset(this);
+            getTutorial().show(AppTutorial.WELCOME, AppTutorial.HOME_INFO, this);
         }
 
         mDrawerLayout.closeDrawer(mDrawerList);
@@ -500,6 +508,11 @@ public class HomeActivity extends ActionBarActivity implements
     public void onBackPressed() {
 
         boolean backProcesed = false;
+
+        if (tutorial.isOpen()) {
+            tutorial.hide();
+            return;
+        }
 
         Fragment current = getViewPagerFragment(mViewPager.getCurrentItem());
         if (current instanceof OnBackPressedListener) {
@@ -720,26 +733,26 @@ public class HomeActivity extends ActionBarActivity implements
 
 
     private void startTutorialIfNeeded() {
-        tutorial.show(AppTutorial.WELCOME, AppTutorial.HOME_INFO, this);
+        getTutorial().show(AppTutorial.WELCOME, AppTutorial.HOME_INFO, this);
     }
 
     private void showTutorialStage(int step) {
         switch (step) {
             case 0:
                 //Home
-                tutorial.show(AppTutorial.HOME_INFO, this);
+                getTutorial().show(AppTutorial.HOME_INFO, this);
                 break;
             case 1:
                 // routines
-                tutorial.show(AppTutorial.ROUTINES_INFO, this);
+                getTutorial().show(AppTutorial.ROUTINES_INFO, this);
                 break;
             case 2:
                 // meds
-                tutorial.show(AppTutorial.MEDICINES_INFO, this);
+                getTutorial().show(AppTutorial.MEDICINES_INFO, this);
                 break;
             case 3:
                 // schedules
-                tutorial.show(AppTutorial.SCHEDULES_INFO, this);
+                getTutorial().show(AppTutorial.SCHEDULES_INFO, this);
                 break;
             default:
                 break;

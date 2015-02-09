@@ -28,6 +28,7 @@ import org.joda.time.DateTime;
 
 import java.util.List;
 
+import es.usc.citius.servando.calendula.HomeActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
@@ -35,6 +36,7 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
+import es.usc.citius.servando.calendula.util.AppTutorial;
 
 /**
  * Created by joseangel.pineiro on 10/21/14.
@@ -177,6 +179,10 @@ public class AgendaZoomHelper {
         list.getLayoutAnimation().start();
         TransitionDrawable transition = (TransitionDrawable) v.getBackground();
         transition.startTransition(250);
+
+        Log.d("AgendaZoomHelper", "Show tutorial if needed...");
+        ((HomeActivity) activity).getTutorial().show(AppTutorial.NOTIFICATION_INFO, R.id.check_button, activity);
+
         animator = null;
     }
 
