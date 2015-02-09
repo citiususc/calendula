@@ -74,10 +74,10 @@
             android:name="es.usc.citius.servando.calendula.activities.AlertFullScreenActivity"
             android:label="@string/title_activity_schedules"
             android:screenOrientation="portrait" />
-        <activity
-            android:name="es.usc.citius.servando.calendula.activities.LoginActivity"
-            android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateVisible" />
+        <!--<activity-->
+        <!--android:name="es.usc.citius.servando.calendula.activities.LoginActivity"-->
+        <!--android:label="@string/title_activity_login"-->
+        <!--android:windowSoftInputMode="adjustResize|stateVisible" />-->
         <activity
             android:name="es.usc.citius.servando.calendula.activities.StartActivity"
             android:screenOrientation="portrait"
@@ -93,10 +93,8 @@
         <receiver android:name="es.usc.citius.servando.calendula.scheduling.AlarmReceiver" />
         <receiver android:name="es.usc.citius.servando.calendula.scheduling.NotificationEventReceiver" />
 
-        <receiver
-            android:name="es.usc.citius.servando.calendula.scheduling.BootReceiver"
-            android:enabled="false">
-            <intent-filter>
+        <receiver android:name="es.usc.citius.servando.calendula.scheduling.BootReceiver">
+        <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
         </receiver>
