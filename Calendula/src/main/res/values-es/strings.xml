@@ -208,7 +208,7 @@
     <string name="dialog_no_option">No</string>
     <string name="medicine_no_name_error_message">Indica un nombre, por favor</string>
 
-    App Tutorial
+    <!--App Tutorial-->
     <string name="tutorial_welcome_title">Bienvenido a Caléndula!</string>
     <string name="tutorial_welcome_text">Caléndula te permitirá gestionar fácilmente tu pauta terapéutica. Desde esta pantalla podrás ver tus medicinas pendientes para hoy.</string>
     <string name="tutorial_homeinfo_title">Explora!</string>
@@ -223,6 +223,9 @@
     <string name="tutorial_understood">Entendido</string>
     <string name="tutorial_notifications_title">Aviso de medicación!</string>
     <string name="tutorial_notifications_text">Toma tus medicinas y recuerda confirmalo, o seguiremos avisándote. Puedes cambiar la configuración de notificaciones en el menú de opciones. </string>
+    <string name="notification_repeat_message">La alarma se repetirá a las %1$s</string>
+    <string name="notification_cancel_now">Cancelar ahora</string>
+
 
 </resources>
 

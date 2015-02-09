@@ -60,13 +60,9 @@ public class DailyScheduleItem extends Model {
         this.scheduleItem = scheduleItem;
     }
 
-    //public DateTime date() {
-//        return date;
-//    }
-
-//    public void setDate(DateTime date) {
-//        this.date = date;
-//    }
+    public void setTimeTaken(LocalTime date) {
+        this.timeTaken = date;
+    }
 
     public boolean takenToday() {
         return takenToday;

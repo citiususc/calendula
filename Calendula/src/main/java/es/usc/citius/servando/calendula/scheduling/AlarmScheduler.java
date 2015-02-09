@@ -18,6 +18,7 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ReminderNotification;
 import es.usc.citius.servando.calendula.activities.StartActivity;
+import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
@@ -73,6 +74,7 @@ public class AlarmScheduler {
     private void setAlarm(Routine routine, Context ctx) {
         // set the routine alarm only if there are schedules associated
         if (ScheduleUtils.getRoutineScheduleItems(routine, false).size() > 0) {
+
             Log.d(TAG, "Updating routine alarm [" + routine.name() + "]");
             // get routine pending intent
             PendingIntent routinePendingIntent = alarmPendingIntent(ctx, routine);
@@ -123,6 +125,14 @@ public class AlarmScheduler {
     }
 
     private void cancelDelayedAlarm(Routine routine, Context ctx) {
+
+        // when cancelling reminder, update time taken to now, but don't set as taken
+
+        for (ScheduleItem scheduleItem : routine.scheduleItems()) {
+            DailyScheduleItem ds = DailyScheduleItem.findByScheduleItem(scheduleItem);
+            ds.setTimeTaken(DateTime.now().toLocalTime());
+        }
+        
         // get delay routine pending intent
         PendingIntent routinePendingIntent = alarmDelayPendingIntent(ctx, routine);
         // Get the AlarmManager service
@@ -155,20 +165,35 @@ public class AlarmScheduler {
 
         // get the schedule items for the current routine, excluding already taken
         List<ScheduleItem> doses = ScheduleUtils.getRoutineScheduleItems(routine, false);
+
         if (!doses.isEmpty()) {
-            final Intent intent = new Intent(ctx, StartActivity.class);
-            intent.putExtra("action", StartActivity.ACTION_SHOW_REMINDERS);
-            intent.putExtra("routine_id", routine.getId());
 
-            ReminderNotification.notify(ctx, ctx.getResources().getString(R.string.meds_time), routine, doses, intent);
+            boolean notify = false;
+            // check if all items have timeTaken (cancelled notifications)            
+            for (ScheduleItem scheduleItem : doses) {
+                DailyScheduleItem ds = DailyScheduleItem.findByScheduleItem(scheduleItem);
+                if (ds != null && ds.timeTaken() == null) {
+                    notify = true;
+                    break;
+                }
 
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-            String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
-            long delay = Long.parseLong(delayMinutesStr);
+            }
 
-            // set auto delay if needed
-            if (delay > 0) {
-                delayAlarm(routine, (int) delay * 60 * 1000, ctx);
+            if (notify) {
+                final Intent intent = new Intent(ctx, StartActivity.class);
+                intent.putExtra("action", StartActivity.ACTION_SHOW_REMINDERS);
+                intent.putExtra("routine_id", routine.getId());
+
+                ReminderNotification.notify(ctx, ctx.getResources().getString(R.string.meds_time), routine, doses, intent);
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+                String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
+                long delay = Long.parseLong(delayMinutesStr);
+
+                // set auto delay if needed
+                if (delay > 0) {
+                    delayAlarm(routine, (int) delay * 60 * 1000, ctx);
+                }
             }
         }
     }

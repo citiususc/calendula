@@ -102,7 +102,7 @@ public class ReminderNotification {
 
         if (delayMinutes > 0) {
             String repeatTime = DateTime.now().plusMinutes((int) delayMinutes).toString("HH:mm");
-            style.setSummaryText("Alarm will be repeated at " + repeatTime);
+            style.setSummaryText(res.getString(R.string.notification_repeat_message, repeatTime));
         } else {
             style.setSummaryText(doses.size() + " meds to take at " + r.name());
         }
@@ -185,7 +185,7 @@ public class ReminderNotification {
                         //.setOngoing(true)
                         // add delay button
                         //.addAction(R.drawable.ic_history_white_24dp, "Delay " + delayMinutes + " minutes", delayIntent)
-                .addAction(R.drawable.ic_alarm_off_white_24dp, "Cancel now", cancelIntent)
+                .addAction(R.drawable.ic_alarm_off_white_24dp, res.getString(R.string.notification_cancel_now), cancelIntent)
                         // Show an expanded list of items on devices running Android 4.1
                         // or later.
                 .setStyle(style)

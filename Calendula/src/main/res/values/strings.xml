@@ -210,5 +210,9 @@
     <string name="tutorial_notifications_title">Check taken meds!</string>
     <string name="tutorial_notifications_text">Remember to confirm your intakes or we will continue reminding you. You can change the notification settings in the options menu. </string>
 
+
+    <string name="notification_repeat_message">Alarm will be repeated at %1$s</string>
+    <string name="notification_cancel_now">Cancel now</string>
+
 </resources>
 
