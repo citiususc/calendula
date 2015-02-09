@@ -130,7 +130,10 @@ public class AlarmScheduler {
 
         for (ScheduleItem scheduleItem : routine.scheduleItems()) {
             DailyScheduleItem ds = DailyScheduleItem.findByScheduleItem(scheduleItem);
-            ds.setTimeTaken(DateTime.now().toLocalTime());
+            ds.setTimeTaken(LocalTime.now());
+            ds.save();
+            Log.d(TAG, "Set time taken to " + ds.scheduleItem().schedule().medicine().name());
+            
         }
         
         // get delay routine pending intent
@@ -173,6 +176,7 @@ public class AlarmScheduler {
             for (ScheduleItem scheduleItem : doses) {
                 DailyScheduleItem ds = DailyScheduleItem.findByScheduleItem(scheduleItem);
                 if (ds != null && ds.timeTaken() == null) {
+                    Log.d(TAG, ds.scheduleItem().schedule().medicine().name() + " not checked or cancelled. Notify!");
                     notify = true;
                     break;
                 }
