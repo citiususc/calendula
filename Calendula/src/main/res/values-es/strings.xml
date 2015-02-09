@@ -221,8 +221,8 @@
     <string name="tutorial_schedule_text">Las pautas nos permiten avisarte cuando es hora de tomar tus medicinas. Añade tus dosis y horarios y no vuelvas a olvidarte nunca!</string>
     <string name="tutorial_next">Coninuar</string>
     <string name="tutorial_understood">Entendido</string>
-    <string name="tutorial_notifications_title">Aviso de medicación!</string>
-    <string name="tutorial_notifications_text">Toma tus medicinas y recuerda confirmalo, o seguiremos avisándote. Puedes cambiar la configuración de notificaciones en el menú de opciones. </string>
+    <string name="tutorial_notifications_title">Avisos de medicación</string>
+    <string name="tutorial_notifications_text">Toma tus medicinas y recuerda confirmar que lo has hecho, o de lo contrario te seguiremos avisando. Puedes cambiar la configuración de notificaciones en el menú de opciones. </string>
     <string name="notification_repeat_message">La alarma se repetirá a las %1$s</string>
     <string name="notification_cancel_now">Cancelar ahora</string>
 
