@@ -4,6 +4,9 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -12,6 +15,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.RingtonePreference;
 import android.util.Log;
 
 import java.util.List;
@@ -39,10 +43,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
-
+    static Context ctx;
+    
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        ctx = getBaseContext();
         setupSimplePreferencesScreen();
     }
 
@@ -59,14 +65,16 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         // In the simplified UI, fragments are not used at all and we instead
         // use the older PreferenceActivity APIs.
-
+//        PreferenceCategory fakeHeader = new PreferenceCategory(this);
+//        fakeHeader.setTitle(R.string.pref_header_general);
+//        getPreferenceScreen().addPreference(fakeHeader);
         // Add 'general' preferences.
         addPreferencesFromResource(R.xml.pref_general);
 
         // Add 'notifications' preferences, and a corresponding header.
-        PreferenceCategory fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle(R.string.pref_header_notifications);
-        getPreferenceScreen().addPreference(fakeHeader);
+        PreferenceCategory fakeHeader2 = new PreferenceCategory(this);
+        fakeHeader2.setTitle(R.string.pref_header_notifications);
+        getPreferenceScreen().addPreference(fakeHeader2);
         addPreferencesFromResource(R.xml.pref_notification);
 
         // Add 'data and sync' preferences, and a corresponding header.
@@ -81,6 +89,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         bindPreferenceSummaryToValue(findPreference("display_name"));
         bindPreferenceSummaryToValue(findPreference("alarm_repeat_frequency"));
         bindPreferenceSummaryToValue(findPreference("alarm_reminder_window"));
+        bindPreferenceSummaryToValue(findPreference("pref_notification_tone"));
     }
 
     /**
@@ -145,6 +154,17 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                                 ? listPreference.getEntries()[index]
                                 : null);
 
+            } else if (preference instanceof RingtonePreference) {
+                // For list preferences, look up the correct display value in
+                // the preference's 'entries' list.
+                RingtonePreference ringtonePreference = (RingtonePreference) preference;
+                Log.d("Settings", " Type: " + ringtonePreference.getRingtoneType() + " , value: " + value);
+
+                Uri ringtoneUri = Uri.parse(value.toString());
+                Ringtone ringtone = RingtoneManager.getRingtone(ctx, ringtoneUri);
+                String name = ringtone.getTitle(ctx);
+                preference.setSummary(name);
+                
             } else {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
@@ -166,12 +186,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
      */
     private static void bindPreferenceSummaryToValue(Preference preference) {
         // Set the listener to watch for value changes.
-        preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                return sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, newValue);
-            }
-        });
+        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
         // Trigger the listener immediately with the preference's
         // current value.

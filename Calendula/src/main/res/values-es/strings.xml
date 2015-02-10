@@ -170,6 +170,10 @@
     <string name="pref_title_new_alarm_notification">Alarmas</string>
     <string name="pref_title_reminder_window">Límite de repetición de alarmas</string>
     <string name="pref_title_sync_frequency">Repetir alarmas</string>
+
+    <string name="pref_notification_tone">Tono de alarma</string>
+    <string name="pref_notification_tone_sum">Por defecto</string>
+
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Contraseña (opcional)</string>
     <string name="splash_quote">Gestiona tu terapia de forma sencilla</string>

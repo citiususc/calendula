@@ -11,6 +11,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -140,6 +141,8 @@ public class ReminderNotification {
                 cancel,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
+        Uri ringtoneUri = Uri.parse(PreferenceManager.getDefaultSharedPreferences(context).getString("pref_notification_tone", "default ringtone"));
+            
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 
@@ -190,9 +193,9 @@ public class ReminderNotification {
                         // or later.
                 .setStyle(style)
                         //.setLights(0x00ff0000, 500, 1000)
-                .setPriority(Notification.PRIORITY_MAX)
+                .setPriority(Notification.PRIORITY_HIGH)
                 .setVibrate(new long[]{1000, 500, 200, 500, 200, 500})
-                .setSound(Settings.System.DEFAULT_RINGTONE_URI)
+                .setSound(ringtoneUri != null ? ringtoneUri : Settings.System.DEFAULT_RINGTONE_URI)
                         // Automatically dismiss the notification when it is touched.
                 .setAutoCancel(false);
 
