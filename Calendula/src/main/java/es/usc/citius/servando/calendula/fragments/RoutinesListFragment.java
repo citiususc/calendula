@@ -137,7 +137,7 @@ public class RoutinesListFragment extends Fragment {
                         notifyDataChange();
                     }
                 })
-                .setNegativeButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
