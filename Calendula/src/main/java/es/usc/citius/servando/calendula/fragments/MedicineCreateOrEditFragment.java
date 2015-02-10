@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -139,6 +140,10 @@ public class MedicineCreateOrEditFragment extends Fragment {
     public boolean validate() {
         if (mNameTextView.getText() != null && mNameTextView.getText().length() > 0) {
             ScheduleCreationHelper.instance().setMedNameToChange(mNameTextView.getText().toString());
+            if (selectedPresentation == null) {
+                Toast.makeText(getActivity(), "Please, select a presentation!", Toast.LENGTH_SHORT).show();
+                return false;
+            }
             return true;
         } else {
             mNameTextView.setError(getString(R.string.medicine_no_name_error_message));
@@ -296,6 +301,11 @@ public class MedicineCreateOrEditFragment extends Fragment {
             }
             // if creating
             else {
+
+                if (!validate()) {
+                    return;
+                }
+                
                 Medicine m = new Medicine(name);
                 m.setPresentation(selectedPresentation != null ? selectedPresentation : Presentation.UNKNOWN);
                 if (mMedicineEditCallback != null) {

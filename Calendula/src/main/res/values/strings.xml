@@ -193,6 +193,7 @@
     <string name="dialog_no_option">No</string>
 
     <string name="medicine_no_name_error_message">Please, type a name</string>
+    <string name="medicine_no_presentation_error_message">Please, select a presentation</string>
 
     <!-- App Tutorial-->
     <string name="tutorial_welcome_title">Welcome to Calendula!</string>
@@ -209,7 +210,6 @@
     <string name="tutorial_understood">Got it</string>
     <string name="tutorial_notifications_title">Check taken meds!</string>
     <string name="tutorial_notifications_text">Remember to confirm your intakes or we will continue reminding you. You can change the notification settings in the options menu. </string>
-
 
     <string name="notification_repeat_message">Alarm will be repeated at %1$s</string>
     <string name="notification_cancel_now">Cancel now</string>

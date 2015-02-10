@@ -211,6 +211,7 @@
     <string name="dialog_yes_option">Si</string>
     <string name="dialog_no_option">No</string>
     <string name="medicine_no_name_error_message">Indica un nombre, por favor</string>
+    <string name="medicine_no_presentation_error_message">Selecciona una presentación, por favor</string>
 
     <!--App Tutorial-->
     <string name="tutorial_welcome_title">Bienvenido a Caléndula!</string>
