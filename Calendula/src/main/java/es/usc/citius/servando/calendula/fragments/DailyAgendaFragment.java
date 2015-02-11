@@ -173,7 +173,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                                 ((HomeActivity) getActivity()).hideAddButton();
                                 ((HomeActivity) getActivity()).hideToolbar();
                             } else if (translationY > (toolbarHeight - profileFragmentHeight)) {
-                                ((HomeActivity) getActivity()).enableToolbarTransparency();
+                                //((HomeActivity) getActivity()).enableToolbarTransparency();
                                 ((HomeActivity) getActivity()).showAddButton();
                                 ((HomeActivity) getActivity()).showToolbar();
                             }

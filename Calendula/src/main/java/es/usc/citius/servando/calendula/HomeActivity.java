@@ -238,18 +238,26 @@ public class HomeActivity extends ActionBarActivity implements
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                if (mViewPager.getCurrentItem() == 0 && !toolbarVisible)
+                if (mViewPager.getCurrentItem() == 0)
                     setActionBarColor(getResources().getColor(R.color.transparent));
                 updateTitle(mViewPager.getCurrentItem());
+                int pageNum = mViewPager.getCurrentItem();
+                MenuItem expand = toolbar.getMenu().findItem(R.id.action_expand);
+                if (pageNum == 0 && expand != null) {
+                    expand.setVisible(true);
+                }
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                if (mViewPager.getCurrentItem() == 0 && !toolbarVisible)
-                    setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
+                setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
                 toolbar.setTitle(R.string.toolbar_menu_title);
-                //tutorial.hide();
+                int pageNum = mViewPager.getCurrentItem();
+                MenuItem expand = toolbar.getMenu().findItem(R.id.action_expand);
+                if (pageNum == 0 && expand != null) {
+                    expand.setVisible(false);
+                }
             }
         };
 
@@ -336,7 +344,7 @@ public class HomeActivity extends ActionBarActivity implements
                 ((TextView) v.findViewById(R.id.text)).setText(item);
                 ((ImageView) v.findViewById(R.id.imageView)).setImageResource(getActionDrawable(position));
                 ((RoundedImageView) v.findViewById(R.id.imageViewbg)).setImageResource(getActionColor(position));
-                ((RoundedImageView) v.findViewById(R.id.imageViewbg)).setMutateBackground(true);
+                ((RoundedImageView) v.findViewById(R.id.imageViewbg)).mutateBackground(true);
 
                 if (position == 8 || position == 9)
                     v.setEnabled(false);
@@ -438,7 +446,6 @@ public class HomeActivity extends ActionBarActivity implements
     public boolean onPrepareOptionsMenu(Menu menu) {
         int pageNum = mViewPager.getCurrentItem();
         if (pageNum == 0) {
-
             boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
             menu.findItem(R.id.action_expand).setVisible(true);
             menu.findItem(R.id.action_expand).setIcon(
