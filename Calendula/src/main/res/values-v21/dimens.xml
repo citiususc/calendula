@@ -1,0 +1,4 @@
+<resources>
+    <!-- Fix bug with showcaseview button positioning on android L -->
+    <dimen name="button_margin">50dp</dimen>
+</resources>
