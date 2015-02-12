@@ -25,12 +25,16 @@
         <item>Schedules</item>
     </string-array>
 
+    <string name="drawer_top_option">Top</string>
     <string name="drawer_menu_option">Menu</string>
+    <string name="drawer_bottom_option">Bottom</string>
     <string name="drawer_services_option">Tools</string>
+    <string name="drawer_help_option">Help</string>
+    <string name="drawer_settings_option">Settings</string>
 
     <string-array name="home_drawer_actions">
+        <item>@string/drawer_top_option</item>
         <item>Home</item>
-        <item>Settings</item>
         <item>@string/drawer_menu_option</item>
         <item>Routines</item>
         <item>@string/title_activity_medicines</item>
@@ -38,7 +42,7 @@
         <item>@string/drawer_services_option</item>
         <item>Pharmacies</item>
         <item>Plan trip</item>
-        <item>Help</item>
+        <item>@string/drawer_bottom_option</item>
 
     </string-array>
 
@@ -189,7 +193,7 @@
     <string name="remove_routine_message_short">Remove %1$s routine?</string>
     <string name="remove_medicine_message_short">Remove %1$s?</string>
     <string name="remove_routine_dialog_title">Remove routine</string>
-    
+
     <string name="dialog_yes_option">Yes</string>
     <string name="dialog_no_option">No</string>
 

@@ -24,12 +24,17 @@
         <item>Pautas</item>
     </string-array>
 
+
+    <string name="drawer_top_option">Top</string>
+    <string name="drawer_bottom_option">Bottom</string>
     <string name="drawer_menu_option">Menú</string>
     <string name="drawer_services_option">Herramientas</string>
+    <string name="drawer_help_option">Ayuda</string>
+    <string name="drawer_settings_option">Ajustes</string>
 
     <string-array name="home_drawer_actions">
+        <item>@string/drawer_top_option</item>
         <item>Inicio</item>
-        <item>Opciones</item>
         <item>@string/drawer_menu_option</item>
         <item>Rutinas</item>
         <item>@string/title_activity_medicines</item>
@@ -37,7 +42,7 @@
         <item>@string/drawer_services_option</item>
         <item>Farmacias</item>
         <item>Plan de viaje</item>
-        <item>Ayuda</item>
+        <item>@string/drawer_bottom_option</item>
     </string-array>
 
     <string name="title_activity_routines">Rutinas</string>

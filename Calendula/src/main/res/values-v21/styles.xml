@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <!-- Set AppCompat’s actionBarStyle -->
+        <!--<item name="actionBarStyle">@style/MyActionBar</item>-->
+        <item name="windowActionBar">false</item>
+        <!-- Set AppCompat’s color theming attrs -->
+        <item name="colorPrimary">@color/android_blue_statusbar</item>
+        <item name="colorPrimaryDark">@color/transparent</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="windowActionModeOverlay">true</item>
+        <!-- The rest of your attributes -->
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    </style>
+</resources>

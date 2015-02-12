@@ -9,8 +9,8 @@
 
         <!-- Set AppCompat’s color theming attrs -->
         <item name="colorPrimary">@color/android_blue_dark</item>
-        <item name="colorPrimaryDark">@color/android_blue_darker</item>
-
+        <item name="colorPrimaryDark">@color/transparent</item>
+        <item name="windowActionModeOverlay">true</item>
         <!-- The rest of your attributes -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
@@ -27,43 +27,7 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
     </style>
-    <!-- Base application theme. -->
-    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
 
-    <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
-    <!--&lt;!&ndash;<item name="android:spinnerDropDownItemStyle">@style/DropDownItemStyle</item>&ndash;&gt;-->
-    <!--<item name="android:actionBarStyle">@style/MyActionBar</item>-->
-    <!--<item name="showcaseViewStyle">@style/CustomShowcaseTheme</item>-->
-    <!--<item name="android:windowActionBarOverlay">true</item>-->
-    <!--&lt;!&ndash; Support library compatibility &ndash;&gt;-->
-    <!--<item name="actionBarStyle">@style/MyActionBar</item>-->
-    <!--<item name="windowActionBarOverlay">true</item>-->
-    <!--</style>-->
-
-    <!--&lt;!&ndash; ActionBar styles &ndash;&gt;-->
-    <!--<style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">-->
-    <!--<item name="android:background">@color/actionbar_background_color</item>-->
-    <!--<item name="android:height">@dimen/action_bar_height</item>-->
-    <!--<item name="android:icon">@drawable/ic_launcher_white</item>-->
-
-    <!--&lt;!&ndash; Support library compatibility &ndash;&gt;-->
-    <!--<item name="background">@color/actionbar_background_color</item>-->
-    <!--</style>-->
-
-
-    <!--<style name="DropDownItemStyle" parent="Widget.AppCompat.Base.DropDownItem.Spinner">-->
-    <!--<item name="android:textAppearance">@style/DropDownItemTextStyle</item>-->
-    <!--</style>-->
-
-    <!-- Theme without ActionBar shadow (inherits main theme) -->
-    <!--<style name="MyActionBarNoShadowTheme" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">-->
-    <!--<item name="android:background">@color/actionbar_background_color</item>-->
-    <!--<item name="android:height">@dimen/action_bar_height</item>-->
-    <!--<item name="android:icon">@drawable/ic_launcher_white</item>-->
-    <!-- Support library compatibility -->
-    <!--<item name="background">@color/actionbar_background_color</item>-->
-    <!--<item name="android:windowContentOverlay">@null</item>-->
-    <!--</style>-->
 
     <style name="home_button">
         <item name="android:textColor">@color/white</item>

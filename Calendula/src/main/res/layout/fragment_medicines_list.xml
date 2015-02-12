@@ -2,16 +2,17 @@
     android:paddingTop="@dimen/action_bar_height"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
-    android:background="#E0EAEF">
+    android:background="@color/android_blue_darker">
 
     <ListView
         android:layout_marginTop="@dimen/tabs_height"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:divider="#E0EAEF"
         android:dividerHeight="0dp"
         android:id="@+id/medicines_list"
-        android:scrollbars="none" />
+        android:scrollbars="none"
+        android:background="#E0EAEF" />
 
     <!--<ImageView-->
     <!--android:layout_width="fill_parent"-->

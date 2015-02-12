@@ -8,17 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:id="@+id/imageView"
-        android:src="@color/android_blue_light"
+        android:src="#dfdfdf"
         android:visibility="visible"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:layout_centerVertical="true" />
 
     <TextView
         android:id="@+id/text"
         android:text="Menu"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        android:layout_height="1dp"
         android:textSize="12sp"
         android:gravity="center_vertical"
         android:paddingLeft="16dp"
@@ -30,7 +28,8 @@
         android:layout_alignParentLeft="false"
         android:textStyle="bold"
         android:layout_centerHorizontal="true"
-        android:background="#E0EAEF" />
+        android:background="#E0EAEF"
+        android:visibility="invisible" />
 
 
 </RelativeLayout>

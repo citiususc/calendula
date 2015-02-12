@@ -8,6 +8,9 @@
     <dimen name="normal_button_height">50dp</dimen>
     <dimen name="action_bar_height">56dp</dimen>
     <dimen name="tabs_height">56dp</dimen>
+    <dimen name="tabs_margin_top">56dp</dimen>
+
+    <dimen name="status_bar_height">0dp</dimen>
     <!-- action_bar_height + tabs_height -->
     <dimen name="fragment_tabs_margin_top">130dp</dimen>
 

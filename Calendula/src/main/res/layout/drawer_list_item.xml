@@ -8,16 +8,15 @@
         android:text="Option text"
         android:layout_width="wrap_content"
         android:layout_height="55dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:gravity="center_vertical"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:textColor="#777777"
+        android:textColor="#8a8a8a"
         android:layout_alignParentRight="false"
         android:layout_alignParentEnd="false"
-        android:typeface="normal"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10dp" />
+        android:layout_marginLeft="10dp"
+        android:textSize="18sp" />
 
 
     <com.makeramen.RoundedImageView
@@ -32,7 +31,6 @@
         app:riv_oval="true"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:layout_marginRight="10dp" />
 
     <ImageView

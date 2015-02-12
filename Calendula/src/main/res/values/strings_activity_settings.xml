@@ -18,6 +18,9 @@
     <string name="pref_title_sync_frequency">Repeat alarms</string>
     <string name="pref_title_reminder_window">Alarm repetition limit</string>
 
+    <string name="pref_notification_tone">Ringtone</string>
+    <string name="pref_notification_tone_sum">Default</string>
+
 
     <string-array name="pref_alarm_repeat_titles">
         <item>1 min</item>

@@ -6,9 +6,11 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -54,6 +56,7 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.util.AppTutorial;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
+import es.usc.citius.servando.calendula.util.view.ScrimInsetsFrameLayout;
 
 //import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
 //import com.github.amlcurran.showcaseview.ShowcaseView;
@@ -86,6 +89,7 @@ public class HomeActivity extends ActionBarActivity implements
     //    ActionBar mActionBar;
     DrawerLayout mDrawerLayout;
     ListView mDrawerList;
+    ScrimInsetsFrameLayout drawerView;
     ActionBarDrawerToggle mDrawerToggle;
     int currentActionBarColor;
     int previousActionBarColor;
@@ -115,6 +119,16 @@ public class HomeActivity extends ActionBarActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                getWindow().getDecorView().setSystemUiVisibility(
+//                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+//        }
+        
+        
         // set the content view layout
         setContentView(R.layout.activity_home);
         mHandler = new Handler();
@@ -174,10 +188,9 @@ public class HomeActivity extends ActionBarActivity implements
 
     public int getActionDrawable(int index) {
         switch (index) {
-            case 0:
-                return R.drawable.ic_small_home_w;
+
             case 1:
-                return R.drawable.ic_settings_white;
+                return R.drawable.ic_small_home_w;
             case 3:
                 return R.drawable.ic_alarm_white_48dp;
             case 4:
@@ -188,8 +201,6 @@ public class HomeActivity extends ActionBarActivity implements
                 return R.drawable.ic_room_white_48dp;
             case 8:
                 return R.drawable.ic_small_plane_w;
-            case 9:
-                return R.drawable.ic_help_white_48dp;
             default:
                 return R.drawable.ic_small_home_w;
 
@@ -219,7 +230,8 @@ public class HomeActivity extends ActionBarActivity implements
 
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer_list);
+        drawerView = (ScrimInsetsFrameLayout) findViewById(R.id.left_drawer);
 
         List<String> items = Arrays.asList(getResources().getStringArray(R.array.home_drawer_actions));
         // Set the adapter for the list view
@@ -238,26 +250,36 @@ public class HomeActivity extends ActionBarActivity implements
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                if (mViewPager.getCurrentItem() == 0)
-                    setActionBarColor(getResources().getColor(R.color.transparent));
-                updateTitle(mViewPager.getCurrentItem());
-                int pageNum = mViewPager.getCurrentItem();
-                MenuItem expand = toolbar.getMenu().findItem(R.id.action_expand);
-                if (pageNum == 0 && expand != null) {
-                    expand.setVisible(true);
+                if (mViewPager.getCurrentItem() == 0) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+                    }
+                } else {
+//                    getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
                 }
+//                updateTitle(mViewPager.getCurrentItem());
+//                int pageNum = mViewPager.getCurrentItem();
+//                MenuItem expand = toolbar.getMenu().findItem(R.id.action_expand);
+//                if (pageNum == 0 && expand != null) {
+//                    expand.setVisible(true);
+//                }
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
-                toolbar.setTitle(R.string.toolbar_menu_title);
-                int pageNum = mViewPager.getCurrentItem();
-                MenuItem expand = toolbar.getMenu().findItem(R.id.action_expand);
-                if (pageNum == 0 && expand != null) {
-                    expand.setVisible(false);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (mViewPager.getCurrentItem() != 0)
+                        getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
                 }
+                //setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
+//                toolbar.setTitle(R.string.toolbar_menu_title);
+//                int pageNum = mViewPager.getCurrentItem();
+//                MenuItem expand = toolbar.getMenu().findItem(R.id.action_expand);
+//                if (pageNum == 0 && expand != null) {
+//                    expand.setVisible(false);
+//                }
             }
         };
 
@@ -329,10 +351,40 @@ public class HomeActivity extends ActionBarActivity implements
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            String item = getItem(position).toUpperCase();
+            String item = getItem(position);
 
             final LayoutInflater layoutInflater = getLayoutInflater();
 
+            if (item.equalsIgnoreCase(getString(R.string.drawer_top_option))) {
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                String displayName = prefs.getString("display_name", "Calendula");
+
+                View v = layoutInflater.inflate(R.layout.drawer_top, null);
+                ((TextView) v.findViewById(R.id.text)).setText(displayName);
+
+                return v;
+            }
+            if (item.equalsIgnoreCase(getString(R.string.drawer_bottom_option))) {
+                View v = layoutInflater.inflate(R.layout.drawer_bottom, null);
+                TextView help = ((TextView) v.findViewById(R.id.text_help));
+                help.setText(getString(R.string.drawer_help_option));
+                help.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selectItem(10);
+                    }
+                });
+                TextView settings = ((TextView) v.findViewById(R.id.text_settings));
+                settings.setText(getString(R.string.drawer_settings_option));
+                settings.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selectItem(9);
+                    }
+                });
+                return v;
+            }
             if (item.equalsIgnoreCase(getString(R.string.drawer_menu_option)) ||
                     item.equalsIgnoreCase(getString(R.string.drawer_services_option))) {
                 View v = layoutInflater.inflate(R.layout.drawer_list_item_spacer, null);
@@ -351,6 +403,11 @@ public class HomeActivity extends ActionBarActivity implements
 
                 return v;
             }
+        }
+
+        @Override
+        public boolean isEnabled(int position) {
+            return (position != 0 && position != 2 && position != 6);
         }
     }
 
@@ -397,20 +454,21 @@ public class HomeActivity extends ActionBarActivity implements
      */
     public void selectItem(int position) {
         Log.d("Agenda", "Position :" + position);
-        if (position == 0)
-            mViewPager.setCurrentItem(0);
-        else if (position == 1)
-            launchActivity(new Intent(this, SettingsActivity.class));
+        if (position == 1)
+            mViewPager.setCurrentItem(0);        
         else if (position > 2 && position < 6)
             mViewPager.setCurrentItem(position - 2);
         else if (position > 6 && position < 9) {
             Toast.makeText(this, getString(R.string.work_in_progress), Toast.LENGTH_SHORT).show();
         } else if (position == 9) {
+            launchActivity(new Intent(this, SettingsActivity.class));
+        } else if (position == 10) {
+            mViewPager.setCurrentItem(0);
             getTutorial().reset(this);
             getTutorial().show(AppTutorial.WELCOME, AppTutorial.HOME_INFO, this);
         }
 
-        mDrawerLayout.closeDrawer(mDrawerList);
+        mDrawerLayout.closeDrawer(drawerView);
     }
 
     @Override
@@ -486,28 +544,6 @@ public class HomeActivity extends ActionBarActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-//    void logout() {
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//
-//        builder.setTitle("Session will be closed, continue?")
-//                .setPositiveButton("Yes, close", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int i) {
-//                        dialog.dismiss();
-//                        Session.instance().close(getApplicationContext());
-//                        finish();
-//                    }
-//                })
-//                .setNegativeButton("No, cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int i) {
-//                        dialog.dismiss();
-//                    }
-//                }).show();
-//
-//    }
-
     @Override
     public void onBackPressed() {
 
@@ -560,10 +596,13 @@ public class HomeActivity extends ActionBarActivity implements
         updateTitle(page);
         showTutorialStage(page);
         if (page == 0) {
-
             hideAddButton();
-            hideTabs();
+            hideTabs();            
+            
         } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
+            }
             showAddButton();
             if (toolbar.getVisibility() != View.VISIBLE) {
                 toolbar.setVisibility(View.VISIBLE);
@@ -636,10 +675,17 @@ public class HomeActivity extends ActionBarActivity implements
 
 
     public void hideToolbar() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_darker));
+//        }
         toolbar.setVisibility(View.GONE);
+
     }
 
     public void showToolbar() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+//        }
         toolbar.setVisibility(View.VISIBLE);
     }
 
@@ -675,6 +721,9 @@ public class HomeActivity extends ActionBarActivity implements
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         tabs.setVisibility(View.GONE);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+                        }
 
                     }
 

@@ -1,4 +1,9 @@
 <resources>
     <!-- Fix bug with showcaseview button positioning on android L -->
     <dimen name="button_margin">50dp</dimen>
+    <dimen name="status_bar_height">25dip</dimen>
+    <!-- tabs margin top: action bar + status bar-->
+    <dimen name="tabs_margin_top">81dp</dimen>
+    <!-- action_bar_height + status bar height +  tabs_height -->
+    <dimen name="fragment_tabs_margin_top">155dp</dimen>
 </resources>

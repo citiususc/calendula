@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/left_drawer_bottom"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:background="#484848">
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="55dp">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="60dp"
+            android:text="@string/drawer_settings_option"
+            android:id="@+id/text_settings"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            style="@style/Base.TextAppearance.AppCompat.Button" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="26dp"
+            android:src="@drawable/ic_settings_white" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="55dp">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="60dp"
+            android:text="@string/drawer_help_option"
+            android:id="@+id/text_help"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            style="@style/Base.TextAppearance.AppCompat.Button" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="26dp"
+            android:src="@drawable/ic_help_white_48dp" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

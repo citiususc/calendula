@@ -59,6 +59,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
     AgendaZoomHelper zoomHelper;
     private SlideExpandableListAdapter slideAdapter;
     private int toolbarHeight;
+    private int statusbarHeight;
     private int lastVisibleItemCount;
     private Dictionary<Integer, Integer> listViewItemHeights = new Hashtable<Integer, Integer>();
 
@@ -100,6 +101,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         userProInfoFragment = HomeUserInfoFragment.newInstance();
         profileFragmentHeight = (int) getResources().getDimension(R.dimen.header_height);
         toolbarHeight = (int) getResources().getDimension(R.dimen.action_bar_height);
+        statusbarHeight = (int) getResources().getDimension(R.dimen.status_bar_height);
 
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.user_info_fragment, userProInfoFragment)
@@ -169,14 +171,20 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                             }
 
                             if (translationY < toolbarHeight - profileFragmentHeight) {
-//                            ((HomeActivity) getActivity()).disableToolbarTransparency();
                                 ((HomeActivity) getActivity()).hideAddButton();
                                 ((HomeActivity) getActivity()).hideToolbar();
                             } else if (translationY > (toolbarHeight - profileFragmentHeight)) {
-                                //((HomeActivity) getActivity()).enableToolbarTransparency();
                                 ((HomeActivity) getActivity()).showAddButton();
                                 ((HomeActivity) getActivity()).showToolbar();
                             }
+
+//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                                if (translationY <= statusbarHeight -profileFragmentHeight) {
+//                                    getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.black_20));
+//                                } else if (translationY > (statusbarHeight-profileFragmentHeight)) {
+//                                    getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+//                                }
+//                            }
                             userInfoFragment.setTranslationY(translationY);
                         }
                         lastScroll = scrollY;

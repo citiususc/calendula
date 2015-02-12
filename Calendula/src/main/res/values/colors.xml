@@ -17,6 +17,7 @@
     <color name="android_blue">#33B5E5</color>
     <color name="android_blue_dark">#0099CC</color>
     <color name="android_blue_darker">#0077aa</color>
+    <color name="android_blue_statusbar">#006699</color>
     <color name="android_blue_light">#5533B5E5</color>
     <color name="white_80">#EEFFFFFF</color>
     <color name="white_50">#55FFFFFF</color>
@@ -25,11 +26,13 @@
     <color name="black_40">#44000000</color>
     <color name="list_item_shadow">#11222222</color>
     <color name="transparent">#00000000</color>
+    <color name="android_orange_darker">#884411</color>
 
     <!-- Other colors -->
     <color name="splash_background">#151515</color>
     <color name="white">#FFFFFF</color>
     <color name="dark_grey_home">#272727</color>
+    <color name="grey">#484848</color>
     <color name="toolbar_dark_background">#0077aa</color>
     <color name="green_hour_expanded_left">#2299CC00</color>
     <color name="green_hour_expanded_right">#CC99CC00</color>
