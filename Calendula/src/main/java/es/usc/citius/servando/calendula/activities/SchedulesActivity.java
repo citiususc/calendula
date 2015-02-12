@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -54,6 +55,9 @@ public class SchedulesActivity extends ActionBarActivity implements ScheduleList
         mViewPager.setAdapter(mSectionsPagerAdapter);
         listFragmentName = FragmentUtils.makeViewPagerFragmentName(R.id.pager, 0);
         editFragmentName = FragmentUtils.makeViewPagerFragmentName(R.id.pager, 1);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
+        }
 
     }
 

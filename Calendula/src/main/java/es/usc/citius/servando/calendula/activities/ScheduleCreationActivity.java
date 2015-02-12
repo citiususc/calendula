@@ -2,6 +2,7 @@ package es.usc.citius.servando.calendula.activities;
 
 import android.content.Intent;
 import android.graphics.drawable.InsetDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -96,6 +97,9 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         mViewPager.setOnPageChangeListener(this);
         // set first page indicator
         setCurrentPageIndicator(0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
+        }
     }
 
     private void processIntent() {
@@ -220,7 +224,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
                     return false;
                 }
             }
-            
+
             if (ScheduleCreationHelper.instance().getDays(this).length <= 0) {
                 Toast.makeText(this, getString(R.string.schedule_no_day_specified_message), Toast.LENGTH_SHORT).show();
                 return false;

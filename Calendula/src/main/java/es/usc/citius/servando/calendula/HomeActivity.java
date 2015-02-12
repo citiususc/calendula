@@ -1,9 +1,5 @@
 package es.usc.citius.servando.calendula;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,8 +21,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -73,8 +67,8 @@ public class HomeActivity extends ActionBarActivity implements
 
 
     private static final String TAG = "HomeActivity";
-    
-    public static final int ANIM_ACTION_BAR_DURATION = 250;
+
+    public static final int ANIM_ACTION_BAR_DURATION = 100;
     public static final int ANIM_TABS_DURATION = 250;
 
     /**
@@ -152,20 +146,21 @@ public class HomeActivity extends ActionBarActivity implements
         tabs.setShouldExpand(true);
         tabs.setDividerColor(getResources().getColor(R.color.white_50));
         tabs.setDividerColor(getResources().getColor(R.color.transparent));
-        tabs.setIndicatorHeight(10);
+        tabs.setIndicatorHeight(getResources().getDimensionPixelSize(R.dimen.tab_indicator_height));
         tabs.setIndicatorColor(getResources().getColor(R.color.white));
         tabs.setTextColor(getResources().getColor(R.color.white_80));
-        tabs.setUnderlineColor(getResources().getColor(R.color.android_blue_darker));
-        tabs.setBackgroundColor(getResources().getColor(R.color.android_blue_darker));
+        tabs.setUnderlineColor(getResources().getColor(R.color.transparent));
+        tabs.setBackgroundColor(getResources().getColor(R.color.transparent));
         tabs.setVisibility(View.GONE);
         // set up the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-
+        toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
         toolbar.setNavigationIcon(R.drawable.ic_launcher_white);
         // configure toolbar as action bar
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
+
         // initialize left drawer
         initializeDrawer();
 
@@ -250,9 +245,9 @@ public class HomeActivity extends ActionBarActivity implements
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                if (mViewPager.getCurrentItem() == 0) {
+                if (mViewPager.getCurrentItem() != 0) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+                        getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
                     }
                 } else {
 //                    getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
@@ -281,6 +276,7 @@ public class HomeActivity extends ActionBarActivity implements
 //                    expand.setVisible(false);
 //                }
             }
+
         };
 
         // Set the drawer toggle as the DrawerListener
@@ -574,7 +570,12 @@ public class HomeActivity extends ActionBarActivity implements
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        //Log.d("Home", position + ", " + positionOffset + ", " + positionOffsetPixels);
+        if (position == 0) {
+            hideTabs();
+        } else {
+            showTabs();
+        }
+        
     }
 
     void showReminder(final Long routineId) {
@@ -597,18 +598,22 @@ public class HomeActivity extends ActionBarActivity implements
         showTutorialStage(page);
         if (page == 0) {
             hideAddButton();
-            hideTabs();            
-            
-        } else {
+            hideTabs();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
+                getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
             }
+
+        } else {
+        
             showAddButton();
             if (toolbar.getVisibility() != View.VISIBLE) {
                 toolbar.setVisibility(View.VISIBLE);
             }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
+            }
             showTabs();
-            setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
+            setActionBarColor(getResources().getColor(R.color.android_blue_darker));
 
         }
 
@@ -675,9 +680,6 @@ public class HomeActivity extends ActionBarActivity implements
 
 
     public void hideToolbar() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_darker));
-//        }
         toolbar.setVisibility(View.GONE);
 
     }
@@ -692,15 +694,16 @@ public class HomeActivity extends ActionBarActivity implements
 
     public void showTabs() {
         if (!(tabs.getVisibility() == View.VISIBLE)) {
-            final Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_show_tabs);
-            slide.setDuration(ANIM_TABS_DURATION);
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    tabs.setVisibility(View.VISIBLE);
-                    tabs.startAnimation(slide);
-                }
-            }, ANIM_ACTION_BAR_DURATION);
+            tabs.setVisibility(View.VISIBLE);
+//            final Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_show_tabs);
+//            slide.setDuration(ANIM_TABS_DURATION);
+//            mHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+
+//                    tabs.startAnimation(slide);
+//                }
+//            }, ANIM_ACTION_BAR_DURATION);
 
         }
 
@@ -708,63 +711,68 @@ public class HomeActivity extends ActionBarActivity implements
 
     public void hideTabs() {
         if (!(tabs.getVisibility() == View.GONE)) {
-
-            if (Build.VERSION.SDK_INT >= 11) {
-
-                Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_hide_tabs);
-                slide.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        tabs.setVisibility(View.GONE);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
-                        }
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                setActionBarColor(getResources().getColor(R.color.transparent));
-                tabs.startAnimation(slide);
-            } else {
-                setActionBarColor(getResources().getColor(R.color.transparent));
-                tabs.setVisibility(View.GONE);
-
+            tabs.setVisibility(View.GONE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
             }
+            setActionBarColor(getResources().getColor(R.color.transparent));
+
+//            if (Build.VERSION.SDK_INT >= 11) {
+//
+//                Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_hide_tabs);
+//                slide.setAnimationListener(new Animation.AnimationListener() {
+//                    @Override
+//                    public void onAnimationStart(Animation animation) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onAnimationEnd(Animation animation) {
+//                        tabs.setVisibility(View.GONE);
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                            getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    public void onAnimationRepeat(Animation animation) {
+//
+//                    }
+//                });
+//                setActionBarColor(getResources().getColor(R.color.transparent));
+//                tabs.startAnimation(slide);
+//            } else {
+//                setActionBarColor(getResources().getColor(R.color.transparent));
+//                tabs.setVisibility(View.GONE);
+//
+//            }
         }
     }
 
 
     private void setActionBarColor(final int color) {
 
-        if (Build.VERSION.SDK_INT >= 11) {
-            previousActionBarColor = currentActionBarColor;
-            final ObjectAnimator backgroundColorAnimator = ObjectAnimator.ofObject(
-                    toolbar,
-                    "backgroundColor",
-                    new ArgbEvaluator(),
-                    currentActionBarColor,
-                    color);
-            backgroundColorAnimator.setDuration(ANIM_ACTION_BAR_DURATION);
-            backgroundColorAnimator.start();
-            backgroundColorAnimator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    currentActionBarColor = color;
-                }
-            });
-        } else {
-            toolbar.setBackgroundColor(color);
-        }
+//        if (Build.VERSION.SDK_INT >= 11) {
+//            previousActionBarColor = currentActionBarColor;
+//            final ObjectAnimator backgroundColorAnimator = ObjectAnimator.ofObject(
+//                    toolbar,
+//                    "backgroundColor",
+//                    new ArgbEvaluator(),
+//                    currentActionBarColor,
+//                    color);
+//            backgroundColorAnimator.setDuration(ANIM_ACTION_BAR_DURATION);
+//            backgroundColorAnimator.start();
+//            backgroundColorAnimator.addListener(new AnimatorListenerAdapter() {
+//                @Override
+//                public void onAnimationEnd(Animator animation) {
+//                    super.onAnimationEnd(animation);
+//                    currentActionBarColor = color;
+//                }
+//            });
+//        } else {
+//            toolbar.setBackgroundColor(color);
+//        }
 
     }
 

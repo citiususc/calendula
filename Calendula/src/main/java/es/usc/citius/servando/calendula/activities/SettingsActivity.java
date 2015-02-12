@@ -48,6 +48,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.dark_gray));
+        }
         ctx = getBaseContext();
         setupSimplePreferencesScreen();
     }

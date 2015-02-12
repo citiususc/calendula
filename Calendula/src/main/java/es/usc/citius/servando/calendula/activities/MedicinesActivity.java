@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.graphics.drawable.InsetDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -63,6 +64,10 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
 
         if (create) {
             //mViewPager.setCurrentItem(1);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
         }
     }
 

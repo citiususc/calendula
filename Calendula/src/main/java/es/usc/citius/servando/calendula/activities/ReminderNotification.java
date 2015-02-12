@@ -194,7 +194,7 @@ public class ReminderNotification {
                 .setStyle(style)
                         //.setLights(0x00ff0000, 500, 1000)
                 .setPriority(Notification.PRIORITY_HIGH)
-                .setVibrate(new long[]{1000, 500, 200, 500, 200, 500})
+                .setVibrate(new long[]{1000, 200, 500, 200, 100, 200, 1000})
                 .setSound(ringtoneUri != null ? ringtoneUri : Settings.System.DEFAULT_RINGTONE_URI)
                         // Automatically dismiss the notification when it is touched.
                 .setAutoCancel(false);

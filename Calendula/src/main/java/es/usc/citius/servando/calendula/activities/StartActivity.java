@@ -3,6 +3,7 @@ package es.usc.citius.servando.calendula.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.animation.AlphaAnimation;
@@ -59,6 +60,9 @@ public class StartActivity extends Activity {
 
         if (mustShowSplash) {
             startAnimations();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.activity_background_color));
         }
     }
 
