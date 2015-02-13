@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.TransitionDrawable;
@@ -20,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.ocpsoft.pretty.time.PrettyTime;
@@ -43,9 +46,9 @@ import es.usc.citius.servando.calendula.util.AppTutorial;
  */
 public class AgendaZoomHelper {
 
-    Routine r = null;
     LinearLayout list;
     ImageButton doneButton = null;
+    ImageButton delayButton = null;
     Routine routine;
     List<ScheduleItem> doses;
     boolean totalChecked;
@@ -53,9 +56,11 @@ public class AgendaZoomHelper {
 
     boolean somethingChanged = false;
     AnimatorSet animator;
+    Activity activity;
 
-    public AgendaZoomHelper(View v, ZoomHelperListener listener) {
+    public AgendaZoomHelper(View v, Activity activity, ZoomHelperListener listener) {
         this.v = v;
+        this.activity = activity;
         this.mListener = listener;
         list = (LinearLayout) v.findViewById(R.id.reminder_list);
         doneButton = (ImageButton) v.findViewById(R.id.button);
@@ -66,11 +71,41 @@ public class AgendaZoomHelper {
             }
         });
 
+        delayButton = (ImageButton) v.findViewById(R.id.delay_button);
+        delayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDelayDialog(routine);
+            }
+        });
+
+    }
+
+
+    public void showDelayDialog(final Routine routineToDelay) {
+        final int[] values = activity.getResources().getIntArray(R.array.delays_array_values);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(R.string.notification_delay)
+                .setItems(R.array.delays_array, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        int minutes = values[which];
+                        AlarmScheduler.instance().onDelayRoutine(routineToDelay, activity, minutes);
+                        Toast.makeText(activity, "Alarm delayed " + minutes + "minutes", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        builder.create().show();
     }
 
 
     public void show(Activity activity, View from, Routine r) {
         if (animator == null) {
+
+            if (AlarmScheduler.instance().isWithinDefaultMargins(r, activity)) {
+                delayButton.setVisibility(View.VISIBLE);
+            } else {
+                delayButton.setVisibility(View.INVISIBLE);
+            }
+
             routine = r;
             doses = ScheduleUtils.getRoutineScheduleItems(r, true);
             list.removeAllViews();
@@ -86,6 +121,13 @@ public class AgendaZoomHelper {
 
     public void remind(Activity activity, Routine r) {
         if (animator == null) {
+
+            if (AlarmScheduler.instance().isWithinDefaultMargins(r, activity)) {
+                delayButton.setVisibility(View.VISIBLE);
+            } else {
+                delayButton.setVisibility(View.INVISIBLE);
+            }
+
             routine = r;
             doses = ScheduleUtils.getRoutineScheduleItems(r, true);
             list.removeAllViews();

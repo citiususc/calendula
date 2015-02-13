@@ -1,91 +1,93 @@
 <!--<RelativeLayout --><!--xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="fill_parent"--><!--android:layout_height="fill_parent"--><!--android:fitsSystemWindows="true">-->
 
-    <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/drawer_layout"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:background="@color/drawerbg_default"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <es.usc.citius.servando.calendula.util.view.ScrimInsetsFrameLayout
+        android:id="@+id/content_frame"
         android:layout_width="match_parent"
+        app:insetForeground="#5000"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:background="@color/android_blue_dark">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <!--android:layout_marginTop="56dp"-->
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".HomeActivity" />
+
+            <com.astuetz.PagerSlidingTabStrip
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tabs_height"
+                android:background="@color/android_blue_darker"
+                android:layout_marginTop="@dimen/tabs_margin_top" />
+
+            <com.melnykov.fab.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/add_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_action_add"
+                fab:fab_colorNormal="@color/android_blue_dark"
+                fab:fab_colorPressed="@color/android_blue"
+                fab:fab_colorRipple="@color/android_blue_light"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:background="@color/transparent"
+                android:elevation="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:layout_marginTop="@dimen/status_bar_height" />
+        </RelativeLayout>
+
+    </es.usc.citius.servando.calendula.util.view.ScrimInsetsFrameLayout>
+
+    <!-- The main content view -->
+    <!-- The navigation drawer -->
+    <es.usc.citius.servando.calendula.util.view.ScrimInsetsFrameLayout
+        android:id="@+id/left_drawer"
+        app:insetForeground="#5000"
+        android:layout_width="300dp"
+        android:layout_gravity="start"
+        android:layout_height="match_parent"
+        android:background="@color/drawerbg_default"
         android:fitsSystemWindows="true">
 
-        <es.usc.citius.servando.calendula.util.view.ScrimInsetsFrameLayout
-            android:id="@+id/content_frame"
-            android:layout_width="match_parent"
-            app:insetForeground="#2000"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            android:background="@color/android_blue_dark">
 
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        <ListView
+            android:id="@+id/left_drawer_list"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:choiceMode="singleChoice"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"
+            android:background="@color/drawerbg" />
 
-
-                <!--android:layout_marginTop="56dp"-->
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/pager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:context=".HomeActivity" />
-
-                <com.astuetz.PagerSlidingTabStrip
-                    android:id="@+id/tabs"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/tabs_height"
-                    android:background="@color/android_blue_darker"
-                    android:layout_marginTop="@dimen/tabs_margin_top" />
-
-                <com.melnykov.fab.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/add_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|right"
-                    android:layout_margin="16dp"
-                    android:src="@drawable/ic_action_add"
-                    fab:fab_colorNormal="@color/android_blue_dark"
-                    fab:fab_colorPressed="@color/android_blue"
-                    fab:fab_colorRipple="@color/android_blue_light"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true" />
-
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:background="@color/transparent"
-                    android:elevation="0dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    android:layout_marginTop="@dimen/status_bar_height" />
-            </RelativeLayout>
-
-        </es.usc.citius.servando.calendula.util.view.ScrimInsetsFrameLayout>
-
-        <!-- The main content view -->
-        <!-- The navigation drawer -->
-        <es.usc.citius.servando.calendula.util.view.ScrimInsetsFrameLayout
-            android:id="@+id/left_drawer"
-            app:insetForeground="#2000"
-            android:layout_width="300dp"
-            android:layout_gravity="start"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true">
+    </es.usc.citius.servando.calendula.util.view.ScrimInsetsFrameLayout>
 
 
-            <ListView
-                android:id="@+id/left_drawer_list"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:choiceMode="singleChoice"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="0dp"
-                android:background="#fff" />
-
-        </es.usc.citius.servando.calendula.util.view.ScrimInsetsFrameLayout>
-
-
-    </android.support.v4.widget.DrawerLayout>
+</android.support.v4.widget.DrawerLayout>
 
 
     <!--</RelativeLayout>-->

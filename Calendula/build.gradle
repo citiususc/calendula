@@ -29,8 +29,8 @@ android {
     defaultConfig {
         minSdkVersion 11
         targetSdkVersion 21
-        versionCode 4
-        versionName "1.0.3"
+        versionCode 5
+        versionName "1.0.4"
     }
     lintOptions {
         abortOnError false
@@ -39,13 +39,13 @@ android {
     buildTypes {
         release {
             runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),       \
-                  'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),        \
+                   'proguard-rules.txt'
         }
         debug {
             runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),       \
-                  'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),        \
+                   'proguard-rules.txt'
         }
     }
     productFlavors {

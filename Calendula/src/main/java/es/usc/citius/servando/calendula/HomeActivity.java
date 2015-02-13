@@ -36,6 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
+import es.usc.citius.servando.calendula.activities.ReminderNotification;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.activities.SettingsActivity;
@@ -66,11 +67,9 @@ public class HomeActivity extends ActionBarActivity implements
         ScheduleListFragment.OnScheduleSelectedListener {
 
 
-    private static final String TAG = "HomeActivity";
-
     public static final int ANIM_ACTION_BAR_DURATION = 100;
     public static final int ANIM_TABS_DURATION = 250;
-
+    private static final String TAG = "HomeActivity";
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -108,7 +107,7 @@ public class HomeActivity extends ActionBarActivity implements
 //    ShowcaseView sv;
 
     private AppTutorial tutorial;
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,8 +120,8 @@ public class HomeActivity extends ActionBarActivity implements
 //                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 //                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
 //        }
-        
-        
+
+
         // set the content view layout
         setContentView(R.layout.activity_home);
         mHandler = new Handler();
@@ -176,9 +175,8 @@ public class HomeActivity extends ActionBarActivity implements
 
         Log.d(TAG, "OnCreate  - Routine Id Extra: " + getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l));
         checkReminder(getIntent());
-        
         startTutorialIfNeeded();
-        
+
     }
 
     public int getActionDrawable(int index) {
@@ -220,6 +218,20 @@ public class HomeActivity extends ActionBarActivity implements
         }
     }
 
+    public int getDrawerBackgroundCOlor(int page) {
+        switch (page) {
+            case 1:
+                return R.color.android_blue_darker;
+            case 2:
+                return R.color.android_pink_dark;
+            case 3:
+                return R.color.android_green_dark;
+            default:
+                return R.color.drawerbg_default;
+
+        }
+    }
+
 
     private void initializeDrawer() {
 
@@ -245,13 +257,13 @@ public class HomeActivity extends ActionBarActivity implements
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                if (mViewPager.getCurrentItem() != 0) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
-                    }
-                } else {
-//                    getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
-                }
+//                if (mViewPager.getCurrentItem() != 0) {
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                        //getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
+//                    }
+//                } else {
+////                    getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
+//                }
 //                updateTitle(mViewPager.getCurrentItem());
 //                int pageNum = mViewPager.getCurrentItem();
 //                MenuItem expand = toolbar.getMenu().findItem(R.id.action_expand);
@@ -264,10 +276,10 @@ public class HomeActivity extends ActionBarActivity implements
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (mViewPager.getCurrentItem() != 0)
-                        getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
-                }
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    //if (mViewPager.getCurrentItem() != 0)
+//                        //getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+//                }
                 //setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
 //                toolbar.setTitle(R.string.toolbar_menu_title);
 //                int pageNum = mViewPager.getCurrentItem();
@@ -339,6 +351,423 @@ public class HomeActivity extends ActionBarActivity implements
         this.tutorial = tutorial;
     }
 
+    @Override
+    public void onClick(View view) {
+
+        if (view.getId() == R.id.add_button) {
+            Intent i;
+            switch (mViewPager.getCurrentItem()) {
+                case 0: // agenda
+                    launchActivity(new Intent(this, ScheduleCreationActivity.class));
+                    break;
+                case 1: // routines
+                    launchActivity(new Intent(this, RoutinesActivity.class));
+                    break;
+                case 2: // medicines
+                    i = new Intent(this, MedicinesActivity.class);
+                    i.putExtra("create", true);
+                    launchActivity(i);
+                    break;
+                case 3: // schedules
+                    launchActivity(new Intent(this, ScheduleCreationActivity.class));
+                    break;
+
+            }
+        }
+    }
+
+    private void launchActivity(Intent i) {
+        startActivity(i);
+        this.overridePendingTransition(0, 0);
+    }
+
+    /**
+     * Swaps fragments in the main content view
+     */
+    public void selectItem(int position) {
+        Log.d("Agenda", "Position :" + position);
+        if (position == 1)
+            mViewPager.setCurrentItem(0);
+        else if (position > 2 && position < 6)
+            mViewPager.setCurrentItem(position - 2);
+        else if (position > 6 && position < 9) {
+            Toast.makeText(this, getString(R.string.work_in_progress), Toast.LENGTH_SHORT).show();
+        } else if (position == 9) {
+            launchActivity(new Intent(this, SettingsActivity.class));
+        } else if (position == 10) {
+            mViewPager.setCurrentItem(0);
+            getTutorial().reset(this);
+            getTutorial().show(AppTutorial.WELCOME, AppTutorial.HOME_INFO, this);
+        }
+
+        mDrawerLayout.closeDrawer(drawerView);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        checkReminder(intent);
+    }
+
+    private void checkReminder(Intent intent) {
+        Log.d(TAG, "CheckReminder" + intent.getDataString());
+        final long remindRoutineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l);
+        final long delayRoutineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID, -1l);
+
+        if (remindRoutineId != -1) {
+            showReminder(remindRoutineId);
+            getIntent().removeExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID);
+        } else if (delayRoutineId != -1) {
+            Log.d(TAG, "isDelay! ");
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mViewPager.setCurrentItem(0);
+                    final Routine r = Routine.findById(delayRoutineId);
+                    ((DailyAgendaFragment) getViewPagerFragment(0)).showDelayDialog(r);
+                    ReminderNotification.cancel(HomeActivity.this);
+                    getIntent().removeExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID);
+                }
+            }, 1000);
+
+
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        CalendulaApp.eventBus().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        int pageNum = mViewPager.getCurrentItem();
+        if (pageNum == 0) {
+            boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
+            menu.findItem(R.id.action_expand).setVisible(true);
+            menu.findItem(R.id.action_expand).setIcon(
+                    getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_white_48dp : R.drawable.ic_unfold_more_white_48dp)
+            );
+
+
+        } else {
+            menu.findItem(R.id.action_expand).setVisible(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_expand:
+                Log.d("Home", "ToogleExpand");
+                ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
+                boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
+                item.setIcon(
+                        getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_white_48dp : R.drawable.ic_unfold_more_white_48dp)
+                );
+
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        boolean backProcesed = false;
+
+        if (tutorial.isOpen()) {
+            tutorial.hide();
+            return;
+        }
+
+        Fragment current = getViewPagerFragment(mViewPager.getCurrentItem());
+        if (current instanceof OnBackPressedListener) {
+            backProcesed = ((OnBackPressedListener) current).doBack();
+        }
+
+        if (mViewPager.getCurrentItem() != 0)
+            mViewPager.setCurrentItem(0);
+        else if (!backProcesed) {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(int i, long l) {
+        mViewPager.setCurrentItem(i);
+        return true;
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        if (position == 0) {
+            hideTabs();
+        } else {
+            showTabs();
+        }
+
+    }
+
+    void showReminder(final Long routineId) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                final Routine r = Routine.findById(routineId);
+                //Toast.makeText(HomeActivity.this, "Take your meds (" + r.name() + ")", Toast.LENGTH_SHORT).show();
+                mViewPager.setCurrentItem(0);
+                ((DailyAgendaFragment) getViewPagerFragment(0)).showReminder(r);
+            }
+        }, 1000);
+
+    }
+
+    @Override
+    public void onPageSelected(int page) {
+        invalidateOptionsMenu();
+        updateTitle(page);
+        showTutorialStage(page);
+
+        //findViewById(R.id.left_drawer_top_overlay).setBackgroundColor(getResources().getColor(getDrawerBackgroundCOlor(page)));
+
+        if (page == 0) {
+            hideAddButton();
+            hideTabs();
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+//            }
+
+        } else {
+
+            showAddButton();
+            if (toolbar.getVisibility() != View.VISIBLE) {
+                toolbar.setVisibility(View.VISIBLE);
+            }
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
+//            }
+            showTabs();
+            setActionBarColor(getResources().getColor(R.color.android_blue_darker));
+
+        }
+
+    }
+
+    private void updateTitle(int page) {
+        String title = "";
+
+        switch (page) {
+            case 1:
+                title = getString(R.string.title_activity_routines);
+                break;
+            case 2:
+                title = getString(R.string.title_activity_medicines);
+                break;
+            case 3:
+                title = getString(R.string.title_activity_schedules);
+                break;
+            default:
+                title = "";
+                break;
+        }
+        toolbar.setTitle(title);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int i) {
+
+    }
+
+    public void hideAddButton() {
+        ((FloatingActionButton) (addButton)).hide(true);
+    }
+
+    public void showAddButton() {
+        ((FloatingActionButton) (addButton)).show(true);
+    }
+
+    Fragment getViewPagerFragment(int position) {
+        return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
+    }
+
+    public void setCustomTitle(String title) {
+        setTitle(title);
+//        ((TextView) findViewById(R.id.action_bar_custom_title)).setText(title);
+    }
+
+    public void enableToolbarTransparency() {
+//        if (toolbarVisible) {
+//            toolbarVisible = false;
+//            Log.d("Home", "HideToolbar");
+        setActionBarColor(getResources().getColor(R.color.transparent));
+//        }
+
+    }
+
+    public void hideToolbar() {
+        toolbar.setVisibility(View.GONE);
+
+    }
+
+    public void showToolbar() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+//        }
+        toolbar.setVisibility(View.VISIBLE);
+    }
+
+    public void showTabs() {
+        if (!(tabs.getVisibility() == View.VISIBLE)) {
+            tabs.setVisibility(View.VISIBLE);
+//            final Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_show_tabs);
+//            slide.setDuration(ANIM_TABS_DURATION);
+//            mHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+
+//                    tabs.startAnimation(slide);
+//                }
+//            }, ANIM_ACTION_BAR_DURATION);
+
+        }
+
+    }
+
+    public void hideTabs() {
+        if (!(tabs.getVisibility() == View.GONE)) {
+            tabs.setVisibility(View.GONE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+            }
+            setActionBarColor(getResources().getColor(R.color.transparent));
+
+//            if (Build.VERSION.SDK_INT >= 11) {
+//
+//                Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_hide_tabs);
+//                slide.setAnimationListener(new Animation.AnimationListener() {
+//                    @Override
+//                    public void onAnimationStart(Animation animation) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onAnimationEnd(Animation animation) {
+//                        tabs.setVisibility(View.GONE);
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                            getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    public void onAnimationRepeat(Animation animation) {
+//
+//                    }
+//                });
+//                setActionBarColor(getResources().getColor(R.color.transparent));
+//                tabs.startAnimation(slide);
+//            } else {
+//                setActionBarColor(getResources().getColor(R.color.transparent));
+//                tabs.setVisibility(View.GONE);
+//
+//            }
+        }
+    }
+
+    private void setActionBarColor(final int color) {
+
+//        if (Build.VERSION.SDK_INT >= 11) {
+//            previousActionBarColor = currentActionBarColor;
+//            final ObjectAnimator backgroundColorAnimator = ObjectAnimator.ofObject(
+//                    toolbar,
+//                    "backgroundColor",
+//                    new ArgbEvaluator(),
+//                    currentActionBarColor,
+//                    color);
+//            backgroundColorAnimator.setDuration(ANIM_ACTION_BAR_DURATION);
+//            backgroundColorAnimator.start();
+//            backgroundColorAnimator.addListener(new AnimatorListenerAdapter() {
+//                @Override
+//                public void onAnimationEnd(Animator animation) {
+//                    super.onAnimationEnd(animation);
+//                    currentActionBarColor = color;
+//                }
+//            });
+//        } else {
+//            toolbar.setBackgroundColor(color);
+//        }
+
+    }
+
+    // Method called from the event bus
+    public void onEvent(PersistenceEvents.ModelCreateOrUpdateEvent event) {
+//        if (event.clazz.equals(Routine.class)) {
+//            ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
+//        } else if (event.clazz.equals(Medicine.class)) {
+//            ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
+//        } else if (event.clazz.equals(Schedule.class)) {
+//            ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
+//        }
+        Log.d(TAG, "onEvent: " + event.clazz.getName());
+        ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
+        ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
+        ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
+        ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
+    }
+
+    private void startTutorialIfNeeded() {
+        getTutorial().show(AppTutorial.WELCOME, AppTutorial.HOME_INFO, this);
+    }
+
+    private void showTutorialStage(int step) {
+        switch (step) {
+            case 0:
+                //Home
+                getTutorial().show(AppTutorial.HOME_INFO, this);
+                break;
+            case 1:
+                // routines
+                getTutorial().show(AppTutorial.ROUTINES_INFO, this);
+                break;
+            case 2:
+                // meds
+                getTutorial().show(AppTutorial.MEDICINES_INFO, this);
+                break;
+            case 3:
+                // schedules
+                getTutorial().show(AppTutorial.SCHEDULES_INFO, this);
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    public interface OnBackPressedListener {
+        public boolean doBack();
+    }
+
     class DrawerListAdapter extends ArrayAdapter<String> {
 
         public DrawerListAdapter(Context context, int resource, List<String> items) {
@@ -407,418 +836,11 @@ public class HomeActivity extends ActionBarActivity implements
         }
     }
 
-
-    @Override
-    public void onClick(View view) {
-
-        if (view.getId() == R.id.add_button) {
-            Intent i;
-            switch (mViewPager.getCurrentItem()) {
-                case 0: // agenda
-                    launchActivity(new Intent(this, ScheduleCreationActivity.class));
-                    break;
-                case 1: // routines
-                    launchActivity(new Intent(this, RoutinesActivity.class));
-                    break;
-                case 2: // medicines
-                    i = new Intent(this, MedicinesActivity.class);
-                    i.putExtra("create", true);
-                    launchActivity(i);
-                    break;
-                case 3: // schedules
-                    launchActivity(new Intent(this, ScheduleCreationActivity.class));
-                    break;
-
-            }
-        }
-    }
-
-    private void launchActivity(Intent i) {
-        startActivity(i);
-        this.overridePendingTransition(0, 0);
-    }
-
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             selectItem(position);
         }
-    }
-
-    /**
-     * Swaps fragments in the main content view
-     */
-    public void selectItem(int position) {
-        Log.d("Agenda", "Position :" + position);
-        if (position == 1)
-            mViewPager.setCurrentItem(0);        
-        else if (position > 2 && position < 6)
-            mViewPager.setCurrentItem(position - 2);
-        else if (position > 6 && position < 9) {
-            Toast.makeText(this, getString(R.string.work_in_progress), Toast.LENGTH_SHORT).show();
-        } else if (position == 9) {
-            launchActivity(new Intent(this, SettingsActivity.class));
-        } else if (position == 10) {
-            mViewPager.setCurrentItem(0);
-            getTutorial().reset(this);
-            getTutorial().show(AppTutorial.WELCOME, AppTutorial.HOME_INFO, this);
-        }
-
-        mDrawerLayout.closeDrawer(drawerView);
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        checkReminder(intent);
-    }
-
-    private void checkReminder(Intent intent) {
-        Log.d(TAG, "CheckReminder - Routine Id Extra: " + intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l));
-        long remindRoutineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l);
-        if (remindRoutineId != -1) {
-            showReminder(remindRoutineId);
-            getIntent().removeExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID);
-        }        
-    }
-
-    @Override
-    protected void onDestroy() {
-        CalendulaApp.eventBus().unregister(this);
-        super.onDestroy();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        int pageNum = mViewPager.getCurrentItem();
-        if (pageNum == 0) {
-            boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
-            menu.findItem(R.id.action_expand).setVisible(true);
-            menu.findItem(R.id.action_expand).setIcon(
-                    getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_white_48dp : R.drawable.ic_unfold_more_white_48dp)
-            );
-
-
-        } else {
-            menu.findItem(R.id.action_expand).setVisible(false);
-        }
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                return true;
-            case R.id.action_expand:
-                Log.d("Home", "ToogleExpand");
-                ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
-                boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
-                item.setIcon(
-                        getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_white_48dp : R.drawable.ic_unfold_more_white_48dp)
-                );
-
-                return true;
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        boolean backProcesed = false;
-
-        if (tutorial.isOpen()) {
-            tutorial.hide();
-            return;
-        }
-
-        Fragment current = getViewPagerFragment(mViewPager.getCurrentItem());
-        if (current instanceof OnBackPressedListener) {
-            backProcesed = ((OnBackPressedListener) current).doBack();
-        }
-
-        if (mViewPager.getCurrentItem() != 0)
-            mViewPager.setCurrentItem(0);
-        else if (!backProcesed) {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(int i, long l) {
-        mViewPager.setCurrentItem(i);
-        return true;
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        if (position == 0) {
-            hideTabs();
-        } else {
-            showTabs();
-        }
-        
-    }
-
-    void showReminder(final Long routineId) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                final Routine r = Routine.findById(routineId);
-                //Toast.makeText(HomeActivity.this, "Take your meds (" + r.name() + ")", Toast.LENGTH_SHORT).show();
-                mViewPager.setCurrentItem(0);
-                ((DailyAgendaFragment) getViewPagerFragment(0)).showReminder(r);
-            }
-        }, 1000);
-
-    }
-
-    @Override
-    public void onPageSelected(int page) {
-        invalidateOptionsMenu();
-        updateTitle(page);
-        showTutorialStage(page);
-        if (page == 0) {
-            hideAddButton();
-            hideTabs();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
-            }
-
-        } else {
-        
-            showAddButton();
-            if (toolbar.getVisibility() != View.VISIBLE) {
-                toolbar.setVisibility(View.VISIBLE);
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
-            }
-            showTabs();
-            setActionBarColor(getResources().getColor(R.color.android_blue_darker));
-
-        }
-
-    }
-
-    private void updateTitle(int page) {
-        String title = "";
-
-        switch (page) {
-            case 1:
-                title = getString(R.string.title_activity_routines);
-                break;
-            case 2:
-                title = getString(R.string.title_activity_medicines);
-                break;
-            case 3:
-                title = getString(R.string.title_activity_schedules);
-                break;
-            default:
-                title = "";
-                break;
-        }
-        toolbar.setTitle(title);
-    }
-
-
-    @Override
-    public void onPageScrollStateChanged(int i) {
-
-    }
-
-
-    public void hideAddButton() {
-        ((FloatingActionButton) (addButton)).hide(true);
-    }
-
-    public void showAddButton() {
-        ((FloatingActionButton) (addButton)).show(true);
-    }
-
-    Fragment getViewPagerFragment(int position) {
-        return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
-    }
-
-    public void setCustomTitle(String title) {
-        setTitle(title);
-//        ((TextView) findViewById(R.id.action_bar_custom_title)).setText(title);
-    }
-
-
-    public interface OnBackPressedListener {
-        public boolean doBack();
-    }
-
-
-    public void enableToolbarTransparency() {
-//        if (toolbarVisible) {
-//            toolbarVisible = false;
-//            Log.d("Home", "HideToolbar");
-        setActionBarColor(getResources().getColor(R.color.transparent));
-//        }
-
-    }
-
-
-    public void hideToolbar() {
-        toolbar.setVisibility(View.GONE);
-
-    }
-
-    public void showToolbar() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
-//        }
-        toolbar.setVisibility(View.VISIBLE);
-    }
-
-
-    public void showTabs() {
-        if (!(tabs.getVisibility() == View.VISIBLE)) {
-            tabs.setVisibility(View.VISIBLE);
-//            final Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_show_tabs);
-//            slide.setDuration(ANIM_TABS_DURATION);
-//            mHandler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-
-//                    tabs.startAnimation(slide);
-//                }
-//            }, ANIM_ACTION_BAR_DURATION);
-
-        }
-
-    }
-
-    public void hideTabs() {
-        if (!(tabs.getVisibility() == View.GONE)) {
-            tabs.setVisibility(View.GONE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
-            }
-            setActionBarColor(getResources().getColor(R.color.transparent));
-
-//            if (Build.VERSION.SDK_INT >= 11) {
-//
-//                Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_hide_tabs);
-//                slide.setAnimationListener(new Animation.AnimationListener() {
-//                    @Override
-//                    public void onAnimationStart(Animation animation) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onAnimationEnd(Animation animation) {
-//                        tabs.setVisibility(View.GONE);
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                            getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
-//                        }
-//
-//                    }
-//
-//                    @Override
-//                    public void onAnimationRepeat(Animation animation) {
-//
-//                    }
-//                });
-//                setActionBarColor(getResources().getColor(R.color.transparent));
-//                tabs.startAnimation(slide);
-//            } else {
-//                setActionBarColor(getResources().getColor(R.color.transparent));
-//                tabs.setVisibility(View.GONE);
-//
-//            }
-        }
-    }
-
-
-    private void setActionBarColor(final int color) {
-
-//        if (Build.VERSION.SDK_INT >= 11) {
-//            previousActionBarColor = currentActionBarColor;
-//            final ObjectAnimator backgroundColorAnimator = ObjectAnimator.ofObject(
-//                    toolbar,
-//                    "backgroundColor",
-//                    new ArgbEvaluator(),
-//                    currentActionBarColor,
-//                    color);
-//            backgroundColorAnimator.setDuration(ANIM_ACTION_BAR_DURATION);
-//            backgroundColorAnimator.start();
-//            backgroundColorAnimator.addListener(new AnimatorListenerAdapter() {
-//                @Override
-//                public void onAnimationEnd(Animator animation) {
-//                    super.onAnimationEnd(animation);
-//                    currentActionBarColor = color;
-//                }
-//            });
-//        } else {
-//            toolbar.setBackgroundColor(color);
-//        }
-
-    }
-
-    // Method called from the event bus
-    public void onEvent(PersistenceEvents.ModelCreateOrUpdateEvent event) {
-//        if (event.clazz.equals(Routine.class)) {
-//            ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
-//        } else if (event.clazz.equals(Medicine.class)) {
-//            ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
-//        } else if (event.clazz.equals(Schedule.class)) {
-//            ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
-//        }
-        Log.d(TAG, "onEvent: " + event.clazz.getName());
-        ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
-        ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
-        ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
-        ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
-    }
-
-
-    private void startTutorialIfNeeded() {
-        getTutorial().show(AppTutorial.WELCOME, AppTutorial.HOME_INFO, this);
-    }
-
-    private void showTutorialStage(int step) {
-        switch (step) {
-            case 0:
-                //Home
-                getTutorial().show(AppTutorial.HOME_INFO, this);
-                break;
-            case 1:
-                // routines
-                getTutorial().show(AppTutorial.ROUTINES_INFO, this);
-                break;
-            case 2:
-                // meds
-                getTutorial().show(AppTutorial.MEDICINES_INFO, this);
-                break;
-            case 3:
-                // schedules
-                getTutorial().show(AppTutorial.SCHEDULES_INFO, this);
-                break;
-            default:
-                break;
-        }
-
     }
 
 

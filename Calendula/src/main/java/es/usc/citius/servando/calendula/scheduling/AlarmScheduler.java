@@ -133,9 +133,9 @@ public class AlarmScheduler {
             ds.setTimeTaken(LocalTime.now());
             ds.save();
             Log.d(TAG, "Set time taken to " + ds.scheduleItem().schedule().medicine().name());
-            
+
         }
-        
+
         // get delay routine pending intent
         PendingIntent routinePendingIntent = alarmDelayPendingIntent(ctx, routine);
         // Get the AlarmManager service
@@ -191,12 +191,15 @@ public class AlarmScheduler {
                 ReminderNotification.notify(ctx, ctx.getResources().getString(R.string.meds_time), routine, doses, intent);
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-                String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
-                long delay = Long.parseLong(delayMinutesStr);
 
-                // set auto delay if needed
-                if (delay > 0) {
-                    delayAlarm(routine, (int) delay * 60 * 1000, ctx);
+                boolean repeatAlarms = prefs.getBoolean("alarm_repeat_enabled", false);
+                if (repeatAlarms) {
+                    String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
+                    long delay = Long.parseLong(delayMinutesStr);
+                    // set auto delay if needed
+                    if (delay > 0) {
+                        delayAlarm(routine, (int) delay * 60 * 1000, ctx);
+                    }
                 }
             }
         }
@@ -326,7 +329,7 @@ public class AlarmScheduler {
      * @param r
      * @return
      */
-    private boolean isWithinDefaultMargins(Routine r, Context cxt) {
+    public boolean isWithinDefaultMargins(Routine r, Context cxt) {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(cxt);
         String delayMinutesStr = prefs.getString("alarm_reminder_window", "60");

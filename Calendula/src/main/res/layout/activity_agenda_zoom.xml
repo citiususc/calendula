@@ -117,4 +117,19 @@
         android:background="@drawable/simple_highlight_click_selector"
         android:padding="7dp" />
 
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_history_black_48dp"
+        android:text="Delay"
+        android:id="@+id/delay_button"
+        android:textSize="15sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="visible"
+        android:background="@drawable/simple_highlight_click_selector"
+        android:padding="7dp" />
+
 </RelativeLayout>

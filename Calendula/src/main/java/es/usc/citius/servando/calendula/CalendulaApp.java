@@ -42,7 +42,7 @@ public class CalendulaApp extends Application {
     public static final String INTENT_EXTRA_ROUTINE_ID = "routine_id";
     public static final String INTENT_EXTRA_MEDICINE_ID = "medicine_id";
     public static final String INTENT_EXTRA_SCHEDULE_ID = "schedule_id";
-
+    public static final String INTENT_EXTRA_DELAY_ROUTINE_ID = "delay_routine_id";
     // ACTIONS
     public static final int ACTION_ROUTINE_TIME = 1;
     public static final int ACTION_DAILY_ALARM = 2;

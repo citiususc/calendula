@@ -60,8 +60,7 @@ public class ReminderNotification {
      *
      * @see #cancel(Context)
      */
-    public static void notify(final Context context,
-                              final String exampleString, Routine r, List<ScheduleItem> doses, Intent intent) {
+    public static void notify(final Context context, final String exampleString, Routine r, List<ScheduleItem> doses, Intent intent) {
 
         // if notifications are disabled, exit
         boolean notifications = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("alarm_notifications", true);
@@ -120,11 +119,13 @@ public class ReminderNotification {
                 intent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
-        final Intent delay = new Intent(context, NotificationEventReceiver.class);
-        delay.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_DELAY_ROUTINE);
-        delay.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, r.getId());
 
-        PendingIntent delayIntent = PendingIntent.getBroadcast(
+        final Intent delay = new Intent(context, StartActivity.class);
+        delay.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, StartActivity.ACTION_SHOW_REMINDERS);
+        delay.putExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID, r.getId());
+
+
+        PendingIntent delayIntent = PendingIntent.getActivity(
                 context,
                 1,
                 delay,
@@ -142,7 +143,7 @@ public class ReminderNotification {
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri ringtoneUri = Uri.parse(PreferenceManager.getDefaultSharedPreferences(context).getString("pref_notification_tone", "default ringtone"));
-            
+
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 
@@ -187,13 +188,13 @@ public class ReminderNotification {
                 .setContentIntent(defaultIntent)
                         //.setOngoing(true)
                         // add delay button
-                        //.addAction(R.drawable.ic_history_white_24dp, "Delay " + delayMinutes + " minutes", delayIntent)
+                .addAction(R.drawable.ic_history_white_24dp, res.getString(R.string.notification_delay), delayIntent)
                 .addAction(R.drawable.ic_alarm_off_white_24dp, res.getString(R.string.notification_cancel_now), cancelIntent)
                         // Show an expanded list of items on devices running Android 4.1
                         // or later.
                 .setStyle(style)
                         //.setLights(0x00ff0000, 500, 1000)
-                .setPriority(Notification.PRIORITY_HIGH)
+                .setPriority(Notification.PRIORITY_DEFAULT)
                 .setVibrate(new long[]{1000, 200, 500, 200, 100, 200, 1000})
                 .setSound(ringtoneUri != null ? ringtoneUri : Settings.System.DEFAULT_RINGTONE_URI)
                         // Automatically dismiss the notification when it is touched.

@@ -124,12 +124,19 @@
 
     <!-- Med schedules -->
     <string-array name="delays_array">
-        <item>Choose a delay:</item>
-        <item>5 min</item>
+        <item>1 min</item>
         <item>15 min</item>
         <item>30 min</item>
         <item>60 min</item>
     </string-array>
+
+    <integer-array name="delays_array_values">
+        <item>1</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+    </integer-array>
+
 
     <!-- Default routines -->
     <string name="routine_breakfast">Breakfast</string>
@@ -218,6 +225,8 @@
 
     <string name="notification_repeat_message">Alarm will be repeated at %1$s</string>
     <string name="notification_cancel_now">Cancel now</string>
+    <string name="notification_delay">Delay</string>
+    <string name="alarm_delayed_message">Alarm delayed %1$s minutes</string>
 
 </resources>
 

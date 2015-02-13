@@ -89,6 +89,10 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         zoomHelper.remind(getActivity(), r);
     }
 
+    public void showDelayDialog(Routine r) {
+        zoomHelper.showDelayDialog(r);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -121,7 +125,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
 //            }
 //        },1000);
 
-        zoomHelper = new AgendaZoomHelper(zoomContainer, new AgendaZoomHelper.ZoomHelperListener() {
+        zoomHelper = new AgendaZoomHelper(zoomContainer, getActivity(), new AgendaZoomHelper.ZoomHelperListener() {
             @Override
             public void onChange() {
                 items.clear();

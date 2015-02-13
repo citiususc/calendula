@@ -44,7 +44,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
     static Context ctx;
-    
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -64,7 +64,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         if (!isSimplePreferences(this)) {
             return;
         }
-
 
         // In the simplified UI, fragments are not used at all and we instead
         // use the older PreferenceActivity APIs.
@@ -167,7 +166,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 Ringtone ringtone = RingtoneManager.getRingtone(ctx, ringtoneUri);
                 String name = ringtone.getTitle(ctx);
                 preference.setSummary(name);
-                
+
             } else {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.

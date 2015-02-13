@@ -2,33 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp">
+    android:padding="2dp"
+    android:background="#fff">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:id="@+id/imageView"
         android:src="#dfdfdf"
-        android:visibility="visible"
-        android:layout_centerVertical="true" />
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/text"
-        android:text="Menu"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:textSize="12sp"
-        android:gravity="center_vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:textColor="@color/android_blue"
-        android:layout_alignParentRight="false"
-        android:layout_alignParentEnd="false"
-        android:typeface="normal"
-        android:layout_alignParentLeft="false"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:background="#E0EAEF"
+        android:layout_height="0dp"
+        android:layout_width="0dp"
         android:visibility="invisible" />
 
 

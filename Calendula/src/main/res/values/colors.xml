@@ -2,9 +2,9 @@
 <resources>
 
     <!-- Android palette -->
-    <color name="android_pink">#AA66CC</color>
-    <color name="android_pink_dark">#9933CC</color>
-    <color name="android_pink_light">#55AA66CC</color>
+    <color name="android_pink">#f06292</color>
+    <color name="android_pink_dark">#ec407a</color>
+    <color name="android_pink_light">#f48fb1</color>
     <color name="android_green">#99CC00</color>
     <color name="android_green_dark">#669900</color>
     <color name="android_green_light">#55669900</color>
@@ -38,6 +38,8 @@
     <color name="green_hour_expanded_right">#CC99CC00</color>
     <color name="list_item_active_background">#11eeeeff</color>
     <color name="click_highlight">#2233B5E5</color>
+    <color name="drawerbg_default">#272727</color>
+    <color name="drawerbg">#3c3c3c</color>
 
     <!-- List items -->
     <color name="list_item_selector_normal">#00111111</color>

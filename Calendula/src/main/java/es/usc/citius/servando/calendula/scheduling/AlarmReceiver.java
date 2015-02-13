@@ -29,12 +29,12 @@ public class AlarmReceiver extends BroadcastReceiver {
                 Long routineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
                 Log.d(TAG, "Routine id: " + routineId);
                 // and call scheduler
-                AlarmScheduler.instance().onAlarmReceived(routineId, context);
+                AlarmScheduler.instance().onAlarmReceived(routineId, context.getApplicationContext());
             } else if (action == CalendulaApp.ACTION_DAILY_ALARM) {
                 Log.d(TAG, "Received update daily agenda event");
                 // update daily agenda
-                DailyAgenda.instance().setupForToday(context);
-                AlarmScheduler.instance().updateAllAlarms(context);
+                DailyAgenda.instance().setupForToday(context.getApplicationContext());
+                AlarmScheduler.instance().updateAllAlarms(context.getApplicationContext());
             }
         }
     }

@@ -121,12 +121,18 @@
 
     <!-- Med schedules -->
     <string-array name="delays_array">
-        <item>Selecciona un retardo:</item>
-        <item>5 min</item>
+        <item>1 min</item>
         <item>15 min</item>
         <item>30 min</item>
         <item>60 min</item>
     </string-array>
+
+    <integer-array name="delays_array_values">
+        <item>1</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+    </integer-array>
 
     <!-- Default routines -->
     <string name="routine_breakfast">Desayuno</string>
@@ -171,12 +177,12 @@
     <string name="pref_header_general">General</string>
     <string name="pref_header_notifications">Notificaciones</string>
     <string name="pref_title_display_name">Nombre</string>
-    <string name="pref_title_insistent_alarms">Notificaciones insistentes</string>
-    <string name="pref_title_new_alarm_notification">Alarmas</string>
-    <string name="pref_title_reminder_window">Límite de repetición de alarmas</string>
-    <string name="pref_title_sync_frequency">Repetir alarmas</string>
-
-    <string name="pref_notification_tone">Tono de alarma</string>
+    <string name="pref_title_insistent_alarms">Avisos insistentes</string>
+    <string name="pref_title_new_alarm_notification">Avisos de medicación</string>
+    <string name="pref_title_reminder_window">Detener avisos después de</string>
+    <string name="pref_title_repeat_alarms">Repetir avisos</string>
+    <string name="pref_title_sync_frequency">Repetir avisos cada</string>
+    <string name="pref_notification_tone">Tono de aviso</string>
     <string name="pref_notification_tone_sum">Por defecto</string>
 
     <string name="prompt_email">Email</string>
@@ -231,11 +237,12 @@
     <string name="tutorial_schedule_text">Las pautas nos permiten avisarte cuando es hora de tomar tus medicinas. Añade tus dosis y horarios y no vuelvas a olvidarte nunca!</string>
     <string name="tutorial_next">Coninuar</string>
     <string name="tutorial_understood">Entendido</string>
-    <string name="tutorial_notifications_title">Avisos de medicación</string>
+    <string name="tutorial_notifications_title">Confirma!</string>
     <string name="tutorial_notifications_text">Toma tus medicinas y recuerda confirmar que lo has hecho, o de lo contrario te seguiremos avisando. Puedes cambiar la configuración de notificaciones en el menú de opciones. </string>
     <string name="notification_repeat_message">La alarma se repetirá a las %1$s</string>
     <string name="notification_cancel_now">Cancelar ahora</string>
-
+    <string name="notification_delay">Posponer</string>
+    <string name="alarm_delayed_message">Alarma pospuesta %1$s minutos</string>
 
 </resources>
 

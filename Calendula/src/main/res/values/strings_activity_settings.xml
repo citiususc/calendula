@@ -11,33 +11,30 @@
 
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
-    <string name="pref_title_new_alarm_notification">Alarm notifications</string>
+    <string name="pref_title_new_alarm_notification">Medicine intake alarms</string>
     <string name="pref_title_insistent_alarms">Insistent notifications</string>
 
 
-    <string name="pref_title_sync_frequency">Repeat alarms</string>
-    <string name="pref_title_reminder_window">Alarm repetition limit</string>
+    <string name="pref_title_repeat_alarms">Repeat alarms</string>
+    <string name="pref_title_sync_frequency">Repeat every</string>
+    <string name="pref_title_reminder_window">Dismiss alarms after</string>
 
     <string name="pref_notification_tone">Ringtone</string>
     <string name="pref_notification_tone_sum">Default</string>
 
 
     <string-array name="pref_alarm_repeat_titles">
-        <item>1 min</item>
         <item>5 min</item>
         <item>15 min</item>
         <item>30 min</item>
         <item>60 min</item>
-        <item>Never</item>
     </string-array>
 
     <string-array name="pref_alarm_repeat_values">
-        <item>1</item>
         <item>5</item>
         <item>15</item>
         <item>30</item>
         <item>60</item>
-        <item>-1</item>
     </string-array>
 
 
@@ -45,14 +42,12 @@
         <item>30 min</item>
         <item>1 hour</item>
         <item>2 hours</item>
-        <item>Forever</item>
     </string-array>
 
     <string-array name="pref_alarm_reminder_window_values">
         <item>30</item>
         <item>60</item>
         <item>120</item>
-        <item>-1</item>
     </string-array>
 
 
