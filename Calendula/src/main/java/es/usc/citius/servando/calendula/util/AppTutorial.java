@@ -200,7 +200,6 @@ public class AppTutorial {
         stages.put(HOME_INFO, new ShowcaseInfo(R.string.tutorial_homeinfo_title, R.string.tutorial_homeinfo_text, new PointTarget(new Point(gap, gap)), new ShowcaseListener() {
             @Override
             public void onHide() {
-                Log.d(TAG, "Called listener onHide");
                 if (activity instanceof HomeActivity) {
                     ((HomeActivity) activity).onNavigationItemSelected(1, 0);
                 }
@@ -209,7 +208,6 @@ public class AppTutorial {
         stages.put(ROUTINES_INFO, new ShowcaseInfo(R.string.tutorial_routine_title, R.string.tutorial_routine_text, ptr, new ShowcaseListener() {
             @Override
             public void onHide() {
-                Log.d(TAG, "Called listener onHide");
                 if (activity instanceof HomeActivity) {
                     ((HomeActivity) activity).onNavigationItemSelected(2, 0);
                 }
@@ -218,13 +216,19 @@ public class AppTutorial {
         stages.put(MEDICINES_INFO, new ShowcaseInfo(R.string.tutorial_meds_title, R.string.tutorial_meds_text, ptm, new ShowcaseListener() {
             @Override
             public void onHide() {
-                Log.d(TAG, "Called listener onHide");
                 if (activity instanceof HomeActivity) {
                     ((HomeActivity) activity).onNavigationItemSelected(3, 0);
                 }
             }
         }));
-        stages.put(SCHEDULES_INFO, new ShowcaseInfo(R.string.tutorial_schedule_title, R.string.tutorial_schedule_text, pts));
+        stages.put(SCHEDULES_INFO, new ShowcaseInfo(R.string.tutorial_schedule_title, R.string.tutorial_schedule_text, pts, new ShowcaseListener() {
+            @Override
+            public void onHide() {
+                if (activity instanceof HomeActivity) {
+                    ((HomeActivity) activity).onNavigationItemSelected(0, 0);
+                }
+            }
+        }));
 
         stages.put(NOTIFICATION_INFO, new ShowcaseInfo(R.string.tutorial_notifications_title, R.string.tutorial_notifications_text, pti, R.style.CustomShowcaseTheme2));
 

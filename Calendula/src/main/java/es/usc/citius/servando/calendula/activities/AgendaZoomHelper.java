@@ -90,7 +90,7 @@ public class AgendaZoomHelper {
                     public void onClick(DialogInterface dialog, int which) {
                         int minutes = values[which];
                         AlarmScheduler.instance().onDelayRoutine(routineToDelay, activity, minutes);
-                        Toast.makeText(activity, "Alarm delayed " + minutes + "minutes", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, activity.getString(R.string.alarm_delayed_message, minutes), Toast.LENGTH_SHORT).show();
                     }
                 });
         builder.create().show();
@@ -232,10 +232,10 @@ public class AgendaZoomHelper {
     public String getDisplayableDose(Activity activity, String dose, Medicine m, Routine r) {
         return dose
                 + " "
-                + m.presentation().units(activity.getResources())
-                + " - "
-                + r.time().toString("kk:mm")
-                + "h";
+                + m.presentation().units(activity.getResources());
+//                + " - "
+//                + r.time().toString("kk:mm")
+//                + "h";
     }
 
 

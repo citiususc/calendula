@@ -29,7 +29,7 @@
     <string name="drawer_menu_option">Menu</string>
     <string name="drawer_bottom_option">Bottom</string>
     <string name="drawer_services_option">Tools</string>
-    <string name="drawer_help_option">Help</string>
+    <string name="drawer_help_option">Tour</string>
     <string name="drawer_settings_option">Settings</string>
 
     <string-array name="home_drawer_actions">
@@ -218,7 +218,7 @@
     <string name="tutorial_meds_text">Keep track of your medicines by adding them to the medical kit. Future versions will include a more advanced stock management!</string>
     <string name="tutorial_schedule_title">Manage your schedules!</string>
     <string name="tutorial_schedule_text">Schedules allow us to notify you when it is time to take your meds. Add your timetables and doses and  don\'t ever forget again!</string>
-    <string name="tutorial_next">Coninue</string>
+    <string name="tutorial_next">Next</string>
     <string name="tutorial_understood">Got it</string>
     <string name="tutorial_notifications_title">Check taken meds!</string>
     <string name="tutorial_notifications_text">Remember to confirm your intakes or we will continue reminding you. You can change the notification settings in the options menu. </string>

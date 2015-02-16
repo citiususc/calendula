@@ -29,7 +29,7 @@
     <string name="drawer_bottom_option">Bottom</string>
     <string name="drawer_menu_option">Menú</string>
     <string name="drawer_services_option">Herramientas</string>
-    <string name="drawer_help_option">Ayuda</string>
+    <string name="drawer_help_option">Recorrido</string>
     <string name="drawer_settings_option">Ajustes</string>
 
     <string-array name="home_drawer_actions">

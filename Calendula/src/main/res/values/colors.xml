@@ -24,7 +24,7 @@
     <color name="white_20">#22FFFFFF</color>
     <color name="black_20">#22000000</color>
     <color name="black_40">#44000000</color>
-    <color name="list_item_shadow">#11222222</color>
+    <color name="list_item_shadow">#112c2c2c</color>
     <color name="transparent">#00000000</color>
     <color name="android_orange_darker">#884411</color>
 
@@ -45,7 +45,7 @@
     <color name="list_item_selector_normal">#00111111</color>
     <color name="list_item_selector_pressed">#3333B5E5</color>
     <color name="home_background_color">@color/dark_grey_home</color>
-    <color name="dark_grey_text">#6e6e6e</color>
+    <color name="dark_grey_text">#5e5e5e</color>
     <color name="light_grey">#55ABABAB</color>
     <color name="light_grey_pressed">#99989898</color>
     <!-- #ececec -->
@@ -54,6 +54,6 @@
     <color name="black_overlay">#66000000</color>
 
     <color name="actionbar_background_color">#0099CC</color>
-    <color name="activity_background_color">#E0EAEF</color>
+    <color name="activity_background_color">#ECECEF</color>
     <!--#006699-->
 </resources>
