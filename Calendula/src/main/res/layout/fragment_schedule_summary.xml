@@ -20,12 +20,12 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="MedName"
+        android:text="@string/medicine_unselected"
         android:id="@+id/sched_summary_medname"
         android:layout_below="@+id/sched_summary_medicon"
         android:layout_marginTop="20dp"
         android:textColor="@color/android_blue_dark"
-        android:textSize="28sp"
+        android:textSize="22sp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:gravity="center" />
@@ -36,7 +36,8 @@
         android:id="@+id/sched_summary_medicon"
         android:layout_below="@id/summaryTitle"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp" />
+        android:layout_marginTop="60dp"
+        android:src="@drawable/ic_presentation_2" />
 
     <TextView
         android:layout_width="wrap_content"

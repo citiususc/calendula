@@ -16,7 +16,7 @@
             android:layout_height="fill_parent"
             android:id="@+id/imageView"
             android:background="@drawable/shape_list_item"
-            android:alpha="0.5" />
+            android:alpha="0.9" />
 
         <ImageButton
             android:layout_width="40dp"

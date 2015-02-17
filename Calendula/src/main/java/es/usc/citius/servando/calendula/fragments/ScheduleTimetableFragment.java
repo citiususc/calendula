@@ -181,9 +181,6 @@ public class ScheduleTimetableFragment extends Fragment {
 
         Collections.sort(ScheduleCreationHelper.instance().getScheduleItems(), scheduleItemComparator);
 
-        for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems())
-            Log.d(TAG, "addTimetableEntries (start) : " + i.getId() + ", " + i.routine().name() + ", " + i.dose());
-
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -199,13 +196,12 @@ public class ScheduleTimetableFragment extends Fragment {
 
         for (int i = 0; i < timesPerDay; i++) {
             // try to get previous routine from state holder
-            ScheduleItem s = (i < ScheduleCreationHelper.instance().getScheduleItems().size()) ?
-                    ScheduleCreationHelper.instance().getScheduleItems().get(i) : null;
+            ScheduleItem s;
 
-
-            // if null, get it from the store if possible
-
-            if (s == null) {
+            if (i < ScheduleCreationHelper.instance().getScheduleItems().size()) {
+                ScheduleItem toCopy = ScheduleCreationHelper.instance().getScheduleItems().get(i);
+                s = new ScheduleItem(null, toCopy.routine(), toCopy.dose());
+            } else {
                 s = new ScheduleItem(null, (i < routines.size()) ? routines.get(i) : null, 1);
             }
 
@@ -315,22 +311,17 @@ public class ScheduleTimetableFragment extends Fragment {
 
                 if (r != null) {
                     updateEntryTime(r, entryView);
-                    item.setRoutine(r);
-                    Log.d(TAG, "Updated routine to " + r.name() + " on item " + item.getId());
-//                    for (ScheduleItem si : ScheduleCreationHelper.instance().getScheduleItems()) {
-//                        Log.d(TAG, "ScheduleCreationHelper : " + si.getId() + ", " + si.routine().name() + ", " + si.dose());
-//                    }
+
                 } else {
                     updateEntryTime(null, entryView);
                     showAddNewRoutineDialog(entryView);
                 }
+                Log.d(TAG, "Updated routine to " + (r != null ? r.name() : "NULL") + " on item " + item.getId());
+                item.setRoutine(r);
 
-//                int idx = timetableContainer.indexOfChild(entryView);
-//                if (ScheduleCreationHelper.instance().getScheduleItems().size() > idx) {
-//                    ScheduleCreationHelper.instance().getScheduleItems().remove(idx);
-//                }
-//                // r can be null, yes
-//                ScheduleCreationHelper.instance().getScheduleItems().add(idx, new ScheduleItem(null, r, item.dose()));
+
+                logScheduleItems();
+
             }
 
             @Override
@@ -353,6 +344,12 @@ public class ScheduleTimetableFragment extends Fragment {
             }
         });
 
+    }
+
+    private void logScheduleItems() {
+        for (ScheduleItem si : ScheduleCreationHelper.instance().getScheduleItems()) {
+            Log.d("TAG", (si.routine() != null ? si.routine().name() : "NONE") + ", " + si.dose() + " ****************************");
+        }
     }
 
 
@@ -422,8 +419,12 @@ public class ScheduleTimetableFragment extends Fragment {
                 Log.d(TAG, "Set dose " + dose + " to item " + item.routine().name() + ", " + item.getId());
                 item.setDose((float) dose);
                 tv.setText(item.displayDose());
+
+                logScheduleItems();
+
             }
         });
+
         dosePickerFragment.show(fm, "fragment_select_dose");
     }
 

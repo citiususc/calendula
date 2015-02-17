@@ -1,5 +1,6 @@
 package es.usc.citius.servando.calendula.util;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
@@ -42,11 +43,12 @@ public class DailyAgendaItemStub {
 
     public static List<DailyAgendaItemStub> fromHour(int hour) {
 
-
+        int today = DateTime.now().getDayOfWeek();
         List<Routine> routines = Routine.findInHour(hour);
         List<DailyAgendaItemStub> items = new ArrayList<DailyAgendaItemStub>(routines.size());
 
         if (!routines.isEmpty()) {
+
             for (Routine r : routines) {
                 // create an ItemStub for the current hour
                 DailyAgendaItemStub item = new DailyAgendaItemStub(r.time().toString("kk:mm"));
@@ -54,29 +56,39 @@ public class DailyAgendaItemStub {
 
                 // Find doses off all routines in this hour
                 List<ScheduleItem> doses = r.scheduleItems();
-                item.id = r.getId();
-                item.title = r.name();
-                item.hour = r.time().getHourOfDay();
-                item.minute = r.time().getMinuteOfHour();
-                if (doses.size() > 0) {
-                    item.hasEvents = true;
+
+                if (doses.size() > 0) {                    
+                    
                     item.meds = new ArrayList<DailyAgendaItemStubElement>();
+
                     for (ScheduleItem scheduleItem : doses) {
-                        int minute = r.time().getMinuteOfHour();
-                        Medicine med = scheduleItem.schedule().medicine();
-                        DailyAgendaItemStubElement el = new DailyAgendaItemStubElement();
-                        el.medName = med.name();
-                        el.dose = scheduleItem.dose();
-                        el.displayDose = scheduleItem.displayDose();
-                        el.res = med.presentation().getDrawable();
-                        el.presentation = med.presentation();
-                        el.minute = minute < 10 ? "0" + minute : String.valueOf(minute);
-                        el.taken = DailyScheduleItem.findByScheduleItem(scheduleItem).takenToday();
-                        item.meds.add(el);
+                        if (scheduleItem.schedule().enabledFor(today)) {
+                            item.hasEvents = true;
+                            int minute = r.time().getMinuteOfHour();
+                            Medicine med = scheduleItem.schedule().medicine();
+                            DailyAgendaItemStubElement el = new DailyAgendaItemStubElement();
+                            el.medName = med.name();
+                            el.dose = scheduleItem.dose();
+                            el.displayDose = scheduleItem.displayDose();
+                            el.res = med.presentation().getDrawable();
+                            el.presentation = med.presentation();
+                            el.minute = minute < 10 ? "0" + minute : String.valueOf(minute);
+                            el.taken = DailyScheduleItem.findByScheduleItem(scheduleItem).takenToday();
+                            item.meds.add(el);
+                        }
                     }
                     Collections.sort(item.meds);
+
+                    if (!item.meds.isEmpty()) {
+                        item.id = r.getId();
+                        item.title = r.name();
+                        item.hour = r.time().getHourOfDay();
+                        item.minute = r.time().getMinuteOfHour();
+                        items.add(item);
+                    }
                 }
-                items.add(item);
+
+
             }
         } else {
             items.add(new DailyAgendaItemStub(new LocalTime(hour, 0).toString("kk:mm")));

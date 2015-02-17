@@ -11,14 +11,17 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Persistence;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
+import es.usc.citius.servando.calendula.util.Snack;
 
 public class MedicinesActivity extends ActionBarActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
 
@@ -54,11 +57,12 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getString(R.string.title_activity_routines));
-        toolbar.setSubtitle(getString(mMedicineId != -1 ? R.string.title_edit_medicine_activity : R.string.create_medicine_button_text));
-        toolbar.setNavigationIcon(new InsetDrawable(getResources().getDrawable(R.drawable.ic_pill_48dp), 18, 18, 18, 18));
+        toolbar.setNavigationIcon(new InsetDrawable(getResources().getDrawable(R.drawable.ic_pill_48dp), 20, 22, 20, 22));
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        ((TextView) findViewById(R.id.textView)).setText(getString(mMedicineId != -1 ? R.string.title_edit_medicine_activity : R.string.create_medicine_button_text));
 
         boolean create = getIntent().getBooleanExtra("create", false);
 
@@ -105,20 +109,21 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
     @Override
     public void onMedicineEdited(Medicine m) {
         Persistence.instance().save(m);
-        Toast.makeText(this, getString(R.string.medicine_edited_message), Toast.LENGTH_SHORT).show();
+        Snack.show(getString(R.string.medicine_edited_message), this);
         finish();
     }
 
     @Override
     public void onMedicineCreated(Medicine m) {
         Persistence.instance().save(m);
+        CalendulaApp.eventBus().post(new PersistenceEvents.MedicineAddedEvent(m.getId()));
         Toast.makeText(this, getString(R.string.medicine_created_message), Toast.LENGTH_SHORT).show();
         finish();
     }
 
     @Override
     public void onMedicineDeleted(Medicine m) {
-        Toast.makeText(this, getString(R.string.medicine_deleted_message), Toast.LENGTH_SHORT).show();
+        Snack.show(getString(R.string.medicine_deleted_message), this);
         Persistence.instance().deleteCascade(m);
         finish();
     }

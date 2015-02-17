@@ -18,7 +18,7 @@
             android:layout_height="fill_parent"
             android:id="@+id/bg"
             android:background="@drawable/shape_list_item"
-            android:alpha="0.4" />
+            android:alpha="0.7" />
 
         <ImageView
             android:layout_width="fill_parent"
@@ -60,11 +60,11 @@
             android:layout_width="35dp"
             android:layout_height="fill_parent"
             android:id="@+id/selection_indicator"
-            android:src="@drawable/ic_adjust_black_48dp"
+            android:src="@drawable/ic_done_black_48dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="26dp"
-            android:alpha="0.8" />
+            android:alpha="0.9" />
 
         <TextView
             android:layout_width="wrap_content"

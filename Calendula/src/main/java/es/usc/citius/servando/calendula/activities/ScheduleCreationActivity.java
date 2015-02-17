@@ -2,7 +2,6 @@ package es.usc.citius.servando.calendula.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.drawable.InsetDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,11 +22,16 @@ import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
 import com.astuetz.PagerSlidingTabStrip;
+import com.nispok.snackbar.Snackbar;
+import com.nispok.snackbar.SnackbarManager;
+import com.nispok.snackbar.enums.SnackbarType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.ScheduleSummaryFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleTimetableFragment;
 import es.usc.citius.servando.calendula.fragments.SelectMedicineListFragment;
@@ -39,6 +43,7 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
+import es.usc.citius.servando.calendula.util.Snack;
 
 //import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 
@@ -108,7 +113,9 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         if (mSchedule != null) {
             mViewPager.setCurrentItem(1);
         }
-        
+
+        CalendulaApp.eventBus().register(this);
+
         // set first page indicator
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
@@ -127,87 +134,212 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
                 ScheduleCreationHelper.instance().setScheduleItems(s.items());
                 mSchedule = s;
             } else {
-                Toast.makeText(this, "Schedule not found :(", Toast.LENGTH_SHORT).show();
+                Snack.show("Schedule not found :(", this);
             }
         }
 
     }
 
 
-    public void saveSchedule() {
-
+    public void createSchedule() {
         try {
             ActiveAndroid.beginTransaction();
-
-            ArrayList<Long> scheduleItemIds = new ArrayList<Long>();
-
-            Medicine m = ScheduleCreationHelper.instance().getSelectedMed();
-
-            Schedule s = mSchedule != null ? mSchedule : new es.usc.citius.servando.calendula.persistence.Schedule();
-            s.setMedicine(m);
+            // save schedule
+            Schedule s = new es.usc.citius.servando.calendula.persistence.Schedule();
+            s.setMedicine(ScheduleCreationHelper.instance().getSelectedMed());
             s.setDays(ScheduleCreationHelper.instance().getSelectedDays());
             s.save();
 
             for (ScheduleItem item : ScheduleCreationHelper.instance().getScheduleItems()) {
                 item.setSchedule(s);
                 item.save();
-                scheduleItemIds.add(item.getId());
-                // for each item, add a new DailyScheduleItem item for it
-                if (DailyScheduleItem.findByScheduleItem(item) == null) {
-                    Log.d(TAG, "Creating daily schedule item for " + item.routine().name());
-                    new DailyScheduleItem(item).save();
-                } else {
-                    Log.d(TAG, "Not creating daily schedule item for " + item.routine().name());
-                }
-
-                Log.d(TAG, "Add item: " + s.getId() + ", " + item.getId());
+                // add to daily schedule
+                new DailyScheduleItem(item).save();
             }
-
-            for (ScheduleItem scheduleItem : s.items()) {
-                if (!ScheduleCreationHelper.instance().getScheduleItems().contains(scheduleItem)) {
-                    Log.d(TAG, "Item to remove : " + scheduleItem.getId() + ", " + scheduleItem.routine().name() + ", " + scheduleItem.dose());
-                    scheduleItem.deleteCascade();
-                }
-            }
-
+            // save and fire event
             Persistence.instance().save(s);
-            Log.d(TAG, "Schedule saved successfully!");
             ActiveAndroid.setTransactionSuccessful();
-            AlarmScheduler.instance().onCreateOrUpdateSchedule(s, this);
             ScheduleCreationHelper.instance().clear();
-            Toast.makeText(ScheduleCreationActivity.this, getString(R.string.schedule_created_message), Toast.LENGTH_LONG).show();
-            // send result to caller activity
-            Intent returnIntent = new Intent();
-            returnIntent.putExtra("schedule_created", true);
-            setResult(RESULT_OK, returnIntent);
+            AlarmScheduler.instance().onCreateOrUpdateSchedule(s, this);
+            Log.d(TAG, "Schedule saved successfully!");
+            Snack.show(R.string.schedule_created_message, this);
             finish();
-
         } catch (Exception e) {
-            Toast.makeText(this, " Error creating schedule", Toast.LENGTH_SHORT).show();
+            Snack.show("Error creating schedule", this);
             e.printStackTrace();
         } finally {
-            ActiveAndroid.endTransaction();
+            if (ActiveAndroid.inTransaction()) {
+                ActiveAndroid.endTransaction();
+            }
         }
     }
 
 
-    boolean validatePage(int page) {
+    public void updateSchedule() {
+        try {
+            ActiveAndroid.beginTransaction();
+            // save schedule
+            Schedule s = mSchedule;
+            s.setMedicine(ScheduleCreationHelper.instance().getSelectedMed());
+            s.setDays(ScheduleCreationHelper.instance().getSelectedDays());
 
-        if (page == 1) {
+            List<Long> routinesTaken = new ArrayList<Long>();
 
-            for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems()) {
-                if (i.routine() == null) {
-                    Toast.makeText(this, R.string.create_schedule_incomplete_items, Toast.LENGTH_SHORT).show();
-                    return false;
+            for (ScheduleItem item : s.items()) {
+                DailyScheduleItem d = DailyScheduleItem.findByScheduleItem(item);
+                // if taken today, add to the list
+                if (d.takenToday()) {
+                    routinesTaken.add(item.routine().getId());
                 }
+                item.deleteCascade();
             }
 
-            if (ScheduleCreationHelper.instance().getDays(this).length <= 0) {
-                Toast.makeText(this, getString(R.string.schedule_no_day_specified_message), Toast.LENGTH_SHORT).show();
+            // save new items
+            for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems()) {
+
+                ScheduleItem item = new ScheduleItem();
+                item.setDose(i.dose());
+                item.setRoutine(i.routine());
+                item.setSchedule(s);
+                item.save();
+                // add to daily schedule
+                DailyScheduleItem dsi = new DailyScheduleItem(item);
+                if (routinesTaken.contains(item.routine().getId())) {
+                    dsi.setTakenToday(true);
+                }
+                dsi.save();
+            }
+            // save and fire event
+            Persistence.instance().save(s);
+            ActiveAndroid.setTransactionSuccessful();
+            ScheduleCreationHelper.instance().clear();
+            AlarmScheduler.instance().onCreateOrUpdateSchedule(s, this);
+            Log.d(TAG, "Schedule saved successfully!");
+            Toast.makeText(this, R.string.schedule_created_message, Toast.LENGTH_SHORT).show();
+            finish();
+        } catch (Exception e) {
+            Toast.makeText(this, "Error creating schedule!", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        } finally {
+            if (ActiveAndroid.inTransaction()) {
+                ActiveAndroid.endTransaction();
+            }
+        }
+    }
+
+
+    public void saveSchedule() {
+
+//        try {
+
+        if (!validateBeforeSave()) {
+            return;
+        }
+
+        if (mSchedule != null) {
+            updateSchedule();
+        } else {
+            createSchedule();
+        }
+
+//            ActiveAndroid.beginTransaction();
+//            ArrayList<Long> scheduleItemIds = new ArrayList<Long>();
+//            Medicine m = ScheduleCreationHelper.instance().getSelectedMed();
+//
+//            Schedule s = mSchedule != null ? mSchedule : new es.usc.citius.servando.calendula.persistence.Schedule();
+//            s.setMedicine(m);
+//            s.setDays(ScheduleCreationHelper.instance().getSelectedDays());
+//            s.save();
+//
+//            for (ScheduleItem item : ScheduleCreationHelper.instance().getScheduleItems()) {
+//                item.setSchedule(s);
+//                item.save();
+//                scheduleItemIds.add(item.getId());
+//                // for each item, add a new DailyScheduleItem item for it
+//                if (DailyScheduleItem.findByScheduleItem(item) == null) {
+//                    Log.d(TAG, "Creating daily schedule item for " + item.routine().name());
+//                    new DailyScheduleItem(item).save();
+//                } else {
+//                    Log.d(TAG, "Not creating daily schedule item for " + item.routine().name());
+//                }
+//
+//                Log.d(TAG, "Add item: " + s.getId() + ", " + item.getId());
+//            }
+//
+//            for (ScheduleItem scheduleItem : s.items()) {
+//                if (!ScheduleCreationHelper.instance().getScheduleItems().contains(scheduleItem)) {
+//                    Log.d(TAG, "Item to remove : " + scheduleItem.getId() + ", " + scheduleItem.routine().name() + ", " + scheduleItem.dose());
+//                    scheduleItem.deleteCascade();
+//                }
+//            }
+//
+//            Persistence.instance().save(s);
+//            Log.d(TAG, "Schedule saved successfully!");
+//            ActiveAndroid.setTransactionSuccessful();
+//            AlarmScheduler.instance().onCreateOrUpdateSchedule(s, this);
+//            ScheduleCreationHelper.instance().clear();
+//            Snack.show(R.string.schedule_created_message, this);
+//            // send result to caller activity
+//            Intent returnIntent = new Intent();
+//            returnIntent.putExtra("schedule_created", true);
+//            setResult(RESULT_OK, returnIntent);
+//            finish();
+//
+//        } catch (Exception e) {
+//            Snack.show("Error creating schedule",this);
+//            e.printStackTrace();
+//        } finally {
+//            if(ActiveAndroid.inTransaction()) {
+//                ActiveAndroid.endTransaction();
+//            }
+//        }
+    }
+
+
+    boolean validateBeforeSave() {
+
+        if (ScheduleCreationHelper.instance().getSelectedMed() == null) {
+            mViewPager.setCurrentItem(0);
+            showSnackBar(R.string.create_schedule_unselected_med);
+            return false;
+        }
+
+        for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems()) {
+            if (i.routine() == null) {
+                mViewPager.setCurrentItem(1);
+                showSnackBar(R.string.create_schedule_incomplete_items);
                 return false;
             }
         }
+
+        for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems()) {
+            if (i.dose() <= 0) {
+                mViewPager.setCurrentItem(1);
+                showSnackBar(R.string.create_schedule_incomplete_doses);
+                return false;
+            }
+        }
+
+        if (ScheduleCreationHelper.instance().getDays(this).length <= 0) {
+            mViewPager.setCurrentItem(1);
+            showSnackBar(R.string.schedule_no_day_specified_message);
+            return false;
+        }
+
         return true;
+    }
+
+
+    private void showSnackBar(int string) {
+        SnackbarManager.show(
+                Snackbar.with(getApplicationContext())
+                        .actionLabel("OK")
+                        .actionColor(getResources().getColor(R.color.android_orange_darker))
+                        .type(SnackbarType.MULTI_LINE)
+                        .textColor(getResources().getColor(R.color.white_80)) // change the text color
+                        .color(getResources().getColor(R.color.android_orange_dark)) // change the background color
+                        .text(getResources().getString(string)), this);
+
     }
 
     @Override
@@ -234,9 +366,15 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         }
     }
 
-    public void onMedicineSelected(Medicine m) {
+    public void onMedicineSelected(Medicine m, boolean step) {
+
+        ScheduleCreationHelper.instance().setSelectedMed(m);
+
+        if (!step) {
+            autoStepDone = true;
+        }
+
         if (!autoStepDone) {
-            ScheduleCreationHelper.instance().setSelectedMed(m);
             autoStepDone = true;
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -296,6 +434,35 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
     }
 
+    @Override
+    protected void onDestroy() {
+        CalendulaApp.eventBus().unregister(this);
+        ScheduleCreationHelper.instance().clear();
+        super.onDestroy();
+    }
+
+//    @Override
+//    public void onBackPressed() {
+        /*
+        if (mViewPager.getCurrentItem() > 0) {
+            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+        } else {
+            ScheduleCreationHelper.instance().clear();
+            super.onBackPressed();
+        }
+        */
+//    }
+
+    Fragment getViewPagerFragment(int position) {
+        return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -340,31 +507,10 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        if (mViewPager.getCurrentItem() > 0) {
-            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
-        } else {
-            ScheduleCreationHelper.instance().clear();
-            super.onBackPressed();
-        }
-    }
 
-    @Override
-    protected void onDestroy() {
-        ScheduleCreationHelper.instance().clear();
-        super.onDestroy();
-    }
-
-
-    Fragment getViewPagerFragment(int position) {
-        return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        overridePendingTransition(0, 0);
+    public void onEvent(PersistenceEvents.MedicineAddedEvent event) {
+        com.activeandroid.util.Log.d("onEvent", event.id + " ----");
+        ((SelectMedicineListFragment) getViewPagerFragment(0)).setSelectedMed(event.id);
     }
 
 }

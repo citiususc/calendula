@@ -179,7 +179,9 @@
     <string name="schedule_day_selector_sa">SA</string>
     <string name="schedule_day_selector_su">SU</string>
     <string name="agenda_zoom_meds_time">It\'s time to take some meds!</string>
-    <string name="create_schedule_incomplete_items">The given schedule is incomplete. Please check it!</string>
+    <string name="create_schedule_unselected_med">Select a med in order to create a schedule</string>
+    <string name="create_schedule_incomplete_items">Select routines for all your intakes</string>
+    <string name="create_schedule_incomplete_doses">Doses must be greater than zero</string>
     <string name="home_no_pending_meds_message">There are no pending meds for today</string>
     <string name="work_in_progress">This feature will be available in future versions. Thanks you!</string>
     <string name="medicine_created_message">Med created!</string>
@@ -202,6 +204,7 @@
     <string name="dialog_no_option">No</string>
 
     <string name="medicine_no_name_error_message">Please, type a name</string>
+    <string name="medicine_unselected">Not selected yet</string>
     <string name="medicine_no_presentation_error_message">Please, select a presentation</string>
 
     <!-- App Tutorial-->

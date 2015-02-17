@@ -15,13 +15,12 @@
 
     <ImageView
         android:layout_width="fill_parent"
-        android:layout_height="185dp"
+        android:layout_height="fill_parent"
         android:id="@+id/imageView"
-        android:background="@color/android_blue_dark" />
+        android:background="@drawable/bg_repeat_deafult" />
 
     <ListView
         android:id="@+id/listview"
-        android:background="@color/activity_background_color"
         android:scrollbars="none"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

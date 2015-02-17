@@ -21,4 +21,15 @@ public class PersistenceEvents {
     public static ModelCreateOrUpdateEvent MEDICINE_EVENT = new ModelCreateOrUpdateEvent(Medicine.class);
     public static ModelCreateOrUpdateEvent SCHEDULE_EVENT = new ModelCreateOrUpdateEvent(Schedule.class);
 
+
+    public static class MedicineAddedEvent {
+
+        public Long id;
+
+        public MedicineAddedEvent(Long id) {
+            this.id = id;
+        }
+    }
+
+
 }

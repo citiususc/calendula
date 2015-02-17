@@ -22,10 +22,9 @@
         android:visibility="visible"
         android:id="@+id/top"
 
-        android:layout_gravity="bottom"
-        android:background="@drawable/shape_list_item">
+        android:layout_gravity="bottom">
 
-        <RelativeLayout
+    <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/hide_if_empty"

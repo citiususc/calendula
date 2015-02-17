@@ -13,7 +13,7 @@ import java.util.List;
  * Created by joseangel.pineiro on 12/5/13.
  */
 @Table(name = "Medicines", id = Medicine.COLUMN_ID)
-public class Medicine extends Model {
+public class Medicine extends Model implements Comparable<Medicine> {
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_NAME = "Name";
@@ -93,4 +93,8 @@ public class Medicine extends Model {
     }
 
 
+    @Override
+    public int compareTo(Medicine another) {
+        return name.compareTo(another.name);
+    }
 }

@@ -9,9 +9,9 @@
         android:layout_height="fill_parent"
         android:divider="#E0EAEF"
         android:dividerHeight="0dp"
+        android:background="@drawable/bg_repeat_deafult"
         android:id="@+id/medicines_list"
-        android:scrollbars="none"
-        android:background="@color/activity_background_color" />
+        android:scrollbars="none" />
 
     <!--<ImageView-->
     <!--android:layout_width="fill_parent"-->

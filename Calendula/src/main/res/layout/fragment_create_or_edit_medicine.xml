@@ -11,11 +11,10 @@
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="40dp"
         android:layout_marginLeft="20dp"
-        android:textStyle="bold"
-        android:textSize="25dp"
-        android:textColor="@color/android_blue_dark" />
+        android:textSize="20sp"
+        android:textColor="@color/dark_grey_text" />
 
     <AutoCompleteTextView
         android:layout_width="match_parent"
@@ -26,7 +25,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:textColor="@color/dark_grey_home"
-        android:textSize="22dp"
+        android:textSize="20sp"
         android:inputType="text"
         android:imeOptions="actionDone"
         android:lines="1"
@@ -38,9 +37,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/medicine_presentation"
-        android:textStyle="bold"
-        android:textSize="25dp"
-        android:textColor="@color/android_blue_dark"
+        android:textSize="20sp"
+        android:textColor="@color/dark_grey_text"
         android:id="@+id/textView2"
         android:layout_below="@+id/medicine_edit_name"
         android:layout_alignLeft="@+id/medicine_edit_name"

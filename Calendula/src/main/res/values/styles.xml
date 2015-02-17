@@ -51,7 +51,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">15sp</item>
         <item name="android:height">@dimen/normal_button_height</item>
-        <item name="android:background">@color/transparent</item>
+        <item name="android:background">@color/android_blue_dark</item>
     </style>
 
     <style name="dark_text_big">

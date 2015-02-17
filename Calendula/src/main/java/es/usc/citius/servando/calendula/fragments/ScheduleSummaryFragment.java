@@ -61,14 +61,16 @@ public class ScheduleSummaryFragment extends Fragment {
         final ImageView medIconImage = (ImageView) rootView.findViewById(R.id.sched_summary_medicon);
 
 
-        String medName = med != null ? med.name() : "Unselected";
+        //String medName = med != null ? med.name() : "Unselected";
         int medIcon = med != null ? med.presentation().getDrawable() : Presentation.PILLS.getDrawable();
 
         String freq = ScheduleUtils.getTimesStr(items != null ? items.size() : 0, getActivity());
         String days[] = ScheduleCreationHelper.instance().getDays(getActivity());
-        String dayStr = ScheduleUtils.stringifyDays(days, getActivity());
+        String dayStr = ScheduleUtils.stringifyDays(ScheduleCreationHelper.instance().getSelectedDays(), getActivity());
 
-        medNameTv.setText(medName);
+        if (med != null) {
+            medNameTv.setText(med.name());
+        }
         medDailyFreqTv.setText(freq);
         medDaysTv.setText(dayStr);
 

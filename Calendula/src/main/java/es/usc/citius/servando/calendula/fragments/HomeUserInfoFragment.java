@@ -55,7 +55,7 @@ public class HomeUserInfoFragment extends Fragment {
 
         monthTv = (TextView) view.findViewById(R.id.month_text);
         dayTv = (TextView) view.findViewById(R.id.day_text);
-        
+
         profileUsername = (TextView) view.findViewById(R.id.profile_username);
         profileContainer = (RelativeLayout) view.findViewById(R.id.profile_container);
         profileImageContainer = view.findViewById(R.id.profile_image_container);
@@ -133,7 +133,7 @@ public class HomeUserInfoFragment extends Fragment {
         int width = (int) Screen.getDpSize(getActivity()).x;
         int height = getResources().getDimensionPixelSize(R.dimen.header_height);
 
-        int rand = (((int) (Math.random() * 1000)) % 5) + 1;
+        int rand = (((int) (Math.random() * 1000)) % 4) + 1;
 
         return Screen.getResizedBitmap(getActivity(), "home_bg_" + rand + ".jpg", width, height);
     }
@@ -164,8 +164,6 @@ public class HomeUserInfoFragment extends Fragment {
         super.onDetach();
         mSharedPreferences.unregisterOnSharedPreferenceChangeListener(mListener);
     }
-    
-    
 
 
 }

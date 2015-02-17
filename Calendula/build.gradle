@@ -39,13 +39,13 @@ android {
     buildTypes {
         release {
             runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),        \
-                   'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),         \
+                    'proguard-rules.txt'
         }
         debug {
             runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),        \
-                   'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),         \
+                    'proguard-rules.txt'
         }
     }
     productFlavors {
@@ -55,7 +55,7 @@ android {
 dependencies {
     compile 'com.google.code.gson:gson'
     compile project(':libraries:ExpandableListview')
-    //compile project(':libraries:BetterPickersLib')
+    compile 'com.nispok:snackbar:2.9.0'
     compile 'com.doomonafireball.betterpickers:library:1.5.3'
     compile 'com.github.filippudak.progresspieview:library:1.0.+'
     compile 'com.github.amlcurran.showcaseview:library:5.0.0'

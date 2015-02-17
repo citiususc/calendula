@@ -3,6 +3,7 @@ package es.usc.citius.servando.calendula.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,9 +14,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
@@ -42,8 +45,17 @@ public class SelectMedicineListFragment extends Fragment {
         if (med != null)
             selectedId = med.getId();
 
+        rootView.findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), MedicinesActivity.class);
+                i.putExtra("create", true);
+                startActivity(i);
+            }
+        });
 
         mMedicines = Medicine.findAll();
+        Collections.sort(mMedicines);
         adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
         listview.setAdapter(adapter);
         return rootView;
@@ -77,7 +89,7 @@ public class SelectMedicineListFragment extends Fragment {
                 Medicine m = (Medicine) view.getTag();
                 selectedId = m.getId();
                 if (mActivity != null) {
-                    mActivity.onMedicineSelected(m);
+                    mActivity.onMedicineSelected(m, true);
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -100,7 +112,6 @@ public class SelectMedicineListFragment extends Fragment {
         }
     }
 
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -111,7 +122,21 @@ public class SelectMedicineListFragment extends Fragment {
 
     @Override
     public void onDetach() {
-        super.onDetach();
         mActivity = null;
+        super.onDetach();
     }
+
+    public void setSelectedMed(Long id) {
+        this.selectedId = id;
+        Medicine m = Medicine.findById(id);
+        if (m != null) {
+            mMedicines.clear();
+            mMedicines.addAll(Medicine.findAll());
+            Collections.sort(mMedicines);
+            mActivity.onMedicineSelected(m, false);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+
 }

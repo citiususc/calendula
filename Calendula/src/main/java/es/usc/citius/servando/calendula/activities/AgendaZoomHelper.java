@@ -22,7 +22,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.ocpsoft.pretty.time.PrettyTime;
@@ -40,6 +39,7 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 import es.usc.citius.servando.calendula.util.AppTutorial;
+import es.usc.citius.servando.calendula.util.Snack;
 
 /**
  * Created by joseangel.pineiro on 10/21/14.
@@ -90,7 +90,7 @@ public class AgendaZoomHelper {
                     public void onClick(DialogInterface dialog, int which) {
                         int minutes = values[which];
                         AlarmScheduler.instance().onDelayRoutine(routineToDelay, activity, minutes);
-                        Toast.makeText(activity, activity.getString(R.string.alarm_delayed_message, minutes), Toast.LENGTH_SHORT).show();
+                        Snack.show(activity.getString(R.string.alarm_delayed_message, minutes), activity);
                     }
                 });
         builder.create().show();
@@ -222,9 +222,10 @@ public class AgendaZoomHelper {
         TransitionDrawable transition = (TransitionDrawable) v.getBackground();
         transition.startTransition(250);
 
-        Log.d("AgendaZoomHelper", "Show tutorial if needed...");
-        ((HomeActivity) activity).getTutorial().show(AppTutorial.NOTIFICATION_INFO, R.id.check_button, activity);
-
+        if (v.findViewById(R.id.check_button) != null) {
+            Log.d("AgendaZoomHelper", "Show tutorial if needed...");
+            ((HomeActivity) activity).getTutorial().show(AppTutorial.NOTIFICATION_INFO, R.id.check_button, activity);
+        }
         animator = null;
     }
 

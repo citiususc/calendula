@@ -26,7 +26,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.makeramen.RoundedImageView;
@@ -51,6 +50,7 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.util.AppTutorial;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
+import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.view.ScrimInsetsFrameLayout;
 
 //import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
@@ -87,7 +87,7 @@ public class HomeActivity extends ActionBarActivity implements
     int currentActionBarColor;
     int previousActionBarColor;
 
-    View addButton;
+    FloatingActionButton addButton;
     boolean addButtonShown = true;
     //boolean profileShown = true;
     String[] titles;
@@ -95,6 +95,7 @@ public class HomeActivity extends ActionBarActivity implements
     Toolbar toolbar;
     PagerSlidingTabStrip tabs;
     Handler mHandler;
+    View tabsShadow;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -133,6 +134,7 @@ public class HomeActivity extends ActionBarActivity implements
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabsShadow = findViewById(R.id.tabs_shadow);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(5);
 
@@ -152,6 +154,7 @@ public class HomeActivity extends ActionBarActivity implements
 
         tabs.setBackgroundColor(getResources().getColor(R.color.transparent));
         tabs.setVisibility(View.GONE);
+        tabsShadow.setVisibility(View.GONE);
         tabs.setViewPager(mViewPager);
         // set up the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -166,7 +169,7 @@ public class HomeActivity extends ActionBarActivity implements
         initializeDrawer();
 
         titles = getResources().getStringArray(R.array.home_action_list);
-        addButton = findViewById(R.id.add_button);
+        addButton = (FloatingActionButton) findViewById(R.id.add_button);
         addButton.setOnClickListener(this);
 
         hideAddButton();
@@ -211,25 +214,25 @@ public class HomeActivity extends ActionBarActivity implements
             case 5:
                 return R.color.android_green;
             case 7:
-                return R.color.android_orange;
+                return R.color.android_orange_lighter;
             case 8:
-                return R.color.android_red;
+                return R.color.android_red_lighter;
             default:
                 return R.color.dark_grey_home;
 
         }
     }
 
-    public int getDrawerBackgroundCOlor(int page) {
+    public int getAddButtonColor(int page) {
         switch (page) {
             case 1:
-                return R.color.android_blue_darker;
+                return R.color.android_blue_dark;
             case 2:
                 return R.color.android_pink_dark;
             case 3:
                 return R.color.android_green_dark;
             default:
-                return R.color.drawerbg_default;
+                return R.color.android_blue_darker;
 
         }
     }
@@ -393,7 +396,7 @@ public class HomeActivity extends ActionBarActivity implements
         else if (position > 2 && position < 6)
             mViewPager.setCurrentItem(position - 2);
         else if (position > 6 && position < 9) {
-            Toast.makeText(this, getString(R.string.work_in_progress), Toast.LENGTH_SHORT).show();
+            Snack.show(R.string.work_in_progress, this);
         } else if (position == 9) {
             launchActivity(new Intent(this, SettingsActivity.class));
         } else if (position == 10) {
@@ -537,7 +540,6 @@ public class HomeActivity extends ActionBarActivity implements
             @Override
             public void run() {
                 final Routine r = Routine.findById(routineId);
-                //Toast.makeText(HomeActivity.this, "Take your meds (" + r.name() + ")", Toast.LENGTH_SHORT).show();
                 mViewPager.setCurrentItem(0);
                 ((DailyAgendaFragment) getViewPagerFragment(0)).showReminder(r);
             }
@@ -550,9 +552,7 @@ public class HomeActivity extends ActionBarActivity implements
         invalidateOptionsMenu();
         updateTitle(page);
         showTutorialStage(page);
-
-        //findViewById(R.id.left_drawer_top_overlay).setBackgroundColor(getResources().getColor(getDrawerBackgroundCOlor(page)));
-
+        updateAddButton(page);
         if (page == 0) {
             hideAddButton();
             hideTabs();
@@ -573,6 +573,11 @@ public class HomeActivity extends ActionBarActivity implements
             setActionBarColor(getResources().getColor(R.color.android_blue_darker));
 
         }
+    }
+
+    private void updateAddButton(int page) {
+
+        addButton.setColorNormalResId(getAddButtonColor(page));
 
     }
 
@@ -642,6 +647,7 @@ public class HomeActivity extends ActionBarActivity implements
     public void showTabs() {
         if (!(tabs.getVisibility() == View.VISIBLE)) {
             tabs.setVisibility(View.VISIBLE);
+            tabsShadow.setVisibility(View.VISIBLE);
 //            final Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_show_tabs);
 //            slide.setDuration(ANIM_TABS_DURATION);
 //            mHandler.postDelayed(new Runnable() {
@@ -659,6 +665,7 @@ public class HomeActivity extends ActionBarActivity implements
     public void hideTabs() {
         if (!(tabs.getVisibility() == View.GONE)) {
             tabs.setVisibility(View.GONE);
+            tabsShadow.setVisibility(View.GONE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
             }
@@ -825,8 +832,9 @@ public class HomeActivity extends ActionBarActivity implements
                 ((RoundedImageView) v.findViewById(R.id.imageViewbg)).setImageResource(getActionColor(position));
                 ((RoundedImageView) v.findViewById(R.id.imageViewbg)).mutateBackground(true);
 
-                if (position == 8 || position == 9)
-                    v.setEnabled(false);
+                if (position == 7 || position == 8) {
+                    ((TextView) v.findViewById(R.id.text)).setTextColor(getResources().getColor(R.color.drawer_item_disabled));
+                }
 
                 return v;
             }

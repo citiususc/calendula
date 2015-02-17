@@ -22,7 +22,6 @@
             android:clipToPadding="false"
             android:layout_height="match_parent">
 
-
             <!--android:layout_marginTop="56dp"-->
             <android.support.v4.view.ViewPager
                 android:id="@+id/pager"
@@ -61,6 +60,17 @@
                 android:background="@color/android_blue_darker"
                 android:elevation="50dp"
                 android:layout_below="@+id/toolbar" />
+
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="5dp"
+                android:id="@+id/tabs_shadow"
+                android:src="@drawable/daily_view_list_item_tab_shadow_top"
+                android:layout_below="@+id/tabs"
+                android:scaleType="fitXY"
+                android:alpha="0.7" />
+
         </RelativeLayout>
 
     </es.usc.citius.servando.calendula.util.view.ScrimInsetsFrameLayout>

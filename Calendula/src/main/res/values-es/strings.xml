@@ -199,7 +199,9 @@
     <string name="schedule_day_selector_sa">SA</string>
     <string name="schedule_day_selector_su">DO</string>
     <string name="agenda_zoom_meds_time">Tómate tus medicinas!</string>
-    <string name="create_schedule_incomplete_items">La pauta indicada está incompleta. Revísela, por favor!</string>
+    <string name="create_schedule_incomplete_items">Selecciona rutinas para todas tus tomas</string>
+    <string name="create_schedule_incomplete_doses">Las dosis deben ser mayores que cero</string>
+    <string name="create_schedule_unselected_med">Selecciona una medicina para poder crear una pauta</string>
     <string name="home_no_pending_meds_message">No hay medicinas pendientes para el resto del día</string>
     <string name="work_in_progress">Esta funcionalidad estará disponible en futuras versiones. Gracias!</string>
     <string name="medicine_created_message">Medicina añadida al botiquín!</string>
@@ -220,6 +222,7 @@
     <string name="dialog_no_option">No</string>
     <string name="medicine_no_name_error_message">Indica un nombre, por favor</string>
     <string name="medicine_no_presentation_error_message">Selecciona una presentación, por favor</string>
+    <string name="medicine_unselected">Aún sin seleccionar</string>
 
     <!--App Tutorial-->
     <string name="tutorial_welcome_title">Bienvenido a Caléndula!</string>
@@ -232,7 +235,7 @@
     <string name="tutorial_meds_text">Mantén el control de tus medicinas añadiéndolas al botiquín. En próximas versiones incluiremos una gestión de stock más avanzada!</string>
     <string name="tutorial_schedule_title">Gestiona tus pautas!</string>
     <string name="tutorial_schedule_text">Las pautas nos permiten avisarte cuando es hora de tomar tus medicinas. Añade tus dosis y horarios y no vuelvas a olvidarte nunca!</string>
-    <string name="tutorial_next">Coninuar</string>
+    <string name="tutorial_next">Continuar</string>
     <string name="tutorial_understood">Entendido</string>
     <string name="tutorial_notifications_title">Confirma!</string>
     <string name="tutorial_notifications_text">Toma tus medicinas y recuerda confirmar que lo has hecho, o de lo contrario te seguiremos avisando. Puedes cambiar la configuración de notificaciones en el menú de opciones. </string>

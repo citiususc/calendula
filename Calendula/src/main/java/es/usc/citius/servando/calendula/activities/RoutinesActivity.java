@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
@@ -96,7 +95,7 @@ public class RoutinesActivity extends ActionBarActivity implements RoutineCreate
     @Override
     public void onRoutineEdited(Routine r) {
         AlarmScheduler.instance().onCreateOrUpdateRoutine(r, this);
-        Toast.makeText(this, getString(R.string.routine_edited_message), Toast.LENGTH_SHORT).show();
+        //Snack.show(getString(R.string.routine_edited_message),this);
         finish();
     }
 
@@ -104,14 +103,14 @@ public class RoutinesActivity extends ActionBarActivity implements RoutineCreate
     public void onRoutineDeleted(Routine r) {
         AlarmScheduler.instance().onDeleteRoutine(r, this);
         r.deleteCascade();
-        Toast.makeText(this, getString(R.string.routine_deleted_message), Toast.LENGTH_SHORT).show();
+        //Snack.show(getString(R.string.routine_deleted_message), this);
         finish();
     }
 
     @Override
     public void onRoutineCreated(Routine r) {
         AlarmScheduler.instance().onCreateOrUpdateRoutine(r, this);
-        Toast.makeText(this, getString(R.string.routine_created_message), Toast.LENGTH_SHORT).show();
+        //Snack.show(getString(R.string.routine_created_message),this);
         // send result to caller activity
         finish();
     }
