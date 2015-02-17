@@ -34,7 +34,6 @@ public class ScheduleTimetableFragment extends Fragment {
     public static final String TAG = ScheduleTimetableFragment.class.getName();
 
     LinearLayout timetableContainer;
-    String doses[] = new String[]{"1", "2", "3", "Specify"};
     int timesPerDay = 1;
 
     Spinner scheduleSpinner;
@@ -118,41 +117,51 @@ public class ScheduleTimetableFragment extends Fragment {
             public void onClick(View view) {
 
                 TextView text = ((TextView) view);
-
-
-                if (text.getTag() == null || ((Boolean) text.getTag()) == true) {
-                    text.setTag(false);
-                    ((TextView) view).setTextAppearance(getActivity(), R.style.schedule_day_unselected);
-                } else {
-                    text.setTag(true);
-                    ((TextView) view).setTextAppearance(getActivity(), R.style.schedule_day_selected);
-                }
-
+                int index;
                 switch (text.getId()) {
                     case R.id.day_mo:
                         ScheduleCreationHelper.instance().toggleSelectedDay(0);
+                        index = 0;
                         break;
                     case R.id.day_tu:
                         ScheduleCreationHelper.instance().toggleSelectedDay(1);
+                        index = 1;
                         break;
                     case R.id.day_we:
                         ScheduleCreationHelper.instance().toggleSelectedDay(2);
+                        index = 2;
                         break;
                     case R.id.day_th:
+                        index = 3;
                         ScheduleCreationHelper.instance().toggleSelectedDay(3);
                         break;
                     case R.id.day_fr:
                         ScheduleCreationHelper.instance().toggleSelectedDay(4);
+                        index = 4;
                         break;
                     case R.id.day_sa:
                         ScheduleCreationHelper.instance().toggleSelectedDay(5);
+                        index = 5;
                         break;
                     case R.id.day_su:
                         ScheduleCreationHelper.instance().toggleSelectedDay(6);
+                        index = 6;
                         break;
                     default:
-                        break;
+                        return;
                 }
+
+                boolean daySelected = ScheduleCreationHelper.instance().getSelectedDays()[index];
+
+                if (!daySelected) {
+                    ((TextView) view).setTextAppearance(getActivity(), R.style.schedule_day_unselected);
+                    view.setBackgroundResource(R.drawable.dayselector_circle_unselected);
+                } else {
+                    ((TextView) view).setTextAppearance(getActivity(), R.style.schedule_day_selected);
+                    view.setBackgroundResource(R.drawable.dayselector_circle);
+                }
+
+
             }
         };
 
@@ -420,20 +429,32 @@ public class ScheduleTimetableFragment extends Fragment {
 
     void checkSelectedDays(View rootView, boolean[] days) {
 
-        ((TextView) rootView.findViewById(R.id.day_mo)).setTextAppearance(getActivity(),
-                days[0] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
+        ((TextView) rootView.findViewById(R.id.day_mo)).setTextAppearance(getActivity(), days[0] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
+        rootView.findViewById(R.id.day_mo).setBackgroundResource(days[0] ? R.drawable.dayselector_circle : R.drawable.dayselector_circle_unselected);
+
         ((TextView) rootView.findViewById(R.id.day_tu)).setTextAppearance(getActivity(),
                 days[1] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
+        (rootView.findViewById(R.id.day_tu)).setBackgroundResource(days[1] ? R.drawable.dayselector_circle : R.drawable.dayselector_circle_unselected);
+
         ((TextView) rootView.findViewById(R.id.day_we)).setTextAppearance(getActivity(),
                 days[2] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
+        (rootView.findViewById(R.id.day_we)).setBackgroundResource(days[2] ? R.drawable.dayselector_circle : R.drawable.dayselector_circle_unselected);
+
         ((TextView) rootView.findViewById(R.id.day_th)).setTextAppearance(getActivity(),
                 days[3] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
+        (rootView.findViewById(R.id.day_th)).setBackgroundResource(days[3] ? R.drawable.dayselector_circle : R.drawable.dayselector_circle_unselected);
+
         ((TextView) rootView.findViewById(R.id.day_fr)).setTextAppearance(getActivity(),
                 days[4] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
+        (rootView.findViewById(R.id.day_fr)).setBackgroundResource(days[4] ? R.drawable.dayselector_circle : R.drawable.dayselector_circle_unselected);
+
         ((TextView) rootView.findViewById(R.id.day_sa)).setTextAppearance(getActivity(),
                 days[5] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
+        (rootView.findViewById(R.id.day_sa)).setBackgroundResource(days[5] ? R.drawable.dayselector_circle : R.drawable.dayselector_circle_unselected);
+
         ((TextView) rootView.findViewById(R.id.day_su)).setTextAppearance(getActivity(),
                 days[6] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
+        (rootView.findViewById(R.id.day_su)).setBackgroundResource(days[6] ? R.drawable.dayselector_circle : R.drawable.dayselector_circle_unselected);
 
     }
 

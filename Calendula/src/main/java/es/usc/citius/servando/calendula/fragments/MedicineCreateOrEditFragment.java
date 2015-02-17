@@ -28,7 +28,6 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
-import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
 
 /**
  * Created by joseangel.pineiro on 12/4/13.
@@ -125,9 +124,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (ScheduleCreationHelper.instance().getSelectedMed() != null) {
-            setMedicne(ScheduleCreationHelper.instance().getSelectedMed());
-        } else if (mMedicine != null) {
+        if (mMedicine != null) {
             setMedicne(mMedicine);
         }
     }
@@ -139,7 +136,6 @@ public class MedicineCreateOrEditFragment extends Fragment {
 
     public boolean validate() {
         if (mNameTextView.getText() != null && mNameTextView.getText().length() > 0) {
-            ScheduleCreationHelper.instance().setMedNameToChange(mNameTextView.getText().toString());
             if (selectedPresentation == null) {
                 Toast.makeText(getActivity(), "Please, select a presentation!", Toast.LENGTH_SHORT).show();
                 return false;
@@ -185,7 +181,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
     void onClickMedicine(int viewId, View rootView) {
 
         for (View v : getViewsByTag((ViewGroup) rootView, "med_type")) {
-            v.setBackgroundColor(getResources().getColor(R.color.white));
+            v.setBackgroundColor(getResources().getColor(R.color.transparent));
         }
         rootView.findViewById(viewId).setBackgroundResource(R.drawable.presentation_circle_background);
 
@@ -215,7 +211,6 @@ public class MedicineCreateOrEditFragment extends Fragment {
                 Log.d(getTag(), "Drops");
                 break;
         }
-
     }
 
 
@@ -260,13 +255,13 @@ public class MedicineCreateOrEditFragment extends Fragment {
         Log.d(getTag(), "Medicine set: " + r.name());
         mMedicine = r;
         mNameTextView.setText(mMedicine.name());
-//        mConfirmButton.setText(getString(R.string.edit_medicine_button_text));
+        selectedPresentation = mMedicine.presentation();
         selectPresentation(mMedicine.presentation());
     }
 
     private void selectPresentation(Presentation p) {
         for (View v : getViewsByTag((ViewGroup) getView(), "med_type")) {
-            v.setBackgroundColor(getResources().getColor(R.color.white));
+            v.setBackgroundColor(getResources().getColor(R.color.transparent));
         }
         if (p != null) {
             int viewId = getPresentationViewId(p);
@@ -305,7 +300,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
                 if (!validate()) {
                     return;
                 }
-                
+
                 Medicine m = new Medicine(name);
                 m.setPresentation(selectedPresentation != null ? selectedPresentation : Presentation.UNKNOWN);
                 if (mMedicineEditCallback != null) {

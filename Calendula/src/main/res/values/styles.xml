@@ -49,9 +49,9 @@
     <style name="next_button">
         <item name="android:textColor">@color/white</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">15dp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:height">@dimen/normal_button_height</item>
-        <item name="android:background">@drawable/next_button_selector</item>
+        <item name="android:background">@color/transparent</item>
     </style>
 
     <style name="dark_text_big">
@@ -62,19 +62,18 @@
 
 
     <style name="prev_button">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">15dp</item>
+        <item name="android:textColor">@color/white_50</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:height">@dimen/normal_button_height</item>
-        <item name="android:background">@drawable/prev_button_selector</item>
+        <item name="android:background">@color/transparent</item>
     </style>
 
     <style name="confirm_button">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/android_green</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">15dp</item>
         <item name="android:height">@dimen/normal_button_height</item>
-        <item name="android:background">@drawable/confirm_button_selector</item>
+        <item name="android:background">@color/transparent</item>
     </style>
 
 
@@ -111,18 +110,20 @@
 
     <style name="schedule_day_unselected">
         <item name="android:layout_width">0dp</item>
+        <!--<item name="android:background">@drawable/dayselector_circle_unselected</item>-->
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
-        <item name="android:textColor">@color/android_blue_light</item>
+        <item name="android:textColor">@color/android_blue</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
     </style>
 
     <style name="schedule_day_selected">
+        <!--<item name="android:background">@drawable/dayselector_circle</item>-->
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
-        <item name="android:textColor">@color/android_blue_dark</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
         <item name="android:textStyle">bold</item>

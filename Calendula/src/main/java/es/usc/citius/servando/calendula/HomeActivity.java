@@ -137,20 +137,22 @@ public class HomeActivity extends ActionBarActivity implements
         mViewPager.setOffscreenPageLimit(5);
 
 
-        tabs.setViewPager(mViewPager);
         tabs.setOnPageChangeListener(this);
         tabs.setShouldExpand(true);
-        tabs.setAllCaps(false);
+        tabs.setAllCaps(true);
         tabs.setTabPaddingLeftRight(30);
         tabs.setShouldExpand(true);
         tabs.setDividerColor(getResources().getColor(R.color.white_50));
         tabs.setDividerColor(getResources().getColor(R.color.transparent));
         tabs.setIndicatorHeight(getResources().getDimensionPixelSize(R.dimen.tab_indicator_height));
+
         tabs.setIndicatorColor(getResources().getColor(R.color.white));
         tabs.setTextColor(getResources().getColor(R.color.white_80));
         tabs.setUnderlineColor(getResources().getColor(R.color.transparent));
+
         tabs.setBackgroundColor(getResources().getColor(R.color.transparent));
         tabs.setVisibility(View.GONE);
+        tabs.setViewPager(mViewPager);
         // set up the toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));

@@ -55,7 +55,7 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
         setSupportActionBar(toolbar);
         toolbar.setTitle(getString(R.string.title_activity_routines));
         toolbar.setSubtitle(getString(mMedicineId != -1 ? R.string.title_edit_medicine_activity : R.string.create_medicine_button_text));
-        toolbar.setNavigationIcon(new InsetDrawable(getResources().getDrawable(R.drawable.ic_pill_48dp), 16, 16, 16, 16));
+        toolbar.setNavigationIcon(new InsetDrawable(getResources().getDrawable(R.drawable.ic_pill_48dp), 18, 18, 18, 18));
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);

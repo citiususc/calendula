@@ -10,8 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Arrays;
+import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Presentation;
+import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
 
@@ -48,16 +52,19 @@ public class ScheduleSummaryFragment extends Fragment {
         Log.d(TAG, "updateSummary ScheduleSUmmaryFragment");
         View rootView = getView();
 
+        Medicine med = ScheduleCreationHelper.instance().getSelectedMed();
+        List<ScheduleItem> items = ScheduleCreationHelper.instance().getScheduleItems();
+
         final TextView medNameTv = (TextView) rootView.findViewById(R.id.sched_summary_medname);
         final TextView medDaysTv = (TextView) rootView.findViewById(R.id.sched_summary_medi_days);
         final TextView medDailyFreqTv = (TextView) rootView.findViewById(R.id.sched_summary_medi_dailyfreq);
         final ImageView medIconImage = (ImageView) rootView.findViewById(R.id.sched_summary_medicon);
 
 
-        String medName = ScheduleCreationHelper.instance().getMedNameToChange() != null ? ScheduleCreationHelper.instance().getMedNameToChange()
-                : ScheduleCreationHelper.instance().getSelectedMed().name();
-        int medIcon = ScheduleCreationHelper.instance().getSelectedMed().presentation().getDrawable();
-        String freq = ScheduleUtils.getTimesStr(ScheduleCreationHelper.instance().getScheduleItems().size(), getActivity());
+        String medName = med != null ? med.name() : "Unselected";
+        int medIcon = med != null ? med.presentation().getDrawable() : Presentation.PILLS.getDrawable();
+
+        String freq = ScheduleUtils.getTimesStr(items != null ? items.size() : 0, getActivity());
         String days[] = ScheduleCreationHelper.instance().getDays(getActivity());
         String dayStr = ScheduleUtils.stringifyDays(days, getActivity());
 

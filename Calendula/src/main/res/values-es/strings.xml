@@ -53,9 +53,6 @@
     <string name="title_create_medicine_activity">Nueva medicina</string>
     <string name="title_edit_schedule_activity">Editar pauta</string>
     <string name="title_create_schedule_activity">Crear pauta</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
     <string name="routine_name">Nombre de la rutina</string>
     <string name="routine_time">Hora</string>
     <string name="edit_routine_button_text">Guardar cambios</string>
@@ -69,11 +66,11 @@
     <string name="add_medicine_button">AÑADIR MEDICINA</string>
     <string name="no_stock_info_msg">Sin información de stock</string>
     <string name="title_activity_schedules">Pautas</string>
-    <string name="prev">ATRÁS</string>
-    <string name="next">SIGUIENTE</string>
-    <string name="delay">RETRASAR</string>
-    <string name="done">HECHO</string>
-    <string name="confirm">CONFIRMAR</string>
+    <string name="prev">Atrás</string>
+    <string name="next">Siguiente</string>
+    <string name="delay">Retrasar</string>
+    <string name="done">Hecho</string>
+    <string name="confirm">Confirmar</string>
     <string name="meds_time">Recuerda tomar tus medicinas</string>
 
     <!-- Schedule creation -->

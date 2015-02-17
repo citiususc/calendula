@@ -2,15 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="4dp"
-    android:paddingTop="4dp"
-    android:paddingRight="4dp">
+    android:paddingLeft="3dp"
+    android:paddingTop="3dp"
+    android:paddingRight="3dp">
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="90dp"
-        android:background="@drawable/shape_list_item"
         android:id="@+id/schedules_list_item_container">
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/imageView"
+            android:background="@drawable/shape_list_item"
+            android:alpha="0.5" />
 
         <ImageButton
             android:layout_width="40dp"

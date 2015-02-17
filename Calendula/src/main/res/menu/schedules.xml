@@ -2,13 +2,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+        android:id="@+id/action_remove"
+        android:title="@string/action_remove"
+        android:icon="@drawable/ic_delete_white_48dp"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
+
     <item
-        android:id="@+id/action_remove_all"
-        android:title="@string/action_remove_all"
-        android:orderInCategory="101"
+        android:id="@+id/action_done"
+        android:title="@string/action_remove"
+        android:icon="@drawable/ic_done_white_48dp"
+        android:orderInCategory="100"
         app:showAsAction="never" />
 </menu>

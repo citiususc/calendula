@@ -17,7 +17,7 @@
     <color name="android_blue">#33B5E5</color>
     <color name="android_blue_dark">#0099CC</color>
     <color name="android_blue_darker">#0077aa</color>
-    <color name="android_blue_statusbar">#006699</color>
+    <color name="android_blue_statusbar">#004F71</color>
     <color name="android_blue_light">#5533B5E5</color>
     <color name="white_80">#EEFFFFFF</color>
     <color name="white_50">#55FFFFFF</color>
@@ -36,7 +36,7 @@
     <color name="toolbar_dark_background">#0077aa</color>
     <color name="green_hour_expanded_left">#2299CC00</color>
     <color name="green_hour_expanded_right">#CC99CC00</color>
-    <color name="list_item_active_background">#11eeeeff</color>
+    <color name="list_item_active_background">#11fefefe</color>
     <color name="click_highlight">#2233B5E5</color>
     <color name="drawerbg_default">#272727</color>
     <color name="drawerbg">#3c3c3c</color>
@@ -50,10 +50,10 @@
     <color name="light_grey_pressed">#99989898</color>
     <!-- #ececec -->
     <!--<color name="actionbar_background_color">#161616</color>-->
-    <color name="med_presentation_circle_bg">#3333B5E5</color>
+    <color name="med_presentation_circle_bg">#2233B5E5</color>
     <color name="black_overlay">#66000000</color>
 
     <color name="actionbar_background_color">#0099CC</color>
-    <color name="activity_background_color">#ECECEF</color>
+    <color name="activity_background_color">#EFEFEF</color>
     <!--#006699-->
 </resources>

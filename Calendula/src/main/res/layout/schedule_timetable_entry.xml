@@ -7,7 +7,7 @@
     android:gravity="center_vertical">
 
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="42dp"
         android:layout_height="50dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="08:"
@@ -16,11 +16,10 @@
         android:textStyle="bold"
         android:textSize="@dimen/routine_label_from_schedule_creation"
         android:gravity="center_vertical|right"
-        android:layout_weight="0.10"
         android:layout_gravity="right" />
 
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="42dp"
         android:layout_height="50dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="00"
@@ -28,16 +27,16 @@
         android:textColor="@color/android_blue"
         android:textSize="@dimen/routine_label_from_schedule_creation"
         android:gravity="center_vertical|left"
-        android:layout_weight="0.10"
+        android:layout_weight="0"
         android:textAlignment="center"
         android:layout_gravity="left" />
 
     <Spinner
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:tag="routine_spinner"
         android:id="@+id/entry_routine_spinner"
-        android:layout_weight="0.45"
+        android:layout_weight="1"
         android:gravity="center_vertical"
         android:spinnerMode="dialog"
         android:textAlignment="gravity" />
@@ -52,24 +51,23 @@
     <!--android:spinnerMode="dialog" />-->
 
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="75dp"
         android:layout_height="fill_parent"
         android:id="@+id/entry_dose_textview"
-        android:layout_weight="0.20"
         android:text="N/A"
         android:textAlignment="center"
         android:gravity="center_vertical|center_horizontal" />
 
     <!--android:src="@drawable/abc_ic_clear_holo_light"-->
     <ImageButton
-        android:layout_width="0dp"
+        android:layout_width="25dp"
         android:layout_height="25dp"
         android:id="@+id/entry_remove"
-        android:layout_weight="0.05"
         android:src="@drawable/ic_backspace_normal_light"
         android:scaleType="fitStart"
         android:baselineAlignBottom="false"
         android:visibility="visible"
-        android:background="@null" />
+        android:background="@null"
+        android:alpha="0.7" />
 
 </LinearLayout>

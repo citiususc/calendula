@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 
@@ -24,9 +23,6 @@ public class ScheduleCreationHelper {
     private int timesPerDay = 1;
     private List<ScheduleItem> scheduleItems;
     private boolean[] selectedDays = new boolean[]{true, true, true, true, true, true, true}; // 7 days
-
-    private String medNameToChange = null;
-    private Presentation medPresentationToChange = null;
 
 
     private ScheduleCreationHelper() {
@@ -66,8 +62,7 @@ public class ScheduleCreationHelper {
     }
 
     public void toggleSelectedDay(int i) {
-        getSelectedDays()[i] = !getSelectedDays()[i];
-        Log.d("Days", Arrays.toString(getSelectedDays()));
+        selectedDays[i] = !getSelectedDays()[i];
     }
 
     public int getSelectedScheduleIdx() {
@@ -118,25 +113,9 @@ public class ScheduleCreationHelper {
 
     public void clear() {
         setTimesPerDay(1);
+        selectedMed = null;
         scheduleItems = new ArrayList<ScheduleItem>();
-        setSelectedMed(null);
         setSelectedScheduleIdx(0);
         selectedDays = new boolean[]{true, true, true, true, true, true, true};
-    }
-
-    public String getMedNameToChange() {
-        return medNameToChange;
-    }
-
-    public void setMedNameToChange(String medNameToChange) {
-        this.medNameToChange = medNameToChange;
-    }
-
-    public Presentation getMedPresentationToChange() {
-        return medPresentationToChange;
-    }
-
-    public void setMedPresentationToChange(Presentation medPresentationToChange) {
-        this.medPresentationToChange = medPresentationToChange;
     }
 }
