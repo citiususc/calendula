@@ -8,7 +8,7 @@
     <dimen name="normal_button_height">50dp</dimen>
     <dimen name="action_bar_height">56dp</dimen>
     <dimen name="tabs_height">56dp</dimen>
-    <dimen name="tab_indicator_height">5dp</dimen>
+    <dimen name="tab_indicator_height">3dp</dimen>
 
     <dimen name="tabs_margin_top">56dp</dimen>
 
@@ -17,7 +17,9 @@
     <dimen name="fragment_tabs_margin_top">112dp</dimen>
 
     <dimen name="header_height">220dp</dimen>
-    <dimen name="create_routine_time_label_size">60sp</dimen>
+    <dimen name="header_height_empty">320dp</dimen>
+
+    <dimen name="create_routine_time_label_size">30sp</dimen>
     <dimen name="routine_label_from_schedule_creation">23sp</dimen>
 
 

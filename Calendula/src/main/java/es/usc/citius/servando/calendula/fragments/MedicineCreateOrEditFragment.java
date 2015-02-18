@@ -19,7 +19,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -28,6 +27,7 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
+import es.usc.citius.servando.calendula.util.Snack;
 
 /**
  * Created by joseangel.pineiro on 12/4/13.
@@ -137,7 +137,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
     public boolean validate() {
         if (mNameTextView.getText() != null && mNameTextView.getText().length() > 0) {
             if (selectedPresentation == null) {
-                Toast.makeText(getActivity(), "Please, select a presentation!", Toast.LENGTH_SHORT).show();
+                Snack.show(R.string.medicine_no_presentation_error_message, getActivity());
                 return false;
             }
             return true;
@@ -308,22 +308,23 @@ public class MedicineCreateOrEditFragment extends Fragment {
                 }
             }
         } else {
-            mNameTextView.setError(getString(R.string.medicine_no_name_error_message));
-            mNameTextView.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                    mNameTextView.setError(null);
-                    mNameTextView.removeTextChangedListener(this);
-                }
-
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                }
-            });
+            Snack.show(R.string.medicine_no_name_error_message, getActivity());
+//            mNameTextView.setError(getString(R.string.medicine_no_name_error_message));
+//            mNameTextView.addTextChangedListener(new TextWatcher() {
+//                @Override
+//                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+//                    mNameTextView.setError(null);
+//                    mNameTextView.removeTextChangedListener(this);
+//                }
+//
+//                @Override
+//                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable editable) {
+//                }
+//            });
         }
     }
 

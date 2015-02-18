@@ -52,7 +52,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
     ListView listview = null;
     int lastScroll = 0;
     View userInfoFragment;
-    boolean profileShown = true;
+    boolean showPlaceholder = false;
     boolean expanded = false;
     int profileFragmentHeight = 0;
     View zoomContainer;
@@ -203,6 +203,8 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.list_animation);
         listview.setLayoutAnimation(controller);
 
+        updateHeaderHeight();
+
         new LoadDailyAgendaTask().execute(null, null, null);
 
         return rootView;
@@ -277,7 +279,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
     }
 
     public List<DailyAgendaItemStub> buildItems() {
-
+        showPlaceholder = false;
         int now = DateTime.now().getHourOfDay();
         String nextRoutineTime = getNextRoutineHour();
         ArrayList<DailyAgendaItemStub> items = new ArrayList<DailyAgendaItemStub>();
@@ -295,7 +297,9 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
 
         Log.d(getTag(), "Items: " + items.size());
 
+
         if (items.size() == 1) {
+            showPlaceholder = true;
             addEmptyPlaceholder(items);
         }
         return items;
@@ -318,31 +322,54 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         expanded = !expanded;
         // get next routine item index
         final int nextRoutineHour = getNextRoutinePosition();
+
+        List<DailyAgendaItemStub> dailyAgendaItemStubs = buildItems();
+
+
         // restore header if not expanded
         if (!expanded) {
             restoreHeader();
             ((HomeActivity) getActivity()).hideAddButton();
         }
 
+        updateHeaderHeight();
+
         // refresh adapter items
         items.clear();
-        items.addAll(buildItems());
+        items.addAll(dailyAgendaItemStubs);
+
         // set expand/collapse animation
         listview.setLayoutAnimation(getAnimationController(expanded));
         // perform update
         adapter.notifyDataSetChanged();
         // open next routine item
         slideAdapter.setLastOpenPosition(expanded ? nextRoutineHour + 1 : 1);
-//        listViewItemHeights = new Hashtable<Integer, Integer>();
-//        lastScroll = getScroll();
 
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                listview.setSelection(nextRoutineHour+1);
-//            }
-//        }, 1000);
+    }
 
+    private void updateHeaderHeight() {
+        if (showPlaceholder) {
+//            RelativeLayout.LayoutParams p = (RelativeLayout.LayoutParams) userInfoFragment.getLayoutParams();
+//            Log.d("DailyAgenda", "Current height " + p.height);
+//            p.height = (int)(p.height*2f);
+//            userInfoFragment.setLayoutParams(p);
+//            Log.d("DailyAgenda", "Current height 2 " + p.height);
+//            userInfoFragment.requestLayout();
+//            Log.d("DailyAgenda", "Updating height " + userInfoFragment.getHeight());
+
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Log.d("DailyAgenda", "Updating height " +  userInfoFragment.getHeight());
+//                    RelativeLayout.LayoutParams p = (RelativeLayout.LayoutParams) userInfoFragment.getLayoutParams();
+//                    p.height = 1000;//getResources().getDimensionPixelSize(R.dimen.header_height_empty);
+//                    userInfoFragment.setLayoutParams(p);
+//                    userInfoFragment.requestLayout();
+//                    Log.d("DailyAgenda", "Current height " + userInfoFragment.getHeight());
+//                }
+//            },3000);
+
+        }
     }
 
 
@@ -412,7 +439,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         ObjectAnimator.ofObject(userInfoFragment,
                 "translationY", new FloatEvaluator(),
                 (int) userInfoFragment.getTranslationY(), 0)
-                .setDuration(500)
+                .setDuration(300)
                 .start();
 
         // fade home toolbar

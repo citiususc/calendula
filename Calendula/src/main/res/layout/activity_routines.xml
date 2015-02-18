@@ -7,12 +7,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".RoutinesActivity"
-        android:layout_marginTop="@dimen/action_bar_height" />
+        android:layout_below="@+id/textView2" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:background="@color/android_blue_darker"
-        android:elevation="3dp"
         android:title="Routines"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -22,5 +21,57 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
 
         />
+
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="5dp"
+        android:id="@+id/tabs_shadow"
+        android:src="@drawable/daily_view_list_item_tab_shadow_top"
+        android:layout_below="@+id/textView2"
+        android:scaleType="fitXY"
+        android:alpha="0.7" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="56dp"
+        android:text="@string/create_routine_button_text"
+        android:textSize="24sp"
+        android:paddingLeft="72dp"
+        android:id="@+id/textView2"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/android_blue_darker"
+        android:textColor="#fff"
+        android:paddingTop="10dp"
+        android:gravity="top" />
+
+    <com.melnykov.fab.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:src="@drawable/ic_done_white_36dp"
+        fab:fab_colorNormal="@color/android_blue_dark"
+        fab:fab_colorPressed="@color/android_blue"
+        fab:fab_colorRipple="@color/android_blue_light"
+        android:layout_marginRight="38dp"
+        android:layout_marginTop="83dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="20dp"
+        android:text="@string/title_activity_routines"
+        android:id="@+id/textView"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="true"
+        android:textSize="14sp"
+        android:textColor="#fff"
+        android:gravity="bottom"
+        android:paddingLeft="72dp"
+        android:layout_marginTop="45dp" />
 
 </RelativeLayout>

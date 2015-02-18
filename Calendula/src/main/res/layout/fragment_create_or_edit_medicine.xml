@@ -5,16 +5,16 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_height="36dp"
         android:text="@string/medicine_name"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="40dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="72dp"
         android:textSize="20sp"
-        android:textColor="@color/dark_grey_text" />
+        android:textColor="@color/dark_grey_text"
+        android:gravity="center_vertical" />
 
     <AutoCompleteTextView
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
         android:layout_below="@+id/textView"
         android:layout_alignLeft="@+id/textView"
         android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="32dp"
         android:textColor="@color/dark_grey_home"
         android:textSize="20sp"
         android:inputType="text"
@@ -34,15 +34,30 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="36dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/medicine_presentation"
         android:textSize="20sp"
         android:textColor="@color/dark_grey_text"
         android:id="@+id/textView2"
         android:layout_below="@+id/medicine_edit_name"
-        android:layout_alignLeft="@+id/medicine_edit_name"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="72dp"
+        android:gravity="center_vertical" />
+
+    <ImageView
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/ic_edit_black_48dp"
+        android:layout_alignTop="@+id/textView"
+        android:layout_marginLeft="16dp" />
+
+    <ImageView
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/ic_visibility_black_48dp"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_marginLeft="16dp" />
 
     <include
         android:layout_width="wrap_content"
@@ -50,8 +65,8 @@
         layout="@layout/fragment_med_presentation"
         android:layout_below="@+id/textView2"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginLeft="72dp"
+        android:layout_marginRight="32dp"
         android:id="@+id/med_presentation" />
 
 

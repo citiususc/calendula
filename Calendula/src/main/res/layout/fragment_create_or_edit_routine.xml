@@ -16,43 +16,41 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="36dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/routine_name"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="30dp"
-        android:layout_marginLeft="20dp"
-        android:textStyle="bold"
-        android:textSize="18dp"
-        android:textColor="@color/android_blue_dark"
-        android:textAllCaps="true" />
+        android:layout_marginLeft="72dp"
+        android:textSize="20sp"
+        android:textColor="@color/dark_grey_text"
+        android:gravity="center_vertical" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/routine_edit_name"
         android:layout_below="@+id/textView"
-        android:layout_alignLeft="@+id/textView"
         android:layout_marginTop="24dp"
         android:layout_marginRight="24dp"
         android:textColor="@color/dark_grey_home"
-        android:textSize="22dp" />
+        android:textSize="22dp"
+        android:layout_marginLeft="72dp" />
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="36dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/routine_time"
         android:id="@+id/textView2"
         android:layout_below="@+id/routine_edit_name"
-        android:layout_alignLeft="@+id/routine_edit_name"
         android:layout_marginTop="20dp"
-        android:textStyle="bold"
-        android:textSize="18dp"
-        android:textColor="@color/android_blue_dark"
-        android:textAllCaps="true" />
+        android:textSize="20sp"
+        android:textColor="@color/dark_grey_text"
+        android:layout_marginLeft="72dp"
+        android:gravity="center_vertical" />
 
     <Button
         android:layout_width="wrap_content"
@@ -60,12 +58,15 @@
         android:text="18:30h"
         android:id="@+id/button2"
         android:textSize="@dimen/create_routine_time_label_size"
-        android:textColor="@color/dark_grey_text"
+        android:textColor="@color/android_blue"
         android:background="@null"
         android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:padding="10dp" />
+        android:padding="10dp"
+        android:layout_alignRight="@+id/routine_edit_name"
+        android:layout_alignEnd="@+id/routine_edit_name"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignStart="@+id/textView2" />
 
     <Button
         android:layout_width="fill_parent"
@@ -76,6 +77,20 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:visibility="gone" />
+
+    <ImageView
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/ic_edit_black_48dp"
+        android:layout_alignTop="@+id/textView"
+        android:layout_marginLeft="16dp" />
+
+    <ImageView
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/ic_alarm_black_48dp"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_marginLeft="16dp" />
 
 
 </RelativeLayout>

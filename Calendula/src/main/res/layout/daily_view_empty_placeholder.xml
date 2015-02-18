@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:padding="5dip">
+    android:orientation="vertical">
     <!--android:background="@color/android_blue_dark"-->
 
     <RelativeLayout
@@ -17,14 +16,14 @@
 
     <RelativeLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:visibility="visible"
         android:id="@+id/top"
 
         android:layout_gravity="bottom">
 
-    <RelativeLayout
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/hide_if_empty"
@@ -54,7 +53,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/imageView_ok"            
+            android:layout_below="@id/imageView_ok"
             android:text="@string/home_no_pending_meds_message"
             android:id="@+id/textView3"
             android:gravity="center"

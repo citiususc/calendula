@@ -10,6 +10,15 @@
         android:layout_below="@+id/tabs"
         android:background="#fafafa" />
 
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="5dp"
+        android:id="@+id/tabs_shadow"
+        android:src="@drawable/daily_view_list_item_tab_shadow_top"
+        android:layout_below="@+id/tabs"
+        android:scaleType="fitXY"
+        android:alpha="0.7" />
+
     <!--<android.support.v7.widget.Toolbar-->
     <!--android:id="@+id/toolbar"-->
     <!--android:background="@color/android_blue_dark"-->
@@ -22,14 +31,12 @@
         android:layout_width="fill_parent"
         android:layout_below="@+id/toolbar"
         android:layout_height="@dimen/tabs_height"
-        android:background="@color/android_blue"
-        android:elevation="3dp" />
+        android:background="@color/android_blue_darker" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:title="@string/title_create_schedule_activity"
         android:background="@color/android_blue_darker"
-        android:elevation="4dp"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         xmlns:app="http://schemas.android.com/apk/res-auto"

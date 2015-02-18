@@ -6,12 +6,12 @@
         android:title="@string/action_remove"
         android:icon="@drawable/ic_delete_white_48dp"
         android:orderInCategory="100"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_done"
-        android:title="@string/action_remove"
-        android:icon="@drawable/ic_done_white_48dp"
-        android:orderInCategory="100"
-        app:showAsAction="always" />
+    <!--<item-->
+    <!--android:id="@+id/action_done"-->
+    <!--android:title="@string/action_remove"-->
+    <!--android:icon="@drawable/ic_done_white_48dp"-->
+    <!--android:orderInCategory="100"-->
+    <!--app:showAsAction="always" />-->
 </menu>

@@ -6,8 +6,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +25,7 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Persistence;
 import es.usc.citius.servando.calendula.persistence.Routine;
+import es.usc.citius.servando.calendula.util.Snack;
 
 
 /**
@@ -171,22 +170,23 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
                 }
             }
         } else {
-            mNameTextView.setError("Please, type a name");
-            mNameTextView.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                    mNameTextView.setError(null);
-                    mNameTextView.removeTextChangedListener(this);
-                }
-
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                }
-            });
+            Snack.show(R.string.medicine_no_name_error_message, getActivity());
+//            mNameTextView.setError("Please, type a name");
+//            mNameTextView.addTextChangedListener(new TextWatcher() {
+//                @Override
+//                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+//                    mNameTextView.setError(null);
+//                    mNameTextView.removeTextChangedListener(this);
+//                }
+//
+//                @Override
+//                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable editable) {
+//                }
+//            });
         }
     }
 
