@@ -3,15 +3,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingLeft="5dp"
-    android:paddingTop="2dp"
-    android:paddingRight="5dp">
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="#efefef"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_list_item"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -36,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="60dp"
                 android:layout_alignParentTop="true"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="15dp"
                 android:fontFamily="sans-serif-light"
                 android:gravity="center"
                 android:text="12"

@@ -187,9 +187,9 @@
     <string name="splash_quote">Gestiona tu terapia de forma sencilla</string>
     <string name="title_activity_login">Entrar</string>
     <string name="title_activity_settings">Opciones</string>
-    <string name="title_select_dose_dialog">Introduce una dósis</string>
+    <string name="title_select_dose_dialog">Introduce una dosis</string>
     <string name="schedule_timetable_time_column">HORA</string>
-    <string name="schedule_timetable_dose_column">DÓSIS</string>
+    <string name="schedule_timetable_dose_column">DOSIS</string>
     <string name="schedule_day_selector_take">Días:</string>
     <string name="schedule_day_selector_mo">LU</string>
     <string name="schedule_day_selector_tu">MA</string>
@@ -198,6 +198,8 @@
     <string name="schedule_day_selector_fr">VI</string>
     <string name="schedule_day_selector_sa">SA</string>
     <string name="schedule_day_selector_su">DO</string>
+    <string name="doses_and_times">Horarios y dosis</string>
+    <string name="schedule_repeat_days">Repetir</string>
     <string name="agenda_zoom_meds_time">Tómate tus medicinas!</string>
     <string name="create_schedule_incomplete_items">Selecciona rutinas para todas tus tomas</string>
     <string name="create_schedule_incomplete_doses">Las dosis deben ser mayores que cero</string>

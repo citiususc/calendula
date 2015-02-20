@@ -35,6 +35,7 @@
         android:layout_below="@+id/textView"
         android:layout_marginTop="24dp"
         android:layout_marginRight="24dp"
+        android:imeOptions="actionDone"
         android:textColor="@color/dark_grey_home"
         android:textSize="22dp"
         android:layout_marginLeft="72dp" />
@@ -57,7 +58,7 @@
         android:layout_height="wrap_content"
         android:text="18:30h"
         android:id="@+id/button2"
-        android:textSize="@dimen/create_routine_time_label_size"
+        android:textSize="35sp"
         android:textColor="@color/android_blue"
         android:background="@null"
         android:layout_below="@+id/textView2"

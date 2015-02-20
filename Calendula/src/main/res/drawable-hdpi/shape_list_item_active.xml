@@ -5,7 +5,7 @@
 
     <item
         android:drawable="@drawable/shape_list_item_bg_active"
-        android:bottom="3px"
-        android:right="3px" />
+        android:bottom="1px"
+        android:right="2px" />
 
 </layer-list>

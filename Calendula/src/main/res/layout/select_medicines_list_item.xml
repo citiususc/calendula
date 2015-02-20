@@ -1,38 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="4dp"
-    android:paddingRight="4dp"
-    android:paddingBottom="0dp"
-    android:paddingTop="3dp">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="70dp"
         android:id="@+id/medicines_list_item_container">
 
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="#efefef"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp" />
+
 
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/bg"
-            android:background="@drawable/shape_list_item"
-            android:alpha="0.7" />
+            android:alpha="0.7"
+            android:background="@drawable/touchable_white" />
 
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/selection_mask"
             android:background="@drawable/select_medicines_selected_background"
-            android:visibility="visible"
-            android:alpha="0.8" />
+            android:visibility="invisible" />
 
         <com.makeramen.RoundedImageView
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:id="@+id/imageView2"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="26dp"
             android:layout_centerVertical="true"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:src="@color/white_80"
@@ -63,19 +66,19 @@
             android:src="@drawable/ic_done_black_48dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="26dp"
-            android:alpha="0.9" />
+            android:layout_marginRight="26dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:text="Atrovent"
             android:id="@+id/medicines_list_item_name"
-            android:textColor="#333"
+            android:textColor="#111"
             android:textSize="20sp"
             android:layout_toEndOf="@+id/imageButton"
             android:gravity="center"
-            android:layout_marginLeft="16dp" />
+            android:layout_marginLeft="16dp"
+            android:fontFamily="sans-serif-light" />
 
     </RelativeLayout>
 

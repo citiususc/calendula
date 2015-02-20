@@ -9,7 +9,7 @@
         android:layout_height="fill_parent"
         android:divider="#E0EAEF"
         android:dividerHeight="0dp"
-        android:background="@drawable/bg_repeat_deafult"
+        android:background="#fcfcfc"
         android:id="@+id/medicines_list"
         android:scrollbars="none" />
 

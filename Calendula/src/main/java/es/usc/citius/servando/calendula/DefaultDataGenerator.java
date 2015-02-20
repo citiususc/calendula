@@ -7,10 +7,8 @@ import android.util.Log;
 import org.joda.time.LocalTime;
 
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
-import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -28,19 +26,18 @@ public class DefaultDataGenerator {
                 //ActiveAndroid.beginTransaction();
                 new Routine(new LocalTime(9, 0), r.getString(R.string.routine_breakfast)).save();
                 new Routine(new LocalTime(13, 0), r.getString(R.string.routine_lunch)).save();
-                Routine routine = new Routine(new LocalTime(21, 0), r.getString(R.string.routine_dinner));
-                routine.save();
+                new Routine(new LocalTime(21, 0), r.getString(R.string.routine_dinner)).save();
 
-                Medicine sweet = new Medicine("Caramelos", Presentation.PILLS);
-                sweet.save();
-
-                Schedule s = new Schedule();
-                s.setDays(new boolean[]{true, true, true, true, true, true, true});
-                s.setMedicine(sweet);
-                s.save();
-
-                ScheduleItem i = new ScheduleItem(s, routine, 3.0f);
-                i.saveAndUpdateDailyAgenda();
+//                Medicine sweet = new Medicine("Caramelos", Presentation.PILLS);
+//                sweet.save();
+//
+//                Schedule s = new Schedule();
+//                s.setDays(new boolean[]{true, true, true, true, true, true, true});
+//                s.setMedicine(sweet);
+//                s.save();
+//
+//                ScheduleItem i = new ScheduleItem(s, routine, 3.0f);
+//                i.saveAndUpdateDailyAgenda();
                 Log.d("DefaultDataGenerator", "Dummy data saved successfully!");
             } catch (Exception e) {
                 Log.e("DefaultDataGenerator", "Error filling db with dummy data!", e);

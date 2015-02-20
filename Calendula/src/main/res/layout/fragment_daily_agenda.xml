@@ -17,7 +17,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/imageView"
-        android:background="@drawable/bg_repeat_deafult" />
+        android:background="#ffffff" />
 
     <ListView
         android:id="@+id/listview"
@@ -46,7 +46,7 @@
         <FrameLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@drawable/shape_list_item"
+            android:background="@drawable/reminder_view_bg"
             android:visibility="visible"
             android:padding="10dp"
             android:id="@+id/content_wrapper"

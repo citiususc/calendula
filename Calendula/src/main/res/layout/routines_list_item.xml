@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="3dp"
-    android:paddingTop="3dp"
-    android:paddingRight="3dp">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="90dp"
-        android:id="@+id/routine_list_item_container">
+        android:layout_height="80dp"
+        android:id="@+id/routine_list_item_container"
+        android:background="@drawable/touchable_white">
 
         <ImageView
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/imageView"
+            android:layout_height="1px"
 
-            android:background="@drawable/shape_list_item"
-            android:alpha="0.9" />
+            android:background="#efefef"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Breakfast"
             android:id="@+id/routines_list_item_name"
-            android:textColor="@color/android_blue_dark"
-            android:textSize="23dp"
+            android:textColor="#222"
+            android:textSize="20sp"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginLeft="20dp"
-            android:alpha="0.9" />
+            android:layout_marginLeft="26dp"
+            android:fontFamily="sans-serif-light" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/routines_list_item_name"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp">
+            android:layout_marginRight="26dp"
+            android:layout_centerVertical="true">
 
             <ImageButton
                 android:layout_width="20dp"
@@ -47,8 +47,7 @@
                 android:src="@drawable/ic_alarm_black_48dp"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:layout_gravity="center_vertical"
-                android:alpha="0.6" />
+                android:layout_gravity="center_vertical" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -57,7 +56,7 @@
                 android:id="@+id/routines_list_item_hour"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:textColor="@color/dark_grey_text"
+                android:textColor="@color/android_blue_dark"
                 android:textStyle="bold"
                 android:textSize="20dp"
                 android:layout_gravity="center_vertical" />
@@ -69,7 +68,7 @@
                 android:id="@+id/routines_list_item_minute"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/routines_list_item_hour"
-                android:textColor="@color/dark_grey_text"
+                android:textColor="@color/android_blue_dark"
                 android:textSize="20dp" />
 
             <TextView
@@ -78,32 +77,12 @@
                 android:text=" h"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/routines_list_item_minute"
-                android:textColor="@color/dark_grey_text"
+                android:textColor="@color/android_blue_dark"
                 android:textSize="20dp" />
 
         </LinearLayout>
 
     </RelativeLayout>
-
-    <!--<ImageView-->
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="10dp"-->
-    <!--android:id="@+id/imageView2b"-->
-    <!--android:src="@drawable/daily_view_list_item_tab_shadow_bottom"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:scaleType="fitXY"-->
-    <!--android:layout_alignParentTop="false"-->
-    <!--android:alpha="0.1" />-->
-
-    <!--<ImageView-->
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="10dp"-->
-    <!--android:id="@+id/imageView2a"-->
-    <!--android:src="@drawable/daily_view_list_item_tab_shadow_top"-->
-    <!--android:scaleType="fitXY"-->
-    <!--android:layout_alignParentTop="true"-->
-    <!--android:visibility="visible"-->
-    <!--android:alpha="0.1" />-->
 
 
 </RelativeLayout>

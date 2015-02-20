@@ -18,8 +18,6 @@
 
     <dimen name="header_height">220dp</dimen>
     <dimen name="header_height_empty">320dp</dimen>
-
-    <dimen name="create_routine_time_label_size">30sp</dimen>
     <dimen name="routine_label_from_schedule_creation">23sp</dimen>
 
 

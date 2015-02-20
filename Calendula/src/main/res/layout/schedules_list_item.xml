@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="3dp"
-    android:paddingTop="3dp"
-    android:paddingRight="3dp">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="90dp"
-        android:id="@+id/schedules_list_item_container">
+        android:layout_height="80dp"
+        android:id="@+id/schedules_list_item_container"
+        android:background="@drawable/touchable_white">
 
         <ImageView
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/imageView"
-            android:background="@drawable/shape_list_item"
-            android:alpha="0.9" />
+            android:layout_height="1px"
+
+            android:background="#efefef"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp" />
 
         <ImageButton
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="fill_parent"
             android:id="@+id/imageButton"
             android:src="@drawable/ic_presentation_2"
             android:background="@null"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="false"
-            android:layout_marginLeft="15dp"
-            android:scaleType="fitCenter"
+            android:layout_marginLeft="26dp"
+            android:scaleType="fitStart"
             android:layout_alignParentTop="true"
             android:layout_marginTop="10dp" />
 
@@ -37,13 +37,14 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Atrovent"
+            android:fontFamily="sans-serif-light"
             android:id="@+id/schedules_list_item_medname"
-            android:textColor="#555555"
-            android:textSize="20dp"
+            android:textColor="#222"
+            android:textSize="20sp"
             android:layout_toEndOf="@+id/imageButton"
             android:layout_alignTop="@+id/imageButton"
             android:layout_toRightOf="@+id/imageButton"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="26dp"
             android:gravity="center_vertical" />
 
         <TextView
@@ -57,7 +58,8 @@
             android:layout_alignLeft="@+id/schedules_list_item_days"
             android:layout_alignStart="@+id/schedules_list_item_days"
             android:layout_below="@+id/schedules_list_item_days"
-            android:layout_marginTop="3dp" />
+            android:layout_marginTop="3dp"
+            android:fontFamily="sans-serif-condensed" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -66,18 +68,25 @@
             android:id="@+id/schedules_list_item_days"
             android:layout_alignLeft="@+id/schedules_list_item_medname"
             android:layout_below="@+id/schedules_list_item_medname"
-            android:textSize="15dp"
-            android:layout_marginTop="0dp" />
+            android:textSize="14dp"
+            android:layout_marginTop="0dp"
+            android:textColor="#9a9a9a"
+            android:fontFamily="sans-serif-light" />
 
         <ImageView
             android:layout_width="30dp"
             android:layout_height="fill_parent"
             android:id="@+id/imageView"
             android:src="@drawable/ic_edit_black_48dp"
-            android:alpha="0.6"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="23dp" />
+            android:layout_marginRight="23dp"
+            android:alpha="0.9" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView2" />
 
     </RelativeLayout>
 

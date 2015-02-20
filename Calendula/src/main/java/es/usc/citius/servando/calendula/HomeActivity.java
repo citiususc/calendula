@@ -230,7 +230,7 @@ public class HomeActivity extends ActionBarActivity implements
             case 2:
                 return R.color.android_pink_dark;
             case 3:
-                return R.color.android_green_dark;
+                return R.color.android_green;
             default:
                 return R.color.android_blue_darker;
 

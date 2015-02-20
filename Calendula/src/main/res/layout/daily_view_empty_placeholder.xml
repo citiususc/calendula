@@ -2,17 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#000">
     <!--android:background="@color/android_blue_dark"-->
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:id="@+id/bottom"
-        android:visibility="invisible">
-
-
-    </RelativeLayout>
 
     <RelativeLayout
         android:orientation="vertical"
@@ -20,8 +12,7 @@
         android:layout_height="fill_parent"
         android:visibility="visible"
         android:id="@+id/top"
-
-        android:layout_gravity="bottom">
+        android:background="#fff">
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -29,9 +20,10 @@
             android:id="@+id/hide_if_empty"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:background="#fff">
 
-            <Button
+        <Button
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_alignParentBottom="true"
@@ -43,30 +35,55 @@
         </RelativeLayout>
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:id="@+id/imageView_ok"
-            android:src="@drawable/ic_check_hover"
+            android:src="@drawable/alldone"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="50dp" />
+            android:layout_below="@+id/textView3"
+            android:paddingLeft="80dp"
+            android:paddingRight="60dp"
+            android:alpha="0.3" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/imageView_ok"
             android:text="@string/home_no_pending_meds_message"
             android:id="@+id/textView3"
+            android:textAllCaps="false"
             android:gravity="center"
-            android:textColor="@color/dark_grey_text"
-            android:textStyle="bold"
-            android:textSize="20sp"
+            android:textColor="#222"
+            android:textSize="18sp"
             android:layout_alignParentLeft="false"
             android:layout_alignParentStart="false"
             android:layout_centerHorizontal="true"
-            android:paddingBottom="50dp"
-            android:paddingTop="30dp"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
             android:paddingLeft="50dp"
-            android:paddingRight="50dp" />
+            android:paddingRight="50dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:visibility="visible"
+            android:fontFamily="sans-serif-light"
+            android:background="#aaececec" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="5dp"
+            android:id="@+id/tabs_shadow"
+            android:src="@drawable/daily_view_list_item_tab_shadow_top"
+            android:layout_below="@+id/textView3"
+            android:scaleType="fitXY"
+            android:alpha="0.7" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:id="@+id/bottom"
+        android:visibility="gone">
+
 
     </RelativeLayout>
 

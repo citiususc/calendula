@@ -56,18 +56,19 @@
         android:id="@+id/entry_dose_textview"
         android:text="N/A"
         android:textAlignment="center"
-        android:gravity="center_vertical|center_horizontal" />
+        android:gravity="center_vertical|center_horizontal"
+        android:textColor="#111" />
 
     <!--android:src="@drawable/abc_ic_clear_holo_light"-->
     <ImageButton
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:id="@+id/entry_remove"
-        android:src="@drawable/ic_backspace_normal_light"
+        android:src="@drawable/ic_clear_black_48dp"
         android:scaleType="fitStart"
         android:baselineAlignBottom="false"
         android:visibility="visible"
         android:background="@null"
-        android:alpha="0.7" />
+        android:alpha="0.9" />
 
 </LinearLayout>

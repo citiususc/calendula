@@ -17,7 +17,7 @@
     <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="225dp"
+        android:layout_height="215dp"
         android:visibility="visible"
         android:id="@+id/top"
 

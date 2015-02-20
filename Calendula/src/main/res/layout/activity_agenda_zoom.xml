@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/prof_container"
         android:layout_width="fill_parent"
-        android:layout_height="125dp"
+        android:layout_height="wrap_content"
         android:padding="10dp"
         android:orientation="vertical"
         android:gravity="center_vertical">
@@ -29,21 +29,21 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:textColor="@color/android_blue_dark"
-            android:textSize="35dp"
+            android:textSize="30sp"
             android:text="12:45"
             android:gravity="center" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Lunch"
             android:layout_below="@+id/prof_container"
             android:id="@+id/routine_name"
-            android:fontFamily="sans-serif-condensed"
+            android:fontFamily="sans-serif-light"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:textColor="@color/android_blue_dark" />
+            android:textColor="@color/android_blue_dark"
+            android:textSize="20sp" />
 
         <TextView
             android:layout_width="fill_parent"
@@ -51,11 +51,19 @@
             android:text="@string/agenda_zoom_meds_time"
             android:layout_below="@+id/prof_container"
             android:id="@+id/meds_time_view"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="sans-serif-condensed"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:textColor="@color/dark_grey_text"
+            android:textColor="#444"
             android:textSize="20dp" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="#efefef"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp" />
 
 
     </LinearLayout>
@@ -68,7 +76,8 @@
         android:padding="10dp"
         android:layout_below="@+id/prof_container"
         android:layout_toRightOf="@+id/delays_spinner"
-        android:layout_toEndOf="@+id/delays_spinner">
+        android:layout_toEndOf="@+id/delays_spinner"
+        android:layout_marginTop="10dp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -104,8 +113,8 @@
 
 
     <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_arrow_back_black_48dp"
         android:text="Close"
@@ -118,8 +127,8 @@
         android:padding="7dp" />
 
     <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_history_black_48dp"
         android:text="Delay"

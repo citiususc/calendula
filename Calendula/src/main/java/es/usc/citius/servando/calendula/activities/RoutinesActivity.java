@@ -92,9 +92,9 @@ public class RoutinesActivity extends ActionBarActivity implements RoutineCreate
             case R.id.action_remove:
                 ((RoutineCreateOrEditFragment) getViewPagerFragment(0)).showDeleteConfirmationDialog(Routine.findById(mRoutineId));
                 return true;
-            case R.id.action_done:
-                ((RoutineCreateOrEditFragment) getViewPagerFragment(0)).onEdit();
-                return true;
+//            case R.id.action_done:
+//                ((RoutineCreateOrEditFragment) getViewPagerFragment(0)).onEdit();
+//                return true;
             default:
                 finish();
                 return true;

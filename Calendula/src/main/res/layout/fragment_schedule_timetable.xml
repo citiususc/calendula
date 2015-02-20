@@ -2,45 +2,62 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="fill_parent"
-    android:layout_width="fill_parent">
+    android:layout_width="fill_parent"
+    android:background="#fff"
+    android:clickable="false">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
             android:text="@string/schedule"
-            android:id="@+id/textView"
+            android:id="@+id/schedule_label"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:textStyle="bold"
-            android:textSize="25dp"
-            android:textColor="@color/android_blue_dark"
-            android:visibility="gone" />
+            android:textSize="15dp"
+            android:textColor="#bfbfbf"
+            android:visibility="visible"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:background="#aaefefef" />
 
         <Spinner
             android:id="@+id/schedules_spinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textView"
-            android:layout_marginTop="15dp"
+            android:layout_below="@+id/schedule_label"
+            android:layout_marginTop="5dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:spinnerMode="dialog" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
+            android:text="@string/doses_and_times"
+            android:id="@+id/doses_and_times_label"
+            android:layout_below="@+id/schedules_spinner"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentLeft="false"
+            android:textSize="15dp"
+            android:textColor="#bfbfbf"
+            android:visibility="visible"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:background="#aaefefef"
+            android:layout_marginTop="10dp" />
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_below="@+id/schedules_spinner"
+            android:layout_below="@+id/doses_and_times_label"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:id="@+id/linearLayout">
 
             <RelativeLayout
@@ -113,17 +130,34 @@
             android:background="@color/android_blue"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp" />
+            android:layout_marginRight="20dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
+            android:text="@string/schedule_repeat_days"
+            android:id="@+id/repeat_label"
+            android:layout_below="@+id/schedule_timetable_container"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentLeft="false"
+            android:textSize="15dp"
+            android:textColor="#bfbfbf"
+            android:visibility="visible"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:background="#aaefefef"
+            android:layout_marginTop="30dp" />
 
         <include
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="80dp"
             layout="@layout/schedule_day_selector"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_below="@id/timetable_divider"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="0dp"
+            android:layout_below="@id/repeat_label"
+            android:layout_marginLeft="0dp"
+            android:layout_marginBottom="20dp" />
 
     </RelativeLayout>
 </ScrollView>

@@ -18,6 +18,8 @@ import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
@@ -90,8 +92,9 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
         //toolbar.setTitle(getString(R.string.title_activity_schedules));        
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getString(mScheduleId != -1 ? R.string.title_edit_schedule_activity : R.string.title_create_schedule_activity));
-        toolbar.setNavigationIcon(new InsetDrawable(getResources().getDrawable(R.drawable.ic_event_white_48dp), 18, 18, 18, 18));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((TextView) findViewById(R.id.textView2)).setText(getString(mScheduleId != -1 ? R.string.title_edit_schedule_activity : R.string.title_create_schedule_activity));
+        toolbar.setNavigationIcon(new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 10, 10, 10, 10));
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -102,12 +105,13 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         tabs.setOnPageChangeListener(this);
         tabs.setAllCaps(true);
         tabs.setShouldExpand(true);
+        tabs.setDividerPadding(3);
         tabs.setDividerColor(getResources().getColor(R.color.white_50));
         tabs.setDividerColor(getResources().getColor(R.color.transparent));
         tabs.setIndicatorHeight(getResources().getDimensionPixelSize(R.dimen.tab_indicator_height));
-        tabs.setIndicatorColor(getResources().getColor(R.color.white));
-        tabs.setTextColor(getResources().getColor(R.color.white));
-        tabs.setUnderlineColor(getResources().getColor(R.color.transparent));
+        tabs.setIndicatorColor(getResources().getColor(R.color.android_blue));
+        tabs.setTextColor(getResources().getColor(R.color.android_blue));
+        tabs.setUnderlineColor(getResources().getColor(R.color.android_blue_light));
         tabs.setViewPager(mViewPager);
 
         if (mSchedule != null) {
@@ -120,6 +124,15 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
         }
+
+        findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveSchedule();
+            }
+        });
+
+
     }
 
     private void processIntent() {
@@ -346,7 +359,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
     public boolean onCreateOptionsMenu(Menu menu) {
 
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.medicines, menu);
+        getMenuInflater().inflate(R.menu.schedules, menu);
         removeItem = menu.findItem(R.id.action_remove);
         removeItem.setVisible(mScheduleId != -1 ? true : false);
         return true;
@@ -358,10 +371,11 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             case R.id.action_remove:
                 showDeleteConfirmationDialog(mSchedule);
                 return true;
-            case R.id.action_done:
-                saveSchedule();
-                return true;
+//            case R.id.action_done:
+//                saveSchedule();
+//                return true;
             default:
+                finish();
                 return true;
         }
     }

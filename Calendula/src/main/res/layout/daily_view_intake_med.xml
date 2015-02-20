@@ -3,50 +3,71 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="40dp"
+    android:layout_height="wrap_content"
     android:id="@+id/daily_agenda_item_med_right"
-    android:padding="5dp">
+    android:paddingTop="5dp"
+    android:paddingBottom="2dp">
+
 
     <ImageView
-        android:layout_width="20dp"
-        android:layout_height="30dp"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
         android:id="@+id/imageView"
         android:src="@drawable/ic_presentation_2"
         android:scaleType="fitCenter"
         android:cropToPadding="false"
-        android:layout_marginLeft="5dp"
-        android:layout_centerVertical="true" />
+        android:layout_marginLeft="36dp" />
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_height="25dp"
         android:text="Ibuprofeno"
         android:id="@+id/med_item_name"
         android:fontFamily="sans-serif-light"
-        android:textColor="@color/dark_grey_text"
+        android:textColor="#444"
 
-        android:layout_toRightOf="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView"
-        android:layout_marginLeft="5dp"
-        android:gravity="bottom"
-        android:layout_centerVertical="true"
-        android:paddingBottom="3dp" />
+        android:gravity="center_vertical"
+        android:paddingBottom="3dp"
+        android:textSize="19dp"
+        android:layout_marginLeft="90dp"
+        android:layout_marginTop="0dp" />
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_height="wrap_content"
         android:text="(1 capsule)"
         android:fontFamily="sans-serif-condensed"
         android:id="@+id/med_item_dose"
-        android:textColor="@color/dark_grey_text"
-        android:textStyle="bold"
+        android:textColor="#000"
         android:gravity="center_vertical"
 
-        android:layout_alignParentRight="true"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentEnd="false"
+        android:layout_marginLeft="90dp"
+        android:layout_below="@+id/med_item_name" />
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/ic_done"
+        android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true" />
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/ic_done_black_48dp"
+        android:visibility="visible" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:id="@+id/imageView2"
+        android:layout_alignParentBottom="false"
+        android:background="#efefef"
+        android:layout_marginLeft="90dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/med_item_dose"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp" />
 
 </RelativeLayout>
 

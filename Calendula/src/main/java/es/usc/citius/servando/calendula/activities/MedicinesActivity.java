@@ -53,7 +53,7 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
         }
-        
+
         processIntent();
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -73,7 +73,7 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
                 ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).onEdit();
             }
         });
-       
+
     }
 
 
@@ -98,9 +98,9 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
             case R.id.action_remove:
                 ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).showDeleteConfirmationDialog(Medicine.findById(mMedicineId));
                 return true;
-            case R.id.action_done:
-                ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).onEdit();
-                return true;
+//            case R.id.action_done:
+//                ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).onEdit();
+//                return true;
             default:
                 finish();
                 return true;
