@@ -39,6 +39,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
 
     Boolean showConfirmButton = true;
     TextView mNameTextView;
+    TextView mPresentationTv;
     //    Button mConfirmButton;
     Presentation selectedPresentation;
     HorizontalScrollView presentationScroll;
@@ -55,6 +56,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
                 android.R.layout.simple_dropdown_item_1line, names);
 
         mNameTextView = (TextView) rootView.findViewById(R.id.medicine_edit_name);
+        mPresentationTv = (TextView) rootView.findViewById(R.id.textView3);
         ((AutoCompleteTextView) mNameTextView).setAdapter(adapter);
         ((AutoCompleteTextView) mNameTextView).setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -186,10 +188,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
         rootView.findViewById(viewId).setBackgroundResource(R.drawable.presentation_circle_background);
 
         switch (viewId) {
-            case R.id.med_presentation_1:
-                selectedPresentation = Presentation.INJECTIONS;
-                Log.d(getTag(), "Injection");
-                break;
+
             case R.id.med_presentation_2:
                 selectedPresentation = Presentation.CAPSULES;
                 Log.d(getTag(), "Capsule");
@@ -210,6 +209,22 @@ public class MedicineCreateOrEditFragment extends Fragment {
                 selectedPresentation = Presentation.DROPS;
                 Log.d(getTag(), "Drops");
                 break;
+            case R.id.med_presentation_7:
+                selectedPresentation = Presentation.SPRAY;
+                Log.d(getTag(), "Spray");
+                break;
+            case R.id.med_presentation_8:
+                selectedPresentation = Presentation.INHALER;
+                Log.d(getTag(), "Drops");
+                break;
+            case R.id.med_presentation_9:
+                selectedPresentation = Presentation.INJECTIONS;
+                Log.d(getTag(), "Injection");
+                break;
+        }
+
+        if (selectedPresentation != null) {
+            mPresentationTv.setText(selectedPresentation.getName(getResources()));
         }
     }
 
@@ -255,6 +270,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
         Log.d(getTag(), "Medicine set: " + r.name());
         mMedicine = r;
         mNameTextView.setText(mMedicine.name());
+        mPresentationTv.setText(mMedicine.presentation().getName(getResources()));
         selectedPresentation = mMedicine.presentation();
         selectPresentation(mMedicine.presentation());
     }
@@ -267,6 +283,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
             int viewId = getPresentationViewId(p);
             View view = getView().findViewById(viewId);
             view.setBackgroundResource(R.drawable.presentation_circle_background);
+            mPresentationTv.setText(p.getName(getResources()));
             scrollToMedPresentation(view);
         }
     }
@@ -373,7 +390,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
     int getPresentationViewId(Presentation pres) {
         switch (pres) {
             case INJECTIONS:
-                return R.id.med_presentation_1;
+                return R.id.med_presentation_9;
             case CAPSULES:
                 return R.id.med_presentation_2;
             case EFFERVESCENT:
@@ -384,6 +401,10 @@ public class MedicineCreateOrEditFragment extends Fragment {
                 return R.id.med_presentation_5;
             case DROPS:
                 return R.id.med_presentation_6;
+            case SPRAY:
+                return R.id.med_presentation_7;
+            case INHALER:
+                return R.id.med_presentation_8;
             default:
                 return -1;
         }

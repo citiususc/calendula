@@ -83,6 +83,7 @@
     <string name="pills">Pastillas</string>
     <string name="capsules">Cápsulas</string>
     <string name="inhaler">Inhalador</string>
+    <string name="spray">Spray</string>
     <string name="drops">Gotas</string>
     <string name="syrup">Jarabe</string>
     <string name="unknown">Desconocido</string>
@@ -94,6 +95,7 @@
     <string name="pills_units">pastilla</string>
     <string name="capsules_units">cápsula</string>
     <string name="inhaler_units">inhalación</string>
+    <string name="spray_units">aplicación</string>
     <string name="drops_units">gota</string>
     <string name="syrup_units">cucharada</string>
     <string name="unknown_units">Desconocido</string>

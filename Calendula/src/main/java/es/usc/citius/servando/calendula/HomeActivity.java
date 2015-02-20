@@ -208,15 +208,15 @@ public class HomeActivity extends ActionBarActivity implements
     public int getActionColor(int index) {
         switch (index) {
             case 3:
-                return R.color.android_blue;
+                return R.color.android_orange;
             case 4:
                 return R.color.android_pink;
             case 5:
                 return R.color.android_green;
             case 7:
-                return R.color.android_orange_lighter;
+                return R.color.android_blue_light;
             case 8:
-                return R.color.android_red_lighter;
+                return R.color.android_red_light;
             default:
                 return R.color.dark_grey_home;
 
@@ -226,13 +226,27 @@ public class HomeActivity extends ActionBarActivity implements
     public int getAddButtonColor(int page) {
         switch (page) {
             case 1:
-                return R.color.android_blue_dark;
+                return R.color.android_orange;
             case 2:
                 return R.color.android_pink_dark;
             case 3:
                 return R.color.android_green;
             default:
                 return R.color.android_blue_darker;
+
+        }
+    }
+
+    public int getSecondaryAddButtonColor(int page) {
+        switch (page) {
+            case 1:
+                return R.color.android_orange_dark;
+            case 2:
+                return R.color.android_pink;
+            case 3:
+                return R.color.android_green_dark;
+            default:
+                return R.color.android_blue_dark;
 
         }
     }
@@ -554,7 +568,7 @@ public class HomeActivity extends ActionBarActivity implements
         showTutorialStage(page);
         updateAddButton(page);
         if (page == 0) {
-            hideAddButton();
+            ((FloatingActionButton) (addButton)).hide(false);
             hideTabs();
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
@@ -578,6 +592,7 @@ public class HomeActivity extends ActionBarActivity implements
     private void updateAddButton(int page) {
 
         addButton.setColorNormalResId(getAddButtonColor(page));
+        addButton.setColorPressedResId(getSecondaryAddButtonColor(page));
 
     }
 

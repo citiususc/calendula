@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#fff">
 
     <TextView
         android:layout_width="wrap_content"
@@ -23,13 +24,13 @@
         android:layout_below="@+id/textView"
         android:layout_alignLeft="@+id/textView"
         android:layout_marginTop="20dp"
-        android:layout_marginRight="32dp"
         android:textColor="@color/dark_grey_home"
         android:textSize="20sp"
         android:inputType="text"
         android:imeOptions="actionDone"
         android:lines="1"
-        android:maxLines="1" />
+        android:maxLines="1"
+        android:layout_marginRight="32dp" />
 
 
     <TextView
@@ -45,29 +46,65 @@
         android:layout_marginLeft="72dp"
         android:gravity="center_vertical" />
 
+
     <ImageView
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@drawable/ic_edit_black_48dp"
         android:layout_alignTop="@+id/textView"
         android:layout_marginLeft="16dp" />
 
     <ImageView
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@drawable/ic_visibility_black_48dp"
         android:layout_alignTop="@+id/textView2"
         android:layout_marginLeft="16dp" />
 
     <include
         android:layout_width="wrap_content"
-        android:layout_height="120dp"
+        android:layout_height="90dp"
         layout="@layout/fragment_med_presentation"
         android:layout_below="@+id/textView2"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="72dp"
-        android:layout_marginRight="32dp"
-        android:id="@+id/med_presentation" />
+        android:id="@+id/med_presentation"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="36dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="18sp"
+        android:textColor="@color/android_blue_dark"
+        android:id="@+id/textView3"
+        android:layout_below="@+id/med_presentation"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:fontFamily="sans-serif-condensed" />
+
+
+    <ImageView
+        android:layout_width="26dp"
+        android:layout_height="100dp"
+        android:id="@+id/imageView"
+        android:layout_alignTop="@+id/med_presentation"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/med_presentation"
+        android:src="@drawable/ic_arrow_right_black_48dp"
+        android:layout_marginRight="20dp"
+        android:alpha="0.3" />
+
+    <ImageView
+        android:layout_width="26dp"
+        android:layout_height="100dp"
+        android:id="@+id/imageView"
+        android:layout_alignTop="@+id/med_presentation"
+        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@+id/med_presentation"
+        android:src="@drawable/ic_arrow_left_black_48dp"
+        android:layout_marginLeft="20dp"
+        android:alpha="0.3" />
 
 
 </RelativeLayout>

@@ -80,15 +80,15 @@
         android:visibility="gone" />
 
     <ImageView
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@drawable/ic_edit_black_48dp"
         android:layout_alignTop="@+id/textView"
         android:layout_marginLeft="16dp" />
 
     <ImageView
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@drawable/ic_alarm_black_48dp"
         android:layout_alignTop="@+id/textView2"
         android:layout_marginLeft="16dp" />

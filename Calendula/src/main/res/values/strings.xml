@@ -90,6 +90,7 @@
     <string name="inhaler">Inhaler</string>
     <string name="drops">Drops</string>
     <string name="syrup">Syrup</string>
+    <string name="spray">Spray</string>
     <string name="unknown">Unknown</string>
     <string name="effervescent">Effervescent</string>
     <string name="schedule">Schedule</string>
@@ -99,6 +100,7 @@
     <string name="pills_units">pill</string>
     <string name="capsules_units">capsule</string>
     <string name="inhaler_units">inhalation</string>
+    <string name="spray_units">applications</string>
     <string name="drops_units">drop</string>
     <string name="syrup_units">syrup spoon</string>
     <string name="unknown_units">Unknown</string>
