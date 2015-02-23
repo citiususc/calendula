@@ -15,7 +15,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
 import android.util.Log;
 
 import java.util.List;
@@ -144,7 +143,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
 
-            if (preference instanceof ListPreference) {
+            if (preference instanceof es.usc.citius.servando.calendula.util.RingtonePreference) {
+                Uri ringtoneUri = Uri.parse(stringValue);
+                Ringtone ringtone = RingtoneManager.getRingtone(ctx, ringtoneUri);
+                String name = ringtone.getTitle(ctx);
+                preference.setSummary(name);
+            } else if (preference instanceof ListPreference) {
                 // For list preferences, look up the correct display value in
                 // the preference's 'entries' list.
                 ListPreference listPreference = (ListPreference) preference;
@@ -155,17 +159,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                         index >= 0
                                 ? listPreference.getEntries()[index]
                                 : null);
-
-            } else if (preference instanceof RingtonePreference) {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
-                RingtonePreference ringtonePreference = (RingtonePreference) preference;
-                Log.d("Settings", " Type: " + ringtonePreference.getRingtoneType() + " , value: " + value);
-
-                Uri ringtoneUri = Uri.parse(value.toString());
-                Ringtone ringtone = RingtoneManager.getRingtone(ctx, ringtoneUri);
-                String name = ringtone.getTitle(ctx);
-                preference.setSummary(name);
 
             } else {
                 // For all other preferences, set the summary to the value's

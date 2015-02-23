@@ -16,12 +16,12 @@ public class ApiResponseFactory {
 
     private static Gson gson = new Gson();
 
-    public static <E> E createFrom(HttpResponse response, Class<?> clazz){
+    public static <E> E createFrom(HttpResponse response, Class<?> clazz) {
         try {
 
             String content = EntityUtils.toString(response.getEntity());
 
-            Log.d("APIResponseFactory",content);
+            Log.d("APIResponseFactory", content);
 
             return (E) gson.fromJson(content, clazz);
 

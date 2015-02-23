@@ -40,14 +40,11 @@
         android:title="@string/pref_title_insistent_alarms"
         android:defaultValue="false" />
 
-    <RingtonePreference
+
+    <es.usc.citius.servando.calendula.util.RingtonePreference
         android:dependency="alarm_insistent"
-        android:ringtoneType="ringtone"
         android:key="pref_notification_tone"
         android:title="@string/pref_notification_tone"
-        android:summary="@string/pref_notification_tone_sum"
-        android:showDefault="true"
-        android:showSilent="true" />
-
+        android:summary="@string/pref_notification_tone_sum" />
 
 </PreferenceScreen>

@@ -22,7 +22,7 @@ public class Settings {
 
     Properties properties;
 
-    public void load(Context ctx) throws Exception{
+    public void load(Context ctx) throws Exception {
         Resources resources = ctx.getResources();
         AssetManager assetManager = resources.getAssets();
         // Read from the /assets directory
@@ -32,29 +32,30 @@ public class Settings {
             InputStream inputStream = assetManager.open(SETTINGS_FILE_NAME);
             properties = new Properties();
             properties.load(inputStream);
-            Log.d(TAG, "Settings loaded successfully!"  + properties.toString());
+            Log.d(TAG, "Settings loaded successfully!" + properties.toString());
         } catch (IOException e) {
             properties = new Properties();
             throw new Exception("Error loading settings file", e);
         }
     }
 
-    public String get(String key){
-        if(properties==null)
+    public String get(String key) {
+        if (properties == null)
             throw new IllegalStateException("Settings not loaded");
         return properties.getProperty(key);
     }
 
-    public String get(String key, String defaultValue){
-        if(properties==null)
+    public String get(String key, String defaultValue) {
+        if (properties == null)
             throw new IllegalStateException("Settings not loaded");
         return properties.getProperty(key, defaultValue);
     }
 
 
-    private Settings(){}
+    private Settings() {
+    }
 
-    public static Settings instance(){
+    public static Settings instance() {
         return instance;
     }
 

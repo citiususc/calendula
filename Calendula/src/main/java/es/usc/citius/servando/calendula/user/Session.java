@@ -12,7 +12,7 @@ public class Session {
     private static Session instance = new Session();
 
     private static boolean isOpen = false;
-    
+
     private Session() {
     }
 

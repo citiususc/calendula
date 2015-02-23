@@ -18,8 +18,8 @@ public enum Presentation {
 
     INHALER(R.drawable.icp_inhaler, R.string.inhaler, R.string.inhaler_units),
     SPRAY(R.drawable.icp_nasalspray, R.string.spray, R.string.spray_units),
-    
-    
+
+
     UNKNOWN(R.drawable.ic_presentation_6, R.string.unknown, R.string.unknown_units);
 
     private int drawable = R.drawable.ic_presentation_1;

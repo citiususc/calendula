@@ -132,7 +132,7 @@ public class AppTutorial {
                     .setContentText(info.detail)
                     .setShowcaseEventListener(new OnShowcaseEventListener() {
                         @Override
-                        public void onShowcaseViewHide(ShowcaseView showcaseView) {                            
+                        public void onShowcaseViewHide(ShowcaseView showcaseView) {
                             prefs.edit().putBoolean(preference_key, true).commit();
                             open = false;
                             show(secondStage, activity);

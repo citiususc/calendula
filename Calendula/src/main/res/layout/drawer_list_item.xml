@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#fff">
+    android:background="#fff"
+    android:paddingRight="10dp">
 
     <TextView
         android:id="@+id/text"
@@ -31,8 +32,7 @@
         app:riv_border_width="0dip"
         app:riv_oval="true"
         android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp" />
+        android:layout_alignParentRight="true" />
 
     <ImageView
         android:layout_width="20dp"

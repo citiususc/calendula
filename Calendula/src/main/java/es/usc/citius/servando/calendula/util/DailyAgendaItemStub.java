@@ -57,8 +57,8 @@ public class DailyAgendaItemStub {
                 // Find doses off all routines in this hour
                 List<ScheduleItem> doses = r.scheduleItems();
 
-                if (doses.size() > 0) {                    
-                    
+                if (doses.size() > 0) {
+
                     item.meds = new ArrayList<DailyAgendaItemStubElement>();
 
                     for (ScheduleItem scheduleItem : doses) {

@@ -12,9 +12,9 @@ public class GsonUtil {
     private static GsonBuilder builder = null;
     private static Gson gson = null;
 
-    public static Gson get(){
+    public static Gson get() {
 
-        if(builder == null){
+        if (builder == null) {
             builder = new GsonBuilder();
             // register date and time converters
             Converters.registerAll(builder);

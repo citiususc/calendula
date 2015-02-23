@@ -200,7 +200,6 @@ public class ReminderNotification {
                         // Automatically dismiss the notification when it is touched.
                 .setAutoCancel(false);
 
-
         Notification n = builder.build();
         n.defaults = 0;
         n.ledARGB = 0x00ffa500;

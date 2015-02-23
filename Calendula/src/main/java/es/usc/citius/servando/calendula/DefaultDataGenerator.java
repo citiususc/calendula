@@ -45,7 +45,7 @@ public class DefaultDataGenerator {
                 //ActiveAndroid.endTransaction();
             }
         }
-        
+
     }
 
 }

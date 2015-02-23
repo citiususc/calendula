@@ -15,7 +15,7 @@ import es.usc.citius.servando.calendula.util.Settings;
  */
 public class ApiRequestBuilder {
 
-//    private enum METHOD {POST, GET, PUT, DELETE}
+    //    private enum METHOD {POST, GET, PUT, DELETE}
     private static HttpClient client = new DefaultHttpClient();
     private String API_LOCATION;
 

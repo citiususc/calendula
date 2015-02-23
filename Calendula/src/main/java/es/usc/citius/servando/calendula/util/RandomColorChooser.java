@@ -9,7 +9,7 @@ import es.usc.citius.servando.calendula.R;
  */
 public class RandomColorChooser {
 
-    private static int colorIndex= 0;
+    private static int colorIndex = 0;
 
     private static final int[] primary_colors = {
             R.color.android_blue,
@@ -26,23 +26,23 @@ public class RandomColorChooser {
             R.color.android_red_light
     };
 
-    public static int getNextColorIndex(){
-        return (colorIndex++)%primary_colors.length;
+    public static int getNextColorIndex() {
+        return (colorIndex++) % primary_colors.length;
     }
 
-    public static int getFixedColor(Object obj, Resources res){
-        return res.getColor(primary_colors[obj.hashCode()%primary_colors.length]);
+    public static int getFixedColor(Object obj, Resources res) {
+        return res.getColor(primary_colors[obj.hashCode() % primary_colors.length]);
     }
 
-    public static int getFixedColorIdx(Object obj){
-        return obj.hashCode()%primary_colors.length;
+    public static int getFixedColorIdx(Object obj) {
+        return obj.hashCode() % primary_colors.length;
     }
 
-    public static int getPrimaryColor(int idx, Resources res){
+    public static int getPrimaryColor(int idx, Resources res) {
         return res.getColor(primary_colors[idx]);
     }
 
-    public static int getSecondaryColor(int idx, Resources res){
+    public static int getSecondaryColor(int idx, Resources res) {
         return res.getColor(secondary_colors[idx]);
     }
 
