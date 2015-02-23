@@ -499,12 +499,6 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         }
     }
 
-    public void updateBackground() {
-        if (userProInfoFragment != null)
-            userProInfoFragment.updateBackground();
-    }
-
-
     public class LoadDailyAgendaTask extends AsyncTask<Void, Void, Void> {
 
         @Override

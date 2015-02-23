@@ -39,6 +39,8 @@ public class HomeUserInfoFragment extends Fragment {
     TextView monthTv;
     TextView dayTv;
 
+    int currentBgFileIdx = 0;
+
 
     public HomeUserInfoFragment() {
         // Required empty public constructor
@@ -89,11 +91,11 @@ public class HomeUserInfoFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        updateBackground();
+        background.setImageDrawable(new BitmapDrawable(getBackgroundBitmap()));
     }
 
     public void updateBackground() {
-        background.setImageDrawable(new BitmapDrawable(getBackgroundBitmap()));
+        background.setImageDrawable(new BitmapDrawable(getRandomBackground()));
     }
 
     void updateProfileInfo() {
@@ -111,30 +113,31 @@ public class HomeUserInfoFragment extends Fragment {
         monthTv.setText(monthStr);
     }
 
-//    public void showEditProfileDialog() {
-//        FragmentManager fm = getActivity().getSupportFragmentManager();
-//        final EditUserProfileFragment editUserProfileFragment = new EditUserProfileFragment();
-//        editUserProfileFragment.setOnProfileEditListener(new EditUserProfileFragment.OnProfileEditListener() {
-//            @Override
-//            public void onProfileEdited(User u) {
-//                editUserProfileFragment.dismiss();
-//                updateProfileInfo();
-//            }
-//        });
-//        editUserProfileFragment.show(fm, "fragment_edit_profile");
-//    }
-
     public static HomeUserInfoFragment newInstance() {
         return new HomeUserInfoFragment();
     }
 
-    Bitmap getBackgroundBitmap() {
-
+    Bitmap getBackgroundBitmap() {       
         int width = (int) Screen.getDpSize(getActivity()).x;
         int height = getResources().getDimensionPixelSize(R.dimen.header_height);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Integer idx = prefs.getInt("profile_background_idx", 1);
+        return Screen.getResizedBitmap(getActivity(), "home_bg_" + idx + ".jpg", width, height);
+    }
 
-        int rand = (((int) (Math.random() * 1000)) % 4) + 1;
 
+    Bitmap getRandomBackground() {
+        int width = (int) Screen.getDpSize(getActivity()).x;
+        int height = getResources().getDimensionPixelSize(R.dimen.header_height);
+        int rand = (((int) (Math.random() * 1000)) % 5) + 1;
+        if (rand == currentBgFileIdx) {
+            rand = ((rand + 1) % 5) + 1;
+        }
+        currentBgFileIdx = rand;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        prefs.edit().putInt("profile_background_idx", rand).commit();
+        
         return Screen.getResizedBitmap(getActivity(), "home_bg_" + rand + ".jpg", width, height);
     }
 
