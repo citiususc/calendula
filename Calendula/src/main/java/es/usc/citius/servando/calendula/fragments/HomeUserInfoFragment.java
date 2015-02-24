@@ -1,6 +1,9 @@
 package es.usc.citius.servando.calendula.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,16 +16,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
+
+import com.makeramen.RoundedImageView;
 
 import org.joda.time.DateTime;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.util.Screen;
+import es.usc.citius.servando.calendula.util.Snack;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,6 +47,27 @@ public class HomeUserInfoFragment extends Fragment {
     TextView monthTv;
     TextView dayTv;
 
+    ImageView moodImg;
+    RoundedImageView modFabButton;
+    ListAdapter moodsAdapter;
+    String[] moods;
+
+    int[] moodRes = new int[]{
+            R.drawable.mood_1,
+            R.drawable.mood_2,
+            R.drawable.mood_3,
+            R.drawable.mood_4,
+            R.drawable.mood_5,
+    };
+
+    int[] moodColor = new int[]{
+            R.color.android_red,
+            R.color.android_orange,
+            R.color.white,
+            R.color.android_blue,
+            R.color.android_green
+    };
+
     int currentBgFileIdx = 0;
 
 
@@ -52,9 +81,12 @@ public class HomeUserInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home_user_info, container, false);
+
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        
         Animation in = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
         Animation out = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
-
+        moods = getResources().getStringArray(R.array.moods);
         monthTv = (TextView) view.findViewById(R.id.month_text);
         dayTv = (TextView) view.findViewById(R.id.day_text);
 
@@ -85,7 +117,26 @@ public class HomeUserInfoFragment extends Fragment {
         });
         updateProfileInfo();
 
+        modFabButton = (RoundedImageView) view.findViewById(R.id.mod_circle);
+        moodImg = (ImageView) view.findViewById(R.id.mood_button);
+        moodImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMoodsDialog();
+            }
+        });
+
+        updateModButton();
+
         return view;
+    }
+
+    public void updateModButton() {
+        int mood = mSharedPreferences.getInt("last_mood", 2);
+        int color = moodColor[mood];
+        int res = moodRes[mood];
+        modFabButton.setImageResource(color);
+        moodImg.setImageResource(res);
     }
 
     @Override
@@ -99,8 +150,8 @@ public class HomeUserInfoFragment extends Fragment {
     }
 
     void updateProfileInfo() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String displayName = prefs.getString("display_name", "Calendula");
+
+        String displayName = mSharedPreferences.getString("display_name", "Calendula");
         profileUsername.setText(displayName);
 
 
@@ -120,8 +171,7 @@ public class HomeUserInfoFragment extends Fragment {
     Bitmap getBackgroundBitmap() {       
         int width = (int) Screen.getDpSize(getActivity()).x;
         int height = getResources().getDimensionPixelSize(R.dimen.header_height);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        Integer idx = prefs.getInt("profile_background_idx", 1);
+        Integer idx = mSharedPreferences.getInt("profile_background_idx", 1);
         return Screen.getResizedBitmap(getActivity(), "home_bg_" + idx + ".jpg", width, height);
     }
 
@@ -135,8 +185,7 @@ public class HomeUserInfoFragment extends Fragment {
         }
         currentBgFileIdx = rand;
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        prefs.edit().putInt("profile_background_idx", rand).commit();
+        mSharedPreferences.edit().putInt("profile_background_idx", rand).commit();
         
         return Screen.getResizedBitmap(getActivity(), "home_bg_" + rand + ".jpg", width, height);
     }
@@ -166,6 +215,54 @@ public class HomeUserInfoFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mSharedPreferences.unregisterOnSharedPreferenceChangeListener(mListener);
+    }
+
+
+    public void showMoodsDialog() {
+
+        moodsAdapter = new MoodListAdapter(getActivity(), R.layout.mood_list_item, moods);
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+        builderSingle.setCancelable(true)
+                .setTitle(getString(R.string.moods_dialog_title))
+                .setAdapter(moodsAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Snack.show("Mood saved!", getActivity());
+                        mSharedPreferences.edit().putInt("last_mood", which).commit();
+                        updateModButton();
+
+                    }
+                }).show();
+    }
+
+    public class MoodListAdapter extends ArrayAdapter<String> {
+
+
+        public MoodListAdapter(Context context, int textViewResourceId) {
+            super(context, textViewResourceId);
+        }
+
+        public MoodListAdapter(Context context, int resource, String[] items) {
+            super(context, resource, items);
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+
+            View v = convertView;
+            if (v == null) {
+                LayoutInflater vi;
+                vi = LayoutInflater.from(getContext());
+                v = vi.inflate(R.layout.mood_list_item, null);
+            }
+            int res = moodRes[position];
+            int color = moodColor[position];
+            v.findViewById(R.id.textView).setBackgroundColor(getResources().getColor(color));
+            ((ImageView) v.findViewById(R.id.mood_image)).setImageResource(res);
+            return v;
+        }
     }
 
 

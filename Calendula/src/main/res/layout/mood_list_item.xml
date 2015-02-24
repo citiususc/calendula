@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:id="@+id/textView"
+        android:background="@color/android_blue" />
+
+    <ImageView
+        android:id="@+id/mood_image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/mood_1"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>

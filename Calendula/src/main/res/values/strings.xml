@@ -233,5 +233,14 @@
     <string name="notification_delay">Delay</string>
     <string name="alarm_delayed_message">Alarm delayed %1$s minutes</string>
 
+    <string name="moods_dialog_title">How are you feeling?</string>
+    <string-array name="moods">
+        <item>Feeling very bad</item>
+        <item>Feeling bad</item>
+        <item>Feeling nothing</item>
+        <item>Feeling good</item>
+        <item>Feeling very good</item>
+    </string-array>
+
 </resources>
 

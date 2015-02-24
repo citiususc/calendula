@@ -248,5 +248,14 @@
     <string name="notification_delay">Posponer</string>
     <string name="alarm_delayed_message">Alarma pospuesta %1$s minutos</string>
 
+    <string name="moods_dialog_title">Como te sientes?</string>
+    <string-array name="moods">
+        <item>Me siento muy mal</item>
+        <item>Me siento mal</item>
+        <item>No siento nada</item>
+        <item>Me siento bien</item>
+        <item>Me siento muy bien</item>
+    </string-array>
+
 </resources>
 
