@@ -142,8 +142,15 @@ public class ReminderNotification {
                 cancel,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Uri ringtoneUri = Uri.parse(PreferenceManager.getDefaultSharedPreferences(context).getString("pref_notification_tone", "default ringtone"));
 
+        String ringtonePref = PreferenceManager.getDefaultSharedPreferences(context).getString("pref_notification_tone", null);
+
+        Uri ringtoneUri;
+        if (inistentNotifications) {
+            ringtoneUri = ringtonePref != null ? Uri.parse(ringtonePref) : Settings.System.DEFAULT_ALARM_ALERT_URI;
+        } else {
+            ringtoneUri = Settings.System.DEFAULT_NOTIFICATION_URI;
+        }
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 
@@ -196,7 +203,7 @@ public class ReminderNotification {
                         //.setLights(0x00ff0000, 500, 1000)
                 .setPriority(Notification.PRIORITY_DEFAULT)
                 .setVibrate(new long[]{1000, 200, 500, 200, 100, 200, 1000})
-                .setSound(ringtoneUri != null ? ringtoneUri : Settings.System.DEFAULT_RINGTONE_URI)
+                .setSound(ringtoneUri != null ? ringtoneUri : Settings.System.DEFAULT_NOTIFICATION_URI)
                         // Automatically dismiss the notification when it is touched.
                 .setAutoCancel(false);
 
