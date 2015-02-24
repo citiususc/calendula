@@ -35,7 +35,6 @@ public class DailyAgenda {
 
         // we need to update daily agenda
         if (!today.contains(lastDate)) {
-
             // Start transaction
             ActiveAndroid.beginTransaction();
             // delete old items
@@ -49,6 +48,10 @@ public class DailyAgenda {
             // End transaction
             ActiveAndroid.setTransactionSuccessful();
             ActiveAndroid.endTransaction();
+
+            // Update alarms
+            AlarmScheduler.instance().updateAllAlarms(ctx);
+            
         } else {
             Log.d(TAG, "No need to update daily schedule (" + DailyScheduleItem.findAll().size() + " items found for today)");
         }

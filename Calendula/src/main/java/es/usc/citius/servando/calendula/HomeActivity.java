@@ -434,8 +434,10 @@ public class HomeActivity extends ActionBarActivity implements
         final long delayRoutineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID, -1l);
 
         if (remindRoutineId != -1) {
+            mDrawerLayout.closeDrawer(drawerView);
             showReminder(remindRoutineId);
             getIntent().removeExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID);
+
         } else if (delayRoutineId != -1) {
             Log.d(TAG, "isDelay! ");
 
@@ -443,6 +445,7 @@ public class HomeActivity extends ActionBarActivity implements
                 @Override
                 public void run() {
                     mViewPager.setCurrentItem(0);
+                    mDrawerLayout.closeDrawer(drawerView);
                     final Routine r = Routine.findById(delayRoutineId);
                     ((DailyAgendaFragment) getViewPagerFragment(0)).showDelayDialog(r);
                     ReminderNotification.cancel(HomeActivity.this);
@@ -554,7 +557,7 @@ public class HomeActivity extends ActionBarActivity implements
             @Override
             public void run() {
                 final Routine r = Routine.findById(routineId);
-                mViewPager.setCurrentItem(0);
+                mViewPager.setCurrentItem(0);                
                 ((DailyAgendaFragment) getViewPagerFragment(0)).showReminder(r);
             }
         }, 1000);

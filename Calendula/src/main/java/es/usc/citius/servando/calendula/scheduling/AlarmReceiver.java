@@ -34,7 +34,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                 Log.d(TAG, "Received update daily agenda event");
                 // update daily agenda
                 DailyAgenda.instance().setupForToday(context.getApplicationContext());
-                AlarmScheduler.instance().updateAllAlarms(context.getApplicationContext());
             }
         }
     }

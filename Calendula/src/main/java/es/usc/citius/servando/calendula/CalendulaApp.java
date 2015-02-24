@@ -22,7 +22,6 @@ import java.util.Arrays;
 
 import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
-import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 
 /**
@@ -71,8 +70,6 @@ public class CalendulaApp extends Application {
                 DailyAgenda.instance().setupForToday(CalendulaApp.this);
                 // setup alarm for daily agenda update
                 setupUpdateDailyAgendaAlarm();
-                // Update alarms
-                AlarmScheduler.instance().updateAllAlarms(CalendulaApp.this);
             }
         }).start();
 
