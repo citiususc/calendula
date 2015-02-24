@@ -133,7 +133,7 @@ public class AgendaZoomHelper {
             list.removeAllViews();
             ((TextView) v.findViewById(R.id.clock)).setText(DateTime.now().toString("kk:mm"));
             ((TextView) v.findViewById(R.id.routine_name)).setText(r.name());
-            ((TextView) v.findViewById(R.id.meds_time_view)).setText("It's time to take some meds!");
+            ((TextView) v.findViewById(R.id.meds_time_view)).setText(activity.getString(R.string.agenda_zoom_meds_time));
             zoomInView(null, activity);
         }
     }
