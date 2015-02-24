@@ -194,4 +194,21 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+
+    <style name="whiteTextWithShadow">
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:shadowColor">#55111111</item>
+        <item name="android:shadowDx">2</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:shadowRadius">3</item>
+    </style>
+
+    <style name="whiteTextWithSpreadShadow">
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:shadowColor">#55666666</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">5</item>
+    </style>
+
 </resources>

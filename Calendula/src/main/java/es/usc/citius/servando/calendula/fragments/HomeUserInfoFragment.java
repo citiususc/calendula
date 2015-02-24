@@ -31,6 +31,7 @@ import org.joda.time.DateTime;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.util.Screen;
 import es.usc.citius.servando.calendula.util.Snack;
+import es.usc.citius.servando.calendula.util.view.CustomDigitalClock;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +44,7 @@ public class HomeUserInfoFragment extends Fragment {
     View profileImageContainer;
     TextView profileUsername;
     RelativeLayout profileContainer;
+    CustomDigitalClock clock;
 
     TextView monthTv;
     TextView dayTv;
@@ -89,6 +91,7 @@ public class HomeUserInfoFragment extends Fragment {
         moods = getResources().getStringArray(R.array.moods);
         monthTv = (TextView) view.findViewById(R.id.month_text);
         dayTv = (TextView) view.findViewById(R.id.day_text);
+        clock = (CustomDigitalClock) view.findViewById(R.id.home_clock);
 
         profileUsername = (TextView) view.findViewById(R.id.profile_username);
         profileContainer = (RelativeLayout) view.findViewById(R.id.profile_container);
@@ -146,7 +149,27 @@ public class HomeUserInfoFragment extends Fragment {
     }
 
     public void updateBackground() {
-        background.setImageDrawable(new BitmapDrawable(getRandomBackground()));
+
+        Bitmap b = getRandomBackground();
+        background.setImageDrawable(new BitmapDrawable(b));
+
+//        Palette.generateAsync(b, new Palette.PaletteAsyncListener() {
+//            public void onGenerated(Palette palette) {
+//                Palette.Swatch swatch = palette.getDarkVibrantSwatch();
+//                int color;
+//                if (swatch != null) {
+//                    color = getResources().getColor(R.color.white);
+//                }else{
+//                    color = getResources().getColor(R.color.darker_blue);
+//                }
+//
+//                profileUsername.setTextColor(color);
+//                monthTv.setTextColor(color);
+//                dayTv.setTextColor(color);
+//                clock.setTextColor(color);
+//
+//            }
+//        });
     }
 
     void updateProfileInfo() {
