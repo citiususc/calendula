@@ -70,6 +70,7 @@
     <string name="next">Siguiente</string>
     <string name="delay">Retrasar</string>
     <string name="done">Hecho</string>
+    <string name="cancel">Cancelar</string>
     <string name="confirm">Confirmar</string>
     <string name="meds_time">Recuerda tomar tus medicinas</string>
 
@@ -87,7 +88,7 @@
     <string name="drops">Gotas</string>
     <string name="syrup">Jarabe</string>
     <string name="unknown">Desconocido</string>
-    <string name="effervescent">Efervscente</string>
+    <string name="effervescent">Efervescente</string>
     <string name="schedule">Pauta</string>
 
     <!-- Med presentation units -->

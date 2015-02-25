@@ -29,8 +29,6 @@ public class DosePickerFragment extends DialogFragment {
     ProgressPieView progress1;
     ProgressPieView progress2;
 
-//    TextView textProgres1;
-//    TextView textProgres2;
 
     String[] integers = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
     int[] integersValues = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -57,9 +55,6 @@ public class DosePickerFragment extends DialogFragment {
 
         progress1 = (ProgressPieView) rootView.findViewById(R.id.progressPieView);
         progress2 = (ProgressPieView) rootView.findViewById(R.id.progressPieView2);
-
-//        textProgres1 = (TextView) rootView.findViewById(R.id.text_progress_1);
-//        textProgres2 = (TextView) rootView.findViewById(R.id.text_progress_2);
 
         integerPicker.setMaxValue(integers.length - 1);
         integerPicker.setMinValue(0);
@@ -93,14 +88,14 @@ public class DosePickerFragment extends DialogFragment {
         return new AlertDialog.Builder(getActivity())
                 .setView(rootView)
                 .setTitle(R.string.title_select_dose_dialog)
-                .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (mDoseSelectedListener != null)
                             mDoseSelectedListener.onDoseSelected(getDose());
                     }
                 })
-                .setNegativeButton("Cancel", null).create();
+                .setNegativeButton(R.string.cancel, null).create();
     }
 
     void setInitialValue() {

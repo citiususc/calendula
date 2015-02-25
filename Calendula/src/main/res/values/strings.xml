@@ -71,6 +71,7 @@
     <string name="next">Next</string>
     <string name="delay">Delay</string>
     <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="meds_time">Remember to take your meds</string>
     <string name="title_select_dose_dialog">Introduce a dose</string>
