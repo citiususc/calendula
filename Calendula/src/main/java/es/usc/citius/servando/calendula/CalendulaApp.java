@@ -5,6 +5,7 @@ import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -62,6 +63,7 @@ public class CalendulaApp extends Application {
         super.onCreate();
         // initialize sqlite engine
         ActiveAndroid.initialize(this, false);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -73,14 +75,11 @@ public class CalendulaApp extends Application {
             }
         }).start();
 
-        // create app palette
-        //Screen.createPalette(this, Screen.drawableToBitmap(getResources().getDrawable(R.drawable.home_bg_1)));
         // export database to db
-        // exportDatabase(this,DB_NAME,new File(Environment.getExternalStorageDirectory()+File.separator+DB_NAME));
+        exportDatabase(this, DB_NAME, new File(Environment.getExternalStorageDirectory() + File.separator + DB_NAME));
 
         Log.d("APP", Arrays.toString(PreferenceManager.getDefaultSharedPreferences(this).getAll().keySet().toArray()));
     }
-
 
     @Override
     public void onTerminate() {

@@ -19,6 +19,8 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.HomeActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.user.Session;
+import es.usc.citius.servando.calendula.util.medicine.Prescription;
+import es.usc.citius.servando.calendula.util.medicine.PrescriptionStore;
 
 /**
  * Start activity:
@@ -117,7 +119,11 @@ public class StartActivity extends Activity {
         private void keepSplashVisible(int seconds) {
             // Show splash
             try {
-                Thread.sleep(seconds * 1000);
+                if (Prescription.empty()) {
+                    PrescriptionStore.fillDatabaseFromCsv(getApplicationContext());
+                } else {
+                    Thread.sleep(seconds * 2500);
+                }
             } catch (InterruptedException e) {
                 // do nothing
             }
@@ -226,5 +232,8 @@ public class StartActivity extends Activity {
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        // do nothing
+    }
 }

@@ -15,11 +15,16 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "onReceive: " + intent.getAction());
+
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
             Log.d(TAG, "Boot completed intent received");
             // Update alarms
             AlarmScheduler.instance().updateAllAlarms(context);
             Log.d(TAG, "Alarms updated!");
+        } else if ("android.intent.action.MY_PACKAGE_REPLACED".equals(intent.getAction())) {
+            Log.d(TAG, "Package received intent received");
+            AlarmScheduler.instance().updateAllAlarms(context);
         }
+
     }
 }

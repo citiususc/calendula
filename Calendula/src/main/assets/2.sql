@@ -1,0 +1,1 @@
+ALTER TABLE Medicines ADD COLUMN cn TEXT;

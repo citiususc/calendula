@@ -61,6 +61,7 @@
     <string name="create_new_routine">Create new routine...</string>
     <string name="add_routine_button">ADD ROUTINE </string>
     <string name="medicine_name">Med name</string>
+    <string name="medicine_description">Med description</string>
     <string name="medicine_presentation">Presentation</string>
     <string name="edit_medicine_button_text">Save changes</string>
     <string name="create_medicine_button_text">Create medicine</string>

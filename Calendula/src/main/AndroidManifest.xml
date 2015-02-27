@@ -11,9 +11,10 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <!--<uses-permission android:name="android.permission.INTERNET" />-->
 
-    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!--
      To retrieve OAuth 2.0 tokens or invalidate tokens to disconnect a user. This disconnect
      option is required to comply with the Google+ Sign-In developer policies
@@ -97,6 +98,7 @@
         <receiver android:name="es.usc.citius.servando.calendula.scheduling.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"></action>
             </intent-filter>
         </receiver>
 
@@ -114,7 +116,7 @@
             android:value="calendula.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="1" />
+            android:value="2" />
 
         <meta-data
             android:name="AA_MODELS"
@@ -122,7 +124,8 @@
              es.usc.citius.servando.calendula.persistence.Medicine,
              es.usc.citius.servando.calendula.persistence.Routine,
              es.usc.citius.servando.calendula.persistence.Schedule,
-             es.usc.citius.servando.calendula.persistence.ScheduleItem" />
+             es.usc.citius.servando.calendula.persistence.ScheduleItem,
+             es.usc.citius.servando.calendula.util.medicine.Prescription" />
 
         <meta-data
             android:name="AA_SERIALIZERS"

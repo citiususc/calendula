@@ -17,10 +17,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
@@ -28,6 +31,7 @@ import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.Snack;
+import es.usc.citius.servando.calendula.util.medicine.Prescription;
 
 /**
  * Created by joseangel.pineiro on 12/4/13.
@@ -38,34 +42,41 @@ public class MedicineCreateOrEditFragment extends Fragment {
     Medicine mMedicine;
 
     Boolean showConfirmButton = true;
-    TextView mNameTextView;
+    AutoCompleteTextView mNameTextView;
     TextView mPresentationTv;
+    TextView mDescriptionTv;
     //    Button mConfirmButton;
     Presentation selectedPresentation;
     HorizontalScrollView presentationScroll;
 
     boolean showcaseShown = false;
     long mMedicineId;
+    String cn;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_or_edit_medicine, container, false);
-        final String[] names = Medicine.findAllMedicineNames();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_dropdown_item_1line, names);
+        //final String[] names = Medicine.findAllMedicineNames();
+        ArrayAdapter<Prescription> adapter = new AutoCompleteAdapter(getActivity(), R.layout.med_drop_down_item);
 
-        mNameTextView = (TextView) rootView.findViewById(R.id.medicine_edit_name);
+        mNameTextView = (AutoCompleteTextView) rootView.findViewById(R.id.medicine_edit_name);
         mPresentationTv = (TextView) rootView.findViewById(R.id.textView3);
-        ((AutoCompleteTextView) mNameTextView).setAdapter(adapter);
-        ((AutoCompleteTextView) mNameTextView).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mDescriptionTv = (TextView) rootView.findViewById(R.id.medicine_edit_description);
+        mNameTextView.setAdapter(adapter);
+        mNameTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
-                String name = (String) parent.getItemAtPosition(pos);
-                mMedicine = Medicine.findByName(name);
-                Log.d(getTag(), "Medicine selected: " + name + ", " + (mMedicine == null));
+                Prescription p = (Prescription) parent.getItemAtPosition(pos);
+                String shortName = p.shortName();
+                mNameTextView.setText(shortName);
+                mDescriptionTv.setText(p.name);                
                 hideKeyboard();
-                selectPresentation(mMedicine != null ? mMedicine.presentation() : null);
+
+                // save referenced prescription to med
+                cn = p.cn;
+
+                // selectPresentation(mMedicine != null ? mMedicine.presentation() : null);
             }
         });
 
@@ -424,6 +435,78 @@ public class MedicineCreateOrEditFragment extends Fragment {
         public void onMedicineCreated(Medicine r);
 
         public void onMedicineDeleted(Medicine r);
+    }
+
+
+    public class AutoCompleteAdapter extends ArrayAdapter<Prescription> implements Filterable {
+        private List<Prescription> mData;
+
+        public AutoCompleteAdapter(Context context, int textViewResourceId) {
+            super(context, textViewResourceId);
+            mData = new ArrayList<Prescription>();
+        }
+
+        @Override
+        public int getCount() {
+            return mData.size();
+        }
+
+        @Override
+        public Prescription getItem(int index) {
+            return mData.get(index);
+        }
+
+        @Override
+        public View getView(int position, View item, ViewGroup parent) {
+
+            if (item == null) {
+                final LayoutInflater inflater = getActivity().getLayoutInflater();
+                item = inflater.inflate(R.layout.med_drop_down_item, null);
+            }
+
+            Prescription p = mData.get(position);
+            ((TextView) item.findViewById(R.id.text1)).setText(p.shortName());
+            ((TextView) item.findViewById(R.id.text2)).setText(mData.get(position).name);
+            ((TextView) item.findViewById(R.id.text3)).setText("(" + p.dose + ")");
+            return item;
+        }
+
+        @Override
+        public Filter getFilter() {
+            Filter myFilter = new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    FilterResults filterResults = new FilterResults();
+                    if (constraint != null) {
+                        // A class that queries a web API, parses the data and returns an ArrayList<Style>
+                        try {
+                            List<Prescription> prescriptions = Prescription.findByName(constraint.toString(), 20);
+                            /*List<String> names = new ArrayList<String>();
+                            for(Prescription p : prescriptions)
+                                names.add(p.name);
+                                */
+                            mData = prescriptions;//Fetcher.fetchNames(constraint.toString());
+                        } catch (Exception e) {
+                            Log.e("myException", e.getMessage());
+                        }
+                        // Now assign the values and count to the FilterResults object
+                        filterResults.values = mData;
+                        filterResults.count = mData.size();
+                    }
+                    return filterResults;
+                }
+
+                @Override
+                protected void publishResults(CharSequence contraint, FilterResults results) {
+                    if (results != null && results.count > 0) {
+                        notifyDataSetChanged();
+                    } else {
+                        notifyDataSetInvalidated();
+                    }
+                }
+            };
+            return myFilter;
+        }
     }
 
 }

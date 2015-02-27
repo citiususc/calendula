@@ -18,12 +18,16 @@ public class Medicine extends Model implements Comparable<Medicine> {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_NAME = "Name";
     public static final String COLUMN_PRESENTATION = "Presentation";
+    public static final String COLUMN_CN = "cn";
 
     @Column(name = COLUMN_NAME)
     private String name;
 
     @Column(name = COLUMN_PRESENTATION)
     private Presentation presentation;
+
+    @Column(name = COLUMN_CN)
+    private String cn;
 
     public Medicine() {
     }
@@ -96,5 +100,13 @@ public class Medicine extends Model implements Comparable<Medicine> {
     @Override
     public int compareTo(Medicine another) {
         return name.compareTo(another.name);
+    }
+
+    public String cn() {
+        return cn;
+    }
+
+    public void setCn(String cn) {
+        this.cn = cn;
     }
 }
