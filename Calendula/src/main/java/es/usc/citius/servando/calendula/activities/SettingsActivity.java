@@ -1,12 +1,14 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -21,6 +23,7 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
+import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -91,6 +94,18 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         bindPreferenceSummaryToValue(findPreference("alarm_repeat_frequency"));
         bindPreferenceSummaryToValue(findPreference("alarm_reminder_window"));
         bindPreferenceSummaryToValue(findPreference("pref_notification_tone"));
+
+        findPreference("enable_prescriptions_db").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                Boolean checked = (Boolean) newValue;
+
+                if (checked) {
+                    new PopulatePrescriptionDatabaseTask().execute("");
+                }
+                return true;
+            }
+        });
     }
 
     /**
@@ -191,6 +206,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                         .getString(preference.getKey(), ""));
     }
 
+
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if ("alarm_repeat_frequency".equals(key)) {
@@ -247,6 +263,37 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+        }
+    }
+
+
+    public class PopulatePrescriptionDatabaseTask extends AsyncTask<String, String, Void> {
+
+
+        ProgressDialog dialog;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            new PopulatePrescriptionDBService().updateIfNeeded(SettingsActivity.this);
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(SettingsActivity.this);
+            dialog.setIndeterminate(true);
+            dialog.setCancelable(false);
+            dialog.setMessage(getString(R.string.enable_prescriptions_progress_messgae));
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
         }
     }
 

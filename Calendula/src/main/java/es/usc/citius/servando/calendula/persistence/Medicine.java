@@ -61,7 +61,7 @@ public class Medicine extends Model implements Comparable<Medicine> {
     // Static
     public static List<Medicine> findAll() {
         return new Select().from(Medicine.class)
-                .orderBy(COLUMN_NAME + " DESC")
+                .orderBy(COLUMN_NAME + " ASC")
                 .execute();
     }
 

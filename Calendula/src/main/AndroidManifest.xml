@@ -116,6 +116,10 @@
             android:value="calendula.db" />
         <meta-data
             android:name="AA_DB_VERSION"
+            android:value="4" />
+
+        <meta-data
+            android:name="AEMPS_DB_VERSION"
             android:value="2" />
 
         <meta-data
@@ -136,6 +140,11 @@
         <activity
             android:name="es.usc.citius.servando.calendula.activities.SettingsActivity"
             android:label="@string/title_activity_settings"></activity>
+
+        <service
+            android:name="es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService"
+            android:process=":populatedbservice" />
+
     </application>
 
 </manifest>

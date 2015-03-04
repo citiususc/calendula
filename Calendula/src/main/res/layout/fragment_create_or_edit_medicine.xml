@@ -23,9 +23,9 @@
         android:id="@+id/medicine_edit_description"
         android:layout_below="@+id/medicine_edit_name"
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="32dp"
+        android:layout_marginLeft="72dp"
         android:textSize="13sp"
-        android:textColor="@color/dark_grey_text"
+        android:textColor="@color/android_blue"
         android:gravity="center_vertical"
         android:layout_marginRight="32dp" />
 
@@ -33,6 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/medicine_edit_name"
+        android:hint="@string/medicine_edit_name_hint"
         android:layout_below="@+id/textView"
         android:layout_marginTop="20dp"
         android:textColor="@color/dark_grey_home"
@@ -42,21 +43,30 @@
         android:lines="1"
         android:maxLines="1"
         android:layout_marginRight="32dp"
-        android:layout_marginLeft="32dp" />
+        android:layout_marginLeft="72dp" />
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/search_button"
+        android:src="@drawable/ic_search_black_48dp"
+        android:layout_alignTop="@+id/medicine_edit_name"
+        android:layout_alignRight="@+id/medicine_edit_name"
+        android:layout_marginRight="10dp" />
 
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="36dp"
+        android:layout_height="26dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/medicine_presentation"
         android:textSize="20sp"
         android:textColor="@color/dark_grey_text"
         android:id="@+id/textView2"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="40dp"
         android:layout_marginLeft="72dp"
         android:gravity="center_vertical"
-        android:layout_below="@+id/medicine_edit_name" />
+        android:layout_below="@+id/medicine_edit_description" />
 
 
     <ImageView
@@ -80,7 +90,7 @@
         android:layout_below="@+id/textView2"
         android:layout_marginTop="20dp"
         android:id="@+id/med_presentation"
-        android:layout_marginLeft="42dp"
+        android:layout_marginLeft="72dp"
         android:layout_marginRight="42dp" />
 
     <TextView
@@ -115,7 +125,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignBottom="@+id/med_presentation"
         android:src="@drawable/ic_arrow_left_black_48dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="46dp"
         android:alpha="0.3" />
 
 

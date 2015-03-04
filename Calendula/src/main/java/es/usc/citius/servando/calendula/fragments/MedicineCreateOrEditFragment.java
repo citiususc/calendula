@@ -3,9 +3,13 @@ package es.usc.citius.servando.calendula.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,6 +24,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -27,9 +32,11 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
+import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.medicine.Prescription;
 
@@ -40,16 +47,19 @@ public class MedicineCreateOrEditFragment extends Fragment {
 
     OnMedicineEditListener mMedicineEditCallback;
     Medicine mMedicine;
+    Prescription mPrescription;
 
     Boolean showConfirmButton = true;
     AutoCompleteTextView mNameTextView;
     TextView mPresentationTv;
     TextView mDescriptionTv;
+    ImageView searchButton;
     //    Button mConfirmButton;
     Presentation selectedPresentation;
     HorizontalScrollView presentationScroll;
 
     boolean showcaseShown = false;
+    boolean enableSearch = false;
     long mMedicineId;
     String cn;
 
@@ -58,19 +68,22 @@ public class MedicineCreateOrEditFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_or_edit_medicine, container, false);
         //final String[] names = Medicine.findAllMedicineNames();
-        ArrayAdapter<Prescription> adapter = new AutoCompleteAdapter(getActivity(), R.layout.med_drop_down_item);
+        //ArrayAdapter<Prescription> adapter = new AutoCompleteAdapter(getActivity(), R.layout.med_drop_down_item);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         mNameTextView = (AutoCompleteTextView) rootView.findViewById(R.id.medicine_edit_name);
         mPresentationTv = (TextView) rootView.findViewById(R.id.textView3);
         mDescriptionTv = (TextView) rootView.findViewById(R.id.medicine_edit_description);
-        mNameTextView.setAdapter(adapter);
+        searchButton = (ImageView) rootView.findViewById(R.id.search_button);
+        //mNameTextView.setAdapter(adapter);
         mNameTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
                 Prescription p = (Prescription) parent.getItemAtPosition(pos);
                 String shortName = p.shortName();
                 mNameTextView.setText(shortName);
-                mDescriptionTv.setText(p.name);                
+                mDescriptionTv.setText(p.name);
                 hideKeyboard();
 
                 // save referenced prescription to med
@@ -79,6 +92,14 @@ public class MedicineCreateOrEditFragment extends Fragment {
                 // selectPresentation(mMedicine != null ? mMedicine.presentation() : null);
             }
         });
+
+        enableSearch = prefs.getBoolean("enable_prescriptions_db", false);
+
+        if (enableSearch) {
+            enableSearchButton();
+        } else {
+            searchButton.setVisibility(View.GONE);
+        }
 
         presentationScroll = (HorizontalScrollView) rootView.findViewById(R.id.med_presentation_scroll);
 //        mConfirmButton = (Button) rootView.findViewById(R.id.medicine_button_ok);
@@ -111,7 +132,20 @@ public class MedicineCreateOrEditFragment extends Fragment {
 
         setupMedPresentationChooser(rootView);
 
+        mNameTextView.requestFocus();
+        askForPrescriptionUsage();
         return rootView;
+    }
+
+    private void enableSearchButton() {
+        searchButton.setVisibility(View.VISIBLE);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Editable editable = mNameTextView.getText();
+                ((MedicinesActivity) getActivity()).showSearchView(editable != null ? editable.toString() : null);
+            }
+        });
     }
 
     public void showDeleteConfirmationDialog(final Medicine m) {
@@ -232,6 +266,10 @@ public class MedicineCreateOrEditFragment extends Fragment {
                 selectedPresentation = Presentation.INJECTIONS;
                 Log.d(getTag(), "Injection");
                 break;
+            case R.id.med_presentation_10:
+                selectedPresentation = Presentation.POMADE;
+                Log.d(getTag(), "Pomade");
+                break;
         }
 
         if (selectedPresentation != null) {
@@ -284,16 +322,40 @@ public class MedicineCreateOrEditFragment extends Fragment {
         mPresentationTv.setText(mMedicine.presentation().getName(getResources()));
         selectedPresentation = mMedicine.presentation();
         selectPresentation(mMedicine.presentation());
+
+        if (r.cn() != null) {
+            Prescription p = Prescription.findByCn(r.cn());
+            if (p != null) {
+                mPrescription = p;
+                mDescriptionTv.setText(p.name);
+            }
+        }
+    }
+
+    public void setPrescription(Prescription p) {
+        mNameTextView.setText(p.shortName());
+        mDescriptionTv.setText(p.name);
+
+        mPrescription = p;
+
+        Presentation pr = p.expectedPresentation();
+        if (pr != null) {
+            mPresentationTv.setText(pr.getName(getResources()));
+            selectedPresentation = pr;
+            selectPresentation(pr);
+        }
     }
 
     private void selectPresentation(Presentation p) {
         for (View v : getViewsByTag((ViewGroup) getView(), "med_type")) {
             v.setBackgroundColor(getResources().getColor(R.color.transparent));
         }
+
         if (p != null) {
             int viewId = getPresentationViewId(p);
             View view = getView().findViewById(viewId);
             view.setBackgroundResource(R.drawable.presentation_circle_background);
+
             mPresentationTv.setText(p.getName(getResources()));
             scrollToMedPresentation(view);
         }
@@ -330,6 +392,10 @@ public class MedicineCreateOrEditFragment extends Fragment {
                 }
 
                 Medicine m = new Medicine(name);
+                if (mPrescription != null && mPrescription.shortName().toLowerCase().equals(m.name().toLowerCase())) {
+                    m.setCn(mPrescription.cn);
+                }
+
                 m.setPresentation(selectedPresentation != null ? selectedPresentation : Presentation.UNKNOWN);
                 if (mMedicineEditCallback != null) {
                     mMedicineEditCallback.onMedicineCreated(m);
@@ -402,6 +468,8 @@ public class MedicineCreateOrEditFragment extends Fragment {
         switch (pres) {
             case INJECTIONS:
                 return R.id.med_presentation_9;
+            case POMADE:
+                return R.id.med_presentation_10;
             case CAPSULES:
                 return R.id.med_presentation_2;
             case EFFERVESCENT:
@@ -465,7 +533,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
             }
 
             Prescription p = mData.get(position);
-            ((TextView) item.findViewById(R.id.text1)).setText(p.shortName());
+            ((TextView) item.findViewById(R.id.text1)).setText(p.shortName()); //  + (p.generic?" (G)":"")
             ((TextView) item.findViewById(R.id.text2)).setText(mData.get(position).name);
             ((TextView) item.findViewById(R.id.text3)).setText("(" + p.dose + ")");
             return item;
@@ -508,5 +576,84 @@ public class MedicineCreateOrEditFragment extends Fragment {
             return myFilter;
         }
     }
+
+
+    public void askForPrescriptionUsage() {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        boolean adviceShown = prefs.getBoolean("show_use_prescriptions_advice", false);
+
+        if (!adviceShown) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(getString(R.string.enable_prescriptions_dialog_title));
+            builder.setCancelable(false);
+            builder.setMessage(getString(R.string.enable_prescriptions_dialog_message))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.enable_prescriptions_dialog_yes), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            new PopulatePrescriptionDatabaseTask().execute("");
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.enable_prescriptions_dialog_no), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+            prefs.edit().putBoolean("show_use_prescriptions_advice", true).commit();
+        } else {
+
+            showSoftInput();
+
+        }
+
+    }
+
+    private void showSoftInput() {
+        mNameTextView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                keyboard.showSoftInput(mNameTextView, 0);
+            }
+        }, 10);
+
+    }
+
+
+    public class PopulatePrescriptionDatabaseTask extends AsyncTask<String, String, Void> {
+
+
+        ProgressDialog dialog;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            new PopulatePrescriptionDBService().updateIfNeeded(getActivity());
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(getActivity());
+            dialog.setIndeterminate(true);
+            dialog.setMessage(getString(R.string.enable_prescriptions_progress_messgae));
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+            enableSearchButton();
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            prefs.edit().putBoolean("enable_prescriptions_db", true).commit();
+            Snack.show(R.string.enable_prescriptions_finish_message, getActivity());
+        }
+    }
+
 
 }

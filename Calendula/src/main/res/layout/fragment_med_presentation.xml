@@ -29,11 +29,11 @@
                 android:baselineAlignBottom="false"
                 android:clickable="false"
                 android:scaleType="fitCenter"
-                android:layout_marginLeft="2dp"
+                android:layout_marginLeft="1dp"
                 android:alpha="1"
                 android:padding="20dp"
                 android:adjustViewBounds="false"
-                android:layout_marginRight="2dp" />
+                android:layout_marginRight="1dp" />
 
             <ImageView
                 android:layout_width="80dp"
@@ -44,11 +44,11 @@
                 android:baselineAlignBottom="false"
                 android:clickable="false"
                 android:scaleType="fitCenter"
-                android:layout_marginLeft="2dp"
+                android:layout_marginLeft="1dp"
                 android:alpha="1"
                 android:padding="20dp"
                 android:adjustViewBounds="false"
-                android:layout_marginRight="2dp" />
+                android:layout_marginRight="1dp" />
 
             <ImageView
                 android:layout_width="80dp"
@@ -59,11 +59,11 @@
                 android:baselineAlignBottom="false"
                 android:clickable="false"
                 android:scaleType="fitCenter"
-                android:layout_marginLeft="2dp"
+                android:layout_marginLeft="1dp"
                 android:alpha="1"
                 android:padding="20dp"
                 android:adjustViewBounds="false"
-                android:layout_marginRight="2dp" />
+                android:layout_marginRight="1dp" />
 
             <ImageView
                 android:layout_width="80dp"
@@ -74,11 +74,11 @@
                 android:baselineAlignBottom="false"
                 android:clickable="false"
                 android:scaleType="fitCenter"
-                android:layout_marginLeft="2dp"
+                android:layout_marginLeft="1dp"
                 android:alpha="1"
                 android:padding="20dp"
                 android:adjustViewBounds="false"
-                android:layout_marginRight="2dp" />
+                android:layout_marginRight="1dp" />
 
             <ImageView
                 android:layout_width="80dp"
@@ -89,11 +89,11 @@
                 android:baselineAlignBottom="false"
                 android:clickable="false"
                 android:scaleType="fitCenter"
-                android:layout_marginLeft="2dp"
+                android:layout_marginLeft="1dp"
                 android:alpha="1"
                 android:padding="20dp"
                 android:adjustViewBounds="false"
-                android:layout_marginRight="2dp" />
+                android:layout_marginRight="1dp" />
 
             <ImageView
                 android:layout_width="80dp"
@@ -104,11 +104,11 @@
                 android:baselineAlignBottom="false"
                 android:clickable="false"
                 android:scaleType="fitCenter"
-                android:layout_marginLeft="2dp"
+                android:layout_marginLeft="1dp"
                 android:alpha="1"
                 android:padding="20dp"
                 android:adjustViewBounds="false"
-                android:layout_marginRight="2dp" />
+                android:layout_marginRight="1dp" />
 
             <ImageView
                 android:layout_width="80dp"
@@ -119,11 +119,26 @@
                 android:baselineAlignBottom="false"
                 android:clickable="false"
                 android:scaleType="fitCenter"
-                android:layout_marginLeft="2dp"
+                android:layout_marginLeft="1dp"
                 android:alpha="1"
                 android:padding="20dp"
                 android:adjustViewBounds="false"
-                android:layout_marginRight="2dp" />
+                android:layout_marginRight="1dp" />
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/med_presentation_10"
+                android:src="@drawable/ic_ppomade"
+                android:baselineAlignBottom="false"
+                android:clickable="false"
+                android:scaleType="fitCenter"
+                android:tag="med_type"
+                android:alpha="1"
+                android:padding="20dp"
+                android:adjustViewBounds="false"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp" />
 
             <ImageView
                 android:layout_width="80dp"
@@ -137,8 +152,8 @@
                 android:alpha="1"
                 android:padding="20dp"
                 android:adjustViewBounds="false"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp" />
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp" />
 
 
         </LinearLayout>

@@ -15,7 +15,7 @@ public enum Presentation {
     PILLS(R.drawable.icp_pill, R.string.pills, R.string.pills_units),
     SYRUP(R.drawable.icp_syrup, R.string.syrup, R.string.syrup_units),
     DROPS(R.drawable.icp_drop, R.string.drops, R.string.drops_units),
-
+    POMADE(R.drawable.ic_ppomade, R.string.pomade, R.string.pomade_units),
     INHALER(R.drawable.icp_inhaler, R.string.inhaler, R.string.inhaler_units),
     SPRAY(R.drawable.icp_nasalspray, R.string.spray, R.string.spray_units),
 

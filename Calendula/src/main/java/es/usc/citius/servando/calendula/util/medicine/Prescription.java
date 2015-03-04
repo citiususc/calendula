@@ -1,5 +1,7 @@
 package es.usc.citius.servando.calendula.util.medicine;
 
+import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 import com.activeandroid.Model;
@@ -8,7 +10,11 @@ import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 import com.activeandroid.util.SQLiteUtils;
 
+import java.io.File;
 import java.util.List;
+
+import es.usc.citius.servando.calendula.persistence.Presentation;
+import es.usc.citius.servando.calendula.util.Strings;
 
 /**
  * Models a prescription:
@@ -24,6 +30,9 @@ public class Prescription extends Model {
     public static final String COLUMN_DOSE = "Dose";
     public static final String COLUMN_CONTENT = "Content";
     public static final String COLUMN_PACK_UNITS = "Packaging";
+    public static final String COLUMN_GENERIC = "Generic";
+    public static final String COLUMN_PROSPECT = "Prospect";
+    public static final String COLUMN_AFFECT_DRIVING = "Affectdriving";
 
     @Column(name = COLUMN_PID)
     public String pid;
@@ -38,12 +47,21 @@ public class Prescription extends Model {
     @Column(name = COLUMN_PACK_UNITS)
     public Float packagingUnits;
 
+    @Column(name = COLUMN_GENERIC)
+    public boolean generic;
+
+    @Column(name = COLUMN_PROSPECT)
+    public boolean hasProspect;
+
+    @Column(name = COLUMN_AFFECT_DRIVING)
+    public boolean affectsDriving;
+
     public static Prescription fromCsv(String csvLine, String separator) {
         String[] values = csvLine.split(separator);
 
         //Log.d("Prescription", values.length + "members: " + Arrays.toString(values));
 
-        if (values.length != 6) {
+        if (values.length != 9) {
             throw new RuntimeException("Invalid CSV. Input string must contain exactly 6 members. " + csvLine);
         }
 
@@ -53,6 +71,9 @@ public class Prescription extends Model {
         p.name = values[2];
         p.dose = values[3];
         p.content = values[5];
+        p.generic = getBoolean(values[6]);
+        p.affectsDriving = getBoolean(values[7]);
+        p.hasProspect = getBoolean(values[8]);
 
         try {
             p.packagingUnits = Float.valueOf(values[4].replaceAll(",", "."));
@@ -61,6 +82,13 @@ public class Prescription extends Model {
             p.packagingUnits = -1f;
         }
         return p;
+    }
+
+    private static boolean getBoolean(String s) {
+        if (s.contains("1")) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -72,19 +100,69 @@ public class Prescription extends Model {
         return count() <= 0;
     }
 
-    public static List<Prescription> findByName(String name, int limit) {
-        return SQLiteUtils.rawQuery(
-                Prescription.class,
-                "SELECT * FROM Prescriptions WHERE Name LIKE '%" + name + "%' LIMIT 20", new String[]{});
-    }
 
     public String shortName() {
         try {
-            String s = name.split(" ")[0].toLowerCase();
-            return s.substring(0, 1).toUpperCase() +
-                    s.substring(1).toLowerCase();
+            String[] parts = name.split(" ");
+            String s = parts[0].toLowerCase();
+            if ((s.contains("acido") || s.contains("ácido")) && parts.length > 1) {
+                return Strings.toCamelCase(s + " " + parts[1], " ");
+            }
+            return Strings.toProperCase(s);
+                    
         } catch (Exception e) {
             return name;
         }
+    }
+
+    public Presentation expectedPresentation() {
+        String n = name.toLowerCase() + " " + content.toLowerCase();
+        if (n.contains("comprimidos")) {
+            return Presentation.PILLS;
+        } else if (n.contains("capsulas")) {
+            return Presentation.CAPSULES;
+        } else if (n.contains("inhala")) {
+            return Presentation.INHALER;
+        } else if (n.contains("viales") || n.contains("jeringa") || n.contains("perfusi") || n.contains("inyectable")) {
+            return Presentation.INJECTIONS;
+        } else if (n.contains("gotas")) {
+            return Presentation.DROPS;
+        } else if (n.contains("sobres")) {
+            return Presentation.EFFERVESCENT;
+        } else if (n.contains("tubo") || n.contains("crema") || n.contains("pomada")) {
+            return Presentation.POMADE;
+        } else if (n.contains("pulverizacion nasal") || n.contains("pulverización nasal") || n.contains("spray")) {
+            return Presentation.SPRAY;
+        } else if (!n.contains("jarabe")) {
+            return Presentation.SYRUP;
+        } else if (n.contains("suspension oral")) {
+            if (!n.contains("polvo") && !n.contains("granulado")) {
+                return Presentation.SYRUP;
+            } else if (!n.contains("polvo")) {
+                // granulado
+            } else {
+                // sobres
+            }
+        }
+        return null;
+    }
+
+    public static List<Prescription> findByName(String name, int limit) {
+
+        Log.d("Prescription", "Query by name: " + name);
+
+        return SQLiteUtils.rawQuery(
+                Prescription.class,
+                "SELECT * FROM Prescriptions WHERE Name LIKE '" + name + "%' ORDER BY Name DESC LIMIT " + limit + ";", new String[]{});
+    }
+
+    public static Prescription findByCn(String cn) {
+        return new Select().from(Prescription.class)
+                .where(COLUMN_CN + " LIKE ? ", cn).executeSingle();
+    }
+
+    public boolean isProspectDownloaded(Context ctx) {
+        File f = new File(ctx.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/prospects/" + pid + ".pdf");
+        return f.exists();
     }
 }

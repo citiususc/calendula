@@ -67,8 +67,72 @@
         android:layout_alignParentStart="true"
         android:textSize="14sp"
         android:textColor="#fff"
-        android:gravity="bottom"
         android:paddingLeft="72dp"
-        android:layout_marginTop="45dp" />
+        android:layout_marginTop="45dp"
+        android:gravity="bottom" />
+
+    <RelativeLayout
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+        android:background="@color/android_blue_darker"
+        android:visibility="gone">
+
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="56dp"
+            android:id="@+id/search_edit_text"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="72dp"
+            android:hint="@string/search_med_hint"
+            android:textCursorDrawable="@null"
+            android:textColor="#fff"
+            android:paddingBottom="10dp"
+            android:background="@null"
+            android:layout_alignBottom="@+id/imageView"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:textColorHint="#ececec"
+            android:textSize="20dp"
+            android:gravity="center_vertical"
+            android:paddingTop="10dp" />
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:id="@+id/search_list"
+            android:layout_below="@+id/search_edit_text"
+            android:background="#fff" />
+
+
+        <ImageView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:id="@+id/imageView"
+            android:src="@drawable/ic_search_white_48dp"
+            android:padding="10dp" />
+
+        <ImageView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:id="@+id/close_search_button"
+            android:src="@drawable/ic_cancel_white_48dp"
+            android:padding="15dp"
+            android:layout_alignParentRight="true" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="5dp"
+            android:id="@+id/search_shadow"
+            android:src="@drawable/daily_view_list_item_tab_shadow_top"
+            android:layout_below="@+id/search_edit_text"
+            android:alpha="0.7"
+            android:scaleType="fitXY" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

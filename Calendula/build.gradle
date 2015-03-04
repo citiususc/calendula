@@ -23,14 +23,20 @@ idea {
     }
 }
 
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmmss')
+    return formattedDate
+}
+
 android {
     compileSdkVersion 21
     buildToolsVersion "21.0.2"
     defaultConfig {
         minSdkVersion 11
         targetSdkVersion 21
-        versionCode 8
-        versionName "1.1.1"
+        versionCode 9
+        versionName "1.2-beta-1"
     }
     lintOptions {
         abortOnError false
@@ -39,13 +45,17 @@ android {
     buildTypes {
         release {
             runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),         \
-                    'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),          \
+                     'proguard-rules.txt'
         }
         debug {
             runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),         \
-                    'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),          \
+                     'proguard-rules.txt'
+        }
+        beta {
+            runProguard false
+            versionNameSuffix "-beta" + "-build" + getDate()
         }
     }
     productFlavors {

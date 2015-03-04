@@ -1,6 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!--
+    <item
+        android:id="@+id/action_search"
+        android:title="Search"
+        android:icon="@drawable/ic_search_white_48dp"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+    -->
+
     <item
         android:id="@+id/action_remove"
         android:title="@string/action_remove"

@@ -20,4 +20,16 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/pref_header_prescriptions"
+        android:key="pref_key_prescriptions">
+
+
+        <CheckBoxPreference
+            android:key="enable_prescriptions_db"
+            android:title="@string/pref_enable_prescriptions_db"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

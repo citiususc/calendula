@@ -19,8 +19,6 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.HomeActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.user.Session;
-import es.usc.citius.servando.calendula.util.medicine.Prescription;
-import es.usc.citius.servando.calendula.util.medicine.PrescriptionStore;
 
 /**
  * Start activity:
@@ -60,12 +58,16 @@ public class StartActivity extends Activity {
         new UserResumeSessionTask().execute((Void) null);
         mustShowSplash = mustShowSplashForAction(action);
 
-        if (mustShowSplash) {
-            startAnimations();
-        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.activity_background_color));
         }
+
+        if (mustShowSplash) {
+            startAnimations();
+        }
+//        if(PopulatePrescriptionDBService.needUpdate(getApplicationContext())) {
+//            PopulatePrescriptionDBService.updateIfNeeded(getApplicationContext());
+//        }
     }
 
     private boolean mustShowSplashForAction(int action) {
@@ -119,9 +121,7 @@ public class StartActivity extends Activity {
         private void keepSplashVisible(int seconds) {
             // Show splash
             try {
-                if (Prescription.empty()) {
-                    PrescriptionStore.fillDatabaseFromCsv(getApplicationContext());
-                } else {
+                if (action == ACTION_DEFAULT) {
                     Thread.sleep(seconds * 2500);
                 }
             } catch (InterruptedException e) {
@@ -220,7 +220,6 @@ public class StartActivity extends Activity {
                 welcome.putExtra("welcome", true);
                 startActivity(welcome);
             }
-
 
             finish();
             StartActivity.this.overridePendingTransition(0, 0);

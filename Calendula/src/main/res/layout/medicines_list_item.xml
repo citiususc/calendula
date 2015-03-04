@@ -60,14 +60,29 @@
             android:fontFamily="sans-serif-condensed" />
 
         <ImageView
-            android:layout_width="30dp"
+            android:layout_width="70dp"
             android:layout_height="fill_parent"
             android:id="@+id/imageView"
-            android:src="@drawable/ic_edit_black_48dp"
+            android:src="@drawable/ic_assignment_black_48dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="23dp"
-            android:alpha="0.9" />
+            android:layout_marginRight="15dp"
+            android:alpha="0.9"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp" />
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:id="@+id/download_indicator"
+            android:src="@drawable/ic_get_app_black_48dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="25dp"
+            android:scaleType="fitCenter"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/white_circle"
+            android:padding="3dp" />
 
     </RelativeLayout>
 
