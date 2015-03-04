@@ -137,13 +137,10 @@
                          es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimeSerializer,
                          es.usc.citius.servando.calendula.persistence.typeSerializers.BooleanArraySerializer" />
 
-        <activity
-            android:name="es.usc.citius.servando.calendula.activities.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
 
-        <service
-            android:name="es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService"
-            android:process=":populatedbservice" />
+        <!--<service-->
+        <!--android:name="es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService"-->
+        <!--android:process=":populatedbservice" />-->
 
     </application>
 
