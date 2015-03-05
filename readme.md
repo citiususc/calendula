@@ -1,9 +1,9 @@
-![Calendula logo](https://dl.dropboxusercontent.com/u/4213618/calendula/calendula-logo.png)
+![Calendula](https://dl.dropboxusercontent.com/u/4213618/calendula/calendula_promo_google_play.png)
 
 Calendula is an android that allows users to manage their medical prescription through a nice, simple and intuitive interface. Users can easily
 define their own daily routines (wake up, lunch, dinner, ...) and then link medication intakes to them.
 
-Try development version: [Download APK](https://dl.dropboxusercontent.com/u/4213618/calendula/Calendula.apk)
+Download from Google Play: [Calendula](https://play.google.com/store/apps/details?id=es.usc.citius.servando.calendula)
 
 Core ideas
 ===========
@@ -32,7 +32,7 @@ Contribute
 ==========
 Feel free to fork and send a pull request if you want to contribute to this project. 
 
-Notice that Calendula is licensed under the terms of the [GPL v3 license](LICENSE.md), so by submitting content to the calendula repository, you release your work to the public domain.
+Notice that Calendula is licensed under the terms of the [GPL v3 license](LICENSE.md), so by submitting content to the Calendula repository, you release your work to the public domain.
 
 
 
