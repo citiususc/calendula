@@ -404,6 +404,8 @@ public class MedicineCreateOrEditFragment extends Fragment {
                 }
                 if (mPrescription != null && mPrescription.shortName().toLowerCase().equals(mMedicine.name().toLowerCase())) {
                     mMedicine.setCn(mPrescription.cn);
+                } else if (mPrescription == null) {
+                    mMedicine.setCn(null);
                 }
                 
                 if (mMedicineEditCallback != null) {
