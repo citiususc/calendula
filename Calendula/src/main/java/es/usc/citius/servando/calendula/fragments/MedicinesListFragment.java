@@ -9,10 +9,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,7 +45,7 @@ public class MedicinesListFragment extends Fragment {
     OnMedicineSelectedListener mMedicineSelectedCallback;
     ArrayAdapter adapter;
     ListView listview;
-    long prospectDowloadRef;
+    String prospectDowloadCn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,7 +53,8 @@ public class MedicinesListFragment extends Fragment {
         listview = (ListView) rootView.findViewById(R.id.medicines_list);
         mMedicines = Medicine.findAll();
         adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
-        listview.setAdapter(adapter);        
+        listview.setAdapter(adapter);
+        
         return rootView;
     }
 
@@ -114,26 +117,44 @@ public class MedicinesListFragment extends Fragment {
         boolean hasProspect = (p != null && p.hasProspect);
 
         if (hasProspect) {
-                if (p.isProspectDownloaded(getActivity())) {
-                    item.findViewById(R.id.download_indicator).setVisibility(View.GONE);
-                    item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            openProspect(p);
-                        }
-                    });
-                } else {
-                    item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            onClickProspect(medicine, p);
-                        }
-                    });
-                }
-            } else {
-                item.findViewById(R.id.imageView).setAlpha(0.1f);
+            if (p.isProspectDownloaded(getActivity())) {
                 item.findViewById(R.id.download_indicator).setVisibility(View.GONE);
+                item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openProspect(p);
+                    }
+                });
+            } else {
+                item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onClickProspect(medicine, p);
+                    }
+                });
             }
+        } else {
+            item.findViewById(R.id.imageView).setAlpha(0.1f);
+            item.findViewById(R.id.download_indicator).setVisibility(View.GONE);
+            item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Snack.show(R.string.download_prospect_not_available_message, getActivity());
+                }
+            });
+        }
+
+        if (p != null && p.affectsDriving) {
+            item.findViewById(R.id.drive_icon).setVisibility(View.VISIBLE);
+            item.findViewById(R.id.drive_icon).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDrivingAdvice(p);
+                }
+            });
+        } else {
+            item.findViewById(R.id.drive_icon).setVisibility(View.GONE);
+        }
 
 
         View.OnClickListener clickListener = new View.OnClickListener() {
@@ -174,28 +195,31 @@ public class MedicinesListFragment extends Fragment {
     void onClickProspect(Medicine medicine, final Prescription p) {
         try {
             if (p != null) {
-                final String purl = PROSPECT_URL.replaceAll("#ID#", p.pid);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle(getString(R.string.download_prospect_title));
-                builder.setMessage(getString(R.string.download_prospect_message, p.shortName()))
-                        .setCancelable(true)
-                        .setPositiveButton(getString(R.string.download_prospect_continue), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                downloadProspect(p, purl);
-//                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(purl));
-//                                startActivity(browserIntent);
-//                                Log.d("MedicinesList", purl);
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.download_prospect_cancel), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog alert = builder.create();
-                alert.show();
-
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                boolean downloadProspectMessageShown = prefs.getBoolean("prospect_download_message_shown", false);
+                ;
+                if (downloadProspectMessageShown) {
+                    downloadProspect(p);
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(getString(R.string.download_prospect_title));
+                    builder.setMessage(getString(R.string.download_prospect_message, p.shortName()))
+                            .setCancelable(true)
+                            .setPositiveButton(getString(R.string.download_prospect_continue), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    downloadProspect(p);
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.download_prospect_cancel), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                    prefs.edit().putBoolean("prospect_download_message_shown", true).commit();
+                }
 
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -214,6 +238,32 @@ public class MedicinesListFragment extends Fragment {
             e.printStackTrace();
         }
 
+    }
+
+    public void showDrivingAdvice(final Prescription p) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(getString(R.string.driving_warning))
+                .setTitle(getString(R.string.driving_warning_title))
+                .setIcon(getResources().getDrawable(R.drawable.ic_warning_amber_48dp));
+        if (p.hasProspect) {
+            builder.setPositiveButton(getString(R.string.driving_warning_show_prospect), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (p.isProspectDownloaded(getActivity())) {
+                        openProspect(p);
+                    } else {
+                        downloadProspect(p);
+                    }
+                }
+            });
+        }
+        builder.setNeutralButton(getString(R.string.driving_warning_gotit), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
     void showDeleteConfirmationDialog(final Medicine m) {
@@ -258,11 +308,11 @@ public class MedicinesListFragment extends Fragment {
     }
 
 
-    public void downloadProspect(Prescription p, String uri) {
+    public void downloadProspect(Prescription p) {
 
+        final String uri = PROSPECT_URL.replaceAll("#ID#", p.pid);
         File prospects = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/prospects/");
         prospects.mkdirs();
-        
         DownloadManager.Request r = new DownloadManager.Request(Uri.parse(uri));
 
         Log.d("MedicinesListFragment.class", "Downloading prospect from  [" + uri + "]");
@@ -272,8 +322,9 @@ public class MedicinesListFragment extends Fragment {
         r.setVisibleInDownloadsUi(false);
         r.setTitle(p.shortName() + " prospect");
         // Start download
+        prospectDowloadCn = p.cn;
         DownloadManager dm = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
-        prospectDowloadRef = dm.enqueue(r);
+        dm.enqueue(r);
     }
     
 
@@ -290,8 +341,16 @@ public class MedicinesListFragment extends Fragment {
         public void onReceive(Context ctxt, Intent intent) {
             adapter.notifyDataSetChanged();
             Snack.show(getString(R.string.prescriptions_download_complete), getActivity());
+            if (prospectDowloadCn != null) {
+                Prescription p = Prescription.findByCn(prospectDowloadCn);
+                if (p != null) {
+                    openProspect(p);
+                }
+                prospectDowloadCn = null;
+            }
         }
     };
+
     BroadcastReceiver onNotificationClick = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
 

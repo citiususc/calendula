@@ -5,7 +5,7 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:id="@+id/medicines_list_item_container"
         android:background="@drawable/touchable_white">
 
@@ -16,16 +16,16 @@
             android:background="#efefef"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="15dp" />
 
 
         <ImageButton
             android:layout_width="30dp"
-            android:layout_height="fill_parent"
+            android:layout_height="70dp"
             android:id="@+id/imageButton"
             android:src="@drawable/ic_presentation_2"
             android:background="@null"
-            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="false"
             android:layout_marginLeft="26dp"
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Atrovent"
+            android:text="Atrovent with another thing here"
             android:fontFamily="sans-serif-light"
             android:id="@+id/medicines_list_item_name"
             android:textColor="#222"
@@ -45,7 +45,9 @@
             android:layout_alignTop="@+id/imageButton"
             android:layout_toRightOf="@+id/imageButton"
             android:layout_toEndOf="@+id/imageButton"
-            android:layout_marginLeft="26dp" />
+            android:layout_marginLeft="26dp"
+            android:layout_toLeftOf="@+id/drive_icon"
+            android:layout_toStartOf="@+id/drive_icon" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -57,30 +59,47 @@
             android:layout_alignLeft="@+id/medicines_list_item_name"
             android:layout_alignStart="@+id/medicines_list_item_name"
             android:textColor="@color/android_blue"
-            android:fontFamily="sans-serif-condensed" />
+            android:fontFamily="sans-serif-condensed"
+            android:layout_marginBottom="10dp" />
 
         <ImageView
-            android:layout_width="70dp"
-            android:layout_height="fill_parent"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:id="@+id/drive_icon"
+            android:src="@drawable/ic_warning_amber_48dp"
+            android:alpha="0.9"
+            android:background="@drawable/simple_highlight_click_selector"
+            android:layout_toLeftOf="@+id/imageView"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:id="@+id/imageView"
-            android:src="@drawable/ic_assignment_black_48dp"
+            android:src="@drawable/icprospect"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="15dp"
             android:alpha="0.9"
-            android:paddingLeft="18dp"
-            android:paddingRight="18dp" />
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:background="@drawable/simple_highlight_click_selector"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp" />
 
         <ImageView
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:id="@+id/download_indicator"
-            android:src="@drawable/ic_get_app_black_48dp"
+            android:src="@drawable/ic_get_app_white_48dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="25dp"
+            android:layout_marginRight="15dp"
             android:scaleType="fitCenter"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="42dp"
             android:background="@drawable/white_circle"
             android:padding="3dp" />
 

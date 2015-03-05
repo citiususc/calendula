@@ -278,8 +278,12 @@
     <string name="enable_prescriptions_finish_message">Listo! Ya puedes comenzar a buscar</string>
     <string name="enable_prescriptions_dialog_yes">Activar (Recomendado)</string>
     <string name="enable_prescriptions_dialog_no">Cancelar</string>
-
     <string name="prescriptions_download_complete">Prospecto disponible!</string>
+
+    <string name="driving_warning">El uso de este medicamento podría tener efectos sobre tu capacidad para conducir. \n\nPor favor, lee detenidamente las instrucciones de uso o consulta a tu farmacéutico antes de ponerte al volante.\n\nMuchas gracias.</string>
+    <string name="driving_warning_title">Ten prudencia</string>
+    <string name="driving_warning_show_prospect">Ver prospecto</string>
+    <string name="driving_warning_gotit">Entendido</string>
 
 </resources>
 

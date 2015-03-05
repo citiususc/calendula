@@ -35,8 +35,8 @@ android {
     defaultConfig {
         minSdkVersion 11
         targetSdkVersion 21
-        versionCode 10
-        versionName "1.2-beta-2"
+        versionCode 11
+        versionName "1.2-beta-3"
     }
     lintOptions {
         abortOnError false
@@ -45,13 +45,13 @@ android {
     buildTypes {
         release {
             runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),          \
-                     'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),           \
+                      'proguard-rules.txt'
         }
         debug {
             runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),          \
-                     'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),           \
+                      'proguard-rules.txt'
         }
         beta {
             runProguard false
@@ -60,6 +60,15 @@ android {
     }
     productFlavors {
     }
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFile = new File(
+                    output.outputFile.parent,
+                    output.outputFile.name.replace(".apk", "-${variant.versionName}.apk"))
+        }
+    }
+
 }
 
 dependencies {
