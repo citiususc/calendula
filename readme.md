@@ -1,6 +1,6 @@
 ![Calendula](https://dl.dropboxusercontent.com/u/4213618/calendula/calendula_promo_google_play.png)
 
-Calendula is an android that allows users to manage their medical prescription through a nice, simple and intuitive interface. Users can easily
+Calendula is an android app that allows users to manage their medical prescription through a nice, simple and intuitive interface. Users can easily
 define their own daily routines (wake up, lunch, dinner, ...) and then link medication intakes to them.
 
 Download from Google Play: [Calendula](https://play.google.com/store/apps/details?id=es.usc.citius.servando.calendula)
