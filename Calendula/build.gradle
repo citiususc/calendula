@@ -35,8 +35,8 @@ android {
     defaultConfig {
         minSdkVersion 11
         targetSdkVersion 21
-        versionCode 9
-        versionName "1.2-beta-1"
+        versionCode 10
+        versionName "1.2-beta-2"
     }
     lintOptions {
         abortOnError false

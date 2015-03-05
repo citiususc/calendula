@@ -109,12 +109,11 @@ public class MedicinesListFragment extends Fragment {
         View overlay = item.findViewById(R.id.medicines_list_item_container);
         overlay.setTag(medicine);
 
-
         String cn = medicine.cn();
+        final Prescription p = cn != null ? Prescription.findByCn(medicine.cn()) : null;
+        boolean hasProspect = (p != null && p.hasProspect);
 
-        if (cn != null) {
-            final Prescription p = Prescription.findByCn(medicine.cn());
-            if (p.hasProspect) {
+        if (hasProspect) {
                 if (p.isProspectDownloaded(getActivity())) {
                     item.findViewById(R.id.download_indicator).setVisibility(View.GONE);
                     item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
@@ -135,7 +134,7 @@ public class MedicinesListFragment extends Fragment {
                 item.findViewById(R.id.imageView).setAlpha(0.1f);
                 item.findViewById(R.id.download_indicator).setVisibility(View.GONE);
             }
-        }
+
 
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
@@ -178,6 +177,7 @@ public class MedicinesListFragment extends Fragment {
                 final String purl = PROSPECT_URL.replaceAll("#ID#", p.pid);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(getString(R.string.download_prospect_title));
                 builder.setMessage(getString(R.string.download_prospect_message, p.shortName()))
                         .setCancelable(true)
                         .setPositiveButton(getString(R.string.download_prospect_continue), new DialogInterface.OnClickListener() {
@@ -259,6 +259,10 @@ public class MedicinesListFragment extends Fragment {
 
 
     public void downloadProspect(Prescription p, String uri) {
+
+        File prospects = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/prospects/");
+        prospects.mkdirs();
+        
         DownloadManager.Request r = new DownloadManager.Request(Uri.parse(uri));
 
         Log.d("MedicinesListFragment.class", "Downloading prospect from  [" + uri + "]");

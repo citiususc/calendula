@@ -132,6 +132,28 @@ public class MedicineCreateOrEditFragment extends Fragment {
 
         setupMedPresentationChooser(rootView);
 
+        mNameTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String name = mNameTextView.getText().toString();
+
+                if (mPrescription != null && !mPrescription.shortName().toLowerCase().equals(name.toLowerCase())) {
+                    mPrescription = null;
+                    mDescriptionTv.setText("");
+                }
+
+            }
+        });
         mNameTextView.requestFocus();
         askForPrescriptionUsage();
         return rootView;
@@ -380,6 +402,10 @@ public class MedicineCreateOrEditFragment extends Fragment {
                 if (selectedPresentation != null) {
                     mMedicine.setPresentation(selectedPresentation);
                 }
+                if (mPrescription != null && mPrescription.shortName().toLowerCase().equals(mMedicine.name().toLowerCase())) {
+                    mMedicine.setCn(mPrescription.cn);
+                }
+                
                 if (mMedicineEditCallback != null) {
                     mMedicineEditCallback.onMedicineEdited(mMedicine);
                 }

@@ -246,9 +246,8 @@
         <item>Feeling very good</item>
     </string-array>
 
-
     <string name="search_med_hint">Search...</string>
-    <string name="download_prospect_message"> %1$s prospect will be downloaded now. Then it will be available for reference without needing to re-download.</string>
+    <string name="download_prospect_message">%1$s prospect will be downloaded now. Once downloaded it will be available for reference even if you are not connected to internet.</string>
     <string name="download_prospect_title">Download prospect</string>
     <string name="download_prospect_not_available_message">Sorry, there is no prospect available for this medicine.</string>
     <string name="download_prospect_continue">Open</string>
@@ -266,7 +265,6 @@
     <string name="enable_prescriptions_dialog_no">Cancel</string>
 
     <string name="prescriptions_download_complete">The prospect is available now!</string>
-
 
 </resources>
 
