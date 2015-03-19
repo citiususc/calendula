@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.activeandroid.ActiveAndroid;
+import com.activeandroid.Configuration;
 
 import org.joda.time.LocalTime;
 
@@ -23,6 +24,7 @@ import java.util.Arrays;
 import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
+import es.usc.citius.servando.calendula.util.medicine.Prescription;
 
 /**
  * Created by castrelo on 4/10/14.
@@ -61,7 +63,8 @@ public class CalendulaApp extends Application {
     public void onCreate() {
         super.onCreate();
         // initialize sqlite engine
-        ActiveAndroid.initialize(this, false);
+
+        ActiveAndroid.initialize(this, true);
 
         new Thread(new Runnable() {
             @Override

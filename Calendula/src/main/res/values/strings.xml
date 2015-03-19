@@ -7,7 +7,6 @@
     <string name="action_settings">Settings</string>
     <string name="action_remove">Remove</string>
     <string name="action_remove_all">Remove all</string>
-
     <string name="action_exit">Exit</string>
     <string name="home_menu_routines">ROUTINES</string>
     <string name="home_menu_medicines">MEDICINES</string>
@@ -43,7 +42,6 @@
         <item>Pharmacies</item>
         <item>Plan trip</item>
         <item>@string/drawer_bottom_option</item>
-
     </string-array>
 
     <string name="title_activity_routines">Routines</string>
@@ -79,7 +77,6 @@
     <string name="doses_and_times">Times and doses</string>
     <string name="schedule_repeat_days">Repeat</string>
 
-
     <!-- Schedule creation -->
     <string name="summary_title">Check and confirm</string>
     <string name="title_activity_schedule_list">Schedules</string>
@@ -109,7 +106,6 @@
     <string name="syrup_units">syrup spoon</string>
     <string name="unknown_units">Unknown</string>
     <string name="effervescent_units">sachet</string>
-
     <string name="never">Never</string>
     <string name="every_day">Every day</string>
     <string name="once_a_day">Once a day</string>
@@ -127,7 +123,6 @@
         <item>@string/four_times_a_day</item>
     </string-array>
 
-
     <!-- Med schedules -->
     <string-array name="delays_array">
         <item>1 min</item>
@@ -143,13 +138,10 @@
         <item>60</item>
     </integer-array>
 
-
     <!-- Default routines -->
     <string name="routine_breakfast">Breakfast</string>
     <string name="routine_lunch">Lunch</string>
     <string name="routine_dinner">Dinner</string>
-
-
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="message_notification_title_template">%1$s</string>
     <string name="message_notification_placeholder_text_template">%1$s</string>
@@ -161,8 +153,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_reminder">ReminderActivity</string>
     <string name="title_activity_agenda_detail">AgendaDetailActivity</string>
-
-
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="splash_quote">Therapy management made easy</string>
@@ -180,6 +170,7 @@
         <item>Sat</item>
         <item>Sun</item>
     </string-array>
+
     <string name="schedule_day_selector_mo">MO</string>
     <string name="schedule_day_selector_tu">TU</string>
     <string name="schedule_day_selector_we">WE</string>
@@ -196,7 +187,6 @@
     <string name="medicine_created_message">Med created!</string>
     <string name="medicine_deleted_message">Med deleted!</string>
     <string name="medicine_edited_message">Med updated!</string>
-
     <string name="routine_created_message">Routine created!</string>
     <string name="routine_deleted_message">Routine deleted!</string>
     <string name="routine_edited_message">Routine updated!</string>
@@ -208,15 +198,13 @@
     <string name="remove_routine_message_short">Remove %1$s routine?</string>
     <string name="remove_medicine_message_short">Remove %1$s?</string>
     <string name="remove_routine_dialog_title">Remove routine</string>
-
     <string name="dialog_yes_option">Yes</string>
     <string name="dialog_no_option">No</string>
-
     <string name="medicine_no_name_error_message">Please, type a name</string>
     <string name="medicine_unselected">Not selected yet</string>
     <string name="medicine_no_presentation_error_message">Please, select a presentation</string>
 
-    <!-- App Tutorial-->
+    <!-- App Tutorial -->
     <string name="tutorial_welcome_title">Welcome to Calendula!</string>
     <string name="tutorial_welcome_text">Calendula will help you manage your therapeutic schedule. Pending meds for today are shown in this screen.</string>
     <string name="tutorial_homeinfo_title">Explore!</string>
@@ -231,13 +219,12 @@
     <string name="tutorial_understood">Got it</string>
     <string name="tutorial_notifications_title">Check taken meds!</string>
     <string name="tutorial_notifications_text">Remember to confirm your intakes or we will continue reminding you. You can change the notification settings in the options menu. </string>
-
     <string name="notification_repeat_message">Alarm will be repeated at %1$s</string>
     <string name="notification_cancel_now">Cancel now</string>
     <string name="notification_delay">Delay</string>
     <string name="alarm_delayed_message">Alarm delayed %1$s minutes</string>
-
     <string name="moods_dialog_title">How are you feeling?</string>
+
     <string-array name="moods">
         <item>Feeling very bad</item>
         <item>Feeling bad</item>
@@ -256,21 +243,19 @@
     <string name="pref_header_prescriptions">Medicine search</string>
     <string name="pref_enable_prescriptions_db">Enable assistant</string>
     <string name="medicine_edit_name_hint">Write here...</string>
-
     <string name="enable_prescriptions_progress_messgae">Setting up med information. It will take only a few seconds</string>
     <string name="enable_prescriptions_dialog_message">You can easily add medicines and view leaflets by enabling search assistant. If you prefer not to do it, you can activate it later from the settings menu.</string>
     <string name="enable_prescriptions_dialog_title">Search assistant</string>
     <string name="enable_prescriptions_finish_message">Done! You can start searching now</string>
     <string name="enable_prescriptions_dialog_yes">Activate (Recommended)</string>
     <string name="enable_prescriptions_dialog_no">Cancel</string>
-
     <string name="prescriptions_download_complete">The leaflet is available now!</string>
-
-
     <string name="driving_warning">Taking this medicine may have effects on your ability to drive. \n\nPlease carefully read the leaflet or ask your pharmacist before you get behind the wheel. \n\nThank you very much.</string>
     <string name="driving_warning_title">Be careful</string>
     <string name="driving_warning_show_prospect">Read leaflet</string>
     <string name="driving_warning_gotit">Understood</string>
+    <string name="title_activity_confirm_schedules">Confirm schedules</string>
+    <string name="confirm_prescription_x_of_y">Prescription %1$s of %2$s</string>
+
 
 </resources>
-

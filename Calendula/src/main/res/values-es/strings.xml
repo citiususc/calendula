@@ -284,6 +284,7 @@
     <string name="driving_warning_title">Ten prudencia</string>
     <string name="driving_warning_show_prospect">Ver prospecto</string>
     <string name="driving_warning_gotit">Entendido</string>
+    <string name="confirm_prescription_x_of_y">Prescripción %1$s de %2$s</string>
 
 </resources>
 

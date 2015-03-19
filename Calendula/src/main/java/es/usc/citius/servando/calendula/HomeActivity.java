@@ -28,6 +28,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.makeramen.RoundedImageView;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -37,6 +39,7 @@ import java.util.List;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.ReminderNotification;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
+import es.usc.citius.servando.calendula.activities.ScanActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.activities.SettingsActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
@@ -499,6 +502,9 @@ public class HomeActivity extends ActionBarActivity implements
 
         switch (item.getItemId()) {
             case R.id.action_settings:
+                return true;
+            case R.id.action_scan:
+                startActivity(new Intent(this, ScanActivity.class));
                 return true;
             case R.id.action_expand:
                 Log.d("Home", "ToogleExpand");

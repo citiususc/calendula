@@ -8,6 +8,8 @@ import com.activeandroid.query.Select;
 
 import java.util.List;
 
+import es.usc.citius.servando.calendula.util.medicine.Prescription;
+
 
 /**
  * Created by joseangel.pineiro on 12/5/13.
@@ -81,6 +83,13 @@ public class Medicine extends Model implements Comparable<Medicine> {
                 .executeSingle();
     }
 
+    public static Medicine findByCn(String cn) {
+        Class<? extends Model> cls = Medicine.class;
+        return new Select().from(cls)
+                .where(COLUMN_CN + " LIKE ? ", cn)
+                .executeSingle();
+    }
+
 
     public static Medicine findByName(String name) {
         return new Select().from(Medicine.class)
@@ -109,4 +118,15 @@ public class Medicine extends Model implements Comparable<Medicine> {
     public void setCn(String cn) {
         this.cn = cn;
     }
+    
+    
+    public static Medicine fromPrescription(Prescription p){
+        Medicine m = new Medicine();
+        m.setCn(p.cn);
+        m.setName(p.shortName());
+        Presentation pre = p.expectedPresentation();        
+        m.setPresentation(pre !=null?pre:Presentation.PILLS);
+        return m;
+    }
+    
 }

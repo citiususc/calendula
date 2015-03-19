@@ -1,0 +1,81 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:background="@color/android_blue_darker"
+        android:title="Routines"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity"
+        android:layout_below="@+id/textView2" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="5dp"
+        android:id="@+id/tabs_shadow"
+        android:src="@drawable/daily_view_list_item_tab_shadow_top"
+        android:layout_below="@+id/textView2"
+        android:scaleType="fitXY"
+        android:alpha="0.7" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="56dp"
+        android:text="Ibuprofeno 500 dsa dsadsa dsadsadas dsadas"
+        android:textSize="24sp"
+        android:paddingLeft="72dp"
+        android:id="@+id/textView2"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/android_blue_darker"
+        android:textColor="#fff"
+        android:paddingTop="10dp"
+        android:gravity="top"
+        android:paddingRight="80dp"
+        android:ellipsize="marquee"
+        android:singleLine="true" />
+
+    <com.melnykov.fab.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:src="@drawable/ic_done_white_36dp"
+        fab:fab_colorNormal="@color/android_green"
+        fab:fab_colorPressed="@color/android_green_dark"
+        fab:fab_colorRipple="@color/android_green_light"
+        android:layout_marginRight="38dp"
+        android:layout_marginTop="83dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="20dp"
+        android:text="Confirm prescription"
+        android:id="@+id/textView"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="true"
+        android:textSize="14sp"
+        android:textColor="#fff"
+        android:gravity="bottom"
+        android:paddingLeft="72dp"
+        android:layout_marginTop="45dp" />
+
+
+</RelativeLayout>

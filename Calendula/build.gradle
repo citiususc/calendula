@@ -14,6 +14,7 @@ apply plugin: 'idea'
 repositories {
     mavenCentral()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "http://dl.bintray.com/journeyapps/maven" }
 }
 
 idea {
@@ -45,13 +46,10 @@ android {
     buildTypes {
         release {
             runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),           \
-                      'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
         }
         debug {
             runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),           \
-                      'proguard-rules.txt'
         }
         beta {
             runProguard false
@@ -72,31 +70,29 @@ android {
 }
 
 dependencies {
+
     compile 'com.google.code.gson:gson'
     compile project(':libraries:ExpandableListview')
-    compile 'com.nispok:snackbar:2.9.0'
-    compile 'com.doomonafireball.betterpickers:library:1.5.3'
-    compile 'com.github.filippudak.progresspieview:library:1.0.+'
-    compile 'com.github.amlcurran.showcaseview:library:5.0.0'
-    //compile 'com.android.support:appcompat-v7:20.0.0'
-    //compile 'com.android.support:support-v4:20.0.0'
-    //    compile 'com.android.support:support-v4:21.0.0'
-    //compile 'com.shamanland:fab:0.0.5'
-    //    compile("com.doomonafireball.betterpickers:library:1.5.2") {
-    //        exclude group: 'com.android.support', module: 'support-v4'
-    //        exclude group: 'com.android.support', module: 'appcompat-v7'
-    //    }
-    compile 'com.android.support:appcompat-v7:21.0.0'
-    compile 'com.android.support:cardview-v7:21.0.0'
-    compile 'com.android.support:recyclerview-v7:21.0.0'
-    compile 'com.android.support:palette-v7:21.0.0'
-    compile 'joda-time:joda-time:2.3'
-    compile 'com.makeramen:roundedimageview:1.5.0'
-    compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
-    compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.1.0'
-    compile 'com.ocpsoft:ocpsoft-pretty-time:1.0.7'
-    compile 'com.melnykov:floatingactionbutton:1.1.0'
-    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
-    compile 'de.greenrobot:eventbus:2.2.1'
-    compile 'com.android.support:support-v4:21.0.0'
+
+    compile'com.nispok:snackbar:2.9.0'
+    compile'com.doomonafireball.betterpickers:library:1.5.3'
+    compile'com.github.filippudak.progresspieview:library:1.0.+'
+    compile'com.github.amlcurran.showcaseview:library:5.0.0'
+    compile'com.android.support:appcompat-v7:21.0.3'
+    compile'com.android.support:cardview-v7:21.0.3'
+    compile'com.android.support:recyclerview-v7:21.0.3'
+    compile'com.android.support:palette-v7:21.0.3'
+    compile'joda-time:joda-time:2.3'
+    compile'com.makeramen:roundedimageview:1.5.0'
+    compile'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+    compile'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.1.0'
+    compile'com.ocpsoft:ocpsoft-pretty-time:1.0.7'
+    compile'com.melnykov:floatingactionbutton:1.1.0'
+    compile'com.astuetz:pagerslidingtabstrip:1.0.1'
+    compile'de.greenrobot:eventbus:2.2.1'
+    compile'com.android.support:support-v4:21.0.3'
+    compile'com.journeyapps:zxing-android-embedded:2.0.1@aar'
+    compile'com.journeyapps:zxing-android-integration:2.0.1@aar'
+    compile'com.google.zxing:core:3.0.1'
+
 }

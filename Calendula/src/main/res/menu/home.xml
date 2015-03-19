@@ -11,4 +11,11 @@
         android:icon="@drawable/ic_list"
         android:orderInCategory="100"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_scan"
+        android:title="Scan QR"
+        android:icon="@drawable/ic_plus_w"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
 </menu>
