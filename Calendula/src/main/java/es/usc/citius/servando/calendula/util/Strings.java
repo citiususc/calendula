@@ -19,4 +19,18 @@ public class Strings {
             return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
         else return s;
     }
+
+    public static String firstPart(String str) {
+        try {
+            String[] parts = str.split(" ");
+            String s = parts[0].toLowerCase();
+            if ((s.contains("acido") || s.contains("ácido")) && parts.length > 1) {
+                return Strings.toCamelCase(s + " " + parts[1], " ");
+            }
+            return Strings.toProperCase(s);
+
+        } catch (Exception e) {
+            return str;
+        }
+    }
 }

@@ -1,29 +1,20 @@
 package es.usc.citius.servando.calendula.activities;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-
+import android.app.ProgressDialog;
 import android.graphics.drawable.InsetDrawable;
+import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,20 +22,27 @@ import com.activeandroid.ActiveAndroid;
 import com.google.gson.Gson;
 import com.melnykov.fab.FloatingActionButton;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
+import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationEndFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationFragment;
+import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationStartFragment;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Persistence;
+import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
-import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
+import es.usc.citius.servando.calendula.util.medicine.HomogeneusGroup;
+import es.usc.citius.servando.calendula.util.medicine.HomogeneusGroupHelper;
 import es.usc.citius.servando.calendula.util.medicine.Prescription;
 
 public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener{
@@ -90,63 +88,48 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
         }
+
+        toolbar.setTitle("");
         
         String qrData = getIntent().getStringExtra("qr_data");
-        
-        if(qrData!=null){
-           prescriptionList = filterValidPrescriptions(parseQRData(qrData));
-           scheduleCount = prescriptionList.size();
-           if(scheduleCount>0){
-               updatePageTitle(0);               
-           }else{
-               Toast.makeText(this,"No prescriptions found!",Toast.LENGTH_SHORT).show();
-           }
-        }else{
-            finish();            
-        }
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int current = mViewPager.getCurrentItem();
-                
-                if(current + 1 < scheduleCount){
-                    mViewPager.setCurrentItem(current+1);
-                }
 
-            }
-        });
-        
-        toolbar.setTitle("");
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), scheduleCount);        
-        
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setOnPageChangeListener(this);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(20);
+        new ProcessQRTask().execute(qrData);
         
 
     }
 
     private List<PrescriptionWrapper> filterValidPrescriptions(PrescriptionListWrapper prescriptionListWrapper) {        
         List<PrescriptionWrapper> p = new ArrayList<PrescriptionWrapper>();
-        
-        for(PrescriptionWrapper pw : prescriptionListWrapper.prescriptions){
+
+        for (PrescriptionWrapper pw : prescriptionListWrapper.p) {
             if(pw.cn!=null) {
-                boolean prescriptionExists = Prescription.findByCn(pw.cn) != null;
+                Prescription pr = Prescription.findByCn(pw.cn);
+                boolean prescriptionExists = pr != null;
                 boolean medExists = Medicine.findByCn(pw.cn) != null;                
                 
                 if(prescriptionExists){
                     pw.exists = medExists;
+                    pw.prescription = pr;
+                    p.add(pw);
+                }
+            } else if (pw.g != null) {
+
+                HomogeneusGroup group = findGroup(pw.g);
+                if (group != null) {
+                    Log.d("ConfirmSchedulesActivity", "Found group: " + group.name);
+                    pw.exists = true;
+                    pw.isGroup = true;
+                    pw.group = group;
                     p.add(pw);
                 }
             }
         }
         return p;
+    }
+
+    private HomogeneusGroup findGroup(String g) {
+        return HomogeneusGroupHelper.queryGroup(g);
     }
 
 
@@ -181,8 +164,8 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
             for (int i = 0; i < scheduleCount; i++) {
                 
                 Log.d("PRESCRIPTION", "Item " + i);
-                
-                Fragment f = getViewPagerFragment(i);
+
+                Fragment f = getViewPagerFragment(i + 1);
                 
                 if (f instanceof ScheduleConfirmationFragment) {
 
@@ -191,15 +174,27 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                     ScheduleConfirmationFragment c = (ScheduleConfirmationFragment) f;
 
                     if (c.validate()) {
-
+                        PrescriptionWrapper w = prescriptionList.get(i);
                         Log.d("PRESCRIPTION", "Validate!");
-                        String cn = prescriptionList.get(i).cn;
-                        Medicine m = Medicine.findByCn(cn);                        
-                        if (m == null) {
-                            Log.d("PRESCRIPTION", "Saving medicine!");
-                            m = Medicine.fromPrescription(Prescription.findByCn(cn));
+                        String cn = w.cn;
+
+                        Medicine m = null;
+
+                        if (cn != null) {
+                            if (Medicine.findByCn(cn) == null) {
+                                Log.d("PRESCRIPTION", "Saving medicine!");
+                                m = Medicine.fromPrescription(Prescription.findByCn(cn));
+                                m.save();
+                            }
+                        } else if (w.isGroup) {
+                            m = new Medicine(Strings.firstPart(w.group.name));
+                            Presentation pres = Presentation.expected(w.group.name, w.group.content);
+                            m.setPresentation(pres != null ? pres : Presentation.PILLS);
                             m.save();
+                        } else {
+                            throw new RuntimeException(" Prescription must have a cn or group reference");
                         }
+
                         Schedule s = c.getSchedule();
                         List<ScheduleItem> items = c.getScheduleItems();
                         s.setMedicine(m);
@@ -216,8 +211,8 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                         s.save();
                         
                     }else{
-                        mViewPager.setCurrentItem(i);
-                        Snack.show("Hmmmmmm....",this);
+                        mViewPager.setCurrentItem(i + 1);
+                        Snack.show("Hmmmmmm....", this);
                     }
                 }            
             }
@@ -235,15 +230,35 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
     }
 
     private void updatePageTitle(int i) {
-        PrescriptionWrapper pw = prescriptionList.get(i);
 
-        title.setText(getResources().getString(R.string.confirm_prescription_x_of_y, i+1, scheduleCount));
+        if (i == 0) {
+            title.setText(scheduleCount + " prescriptions");
+            medName.setText("Review");
+        } else if (i == scheduleCount + 1) {
+            title.setText(scheduleCount + " prescriptions");
+            medName.setText("Confirm");
+        } else {
 
-        if(pw.cn!=null){
-            if(pw.p == null){
-                pw.p = Prescription.findByCn(pw.cn);
+            PrescriptionWrapper pw = prescriptionList.get(i - 1);
+            String name = "_";
+
+            if (pw.cn != null) {
+                if (pw.prescription == null) {
+                    pw.prescription = Prescription.findByCn(pw.cn);
+                }
+                medName.setText(Strings.toProperCase(pw.prescription.name));
+                name = pw.prescription.shortName();
+
+            } else if (pw.isGroup) {
+                medName.setText(pw.group.name);
+                name = Strings.firstPart(pw.group.name);
             }
-            medName.setText(Strings.toProperCase(pw.p.name));
+
+            boolean isNew = Medicine.findByName(name) == null;
+
+            title.setText(getResources().getString(R.string.confirm_prescription_x_of_y, i, scheduleCount) + (isNew ? " (new)" : ""));
+            
+            
         }
     }
 
@@ -255,11 +270,23 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
     @Override
     public void onPageSelected(int i) {        
         updatePageTitle(i);
+
+        Log.d("ConfirmSchedulesActivity", " Page Selected: " + i);
+
+        if (i == 0) {
+            fab.setVisibility(View.INVISIBLE);
+        } else {
+            fab.setVisibility(View.VISIBLE);
+        }
     }    
 
     @Override
     public void onPageScrollStateChanged(int i) {
 
+    }
+
+    public List<PrescriptionWrapper> getPrescriptions() {
+        return prescriptionList;
     }
 
 
@@ -278,15 +305,22 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            PrescriptionWrapper pw = prescriptionList.get(position);
-            return ScheduleConfirmationFragment.newInstance(pw);
+
+            if (position == 0) {
+                return ScheduleConfirmationStartFragment.newInstance();
+            } else if (position == scheduleCount + 1) {
+                return ScheduleConfirmationEndFragment.newInstance();
+            } else {
+                // getItem is called to instantiate the fragment for the given page.
+                // Return a PlaceholderFragment (defined as a static inner class below).            
+                PrescriptionWrapper pw = prescriptionList.get(position - 1);
+                return ScheduleConfirmationFragment.newInstance(pw);
+            }
         }
 
         @Override
-        public int getCount() {            
-            return scheduleCount;
+        public int getCount() {
+            return scheduleCount + 2;
         }
 
         @Override
@@ -301,26 +335,97 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
     }
 
     public static class PrescriptionListWrapper{
-        public List<PrescriptionWrapper> prescriptions;
+        public List<PrescriptionWrapper> p;
     }
 
     public static class PrescriptionWrapper implements Serializable{
         public String cn;
+        public String g;
+        public String sk;
+        public ScheduleWrapper s;
+
+
+        public Prescription prescription;
+        public HomogeneusGroup group;
+        
         public boolean exists;
-        public String sk;        
-        public ScheduleWrapper sched;
-        public Prescription p;
+
+        public boolean isGroup = false;
     }
 
     public static class ScheduleWrapper implements Serializable{
-        public float dose = -1;
-        public int interval = -1;
-        public int period = -1;
+        public float d = -1;
+        public int i = -1;
+        public int p = -1;
     }
 
 
     Fragment getViewPagerFragment(int position) {
         return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
     }
+
+
+    private class ProcessQRTask extends AsyncTask<String, Integer, Long> {
+
+        ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(ConfirmSchedulesActivity.this);
+            dialog.setMessage("Processing QR info ...");
+        }
+
+        protected Long doInBackground(String... data) {
+            String qrData = data[0];
+
+            if (qrData != null) {
+                prescriptionList = filterValidPrescriptions(parseQRData(qrData));
+                Long sCount = (long) prescriptionList.size();
+                if (sCount > 0) {
+                    return sCount;
+                } else {
+                    return 0l;
+                }
+            } else {
+                return -1l;
+            }
+        }
+
+
+        protected void onPostExecute(Long schedules) {
+
+            scheduleCount = schedules.intValue();
+
+            if (schedules == -1) {
+                finish();
+            } else if (schedules == 0) {
+                Toast.makeText(ConfirmSchedulesActivity.this, "No prescriptions found!", Toast.LENGTH_SHORT).show();
+            } else {
+                updatePageTitle(0);
+                fab.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int current = mViewPager.getCurrentItem();
+                        if (current + 1 < scheduleCount) {
+                            mViewPager.setCurrentItem(current + 1);
+                        }
+                    }
+                });
+                // Create the adapter that will return a fragment for each of the three
+                // primary sections of the activity.
+                mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), scheduleCount);
+                // Set up the ViewPager with the sections adapter.
+                mViewPager = (ViewPager) findViewById(R.id.pager);
+                mViewPager.setOnPageChangeListener(ConfirmSchedulesActivity.this);
+                mViewPager.setAdapter(mSectionsPagerAdapter);
+                mViewPager.setOffscreenPageLimit(20);
+            }
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        }
+    }
+
 
 }

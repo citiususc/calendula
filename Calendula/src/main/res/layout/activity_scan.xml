@@ -3,20 +3,32 @@
     android:layout_height="match_parent"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true">
-    
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/imageView"
+        android:scaleType="centerCrop"
+        android:src="@drawable/qr_code_scan" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Scan QR"
         android:id="@+id/button"
-        android:layout_alignParentBottom="false"
-        android:layout_centerInParent="true" />
-    
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="30dp"
+        android:textStyle="bold" />
+
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="50dip"
-        android:text="MECAG..!"
+        android:text="Scan prescriptions"
         android:id="@+id/text"
-        android:gravity="center" />
-    
+        android:gravity="center"
+        android:textColor="#fff"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
 </RelativeLayout>

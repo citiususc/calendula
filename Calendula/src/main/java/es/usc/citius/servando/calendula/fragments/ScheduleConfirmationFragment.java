@@ -54,47 +54,45 @@ public class ScheduleConfirmationFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_schedule_confirmation, container, false);
 
-        prescriptionWrapper = (ConfirmSchedulesActivity.PrescriptionWrapper)getArguments().getSerializable(ARG_PRESCRIPTION);
-        if(prescriptionWrapper!=null && prescriptionWrapper.sched!= null){
-            Log.d(TAG, "Wrapper: " + prescriptionWrapper.cn + "," + (prescriptionWrapper.sched.dose));
+        prescriptionWrapper = (ConfirmSchedulesActivity.PrescriptionWrapper) getArguments().getSerializable(ARG_PRESCRIPTION);
+        if (prescriptionWrapper != null && prescriptionWrapper.s != null && (prescriptionWrapper.cn != null || prescriptionWrapper.g != null)) {
+            Log.d(TAG, "Wrapper: " + prescriptionWrapper.cn + "," + (prescriptionWrapper.s.d));
             setDefaultValues();
         }
+
         timetableContainer = (LinearLayout) rootView.findViewById(R.id.schedule_timetable_container);
         setupScheduleSpinner(rootView);
         setupDaySelectionListeners(rootView);
-    
-        
         return rootView;
     }
 
     private void setDefaultValues() {
 
-        ConfirmSchedulesActivity.ScheduleWrapper sw = prescriptionWrapper.sched;
-        
-        if(sw.period != -1){
-            int times = 24 / sw.period;
-            float dose = sw.dose; //   dose / times ?
+        ConfirmSchedulesActivity.ScheduleWrapper sw = prescriptionWrapper.s;
+
+        if (sw.p != -1) {
+            int times = 24 / sw.p;
+            float dose = sw.d; //   dose / times ?
             timesPerDay = times;
             doses = new float[timesPerDay];
             for (int i = 0; i < doses.length; i++) {
                 doses[i] = dose;
             }
-            Log.d(TAG," Values: " + timesPerDay + ", " + dose);
-        }else{
-            Log.d(TAG,"Period not avilable");
-            
+            Log.d(TAG, " Values: " + timesPerDay + ", " + dose);
+        } else {
+            Log.d(TAG, "Period not avilable");
         }
 
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        scheduleSpinner.setSelection(timesPerDay>0?timesPerDay-1:0);
+        scheduleSpinner.setSelection(timesPerDay > 0 ? timesPerDay - 1 : 0);
         checkSelectedDays(view, selectedDays);
     }
 
@@ -113,7 +111,7 @@ public class ScheduleConfirmationFragment extends Fragment {
         // Apply the adapter to the spinner
         scheduleSpinner.setAdapter(adapter);
 
-        scheduleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {            
+        scheduleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -334,7 +332,7 @@ public class ScheduleConfirmationFragment extends Fragment {
 //        doseSpinner.setSelection((int) scheduleItem.dose() - 1); // dose "1" is located at the index "0", and so on
 
         Log.d(TAG, "Dose: " + scheduleItem.dose() + ", " + scheduleItem.displayDose());
-            
+
         doseTv.setText(scheduleItem.displayDose());
 
         // setup listeners
@@ -442,19 +440,19 @@ public class ScheduleConfirmationFragment extends Fragment {
         addRoutineFragment.show(fm, "fragment_edit_name");
     }
 
-    public boolean validate(){
-        
+    public boolean validate() {
+
         // check dose as in prescriptions
         return true;
     }
-    
-    public Schedule getSchedule(){        
+
+    public Schedule getSchedule() {
         Schedule s = new Schedule();
-        s.setDays(selectedDays);        
+        s.setDays(selectedDays);
         return s;
     }
 
-    public List<ScheduleItem> getScheduleItems(){
+    public List<ScheduleItem> getScheduleItems() {
         return sItems;
     }
 

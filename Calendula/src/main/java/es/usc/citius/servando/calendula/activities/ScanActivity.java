@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -31,6 +32,10 @@ public class ScanActivity extends ActionBarActivity{
                 doScan();
             }
         });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
+        }
     }
 
     @Override
@@ -43,7 +48,7 @@ public class ScanActivity extends ActionBarActivity{
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
         integrator.setPrompt("Scan QR");
-        integrator.setResultDisplayDuration(500);
+        //integrator.setResultDisplayDuration(500);
         integrator.initiateScan();
     }
 
@@ -55,7 +60,7 @@ public class ScanActivity extends ActionBarActivity{
             if(result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
                 Log.d("ScanActivity", result.getContents());
                 final String content = result.getContents();
                 Class<?> cls = Medicine.class.getClass();
@@ -69,9 +74,5 @@ public class ScanActivity extends ActionBarActivity{
             }
         }
     }
-
-
-
-
     
 }

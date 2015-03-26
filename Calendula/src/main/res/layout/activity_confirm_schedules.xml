@@ -34,8 +34,8 @@
         android:layout_width="fill_parent"
         android:layout_height="56dp"
         android:text="Ibuprofeno 500 dsa dsadsa dsadsadas dsadas"
-        android:textSize="24sp"
-        android:paddingLeft="72dp"
+        android:textSize="20sp"
+        android:paddingLeft="52dp"
         android:id="@+id/textView2"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
@@ -45,7 +45,7 @@
         android:paddingTop="10dp"
         android:gravity="top"
         android:paddingRight="80dp"
-        android:ellipsize="marquee"
+        android:ellipsize="end"
         android:singleLine="true" />
 
     <com.melnykov.fab.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
@@ -74,7 +74,7 @@
         android:textSize="14sp"
         android:textColor="#fff"
         android:gravity="bottom"
-        android:paddingLeft="72dp"
+        android:paddingLeft="52dp"
         android:layout_marginTop="45dp" />
 
 
