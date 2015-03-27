@@ -16,17 +16,17 @@ public class DB {
     private static DatabaseHelper db;
 
     // Medicines DAO
-    public static MedicineDao Medicines;
+    private static MedicineDao Medicines;
     // Routines DAO
-    public static RoutineDao Routines;
+    private static RoutineDao Routines;
     // Schedules DAO
-    public static ScheduleDao Schedules;
+    private static ScheduleDao Schedules;
     // ScheduleItems DAO
-    public static ScheduleItemDao ScheduleItems;
+    private static ScheduleItemDao ScheduleItems;
     // DailyScheduleItem DAO
-    public static DailyScheduleItemDao DailyScheduleItems;
+    private static DailyScheduleItemDao DailyScheduleItems;
     // Prescriptions DAO
-    public static PrescriptionDao Prescriptions;
+    private static PrescriptionDao Prescriptions;
 
     /**
      * Initialize database and DAOs
@@ -68,4 +68,27 @@ public class DB {
     }
 
 
+    public static MedicineDao medicines() {
+        return Medicines;
+    }
+
+    public static RoutineDao routines() {
+        return Routines;
+    }
+
+    public static ScheduleDao schedules() {
+        return Schedules;
+    }
+
+    public static ScheduleItemDao scheduleItems() {
+        return ScheduleItems;
+    }
+
+    public static DailyScheduleItemDao dailyScheduleItems() {
+        return DailyScheduleItems;
+    }
+
+    public static PrescriptionDao prescriptions() {
+        return Prescriptions;
+    }
 }

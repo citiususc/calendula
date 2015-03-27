@@ -23,13 +23,13 @@ import org.joda.time.LocalTime;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.persistence.Persistence;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.util.Snack;
 
 
 /**
- * Created by joseangel.pineiro on 12/4/13.
+ * Created by joseangel.pineiro
  */
 public class RoutineCreateOrEditFragment extends DialogFragment implements RadialTimePickerDialog.OnTimeSetListener, TimePickerDialogFragment.TimePickerDialogHandler {
 
@@ -153,7 +153,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
             if (mRoutine != null) {
                 mRoutine.setName(name);
                 mRoutine.setTime(new LocalTime(hour, minute));
-                Persistence.instance().save(mRoutine);
+                DB.routines().saveAndFireEvent(mRoutine);
                 //mRoutine.save();
                 if (mRoutineEditCallback != null) {
                     mRoutineEditCallback.onRoutineEdited(mRoutine);
@@ -163,7 +163,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
             else {
                 mRoutine = new Routine(new LocalTime(hour, minute), name);
                 Log.d(getTag(), "Routine created");
-                Persistence.instance().save(mRoutine);
+                DB.routines().saveAndFireEvent(mRoutine);
                 //mRoutine.save();
                 if (mRoutineEditCallback != null) {
                     mRoutineEditCallback.onRoutineCreated(mRoutine);

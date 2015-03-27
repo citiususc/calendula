@@ -7,9 +7,14 @@ import com.j256.ormlite.dao.Dao;
 import org.joda.time.LocalTime;
 
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Routine;
+import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
 /**
  * Created by joseangel.pineiro on 3/26/15.
@@ -31,6 +36,11 @@ public class RoutineDao extends GenericDao<Routine, Long> {
         }
     }
 
+    @Override
+    public void fireEvent() {
+        CalendulaApp.eventBus().post(PersistenceEvents.ROUTINE_EVENT);
+    }
+
     public List<Routine> findInHour(int hour) {
         try {
             LocalTime time = new LocalTime(hour, 0);
@@ -48,8 +58,26 @@ public class RoutineDao extends GenericDao<Routine, Long> {
             Log.e(TAG, "Error in findInHour", e);
             throw new RuntimeException(e);
         }
-
-
     }
+
+    public void deleteCascade(final Routine r, boolean fireEvent) {
+
+        DB.transaction(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                Collection<ScheduleItem> items = r.scheduleItems();
+                for (ScheduleItem i : items) {
+                    i.deleteCascade();
+                }
+                DB.routines().remove(r);
+                return null;
+            }
+        });
+
+        if (fireEvent) {
+            fireEvent();
+        }
+    }
+
 
 }

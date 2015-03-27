@@ -36,14 +36,19 @@ public class Prescription {
 
     @DatabaseField(columnName = COLUMN_PID)
     public String pid;
+
     @DatabaseField(columnName = COLUMN_CN)
     public String cn;
+
     @DatabaseField(columnName = COLUMN_NAME)
     public String name;
+
     @DatabaseField(columnName = COLUMN_DOSE)
     public String dose;
+
     @DatabaseField(columnName = COLUMN_CONTENT)
     public String content;
+
     @DatabaseField(columnName = COLUMN_PACK_UNITS)
     public Float packagingUnits;
 
@@ -58,8 +63,6 @@ public class Prescription {
 
     public static Prescription fromCsv(String csvLine, String separator) {
         String[] values = csvLine.split(separator);
-
-        //Log.d("Prescription", values.length + "members: " + Arrays.toString(values));
 
         if (values.length != 9) {
             throw new RuntimeException("Invalid CSV. Input string must contain exactly 6 members. " + csvLine);
@@ -78,7 +81,7 @@ public class Prescription {
         try {
             p.packagingUnits = Float.valueOf(values[4].replaceAll(",", "."));
         } catch (Exception e) {
-            Log.e("Prescription.class", "Unable to parse med " + p.pid + " packagingUnits", e);
+            Log.w("Prescription.class", "Unable to parse med " + p.pid + " packagingUnits");
             p.packagingUnits = -1f;
         }
         return p;
@@ -91,15 +94,13 @@ public class Prescription {
         return false;
     }
 
-
     public static int count() {
-        return DB.Prescriptions.count();
+        return DB.prescriptions().count();
     }
 
     public static boolean empty() {
         return count() <= 0;
     }
-
 
     public String shortName() {
         try {
@@ -149,15 +150,23 @@ public class Prescription {
 
     public static List<Prescription> findByName(String name, int limit) {
         Log.d("Prescription", "Query by name: " + name);
-        return DB.Prescriptions.findBy(COLUMN_NAME, name + "%", Long.valueOf(limit));
+        return DB.prescriptions().findBy(COLUMN_NAME, name + "%", Long.valueOf(limit));
     }
 
     public static Prescription findByCn(String cn) {
-        return DB.Prescriptions.findOneBy(COLUMN_CN, cn);
+        return DB.prescriptions().findOneBy(COLUMN_CN, cn);
     }
 
     public boolean isProspectDownloaded(Context ctx) {
         File f = new File(ctx.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/prospects/" + pid + ".pdf");
         return f.exists();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

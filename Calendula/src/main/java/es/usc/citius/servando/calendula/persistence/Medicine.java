@@ -4,14 +4,13 @@ package es.usc.citius.servando.calendula.persistence;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.database.DB;
 
 
 /**
- * Created by joseangel.pineiro on 12/5/13.
+ * Created by joseangel.pineiro
  */
 @DatabaseTable(tableName = "Medicines")
 public class Medicine implements Comparable<Medicine> {
@@ -33,9 +32,7 @@ public class Medicine implements Comparable<Medicine> {
     @DatabaseField(columnName = COLUMN_CN)
     private String cn;
 
-
     public Medicine() {
-
     }
 
     public Medicine(String name) {
@@ -45,6 +42,22 @@ public class Medicine implements Comparable<Medicine> {
     public Medicine(String name, Presentation presentation) {
         this.name = name;
         this.presentation = presentation;
+    }
+
+    public String cn() {
+        return cn;
+    }
+
+    public void setCn(String cn) {
+        this.cn = cn;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String name() {
@@ -63,59 +76,34 @@ public class Medicine implements Comparable<Medicine> {
         this.presentation = presentation;
     }
 
-
-    // Static
-
-    public static List<Medicine> findAll() {
-        return DB.Medicines.findAll();
-    }
-
-    public static Medicine findById(long id) {
-        try {
-            return DB.Medicines.queryForId(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
-    public static Medicine findByName(String name) {
-        return DB.Medicines.findOneBy(COLUMN_NAME, name);
-    }
-
-    public void deleteCascade() {
-        List<Schedule> schedules = Schedule.findByMedicine(this);
-        for (Schedule s : schedules) {
-            s.deleteCascade();
-        }
-        DB.Medicines.remove(this);
-    }
-
-    public Long save() {
-        DB.Medicines.save(this);
-        return this.id;
-    }
-
-
     @Override
     public int compareTo(Medicine another) {
         return name.compareTo(another.name);
     }
 
-    public String cn() {
-        return cn;
+    // *************************************
+    // DB queries
+    // *************************************
+    
+    public static List<Medicine> findAll() {
+        return DB.medicines().findAll();
     }
 
-    public void setCn(String cn) {
-        this.cn = cn;
+    public static Medicine findById(long id) {
+        return DB.medicines().findById(id);
     }
 
-    public Long getId() {
-        return id;
+    public static Medicine findByName(String name) {
+        return DB.medicines().findOneBy(COLUMN_NAME, name);
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void deleteCascade() {
+        DB.medicines().deleteCascade(this, false);
     }
+
+    public void save() {
+        DB.medicines().save(this);
+    }
+
+
 }

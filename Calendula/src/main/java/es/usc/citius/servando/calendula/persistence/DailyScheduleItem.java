@@ -6,21 +6,18 @@ import com.j256.ormlite.table.DatabaseTable;
 import org.joda.time.LocalTime;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimePersister;
 
 /**
- * Created by castrelo on 4/10/14.
+ * Created by castrelo
  */
 @DatabaseTable(tableName = "DailyScheduleItems")
 public class DailyScheduleItem {
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_SCHEDULE_ITEM = "ScheduleItem";
-
-    //public static final String COLUMN_DATE = "Date";
     public static final String COLUMN_TAKEN_TODAY = "TakenToday";
     public static final String COLUMN_TIME_TAKEN = "TimeTaken";
 
@@ -39,16 +36,16 @@ public class DailyScheduleItem {
     public DailyScheduleItem() {
     }
 
+    public DailyScheduleItem(ScheduleItem scheduleItem) {
+        this.scheduleItem = scheduleItem;
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public DailyScheduleItem(ScheduleItem scheduleItem) {
-        this.scheduleItem = scheduleItem;
     }
 
     public LocalTime timeTaken() {
@@ -58,11 +55,6 @@ public class DailyScheduleItem {
     public ScheduleItem scheduleItem() {
         return scheduleItem;
     }
-
-    public void setScheduleItem(ScheduleItem scheduleItem) {
-        this.scheduleItem = scheduleItem;
-    }
-
 
     public void setTimeTaken(LocalTime date) {
         this.timeTaken = date;
@@ -76,6 +68,8 @@ public class DailyScheduleItem {
         this.takenToday = takenToday;
         if (takenToday) {
             timeTaken = LocalTime.now();
+        } else {
+            timeTaken = null;
         }
     }
 
@@ -89,34 +83,21 @@ public class DailyScheduleItem {
                 '}';
     }
 
-
     public static DailyScheduleItem findById(long id) {
-        return DB.DailyScheduleItems.findById(id);
+        return DB.dailyScheduleItems().findById(id);
     }
 
 
     public static List<DailyScheduleItem> findAll() {
-        return DB.DailyScheduleItems.findAll();
+        return DB.dailyScheduleItems().findAll();
     }
 
     public static DailyScheduleItem findByScheduleItem(ScheduleItem item) {
-        return DB.DailyScheduleItems.findByScheduleItem(item);
-    }
-
-    public static void removeAll() {
-        DB.transaction(new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                for (DailyScheduleItem i : findAll()) {
-                    DB.DailyScheduleItems.remove(i);
-                }
-                return null;
-            }
-        });        
+        return DB.dailyScheduleItems().findByScheduleItem(item);
     }
 
     public void save() {
-        DB.DailyScheduleItems.save(this);
+        DB.dailyScheduleItems().save(this);
     }
 
 

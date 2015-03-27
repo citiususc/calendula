@@ -20,7 +20,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.persistence.Persistence;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 
@@ -116,7 +116,7 @@ public class ScheduleListFragment extends Fragment {
                 .setCancelable(true)
                 .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Persistence.instance().deleteCascade(s);
+                        DB.schedules().deleteCascade(s, true);
                         notifyDataChange();
                     }
                 })

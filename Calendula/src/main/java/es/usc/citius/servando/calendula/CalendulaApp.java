@@ -5,7 +5,6 @@ import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.joda.time.LocalTime;
@@ -16,8 +15,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.SQLException;
-import java.util.Arrays;
 
 import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
@@ -62,11 +59,8 @@ public class CalendulaApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        registerORMLiteDataTypes();
+        // initialize SQLite engine
         initializeDatabase();
-
-        // initialize sqlite engine
-        // ActiveAndroid.initialize(this, false);
 
         new Thread(new Runnable() {
             @Override
@@ -79,33 +73,16 @@ public class CalendulaApp extends Application {
             }
         }).start();
 
-        // export database to db
         //exportDatabase(this, DB_NAME, new File(Environment.getExternalStorageDirectory() + File.separator + DB_NAME));
-
-        Log.d("APP", Arrays.toString(PreferenceManager.getDefaultSharedPreferences(this).getAll().keySet().toArray()));
     }
-
-
-    public void registerORMLiteDataTypes() {
-        //DataPersisterManager.registerDataPersisters(LocalTimePersister.getSingleton());
-    }
-
 
     public void initializeDatabase() {
         DB.init(this);
-
-        try {
-            Log.d("CalendulaAPP", DB.Medicines.queryForAll() + " medicines found");
-        } catch (SQLException e) {
-            Log.e("CalendulaAPP", "AUCH!", e);
-        }
-
     }
 
     @Override
     public void onTerminate() {
         DB.dispose();
-        // ActiveAndroid.dispose();
         super.onTerminate();
     }
 

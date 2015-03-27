@@ -5,15 +5,13 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import org.joda.time.LocalTime;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimePersister;
 
 /**
- * Created by joseangel.pineiro on 10/9/14.
+ * Created by joseangel.pineiro
  */
 @DatabaseTable(tableName = "Routines")
 public class Routine {
@@ -31,11 +29,7 @@ public class Routine {
     @DatabaseField(columnName = COLUMN_NAME)
     private String name;
 
-//    @ForeignCollectionField(foreignFieldName = "routine")
-//    Collection<ScheduleItem> items;
-
     public Routine() {
-
     }
 
     public Routine(LocalTime time, String name) {
@@ -70,51 +64,36 @@ public class Routine {
 
 
     public void save() {
-        DB.Routines.save(this);
+        DB.routines().save(this);
     }
 
     public void deleteCascade() {
-
-        DB.transaction(new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                Collection<ScheduleItem> items = scheduleItems();
-                for (ScheduleItem i : items) {
-                    i.deleteCascade();
-                }
-                DB.Routines.remove(Routine.this);
-                return null;
-            }
-        });
+        DB.routines().deleteCascade(this, false);
     }
 
-    //
+    // *************************************
     // DB queries
-    //
+    // *************************************
 
-    /**
-     * Get the schedule items
-     *
-     * @return the items associated to this schedule
-     */
+
     public List<ScheduleItem> scheduleItems() {
-        return DB.ScheduleItems.findByRoutine(this);
+        return DB.scheduleItems().findByRoutine(this);
     }
 
     public static List<Routine> findAll() {
-        return DB.Routines.findAll();
+        return DB.routines().findAll();
     }
 
     public static Routine findById(long id) {
-        return DB.Routines.findById(id);
+        return DB.routines().findById(id);
     }
 
     public static Routine findByName(String name) {
-        return DB.Routines.findOneBy(COLUMN_NAME, name);
+        return DB.routines().findOneBy(COLUMN_NAME, name);
     }
 
     public static List<Routine> findInHour(int hour) {
-        return DB.Routines.findInHour(hour);
+        return DB.routines().findInHour(hour);
     }
 
 

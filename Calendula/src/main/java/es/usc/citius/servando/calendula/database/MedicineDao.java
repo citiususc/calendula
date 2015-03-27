@@ -3,11 +3,16 @@ package es.usc.citius.servando.calendula.database;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.concurrent.Callable;
 
+import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Schedule;
 
 /**
- * Created by joseangel.pineiro on 3/26/15.
+ * Created by joseangel.pineiro
  */
 public class MedicineDao extends GenericDao<Medicine, Long> {
 
@@ -23,6 +28,31 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
         } catch (SQLException e) {
             throw new RuntimeException("Error creating medicines dao", e);
         }
+    }
+
+    @Override
+    public void fireEvent() {
+        CalendulaApp.eventBus().post(PersistenceEvents.MEDICINE_EVENT);
+    }
+
+    public void deleteCascade(final Medicine m, boolean fireEvent) {
+
+        DB.transaction(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                List<Schedule> schedules = Schedule.findByMedicine(m);
+                for (Schedule s : schedules) {
+                    s.deleteCascade();
+                }
+                DB.medicines().remove(m);
+                return null;
+            }
+        });
+
+        if (fireEvent) {
+            fireEvent();
+        }
+
     }
 
 }

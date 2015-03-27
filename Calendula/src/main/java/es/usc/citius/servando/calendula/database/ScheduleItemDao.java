@@ -4,7 +4,9 @@ import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
@@ -34,6 +36,19 @@ public class ScheduleItemDao extends GenericDao<ScheduleItem, Long> {
 
     public List<ScheduleItem> findByRoutine(Routine r) {
         return findBy(ScheduleItem.COLUMN_ROUTINE, r.getId());
+    }
+
+    public void deleteCascade(final ScheduleItem s) {
+        DB.transaction(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                DailyScheduleItem item = DailyScheduleItem.findByScheduleItem(s);
+                DB.dailyScheduleItems().remove(item);
+                DB.scheduleItems().remove(s);
+                return null;
+            }
+        });
+
     }
 
 }

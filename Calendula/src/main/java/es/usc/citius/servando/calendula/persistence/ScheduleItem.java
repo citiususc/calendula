@@ -3,8 +3,6 @@ package es.usc.citius.servando.calendula.persistence;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import java.util.concurrent.Callable;
-
 import es.usc.citius.servando.calendula.database.DB;
 
 /**
@@ -47,10 +45,14 @@ public class ScheduleItem {
         this.routine = routine;
     }
 
-    public void save() {
-        DB.ScheduleItems.save(this);
+    public Long getId() {
+        return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public Routine routine() {
         return routine;
     }
@@ -96,26 +98,17 @@ public class ScheduleItem {
         this.dose = dose;
     }
 
+    // *************************************
+    // DB queries
+    // *************************************
+
+    public void save() {
+        DB.scheduleItems().save(this);
+    }
 
     public void deleteCascade() {
-
-        DB.transaction(new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                DailyScheduleItem item = DailyScheduleItem.findByScheduleItem(ScheduleItem.this);
-                DB.DailyScheduleItems.remove(item);
-                DB.ScheduleItems.remove(ScheduleItem.this);
-                return null;
-            }
-        });
-
+        DB.scheduleItems().deleteCascade(this);
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

@@ -40,14 +40,11 @@ public class DailyAgenda {
         if (!today.contains(lastDate)) {
             // Start transaction
             try {
-
-
                 TransactionManager.callInTransaction(DB.helper().getConnectionSource(), new Callable<Object>() {
                     @Override
                     public Object call() throws Exception {
-
                         // delete old items
-                        DailyScheduleItem.removeAll();
+                        DB.dailyScheduleItems().removeAll();
                         // and add new ones
                         createDailySchedule(now);
                         // Save last date to prefs
@@ -63,12 +60,6 @@ public class DailyAgenda {
             } catch (SQLException e) {
                 Log.e(TAG, "Error setting up daily agenda", e);
             }
-//            
-//            ActiveAndroid.beginTransaction();
-//            
-//            ActiveAndroid.setTransactionSuccessful();
-//            ActiveAndroid.endTransaction();
-
             // Update alarms
             AlarmScheduler.instance().updateAllAlarms(ctx);
 

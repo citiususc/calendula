@@ -4,14 +4,13 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.typeSerializers.BooleanArrayPersister;
 
 
 /**
- * Created by joseangel.pineiro on 12/17/13.
+ * Created by joseangel.pineiro
  */
 @DatabaseTable(tableName = "Schedules")
 public class Schedule {
@@ -29,11 +28,7 @@ public class Schedule {
     @DatabaseField(columnName = COLUMN_DAYS, persisterClass = BooleanArrayPersister.class)
     private boolean[] days = new boolean[]{true, true, true, true, true, true, true};
 
-//    @ForeignCollectionField(foreignFieldName = "schedule")
-//    private Collection<ScheduleItem> items;
-
     public Schedule() {
-
     }
 
     public Schedule(Medicine medicine) {
@@ -45,15 +40,16 @@ public class Schedule {
         this.days = days;
     }
 
-    /**
-     * Get the schedule items
-     *
-     * @return the items associated to this schedule
-     */
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public List<ScheduleItem> items() {
-        //TODO Replace
-        return DB.ScheduleItems.findBySchedule(this);
-        //return new ArrayList<ScheduleItem>(items);
+        return DB.scheduleItems().findBySchedule(this);
     }
 
     public Medicine medicine() {
@@ -78,47 +74,29 @@ public class Schedule {
 
         return days[dayOfWeek - 1];
     }
-    //
+
+    // *************************************
     // DB queries
-    //
+    // *************************************
 
     public static List<Schedule> findAll() {
-        return DB.Schedules.findAll();
+        return DB.schedules().findAll();
     }
 
     public static List<Schedule> findByMedicine(Medicine med) {
-        return DB.Schedules.findByMedicine(med);
+        return DB.schedules().findByMedicine(med);
     }
 
     public static Schedule findById(long id) {
-        return DB.Schedules.findById(id);
+        return DB.schedules().findById(id);
     }
 
     public void save() {
-        DB.Schedules.save(this);
+        DB.schedules().save(this);
     }
 
     public void deleteCascade() {
-
-        DB.transaction(new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                for (ScheduleItem i : items()) {
-                    i.deleteCascade();
-                }
-                DB.Schedules.remove(Schedule.this);
-                return null;
-            }
-        });
-
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        DB.schedules().deleteCascade(this, false);
     }
 }
 

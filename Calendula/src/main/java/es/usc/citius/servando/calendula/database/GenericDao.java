@@ -42,6 +42,16 @@ public abstract class GenericDao<T extends Object, I> implements Dao<T, I> {
 
     public abstract Dao<T, I> getConcreteDao();
 
+    /**
+     * Fires an event indication changes in this collection
+     * To be implemented by subclasses if necessary
+     */
+    public void fireEvent() {
+        // default implementation: do nothing
+    }
+
+    ;
+
     public void save(T model) {
         try {
             dao.createOrUpdate(model);
@@ -49,6 +59,12 @@ public abstract class GenericDao<T extends Object, I> implements Dao<T, I> {
             throw new RuntimeException("Error saving model", e);
         }
     }
+
+    public void saveAndFireEvent(T model) {
+        save(model);
+        fireEvent();
+    }
+
 
     public List<T> findAll() {
         try {

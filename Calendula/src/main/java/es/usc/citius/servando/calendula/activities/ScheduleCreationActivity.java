@@ -41,7 +41,6 @@ import es.usc.citius.servando.calendula.fragments.ScheduleTimetableFragment;
 import es.usc.citius.servando.calendula.fragments.SelectMedicineListFragment;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Persistence;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
@@ -182,12 +181,12 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
                         Log.d(TAG, "Saving daily schedule item..." + dsi.getId() + ", " + dsi.scheduleItem().getId());
                     }
                     // save and fire event
-                    Persistence.instance().save(s);
+                    DB.schedules().saveAndFireEvent(s);
 
                     return null;
                 }
             });
-            
+
             ScheduleCreationHelper.instance().clear();
             AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ScheduleCreationActivity.this);
             Log.d(TAG, "Schedule saved successfully!");
@@ -239,11 +238,11 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
                         dsi.save();
                     }
                     // save and fire event
-                    Persistence.instance().save(s);
+                    DB.schedules().saveAndFireEvent(s);
                     return null;
                 }
             });
-            
+
             ScheduleCreationHelper.instance().clear();
             AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ScheduleCreationActivity.this);
             Log.d(TAG, "Schedule saved successfully!");
@@ -434,7 +433,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
                 .setCancelable(true)
                 .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Persistence.instance().deleteCascade(s);
+                        DB.schedules().deleteCascade(s, true);
                         finish();
                     }
                 })
