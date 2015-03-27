@@ -4,11 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.activeandroid.ActiveAndroid;
+import com.j256.ormlite.misc.TransactionManager;
 
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
+import java.sql.SQLException;
+import java.util.concurrent.Callable;
+
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
@@ -25,9 +29,8 @@ public class DailyAgenda {
 
     public void setupForToday(Context ctx) {
 
-        SharedPreferences settings = ctx.getSharedPreferences(PREFERENCES_NAME, 0);
-
-        DateTime now = DateTime.now();
+        final SharedPreferences settings = ctx.getSharedPreferences(PREFERENCES_NAME, 0);
+        final DateTime now = DateTime.now();
         Long lastDate = settings.getLong(PREF_LAST_DATE, 0);
 
         Log.d(TAG, "Setup daily agenda. Last updated: " + new DateTime(lastDate).toString("dd/MM - kk:mm"));
@@ -36,22 +39,39 @@ public class DailyAgenda {
         // we need to update daily agenda
         if (!today.contains(lastDate)) {
             // Start transaction
-            ActiveAndroid.beginTransaction();
-            // delete old items
-            DailyScheduleItem.removeAll();
-            // and add new ones
-            createDailySchedule(now);
-            // Save last date to prefs
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putLong(PREF_LAST_DATE, now.getMillis());
-            editor.commit();
-            // End transaction
-            ActiveAndroid.setTransactionSuccessful();
-            ActiveAndroid.endTransaction();
+            try {
+
+
+                TransactionManager.callInTransaction(DB.helper().getConnectionSource(), new Callable<Object>() {
+                    @Override
+                    public Object call() throws Exception {
+
+                        // delete old items
+                        DailyScheduleItem.removeAll();
+                        // and add new ones
+                        createDailySchedule(now);
+                        // Save last date to prefs
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.putLong(PREF_LAST_DATE, now.getMillis());
+                        editor.commit();
+                        // End transaction
+
+                        return null;
+                    }
+                });
+
+            } catch (SQLException e) {
+                Log.e(TAG, "Error setting up daily agenda", e);
+            }
+//            
+//            ActiveAndroid.beginTransaction();
+//            
+//            ActiveAndroid.setTransactionSuccessful();
+//            ActiveAndroid.endTransaction();
 
             // Update alarms
             AlarmScheduler.instance().updateAllAlarms(ctx);
-            
+
         } else {
             Log.d(TAG, "No need to update daily schedule (" + DailyScheduleItem.findAll().size() + " items found for today)");
         }

@@ -62,7 +62,7 @@ public class DailyAgendaItemStub {
                     item.meds = new ArrayList<DailyAgendaItemStubElement>();
 
                     for (ScheduleItem scheduleItem : doses) {
-                        if (scheduleItem.schedule().enabledFor(today)) {
+                        if (scheduleItem.schedule() != null && scheduleItem.schedule().enabledFor(today)) {
                             item.hasEvents = true;
                             int minute = r.time().getMinuteOfHour();
                             Medicine med = scheduleItem.schedule().medicine();

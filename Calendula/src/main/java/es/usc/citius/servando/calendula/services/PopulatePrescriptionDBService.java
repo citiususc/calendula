@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import es.usc.citius.servando.calendula.util.medicine.Prescription;
+import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.util.medicine.PrescriptionStore;
 
 /**

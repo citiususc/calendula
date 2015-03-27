@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.activeandroid.ActiveAndroid;
-
 import org.joda.time.LocalTime;
 
 import java.io.File;
@@ -18,9 +16,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.SQLException;
 import java.util.Arrays;
 
 import de.greenrobot.event.EventBus;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 
@@ -30,7 +30,7 @@ import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 public class CalendulaApp extends Application {
 
 
-    private static final String DB_NAME = "calendula.db";
+    public static final String DB_NAME = "calendula.db";
 
     // PREFERENCES
     public static final String PREFERENCES_NAME = "CalendulaPreferences";
@@ -57,11 +57,16 @@ public class CalendulaApp extends Application {
 
     private static EventBus eventBus = EventBus.getDefault();
 
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        registerORMLiteDataTypes();
+        initializeDatabase();
+
         // initialize sqlite engine
-        ActiveAndroid.initialize(this, false);
+        // ActiveAndroid.initialize(this, false);
 
         new Thread(new Runnable() {
             @Override
@@ -80,9 +85,27 @@ public class CalendulaApp extends Application {
         Log.d("APP", Arrays.toString(PreferenceManager.getDefaultSharedPreferences(this).getAll().keySet().toArray()));
     }
 
+
+    public void registerORMLiteDataTypes() {
+        //DataPersisterManager.registerDataPersisters(LocalTimePersister.getSingleton());
+    }
+
+
+    public void initializeDatabase() {
+        DB.init(this);
+
+        try {
+            Log.d("CalendulaAPP", DB.Medicines.queryForAll() + " medicines found");
+        } catch (SQLException e) {
+            Log.e("CalendulaAPP", "AUCH!", e);
+        }
+
+    }
+
     @Override
     public void onTerminate() {
-        ActiveAndroid.dispose();
+        DB.dispose();
+        // ActiveAndroid.dispose();
         super.onTerminate();
     }
 

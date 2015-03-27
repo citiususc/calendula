@@ -45,13 +45,13 @@ android {
     buildTypes {
         release {
             runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),           \
-                      'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),            \
+                       'proguard-rules.txt'
         }
         debug {
             runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),           \
-                      'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),            \
+                       'proguard-rules.txt'
         }
         beta {
             runProguard false
@@ -92,11 +92,13 @@ dependencies {
     compile 'com.android.support:palette-v7:21.0.0'
     compile 'joda-time:joda-time:2.3'
     compile 'com.makeramen:roundedimageview:1.5.0'
-    compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+    //compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.1.0'
     compile 'com.ocpsoft:ocpsoft-pretty-time:1.0.7'
     compile 'com.melnykov:floatingactionbutton:1.1.0'
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'de.greenrobot:eventbus:2.2.1'
     compile 'com.android.support:support-v4:21.0.0'
+
+    compile 'com.j256.ormlite:ormlite-android:4.45'
 }

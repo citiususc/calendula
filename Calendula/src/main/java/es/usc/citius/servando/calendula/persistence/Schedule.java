@@ -1,28 +1,36 @@
 package es.usc.citius.servando.calendula.persistence;
 
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
-import com.activeandroid.query.Select;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.List;
+import java.util.concurrent.Callable;
+
+import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.persistence.typeSerializers.BooleanArrayPersister;
 
 
 /**
  * Created by joseangel.pineiro on 12/17/13.
  */
-@Table(name = "Schedules", id = Schedule.COLUMN_ID)
-public class Schedule extends Model {
+@DatabaseTable(tableName = "Schedules")
+public class Schedule {
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_MEDICINE = "Medicine";
     public static final String COLUMN_DAYS = "Days";
 
-    @Column(name = COLUMN_MEDICINE)
+    @DatabaseField(columnName = COLUMN_ID, generatedId = true)
+    private Long id;
+
+    @DatabaseField(columnName = COLUMN_MEDICINE, foreign = true, foreignAutoRefresh = true)
     private Medicine medicine;
 
-    @Column(name = COLUMN_DAYS)
+    @DatabaseField(columnName = COLUMN_DAYS, persisterClass = BooleanArrayPersister.class)
     private boolean[] days = new boolean[]{true, true, true, true, true, true, true};
+
+//    @ForeignCollectionField(foreignFieldName = "schedule")
+//    private Collection<ScheduleItem> items;
 
     public Schedule() {
 
@@ -43,7 +51,9 @@ public class Schedule extends Model {
      * @return the items associated to this schedule
      */
     public List<ScheduleItem> items() {
-        return getMany(ScheduleItem.class, ScheduleItem.COLUMN_SCHEDULE);
+        //TODO Replace
+        return DB.ScheduleItems.findBySchedule(this);
+        //return new ArrayList<ScheduleItem>(items);
     }
 
     public Medicine medicine() {
@@ -73,32 +83,42 @@ public class Schedule extends Model {
     //
 
     public static List<Schedule> findAll() {
-        return new Select().from(Schedule.class)
-                .orderBy(COLUMN_MEDICINE + " ASC")
-                .execute();
+        return DB.Schedules.findAll();
     }
 
     public static List<Schedule> findByMedicine(Medicine med) {
-        return new Select().from(Schedule.class)
-                .where(COLUMN_MEDICINE + " = ?", med.getId())
-                .execute();
+        return DB.Schedules.findByMedicine(med);
     }
 
-
     public static Schedule findById(long id) {
-        return new Select().from(Schedule.class)
-                .where(COLUMN_ID + " = ?", id)
-                .executeSingle();
+        return DB.Schedules.findById(id);
+    }
+
+    public void save() {
+        DB.Schedules.save(this);
     }
 
     public void deleteCascade() {
-        for (ScheduleItem i : items()) {
-//            i.setSchedule(null);
-//            i.setRoutine(null);
-//            i.save();
-            i.deleteCascade();
-        }
-        this.delete();
+
+        DB.transaction(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                for (ScheduleItem i : items()) {
+                    i.deleteCascade();
+                }
+                DB.Schedules.remove(Schedule.this);
+                return null;
+            }
+        });
+
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
 

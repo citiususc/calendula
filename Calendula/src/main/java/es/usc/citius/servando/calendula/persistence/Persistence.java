@@ -1,29 +1,29 @@
 package es.usc.citius.servando.calendula.persistence;
 
-import com.activeandroid.Model;
-
 import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 
 /**
  * Created by joseangel.pineiro on 11/4/14.
  */
+@Deprecated
 public class Persistence {
 
     // CREATE OR UPDTAE 
 
     public void save(Routine m) {
-        saveModel(m);
+        DB.Routines.save(m);
         CalendulaApp.eventBus().post(PersistenceEvents.ROUTINE_EVENT);
     }
 
     public void save(Medicine m) {
-        saveModel(m);
+        DB.Medicines.save(m);
         CalendulaApp.eventBus().post(PersistenceEvents.MEDICINE_EVENT);
     }
 
     public void save(Schedule m) {
-        saveModel(m);
+        DB.Schedules.save(m);
         CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
     }
 
@@ -43,13 +43,6 @@ public class Persistence {
         m.deleteCascade();
         CalendulaApp.eventBus().post(PersistenceEvents.ROUTINE_EVENT);
     }
-
-    // PRIVATE METHODS
-
-    private void saveModel(Model m) {
-        m.save();
-    }
-
 
     // SIngleton
 

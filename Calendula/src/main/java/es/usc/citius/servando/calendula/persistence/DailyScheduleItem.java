@@ -1,50 +1,53 @@
 package es.usc.citius.servando.calendula.persistence;
 
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
-import com.activeandroid.query.Select;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
 import java.util.List;
+import java.util.concurrent.Callable;
+
+import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimePersister;
 
 /**
  * Created by castrelo on 4/10/14.
  */
-@Table(name = "DailyScheduleItems", id = DailyScheduleItem.COLUMN_ID)
-public class DailyScheduleItem extends Model {
+@DatabaseTable(tableName = "DailyScheduleItems")
+public class DailyScheduleItem {
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_SCHEDULE_ITEM = "ScheduleItem";
 
-    public static final String COLUMN_DATE = "Date";
+    //public static final String COLUMN_DATE = "Date";
     public static final String COLUMN_TAKEN_TODAY = "TakenToday";
     public static final String COLUMN_TIME_TAKEN = "TimeTaken";
 
-//    @Column(name = COLUMN_DATE)
-//    private DateTime date;
+    @DatabaseField(columnName = COLUMN_ID, generatedId = true)
+    private Long id;
 
-    @Column(name = COLUMN_SCHEDULE_ITEM, onDelete = Column.ForeignKeyAction.NO_ACTION, onUpdate = Column.ForeignKeyAction.NO_ACTION)
+    @DatabaseField(columnName = COLUMN_SCHEDULE_ITEM, foreign = true, foreignAutoRefresh = true)
     private ScheduleItem scheduleItem;
 
-    @Column(name = COLUMN_TAKEN_TODAY)
+    @DatabaseField(columnName = COLUMN_TAKEN_TODAY)
     private boolean takenToday;
 
-    @Column(name = COLUMN_TIME_TAKEN)
+    @DatabaseField(columnName = COLUMN_TIME_TAKEN, persisterClass = LocalTimePersister.class)
     private LocalTime timeTaken;
 
     public DailyScheduleItem() {
     }
 
-    public DailyScheduleItem(DateTime date, ScheduleItem scheduleItem) {
-//        this.date = date;
-        this.scheduleItem = scheduleItem;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public DailyScheduleItem(ScheduleItem scheduleItem) {
-//        this.date = scheduleItem.routine().time().toDateTimeToday();
         this.scheduleItem = scheduleItem;
     }
 
@@ -59,6 +62,7 @@ public class DailyScheduleItem extends Model {
     public void setScheduleItem(ScheduleItem scheduleItem) {
         this.scheduleItem = scheduleItem;
     }
+
 
     public void setTimeTaken(LocalTime date) {
         this.timeTaken = date;
@@ -87,37 +91,34 @@ public class DailyScheduleItem extends Model {
 
 
     public static DailyScheduleItem findById(long id) {
-        return new Select().from(DailyScheduleItem.class)
-                .where(COLUMN_ID + " = ?", id)
-                .executeSingle();
+        return DB.DailyScheduleItems.findById(id);
     }
 
 
     public static List<DailyScheduleItem> findAll() {
-        return new Select().from(DailyScheduleItem.class)
-                .execute();
+        return DB.DailyScheduleItems.findAll();
     }
 
     public static DailyScheduleItem findByScheduleItem(ScheduleItem item) {
-        return new Select().from(DailyScheduleItem.class)
-                .where(COLUMN_SCHEDULE_ITEM + " = ?", item.getId())
-                .executeSingle();
-    }
-
-    public static List<DailyScheduleItem> fromDate(DateTime date) {
-        // get one day interval
-        String start = date.withTimeAtStartOfDay().toString("yy/mm/dd kk:mm");
-        String end = date.plusDays(1).withTimeAtStartOfDay().toString("yy/mm/dd kk:mm");
-
-        return new Select().from(DailyScheduleItem.class)
-                .where(COLUMN_DATE + " BETWEEN ? AND ?", start, end)
-                .execute();
+        return DB.DailyScheduleItems.findByScheduleItem(item);
     }
 
     public static void removeAll() {
-        for (DailyScheduleItem i : findAll()) {
-            i.delete();
-        }
+        DB.transaction(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                for (DailyScheduleItem i : findAll()) {
+                    DB.DailyScheduleItems.remove(i);
+                }
+                return null;
+            }
+        });        
     }
+
+    public void save() {
+        DB.DailyScheduleItems.save(this);
+    }
+
+
 }
 
