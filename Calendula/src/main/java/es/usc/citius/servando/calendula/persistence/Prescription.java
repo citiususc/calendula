@@ -150,7 +150,7 @@ public class Prescription {
 
     public static List<Prescription> findByName(String name, int limit) {
         Log.d("Prescription", "Query by name: " + name);
-        return DB.prescriptions().findBy(COLUMN_NAME, name + "%", Long.valueOf(limit));
+        return DB.prescriptions().like(COLUMN_NAME, name + "%", Long.valueOf(limit));
     }
 
     public static Prescription findByCn(String cn) {
@@ -168,5 +168,22 @@ public class Prescription {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Prescription{" +
+                "id=" + id +
+                ", pid='" + pid + '\'' +
+                ", cn='" + cn + '\'' +
+                ", name='" + name + '\'' +
+                ", dose='" + dose + '\'' +
+                ", content='" + content + '\'' +
+                ", packagingUnits=" + packagingUnits +
+                ", generic=" + generic +
+                ", hasProspect=" + hasProspect +
+                ", affectsDriving=" + affectsDriving +
+                '}';
     }
 }

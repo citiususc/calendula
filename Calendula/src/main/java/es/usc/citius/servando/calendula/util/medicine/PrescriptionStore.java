@@ -60,30 +60,28 @@ public class PrescriptionStore {
                         i++;
                         p = Prescription.fromCsv(line, CSV_SPACER);
                         // cn | id | name | dose | units | content
-
-
-                        DB.prescriptions().executeRaw(String.format(
-                                "INSERT INTO Prescriptions (Cn, Pid, Name, Dose, Packaging, Content, Generic, Prospect, Affectdriving) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);",
-                                new Object[]{p.cn, p.pid, p.name, p.dose, p.packagingUnits, p.content, p.generic, p.hasProspect, p.affectsDriving}));
+                        DB.prescriptions().executeRaw("INSERT INTO Prescriptions (Cn, Pid, Name, Dose, Packaging, Content, Generic, Prospect, Affectdriving) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);",
+                                new String[]{p.cn, p.pid, p.name, p.dose, String.valueOf(p.packagingUnits), p.content, String.valueOf(p.generic), String.valueOf(p.hasProspect), String.valueOf(p.affectsDriving)});
                     }
                     br.close();
-
                     // update preferences version
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
                     prefs.edit().putInt(PopulatePrescriptionDBService.DB_VERSION_KEY, newVersionCode).commit();
-
-                    // clear all allocated spaces
-                    Log.d(TAG, "Finish saving " + Prescription.count() + " prescriptions!");                    
                     return null;
                 }
             });
         } catch (Exception e) {
             Log.e(TAG, "Error while saving prescription data", e);
         }
+
+        // clear all allocated spaces
+        Log.d(TAG, "Finish saving " + Prescription.count() + " prescriptions!");
+        
         try {
             DB.prescriptions().executeRaw("VACUUM;");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 }

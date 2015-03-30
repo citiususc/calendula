@@ -101,12 +101,13 @@ public abstract class GenericDao<T extends Object, I> implements Dao<T, I> {
         }
     }
 
-    public List<T> findBy(String columnName, Object value, Long limit) {
+    public List<T> like(String columnName, Object value, Long limit) {
         try {
-            return dao.queryBuilder()
-                    .limit(limit)
-                    .where().like(columnName, value)
-                    .query();
+            QueryBuilder<T, I> qb = dao.queryBuilder();
+            qb.where().like(columnName, value);
+            qb.orderBy(columnName, false);
+            qb.limit(limit);
+            return qb.query();
 
         } catch (SQLException e) {
             throw new RuntimeException("Error finding model", e);

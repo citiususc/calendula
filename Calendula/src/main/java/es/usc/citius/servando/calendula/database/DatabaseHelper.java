@@ -26,6 +26,18 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
  */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
+    public static final String TAG = "DatabaseHelper";
+
+    // List of persisted classes to simplify table creation
+    public Class<?>[] persistedClasses = new Class<?>[]{
+            Routine.class,
+            Medicine.class,
+            Schedule.class,
+            ScheduleItem.class,
+            DailyScheduleItem.class,
+            Prescription.class
+    };    
+
     // name of the database file for your application -- change to something appropriate for your app
     private static final String DATABASE_NAME = CalendulaApp.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
@@ -56,14 +68,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void onCreate(SQLiteDatabase db, ConnectionSource connectionSource) {
         try {
             Log.i(DatabaseHelper.class.getName(), "onCreate");
-            TableUtils.createTable(connectionSource, Medicine.class);
-            // here we try inserting data in the on-create as a test
-            getRoutinesDao();
-            getMedicinesDao();
-            getSchedulesDao();
-            getScheduleItemsDao();
 
-
+            for (Class<?> c : persistedClasses) {
+                Log.d(TAG, "Creating table for " + c.getSimpleName());
+                TableUtils.createTable(connectionSource, c);
+            }
+            
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
             throw new RuntimeException(e);
