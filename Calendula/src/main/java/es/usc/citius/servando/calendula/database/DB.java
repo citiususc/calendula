@@ -32,7 +32,7 @@ public class DB {
      * Initialize database and DAOs
      */
     public static void init(Context context) {
-        DatabaseManager<DatabaseHelper> manager = new DatabaseManager<DatabaseHelper>();
+        DatabaseManager<DatabaseHelper> manager = new DatabaseManager<>();
         db = manager.getHelper(context, DatabaseHelper.class);
 
         Medicines = new MedicineDao(db);

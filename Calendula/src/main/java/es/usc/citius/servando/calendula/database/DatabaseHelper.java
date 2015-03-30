@@ -12,7 +12,6 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
-import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Prescription;
@@ -26,6 +25,8 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
  */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
+    public static String DB_NAME = "calendula.db";
+
     public static final String TAG = "DatabaseHelper";
 
     // List of persisted classes to simplify table creation
@@ -36,10 +37,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             ScheduleItem.class,
             DailyScheduleItem.class,
             Prescription.class
-    };    
+    };
 
-    // name of the database file for your application -- change to something appropriate for your app
-    private static final String DATABASE_NAME = CalendulaApp.DB_NAME;
+    // name of the database file for our application
+    private static final String DATABASE_NAME = DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
     private static final int DATABASE_VERSION = 4;
 

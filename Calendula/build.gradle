@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.13.0'
+        classpath 'com.android.tools.build:gradle:1.1.0'
     }
 }
 apply plugin: 'com.android.application'
@@ -44,17 +44,17 @@ android {
     }
     buildTypes {
         release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),            \
-                       'proguard-rules.txt'
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),             \
+                        'proguard-rules.txt'
         }
         debug {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),            \
-                       'proguard-rules.txt'
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),             \
+                        'proguard-rules.txt'
         }
         beta {
-            runProguard false
+            minifyEnabled false
             versionNameSuffix "-beta" + "-build" + getDate()
         }
     }

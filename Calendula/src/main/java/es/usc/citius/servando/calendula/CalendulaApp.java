@@ -27,8 +27,6 @@ import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 public class CalendulaApp extends Application {
 
 
-    public static final String DB_NAME = "calendula.db";
-
     // PREFERENCES
     public static final String PREFERENCES_NAME = "CalendulaPreferences";
     public static final String PREF_ALARM_SETTLED = "alarm_settled";
