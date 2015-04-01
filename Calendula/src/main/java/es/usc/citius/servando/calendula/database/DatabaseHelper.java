@@ -25,8 +25,6 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
  */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
-    public static String DB_NAME = "calendula.db";
-
     public static final String TAG = "DatabaseHelper";
 
     // List of persisted classes to simplify table creation
@@ -40,7 +38,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     };
 
     // name of the database file for our application
-    private static final String DATABASE_NAME = DB_NAME;
+    private static final String DATABASE_NAME = DB.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
     private static final int DATABASE_VERSION = 4;
 
@@ -169,6 +167,26 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    public void dropAndCreateAllTables() {
+        try {
+            Log.i(DatabaseHelper.class.getName(), "Dropping all tables...");
+            for (Class<?> c : persistedClasses) {
+                Log.d(TAG, "Dropping table " + c.getSimpleName());
+                TableUtils.dropTable(connectionSource, c, true);
+            }
+
+            Log.i(DatabaseHelper.class.getName(), "Creating tables...");
+            for (Class<?> c : persistedClasses) {
+                Log.d(TAG, "Creating table " + c.getSimpleName());
+                TableUtils.createTable(connectionSource, c);
+            }
+
+        } catch (SQLException e) {
+            Log.e(DatabaseHelper.class.getName(), "Can't recreate database", e);
+            throw new RuntimeException(e);
+        }
     }
 
     /**

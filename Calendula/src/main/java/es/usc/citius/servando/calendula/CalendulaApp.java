@@ -26,6 +26,7 @@ import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
  */
 public class CalendulaApp extends Application {
 
+    public static boolean disableReceivers = false;
 
     // PREFERENCES
     public static final String PREFERENCES_NAME = "CalendulaPreferences";

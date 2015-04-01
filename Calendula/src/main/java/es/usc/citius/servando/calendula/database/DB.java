@@ -10,8 +10,14 @@ import java.util.concurrent.Callable;
 
 public class DB {
 
+
     public static final String TAG = DB.class.getSimpleName();
 
+    // Database name
+    public static String DB_NAME = "calendula.db";
+
+    // DatabaseManeger reference
+    private static DatabaseManager<DatabaseHelper> manager;
     // SQLite DB Helper
     private static DatabaseHelper db;
 
@@ -32,7 +38,7 @@ public class DB {
      * Initialize database and DAOs
      */
     public static void init(Context context) {
-        DatabaseManager<DatabaseHelper> manager = new DatabaseManager<>();
+        manager = new DatabaseManager<>();
         db = manager.getHelper(context, DatabaseHelper.class);
 
         Medicines = new MedicineDao(db);
@@ -42,7 +48,7 @@ public class DB {
         DailyScheduleItems = new DailyScheduleItemDao(db);
         Prescriptions = new PrescriptionDao(db);
         // HomogeneusGroups
-        Log.v(TAG, "DB initialized ");
+        Log.v(TAG, "DB initialized " + DB.DB_NAME);
     }
 
     /**
@@ -50,8 +56,7 @@ public class DB {
      */
     public static void dispose() {
         db.close();
-        db = null;
-        Medicines = null;
+        manager.releaseHelper(db);
         Log.v(TAG, "DB disposed");
     }
 
@@ -90,5 +95,9 @@ public class DB {
 
     public static PrescriptionDao prescriptions() {
         return Prescriptions;
+    }
+
+    public static void dropAndCreateDatabase() {
+        db.dropAndCreateAllTables();
     }
 }

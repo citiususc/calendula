@@ -520,11 +520,11 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 0) {
-                return "Medicina";
+                return getString(R.string.medicine);
             } else if (position == 1) {
-                return " Pauta  ";
+                return getString(R.string.schedule);
             } else {
-                return "Resumen ";
+                return getString(R.string.summary);
             }
         }
 

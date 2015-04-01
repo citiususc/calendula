@@ -12,7 +12,7 @@
         android:background="@color/white" />
 
     <com.melnykov.fab.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/add_button"
+        android:id="@+id/add_medicine_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"

@@ -18,6 +18,9 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         {
+            if (CalendulaApp.disableReceivers)
+                return;
+
             // get action type
             int action = intent.getIntExtra(CalendulaApp.INTENT_EXTRA_ACTION, -1);
 
