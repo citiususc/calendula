@@ -15,6 +15,8 @@ public class DB {
 
     // Database name
     public static String DB_NAME = "calendula.db";
+    // initialized flag
+    public static boolean initialized = false;
 
     // DatabaseManeger reference
     private static DatabaseManager<DatabaseHelper> manager;
@@ -37,24 +39,30 @@ public class DB {
     /**
      * Initialize database and DAOs
      */
-    public static void init(Context context) {
-        manager = new DatabaseManager<>();
-        db = manager.getHelper(context, DatabaseHelper.class);
+    public synchronized static void init(Context context) {
 
-        Medicines = new MedicineDao(db);
-        Routines = new RoutineDao(db);
-        Schedules = new ScheduleDao(db);
-        ScheduleItems = new ScheduleItemDao(db);
-        DailyScheduleItems = new DailyScheduleItemDao(db);
-        Prescriptions = new PrescriptionDao(db);
-        // HomogeneusGroups
-        Log.v(TAG, "DB initialized " + DB.DB_NAME);
+        if (!initialized) {
+            initialized = true;
+            manager = new DatabaseManager<>();
+            db = manager.getHelper(context, DatabaseHelper.class);
+
+            Medicines = new MedicineDao(db);
+            Routines = new RoutineDao(db);
+            Schedules = new ScheduleDao(db);
+            ScheduleItems = new ScheduleItemDao(db);
+            DailyScheduleItems = new DailyScheduleItemDao(db);
+            Prescriptions = new PrescriptionDao(db);
+            // HomogeneusGroups
+            Log.v(TAG, "DB initialized " + DB.DB_NAME);
+        }
+
     }
 
     /**
      * Dispose DB and DAOs
      */
-    public static void dispose() {
+    public synchronized static void dispose() {
+        initialized = false;
         db.close();
         manager.releaseHelper(db);
         Log.v(TAG, "DB disposed");

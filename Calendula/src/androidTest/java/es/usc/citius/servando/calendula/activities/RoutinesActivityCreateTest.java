@@ -9,10 +9,10 @@ import org.junit.Test;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.TestUtils;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.fragments.RoutineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.persistence.Routine;
+import es.usc.citius.servando.calendula.util.TestUtils;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -38,9 +38,9 @@ public class RoutinesActivityCreateTest extends ActivityInstrumentationTestCase2
         super.setUp();
         CalendulaApp.disableReceivers = true;
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        mActivity = getActivity();
-        DB.init(mActivity.getApplicationContext());
+        DB.init(getInstrumentation().getContext());
         DB.dropAndCreateDatabase();
+        mActivity = getActivity();
     }
 
     @Test

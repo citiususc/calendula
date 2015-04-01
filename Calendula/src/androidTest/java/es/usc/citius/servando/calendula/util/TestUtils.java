@@ -1,4 +1,4 @@
-package es.usc.citius.servando.calendula;
+package es.usc.citius.servando.calendula.util;
 
 import android.support.test.espresso.Espresso;
 

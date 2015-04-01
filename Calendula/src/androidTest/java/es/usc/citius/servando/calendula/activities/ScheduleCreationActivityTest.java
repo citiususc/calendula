@@ -12,7 +12,6 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.TestUtils;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
@@ -20,6 +19,7 @@ import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.util.TestUtils;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -48,7 +48,7 @@ public class ScheduleCreationActivityTest extends ActivityInstrumentationTestCas
 
         Routine r;
         Medicine m;
-
+        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         DB.init(getInstrumentation().getContext());
         DB.dropAndCreateDatabase();
 
@@ -68,7 +68,6 @@ public class ScheduleCreationActivityTest extends ActivityInstrumentationTestCas
         m.save();
 
         // set edit intent
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         mActivity = getActivity();
     }
 

@@ -1,8 +1,7 @@
 package es.usc.citius.servando.calendula.database;
 
-import android.test.AndroidTestCase;
-import android.test.RenamingDelegatingContext;
-import android.util.Log;
+import android.support.test.InstrumentationRegistry;
+import android.test.InstrumentationTestCase;
 
 import org.joda.time.LocalTime;
 import org.junit.Before;
@@ -16,16 +15,14 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
-public class DBTest extends AndroidTestCase {
-
-    public static final String TAG = "DBTest";
+public class DBTest extends InstrumentationTestCase {
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
         CalendulaApp.disableReceivers = true;
-        Log.d(TAG, "Setting up DB tests...");
-        DB.init(new RenamingDelegatingContext(getContext(), "_test"));
+        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
+        DB.init(getInstrumentation().getContext());
         DB.dropAndCreateDatabase();
     }
 

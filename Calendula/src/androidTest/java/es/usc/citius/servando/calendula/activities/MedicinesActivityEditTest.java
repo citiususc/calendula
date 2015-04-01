@@ -9,10 +9,10 @@ import org.junit.Test;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.TestUtils;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
+import es.usc.citius.servando.calendula.util.TestUtils;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
@@ -36,6 +36,7 @@ public class MedicinesActivityEditTest extends ActivityInstrumentationTestCase2<
     public void setUp() throws Exception {
         super.setUp();
         CalendulaApp.disableReceivers = true;
+        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         DB.init(getInstrumentation().getContext());
         DB.dropAndCreateDatabase();
 
@@ -48,7 +49,7 @@ public class MedicinesActivityEditTest extends ActivityInstrumentationTestCase2<
         i.putExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, created.getId());
         setActivityIntent(i);
 
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
+
         mActivity = getActivity();
     }
 

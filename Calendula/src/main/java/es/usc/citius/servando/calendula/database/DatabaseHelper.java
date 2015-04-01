@@ -72,7 +72,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 Log.d(TAG, "Creating table for " + c.getSimpleName());
                 TableUtils.createTable(connectionSource, c);
             }
-            
+
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
             throw new RuntimeException(e);
@@ -170,12 +170,20 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     }
 
     public void dropAndCreateAllTables() {
-        try {
-            Log.i(DatabaseHelper.class.getName(), "Dropping all tables...");
-            for (Class<?> c : persistedClasses) {
-                Log.d(TAG, "Dropping table " + c.getSimpleName());
+
+        Log.i(DatabaseHelper.class.getName(), "Dropping all tables...");
+        for (Class<?> c : persistedClasses) {
+            Log.d(TAG, "Dropping table " + c.getSimpleName());
+            try {
                 TableUtils.dropTable(connectionSource, c, true);
+            } catch (SQLException e) {
+                // ignore
+                Log.e(TAG, "Erro dropping table " + c.getSimpleName());
             }
+
+        }
+
+        try {
 
             Log.i(DatabaseHelper.class.getName(), "Creating tables...");
             for (Class<?> c : persistedClasses) {

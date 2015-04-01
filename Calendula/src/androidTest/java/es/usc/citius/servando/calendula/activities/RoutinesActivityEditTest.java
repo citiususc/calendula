@@ -10,10 +10,10 @@ import org.junit.Test;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.TestUtils;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.fragments.RoutineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.persistence.Routine;
+import es.usc.citius.servando.calendula.util.TestUtils;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
@@ -40,7 +40,7 @@ public class RoutinesActivityEditTest extends ActivityInstrumentationTestCase2<R
     public void setUp() throws Exception {
         super.setUp();
         CalendulaApp.disableReceivers = true;
-
+        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         DB.init(getInstrumentation().getContext());
         DB.dropAndCreateDatabase();
 
@@ -53,7 +53,6 @@ public class RoutinesActivityEditTest extends ActivityInstrumentationTestCase2<R
         i.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, created.getId());
         setActivityIntent(i);
 
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         mActivity = getActivity();
     }
 
