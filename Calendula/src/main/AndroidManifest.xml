@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="es.usc.citius.servando.calendula"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="9"
@@ -38,7 +38,8 @@
         android:smallScreens="true"
         android:xlargeScreens="true" />
 
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- <android:uses-permission android:name="android.permission.READ_PHONE_STATE" /> -->
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- <android:uses-permission android:name="android.permission.READ_PHONE_STATE" /> -->
     <!-- <android:uses-permission android:name="android.permission.READ_CALL_LOG" /> -->
     <application
         android:name="es.usc.citius.servando.calendula.CalendulaApp"
@@ -46,7 +47,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        tools:replace="icon, label" >
+        tools:replace="icon, label">
 
         <!-- android:launchMode="singleInstance" -->
         <activity
@@ -92,7 +93,7 @@
             android:name="es.usc.citius.servando.calendula.activities.StartActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            android:theme="@android:style/Theme.Black.NoTitleBar">
             android:label="@string/title_activity_start" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -103,7 +104,7 @@
 
         <receiver android:name="es.usc.citius.servando.calendula.scheduling.AlarmReceiver" />
         <receiver android:name="es.usc.citius.servando.calendula.scheduling.NotificationEventReceiver" />
-        <receiver android:name="es.usc.citius.servando.calendula.scheduling.BootReceiver" >
+        <receiver android:name="es.usc.citius.servando.calendula.scheduling.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
@@ -118,6 +119,7 @@
             android:name="es.usc.citius.servando.calendula.activities.AgendaDetailActivity"
             android:label="@string/title_activity_agenda_detail"
             android:screenOrientation="portrait" />
+
 
         <meta-data
             android:name="AA_DB_NAME"
@@ -146,8 +148,7 @@
         <activity
             android:name="es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_confirm_schedules" >
-        </activity>
+            android:label="@string/title_activity_confirm_schedules"></activity>
     </application>
 
 </manifest>

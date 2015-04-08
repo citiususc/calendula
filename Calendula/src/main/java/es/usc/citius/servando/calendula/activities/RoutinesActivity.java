@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.fragments.RoutineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
@@ -112,8 +113,7 @@ public class RoutinesActivity extends ActionBarActivity implements RoutineCreate
     @Override
     public void onRoutineDeleted(Routine r) {
         AlarmScheduler.instance().onDeleteRoutine(r, this);
-        r.deleteCascade();
-        //Snack.show(getString(R.string.routine_deleted_message), this);
+        DB.routines().deleteCascade(r, true);
         finish();
     }
 

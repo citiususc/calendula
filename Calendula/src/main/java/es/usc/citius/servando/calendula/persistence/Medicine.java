@@ -1,34 +1,35 @@
 package es.usc.citius.servando.calendula.persistence;
 
 
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
-import com.activeandroid.query.Select;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.List;
 
-import es.usc.citius.servando.calendula.util.medicine.Prescription;
+import es.usc.citius.servando.calendula.database.DB;
 
 
 /**
- * Created by joseangel.pineiro on 12/5/13.
+ * Created by joseangel.pineiro
  */
-@Table(name = "Medicines", id = Medicine.COLUMN_ID)
-public class Medicine extends Model implements Comparable<Medicine> {
+@DatabaseTable(tableName = "Medicines")
+public class Medicine implements Comparable<Medicine> {
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_NAME = "Name";
     public static final String COLUMN_PRESENTATION = "Presentation";
     public static final String COLUMN_CN = "cn";
 
-    @Column(name = COLUMN_NAME)
+    @DatabaseField(columnName = COLUMN_ID, generatedId = true)
+    private Long id;
+
+    @DatabaseField(columnName = COLUMN_NAME)
     private String name;
 
-    @Column(name = COLUMN_PRESENTATION)
+    @DatabaseField(columnName = COLUMN_PRESENTATION)
     private Presentation presentation;
 
-    @Column(name = COLUMN_CN)
+    @DatabaseField(columnName = COLUMN_CN)
     private String cn;
 
     public Medicine() {
@@ -41,6 +42,22 @@ public class Medicine extends Model implements Comparable<Medicine> {
     public Medicine(String name, Presentation presentation) {
         this.name = name;
         this.presentation = presentation;
+    }
+
+    public String cn() {
+        return cn;
+    }
+
+    public void setCn(String cn) {
+        this.cn = cn;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String name() {
@@ -59,74 +76,44 @@ public class Medicine extends Model implements Comparable<Medicine> {
         this.presentation = presentation;
     }
 
-
-    // Static
-    public static List<Medicine> findAll() {
-        return new Select().from(Medicine.class)
-                .orderBy(COLUMN_NAME + " ASC")
-                .execute();
-    }
-
-    public static String[] findAllMedicineNames() {
-        List<Medicine> ms = findAll();
-        String[] names = new String[ms.size()];
-        for (int i = 0; i < ms.size(); i++) {
-            names[i] = ms.get(i).name();
-        }
-        return names;
-    }
-
-
-    public static Medicine findById(long id) {
-        return new Select().from(Medicine.class)
-                .where(COLUMN_ID + " = ?", id)
-                .executeSingle();
-    }
-
-    public static Medicine findByCn(String cn) {
-        Class<? extends Model> cls = Medicine.class;
-        return new Select().from(cls)
-                .where(COLUMN_CN + " LIKE ? ", cn)
-                .executeSingle();
-    }
-
-
-    public static Medicine findByName(String name) {
-        return new Select().from(Medicine.class)
-                .where(COLUMN_NAME + " = ?", name)
-                .executeSingle();
-    }
-
-    public void deleteCascade() {
-        List<Schedule> schedules = Schedule.findByMedicine(this);
-        for (Schedule s : schedules) {
-            s.deleteCascade();
-        }
-        this.delete();
-    }
-
-
     @Override
     public int compareTo(Medicine another) {
         return name.compareTo(another.name);
     }
 
-    public String cn() {
-        return cn;
+    // *************************************
+    // DB queries
+    // *************************************
+    
+    public static List<Medicine> findAll() {
+        return DB.medicines().findAll();
     }
 
-    public void setCn(String cn) {
-        this.cn = cn;
+    public static Medicine findById(long id) {
+        return DB.medicines().findById(id);
     }
-    
-    
+
+    public static Medicine findByName(String name) {
+        return DB.medicines().findOneBy(COLUMN_NAME, name);
+    }
+
+
+    public void deleteCascade() {
+        DB.medicines().deleteCascade(this, false);
+    }
+
+    public void save() {
+        DB.medicines().save(this);
+    }
+
     public static Medicine fromPrescription(Prescription p){
         Medicine m = new Medicine();
         m.setCn(p.cn);
         m.setName(p.shortName());
-        Presentation pre = p.expectedPresentation();        
-        m.setPresentation(pre !=null?pre:Presentation.PILLS);
+        Presentation pre = p.expectedPresentation();
+        m.setPresentation(pre != null ? pre : Presentation.PILLS);
         return m;
     }
-    
+
+
 }

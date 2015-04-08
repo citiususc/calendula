@@ -5,11 +5,7 @@ import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.preference.PreferenceManager;
 import android.util.Log;
-
-import com.activeandroid.ActiveAndroid;
-import com.activeandroid.Configuration;
 
 import org.joda.time.LocalTime;
 
@@ -19,20 +15,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
 
 import de.greenrobot.event.EventBus;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
-import es.usc.citius.servando.calendula.util.medicine.Prescription;
 
 /**
  * Created by castrelo on 4/10/14.
  */
 public class CalendulaApp extends Application {
 
-
-    private static final String DB_NAME = "calendula.db";
+    public static boolean disableReceivers = false;
 
     // PREFERENCES
     public static final String PREFERENCES_NAME = "CalendulaPreferences";
@@ -59,12 +53,13 @@ public class CalendulaApp extends Application {
 
     private static EventBus eventBus = EventBus.getDefault();
 
+
     @Override
     public void onCreate() {
         super.onCreate();
-        // initialize sqlite engine
 
-        ActiveAndroid.initialize(this, true);
+        // initialize SQLite engine
+        initializeDatabase();
 
         new Thread(new Runnable() {
             @Override
@@ -77,15 +72,16 @@ public class CalendulaApp extends Application {
             }
         }).start();
 
-        // export database to db
         //exportDatabase(this, DB_NAME, new File(Environment.getExternalStorageDirectory() + File.separator + DB_NAME));
+    }
 
-        Log.d("APP", Arrays.toString(PreferenceManager.getDefaultSharedPreferences(this).getAll().keySet().toArray()));
+    public void initializeDatabase() {
+        DB.init(this);
     }
 
     @Override
     public void onTerminate() {
-        ActiveAndroid.dispose();
+        DB.dispose();
         super.onTerminate();
     }
 

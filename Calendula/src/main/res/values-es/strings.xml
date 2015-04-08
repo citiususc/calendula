@@ -78,6 +78,7 @@
     <string name="summary_title">Revisa y confirma</string>
     <string name="title_activity_schedule_list">Pautas</string>
     <string name="add_schedule_button">AÑADIR PAUTA</string>
+    <string name="summary">Resumen</string>
 
     <!-- Med presentations -->
     <string name="injections">Inyecciones</string>
@@ -232,20 +233,20 @@
     <string name="medicine_unselected">Aún sin seleccionar</string>
 
     <!--App Tutorial-->
-    <string name="tutorial_welcome_title">Bienvenido a Caléndula!</string>
-    <string name="tutorial_welcome_text">Caléndula te permitirá gestionar fácilmente tu pauta terapéutica. Desde esta pantalla podrás ver tus medicinas pendientes para hoy.</string>
+    <string name="tutorial_welcome_title">Bienvenido a Calendula!</string>la t
+    <string name="tutorial_welcome_text">Calendula te ayudará a controlar tu medicación de forma sencilla. En esta pantalla podrás ver tus medicamentos pendientes para hoy.</string>
     <string name="tutorial_homeinfo_title">Explora!</string>
-    <string name="tutorial_homeinfo_text">A través del menú puedes acceder a las diferentes opciones de Caléndula. También puedes llegar a las opciones más comunes deslizándote a la derecha!</string>
+    <string name="tutorial_homeinfo_text">A través del menú puedes acceder a las diferentes opciones de Caléndula. También puedes llegar a las opciones más comunes deslizando a la derecha!</string>
     <string name="tutorial_routine_title">Potencia los buenos hábitos</string>
-    <string name="tutorial_routine_text">Las rutinas te permiten asociar la toma de medicamentos con tus actividades diarias. Añade tus propias rutinas y consigue que la terapia no sea una interferencia</string>
+    <string name="tutorial_routine_text">Las rutinas te permiten asociar la toma de medicamentos con tus actividades diarias. Para que sea más fácil, añade aquí las horas a las que debes tomar algún medicamento (desayuno, comida,...)</string>
     <string name="tutorial_meds_title">Administra tus medicinas</string>
-    <string name="tutorial_meds_text">Mantén el control de tus medicinas añadiéndolas al botiquín. En próximas versiones incluiremos una gestión de stock más avanzada!</string>
-    <string name="tutorial_schedule_title">Gestiona tus pautas!</string>
-    <string name="tutorial_schedule_text">Las pautas nos permiten avisarte cuando es hora de tomar tus medicinas. Añade tus dosis y horarios y no vuelvas a olvidarte nunca!</string>
+    <string name="tutorial_meds_text">Busca tus medicamentos y añádelos al botiquín. Así los tendrás siempre bajo control y podrás consultar sus prospectos ante cualquier duda!</string>
+    <string name="tutorial_schedule_title">Define tus pautas!</string>
+    <string name="tutorial_schedule_text">Las pautas nos permiten avisarte cuando es hora de tomar tus medicinas. Añade su dosis y horarios y no vuelvas a olvidarte nunca!</string>
     <string name="tutorial_next">Continuar</string>
     <string name="tutorial_understood">Entendido</string>
     <string name="tutorial_notifications_title">Confirma!</string>
-    <string name="tutorial_notifications_text">Toma tus medicinas y recuerda confirmar que lo has hecho, o de lo contrario te seguiremos avisando. Puedes cambiar la configuración de notificaciones en el menú de opciones. </string>
+    <string name="tutorial_notifications_text">Toma tus medicamentos y confirma que lo has hecho. Si no lo haces te seguiremos avisando. Recuerda que puedes cambiar la configuración de notificaciones en el menú de ajustes.</string>
     <string name="notification_repeat_message">La alarma se repetirá a las %1$s</string>
     <string name="notification_cancel_now">Cancelar ahora</string>
     <string name="notification_delay">Posponer</string>

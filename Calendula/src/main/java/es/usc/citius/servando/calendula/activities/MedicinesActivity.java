@@ -36,15 +36,15 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Persistence;
+import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
-import es.usc.citius.servando.calendula.util.medicine.Prescription;
 
 public class MedicinesActivity extends ActionBarActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
 
@@ -215,14 +215,14 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
 
     @Override
     public void onMedicineEdited(Medicine m) {
-        Persistence.instance().save(m);
+        DB.medicines().saveAndFireEvent(m);
         Snack.show(getString(R.string.medicine_edited_message), this);
         finish();
     }
 
     @Override
     public void onMedicineCreated(Medicine m) {
-        Persistence.instance().save(m);
+        DB.medicines().saveAndFireEvent(m);
         CalendulaApp.eventBus().post(new PersistenceEvents.MedicineAddedEvent(m.getId()));
         Toast.makeText(this, getString(R.string.medicine_created_message), Toast.LENGTH_SHORT).show();
         finish();
@@ -231,7 +231,7 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
     @Override
     public void onMedicineDeleted(Medicine m) {
         Snack.show(getString(R.string.medicine_deleted_message), this);
-        Persistence.instance().deleteCascade(m);
+        DB.medicines().deleteCascade(m, true);
         finish();
     }
 

@@ -45,7 +45,7 @@ public class SelectMedicineListFragment extends Fragment {
         if (med != null)
             selectedId = med.getId();
 
-        rootView.findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.add_medicine_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), MedicinesActivity.class);

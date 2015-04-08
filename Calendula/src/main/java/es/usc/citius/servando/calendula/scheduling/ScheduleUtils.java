@@ -66,10 +66,12 @@ public class ScheduleUtils {
         List<ScheduleItem> doses = new ArrayList<ScheduleItem>();
         for (ScheduleItem scheduleItem : routine.scheduleItems()) {
             DailyScheduleItem dsi = DailyScheduleItem.findByScheduleItem(scheduleItem);
-            boolean takenToday = dsi.takenToday();
-            if (scheduleItem.schedule().enabledFor(TODAY_IN_WEEK)) {
-                if (includeTaken || (!includeTaken && !takenToday)) {
-                    doses.add(scheduleItem);
+            if (dsi != null) {
+                boolean takenToday = dsi.takenToday();
+                if (scheduleItem.schedule().enabledFor(TODAY_IN_WEEK)) {
+                    if (includeTaken || (!includeTaken && !takenToday)) {
+                        doses.add(scheduleItem);
+                    }
                 }
             }
         }

@@ -29,10 +29,10 @@ import java.io.File;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Persistence;
+import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.util.Snack;
-import es.usc.citius.servando.calendula.util.medicine.Prescription;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -51,10 +51,10 @@ public class MedicinesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_medicines_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.medicines_list);
-        mMedicines = Medicine.findAll();
+        mMedicines = DB.medicines().findAll();
         adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
         listview.setAdapter(adapter);
-        
+
         return rootView;
     }
 
@@ -84,7 +84,7 @@ public class MedicinesListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            mMedicines = Medicine.findAll();
+            mMedicines = DB.medicines().findAll();
 
             return null;
         }
@@ -272,7 +272,7 @@ public class MedicinesListFragment extends Fragment {
                 .setCancelable(true)
                 .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Persistence.instance().deleteCascade(m);
+                        DB.medicines().deleteCascade(m, true);
                         notifyDataChange();
                     }
                 })
@@ -326,13 +326,14 @@ public class MedicinesListFragment extends Fragment {
         DownloadManager dm = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
         dm.enqueue(r);
     }
-    
+
 
     //
     // Container Activity must implement this interface
     //
     public interface OnMedicineSelectedListener {
         public void onMedicineSelected(Medicine m);
+
         public void onCreateMedicine();
     }
 

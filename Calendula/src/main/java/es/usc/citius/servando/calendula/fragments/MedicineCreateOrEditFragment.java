@@ -35,10 +35,10 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 import es.usc.citius.servando.calendula.util.Snack;
-import es.usc.citius.servando.calendula.util.medicine.Prescription;
 
 /**
  * Created by joseangel.pineiro on 12/4/13.
@@ -407,7 +407,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
                 } else if (mPrescription == null) {
                     mMedicine.setCn(null);
                 }
-                
+
                 if (mMedicineEditCallback != null) {
                     mMedicineEditCallback.onMedicineEdited(mMedicine);
                 }

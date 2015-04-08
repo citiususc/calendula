@@ -18,22 +18,25 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.activeandroid.ActiveAndroid;
 import com.google.gson.Gson;
+import com.j256.ormlite.misc.TransactionManager;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationEndFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationStartFragment;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
@@ -43,7 +46,6 @@ import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
 import es.usc.citius.servando.calendula.util.medicine.HomogeneusGroup;
 import es.usc.citius.servando.calendula.util.medicine.HomogeneusGroupHelper;
-import es.usc.citius.servando.calendula.util.medicine.Prescription;
 
 public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener{
 
@@ -106,7 +108,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
             if(pw.cn!=null) {
                 Prescription pr = Prescription.findByCn(pw.cn);
                 boolean prescriptionExists = pr != null;
-                boolean medExists = Medicine.findByCn(pw.cn) != null;                
+                boolean medExists = DB.medicines().findOneBy(Prescription.COLUMN_CN, pw.cn) != null;
                 
                 if(prescriptionExists){
                     pw.exists = medExists;
@@ -117,7 +119,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
 
                 HomogeneusGroup group = findGroup(pw.g);
                 if (group != null) {
-                    Log.d("ConfirmSchedulesActivity", "Found group: " + group.name);
+                    Log.d("ConfirmSchedulesAct", "Found group: " + group.name);
                     pw.exists = true;
                     pw.isGroup = true;
                     pw.group = group;
@@ -159,73 +161,81 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
 
     private void saveSchedules() {
 
-        ActiveAndroid.beginTransaction();
+
         try {
-            for (int i = 0; i < scheduleCount; i++) {
-                
-                Log.d("PRESCRIPTION", "Item " + i);
 
-                Fragment f = getViewPagerFragment(i + 1);
-                
-                if (f instanceof ScheduleConfirmationFragment) {
+            TransactionManager.callInTransaction(DB.helper().getConnectionSource(), new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
 
-                    Log.d("PRESCRIPTION", "Fragment " + i);
-                    
-                    ScheduleConfirmationFragment c = (ScheduleConfirmationFragment) f;
+                    for (int i = 0; i < scheduleCount; i++) {
 
-                    if (c.validate()) {
-                        PrescriptionWrapper w = prescriptionList.get(i);
-                        Log.d("PRESCRIPTION", "Validate!");
-                        String cn = w.cn;
+                        Log.d("PRESCRIPTION", "Item " + i);
 
-                        Medicine m = null;
+                        Fragment f = getViewPagerFragment(i + 1);
 
-                        if (cn != null) {
-                            if (Medicine.findByCn(cn) == null) {
-                                Log.d("PRESCRIPTION", "Saving medicine!");
-                                m = Medicine.fromPrescription(Prescription.findByCn(cn));
-                                m.save();
+                        if (f instanceof ScheduleConfirmationFragment) {
+
+                            Log.d("PRESCRIPTION", "Fragment " + i);
+
+                            ScheduleConfirmationFragment c = (ScheduleConfirmationFragment) f;
+
+                            if (c.validate()) {
+                                PrescriptionWrapper w = prescriptionList.get(i);
+                                Log.d("PRESCRIPTION", "Validate!");
+                                String cn = w.cn;
+
+                                Medicine m = null;
+
+                                if (cn != null) {
+                                    if (DB.medicines().findOneBy(Prescription.COLUMN_CN, cn) == null) {
+                                        Log.d("PRESCRIPTION", "Saving medicine!");
+                                        m = Medicine.fromPrescription(Prescription.findByCn(cn));
+                                        m.save();
+                                    }
+                                } else if (w.isGroup) {
+                                    m = new Medicine(Strings.firstPart(w.group.name));
+                                    Presentation pres = Presentation.expected(w.group.name, w.group.content);
+                                    m.setPresentation(pres != null ? pres : Presentation.PILLS);
+                                    m.save();
+                                } else {
+                                    throw new RuntimeException(" Prescription must have a cn or group reference");
+                                }
+
+                                Schedule s = c.getSchedule();
+                                List<ScheduleItem> items = c.getScheduleItems();
+                                s.setMedicine(m);
+                                s.save();
+
+                                for (ScheduleItem item : items) {
+                                    item.setSchedule(s);
+                                    item.save();
+                                    // add to daily schedule
+                                    new DailyScheduleItem(item).save();
+                                }
+                                // save and fire event
+                                Log.d("PRESCRIPTION", "Saving schedule!");
+                                s.save();
+
+                            } else {
+                                mViewPager.setCurrentItem(i + 1);
+                                Snack.show("Hmmmmmm....", ConfirmSchedulesActivity.this);
                             }
-                        } else if (w.isGroup) {
-                            m = new Medicine(Strings.firstPart(w.group.name));
-                            Presentation pres = Presentation.expected(w.group.name, w.group.content);
-                            m.setPresentation(pres != null ? pres : Presentation.PILLS);
-                            m.save();
-                        } else {
-                            throw new RuntimeException(" Prescription must have a cn or group reference");
                         }
-
-                        Schedule s = c.getSchedule();
-                        List<ScheduleItem> items = c.getScheduleItems();
-                        s.setMedicine(m);
-                        s.save();
-
-                        for (ScheduleItem item : items) {
-                            item.setSchedule(s);
-                            item.save();
-                            // add to daily schedule
-                            new DailyScheduleItem(item).save();
-                        }
-                        // save and fire event
-                        Log.d("PRESCRIPTION", "Saving schedule!");
-                        s.save();
-                        
-                    }else{
-                        mViewPager.setCurrentItem(i + 1);
-                        Snack.show("Hmmmmmm....", this);
                     }
-                }            
-            }
-            CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
-            AlarmScheduler.instance().updateAllAlarms(this);
-            ActiveAndroid.setTransactionSuccessful();            
+                    CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
+                    AlarmScheduler.instance().updateAllAlarms(ConfirmSchedulesActivity.this);
+                    return null;
+                }
+            });
             Toast.makeText(this, scheduleCount + " schedules saved!", Toast.LENGTH_SHORT).show();
-            
-        }catch (Exception e){
-            Log.e("ConfirmSchedulesActivity", "Error saving prescriptions", e);            
-        }finally {
-            if(ActiveAndroid.inTransaction())
-                ActiveAndroid.endTransaction();
+
+        } catch (
+                Exception e
+                )
+
+        {
+            Log.e("ConfirmSchedulesAct", "Error saving prescriptions", e);
         }
     }
 
@@ -271,7 +281,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
     public void onPageSelected(int i) {        
         updatePageTitle(i);
 
-        Log.d("ConfirmSchedulesActivity", " Page Selected: " + i);
+        Log.d("ConfirmSchedulesAct", " Page Selected: " + i);
 
         if (i == 0) {
             fab.setVisibility(View.INVISIBLE);

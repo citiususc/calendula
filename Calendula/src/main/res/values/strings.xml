@@ -81,6 +81,7 @@
     <string name="summary_title">Check and confirm</string>
     <string name="title_activity_schedule_list">Schedules</string>
     <string name="add_schedule_button">ADD SCHEDULE</string>
+    <string name="summary">Summary</string>
 
     <!-- Med presentations -->
     <string name="injections">Injections</string>

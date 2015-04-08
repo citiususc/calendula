@@ -169,6 +169,8 @@ public class AlarmScheduler {
         // get the schedule items for the current routine, excluding already taken
         List<ScheduleItem> doses = ScheduleUtils.getRoutineScheduleItems(routine, false);
 
+        Log.d(TAG, " Doses: " + doses.size());
+
         if (!doses.isEmpty()) {
 
             boolean notify = false;

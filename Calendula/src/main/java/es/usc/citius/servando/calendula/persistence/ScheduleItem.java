@@ -1,29 +1,31 @@
 package es.usc.citius.servando.calendula.persistence;
 
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
-import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
+import es.usc.citius.servando.calendula.database.DB;
 
 /**
  * Created by joseangel.pineiro on 7/9/14.
  */
-@Table(name = "ScheduleItems", id = ScheduleItem.COLUMN_ID)
-public class ScheduleItem extends Model {
+@DatabaseTable(tableName = "ScheduleItems")
+public class ScheduleItem {
+
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_SCHEDULE = "Schedule";
     public static final String COLUMN_ROUTINE = "Routine";
     public static final String COLUMN_DOSE = "Dose";
 
-    @Column(name = COLUMN_SCHEDULE, onDelete = Column.ForeignKeyAction.NO_ACTION, onUpdate = Column.ForeignKeyAction.NO_ACTION)
+    @DatabaseField(columnName = COLUMN_ID, generatedId = true)
+    private Long id;
+
+    @DatabaseField(columnName = COLUMN_SCHEDULE, foreign = true, foreignAutoRefresh = true)
     private Schedule schedule;
 
-
-    @Column(name = COLUMN_ROUTINE, onDelete = Column.ForeignKeyAction.NO_ACTION, onUpdate = Column.ForeignKeyAction.NO_ACTION)
+    @DatabaseField(columnName = COLUMN_ROUTINE, foreign = true, foreignAutoRefresh = true)
     private Routine routine;
 
-    @Column(name = COLUMN_DOSE)
+    @DatabaseField(columnName = COLUMN_DOSE)
     private float dose;
 
     public ScheduleItem() {
@@ -43,9 +45,12 @@ public class ScheduleItem extends Model {
         this.routine = routine;
     }
 
-    public void saveAndUpdateDailyAgenda() {
-        this.save();
-        DailyAgenda.instance().updateDailySchedule(this);
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Routine routine() {
@@ -93,11 +98,17 @@ public class ScheduleItem extends Model {
         this.dose = dose;
     }
 
+    // *************************************
+    // DB queries
+    // *************************************
+
+    public void save() {
+        DB.scheduleItems().save(this);
+    }
 
     public void deleteCascade() {
-        DailyScheduleItem item = DailyScheduleItem.findByScheduleItem(this);
-        item.delete();
-        this.delete();
+        DB.scheduleItems().deleteCascade(this);
     }
+
 
 }
