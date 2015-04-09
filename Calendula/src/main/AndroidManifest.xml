@@ -129,7 +129,7 @@
             android:value="4" />
         <meta-data
             android:name="AEMPS_DB_VERSION"
-            android:value="2" />
+            android:value="3" />
         <meta-data
             android:name="AA_MODELS"
             android:value="es.usc.citius.servando.calendula.persistence.DailyScheduleItem,              es.usc.citius.servando.calendula.persistence.Medicine,              es.usc.citius.servando.calendula.persistence.Routine,              es.usc.citius.servando.calendula.persistence.Schedule,              es.usc.citius.servando.calendula.persistence.ScheduleItem,              es.usc.citius.servando.calendula.util.medicine.Prescription" />

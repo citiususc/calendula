@@ -14,19 +14,20 @@ import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 
 /**
  * Created by joseangel.pineiro
  */
-public class PrescriptionStore {
+public class HomogeneousGroupStore {
 
-    private static final String TAG = "PrescriptionStore";
-    private static final String MEDS_CSV = "meds.csv";
+    private static final String TAG = "HomogeneousGroupStore";
+    private static final String GROUPS_CSV = "groups.csv";
     private static final String CSV_SPACER = "\\|";
 
-    public static void updatePrescriptionsFromCSV(final Context ctx, final boolean truncateBefore, final int newVersionCode) {
+    public static void updateGroupsFromCSV(final Context ctx, final boolean truncateBefore, final int newVersionCode) {
 
         final AssetManager assetManager = ctx.getAssets();
 
@@ -36,19 +37,17 @@ public class PrescriptionStore {
                 @Override
                 public Object call() throws Exception {
 
-                    if (truncateBefore && !Prescription.empty()) {
-                        Log.d(TAG, "Truncating prescriptions database...");
-                        // truncate prescriptions table
-                        DB.prescriptions().executeRaw("DELETE FROM Prescriptions;");
+                    if (truncateBefore && !HomogeneousGroup.empty()) {
+                        Log.d(TAG, "Truncating groups database...");
+                        // truncate groups table
+                        DB.groups().executeRaw("DELETE FROM Prescriptions;");
 
                     }
 
-                    Prescription p = null;
+                    HomogeneousGroup g = null;
 
-                    InputStream csvStream = assetManager.open(MEDS_CSV);
+                    InputStream csvStream = assetManager.open(GROUPS_CSV);
                     BufferedReader br = new BufferedReader(new InputStreamReader(csvStream));
-                    // step first line (headers)
-                    br.readLine();
                     // read prescriptions and save them
                     String line;
                     int i = 0;
@@ -57,11 +56,10 @@ public class PrescriptionStore {
                             Log.d(TAG, " Reading line " + i + "...");
                         }
                         i++;
-                        p = Prescription.fromCsv(line, CSV_SPACER);
-                        DB.prescriptions().save(p);
-                        // cn | id | name | dose | units | content
-                        //DB.prescriptions().executeRaw("INSERT INTO Prescriptions (Cn, Pid, Name, Dose, Packaging, Content, Generic, Prospect, Affectdriving) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);",
-                        //       new String[]{p.cn, p.pid, p.name, p.dose, String.valueOf(p.packagingUnits), p.content, String.valueOf(p.generic), String.valueOf(p.hasProspect), String.valueOf(p.affectsDriving)});
+                        g = HomogeneousGroup.fromCsv(line, CSV_SPACER);
+                        DB.groups().save(g);
+                        // group, name
+                        //DB.groups().executeRaw("INSERT INTO Groups (Group, Name) VALUES (?, ?);",new String[]{g.group, g.name});
                     }
                     br.close();
                     // update preferences version

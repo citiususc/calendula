@@ -13,6 +13,7 @@ import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
+import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Routine;
@@ -34,13 +35,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Schedule.class,
             ScheduleItem.class,
             DailyScheduleItem.class,
-            Prescription.class
+            Prescription.class,
+            HomogeneousGroup.class
     };
 
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
@@ -54,6 +56,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<DailyScheduleItem, Long> dailyScheduleItemsDao = null;
     // the DAO object we use to access the DailyScheduleItems table
     private Dao<Prescription, Long> prescriptionsDao = null;
+    // the DAO object we use to access the HomogeneousGroups table
+    private Dao<HomogeneousGroup, Long> homogeneousGroupsDao = null;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -87,16 +91,24 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, ConnectionSource connectionSource, int oldVersion, int newVersion) {
         try {
             Log.i(DatabaseHelper.class.getName(), "onUpgrade");
-            //TableUtils.dropTable(connectionSource, Medicine.class, true);
-            // after we drop the old databases, we create the new ones
-            //onCreate(db, connectionSource);
             Log.d(DatabaseHelper.class.getName(), "OldVersion: " + oldVersion + ", newVersion: " + newVersion);
+
+
+            switch (newVersion) {
+                //
+                // Database version 5: Add HomogeneousGroups table
+                //
+                case 5:
+                    TableUtils.createTable(connectionSource, HomogeneousGroup.class);
+            }
+
 
         } catch (Exception e) {
             Log.e(DatabaseHelper.class.getName(), "Can't upgrade databases", e);
             throw new RuntimeException(e);
         }
     }
+
 
     /**
      * Returns the Database Access Object (DAO) for our Medicines class. It will create it or just give the cached
@@ -162,6 +174,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             prescriptionsDao = getDao(Prescription.class);
         }
         return prescriptionsDao;
+    }
+
+    /**
+     * Returns the Database Access Object (DAO) for our HomogeneousGroup class. It will create it or just give the cached
+     * value.
+     */
+    public Dao<HomogeneousGroup, Long> getHomogeneousGroupsDao() throws SQLException {
+        if (homogeneousGroupsDao == null) {
+            homogeneousGroupsDao = getDao(HomogeneousGroup.class);
+        }
+        return homogeneousGroupsDao;
     }
 
     @Override

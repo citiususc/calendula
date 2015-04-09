@@ -22,6 +22,9 @@ import com.google.gson.Gson;
 import com.j256.ormlite.misc.TransactionManager;
 import com.melnykov.fab.FloatingActionButton;
 
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +38,7 @@ import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationEndFragmen
 import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationStartFragment;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
+import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
@@ -44,8 +48,6 @@ import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
-import es.usc.citius.servando.calendula.util.medicine.HomogeneusGroup;
-import es.usc.citius.servando.calendula.util.medicine.HomogeneusGroupHelper;
 
 public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener{
 
@@ -72,6 +74,8 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
     
     TextView medName;
     TextView title;
+
+    DateTimeFormatter df = DateTimeFormat.forPattern("yyMMdd");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +121,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                 }
             } else if (pw.g != null) {
 
-                HomogeneusGroup group = findGroup(pw.g);
+                HomogeneousGroup group = findGroup(pw.g);
                 if (group != null) {
                     Log.d("ConfirmSchedulesAct", "Found group: " + group.name);
                     pw.exists = true;
@@ -126,12 +130,23 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                     p.add(pw);
                 }
             }
+
+            if (pw.pk != null) {
+                for (PickupWrapper pkw : pw.pk) {
+                    Log.d("ConfirmSchedulesAct", "Pickup : " + df.parseDateTime(pkw.f).toString("dd/MM/yyyy"));
+                    Log.d("ConfirmSchedulesAct", "Pickup : " + df.parseDateTime(pkw.t).toString("dd/MM/yyyy"));
+                    Log.d("ConfirmSchedulesAct", "Pickup : " + pkw.tk);
+                }
+            }
+
+
+
         }
         return p;
     }
 
-    private HomogeneusGroup findGroup(String g) {
-        return HomogeneusGroupHelper.queryGroup(g);
+    private HomogeneousGroup findGroup(String g) {
+        return DB.groups().findOneBy(HomogeneousGroup.COLUMN_GROUP, g);
     }
 
 
@@ -195,7 +210,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                                     }
                                 } else if (w.isGroup) {
                                     m = new Medicine(Strings.firstPart(w.group.name));
-                                    Presentation pres = Presentation.expected(w.group.name, w.group.content);
+                                    Presentation pres = Presentation.expected(w.group.name, w.group.name);
                                     m.setPresentation(pres != null ? pres : Presentation.PILLS);
                                     m.save();
                                 } else {
@@ -352,11 +367,12 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
         public String cn;
         public String g;
         public String sk;
+        public List<PickupWrapper> pk;
         public ScheduleWrapper s;
 
 
         public Prescription prescription;
-        public HomogeneusGroup group;
+        public HomogeneousGroup group;
         
         public boolean exists;
 
@@ -367,6 +383,12 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
         public float d = -1;
         public int i = -1;
         public int p = -1;
+    }
+
+    public static class PickupWrapper implements Serializable {
+        public String t;
+        public String f;
+        public int tk = 0;
     }
 
 

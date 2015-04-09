@@ -35,6 +35,8 @@ public class DB {
     private static DailyScheduleItemDao DailyScheduleItems;
     // Prescriptions DAO
     private static PrescriptionDao Prescriptions;
+    // HomogeneousGroups DAO
+    private static HomogeneousGroupDao Groups;
 
     /**
      * Initialize database and DAOs
@@ -52,7 +54,8 @@ public class DB {
             ScheduleItems = new ScheduleItemDao(db);
             DailyScheduleItems = new DailyScheduleItemDao(db);
             Prescriptions = new PrescriptionDao(db);
-            // HomogeneusGroups
+            Groups = new HomogeneousGroupDao(db);
+
             Log.v(TAG, "DB initialized " + DB.DB_NAME);
         }
 
@@ -103,6 +106,10 @@ public class DB {
 
     public static PrescriptionDao prescriptions() {
         return Prescriptions;
+    }
+
+    public static HomogeneousGroupDao groups() {
+        return Groups;
     }
 
     public static void dropAndCreateDatabase() {
