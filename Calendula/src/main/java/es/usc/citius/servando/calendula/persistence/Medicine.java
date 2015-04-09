@@ -4,6 +4,7 @@ package es.usc.citius.servando.calendula.persistence;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.Collection;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.database.DB;
@@ -74,6 +75,10 @@ public class Medicine implements Comparable<Medicine> {
 
     public void setPresentation(Presentation presentation) {
         this.presentation = presentation;
+    }
+
+    public Collection<PickupInfo> pickups() {
+        return DB.pickups().findByMedicine(this);
     }
 
     @Override

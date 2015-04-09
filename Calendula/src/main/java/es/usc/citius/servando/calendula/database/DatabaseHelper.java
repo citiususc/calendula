@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
@@ -36,13 +37,16 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             ScheduleItem.class,
             DailyScheduleItem.class,
             Prescription.class,
-            HomogeneousGroup.class
+            // v5
+            HomogeneousGroup.class,
+            // v6
+            PickupInfo.class
     };
 
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
@@ -58,6 +62,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<Prescription, Long> prescriptionsDao = null;
     // the DAO object we use to access the HomogeneousGroups table
     private Dao<HomogeneousGroup, Long> homogeneousGroupsDao = null;
+    // the DAO object we use to access the pcikupInfo table
+    private Dao<PickupInfo, Long> pickupInfoDao = null;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -100,6 +106,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 //
                 case 5:
                     TableUtils.createTable(connectionSource, HomogeneousGroup.class);
+                    //
+                    // Database version 6: Add PickupInfo table
+                    //
+                case 6:
+                    TableUtils.createTable(connectionSource, PickupInfo.class);
             }
 
 
@@ -185,6 +196,18 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             homogeneousGroupsDao = getDao(HomogeneousGroup.class);
         }
         return homogeneousGroupsDao;
+    }
+
+
+    /**
+     * Returns the Database Access Object (DAO) for our PickupInfo class. It will create it or just give the cached
+     * value.
+     */
+    public Dao<PickupInfo, Long> getPickupInfosDao() throws SQLException {
+        if (pickupInfoDao == null) {
+            pickupInfoDao = getDao(PickupInfo.class);
+        }
+        return pickupInfoDao;
     }
 
     @Override

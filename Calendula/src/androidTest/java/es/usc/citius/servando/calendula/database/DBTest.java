@@ -3,6 +3,7 @@ package es.usc.citius.servando.calendula.database;
 import android.support.test.InstrumentationRegistry;
 import android.test.InstrumentationTestCase;
 
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
@@ -35,12 +37,18 @@ public class DBTest extends InstrumentationTestCase {
         DailyScheduleItem d = new DailyScheduleItem(i);
         d.setTakenToday(true);
 
+        PickupInfo pk = new PickupInfo();
+        pk.setFrom(LocalDate.parse("2015-01-01"));
+        pk.setTo(LocalDate.parse("2015-02-05"));
+        pk.setMedicine(m);
+
         // save some stuff
         DB.routines().save(r);
         DB.medicines().save(m);
         DB.schedules().save(s);
         DB.scheduleItems().save(i);
         DB.dailyScheduleItems().save(d);
+        DB.pickups().save(pk);
 
         // verify id property created
         assertNotNull(r.getId());
@@ -48,6 +56,9 @@ public class DBTest extends InstrumentationTestCase {
         assertNotNull(s.getId());
         assertNotNull(i.getId());
         assertNotNull(d.getId());
+        assertNotNull(pk.id());
+
+        assertEquals(DB.pickups().findByMedicine(m).get(0).from(), LocalDate.parse("2015-01-01"));
     }
 
     @Test
