@@ -5,6 +5,8 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import org.joda.time.LocalDate;
 
+import java.util.Comparator;
+
 import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalDatePersister;
 
 
@@ -82,5 +84,17 @@ public class PickupInfo {
     // DB QUERIES
     //
 
+
+    // Comparator
+
+    public static class PickupComparator implements Comparator<PickupInfo> {
+
+        @Override
+        public int compare(PickupInfo a, PickupInfo b) {
+            LocalDate fromA = a.from();
+            LocalDate fromB = b.from();
+            return fromA.compareTo(fromB);
+        }
+    }
 
 }

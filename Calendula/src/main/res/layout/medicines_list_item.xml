@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/no_stock_info_msg"
-            android:id="@+id/textView"
+            android:id="@+id/stock_info"
             android:layout_below="@+id/medicines_list_item_name"
             android:layout_alignLeft="@+id/medicines_list_item_name"
             android:layout_alignStart="@+id/medicines_list_item_name"

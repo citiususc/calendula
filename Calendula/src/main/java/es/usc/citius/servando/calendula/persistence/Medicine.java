@@ -4,10 +4,13 @@ package es.usc.citius.servando.calendula.persistence;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.database.DB;
+
+import static java.util.Collections.sort;
 
 
 /**
@@ -120,5 +123,18 @@ public class Medicine implements Comparable<Medicine> {
         return m;
     }
 
+    public String nextPickup() {
+        List<PickupInfo> pickupList = new ArrayList<>();
+        for (PickupInfo pickupInfo : pickups()) {
+            if (!pickupInfo.taken())
+                pickupList.add(pickupInfo);
+        }
 
+        if (!pickupList.isEmpty()) {
+            sort(pickupList, new PickupInfo.PickupComparator());
+            return pickupList.get(0).from().toString("dd MMMM");
+        }
+
+        return null;
+    }
 }

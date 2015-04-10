@@ -40,6 +40,7 @@ import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationStartFragm
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Schedule;
@@ -203,7 +204,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                                 Medicine m = null;
 
                                 if (cn != null) {
-                                    if (DB.medicines().findOneBy(Prescription.COLUMN_CN, cn) == null) {
+                                    if (DB.medicines().findOneBy(Medicine.COLUMN_CN, cn) == null) {
                                         Log.d("PRESCRIPTION", "Saving medicine!");
                                         m = Medicine.fromPrescription(Prescription.findByCn(cn));
                                         m.save();
@@ -215,6 +216,17 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                                     m.save();
                                 } else {
                                     throw new RuntimeException(" Prescription must have a cn or group reference");
+                                }
+
+                                if (m != null && w.pk != null && w.pk.size() > 0) {
+                                    for (PickupWrapper pkw : w.pk) {
+                                        PickupInfo pickupInfo = new PickupInfo();
+                                        pickupInfo.setTo(df.parseLocalDate(pkw.t));
+                                        pickupInfo.setFrom(df.parseLocalDate(pkw.f));
+                                        pickupInfo.taken(pkw.tk == 1 ? true : false);
+                                        pickupInfo.setMedicine(m);
+                                        DB.pickups().save(pickupInfo);
+                                    }
                                 }
 
                                 Schedule s = c.getSchedule();
