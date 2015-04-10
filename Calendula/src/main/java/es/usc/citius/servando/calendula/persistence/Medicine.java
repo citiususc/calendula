@@ -4,6 +4,8 @@ package es.usc.citius.servando.calendula.persistence;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import org.joda.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -92,7 +94,7 @@ public class Medicine implements Comparable<Medicine> {
     // *************************************
     // DB queries
     // *************************************
-    
+
     public static List<Medicine> findAll() {
         return DB.medicines().findAll();
     }
@@ -114,7 +116,7 @@ public class Medicine implements Comparable<Medicine> {
         DB.medicines().save(this);
     }
 
-    public static Medicine fromPrescription(Prescription p){
+    public static Medicine fromPrescription(Prescription p) {
         Medicine m = new Medicine();
         m.setCn(p.cn);
         m.setName(p.shortName());
@@ -123,7 +125,8 @@ public class Medicine implements Comparable<Medicine> {
         return m;
     }
 
-    public String nextPickup() {
+    public LocalDate nextPickupDate() {
+
         List<PickupInfo> pickupList = new ArrayList<>();
         for (PickupInfo pickupInfo : pickups()) {
             if (!pickupInfo.taken())
@@ -132,9 +135,14 @@ public class Medicine implements Comparable<Medicine> {
 
         if (!pickupList.isEmpty()) {
             sort(pickupList, new PickupInfo.PickupComparator());
-            return pickupList.get(0).from().toString("dd MMMM");
+            return pickupList.get(0).from();
         }
 
         return null;
+    }
+
+    public String nextPickup() {
+        LocalDate np = nextPickupDate();
+        return np != null ? np.toString("dd MMMM") : null;
     }
 }

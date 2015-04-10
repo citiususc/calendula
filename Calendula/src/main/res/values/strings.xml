@@ -258,5 +258,10 @@
     <string name="title_activity_confirm_schedules">Confirm schedules</string>
     <string name="confirm_prescription_x_of_y">Prescription %1$s of %2$s</string>
 
+    <string name="title_activity_calendar">Pickups calendar</string>
+    <string name="title_pickups_bottom_sheet">Pickups on %1$s</string>
+    <string name="pickup_interval">Until %1$s</string>
+    <string name="pickup_date_format">MMMM dd</string>
+
 
 </resources>

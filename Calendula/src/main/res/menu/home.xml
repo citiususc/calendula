@@ -13,6 +13,13 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/action_calendar"
+        android:title="Show pickups"
+        android:icon="@drawable/ic_event_white_48dp"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_scan"
         android:title="Scan QR"
         android:icon="@drawable/ic_plus_w"

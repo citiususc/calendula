@@ -71,7 +71,7 @@ public class PickupInfo {
         this.taken = taken;
     }
 
-    public Medicine getMedicine() {
+    public Medicine medicine() {
         return medicine;
     }
 

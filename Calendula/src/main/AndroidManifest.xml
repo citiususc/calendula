@@ -82,6 +82,11 @@
             android:label="ScanActivity"
             android:parentActivityName="es.usc.citius.servando.calendula.HomeActivity" />
         <activity
+            android:name="es.usc.citius.servando.calendula.activities.CalendarActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_calendar"
+            android:parentActivityName="es.usc.citius.servando.calendula.HomeActivity" />
+        <activity
             android:name="es.usc.citius.servando.calendula.activities.AlertFullScreenActivity"
             android:label="@string/title_activity_schedules"
             android:screenOrientation="portrait" />

@@ -28,14 +28,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.makeramen.RoundedImageView;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.Arrays;
 import java.util.List;
 
+import es.usc.citius.servando.calendula.activities.CalendarActivity;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.ReminderNotification;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
@@ -488,6 +487,14 @@ public class HomeActivity extends ActionBarActivity implements
         } else {
             menu.findItem(R.id.action_expand).setVisible(false);
         }
+
+        if (pageNum == 2) {
+            menu.findItem(R.id.action_calendar).setVisible(true);
+        } else {
+            menu.findItem(R.id.action_calendar).setVisible(false);
+        }
+
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -505,6 +512,9 @@ public class HomeActivity extends ActionBarActivity implements
                 return true;
             case R.id.action_scan:
                 startActivity(new Intent(this, ScanActivity.class));
+                return true;
+            case R.id.action_calendar:
+                startActivity(new Intent(this, CalendarActivity.class));
                 return true;
             case R.id.action_expand:
                 Log.d("Home", "ToogleExpand");

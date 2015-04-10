@@ -2,6 +2,8 @@ package es.usc.citius.servando.calendula.database;
 
 import com.j256.ormlite.dao.Dao;
 
+import org.joda.time.LocalDate;
+
 import java.sql.SQLException;
 import java.util.List;
 
@@ -30,4 +32,21 @@ public class PickupInfoDao extends GenericDao<PickupInfo, Long> {
         return findBy(PickupInfo.COLUMN_MEDICINE, m.getId());
     }
 
+    public List<PickupInfo> findByFrom(LocalDate d) {
+        return findBy(PickupInfo.COLUMN_FROM, d);
+    }
+
+    public PickupInfo findNext() {
+
+        try {
+            return dao.queryBuilder()
+                    .orderBy(PickupInfo.COLUMN_FROM, true)
+                    .where().eq(PickupInfo.COLUMN_TAKEN, false)
+                    .queryForFirst();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding model", e);
+        }
+
+    }
 }

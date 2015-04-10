@@ -1,0 +1,87 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:background="@color/android_blue_darker"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <com.squareup.timessquare.CalendarPickerView
+        android:layout_below="@+id/toolbar"
+        android:id="@+id/calendar_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/pickup_list_container">
+
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_pickups_bottom_sheet"
+            android:id="@+id/bottom_sheet_title"
+            android:layout_alignParentTop="true"
+            android:background="#fff"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/android_blue_darker"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp" />
+
+        <LinearLayout
+            android:id="@+id/pickup_list"
+            android:paddingLeft="26dp"
+            android:paddingRight="26dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:layout_below="@+id/bottom_sheet_title">
+
+            <include layout="@layout/calendar_pickup_list_item" />
+
+            <include layout="@layout/calendar_pickup_list_item" />
+
+            <include layout="@layout/calendar_pickup_list_item" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="5dip"
+            android:id="@+id/imageView4"
+            android:src="@drawable/daily_view_list_item_tab_shadow_bottom"
+            android:scaleType="fitXY"
+            android:alpha="0.5" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:text="Close"
+            android:id="@+id/close_pickup_list"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="15dp"
+            android:textSize="15dp" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
