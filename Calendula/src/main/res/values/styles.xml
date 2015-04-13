@@ -211,4 +211,22 @@
         <item name="android:shadowRadius">5</item>
     </style>
 
+
+    <style name="calendar_day">
+        <item name="android:textColor">#888888</item>
+    </style>
+
+    <style name="calendar_day_disabled">
+        <item name="android:textColor">#dcdcdc</item>
+    </style>
+
+    <style name="calendar_day_highlighted">
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="calendar_day_today">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
 </resources>
