@@ -20,6 +20,7 @@ import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
+import es.usc.citius.servando.calendula.scheduling.PickupReminderMgr;
 
 /**
  * Created by castrelo on 4/10/14.
@@ -44,6 +45,7 @@ public class CalendulaApp extends Application {
     public static final int ACTION_ROUTINE_DELAYED_TIME = 3;
     public static final int ACTION_DELAY_ROUTINE = 4;
     public static final int ACTION_CANCEL_ROUTINE = 5;
+    public static final int ACTION_CHECK_PICKUPS_ALARM = 6;
 
 
     // REQUEST CODES
@@ -61,17 +63,13 @@ public class CalendulaApp extends Application {
         // initialize SQLite engine
         initializeDatabase();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                DefaultDataGenerator.fillDBWithDummyData(getApplicationContext());
-                // initialize daily agenda
-                DailyAgenda.instance().setupForToday(CalendulaApp.this);
-                // setup alarm for daily agenda update
-                setupUpdateDailyAgendaAlarm();
-            }
-        }).start();
-
+        DefaultDataGenerator.fillDBWithDummyData(getApplicationContext());
+        // initialize daily agenda
+        DailyAgenda.instance().setupForToday(this);
+        // setup alarm for daily agenda update
+        setupUpdateDailyAgendaAlarm();
+        // set pickup reminder alarm
+        PickupReminderMgr.instance().setCheckPickupsAlarm(this);
         //exportDatabase(this, DB_NAME, new File(Environment.getExternalStorageDirectory() + File.separator + DB_NAME));
     }
 

@@ -108,6 +108,7 @@
         </activity>
 
         <receiver android:name="es.usc.citius.servando.calendula.scheduling.AlarmReceiver" />
+        <receiver android:name="es.usc.citius.servando.calendula.scheduling.PickupAlarmReceiver" />
         <receiver android:name="es.usc.citius.servando.calendula.scheduling.NotificationEventReceiver" />
         <receiver android:name="es.usc.citius.servando.calendula.scheduling.BootReceiver">
             <intent-filter>

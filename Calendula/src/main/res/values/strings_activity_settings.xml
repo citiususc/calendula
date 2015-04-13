@@ -12,6 +12,7 @@
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
     <string name="pref_title_new_alarm_notification">Medicine intake alarms</string>
+    <string name="pref_title_pickup_notification">Medicine pickup notifications</string>
     <string name="pref_title_insistent_alarms">Insistent notifications</string>
 
 

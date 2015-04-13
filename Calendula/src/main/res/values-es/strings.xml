@@ -291,6 +291,16 @@
     <string name="title_pickups_bottom_sheet">Recogidas el %1$s</string>
     <string name="pickup_interval">Hasta el %1$s</string>
     <string name="pickup_date_format">dd \'de\' MMMM</string>
+    <string-array name="calendar_weekday_names">
+        <item>NONE</item>
+        <item>DO</item>
+        <item>LU</item>
+        <item>MA</item>
+        <item>MI</item>
+        <item>JU</item>
+        <item>VI</item>
+        <item>SA</item>
+    </string-array>
 
 </resources>
 

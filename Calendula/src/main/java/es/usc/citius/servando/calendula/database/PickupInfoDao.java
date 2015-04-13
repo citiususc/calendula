@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.database;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.Where;
 
 import org.joda.time.LocalDate;
 
@@ -32,8 +33,23 @@ public class PickupInfoDao extends GenericDao<PickupInfo, Long> {
         return findBy(PickupInfo.COLUMN_MEDICINE, m.getId());
     }
 
-    public List<PickupInfo> findByFrom(LocalDate d) {
-        return findBy(PickupInfo.COLUMN_FROM, d);
+    public List<PickupInfo> findByFrom(LocalDate d, boolean includeTaken) {
+
+        try {
+
+            Where<PickupInfo, Long> where = dao.queryBuilder().where();
+            where.eq(PickupInfo.COLUMN_FROM, d);
+            if (!includeTaken) {
+                where.and();
+                where.eq(PickupInfo.COLUMN_TAKEN, false);
+            }
+            return where.query();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding model", e);
+        }
+
+        //return findBy(PickupInfo.COLUMN_FROM, d);
     }
 
     public PickupInfo findNext() {

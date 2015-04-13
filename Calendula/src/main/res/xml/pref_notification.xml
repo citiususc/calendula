@@ -47,5 +47,10 @@
         android:title="@string/pref_notification_tone"
         android:summary="@string/pref_notification_tone_sum" />
 
+    <CheckBoxPreference
+        android:key="alarm_pickup_notifications"
+        android:title="@string/pref_title_pickup_notification"
+        android:defaultValue="true" />
+
 
 </PreferenceScreen>

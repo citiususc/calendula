@@ -263,5 +263,16 @@
     <string name="pickup_interval">Until %1$s</string>
     <string name="pickup_date_format">MMMM dd</string>
 
+    <string-array name="calendar_weekday_names">
+        <item>NONE</item>
+        <item>SU</item>
+        <item>MO</item>
+        <item>TU</item>
+        <item>WE</item>
+        <item>TH</item>
+        <item>FR</item>
+        <item>SA</item>
+    </string-array>
+
 
 </resources>

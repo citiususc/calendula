@@ -213,7 +213,7 @@
 
 
     <style name="calendar_day">
-        <item name="android:textColor">#888888</item>
+        <item name="android:textColor">#666</item>
     </style>
 
     <style name="calendar_day_disabled">
@@ -226,7 +226,7 @@
 
     <style name="calendar_day_today">
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">#444444</item>
     </style>
 
 </resources>
