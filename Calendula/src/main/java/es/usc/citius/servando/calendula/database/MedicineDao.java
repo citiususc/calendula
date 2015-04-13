@@ -9,6 +9,7 @@ import java.util.concurrent.Callable;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 
 /**
@@ -43,6 +44,10 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
                 List<Schedule> schedules = Schedule.findByMedicine(m);
                 for (Schedule s : schedules) {
                     s.deleteCascade();
+                }
+                List<PickupInfo> pickups = DB.pickups().findByMedicine(m);
+                for (PickupInfo p : pickups) {
+                    DB.pickups().remove(p);
                 }
                 DB.medicines().remove(m);
                 return null;
