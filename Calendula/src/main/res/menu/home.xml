@@ -15,7 +15,7 @@
     <item
         android:id="@+id/action_calendar"
         android:title="Show pickups"
-        android:icon="@drawable/ic_event_white_48dp"
+        android:icon="@drawable/ic_event_available_white_48dp"
         android:orderInCategory="100"
         app:showAsAction="always" />
 

@@ -287,7 +287,7 @@
     <string name="driving_warning_gotit">Entendido</string>
     <string name="confirm_prescription_x_of_y">Prescripción %1$s de %2$s</string>
 
-    <string name="title_activity_calendar">Calendario e-Receta</string>
+    <string name="title_activity_calendar">Calendario</string>
     <string name="title_pickups_bottom_sheet">Recogidas el %1$s</string>
     <string name="pickup_interval">Hasta el %1$s</string>
     <string name="pickup_date_format">dd \'de\' MMMM</string>

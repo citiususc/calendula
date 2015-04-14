@@ -39,7 +39,6 @@ import java.util.Map;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 
 public class CalendarActivity extends ActionBarActivity {
@@ -118,6 +117,13 @@ public class CalendarActivity extends ActionBarActivity {
                 }, 500);
             }
 
+        } else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    calendar.selectDate(LocalDate.now().toDate(), true);
+                }
+            }, 500);
         }
 
     }
@@ -127,7 +133,7 @@ public class CalendarActivity extends ActionBarActivity {
 
         calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
 
-        final Map<Date, List<Medicine>> pickups = new HashMap<>();
+        final Map<Date, List<PickupInfo>> pickups = new HashMap<>();
         DateTime from = DateTime.now().minusMonths(2);
         DateTime to = DateTime.now().plusMonths(3);
         Interval interval = new Interval(from, to);
@@ -137,10 +143,9 @@ public class CalendarActivity extends ActionBarActivity {
             if (d != null && interval.contains(d.toDateTimeAtStartOfDay())) {
                 Date date = d.toDateTimeAtStartOfDay().toDate();
                 if (!pickups.containsKey(date)) {
-                    pickups.put(date, new ArrayList<Medicine>());
+                    pickups.put(date, new ArrayList<PickupInfo>());
                 }
-                pickups.get(date).add(p.medicine());
-                Log.d("Calendar", dtf.format(date) + ", " + p.medicine().name());
+                pickups.get(date).add(p);
             }
         }
 
@@ -175,10 +180,8 @@ public class CalendarActivity extends ActionBarActivity {
     }
 
     private boolean onDaySelected(LocalDate date) {
-        List<PickupInfo> from = DB.pickups().findByFrom(date, false);
-
+        List<PickupInfo> from = DB.pickups().findByFrom(date, true);
         selectedDate = date.toDateTimeAtStartOfDay().toDate();
-
         if (date.equals(LocalDate.now())) {
             showNotification();
         }
@@ -201,11 +204,27 @@ public class CalendarActivity extends ActionBarActivity {
 
         for (PickupInfo p : pickups) {
 
+            View v = i.inflate(R.layout.calendar_pickup_list_item, null);
+            TextView tv1 = ((TextView) v.findViewById(R.id.textView));
+            TextView tv2 = ((TextView) v.findViewById(R.id.textView2));
             String interval = getResources().getString(R.string.pickup_interval, p.to().toString(df));
 
-            View v = i.inflate(R.layout.calendar_pickup_list_item, null);
-            ((TextView) v.findViewById(R.id.textView)).setText(p.medicine().name());
-            ((TextView) v.findViewById(R.id.textView2)).setText(interval);
+            if (p.taken()) {
+                interval += " ✔";
+                tv1.setAlpha(0.5f);
+                //tv2.setAlpha(0.5f);
+            } else {
+                tv1.setAlpha(1f);
+                tv2.setAlpha(1f);
+            }
+
+            tv1.setText(p.medicine().name());
+            tv2.setText(interval);
+
+
+
+
+
             list.addView(v);
         }
     }
@@ -258,9 +277,9 @@ public class CalendarActivity extends ActionBarActivity {
     private static class PickupCellDecorator implements CalendarCellDecorator {
 
 
-        Map<Date, List<Medicine>> pickups;
+        Map<Date, List<PickupInfo>> pickups;
 
-        public PickupCellDecorator(Map<Date, List<Medicine>> pickups) {
+        public PickupCellDecorator(Map<Date, List<PickupInfo>> pickups) {
             this.pickups = pickups;
         }
 
@@ -269,11 +288,12 @@ public class CalendarActivity extends ActionBarActivity {
 
             boolean isCurrent = isCurrentMonth(cellView);
 
-            Log.d("Calendar", "DECORATE: " + dtf.format(date) + ", " + pickups.containsKey(date) + ", " + isCurrent + ", " + cellView.isEnabled());
+            Date today = new Date();
+            cellView.setAlpha(1f);
 
             if (pickups != null && isCurrent && pickups.containsKey(date)) {
-                List<Medicine> meds = pickups.get(date);
-                String count = "● " + meds.size() + "";
+                List<PickupInfo> pickupInfos = pickups.get(date);
+                String count = "● " + pickupInfos.size() + "";
                 String dateString = Integer.toString(date.getDate());
                 SpannableString string = new SpannableString(dateString + "\n" + count);
                 string.setSpan(new RelativeSizeSpan(0.8f), 0, dateString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -282,6 +302,20 @@ public class CalendarActivity extends ActionBarActivity {
                 boolean selected = date.equals(selectedDate);
                 cellView.setBackgroundResource(selected ? R.drawable.calendar_day_circle_selected : R.drawable.calendar_day_circle);
                 cellView.setTextAppearance(cellView.getContext(), R.style.calendar_day_highlighted);
+
+                boolean allTaken = true;
+                Log.d("Calendar", "- - - - - - Pickups:");
+                for (PickupInfo pki : pickupInfos) {
+                    Log.d("Calendar", "    " + dtf.format(pki.from().toDate()) + ", taken: " + pki.taken() + ", allTaken: " + allTaken);
+                    if (!pki.taken()) {
+                        allTaken = false;
+                    }
+                }
+
+                if (allTaken) {
+                    cellView.setAlpha(0.3f);
+                }
+
             } else if (!cellView.isEnabled()) {
                 cellView.setBackgroundResource(R.color.white);
                 cellView.setTextAppearance(cellView.getContext(), R.style.calendar_day_disabled);

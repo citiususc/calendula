@@ -24,7 +24,6 @@
         android:layout_height="match_parent"
         app:titleTextColor="#222"
         app:headerTextColor="@color/android_blue" />
-
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -40,25 +39,26 @@
             android:text="@string/title_pickups_bottom_sheet"
             android:id="@+id/bottom_sheet_title"
             android:layout_alignParentTop="true"
-            android:background="#fff"
+            android:background="#f7f7f7"
             android:layout_marginTop="5dp"
             android:textColor="@color/android_blue_darker"
             android:textStyle="bold"
             android:textSize="18dp"
             android:paddingLeft="18dp"
             android:paddingRight="16dp"
-            android:paddingTop="16dp" />
+            android:paddingTop="16dp"
+            android:fontFamily="sans-serif-light" />
 
         <LinearLayout
             android:id="@+id/pickup_list"
-            android:paddingLeft="26dp"
+            android:paddingLeft="18dp"
             android:paddingRight="26dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="#f7f7f7"
             android:layout_below="@+id/bottom_sheet_title">
 
             <include layout="@layout/calendar_pickup_list_item" />
@@ -85,9 +85,19 @@
             android:id="@+id/close_pickup_list"
             android:layout_marginRight="16dp"
             android:layout_marginTop="15dp"
+            style="?android:attr/borderlessButtonStyle"
             android:textSize="15dp" />
 
     </RelativeLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="5dp"
+        android:id="@+id/tabs_shadow"
+        android:src="@drawable/daily_view_list_item_tab_shadow_top"
+        android:layout_below="@+id/toolbar"
+        android:scaleType="fitXY"
+        android:alpha="0.5" />
 
 
 </RelativeLayout>
