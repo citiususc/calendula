@@ -19,7 +19,8 @@
     <color name="android_blue">#33B5E5</color>
     <color name="android_blue_dark">#0099CC</color>
     <color name="android_blue_darker">#0077aa</color>
-    <color name="android_blue_statusbar">#004F71</color>
+    <color name="android_blue_statusbar">#006f9f</color>
+    <!--#004F71-->
     <color name="android_blue_light">#5533B5E5</color>
     <color name="white_80">#EEFFFFFF</color>
     <color name="white_50">#55FFFFFF</color>

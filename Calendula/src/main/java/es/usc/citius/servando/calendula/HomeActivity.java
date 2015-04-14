@@ -701,7 +701,7 @@ public class HomeActivity extends ActionBarActivity implements
             tabs.setVisibility(View.GONE);
             tabsShadow.setVisibility(View.GONE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+                //getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
             }
             setActionBarColor(getResources().getColor(R.color.transparent));
 

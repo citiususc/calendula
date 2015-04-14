@@ -11,7 +11,7 @@
     <es.usc.citius.servando.calendula.util.view.ScrimInsetsFrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        app:insetForeground="#5000"
+        app:insetForeground="#1000"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         android:background="@color/android_blue_dark">
@@ -69,7 +69,7 @@
                 android:src="@drawable/daily_view_list_item_tab_shadow_top"
                 android:layout_below="@+id/tabs"
                 android:scaleType="fitXY"
-                android:alpha="0.7" />
+                android:alpha="0.5" />
 
         </RelativeLayout>
 
