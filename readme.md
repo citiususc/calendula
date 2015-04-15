@@ -28,12 +28,5 @@ Screenshots
 ![Schedules Detail](https://dl.dropboxusercontent.com/u/4213618/calendula/screenshots/5.png)
 
 
-Contribute
-==========
-Feel free to fork and send a pull request if you want to contribute to this project. 
-
-Notice that Calendula is licensed under the terms of the [GPL v3 license](LICENSE.md), so by submitting content to the Calendula repository, you release your work to the public domain.
-
-
 
 
