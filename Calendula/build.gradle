@@ -108,6 +108,7 @@ dependencies {
     compile 'com.squareup:android-times-square:1.6.0@aar'
 
     // Tab strip
+    compile 'com.ogaclejapan.smarttablayout:library:1.1.0@aar'
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
 
     // Event bus

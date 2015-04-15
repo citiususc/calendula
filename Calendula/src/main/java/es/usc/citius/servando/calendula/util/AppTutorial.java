@@ -8,12 +8,12 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 
-import com.astuetz.PagerSlidingTabStrip;
 import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.PointTarget;
 import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import java.util.HashMap;
 
@@ -176,7 +176,7 @@ public class AppTutorial {
         }
     }
 
-    public void init(final Activity activity, PagerSlidingTabStrip tabs) {
+    public void init(final Activity activity, SmartTabLayout tabs) {
 
 
         PointF size = Screen.getDpSize(activity);
@@ -190,8 +190,6 @@ public class AppTutorial {
         PointTarget ptr = new PointTarget(new Point(gap * 3, pointY));
         PointTarget ptm = new PointTarget(new Point(gap * 5, pointY));
         PointTarget pts = new PointTarget(new Point(gap * 7, pointY));
-
-        Log.d(TAG, "Point " + pointY + ", " + tabs.getScrollOffset() + ", " + tabs.getChildAt(0).getId());
 
         stages.put(WELCOME, new ShowcaseInfo(R.string.tutorial_welcome_title, R.string.tutorial_welcome_text, pth));
 

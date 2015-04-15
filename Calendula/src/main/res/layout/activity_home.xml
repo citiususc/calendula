@@ -53,13 +53,47 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 android:layout_marginTop="@dimen/status_bar_height" />
 
-            <com.astuetz.PagerSlidingTabStrip
+            <!--<com.astuetz.PagerSlidingTabStrip
                 android:id="@+id/tabs"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/tabs_height"
                 android:background="@color/android_blue_darker"
                 android:elevation="50dp"
-                android:layout_below="@+id/toolbar" />
+                android:layout_below="@+id/toolbar" />-->
+
+            <com.ogaclejapan.smarttablayout.SmartTabLayout
+                android:id="@+id/tabs"
+                android:layout_below="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tabs_height"
+                app:stl_indicatorAlwaysInCenter="false"
+                app:stl_indicatorInFront="false"
+                app:stl_indicatorInterpolation="smart"
+                app:stl_indicatorColor="#fff"
+                app:stl_indicatorThickness="@dimen/tab_indicator_height"
+                app:stl_indicatorCornerRadius="0dp"
+                app:stl_underlineThickness="3dp"
+                app:stl_underlineColor="@color/transparent"
+                app:stl_dividerThickness="0dp"
+                app:stl_dividerColor="@color/transparent"
+                app:stl_defaultTabTextAllCaps="true"
+                app:stl_defaultTabTextColor="#FFF"
+                app:stl_defaultTabTextSize="12sp"
+                app:stl_defaultTabTextHorizontalPadding="16dp"
+                app:stl_defaultTabTextMinWidth="100dp"
+                app:stl_distributeEvenly="true" />
+
+            <!-- tabs.setShouldExpand(true);
+            tabs.setAllCaps(true);
+            tabs.setTabPaddingLeftRight(30);
+            tabs.setShouldExpand(true);
+            tabs.setDividerColor(getResources().getColor(R.color.white_50));
+            tabs.setDividerColor(getResources().getColor(R.color.transparent));
+            tabs.setIndicatorHeight(getResources().getDimensionPixelSize(R.dimen.tab_indicator_height));
+
+            tabs.setIndicatorColor(getResources().getColor(R.color.white));
+            tabs.setTextColor(getResources().getColor(R.color.white_80));
+            tabs.setUnderlineColor(getResources().getColor(R.color.transparent));-->
 
 
             <ImageView

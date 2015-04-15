@@ -293,14 +293,15 @@ public class CalendarActivity extends ActionBarActivity {
 
             if (pickups != null && isCurrent && pickups.containsKey(date)) {
                 List<PickupInfo> pickupInfos = pickups.get(date);
-                String count = "● " + pickupInfos.size() + "";
+                String count = "";//"● " + pickupInfos.size() + "";
                 String dateString = Integer.toString(date.getDate());
-                SpannableString string = new SpannableString(dateString + "\n" + count);
+                SpannableString string = new SpannableString(dateString); // "\n" + count
                 string.setSpan(new RelativeSizeSpan(0.8f), 0, dateString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                string.setSpan(new RelativeSizeSpan(0.5f), dateString.length(), dateString.length() + 1 + count.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//                string.setSpan(new RelativeSizeSpan(0.7f), dateString.length(), dateString.length() + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//                string.setSpan(new RelativeSizeSpan(0.5f), dateString.length() + 1, dateString.length() + 1 + count.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 cellView.setText(string);
                 boolean selected = date.equals(selectedDate);
-                cellView.setBackgroundResource(selected ? R.drawable.calendar_day_circle_selected : R.drawable.calendar_day_circle);
+                cellView.setBackgroundResource(selected ? R.drawable.calendar_day_circle : R.drawable.green_cross);
                 cellView.setTextAppearance(cellView.getContext(), R.style.calendar_day_highlighted);
 
                 boolean allTaken = true;

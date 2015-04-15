@@ -27,9 +27,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.astuetz.PagerSlidingTabStrip;
 import com.makeramen.RoundedImageView;
 import com.melnykov.fab.FloatingActionButton;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import java.util.Arrays;
 import java.util.List;
@@ -95,7 +95,7 @@ public class HomeActivity extends ActionBarActivity implements
     String[] titles;
 
     Toolbar toolbar;
-    PagerSlidingTabStrip tabs;
+    SmartTabLayout tabs;
     Handler mHandler;
     View tabsShadow;
 
@@ -135,14 +135,14 @@ public class HomeActivity extends ActionBarActivity implements
         mSectionsPagerAdapter = new HomePageAdapter(getSupportFragmentManager(), this, this);
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
-        tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabs = (SmartTabLayout) findViewById(R.id.tabs);
         tabsShadow = findViewById(R.id.tabs_shadow);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(5);
 
 
         tabs.setOnPageChangeListener(this);
-        tabs.setShouldExpand(true);
+       /* tabs.setShouldExpand(true);
         tabs.setAllCaps(true);
         tabs.setTabPaddingLeftRight(30);
         tabs.setShouldExpand(true);
@@ -152,7 +152,7 @@ public class HomeActivity extends ActionBarActivity implements
 
         tabs.setIndicatorColor(getResources().getColor(R.color.white));
         tabs.setTextColor(getResources().getColor(R.color.white_80));
-        tabs.setUnderlineColor(getResources().getColor(R.color.transparent));
+        tabs.setUnderlineColor(getResources().getColor(R.color.transparent));*/
 
         tabs.setBackgroundColor(getResources().getColor(R.color.transparent));
         tabs.setVisibility(View.GONE);
@@ -178,7 +178,7 @@ public class HomeActivity extends ActionBarActivity implements
         CalendulaApp.eventBus().register(this);
 
         setTutorial(new AppTutorial());
-        getTutorial().init(this, tabs);
+        //getTutorial().init(this, tabs);
 
         Log.d(TAG, "OnCreate  - Routine Id Extra: " + getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l));
         checkReminder(getIntent());
