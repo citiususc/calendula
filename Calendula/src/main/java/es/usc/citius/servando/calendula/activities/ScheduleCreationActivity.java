@@ -22,24 +22,25 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.activeandroid.ActiveAndroid;
 import com.astuetz.PagerSlidingTabStrip;
+import com.j256.ormlite.misc.TransactionManager;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 import com.nispok.snackbar.enums.SnackbarType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.ScheduleSummaryFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleTimetableFragment;
 import es.usc.citius.servando.calendula.fragments.SelectMedicineListFragment;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Persistence;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
@@ -156,87 +157,100 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
     public void createSchedule() {
         try {
-            ActiveAndroid.beginTransaction();
-            // save schedule
-            Schedule s = new es.usc.citius.servando.calendula.persistence.Schedule();
-            s.setMedicine(ScheduleCreationHelper.instance().getSelectedMed());
-            s.setDays(ScheduleCreationHelper.instance().getSelectedDays());
-            s.save();
 
-            for (ScheduleItem item : ScheduleCreationHelper.instance().getScheduleItems()) {
-                item.setSchedule(s);
-                item.save();
-                // add to daily schedule
-                new DailyScheduleItem(item).save();
-            }
-            // save and fire event
-            Persistence.instance().save(s);
-            ActiveAndroid.setTransactionSuccessful();
+            final Schedule s = new es.usc.citius.servando.calendula.persistence.Schedule();
+
+            TransactionManager.callInTransaction(DB.helper().getConnectionSource(), new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    // save schedule
+
+                    s.setMedicine(ScheduleCreationHelper.instance().getSelectedMed());
+                    s.setDays(ScheduleCreationHelper.instance().getSelectedDays());
+                    s.save();
+
+                    Log.d(TAG, "Saving schedule...");
+
+                    for (ScheduleItem item : ScheduleCreationHelper.instance().getScheduleItems()) {
+                        item.setSchedule(s);
+                        item.save();
+                        Log.d(TAG, "Saving item..." + item.getId());
+                        // add to daily schedule
+                        DailyScheduleItem dsi = new DailyScheduleItem(item);
+                        dsi.save();
+                        Log.d(TAG, "Saving daily schedule item..." + dsi.getId() + ", " + dsi.scheduleItem().getId());
+                    }
+                    // save and fire event
+                    DB.schedules().saveAndFireEvent(s);
+
+                    return null;
+                }
+            });
+
             ScheduleCreationHelper.instance().clear();
-            AlarmScheduler.instance().onCreateOrUpdateSchedule(s, this);
+            AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ScheduleCreationActivity.this);
             Log.d(TAG, "Schedule saved successfully!");
             Snack.show(R.string.schedule_created_message, this);
             finish();
         } catch (Exception e) {
             Snack.show("Error creating schedule", this);
             e.printStackTrace();
-        } finally {
-            if (ActiveAndroid.inTransaction()) {
-                ActiveAndroid.endTransaction();
-            }
         }
     }
 
 
     public void updateSchedule() {
         try {
-            ActiveAndroid.beginTransaction();
-            // save schedule
-            Schedule s = mSchedule;
-            s.setMedicine(ScheduleCreationHelper.instance().getSelectedMed());
-            s.setDays(ScheduleCreationHelper.instance().getSelectedDays());
+            final Schedule s = mSchedule;
 
-            List<Long> routinesTaken = new ArrayList<Long>();
+            TransactionManager.callInTransaction(DB.helper().getConnectionSource(), new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    // save schedule
 
-            for (ScheduleItem item : s.items()) {
-                DailyScheduleItem d = DailyScheduleItem.findByScheduleItem(item);
-                // if taken today, add to the list
-                if (d.takenToday()) {
-                    routinesTaken.add(item.routine().getId());
+                    s.setMedicine(ScheduleCreationHelper.instance().getSelectedMed());
+                    s.setDays(ScheduleCreationHelper.instance().getSelectedDays());
+
+                    List<Long> routinesTaken = new ArrayList<Long>();
+
+                    for (ScheduleItem item : s.items()) {
+                        DailyScheduleItem d = DailyScheduleItem.findByScheduleItem(item);
+                        // if taken today, add to the list
+                        if (d.takenToday()) {
+                            routinesTaken.add(item.routine().getId());
+                        }
+                        item.deleteCascade();
+                    }
+
+                    // save new items
+                    for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems()) {
+
+                        ScheduleItem item = new ScheduleItem();
+                        item.setDose(i.dose());
+                        item.setRoutine(i.routine());
+                        item.setSchedule(s);
+                        item.save();
+                        // add to daily schedule
+                        DailyScheduleItem dsi = new DailyScheduleItem(item);
+                        if (routinesTaken.contains(item.routine().getId())) {
+                            dsi.setTakenToday(true);
+                        }
+                        dsi.save();
+                    }
+                    // save and fire event
+                    DB.schedules().saveAndFireEvent(s);
+                    return null;
                 }
-                item.deleteCascade();
-            }
+            });
 
-            // save new items
-            for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems()) {
-
-                ScheduleItem item = new ScheduleItem();
-                item.setDose(i.dose());
-                item.setRoutine(i.routine());
-                item.setSchedule(s);
-                item.save();
-                // add to daily schedule
-                DailyScheduleItem dsi = new DailyScheduleItem(item);
-                if (routinesTaken.contains(item.routine().getId())) {
-                    dsi.setTakenToday(true);
-                }
-                dsi.save();
-            }
-            // save and fire event
-            Persistence.instance().save(s);
-            ActiveAndroid.setTransactionSuccessful();
             ScheduleCreationHelper.instance().clear();
-            AlarmScheduler.instance().onCreateOrUpdateSchedule(s, this);
+            AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ScheduleCreationActivity.this);
             Log.d(TAG, "Schedule saved successfully!");
             Toast.makeText(this, R.string.schedule_created_message, Toast.LENGTH_SHORT).show();
             finish();
         } catch (Exception e) {
             Toast.makeText(this, "Error creating schedule!", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
-        } finally {
-            if (ActiveAndroid.inTransaction()) {
-                ActiveAndroid.endTransaction();
-            }
         }
     }
 
@@ -419,7 +433,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
                 .setCancelable(true)
                 .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Persistence.instance().deleteCascade(s);
+                        DB.schedules().deleteCascade(s, true);
                         finish();
                     }
                 })
@@ -506,11 +520,11 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 0) {
-                return "Medicina";
+                return getString(R.string.medicine);
             } else if (position == 1) {
-                return " Pauta  ";
+                return getString(R.string.schedule);
             } else {
-                return "Resumen ";
+                return getString(R.string.summary);
             }
         }
 
@@ -523,7 +537,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
 
     public void onEvent(PersistenceEvents.MedicineAddedEvent event) {
-        com.activeandroid.util.Log.d("onEvent", event.id + " ----");
+        Log.d("onEvent", event.id + " ----");
         ((SelectMedicineListFragment) getViewPagerFragment(0)).setSelectedMed(event.id);
     }
 

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 
@@ -37,7 +38,7 @@ public class RoutinesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_routines_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.routines_list);
-        mRoutines = Routine.findAll();
+        mRoutines = DB.routines().findAll();
         adapter = new RoutinesListAdapter(getActivity(), R.layout.daily_view_hour, mRoutines);
         listview.setAdapter(adapter);
         return rootView;
@@ -133,7 +134,7 @@ public class RoutinesListFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int id) {
                         // cancel routine alarm and delete it
                         AlarmScheduler.instance().onDeleteRoutine(r, getActivity());
-                        r.deleteCascade();
+                        DB.routines().deleteCascade(r, true);
                         notifyDataChange();
                     }
                 })
@@ -155,7 +156,7 @@ public class RoutinesListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            mRoutines = Routine.findAll();
+            mRoutines = DB.routines().findAll();
 
             return null;
         }

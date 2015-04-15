@@ -111,6 +111,7 @@
             android:label="@string/title_activity_agenda_detail"
             android:screenOrientation="portrait" />
 
+
         <meta-data
             android:name="AA_DB_NAME"
             android:value="calendula.db" />

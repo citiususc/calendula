@@ -1,51 +1,51 @@
 package es.usc.citius.servando.calendula.persistence;
 
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
-import com.activeandroid.query.Select;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
 import java.util.List;
 
+import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimePersister;
+
 /**
- * Created by castrelo on 4/10/14.
+ * Created by castrelo
  */
-@Table(name = "DailyScheduleItems", id = DailyScheduleItem.COLUMN_ID)
-public class DailyScheduleItem extends Model {
+@DatabaseTable(tableName = "DailyScheduleItems")
+public class DailyScheduleItem {
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_SCHEDULE_ITEM = "ScheduleItem";
-
-    public static final String COLUMN_DATE = "Date";
     public static final String COLUMN_TAKEN_TODAY = "TakenToday";
     public static final String COLUMN_TIME_TAKEN = "TimeTaken";
 
-//    @Column(name = COLUMN_DATE)
-//    private DateTime date;
+    @DatabaseField(columnName = COLUMN_ID, generatedId = true)
+    private Long id;
 
-    @Column(name = COLUMN_SCHEDULE_ITEM, onDelete = Column.ForeignKeyAction.NO_ACTION, onUpdate = Column.ForeignKeyAction.NO_ACTION)
+    @DatabaseField(columnName = COLUMN_SCHEDULE_ITEM, foreign = true, foreignAutoRefresh = true)
     private ScheduleItem scheduleItem;
 
-    @Column(name = COLUMN_TAKEN_TODAY)
+    @DatabaseField(columnName = COLUMN_TAKEN_TODAY)
     private boolean takenToday;
 
-    @Column(name = COLUMN_TIME_TAKEN)
+    @DatabaseField(columnName = COLUMN_TIME_TAKEN, persisterClass = LocalTimePersister.class)
     private LocalTime timeTaken;
 
     public DailyScheduleItem() {
     }
 
-    public DailyScheduleItem(DateTime date, ScheduleItem scheduleItem) {
-//        this.date = date;
+    public DailyScheduleItem(ScheduleItem scheduleItem) {
         this.scheduleItem = scheduleItem;
     }
 
-    public DailyScheduleItem(ScheduleItem scheduleItem) {
-//        this.date = scheduleItem.routine().time().toDateTimeToday();
-        this.scheduleItem = scheduleItem;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalTime timeTaken() {
@@ -54,10 +54,6 @@ public class DailyScheduleItem extends Model {
 
     public ScheduleItem scheduleItem() {
         return scheduleItem;
-    }
-
-    public void setScheduleItem(ScheduleItem scheduleItem) {
-        this.scheduleItem = scheduleItem;
     }
 
     public void setTimeTaken(LocalTime date) {
@@ -72,6 +68,8 @@ public class DailyScheduleItem extends Model {
         this.takenToday = takenToday;
         if (takenToday) {
             timeTaken = LocalTime.now();
+        } else {
+            timeTaken = null;
         }
     }
 
@@ -85,39 +83,23 @@ public class DailyScheduleItem extends Model {
                 '}';
     }
 
-
     public static DailyScheduleItem findById(long id) {
-        return new Select().from(DailyScheduleItem.class)
-                .where(COLUMN_ID + " = ?", id)
-                .executeSingle();
+        return DB.dailyScheduleItems().findById(id);
     }
 
 
     public static List<DailyScheduleItem> findAll() {
-        return new Select().from(DailyScheduleItem.class)
-                .execute();
+        return DB.dailyScheduleItems().findAll();
     }
 
     public static DailyScheduleItem findByScheduleItem(ScheduleItem item) {
-        return new Select().from(DailyScheduleItem.class)
-                .where(COLUMN_SCHEDULE_ITEM + " = ?", item.getId())
-                .executeSingle();
+        return DB.dailyScheduleItems().findByScheduleItem(item);
     }
 
-    public static List<DailyScheduleItem> fromDate(DateTime date) {
-        // get one day interval
-        String start = date.withTimeAtStartOfDay().toString("yy/mm/dd kk:mm");
-        String end = date.plusDays(1).withTimeAtStartOfDay().toString("yy/mm/dd kk:mm");
-
-        return new Select().from(DailyScheduleItem.class)
-                .where(COLUMN_DATE + " BETWEEN ? AND ?", start, end)
-                .execute();
+    public void save() {
+        DB.dailyScheduleItems().save(this);
     }
 
-    public static void removeAll() {
-        for (DailyScheduleItem i : findAll()) {
-            i.delete();
-        }
-    }
+
 }
 

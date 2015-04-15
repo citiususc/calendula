@@ -2,7 +2,6 @@ package es.usc.citius.servando.calendula.persistence;
 
 import android.util.Log;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
 import java.util.Arrays;
@@ -52,7 +51,7 @@ public class Testing {
         ScheduleItem item = new ScheduleItem(s, r, 1);
         item.save();
 
-        DailyScheduleItem dsi = new DailyScheduleItem(item.routine().time().toDateTimeToday(), item);
+        DailyScheduleItem dsi = new DailyScheduleItem(item);
         dsi.save();
 
 
@@ -75,9 +74,9 @@ public class Testing {
             Log.d(TAG, "Schedule: " + schedule.medicine().name() + ", " + Arrays.toString(schedule.days()));
         }
 
-        for (DailyScheduleItem d : DailyScheduleItem.fromDate(DateTime.now())) {
-            Log.d(TAG, "DSI: " + d.toString());
-        }
+//        for (DailyScheduleItem d : DailyScheduleItem.fromDate(DateTime.now())) {
+//            Log.d(TAG, "DSI: " + d.toString());
+//        }
     }
 
 }

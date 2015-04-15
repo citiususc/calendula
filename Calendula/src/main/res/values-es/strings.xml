@@ -78,6 +78,7 @@
     <string name="summary_title">Revisa y confirma</string>
     <string name="title_activity_schedule_list">Pautas</string>
     <string name="add_schedule_button">AÑADIR PAUTA</string>
+    <string name="summary">Resumen</string>
 
     <!-- Med presentations -->
     <string name="injections">Inyecciones</string>
