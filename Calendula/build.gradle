@@ -31,13 +31,14 @@ def getDate() {
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.0.2"
+    buildToolsVersion "21.1.2"
     defaultConfig {
         minSdkVersion 11
         targetSdkVersion 21
         versionCode 15
         versionName "1.3-beta-1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     packagingOptions {
@@ -84,10 +85,14 @@ dependencies {
     compile 'com.doomonafireball.betterpickers:library:1.5.3'
     compile 'com.github.filippudak.progresspieview:library:1.0.+'
     compile 'com.github.amlcurran.showcaseview:library:5.0.0'
-    compile 'com.android.support:appcompat-v7:21.0.0'
-    compile 'com.android.support:cardview-v7:21.0.0'
-    compile 'com.android.support:recyclerview-v7:21.0.0'
-    compile 'com.android.support:palette-v7:21.0.0'
+
+    // support
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:cardview-v7:21.0.3'
+    compile 'com.android.support:recyclerview-v7:21.0.3'
+    compile 'com.android.support:palette-v7:21.0.3'
+    compile 'com.android.support:support-v4:21.0.3'
+
     compile 'joda-time:joda-time:2.3'
     compile 'com.makeramen:roundedimageview:1.5.0'
     compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.1.0'
@@ -95,7 +100,6 @@ dependencies {
     compile 'com.melnykov:floatingactionbutton:1.1.0'
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'de.greenrobot:eventbus:2.2.1'
-    compile 'com.android.support:support-v4:21.0.0'
 
     compile 'com.j256.ormlite:ormlite-android:4.45'
 
@@ -105,5 +109,8 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:1.9.5"
+
+    // google ref 2445
+    compile 'org.scala-saddle:google-rfc-2445:20110304'
 
 }

@@ -7,14 +7,18 @@ import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
@@ -40,7 +44,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 7;
 
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
@@ -87,15 +91,51 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, ConnectionSource connectionSource, int oldVersion, int newVersion) {
         try {
             Log.i(DatabaseHelper.class.getName(), "onUpgrade");
-            //TableUtils.dropTable(connectionSource, Medicine.class, true);
-            // after we drop the old databases, we create the new ones
-            //onCreate(db, connectionSource);
             Log.d(DatabaseHelper.class.getName(), "OldVersion: " + oldVersion + ", newVersion: " + newVersion);
+
+
+            switch (newVersion) {
+                //
+                // Database version 7: Add Ical
+                //
+                case 7:
+                    migrateToICal();
+            }
+
 
         } catch (Exception e) {
             Log.e(DatabaseHelper.class.getName(), "Can't upgrade databases", e);
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Method that migrate schedules to the ical format
+     */
+    private void migrateToICal() throws SQLException {
+
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Rrule TEXT;");
+
+        // update schedules
+        TransactionManager.callInTransaction(getConnectionSource(), new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                // iterate over schedules and replace days[] with rrule
+                List<Schedule> schedules = getSchedulesDao().queryForAll();
+                Log.d(TAG, "Upgrade " + schedules.size() + " schedules");
+                for (Schedule s : schedules) {
+                    if (s.getRepetition() == null) {
+                        s.setRepetition(new RepetitionRule(RepetitionRule.DEFAULT_ICAL_VALUE));
+                    }
+                    s.setDays(s.getLegacyDays());
+                    s.save();
+                }
+
+                return null;
+            }
+        });
+
+
     }
 
     /**

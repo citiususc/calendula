@@ -7,6 +7,7 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.typeSerializers.BooleanArrayPersister;
+import es.usc.citius.servando.calendula.persistence.typeSerializers.RRulePersister;
 
 
 /**
@@ -18,6 +19,7 @@ public class Schedule {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_MEDICINE = "Medicine";
     public static final String COLUMN_DAYS = "Days";
+    public static final String COLUMN_RRULE = "Rrule";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
@@ -28,7 +30,22 @@ public class Schedule {
     @DatabaseField(columnName = COLUMN_DAYS, persisterClass = BooleanArrayPersister.class)
     private boolean[] days = new boolean[]{true, true, true, true, true, true, true};
 
+    public RepetitionRule getRepetition() {
+        return rrule;
+    }
+
+    public void setRepetition(RepetitionRule rrule) {
+        this.rrule = rrule;
+    }
+
+    /**
+     * See: http://google-rfc-2445.googlecode.com/svn/trunk/rfc2445.html
+     */
+    @DatabaseField(columnName = COLUMN_RRULE, persisterClass = RRulePersister.class)
+    private RepetitionRule rrule;
+
     public Schedule() {
+        rrule = new RepetitionRule(null);
     }
 
     public Schedule(Medicine medicine) {
@@ -37,7 +54,7 @@ public class Schedule {
 
     public Schedule(Medicine medicine, boolean[] days) {
         this.medicine = medicine;
-        this.days = days;
+        setDays(days);
     }
 
     public Long getId() {
@@ -61,18 +78,18 @@ public class Schedule {
     }
 
     public boolean[] days() {
-        return days;
+        return rrule.days();
     }
 
     public void setDays(boolean[] days) {
-        this.days = days;
+        rrule.setDays(days);
     }
 
     public boolean enabledFor(int dayOfWeek) {
         if (dayOfWeek > 7 || dayOfWeek < 1)
             throw new IllegalArgumentException("Day off week must be between 1 and 7");
 
-        return days[dayOfWeek - 1];
+        return days()[dayOfWeek - 1];
     }
 
     // *************************************
@@ -97,6 +114,10 @@ public class Schedule {
 
     public void deleteCascade() {
         DB.schedules().deleteCascade(this, false);
+    }
+
+    public boolean[] getLegacyDays() {
+        return days;
     }
 }
 
