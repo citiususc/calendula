@@ -1,6 +1,6 @@
 package es.usc.citius.servando.calendula.util;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
@@ -43,7 +43,9 @@ public class DailyAgendaItemStub {
 
     public static List<DailyAgendaItemStub> fromHour(int hour) {
 
-        int today = DateTime.now().getDayOfWeek();
+        //int today = DateTime.now().getDayOfWeek();
+        LocalDate today = LocalDate.now();
+
         List<Routine> routines = Routine.findInHour(hour);
         List<DailyAgendaItemStub> items = new ArrayList<DailyAgendaItemStub>(routines.size());
 
@@ -62,7 +64,7 @@ public class DailyAgendaItemStub {
                     item.meds = new ArrayList<DailyAgendaItemStubElement>();
 
                     for (ScheduleItem scheduleItem : doses) {
-                        if (scheduleItem.schedule() != null && scheduleItem.schedule().enabledFor(today)) {
+                        if (scheduleItem.schedule() != null && scheduleItem.schedule().enabledForDate(today)) {
                             item.hasEvents = true;
                             int minute = r.time().getMinuteOfHour();
                             Medicine med = scheduleItem.schedule().medicine();

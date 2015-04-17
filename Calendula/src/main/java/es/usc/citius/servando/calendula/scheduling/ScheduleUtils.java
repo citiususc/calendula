@@ -3,7 +3,7 @@ package es.usc.citius.servando.calendula.scheduling;
 import android.content.Context;
 import android.util.Log;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,14 +61,15 @@ public class ScheduleUtils {
     public static List<ScheduleItem> getRoutineScheduleItems(Routine routine, boolean includeTaken) {
 
         // get day of week to filter results
-        int TODAY_IN_WEEK = DateTime.now().getDayOfWeek(); // ISO8601: MON = 1, TUE = 2...
+        //int TODAY_IN_WEEK = DateTime.now().getDayOfWeek(); // ISO8601: MON = 1, TUE = 2...
+        LocalDate today = LocalDate.now();
         // iterate over routine items and filter by day
-        List<ScheduleItem> doses = new ArrayList<ScheduleItem>();
+        List<ScheduleItem> doses = new ArrayList<>();
         for (ScheduleItem scheduleItem : routine.scheduleItems()) {
             DailyScheduleItem dsi = DailyScheduleItem.findByScheduleItem(scheduleItem);
             if (dsi != null) {
                 boolean takenToday = dsi.takenToday();
-                if (scheduleItem.schedule().enabledFor(TODAY_IN_WEEK)) {
+                if (scheduleItem.schedule().enabledForDate(today)) {
                     if (includeTaken || (!includeTaken && !takenToday)) {
                         doses.add(scheduleItem);
                     }

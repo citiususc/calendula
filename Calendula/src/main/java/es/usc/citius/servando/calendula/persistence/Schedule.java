@@ -1,7 +1,11 @@
 package es.usc.citius.servando.calendula.persistence;
 
+import android.util.Log;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import org.joda.time.LocalDate;
 
 import java.util.List;
 
@@ -85,11 +89,25 @@ public class Schedule {
         rrule.setDays(days);
     }
 
-    public boolean enabledFor(int dayOfWeek) {
+    /**
+     * @deprecated Use enabledForDate instead
+     */
+    private boolean enabledFor(int dayOfWeek) {
         if (dayOfWeek > 7 || dayOfWeek < 1)
             throw new IllegalArgumentException("Day off week must be between 1 and 7");
 
         return days()[dayOfWeek - 1];
+    }
+
+    public boolean enabledForDate(LocalDate date) {
+
+        boolean enabled = rrule.hasOccurrencesAt(date);
+        Log.d("Schedule", "------ Schedule " + medicine().name() + " enabled for " + date.toString("dd/MM/YY") + ": " + enabled);
+        return enabled;
+    }
+
+    public List<LocalDate> ocurrencesBetween(LocalDate start, LocalDate end) {
+        return rrule.occurrencesBetween(start, end);
     }
 
     // *************************************
@@ -119,5 +137,7 @@ public class Schedule {
     public boolean[] getLegacyDays() {
         return days;
     }
+
+
 }
 

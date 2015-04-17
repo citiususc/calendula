@@ -2,13 +2,19 @@ package es.usc.citius.servando.calendula.persistence;
 
 import android.util.Log;
 
+import com.google.ical.compat.jodatime.LocalDateIterator;
 import com.google.ical.values.RRule;
 import com.google.ical.values.Weekday;
 import com.google.ical.values.WeekdayNum;
 
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.google.ical.compat.jodatime.LocalDateIteratorFactory.createLocalDateIterator;
 
 /**
  * Created by joseangel.pineiro on 4/16/15.
@@ -69,6 +75,61 @@ public class RepetitionRule {
             }
         }
         return this.days;
+    }
+
+    public boolean hasOccurrencesToday() throws Exception {
+        return hasOccurrencesAt(LocalDate.now());
+    }
+
+    public boolean hasOccurrencesAt(LocalDate date) {
+        try {
+
+            LocalDate start = date.minusDays(1);
+            LocalDate end = date.plusDays(1);
+            Log.d("Schedule", "------  Start: " + date.toString("dd/MM/YY - kk:mm"));
+            Log.d("Schedule", "------  End: " + end.toString("dd/MM/YY - hh:mm"));
+
+            LocalDateIterator it = createLocalDateIterator(rrule.toIcal(), start, true);
+            it.advanceTo(date);
+            while (it.hasNext()) {
+                if (it.next().isBefore(end)) {
+                    Log.d("Schedule", "------  There are ocurrences in range");
+                    return true;
+                } else {
+                    break;
+                }
+            }
+            Log.d("Schedule", "------  No dates in range");
+            return false;
+        } catch (ParseException e) {
+            throw new RuntimeException("Error parsing ical", e);
+        }
+    }
+
+    public List<LocalDate> occurrencesBetween(LocalDate start, LocalDate to) {
+        try {
+            LocalDate from = start.minusDays(1);
+
+            Log.d("Schedule", "------  Start: " + from.toString("dd/MM/YY - kk:mm"));
+            Log.d("Schedule", "------  End: " + to.toString("dd/MM/YY - hh:mm"));
+
+            List<LocalDate> occurrences = new ArrayList<>();
+            LocalDateIterator it = createLocalDateIterator(rrule.toIcal(), from, DateTimeZone.UTC, true);
+            it.advanceTo(start);
+            while (it.hasNext()) {
+                LocalDate n = it.next();
+                if (n.isBefore(to)) {
+                    occurrences.add(n);
+                    Log.d("Schedule", "          New occurrence: " + n.toString("dd/MM/YY"));
+                } else {
+                    break;
+                }
+            }
+            Log.d("Schedule", "------  No dates in range");
+            return occurrences;
+        } catch (ParseException e) {
+            throw new RuntimeException("Error parsing ical", e);
+        }
     }
 
     public String toIcal() {

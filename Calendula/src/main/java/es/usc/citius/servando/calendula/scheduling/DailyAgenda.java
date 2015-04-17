@@ -73,7 +73,7 @@ public class DailyAgenda {
         // create a list with all day doses
         for (Routine r : Routine.findAll()) {
             for (ScheduleItem s : r.scheduleItems()) {
-                s.schedule().enabledFor(d.getDayOfWeek());
+                s.schedule().enabledForDate(d.toLocalDate());
                 // create a dailyScheduleItem and save it
                 new DailyScheduleItem(s).save();
                 items++;

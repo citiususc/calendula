@@ -111,6 +111,7 @@ dependencies {
     testCompile "org.mockito:mockito-core:1.9.5"
 
     // google ref 2445
-    compile 'org.scala-saddle:google-rfc-2445:20110304'
+    compile files('libs/rfc2445-4Mar2011.jar')
+    //compile 'org.scala-saddle:google-rfc-2445:20110304'
 
 }
