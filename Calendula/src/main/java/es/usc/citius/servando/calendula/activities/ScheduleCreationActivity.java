@@ -23,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.google.ical.values.Frequency;
+import com.google.ical.values.RRule;
 import com.j256.ormlite.misc.TransactionManager;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
@@ -41,6 +43,7 @@ import es.usc.citius.servando.calendula.fragments.ScheduleTimetableFragment;
 import es.usc.citius.servando.calendula.fragments.SelectMedicineListFragment;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
@@ -142,18 +145,39 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             Schedule s = Schedule.findById(mScheduleId);
             if (s != null) {
                 ScheduleCreationHelper.instance().setSelectedMed(s.medicine());
-                ScheduleCreationHelper.instance().setSelectedDays(s.days());
                 ScheduleCreationHelper.instance().setTimesPerDay(s.items().size());
                 ScheduleCreationHelper.instance().setSelectedScheduleIdx(s.items().size() - 1);
                 ScheduleCreationHelper.instance().setScheduleItems(s.items());
+
+                RRule r = s.getRepetition().iCalRule();
+
+                int interval = r.getInterval();
+                Frequency freq = r.getFreq();
+                int byDaySize = r.getByDay() != null ? r.getByDay().size() : 0;
+
+                Log.d(TAG, "Freq: " + freq.name() + ", interval: " + interval + ", byDaySize: " + byDaySize);
+
+                if (freq.equals(Frequency.DAILY) && interval == 0 && (byDaySize == 7 || byDaySize == 0)) {
+                    Log.d(TAG, "REPEAT_EVERYDAY");
+                    ScheduleCreationHelper.instance().setRepeatType(ScheduleTimetableFragment.REPEAT_EVERYDAY);
+                } else if (freq.equals(Frequency.DAILY) && byDaySize > 0) {
+                    Log.d(TAG, "REPEAT_SPECIFIC_DAYS");
+                    ScheduleCreationHelper.instance().setRepeatType(ScheduleTimetableFragment.REPEAT_SPECIFIC_DAYS);
+                    ScheduleCreationHelper.instance().setSelectedDays(s.days());
+                } else {
+                    Log.d(TAG, "REPEAT_INTERVAL");
+                    ScheduleCreationHelper.instance().setRepeatType(ScheduleTimetableFragment.REPEAT_INTERVAL);
+                    ScheduleCreationHelper.instance().setFrequency(freq);
+                    ScheduleCreationHelper.instance().setIcalInterval(interval);
+                    if (freq == Frequency.WEEKLY)
+                        ScheduleCreationHelper.instance().setSelectedDays(s.days());
+                }
                 mSchedule = s;
             } else {
                 Snack.show("Schedule not found :(", this);
             }
         }
-
     }
-
 
     public void createSchedule() {
         try {
@@ -166,7 +190,32 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
                     // save schedule
 
                     s.setMedicine(ScheduleCreationHelper.instance().getSelectedMed());
-                    s.setDays(ScheduleCreationHelper.instance().getSelectedDays());
+                    int repeatType = ScheduleCreationHelper.instance().getRepeatType();
+                    RepetitionRule r = new RepetitionRule();
+
+                    if (repeatType == ScheduleTimetableFragment.REPEAT_EVERYDAY) {
+                        r.setRepeat(Frequency.DAILY);
+                        r.setInterval(0);
+                        r.setDays(null);
+                    } else if (repeatType == ScheduleTimetableFragment.REPEAT_SPECIFIC_DAYS) {
+                        r.setRepeat(Frequency.DAILY);
+                        r.setInterval(0);
+                        r.setDays(ScheduleCreationHelper.instance().getSelectedDays());
+                    } else if (repeatType == ScheduleTimetableFragment.REPEAT_INTERVAL) {
+                        int interval = ScheduleCreationHelper.instance().getIcalInterval();
+                        Frequency freq = ScheduleCreationHelper.instance().getFrequency();
+                        r.setInterval(interval);
+                        if (freq == Frequency.WEEKLY)
+                            r.setDays(ScheduleCreationHelper.instance().getSelectedDays());
+                        else
+                            r.setDays(null);
+                        r.setRepeat(freq);
+                    } else {
+                        String rule = ScheduleCreationHelper.instance().getRule();
+                        r = new RepetitionRule("RRULE:" + rule);
+                    }
+
+                    s.setRepetition(r);
                     s.save();
 
                     Log.d(TAG, "Saving schedule...");
@@ -209,7 +258,28 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
                     // save schedule
 
                     s.setMedicine(ScheduleCreationHelper.instance().getSelectedMed());
-                    s.setDays(ScheduleCreationHelper.instance().getSelectedDays());
+                    int repeatType = ScheduleCreationHelper.instance().getRepeatType();
+                    RepetitionRule r = new RepetitionRule();
+
+                    if (repeatType == ScheduleTimetableFragment.REPEAT_EVERYDAY) {
+                        r.setRepeat(Frequency.DAILY);
+                        r.setInterval(0);
+                        r.setDays(null);
+                    } else if (repeatType == ScheduleTimetableFragment.REPEAT_SPECIFIC_DAYS) {
+                        r.setRepeat(Frequency.DAILY);
+                        r.setInterval(0);
+                        r.setDays(ScheduleCreationHelper.instance().getSelectedDays());
+                    } else {
+                        int interval = ScheduleCreationHelper.instance().getIcalInterval();
+                        Frequency freq = ScheduleCreationHelper.instance().getFrequency();
+                        r.setInterval(interval);
+                        if (freq == Frequency.WEEKLY)
+                            r.setDays(ScheduleCreationHelper.instance().getSelectedDays());
+                        else
+                            r.setDays(null);
+                        r.setRepeat(freq);
+                    }
+                    s.setRepetition(r);
 
                     List<Long> routinesTaken = new ArrayList<Long>();
 
@@ -347,7 +417,8 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             }
         }
 
-        if (ScheduleCreationHelper.instance().getDays(this).length <= 0) {
+        if (ScheduleCreationHelper.instance().getDays(this).length <= 0
+                && ScheduleCreationHelper.instance().getRepeatType() == ScheduleTimetableFragment.REPEAT_SPECIFIC_DAYS) {
             mViewPager.setCurrentItem(1);
             showSnackBar(R.string.schedule_no_day_specified_message);
             return false;

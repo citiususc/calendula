@@ -272,6 +272,45 @@
     <string name="driving_warning_title">Be careful</string>
     <string name="driving_warning_show_prospect">Read leaflet</string>
     <string name="driving_warning_gotit">Understood</string>
+    <string name="repeat_every">Repeats every</string>
+    <string name="every">Every</string>
+    <string name="repeat_specific_days">Specific days</string>
+    <string name="repeat_every_tostr">Every %1$s %2$s</string>
+    <string name="schedule_freq_days">days</string>
+    <string name="schedule_freq_weeks">weeks</string>
+    <string name="schedule_freq_months">months</string>
+    <string name="label_schedule_repeat_today">Start</string>
+    <string name="button_schedule_repeat_today">Today</string>
+    <string name="label_schedule_repeat_until">Stop</string>
+    <string name="button_schedule_repeat_until">Never</string>
+    <string name="schedule_limits_date_format">MMMM dd, YYYY</string>
+    <string name="schedule_week_days_connector">on</string>
+
+    <string-array name="schedule_repeat_types">
+        <item>Every day</item>
+        <item>Some week days</item>
+        <item>Interval</item>
+        <item>Custom</item>
+    </string-array>
+
+    <string-array name="schedule_repeat_frequencies">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+    </string-array>
+
+    <string-array name="schedule_repeat_frequency_units">
+        <item>days</item>
+        <item>weeks</item>
+        <item>months</item>
+    </string-array>
+
+    <string-array name="schedule_repeat_units">
+        <item>Days</item>
+        <item>Weeks</item>
+        <item>Months</item>
+    </string-array>
+
 
 </resources>
 

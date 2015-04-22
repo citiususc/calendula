@@ -79,7 +79,7 @@ public class ScheduleListFragment extends Fragment {
         icon.setImageDrawable(getResources().getDrawable(schedule.medicine().presentation().getDrawable()));
         ((TextView) item.findViewById(R.id.schedules_list_item_medname)).setText(schedule.medicine().name());
         ((TextView) item.findViewById(R.id.schedules_list_item_times)).setText(ScheduleUtils.getTimesStr(schedule.items().size(), getActivity()));
-        ((TextView) item.findViewById(R.id.schedules_list_item_days)).setText(ScheduleUtils.stringifyDays(schedule.days(), getActivity()));
+        ((TextView) item.findViewById(R.id.schedules_list_item_days)).setText(schedule.toReadableString(getActivity()));
 
 
         View overlay = item.findViewById(R.id.schedules_list_item_container);

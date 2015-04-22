@@ -3,6 +3,7 @@ package es.usc.citius.servando.calendula.persistence;
 import android.util.Log;
 
 import com.google.ical.compat.jodatime.LocalDateIterator;
+import com.google.ical.values.Frequency;
 import com.google.ical.values.RRule;
 import com.google.ical.values.Weekday;
 import com.google.ical.values.WeekdayNum;
@@ -42,6 +43,20 @@ public class RepetitionRule {
     // cached value for week days
     private boolean[] days;
 
+    public String start() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
+    }
+
+    private String start;
+
+    public RepetitionRule() {
+        rrule = new RRule();
+    }
+
     public RepetitionRule(String ical) {
         try {
             if (ical == null || ical.isEmpty()) {
@@ -54,15 +69,25 @@ public class RepetitionRule {
         }
     }
 
+    public void setRepeat(Frequency freq) {
+        rrule.setFreq(freq);
+    }
+
+    public void setInterval(int interval) {
+        rrule.setInterval(interval);
+    }
+
     public void setDays(boolean[] days) {
-        List<WeekdayNum> byDay = new ArrayList<>(7);
-        for (int i = 0; i < days.length; i++) {
-            if (days[i]) {
-                byDay.add(new WeekdayNum(0, WEEK_DAYS[i]));
+        List<WeekdayNum> byDay = new ArrayList<>();
+        if (days != null) {
+            for (int i = 0; i < days.length; i++) {
+                if (days[i]) {
+                    byDay.add(new WeekdayNum(0, WEEK_DAYS[i]));
+                }
             }
         }
         rrule.setByDay(byDay);
-        Log.d("ICAL", rrule.toIcal());
+
         // invalidate cached value
         this.days = null;
     }
@@ -130,6 +155,10 @@ public class RepetitionRule {
         } catch (ParseException e) {
             throw new RuntimeException("Error parsing ical", e);
         }
+    }
+
+    public RRule iCalRule() {
+        return rrule;
     }
 
     public String toIcal() {

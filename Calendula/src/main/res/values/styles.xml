@@ -13,7 +13,20 @@
         <item name="windowActionModeOverlay">true</item>
         <!-- The rest of your attributes -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <!-- dialog theme stuff -->
+        <item name="android:dialogTheme">@style/AppTheme.DialogTheme</item>
+
     </style>
+
+    <!-- Styles for pop-up dialogs -->
+    <style name="AppTheme.DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+
+        <item name="colorPrimary">@color/android_blue</item>
+        <item name="colorPrimaryDark">@color/android_blue_dark</item>
+        <item name="colorAccent">@color/android_blue_darker</item>
+
+    </style>
+
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
@@ -209,6 +222,19 @@
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">5</item>
+    </style>
+
+    <style name="BetterPickersDialogFragment.Calendula">
+        <item name="bpDialogBackground">@drawable/dialog_full_holo_light</item>
+        <item name="bpTitleColor">@color/dialog_text_color_holo_light</item>
+        <item name="bpTextColor">@color/android_blue_darker</item>
+        <item name="bpDeleteIcon">@drawable/ic_backspace_light</item>
+        <item name="bpCheckIcon">@drawable/ic_check_light</item>
+        <item name="bpKeyBackground">@drawable/key_background_light</item>
+        <item name="bpButtonBackground">@drawable/button_background_light</item>
+        <item name="bpTitleDividerColor">@color/default_keyboard_indicator_color_dark</item>
+        <item name="bpDividerColor">@color/default_divider_color_light</item>
+        <item name="bpKeyboardIndicatorColor">@color/default_keyboard_indicator_color_light</item>
     </style>
 
 </resources>

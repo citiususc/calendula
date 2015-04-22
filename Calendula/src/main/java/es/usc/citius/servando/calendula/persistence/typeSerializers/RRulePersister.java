@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 
 /**
- * Created by joseangel.pineiro on 10/9/14.
+ * Created by joseangel.pineiro
  */
 public class RRulePersister extends BaseDataType {
 
@@ -30,12 +30,23 @@ public class RRulePersister extends BaseDataType {
 
     @Override
     public Object sqlArgToJava(FieldType fieldType, Object sqlArg, int columnPos) throws SQLException {
+        String data = (String) sqlArg;
+        if (data.contains("$$$")) {
+            String[] parts = data.split("$$$");
+            RepetitionRule r = new RepetitionRule(parts[0]);
+            r.setStart(parts[1]);
+        }
         return new RepetitionRule((String) sqlArg);
     }
 
     @Override
     public Object javaToSqlArg(FieldType fieldType, Object javaObject) throws SQLException {
-        return ((RepetitionRule) javaObject).toIcal();
+        RepetitionRule rule = (RepetitionRule) javaObject;
+        String ical = rule.toIcal();
+        if (rule.start() != null) {
+            ical += "$$$" + rule.start();
+        }
+        return ical;
     }
 
 

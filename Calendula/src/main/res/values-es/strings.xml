@@ -285,6 +285,23 @@
     <string name="driving_warning_title">Ten prudencia</string>
     <string name="driving_warning_show_prospect">Ver prospecto</string>
     <string name="driving_warning_gotit">Entendido</string>
+    <string name="repeat_every">Se repite cada</string>
+    <string name="repeat_specific_days">Días específicos</string>
+    <string name="repeat_every_tostr">Cada %1$s %2$s</string>
+    <string name="schedule_freq_days">días</string>
+    <string name="schedule_freq_weeks">semanas</string>
+    <string name="schedule_freq_months">meses</string>
+    <string name="label_schedule_repeat_today">Empieza</string>
+    <string name="button_schedule_repeat_today">Hoy</string>
+    <string name="label_schedule_repeat_until">Acaba</string>
+    <string name="button_schedule_repeat_until">Nunca</string>
+    <string name="schedule_limits_date_format">\'El\' dd \'de\' MMMM \'de\' YYYY</string>
+    <string name="schedule_week_days_connector">los</string>
+    <string-array name="schedule_repeat_units">
+        <item>Días</item>
+        <item>Semanas</item>
+        <item>Meses</item>
+    </string-array>
 
 </resources>
 

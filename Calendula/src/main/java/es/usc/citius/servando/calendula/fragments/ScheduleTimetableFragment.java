@@ -1,5 +1,8 @@
 package es.usc.citius.servando.calendula.fragments;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,9 +13,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.doomonafireball.betterpickers.numberpicker.NumberPickerBuilder;
+import com.doomonafireball.betterpickers.numberpicker.NumberPickerDialogFragment;
+import com.doomonafireball.betterpickers.recurrencepicker.EventRecurrence;
+import com.doomonafireball.betterpickers.recurrencepicker.EventRecurrenceFormatter;
+import com.doomonafireball.betterpickers.recurrencepicker.RecurrencePickerDialog;
+import com.google.ical.values.Frequency;
+
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,17 +45,43 @@ import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
 /**
  * Created by joseangel.pineiro on 12/11/13.
  */
-public class ScheduleTimetableFragment extends Fragment {
+public class ScheduleTimetableFragment extends Fragment implements NumberPickerDialogFragment.NumberPickerDialogHandler, RecurrencePickerDialog.OnRecurrenceSetListener {
+
 
     public static final String TAG = ScheduleTimetableFragment.class.getName();
+    public static final int REPEAT_EVERYDAY = 0;
+    public static final int REPEAT_SPECIFIC_DAYS = 1;
+    public static final int REPEAT_INTERVAL = 2;
+    public static final int REPEAT_CUSTOM = 3;
+
+
+    final Frequency[] FREQ = new Frequency[]{Frequency.DAILY, Frequency.WEEKLY, Frequency.MONTHLY};
 
     LinearLayout timetableContainer;
     int timesPerDay = 1;
 
     Spinner scheduleSpinner;
-
+    Spinner repeatTypeSpinner;
+    Spinner freqSpinner;
     ScheduleItemComparator scheduleItemComparator = new ScheduleItemComparator();
 
+    NumberPicker intervalPicker;
+    NumberPicker intervalUnitsPicker;
+    Button buttonScheduleStart;
+    Button buttonScheduleEnd;
+    Button intervalEditText;
+    //RadioGroup radioGroup;
+
+    View daySelectionBox;
+    View customRepeatBox;
+    TextView ruleText;
+
+
+    int repeatType = 1;
+    Frequency frequency = Frequency.DAILY;
+    int interval = 2;
+    boolean ignoreNextEvent = true;
+    private String rule;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,23 +89,273 @@ public class ScheduleTimetableFragment extends Fragment {
         timetableContainer = (LinearLayout) rootView.findViewById(R.id.schedule_timetable_container);
         setupScheduleSpinner(rootView);
         setupDaySelectionListeners(rootView);
+        setupStartEndDatePickers(rootView);
         return rootView;
+    }
+
+    private void setupRepetitions(final View rooView) {
+        repeatTypeSpinner = (Spinner) rooView.findViewById(R.id.repeat_type_spinner);
+        freqSpinner = (Spinner) rooView.findViewById(R.id.freq_spinner);
+        daySelectionBox = rooView.findViewById(R.id.day_selector_box);
+        customRepeatBox = rooView.findViewById(R.id.custom_repeat_box);
+        intervalEditText = (Button) rooView.findViewById(R.id.interval_edit_text);
+        ruleText = (TextView) rooView.findViewById(R.id.rule_text);
+        ruleText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showRecurrencePickerDialog();
+            }
+        });
+
+
+        repeatTypeSpinner.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.schedule_repeat_types)));
+        repeatTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!ignoreNextEvent) {
+                    setRepeatType(position, rooView, true);
+                } else {
+                    setRepeatType(position, rooView, false);
+                    ignoreNextEvent = false;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        freqSpinner.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.schedule_repeat_frequency_units)));
+        freqSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setFrequency(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        intervalEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showIntervalPickerDIalog();
+            }
+        });
+
+        /*intervalEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    int i = Integer.parseInt(intervalEditText.getText().toString());
+                    ScheduleCreationHelper.instance().setIcalInterval(i);
+                    Log.d(TAG, "Set interval: " + i);
+                } catch (Exception e) {
+                    ScheduleCreationHelper.instance().setIcalInterval(-1);
+                }
+            }
+        });*/
+
+        int _repeatType = ScheduleCreationHelper.instance().getRepeatType();
+        Frequency _freq = ScheduleCreationHelper.instance().getFrequency();
+        int _interval = ScheduleCreationHelper.instance().getIcalInterval();
+        int freqIndex = _freq == Frequency.MONTHLY ? 2 : _freq == Frequency.WEEKLY ? 1 : 0; // DAILY by default
+        setRepeatType(_repeatType, rooView, true);
+        checkSelectedDays(rooView, ScheduleCreationHelper.instance().getSelectedDays());
+        ignoreNextEvent = true;
+        repeatTypeSpinner.setSelection(repeatType);
+        freqSpinner.setSelection(freqIndex);
+        intervalEditText.setText(String.valueOf(_interval > 0 ? _interval : 2));
+    }
+
+    void setupStartEndDatePickers(View rootView) {
+
+        final DateTime today = DateTime.now();
+        buttonScheduleStart = (Button) rootView.findViewById(R.id.button_set_start);
+        buttonScheduleEnd = (Button) rootView.findViewById(R.id.button_set_end);
+        buttonScheduleStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog dpd = new DatePickerDialog(getActivity(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                LocalDate d = new LocalDate(year, monthOfYear, dayOfMonth);
+                                buttonScheduleStart.setText(d.toString(getString(R.string.schedule_limits_date_format)));
+                            }
+                        }, today.getYear(), today.getMonthOfYear(), today.getDayOfMonth());
+                dpd.show();
+            }
+        });
+
+        buttonScheduleEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog dpd = new DatePickerDialog(getActivity(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                LocalDate d = new LocalDate(year, monthOfYear, dayOfMonth);
+                                buttonScheduleEnd.setText(d.toString(getString(R.string.schedule_limits_date_format)));
+                            }
+                        }, today.getYear(), today.getMonthOfYear(), today.getDayOfMonth());
+                dpd.show();
+            }
+        });
+
+        buttonScheduleEnd.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Do you want this schedule to continue indefinitely?")
+                        .setCancelable(true)
+                        .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                buttonScheduleEnd.setText(getString(R.string.never));
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+                return true;
+            }
+        });
+    }
+
+    private void setFrequency(int freq) {
+        frequency = FREQ[freq];
+        ScheduleCreationHelper.instance().setFrequency(frequency);
+        Log.d(TAG, "Frquency set to " + frequency.name());
+        if (frequency == Frequency.WEEKLY) {
+            daySelectionBox.setVisibility(View.VISIBLE);
+        } else {
+            daySelectionBox.setVisibility(View.GONE);
+        }
+    }
+
+    private void setRepeatType(int type, View v, boolean updateUi) {
+        repeatType = type;
+        Log.d(TAG, "Set repeat type: " + repeatType);
+        ScheduleCreationHelper.instance().setRepeatType(type);
+        if (updateUi) {
+            if (repeatType == REPEAT_EVERYDAY) {
+                checkAllDays(v);
+                daySelectionBox.setVisibility(View.VISIBLE);
+                customRepeatBox.setVisibility(View.GONE);
+                ruleText.setVisibility(View.GONE);
+            } else if (repeatType == REPEAT_SPECIFIC_DAYS) {
+                if (ScheduleCreationHelper.instance().getDays(getActivity()).length == 7) {
+                    checkToday(v);
+                } else {
+                    checkSelectedDays(v, ScheduleCreationHelper.instance().getSelectedDays());
+                }
+                daySelectionBox.setVisibility(View.VISIBLE);
+                customRepeatBox.setVisibility(View.GONE);
+                ruleText.setVisibility(View.GONE);
+            } else if (repeatType == REPEAT_INTERVAL) {
+                if (ScheduleCreationHelper.instance().getIcalInterval() <= 0) {
+                    ScheduleCreationHelper.instance().setIcalInterval(2);
+                }
+                intervalEditText.setText(ScheduleCreationHelper.instance().getIcalInterval() + "");
+                ScheduleCreationHelper.instance().setFrequency(frequency);
+                if (frequency == Frequency.WEEKLY) {
+                    daySelectionBox.setVisibility(View.VISIBLE);
+                } else {
+                    daySelectionBox.setVisibility(View.GONE);
+                }
+                ruleText.setVisibility(View.GONE);
+                customRepeatBox.setVisibility(View.VISIBLE);
+            } else {
+                daySelectionBox.setVisibility(View.GONE);
+                customRepeatBox.setVisibility(View.GONE);
+                ruleText.setVisibility(View.VISIBLE);
+                showRecurrencePickerDialog();
+            }
+        }
+    }
+
+    private void checkAllDays(View v) {
+        checkSelectedDays(v, new boolean[]{true, true, true, true, true, true, true});
+    }
+
+    private void checkToday(View v) {
+        boolean[] days = new boolean[]{false, false, false, false, false, false, false};
+        days[LocalDate.now().getDayOfWeek() - 1] = true;
+        checkSelectedDays(v, days);
+    }
+
+    private void setupRepetitionPickers(View rootView) {
+
+        final String[] unit = getResources().getStringArray(R.array.schedule_repeat_units);
+
+        intervalPicker = (NumberPicker) rootView.findViewById(R.id.interval_picker);
+        intervalUnitsPicker = (NumberPicker) rootView.findViewById(R.id.interval_units_picker);
+
+
+        intervalPicker.setMaxValue(31);
+        intervalPicker.setMinValue(1);
+        intervalPicker.setWrapSelectorWheel(false);
+        intervalPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+        intervalUnitsPicker.setMaxValue(unit.length - 1);
+        intervalUnitsPicker.setMinValue(0);
+        intervalUnitsPicker.setWrapSelectorWheel(false);
+        intervalUnitsPicker.setDisplayedValues(unit);
+        intervalUnitsPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+
+        Frequency freq = ScheduleCreationHelper.instance().getFrequency();
+        int interv = ScheduleCreationHelper.instance().getIcalInterval();
+        frequency = freq != null ? freq : frequency;
+        interval = interv >= 0 ? interv : 2;
+        intervalPicker.setValue(interval);
+        intervalUnitsPicker.setValue(frequency == Frequency.DAILY ? 0 : frequency == Frequency.WEEKLY ? 1 : 2);
+
+        intervalPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                interval = newVal;
+                ScheduleCreationHelper.instance().setIcalInterval(interval);
+            }
+        });
+
+        intervalUnitsPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                frequency = FREQ[newVal];
+                ScheduleCreationHelper.instance().setFrequency(frequency);
+            }
+        });
+
+
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         timesPerDay = ScheduleCreationHelper.instance().getTimesPerDay();
         scheduleSpinner.setSelection(ScheduleCreationHelper.instance().getSelectedScheduleIdx());
-        checkSelectedDays(view, ScheduleCreationHelper.instance().getSelectedDays());
+        setupRepetitions(view);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("RESUME", "Idx: " + ScheduleCreationHelper.instance().getSelectedScheduleIdx());
-        Log.d("RESUME", "Days: " + Arrays.toString(ScheduleCreationHelper.instance().getSelectedDays()));
-        Log.d("RESUME", "Schedule: " + ScheduleCreationHelper.instance().getTimesPerDay());
-        //Log.d("RESUME", "Times: " + Arrays.toString(ScheduleCreationHelper.instance().getSelectedRoutines().toArray()));
     }
 
     private void setupScheduleSpinner(View rootView) {
@@ -110,7 +402,7 @@ public class ScheduleTimetableFragment extends Fragment {
     }
 
 
-    void setupDaySelectionListeners(View rootView) {
+    void setupDaySelectionListeners(final View rootView) {
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -161,9 +453,21 @@ public class ScheduleTimetableFragment extends Fragment {
                     view.setBackgroundResource(R.drawable.dayselector_circle);
                 }
 
+                boolean allDaysSelected = ScheduleCreationHelper.instance().getDays(getActivity()).length == 7;
 
+                if (repeatType == REPEAT_EVERYDAY && !allDaysSelected) {
+                    setRepeatType(REPEAT_SPECIFIC_DAYS, rootView, false);
+                    ignoreNextEvent = true;
+                    repeatTypeSpinner.setSelection(1);
+                } else if (repeatType == REPEAT_SPECIFIC_DAYS && allDaysSelected) {
+                    repeatTypeSpinner.setSelection(0);
+                    repeatType = REPEAT_EVERYDAY;
+                }
+
+                Log.d(TAG, "All days selected: " + allDaysSelected + ", repeatType: " + repeatType);
             }
         };
+
 
         rootView.findViewById(R.id.day_mo).setOnClickListener(listener);
         rootView.findViewById(R.id.day_tu).setOnClickListener(listener);
@@ -174,6 +478,26 @@ public class ScheduleTimetableFragment extends Fragment {
         rootView.findViewById(R.id.day_su).setOnClickListener(listener);
 
 
+    }
+
+
+    void showIntervalPickerDIalog() {
+        NumberPickerBuilder npb = new NumberPickerBuilder()
+                .setDecimalVisibility(NumberPicker.INVISIBLE)
+                .setMinNumber(1)
+                .setMaxNumber(31)
+                .setPlusMinusVisibility(NumberPicker.INVISIBLE)
+                .setFragmentManager(getChildFragmentManager())
+                .setTargetFragment(this)
+                .setStyleResId(R.style.BetterPickersDialogFragment_Calendula);
+        npb.show();
+    }
+
+    void showRecurrencePickerDialog() {
+        RecurrencePickerDialog dialog = new RecurrencePickerDialog();
+        Bundle b = new Bundle();
+        dialog.setOnRecurrenceSetListener(this);
+        dialog.show(getChildFragmentManager(), "REC");
     }
 
 
@@ -430,6 +754,9 @@ public class ScheduleTimetableFragment extends Fragment {
 
     void checkSelectedDays(View rootView, boolean[] days) {
 
+        Log.d(TAG, "Checking selected days");
+
+        ScheduleCreationHelper.instance().setSelectedDays(days);
         ((TextView) rootView.findViewById(R.id.day_mo)).setTextAppearance(getActivity(), days[0] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
         rootView.findViewById(R.id.day_mo).setBackgroundResource(days[0] ? R.drawable.dayselector_circle : R.drawable.dayselector_circle_unselected);
 
@@ -459,5 +786,22 @@ public class ScheduleTimetableFragment extends Fragment {
 
     }
 
+    @Override
+    public void onDialogNumberSet(int reference, int number, double decimal, boolean isNegative, double fullNumber) {
 
+        intervalEditText.setText("" + number);
+        ScheduleCreationHelper.instance().setIcalInterval(number);
+    }
+
+    @Override
+    public void onRecurrenceSet(String s) {
+
+        EventRecurrence e = new EventRecurrence();
+        e.parse(s);
+        String repeatString = EventRecurrenceFormatter.getRepeatString(getActivity(), getResources(), e, true);
+        ruleText.setText(repeatString);
+        this.rule = s;
+        ScheduleCreationHelper.instance().setRule(rule);
+        Log.d(TAG, "Recurrence: " + repeatString);
+    }
 }

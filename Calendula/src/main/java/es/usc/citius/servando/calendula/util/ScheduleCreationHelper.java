@@ -3,6 +3,8 @@ package es.usc.citius.servando.calendula.util;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.ical.values.Frequency;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +24,11 @@ public class ScheduleCreationHelper {
     private int selectedScheduleIdx = 0;
     private int timesPerDay = 1;
     private List<ScheduleItem> scheduleItems;
-    private boolean[] selectedDays = new boolean[]{true, true, true, true, true, true, true}; // 7 days
+    private boolean[] selectedDays = new boolean[]{false, false, false, false, false, false, false}; // 7 days
+    private int icalInterval;
+    private Frequency frequency;
+    private int repeatType;
+    private String rule;
 
 
     private ScheduleCreationHelper() {
@@ -81,6 +87,30 @@ public class ScheduleCreationHelper {
         this.timesPerDay = timesPerDay;
     }
 
+    public int getIcalInterval() {
+        return icalInterval;
+    }
+
+    public void setIcalInterval(int icalInterval) {
+        this.icalInterval = icalInterval;
+    }
+
+    public Frequency getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(Frequency frequency) {
+        this.frequency = frequency;
+    }
+
+    public int getRepeatType() {
+        return repeatType;
+    }
+
+    public void setRepeatType(int repeatType) {
+        this.repeatType = repeatType;
+    }
+
     @Override
     public String toString() {
         return "ScheduleCreationHelper{" +
@@ -117,5 +147,15 @@ public class ScheduleCreationHelper {
         scheduleItems = new ArrayList<ScheduleItem>();
         setSelectedScheduleIdx(0);
         selectedDays = new boolean[]{true, true, true, true, true, true, true};
+        repeatType = 0;
+        frequency = Frequency.DAILY;
+    }
+
+    public void setRule(String rule) {
+        this.rule = rule;
+    }
+
+    public String getRule() {
+        return rule;
     }
 }
