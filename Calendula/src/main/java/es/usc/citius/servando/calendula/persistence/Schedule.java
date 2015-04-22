@@ -24,11 +24,17 @@ import es.usc.citius.servando.calendula.persistence.typeSerializers.RRulePersist
 @DatabaseTable(tableName = "Schedules")
 public class Schedule {
 
+    public static final int SCHEDULE_TYPE_EVERYDAY = 0; // DEFAULT
+    public static final int SCHEDULE_TYPE_SOMEDAYS = 1;
+    public static final int SCHEDULE_TYPE_INTERVAL = 2;
+    public static final int SCHEDULE_TYPE_CUSTOM = 3;
+
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_MEDICINE = "Medicine";
     public static final String COLUMN_DAYS = "Days";
     public static final String COLUMN_RRULE = "Rrule";
     public static final String COLUMN_START = "Start";
+    public static final String COLUMN_TYPE = "Type";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
@@ -39,8 +45,14 @@ public class Schedule {
     @DatabaseField(columnName = COLUMN_DAYS, persisterClass = BooleanArrayPersister.class)
     private boolean[] days = new boolean[]{false, false, false, false, false, false, false};
 
+    @DatabaseField(columnName = COLUMN_RRULE, persisterClass = RRulePersister.class)
+    private RepetitionRule rrule;
+
     @DatabaseField(columnName = COLUMN_START, persisterClass = LocalDatePersister.class)
     private LocalDate start;
+
+    @DatabaseField(columnName = COLUMN_TYPE)
+    private int type = SCHEDULE_TYPE_EVERYDAY;
 
     public RepetitionRule getRepetition() {
         return rrule;
@@ -50,11 +62,16 @@ public class Schedule {
         this.rrule = rrule;
     }
 
-    /**
-     * See: http://google-rfc-2445.googlecode.com/svn/trunk/rfc2445.html
-     */
-    @DatabaseField(columnName = COLUMN_RRULE, persisterClass = RRulePersister.class)
-    private RepetitionRule rrule;
+    public int type() {
+        return type;
+    }
+
+    public void setType(int type) {
+        if (type < 0 || type > 3) {
+            throw new RuntimeException("Invalid schedule type");
+        }
+        this.type = type;
+    }
 
     public Schedule() {
         rrule = new RepetitionRule(null);
