@@ -31,6 +31,7 @@ public class Schedule {
     public static final int SCHEDULE_TYPE_SOMEDAYS = 1;
     public static final int SCHEDULE_TYPE_INTERVAL = 2;
     public static final int SCHEDULE_TYPE_CUSTOM = 3;
+    public static final int SCHEDULE_TYPE_HOURLY = 4;
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_MEDICINE = "Medicine";
@@ -190,6 +191,10 @@ public class Schedule {
         return true;
     }
 
+    public boolean repeatsHourly() {
+        return type == SCHEDULE_TYPE_HOURLY;
+    }
+
     public int dayCount() {
         int count = 0;
         for (boolean d : days())
@@ -208,11 +213,6 @@ public class Schedule {
 
     public LocalDate end() {
         DateValue v = rrule.iCalRule().getUntil();
-        /*if(v == null || v.year() == 1)
-            return null;
-        else {
-            return new LocalDate(v.year(), v.month(), v.day());
-        }*/
         return v != null ? new LocalDate(v.year(), v.month(), v.day()) : null;
     }
 

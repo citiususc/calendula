@@ -56,10 +56,6 @@ public class ScheduleTimetableFragment extends Fragment implements NumberPickerD
 
 
     public static final String TAG = ScheduleTimetableFragment.class.getName();
-    public static final int REPEAT_EVERYDAY = 0;
-    public static final int REPEAT_SPECIFIC_DAYS = 1;
-    public static final int REPEAT_INTERVAL = 2;
-    public static final int REPEAT_CUSTOM = 3;
 
 
     final Frequency[] FREQ = new Frequency[]{Frequency.DAILY, Frequency.WEEKLY, Frequency.MONTHLY};
@@ -272,17 +268,17 @@ public class ScheduleTimetableFragment extends Fragment implements NumberPickerD
         schedule.setType(type);
         if (updateUi) {
             resetRule();
-            if (type == REPEAT_EVERYDAY) {
+            if (type == Schedule.SCHEDULE_TYPE_EVERYDAY) {
                 checkAllDays(v);
                 daySelectionBox.setVisibility(View.VISIBLE);
                 customRepeatBox.setVisibility(View.GONE);
                 ruleText.setVisibility(View.GONE);
-            } else if (type == REPEAT_SPECIFIC_DAYS) {
+            } else if (type == Schedule.SCHEDULE_TYPE_SOMEDAYS) {
                 checkToday(v);
                 daySelectionBox.setVisibility(View.VISIBLE);
                 customRepeatBox.setVisibility(View.GONE);
                 ruleText.setVisibility(View.GONE);
-            } else if (type == REPEAT_INTERVAL) {
+            } else if (type == Schedule.SCHEDULE_TYPE_INTERVAL) {
                 schedule.rule().setInterval(2);
                 intervalEditText.setText(String.valueOf(schedule.rule().interval()));
                 ruleText.setVisibility(View.GONE);
@@ -439,13 +435,13 @@ public class ScheduleTimetableFragment extends Fragment implements NumberPickerD
 
                 boolean allDaysSelected = schedule.allDaysSelected();
 
-                if (schedule.type() == REPEAT_EVERYDAY && !allDaysSelected) {
-                    setRepeatType(REPEAT_SPECIFIC_DAYS, rootView, false);
+                if (schedule.type() == Schedule.SCHEDULE_TYPE_EVERYDAY && !allDaysSelected) {
+                    setRepeatType(Schedule.SCHEDULE_TYPE_SOMEDAYS, rootView, false);
                     ignoreNextEvent = true;
                     repeatTypeSpinner.setSelection(1);
-                } else if (schedule.type() == REPEAT_SPECIFIC_DAYS && allDaysSelected) {
+                } else if (schedule.type() == Schedule.SCHEDULE_TYPE_SOMEDAYS && allDaysSelected) {
                     repeatTypeSpinner.setSelection(0);
-                    schedule.setType(REPEAT_EVERYDAY);
+                    schedule.setType(Schedule.SCHEDULE_TYPE_EVERYDAY);
                 }
 
                 Log.d(TAG, "All days selected: " + allDaysSelected + ", repeatType: " + schedule.type());

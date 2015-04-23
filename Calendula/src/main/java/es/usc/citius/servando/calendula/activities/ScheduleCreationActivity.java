@@ -415,7 +415,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         }
 
         if (ScheduleHelper.instance().getSchedule().allDaysSelected()
-                && ScheduleHelper.instance().getSchedule().type() == ScheduleTimetableFragment.REPEAT_SPECIFIC_DAYS) {
+                && ScheduleHelper.instance().getSchedule().type() == Schedule.SCHEDULE_TYPE_SOMEDAYS) {
             mViewPager.setCurrentItem(1);
             showSnackBar(R.string.schedule_no_day_specified_message);
             return false;
