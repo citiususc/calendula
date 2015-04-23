@@ -58,7 +58,7 @@ public class ScheduleTimetableFragment extends Fragment implements NumberPickerD
     public static final String TAG = ScheduleTimetableFragment.class.getName();
 
 
-    final Frequency[] FREQ = new Frequency[]{Frequency.DAILY, Frequency.WEEKLY, Frequency.MONTHLY};
+    final Frequency[] FREQ = new Frequency[]{Frequency.HOURLY, Frequency.DAILY, Frequency.WEEKLY, Frequency.MONTHLY};
 
     LinearLayout timetableContainer;
     int timesPerDay = 1;
@@ -158,7 +158,10 @@ public class ScheduleTimetableFragment extends Fragment implements NumberPickerD
         int repeatType = schedule.type();
         int interval = schedule.rule().interval();
         Frequency frequency = schedule.rule().frequency();
-        int freqIndex = frequency == Frequency.MONTHLY ? 2 : frequency == Frequency.WEEKLY ? 1 : 0; // DAILY by default
+        int freqIndex = frequency == Frequency.MONTHLY ? 3
+                : frequency == Frequency.WEEKLY ? 2
+                : frequency == Frequency.DAILY ? 1
+                : 0; // HOURLY by default
         setRepeatType(repeatType, rooView, true);
         checkSelectedDays(rooView, schedule.days());
 
@@ -259,6 +262,11 @@ public class ScheduleTimetableFragment extends Fragment implements NumberPickerD
             checkToday(rootView);
             daySelectionBox.setVisibility(View.VISIBLE);
         } else {
+
+            if (frequency == Frequency.HOURLY) {
+                setRepeatType(Schedule.SCHEDULE_TYPE_HOURLY, rootView, false);
+            }
+
             schedule.rule().setDays(null);
             daySelectionBox.setVisibility(View.GONE);
         }

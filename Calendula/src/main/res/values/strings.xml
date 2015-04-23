@@ -292,7 +292,7 @@
         <item>Every day</item>
         <item>Some week days</item>
         <item>Interval</item>
-        <item>Customize</item>
+        <!--<item>Customize</item>-->
     </string-array>
 
     <string-array name="schedule_repeat_frequencies">
@@ -302,6 +302,7 @@
     </string-array>
 
     <string-array name="schedule_repeat_frequency_units">
+        <item>hours</item>
         <item>days</item>
         <item>weeks</item>
         <item>months</item>

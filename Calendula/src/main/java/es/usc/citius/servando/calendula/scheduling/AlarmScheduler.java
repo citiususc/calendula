@@ -11,13 +11,16 @@ import android.util.Log;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
 
+import java.util.Arrays;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ReminderNotification;
 import es.usc.citius.servando.calendula.activities.StartActivity;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
@@ -31,6 +34,7 @@ public class AlarmScheduler {
     private static final String TAG = AlarmScheduler.class.getName();
     // static instance
     private static final AlarmScheduler instance = new AlarmScheduler();
+    private static final String SCHEDULE_TIME_FORMAT = "hh:mm";
 
     private AlarmScheduler() {
     }
@@ -57,6 +61,19 @@ public class AlarmScheduler {
         intent.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, routine.getId());
         // create pending intent
         int intent_id = routine.getId().hashCode() + 33;
+        return PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    public static PendingIntent hourlyScheduleAlarmPendingIntent(Context ctx, Schedule schedule, DateTime time) {
+        // intent our receiver will receive
+        Intent intent = new Intent(ctx, AlarmReceiver.class);
+        // indicate thar is for a routine
+        intent.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_HOURLY_SCHEDULE_TIME);
+        // pass the schedule id (hash code)
+        intent.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
+        intent.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, time.toString(SCHEDULE_TIME_FORMAT));
+        // create pending intent
+        int intent_id = schedule.getId().hashCode();
         return PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
@@ -88,6 +105,24 @@ public class AlarmScheduler {
             }
         }
     }
+
+
+    /**
+     * Set an alarm to an hourly schedule time using the
+     * android AlarmManager service.
+     */
+    private void setHourlyAlarm(Schedule schedule, DateTime time, Context ctx) {
+        Log.d(TAG, "Setting schedule alarm [" + schedule.medicine().name() + "]");
+        // get routine pending intent
+        PendingIntent routinePendingIntent = hourlyScheduleAlarmPendingIntent(ctx, schedule, time);
+        // Get the AlarmManager service
+        AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+        // set the routine alarm, with repetition every day
+        if (alarmManager != null) {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, time.getMillis(), routinePendingIntent);
+        }
+    }
+
 
     private void cancelAlarm(Routine routine, Context ctx) {
         // get routine pending intent
@@ -152,9 +187,18 @@ public class AlarmScheduler {
      * @param schedule The routine whose alarm will be set
      */
     private void setAlarmsIfNeeded(Schedule schedule, Context ctx) {
-        Log.d(TAG, "Setting alarm for schedule [" + schedule.medicine().name() + "] with " + schedule.items().size() + " items");
-        for (ScheduleItem scheduleItem : schedule.items()) {
-            setAlarm(scheduleItem.routine(), ctx);
+        Log.d(TAG, "Setting alarm for schedule [" + schedule.medicine().name() + "]");
+
+        if (!schedule.repeatsHourly()) {
+            for (ScheduleItem scheduleItem : schedule.items()) {
+                if (scheduleItem.routine() != null)
+                    setAlarm(scheduleItem.routine(), ctx);
+            }
+        } else {
+            List<DateTime> times = schedule.hourlyItemsToday();
+            for (DateTime time : times) {
+                setHourlyAlarm(schedule, time, ctx);
+            }
         }
     }
 
@@ -207,6 +251,53 @@ public class AlarmScheduler {
         }
     }
 
+
+    /**
+     * Called when this class receives an alarm from the AlarmReceiver,
+     * and the routine time is after the current time
+     *
+     * @param schedule
+     * @param time
+     */
+    private void onHourlyScheduleTime(Schedule schedule, DateTime time, Context ctx) {
+
+        boolean notify = false;
+        // check if this item has timeTaken (cancelled notifications)
+
+        DailyScheduleItem ds = DB.dailyScheduleItems().findByScheduleAndTime(schedule, time.toLocalTime());
+        if (ds != null && ds.timeTaken() == null) {
+            Log.d(TAG, "Hourly schedule not checked or cancelled. Notify!");
+            notify = true;
+        }
+
+        if (notify) {
+
+            final Intent intent = new Intent(ctx, StartActivity.class);
+            intent.putExtra("action", StartActivity.ACTION_SHOW_REMINDERS);
+            intent.putExtra("schedule_id", schedule.getId());
+            intent.putExtra("schedule_time", time.toString(SCHEDULE_TIME_FORMAT));
+
+            ScheduleItem dummy = new ScheduleItem();
+            dummy.setSchedule(schedule);
+            dummy.setDose(schedule.dose());
+
+            ReminderNotification.notify(ctx, ctx.getResources().getString(R.string.meds_time), null, Arrays.asList(dummy), intent);
+
+            // Handle delay if needed
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+            boolean repeatAlarms = prefs.getBoolean("alarm_repeat_enabled", false);
+            if (repeatAlarms) {
+                String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
+                long delay = Long.parseLong(delayMinutesStr);
+                // set auto delay if needed
+                if (delay > 0) {
+                    //delayHourlyScheduleAlarm(routine, (int) delay * 60 * 1000, ctx);
+                }
+            }
+        }
+
+    }
+
     /**
      * Called when this class receives an alarm from the AlarmReceiver,
      * and the routine time has passed
@@ -236,6 +327,27 @@ public class AlarmScheduler {
             }
         } else {
             Log.d(TAG, "onAlarmReceived: " + routineId + ", null routine");
+        }
+    }
+
+    /**
+     * Called by the when an previously established alarm is received.
+     *
+     * @param scheduleId the id of a schedule
+     * @param scheduleTime schedule specific time at day
+     */
+    public void onHourlyAlarmReceived(Long scheduleId, String scheduleTime, Context ctx) {
+
+        Schedule schedule = Schedule.findById(scheduleId);
+
+        if (schedule != null) {
+            Log.d(TAG, "onHourlyAlarmReceived: " + scheduleId + " at " + scheduleTime + ")");
+            DateTime time = DateTime.parse(scheduleTime, DateTimeFormat.forPattern(SCHEDULE_TIME_FORMAT));
+            if (isWithinDefaultMargins(time, ctx)) {
+                onHourlyScheduleTime(schedule, time, ctx);
+            }
+        } else {
+            Log.d(TAG, "onHourlyAlarmReceived null schedule");
         }
     }
 
@@ -332,13 +444,17 @@ public class AlarmScheduler {
      * @return
      */
     public boolean isWithinDefaultMargins(Routine r, Context cxt) {
+        return isWithinDefaultMargins(r.time().toDateTimeToday(), cxt);
+    }
+
+    public boolean isWithinDefaultMargins(DateTime t, Context cxt) {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(cxt);
         String delayMinutesStr = prefs.getString("alarm_reminder_window", "60");
         long window = Long.parseLong(delayMinutesStr);
 
         DateTime now = DateTime.now();
-        DateTime routineTime = r.time().toDateTimeToday();
+        DateTime routineTime = t;
         boolean result = routineTime.isBefore(now) && routineTime.plusMillis((int) window * 60 * 1000).isAfter(now);
         Log.d(TAG, "isWithinDefaultMargins: " + result);
         return result;

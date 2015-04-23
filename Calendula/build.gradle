@@ -82,7 +82,7 @@ android {
 dependencies {
 
     // google ref 2445
-    compile files('libs/rfc2445-4Mar2011.jar')
+    // compile files('libs/rfc2445-4Mar2011.jar')
 
     compile 'com.google.code.gson:gson'
     compile project(':libraries:ExpandableListview')
@@ -117,6 +117,6 @@ dependencies {
 
     // calendar view
     compile 'com.squareup:android-times-square:1.6.1@aar'
-    //compile 'org.scala-saddle:google-rfc-2445:20110304'
+    compile 'org.scala-saddle:google-rfc-2445:20110304'
 
 }

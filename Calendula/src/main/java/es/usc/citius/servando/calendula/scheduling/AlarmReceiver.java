@@ -33,6 +33,12 @@ public class AlarmReceiver extends BroadcastReceiver {
                 Log.d(TAG, "Routine id: " + routineId);
                 // and call scheduler
                 AlarmScheduler.instance().onAlarmReceived(routineId, context.getApplicationContext());
+            } else if ((action == CalendulaApp.ACTION_HOURLY_SCHEDULE_TIME) || (action == CalendulaApp.ACTION_HOURLY_SCHEDULE_DELAYED_TIME)) {
+                // get the schedule id from the intent
+                Long scheduleId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1);
+                String scheduleTime = intent.getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME);
+                // and call scheduler
+                AlarmScheduler.instance().onHourlyAlarmReceived(scheduleId, scheduleTime, context.getApplicationContext());
             } else if (action == CalendulaApp.ACTION_DAILY_ALARM) {
                 Log.d(TAG, "Received update daily agenda event");
                 // update daily agenda

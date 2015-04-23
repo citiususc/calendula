@@ -10,6 +10,7 @@ import com.google.ical.values.DateValue;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.util.Arrays;
@@ -38,6 +39,7 @@ public class Schedule {
     public static final String COLUMN_DAYS = "Days";
     public static final String COLUMN_RRULE = "Rrule";
     public static final String COLUMN_START = "Start";
+    public static final String COLUMN_DOSE = "Dose";
     public static final String COLUMN_TYPE = "Type";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
@@ -55,8 +57,12 @@ public class Schedule {
     @DatabaseField(columnName = COLUMN_START, persisterClass = LocalDatePersister.class)
     private LocalDate start;
 
+    @DatabaseField(columnName = COLUMN_DOSE)
+    private float dose = 1f;
+
     @DatabaseField(columnName = COLUMN_TYPE)
     private int type = SCHEDULE_TYPE_EVERYDAY;
+
 
     public RepetitionRule rule() {
         return rrule;
@@ -71,7 +77,7 @@ public class Schedule {
     }
 
     public void setType(int type) {
-        if (type < 0 || type > 3) {
+        if (type < 0 || type > 4) {
             throw new RuntimeException("Invalid schedule type");
         }
         this.type = type;
@@ -102,6 +108,12 @@ public class Schedule {
         return DB.scheduleItems().findBySchedule(this);
     }
 
+    public List<DateTime> hourlyItemsToday() {
+        DateTime today = DateTime.now().withTimeAtStartOfDay();
+        // get schedule occurrences for the current day
+        return rrule.occurrencesBetween(today, today.plusDays(1));
+    }
+
     public Medicine medicine() {
         return medicine;
     }
@@ -125,6 +137,15 @@ public class Schedule {
     public void setStart(LocalDate start) {
         this.start = start;
     }
+
+    public float dose() {
+        return dose;
+    }
+
+    public void setDose(float dose) {
+        this.dose = dose;
+    }
+
 
     public boolean enabledForDate(LocalDate date) {
         boolean enabled = rrule.hasOccurrencesAt(date);
@@ -210,7 +231,6 @@ public class Schedule {
         Log.d("Schedule", "Days: " + Arrays.toString(days()));
     }
 
-
     public LocalDate end() {
         DateValue v = rrule.iCalRule().getUntil();
         return v != null ? new LocalDate(v.year(), v.month(), v.day()) : null;
@@ -219,5 +239,6 @@ public class Schedule {
     public DateValue until() {
         return rrule.iCalRule().getUntil();
     }
+
 }
 

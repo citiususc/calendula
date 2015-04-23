@@ -8,6 +8,7 @@ import com.j256.ormlite.misc.TransactionManager;
 
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import org.joda.time.LocalTime;
 
 import java.sql.SQLException;
 import java.util.concurrent.Callable;
@@ -15,6 +16,7 @@ import java.util.concurrent.Callable;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Routine;
+import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
 /**
@@ -70,7 +72,7 @@ public class DailyAgenda {
 
     public void createDailySchedule(DateTime d) {
         int items = 0;
-        // create a list with all day doses
+        // create a list with all day doses for schedules bound to routines
         for (Routine r : Routine.findAll()) {
             for (ScheduleItem s : r.scheduleItems()) {
                 s.schedule().enabledForDate(d.toLocalDate());
@@ -79,6 +81,15 @@ public class DailyAgenda {
                 items++;
             }
         }
+        // Do the same for hourly schedules
+        for (Schedule s : DB.schedules().findHourly()) {
+            // create an schedule item for each repetition today
+            for (DateTime time : s.hourlyItemsToday()) {
+                LocalTime timeToday = time.toLocalTime();
+                new DailyScheduleItem(s, timeToday).save();
+            }
+        }
+
         Log.d(TAG, items + " items added to daily schedule");
     }
 

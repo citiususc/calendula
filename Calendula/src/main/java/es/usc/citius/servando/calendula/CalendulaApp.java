@@ -26,6 +26,7 @@ import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
  */
 public class CalendulaApp extends Application {
 
+
     public static boolean disableReceivers = false;
 
     // PREFERENCES
@@ -37,6 +38,7 @@ public class CalendulaApp extends Application {
     public static final String INTENT_EXTRA_ROUTINE_ID = "routine_id";
     public static final String INTENT_EXTRA_MEDICINE_ID = "medicine_id";
     public static final String INTENT_EXTRA_SCHEDULE_ID = "schedule_id";
+    public static final String INTENT_EXTRA_SCHEDULE_TIME = "schedule_time";
     public static final String INTENT_EXTRA_DELAY_ROUTINE_ID = "delay_routine_id";
     // ACTIONS
     public static final int ACTION_ROUTINE_TIME = 1;
@@ -44,6 +46,8 @@ public class CalendulaApp extends Application {
     public static final int ACTION_ROUTINE_DELAYED_TIME = 3;
     public static final int ACTION_DELAY_ROUTINE = 4;
     public static final int ACTION_CANCEL_ROUTINE = 5;
+    public static final int ACTION_HOURLY_SCHEDULE_TIME = 6;
+    public static final int ACTION_HOURLY_SCHEDULE_DELAYED_TIME = 7;
 
 
     // REQUEST CODES

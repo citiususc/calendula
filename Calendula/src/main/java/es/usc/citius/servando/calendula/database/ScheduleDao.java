@@ -59,4 +59,7 @@ public class ScheduleDao extends GenericDao<Schedule, Long> {
 
     }
 
+    public List<Schedule> findHourly() {
+        return findBy(Schedule.COLUMN_TYPE, Schedule.SCHEDULE_TYPE_HOURLY);
+    }
 }

@@ -1,11 +1,16 @@
 package es.usc.citius.servando.calendula.database;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
+
+import org.joda.time.LocalTime;
 
 import java.sql.SQLException;
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
+import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
 /**
@@ -43,4 +48,15 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
         });
     }
 
+    public DailyScheduleItem findByScheduleAndTime(Schedule schedule, LocalTime time) {
+        try {
+            QueryBuilder<DailyScheduleItem, Long> qb = dao.queryBuilder();
+            Where w = qb.where();
+            w.and(w.eq(DailyScheduleItem.COLUMN_SCHEDULE, schedule), w.eq(DailyScheduleItem.COLUMN_TIME, time));
+            qb.setWhere(w);
+            return qb.queryForFirst();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding model", e);
+        }
+    }
 }

@@ -2,12 +2,15 @@ package es.usc.citius.servando.calendula.persistence;
 
 import android.util.Log;
 
+import com.google.ical.compat.jodatime.DateTimeIterator;
+import com.google.ical.compat.jodatime.DateTimeIteratorFactory;
 import com.google.ical.compat.jodatime.LocalDateIterator;
 import com.google.ical.values.Frequency;
 import com.google.ical.values.RRule;
 import com.google.ical.values.Weekday;
 import com.google.ical.values.WeekdayNum;
 
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 
@@ -163,6 +166,30 @@ public class RepetitionRule {
                 }
             }
             Log.d("Schedule", "------  No dates in range");
+            return occurrences;
+        } catch (ParseException e) {
+            throw new RuntimeException("Error parsing ical", e);
+        }
+    }
+
+    public List<DateTime> occurrencesBetween(DateTime start, DateTime to) {
+        try {
+            // start at previous day and then advance
+            // to prevent start date be returned on the recurrences list
+            DateTime from = start.minusDays(1);
+            List<DateTime> occurrences = new ArrayList<>();
+            DateTimeIterator it = DateTimeIteratorFactory.createDateTimeIterator(rrule.toIcal(), from, DateTimeZone.UTC, true);
+            it.advanceTo(start);
+            // iterate until first date out of range
+            while (it.hasNext()) {
+                DateTime n = it.next();
+                if (n.isBefore(to)) {
+                    occurrences.add(n);
+                    Log.d("Schedule", "New occurrence: " + n.toString("dd/MM/YY - hh:mm"));
+                } else {
+                    break;
+                }
+            }
             return occurrences;
         } catch (ParseException e) {
             throw new RuntimeException("Error parsing ical", e);

@@ -309,7 +309,7 @@
         <item>Todos los días</item>
         <item>Algunos días</item>
         <item>Intervalo</item>
-        <item>Personalizado</item>
+        <!--<item>Personalizado</item>-->
     </string-array>
 
     <string-array name="schedule_repeat_frequencies">
@@ -319,6 +319,7 @@
     </string-array>
 
     <string-array name="schedule_repeat_frequency_units">
+        <item>horas</item>
         <item>días</item>
         <item>semanas</item>
         <item>meses</item>

@@ -187,48 +187,25 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
                 public Object call() throws Exception {
                     // save schedule
                     s.setMedicine(ScheduleHelper.instance().getSelectedMed());
-                    /*int repeatType = ScheduleCreationHelper.instance().getRepeatType();
-                    RepetitionRule r = new RepetitionRule();
-
-                    if (repeatType == ScheduleTimetableFragment.REPEAT_EVERYDAY) {
-                        r.setFrequency(Frequency.DAILY);
-                        r.setInterval(0);
-                        r.setDays(null);
-                    } else if (repeatType == ScheduleTimetableFragment.REPEAT_SPECIFIC_DAYS) {
-                        r.setFrequency(Frequency.DAILY);
-                        r.setInterval(0);
-                        r.setDays(ScheduleCreationHelper.instance().getSelectedDays());
-                    } else if (repeatType == ScheduleTimetableFragment.REPEAT_INTERVAL) {
-                        int interval = ScheduleCreationHelper.instance().getIcalInterval();
-                        Frequency freq = ScheduleCreationHelper.instance().getFrequency();
-                        r.setInterval(interval);
-                        if (freq == Frequency.WEEKLY)
-                            r.setDays(ScheduleCreationHelper.instance().getSelectedDays());
-                        else
-                            r.setDays(null);
-                        r.setFrequency(freq);
-                    } else {
-                        String rule = ScheduleCreationHelper.instance().getRule();
-                        r = new RepetitionRule("RRULE:" + rule);
-                    }
-
-                    s.setRepetition(r);*/
                     s.save();
 
                     Log.d(TAG, "Saving schedule...");
 
-                    for (ScheduleItem item : ScheduleHelper.instance().getScheduleItems()) {
-                        item.setSchedule(s);
-                        item.save();
-                        Log.d(TAG, "Saving item..." + item.getId());
-                        // add to daily schedule
-                        DailyScheduleItem dsi = new DailyScheduleItem(item);
-                        dsi.save();
-                        Log.d(TAG, "Saving daily schedule item..." + dsi.getId() + ", " + dsi.scheduleItem().getId());
+                    if (!s.repeatsHourly()) {
+                        for (ScheduleItem item : ScheduleHelper.instance().getScheduleItems()) {
+                            item.setSchedule(s);
+                            item.save();
+                            Log.d(TAG, "Saving item..." + item.getId());
+                            // add to daily schedule
+                            DailyScheduleItem dsi = new DailyScheduleItem(item);
+                            dsi.save();
+                            Log.d(TAG, "Saving daily schedule item..." + dsi.getId() + ", " + dsi.scheduleItem().getId());
+                        }
+                    } else {
+                        s.setDose(1); // TODO
                     }
                     // save and fire event
                     DB.schedules().saveAndFireEvent(s);
-
                     return null;
                 }
             });
