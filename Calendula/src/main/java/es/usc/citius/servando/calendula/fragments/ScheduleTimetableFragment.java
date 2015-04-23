@@ -21,6 +21,7 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -82,12 +83,27 @@ public class ScheduleTimetableFragment extends Fragment implements NumberPickerD
     Schedule schedule;
     boolean ignoreNextEvent = true;
 
+
+    boolean newSchedule = false;
+
+    View boxTimetable;
+    View boxRepeat;
+    View boxDuration;
+    View boxHelp;
+
+    TextView helpView;
+    Button nextButton;
+    ScrollView scrollView;
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // get schedule from state helper if any
         schedule = ScheduleHelper.instance().getSchedule();
         if (schedule == null) {
+            newSchedule = true;
             schedule = new Schedule();
             ScheduleHelper.instance().setSchedule(schedule);
         }
@@ -97,10 +113,59 @@ public class ScheduleTimetableFragment extends Fragment implements NumberPickerD
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_schedule_timetable, container, false);
         timetableContainer = (LinearLayout) rootView.findViewById(R.id.schedule_timetable_container);
+
+
         setupScheduleSpinner(rootView);
         setupDaySelectionListeners(rootView);
         setupStartEndDatePickers(rootView);
+        if (newSchedule) {
+            setupForNewSchedule(rootView);
+        }
         return rootView;
+    }
+
+    private void setupForNewSchedule(View rootView) {
+
+        boxTimetable = rootView.findViewById(R.id.box_schedule_timetable);
+        boxRepeat = rootView.findViewById(R.id.box_schedule_repeat);
+        boxDuration = rootView.findViewById(R.id.box_schedule_duration);
+        boxHelp = rootView.findViewById(R.id.box_schedule_help);
+        helpView = (TextView) rootView.findViewById(R.id.schedule_help_text);
+        nextButton = (Button) rootView.findViewById(R.id.schedule_help_button);
+
+        boxTimetable.setVisibility(View.GONE);
+        boxRepeat.setVisibility(View.GONE);
+        boxDuration.setVisibility(View.GONE);
+        scrollView = (ScrollView) rootView.findViewById(R.id.schedule_scroll);
+
+        helpView.setText("Please select times a day");
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (boxTimetable.getVisibility() != View.VISIBLE) {
+                    boxTimetable.setVisibility(View.VISIBLE);
+                    helpView.setText("Set timetable... ");
+                } else if (boxRepeat.getVisibility() != View.VISIBLE) {
+                    boxRepeat.setVisibility(View.VISIBLE);
+                    helpView.setText("Introduce repeat... ");
+                } else if (boxDuration.getVisibility() != View.VISIBLE) {
+                    boxDuration.setVisibility(View.VISIBLE);
+                    helpView.setText("Set schedule limits... ");
+                    nextButton.setVisibility(View.GONE);
+                }
+
+                scrollView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                    }
+                });
+            }
+        });
+
+
     }
 
     private void setupRepetitions(final View rooView) {
