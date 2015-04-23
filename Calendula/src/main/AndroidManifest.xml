@@ -93,6 +93,13 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="es.usc.citius.servando.calendula.activities.SummaryCalendarActivity"
+            android:label="@string/title_activity_schedules"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            android:theme="@style/Theme.AppCompat.Translucent" />
+
         <receiver android:name="es.usc.citius.servando.calendula.scheduling.AlarmReceiver" />
         <receiver android:name="es.usc.citius.servando.calendula.scheduling.NotificationEventReceiver" />
 

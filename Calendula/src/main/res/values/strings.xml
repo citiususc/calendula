@@ -315,6 +315,7 @@
     <string name="recurrence_end_continously"></string>
     <string name="recurrence_end_count_label">For a number of intakes</string>
     <string name="every_weekday"></string>
+    <string name="summary_show_calendar">Show calendar</string>
 
 
 </resources>

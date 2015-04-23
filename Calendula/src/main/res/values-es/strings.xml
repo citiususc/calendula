@@ -325,6 +325,18 @@
     </string-array>
     <string name="schedule_custom_rule_text">&lt;u> %1$s &lt;/u></string>
     <string name="every">Cada</string>
+    <string name="summary_show_calendar">Ver calendario</string>
+
+    <string-array name="calendar_weekday_names">
+        <item>NONE</item>
+        <item>DO</item>
+        <item>LU</item>
+        <item>MA</item>
+        <item>MI</item>
+        <item>JU</item>
+        <item>VI</item>
+        <item>SA</item>
+    </string-array>
 
 
 </resources>

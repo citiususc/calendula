@@ -36,7 +36,7 @@
         android:id="@+id/sched_summary_medicon"
         android:layout_below="@id/summaryTitle"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
         android:src="@drawable/ic_presentation_2" />
 
     <TextView
@@ -61,5 +61,14 @@
         android:layout_below="@+id/sched_summary_medi_days"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/summary_show_calendar"
+        android:id="@+id/button_show_calendar"
+        android:layout_below="@+id/sched_summary_medi_dailyfreq"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
 
 </RelativeLayout>

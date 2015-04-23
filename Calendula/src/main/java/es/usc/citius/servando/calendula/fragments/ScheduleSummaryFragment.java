@@ -1,17 +1,22 @@
 package es.usc.citius.servando.calendula.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.joda.time.LocalDate;
 
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.SummaryCalendarActivity;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Schedule;
@@ -60,7 +65,7 @@ public class ScheduleSummaryFragment extends Fragment {
         final TextView medDaysTv = (TextView) rootView.findViewById(R.id.sched_summary_medi_days);
         final TextView medDailyFreqTv = (TextView) rootView.findViewById(R.id.sched_summary_medi_dailyfreq);
         final ImageView medIconImage = (ImageView) rootView.findViewById(R.id.sched_summary_medicon);
-
+        final Button showCalendarButton = (Button) rootView.findViewById(R.id.button_show_calendar);
 
         //String medName = med != null ? med.name() : "Unselected";
         int medIcon = med != null ? med.presentation().getDrawable() : Presentation.PILLS.getDrawable();
@@ -74,6 +79,21 @@ public class ScheduleSummaryFragment extends Fragment {
         medDailyFreqTv.setText(freq);
         medDaysTv.setText(s.toReadableString(getActivity()));
         medIconImage.setImageDrawable(getResources().getDrawable(medIcon));
+
+        showCalendarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                LocalDate start = ScheduleHelper.instance().getSchedule().start();
+
+                Intent i = new Intent(getActivity(), SummaryCalendarActivity.class);
+                i.putExtra("rule", ScheduleHelper.instance().getSchedule().rule().toIcal());
+                if (start != null) {
+                    i.putExtra("start", start.toString(SummaryCalendarActivity.START_DATE_FORMAT));
+                }
+                startActivity(i);
+            }
+        });
 
 
     }

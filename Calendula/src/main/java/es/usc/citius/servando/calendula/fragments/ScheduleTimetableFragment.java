@@ -189,10 +189,10 @@ public class ScheduleTimetableFragment extends Fragment implements NumberPickerD
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                 Log.d(TAG, year + " " + monthOfYear);
-                                LocalDate d = new LocalDate(year, monthOfYear - 1, dayOfMonth);
+                                LocalDate d = new LocalDate(year, monthOfYear + 1, dayOfMonth);
                                 setScheduleStart(d);
                             }
-                        }, scheduleStart.getYear(), scheduleStart.getMonthOfYear() + 1, scheduleStart.getDayOfMonth());
+                        }, scheduleStart.getYear(), scheduleStart.getMonthOfYear() - 1, scheduleStart.getDayOfMonth());
                 dpd.show();
             }
         });
@@ -206,10 +206,10 @@ public class ScheduleTimetableFragment extends Fragment implements NumberPickerD
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                LocalDate d = new LocalDate(year, monthOfYear - 1, dayOfMonth);
+                                LocalDate d = new LocalDate(year, monthOfYear + 1, dayOfMonth);
                                 setScheduleEnd(d);
                             }
-                        }, scheduleEnd.getYear(), scheduleEnd.getMonthOfYear() + 1, scheduleEnd.getDayOfMonth());
+                        }, scheduleEnd.getYear(), scheduleEnd.getMonthOfYear() - 1, scheduleEnd.getDayOfMonth());
                 dpd.show();
             }
         });

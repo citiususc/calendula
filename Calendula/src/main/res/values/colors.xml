@@ -64,4 +64,19 @@
     <color name="actionbar_background_color">#0099CC</color>
     <color name="activity_background_color">#EFEFEF</color>
     <!--#006699-->
+
+    <!-- CALENDAR -->
+    <color name="calendar_active_month_bg">#ffffff</color>
+    <color name="calendar_bg">#ffffffff</color>
+    <color name="calendar_divider">#11ececec</color>
+    <color name="calendar_inactive_month_bg">#ffffff</color>
+    <color name="calendar_selected_day_bg">@color/android_blue_dark</color>
+    <color name="calendar_highlighted_day_bg">@color/android_blue_light</color>
+    <color name="calendar_selected_range_bg">#ff96caff</color>
+    <color name="calendar_text_inactive">#30778088</color>
+    <color name="calendar_text_active">#ff778088</color>
+    <color name="calendar_text_selected">#ffffffff</color>
+    <color name="calendar_text_unselectable">#22778088</color>
+    <!-- /CALENDAR -->
+
 </resources>
