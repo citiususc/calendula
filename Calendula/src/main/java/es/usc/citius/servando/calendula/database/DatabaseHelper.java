@@ -115,6 +115,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private void migrateToICal() throws SQLException {
 
         getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Rrule TEXT;");
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Start TEXT;");
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Type INTEGER;");
 
         // update schedules
         TransactionManager.callInTransaction(getConnectionSource(), new Callable<Void>() {
@@ -124,7 +126,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 List<Schedule> schedules = getSchedulesDao().queryForAll();
                 Log.d(TAG, "Upgrade " + schedules.size() + " schedules");
                 for (Schedule s : schedules) {
-                    if (s.getRepetition() == null) {
+                    if (s.rule() == null) {
                         s.setRepetition(new RepetitionRule(RepetitionRule.DEFAULT_ICAL_VALUE));
                     }
                     s.setDays(s.getLegacyDays());

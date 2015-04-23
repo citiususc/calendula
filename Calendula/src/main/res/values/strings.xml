@@ -285,12 +285,14 @@
     <string name="button_schedule_repeat_until">Never</string>
     <string name="schedule_limits_date_format">MMMM dd, YYYY</string>
     <string name="schedule_week_days_connector">on</string>
+    <string name="schedules_stop_after">Stop after %1$s intakes</string>
+    <string name="schedule_custom_rule_text">&lt;u> %1$s &lt;/u></string>
 
     <string-array name="schedule_repeat_types">
         <item>Every day</item>
         <item>Some week days</item>
         <item>Interval</item>
-        <item>Custom</item>
+        <item>Customize</item>
     </string-array>
 
     <string-array name="schedule_repeat_frequencies">
@@ -310,6 +312,9 @@
         <item>Weeks</item>
         <item>Months</item>
     </string-array>
+    <string name="recurrence_end_continously"></string>
+    <string name="recurrence_end_count_label">For a number of intakes</string>
+    <string name="every_weekday"></string>
 
 
 </resources>

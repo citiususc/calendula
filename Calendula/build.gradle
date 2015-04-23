@@ -13,6 +13,7 @@ apply plugin: 'idea'
 
 repositories {
     mavenCentral()
+    jcenter()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
@@ -79,10 +80,14 @@ android {
 }
 
 dependencies {
+
+    // google ref 2445
+    compile files('libs/rfc2445-4Mar2011.jar')
+
     compile 'com.google.code.gson:gson'
     compile project(':libraries:ExpandableListview')
     compile 'com.nispok:snackbar:2.9.0'
-    compile 'com.doomonafireball.betterpickers:library:1.5.3'
+    compile 'com.doomonafireball.betterpickers:library:1.5.5'
     compile 'com.github.filippudak.progresspieview:library:1.0.+'
     compile 'com.github.amlcurran.showcaseview:library:5.0.0'
 
@@ -110,8 +115,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:1.9.5"
 
-    // google ref 2445
-    compile files('libs/rfc2445-4Mar2011.jar')
     //compile 'org.scala-saddle:google-rfc-2445:20110304'
 
 }

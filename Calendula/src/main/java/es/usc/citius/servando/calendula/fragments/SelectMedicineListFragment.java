@@ -21,7 +21,7 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
+import es.usc.citius.servando.calendula.util.ScheduleHelper;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -41,7 +41,7 @@ public class SelectMedicineListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_select_medicine_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.medicines_list);
 
-        Medicine med = ScheduleCreationHelper.instance().getSelectedMed();
+        Medicine med = ScheduleHelper.instance().getSelectedMed();
         if (med != null)
             selectedId = med.getId();
 

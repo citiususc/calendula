@@ -63,13 +63,25 @@ public class RepetitionRule {
                 ical = DEFAULT_ICAL_VALUE;
             }
             rrule = new RRule(ical);
-            Log.d("RRule", "Creating repetition rule" + rrule.toIcal());
+            /*if(!ical.contains("UNTIL")){
+                DateValue v = new DateTimeValueImpl(1,0,0,0,0,0);
+                rrule.setUntil(v);
+            }*/
+            Log.d("RRule", "Creating repetition rule: " + rrule.toIcal());
         } catch (ParseException p) {
             throw new RuntimeException("Error parsing RRule", p);
         }
     }
 
-    public void setRepeat(Frequency freq) {
+    public Frequency frequency() {
+        return rrule.getFreq();
+    }
+
+    public int interval() {
+        return rrule.getInterval();
+    }
+
+    public void setFrequency(Frequency freq) {
         rrule.setFreq(freq);
     }
 

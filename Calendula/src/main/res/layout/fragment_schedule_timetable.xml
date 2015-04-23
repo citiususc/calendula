@@ -182,10 +182,13 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="55dp"
-                android:text="Every..."
+                android:text="@string/schedule_custom_rule_text"
                 android:gravity="center_vertical"
                 android:paddingLeft="26dp"
-                android:id="@+id/rule_text" />
+                android:id="@+id/rule_text"
+                android:textColor="@color/android_blue_dark"
+                android:fontFamily="sans_serif_condensed"
+                android:textSize="15dp" />
 
         </RelativeLayout>
 
@@ -272,6 +275,42 @@
                     android:layout_alignParentEnd="false"
                     android:textColor="@color/android_blue_dark"
                     android:gravity="start" />
+
+
+                <ImageButton
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:text="@string/button_schedule_repeat_today"
+                    android:id="@+id/button_clear_start"
+                    android:textSize="15dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_clear_black_48dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignParentRight="true"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_alignParentEnd="false"
+                    android:textColor="@color/android_blue_dark"
+                    android:gravity="start"
+                    android:scaleType="fitCenter" />
+
+                <ImageButton
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:text="@string/button_schedule_repeat_until"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:id="@+id/button_clear_end"
+                    android:textSize="15dp"
+                    android:layout_weight="1"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center_vertical"
+                    android:visibility="visible"
+                    android:src="@drawable/ic_clear_black_48dp"
+                    android:layout_alignTop="@+id/textView5"
+                    android:layout_alignParentEnd="false"
+                    android:textColor="@color/android_blue_dark"
+                    android:gravity="start"
+                    android:scaleType="fitCenter" />
+
 
             </RelativeLayout>
 

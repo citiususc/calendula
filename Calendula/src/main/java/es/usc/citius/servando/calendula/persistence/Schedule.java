@@ -1,15 +1,18 @@
 package es.usc.citius.servando.calendula.persistence;
 
 import android.content.Context;
+import android.text.format.Time;
 import android.util.Log;
 
 import com.doomonafireball.betterpickers.recurrencepicker.EventRecurrence;
 import com.doomonafireball.betterpickers.recurrencepicker.EventRecurrenceFormatter;
+import com.google.ical.values.DateValue;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import org.joda.time.LocalDate;
 
+import java.util.Arrays;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.database.DB;
@@ -54,7 +57,7 @@ public class Schedule {
     @DatabaseField(columnName = COLUMN_TYPE)
     private int type = SCHEDULE_TYPE_EVERYDAY;
 
-    public RepetitionRule getRepetition() {
+    public RepetitionRule rule() {
         return rrule;
     }
 
@@ -122,16 +125,6 @@ public class Schedule {
         this.start = start;
     }
 
-    /**
-     * @deprecated Use enabledForDate instead
-     */
-    private boolean enabledFor(int dayOfWeek) {
-        if (dayOfWeek > 7 || dayOfWeek < 1)
-            throw new IllegalArgumentException("Day off week must be between 1 and 7");
-
-        return days()[dayOfWeek - 1];
-    }
-
     public boolean enabledForDate(LocalDate date) {
         boolean enabled = rrule.hasOccurrencesAt(date);
         Log.d("Schedule", "------ Schedule " + medicine().name() + " enabled for " + date.toString("dd/MM/YY") + ": " + enabled);
@@ -145,35 +138,21 @@ public class Schedule {
     public String toReadableString(Context ctx) {
 
         EventRecurrence e = new EventRecurrence();
+        Time t;
+        if (start != null) {
+            t = new Time();
+            t.set(start.getDayOfWeek(), start.getMonthOfYear(), start.getYear());
+        } else {
+            t = new Time();
+            t.setToNow();
+            t.normalize(true);
+            e.setStartDate(t);
+        }
         String ical = rrule.toIcal();
         if (ical != null)
             e.parse(ical.replace("RRULE:", ""));
 
-        return EventRecurrenceFormatter.getRepeatString(ctx, ctx.getResources(), e, true);
-
-        /*int interval = rrule.iCalRule().getInterval();
-        Frequency freq = rrule.iCalRule().getFreq();
-        int byDaySize = rrule.iCalRule().getByDay() != null ? rrule.iCalRule().getByDay().size() : 0;
-
-        if(freq.equals(Frequency.DAILY) && interval == 0 && byDaySize == 0){
-            return ctx.getString(R.string.every_day);
-        }else if (freq.equals(Frequency.DAILY) && (byDaySize > 0)){
-            return ScheduleUtils.stringifyDays(days(),ctx);
-        }else{
-            String freqStr;
-            String tail = "";
-            if(freq == Frequency.DAILY){
-                freqStr = ctx.getString(R.string.schedule_freq_days);
-            }else if(freq == Frequency.WEEKLY){
-                freqStr = ctx.getString(R.string.schedule_freq_weeks);
-                tail = ScheduleUtils.stringifyDays(days(),ctx) + " " + ctx.getString(R.string.schedule_week_days_connector);
-            }else{
-                freqStr = ctx.getString(R.string.schedule_freq_months);
-            }
-            return ctx.getResources().getString(R.string.repeat_every_tostr, String.valueOf(interval), freqStr) + tail;
-        }
-*/
-
+        return EventRecurrenceFormatter.getRepeatString(ctx, ctx.getResources(), e, false);
     }
 
     // *************************************
@@ -204,6 +183,41 @@ public class Schedule {
         return days;
     }
 
+    public boolean allDaysSelected() {
+        for (boolean d : days())
+            if (!d)
+                return false;
+        return true;
+    }
 
+    public int dayCount() {
+        int count = 0;
+        for (boolean d : days())
+            if (d)
+                count += 1;
+        return count;
+    }
+
+    public void toggleSelectedDay(int i) {
+        boolean[] d = days();
+        d[i] = !d[i];
+        rrule.setDays(d);
+        Log.d("Schedule", "Days: " + Arrays.toString(days()));
+    }
+
+
+    public LocalDate end() {
+        DateValue v = rrule.iCalRule().getUntil();
+        /*if(v == null || v.year() == 1)
+            return null;
+        else {
+            return new LocalDate(v.year(), v.month(), v.day());
+        }*/
+        return v != null ? new LocalDate(v.year(), v.month(), v.day()) : null;
+    }
+
+    public DateValue until() {
+        return rrule.iCalRule().getUntil();
+    }
 }
 

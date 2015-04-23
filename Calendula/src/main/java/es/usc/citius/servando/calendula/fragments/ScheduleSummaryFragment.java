@@ -9,15 +9,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Arrays;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
+import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
-import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
+import es.usc.citius.servando.calendula.util.ScheduleHelper;
 
 
 /**
@@ -52,8 +52,9 @@ public class ScheduleSummaryFragment extends Fragment {
         Log.d(TAG, "updateSummary ScheduleSUmmaryFragment");
         View rootView = getView();
 
-        Medicine med = ScheduleCreationHelper.instance().getSelectedMed();
-        List<ScheduleItem> items = ScheduleCreationHelper.instance().getScheduleItems();
+        Medicine med = ScheduleHelper.instance().getSelectedMed();
+        Schedule s = ScheduleHelper.instance().getSchedule();
+        List<ScheduleItem> items = ScheduleHelper.instance().getScheduleItems();
 
         final TextView medNameTv = (TextView) rootView.findViewById(R.id.sched_summary_medname);
         final TextView medDaysTv = (TextView) rootView.findViewById(R.id.sched_summary_medi_days);
@@ -65,19 +66,15 @@ public class ScheduleSummaryFragment extends Fragment {
         int medIcon = med != null ? med.presentation().getDrawable() : Presentation.PILLS.getDrawable();
 
         String freq = ScheduleUtils.getTimesStr(items != null ? items.size() : 0, getActivity());
-        String days[] = ScheduleCreationHelper.instance().getDays(getActivity());
-        String dayStr = ScheduleUtils.stringifyDays(ScheduleCreationHelper.instance().getSelectedDays(), getActivity());
 
         if (med != null) {
             medNameTv.setText(med.name());
         }
-        medDailyFreqTv.setText(freq);
-        medDaysTv.setText(dayStr);
 
+        medDailyFreqTv.setText(freq);
+        medDaysTv.setText(s.toReadableString(getActivity()));
         medIconImage.setImageDrawable(getResources().getDrawable(medIcon));
-        Log.d(TAG, "Idx: " + ScheduleCreationHelper.instance().getSelectedScheduleIdx());
-        Log.d(TAG, "Days: " + Arrays.toString(ScheduleCreationHelper.instance().getSelectedDays()));
-        Log.d(TAG, "Schedule: " + ScheduleCreationHelper.instance().getTimesPerDay());
+
 
     }
 
