@@ -56,39 +56,6 @@ public class ScheduleHelper {
         this.selectedScheduleIdx = selectedScheduleIdx;
     }
 
-    @Override
-    public String toString() {
-        return "ScheduleCreationHelper{" +
-                "selectedMed=" + selectedMed.name() +
-                ", selectedScheduleIdx=" + selectedScheduleIdx +
-                ", timesPerDay=" + timesPerDay +
-                ", scheduleItems=" + scheduleItems.size() +
-                '}';
-    }
-
-
-    public void clear() {
-        instance = null;
-    }
-
-   /* public String[] getDays(Context ctx) {
-        ArrayList<String> days = new ArrayList<String>();
-        String[] dayNames = ScheduleUtils.dayNames(ctx);
-        Log.d("DAYS bool: ", Arrays.toString(selectedDays));
-
-        for (int i = 0; i < selectedDays.length; i++) {
-            if (selectedDays[i]) {
-                Log.d("DAYS", "Add " + i + "( " + dayNames[i] + ") to list");
-                days.add(dayNames[i]);
-            }
-        }
-
-        String[] d = days.toArray(new String[days.size()]);
-        Log.d("DAYS bool 2: ", Arrays.toString(d));
-        return d;
-
-    }*/
-
     public Schedule getSchedule() {
         return schedule;
     }
@@ -104,4 +71,19 @@ public class ScheduleHelper {
     public int getTimesPerDay() {
         return timesPerDay;
     }
+
+    public void clear() {
+        instance = null;
+    }
+
+    @Override
+    public String toString() {
+        return "ScheduleCreationHelper{" +
+                "selectedMed=" + selectedMed.name() +
+                ", selectedScheduleIdx=" + selectedScheduleIdx +
+                ", timesPerDay=" + timesPerDay +
+                ", scheduleItems=" + scheduleItems.size() +
+                '}';
+    }
+
 }

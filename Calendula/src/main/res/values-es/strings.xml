@@ -340,5 +340,11 @@
     </string-array>
 
 
+    <string name="schedule_help_timesbyday">Para empezar, indica el número de veces al día que debes tomar  %1$s</string>
+    <string name="schedule_help_timetable">Ahora, selecciona las rutinas para cada toma</string>
+    <string name="schedule_help_repeat">Ahora indica cómo se repite la pauta. Si se repite tódos los días no tienes que hacer nada.</string>
+    <string name="schedule_help_duration">Para acabar, puedes indicar cuando empieza y acaba esta pauta. Si no estás seguro, puedes dejarlo como está. </string>
+
+
 </resources>
 

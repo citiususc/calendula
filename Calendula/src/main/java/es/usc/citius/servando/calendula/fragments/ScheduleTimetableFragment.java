@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -42,6 +44,7 @@ import java.util.Collections;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
@@ -86,20 +89,24 @@ public class ScheduleTimetableFragment extends Fragment implements NumberPickerD
 
     boolean newSchedule = false;
 
+    View boxTimesByDay;
     View boxTimetable;
     View boxRepeat;
     View boxDuration;
     View boxHelp;
 
     TextView helpView;
-    Button nextButton;
+    ImageButton nextButton;
     ScrollView scrollView;
-
+    private boolean firstBoxAnimated = false;
+    private boolean isFirstScheduleSelection = true;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         // get schedule from state helper if any
         schedule = ScheduleHelper.instance().getSchedule();
         if (schedule == null) {
@@ -114,57 +121,91 @@ public class ScheduleTimetableFragment extends Fragment implements NumberPickerD
         View rootView = inflater.inflate(R.layout.fragment_schedule_timetable, container, false);
         timetableContainer = (LinearLayout) rootView.findViewById(R.id.schedule_timetable_container);
 
+        boxTimesByDay = rootView.findViewById(R.id.box_schedule_times_by_day);
+        boxTimetable = rootView.findViewById(R.id.box_schedule_timetable);
+        boxRepeat = rootView.findViewById(R.id.box_schedule_repeat);
+        boxDuration = rootView.findViewById(R.id.box_schedule_duration);
+        boxHelp = rootView.findViewById(R.id.box_schedule_help);
+        helpView = (TextView) rootView.findViewById(R.id.schedule_help_text);
+        nextButton = (ImageButton) rootView.findViewById(R.id.schedule_help_button);
 
         setupScheduleSpinner(rootView);
         setupDaySelectionListeners(rootView);
         setupStartEndDatePickers(rootView);
+
         if (newSchedule) {
             setupForNewSchedule(rootView);
+        } else {
+            boxHelp.setVisibility(View.GONE);
         }
         return rootView;
     }
 
     private void setupForNewSchedule(View rootView) {
 
-        boxTimetable = rootView.findViewById(R.id.box_schedule_timetable);
-        boxRepeat = rootView.findViewById(R.id.box_schedule_repeat);
-        boxDuration = rootView.findViewById(R.id.box_schedule_duration);
-        boxHelp = rootView.findViewById(R.id.box_schedule_help);
-        helpView = (TextView) rootView.findViewById(R.id.schedule_help_text);
-        nextButton = (Button) rootView.findViewById(R.id.schedule_help_button);
-
         boxTimetable.setVisibility(View.GONE);
         boxRepeat.setVisibility(View.GONE);
         boxDuration.setVisibility(View.GONE);
         scrollView = (ScrollView) rootView.findViewById(R.id.schedule_scroll);
 
-        helpView.setText("Please select times a day");
-
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (boxTimetable.getVisibility() != View.VISIBLE) {
-                    boxTimetable.setVisibility(View.VISIBLE);
-                    helpView.setText("Set timetable... ");
-                } else if (boxRepeat.getVisibility() != View.VISIBLE) {
-                    boxRepeat.setVisibility(View.VISIBLE);
-                    helpView.setText("Introduce repeat... ");
-                } else if (boxDuration.getVisibility() != View.VISIBLE) {
-                    boxDuration.setVisibility(View.VISIBLE);
-                    helpView.setText("Set schedule limits... ");
-                    nextButton.setVisibility(View.GONE);
-                }
-
-                scrollView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-                    }
-                });
+                showNext();
             }
         });
 
+    }
+
+    private void showNext() {
+
+        if (isFirstScheduleSelection) {
+            isFirstScheduleSelection = false;
+            return;
+        }
+
+        if (boxTimetable.getVisibility() != View.VISIBLE) {
+            helpView.setText(getString(R.string.schedule_help_timetable));
+            showBox(boxTimetable);
+        } else if (boxRepeat.getVisibility() != View.VISIBLE) {
+            helpView.setText(getString(R.string.schedule_help_repeat));
+            showBox(boxRepeat);
+        } else if (boxDuration.getVisibility() != View.VISIBLE) {
+            helpView.setText(getString(R.string.schedule_help_duration));
+            showBox(boxDuration);
+            nextButton.setVisibility(View.GONE);
+        }
+    }
+
+
+    private void showBox(final View v) {
+
+        v.setVisibility(View.VISIBLE);
+        Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_scheule_box_slide_up);
+        //anim.setDuration(600);
+        scrollView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.smoothScrollTo((int) v.getX(), (int) v.getY());
+            }
+        }, 200);
+
+
+        anim.setAnimationListener(new Animation.AnimationListener() {
+                                      @Override
+                                      public void onAnimationStart(Animation animation) {
+                                      }
+
+                                      @Override
+                                      public void onAnimationEnd(Animation animation) {
+                                      }
+
+                                      @Override
+                                      public void onAnimationRepeat(Animation animation) {
+                                      }
+                                  }
+        );
+        v.startAnimation(anim);
 
     }
 
@@ -319,6 +360,17 @@ public class ScheduleTimetableFragment extends Fragment implements NumberPickerD
 
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && newSchedule && !firstBoxAnimated) {
+            firstBoxAnimated = true;
+            Medicine med = ScheduleHelper.instance().getSelectedMed();
+            helpView.setText(getString(R.string.schedule_help_timesbyday, med != null ? med.name() : "NO"));
+            showBox(boxTimesByDay);
+        }
+    }
+
     private void setFrequency(int freq, View rootView) {
         Frequency frequency = FREQ[freq];
         schedule.rule().setFrequency(frequency);
@@ -452,6 +504,7 @@ public class ScheduleTimetableFragment extends Fragment implements NumberPickerD
 
         List<Routine> routines = Routine.findAll();
         addTimetableEntries(timesPerDay, routines);
+        showNext();
     }
 
 

@@ -14,9 +14,68 @@
 
 
         <RelativeLayout
+
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:id="@+id/box_schedule_help"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/box_schedule_duration"
+            android:layout_marginTop="0dp">
+
+            <RelativeLayout
+                android:id="@+id/text_container"
+                android:layout_width="fill_parent"
+                android:background="@drawable/schedule_help_bg"
+                android:layout_height="fill_parent"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/imageView4"
+                    android:layout_alignParentLeft="false"
+                    android:layout_alignParentStart="false"
+                    android:src="@drawable/ic_help_white_48dp"
+                    android:scaleType="fitStart"
+                    android:layout_alignParentEnd="false"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:textColor="#222"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/schedule_help_text"
+                    android:text="Help goes here!"
+                    android:gravity="center"
+                    android:fontFamily="sans-serif-condensed"
+                    android:layout_marginRight="30dp" />
+
+            </RelativeLayout>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="5dp"
+                android:textSize="13dp"
+                style="?android:attr/borderlessButtonStyle"
+                android:id="@+id/schedule_help_button"
+                android:layout_below="@+id/text_container"
+                android:src="@drawable/ic_expand_more_black_48dp"
+                android:alpha="0.8" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:id="@+id/box_schedule_times_by_day"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
 
             <TextView
                 android:layout_width="fill_parent"
@@ -31,8 +90,7 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
                 android:focusableInTouchMode="true"
-                android:background="#aaefefef"
-                android:layout_marginTop="10dp" />
+                android:background="#aaefefef" />
 
             <Spinner
                 android:id="@+id/schedules_spinner"
@@ -49,7 +107,8 @@
             android:layout_width="fill_parent"
             android:id="@+id/box_schedule_timetable"
             android:layout_below="@+id/box_schedule_times_by_day"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp">
 
             <TextView
                 android:layout_width="fill_parent"
@@ -63,8 +122,7 @@
                 android:visibility="visible"
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
-                android:background="#aaefefef"
-                android:layout_marginTop="10dp" />
+                android:background="#aaefefef" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -154,7 +212,8 @@
             android:layout_width="fill_parent"
             android:id="@+id/box_schedule_repeat"
             android:layout_below="@+id/box_schedule_timetable"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
 
             <TextView
                 android:layout_width="fill_parent"
@@ -168,8 +227,7 @@
                 android:visibility="visible"
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
-                android:background="#aaefefef"
-                android:layout_marginTop="20dp" />
+                android:background="#aaefefef" />
 
             <RelativeLayout
                 android:layout_width="fill_parent"
@@ -243,8 +301,7 @@
                 android:visibility="visible"
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
-                android:background="#aaefefef"
-                android:layout_marginTop="10dp" />
+                android:background="#aaefefef" />
 
             <RelativeLayout
                 android:layout_width="fill_parent"
@@ -357,35 +414,6 @@
 
 
         </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:id="@+id/box_schedule_help"
-            android:layout_below="@+id/box_schedule_duration"
-            android:layout_alignParentBottom="true"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:background="@color/android_green"
-                android:textColor="@color/white"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="10dp"
-                android:layout_margin="16dp"
-                android:id="@+id/schedule_help_text"
-                android:text="Help goes here!" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/schedule_help_text"
-                android:layout_centerInParent="true"
-                style="?android:attr/borderlessButtonStyle"
-                android:id="@+id/schedule_help_button"
-                android:text="Next" />
-        </RelativeLayout>
-
 
     </RelativeLayout>
 </ScrollView>
