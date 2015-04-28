@@ -21,23 +21,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.astuetz.PagerSlidingTabStrip;
 import com.j256.ormlite.misc.TransactionManager;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 import com.nispok.snackbar.enums.SnackbarType;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.ScheduleSummaryFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleTimetableFragment;
+import es.usc.citius.servando.calendula.fragments.ScheduleTypeFragment;
 import es.usc.citius.servando.calendula.fragments.SelectMedicineListFragment;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
@@ -47,6 +42,9 @@ import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 import es.usc.citius.servando.calendula.util.Snack;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
 
 //import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 
@@ -100,7 +98,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOnPageChangeListener(this);
-        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setOffscreenPageLimit(3);
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 
         tabs.setOnPageChangeListener(this);
@@ -116,7 +114,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         tabs.setViewPager(mViewPager);
 
         if (mSchedule != null) {
-            mViewPager.setCurrentItem(1);
+            mViewPager.setCurrentItem(2);
         }
 
         CalendulaApp.eventBus().register(this);
@@ -146,30 +144,6 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
                 ScheduleHelper.instance().setSelectedScheduleIdx(s.items().size() - 1);
                 ScheduleHelper.instance().setScheduleItems(s.items());
                 ScheduleHelper.instance().setSchedule(s);
-
-                /*RRule r = s.rule().iCalRule();
-
-                int interval = r.getInterval();
-                Frequency freq = r.getFreq();
-                int byDaySize = r.getByDay() != null ? r.getByDay().size() : 0;
-
-                Log.d(TAG, "Freq: " + freq.name() + ", interval: " + interval + ", byDaySize: " + byDaySize);
-
-                if (freq.equals(Frequency.DAILY) && interval == 0 && (byDaySize == 7 || byDaySize == 0)) {
-                    Log.d(TAG, "REPEAT_EVERYDAY");
-                    ScheduleCreationHelper.instance().setRepeatType(ScheduleTimetableFragment.REPEAT_EVERYDAY);
-                } else if (freq.equals(Frequency.DAILY) && byDaySize > 0) {
-                    Log.d(TAG, "REPEAT_SPECIFIC_DAYS");
-                    ScheduleCreationHelper.instance().setRepeatType(ScheduleTimetableFragment.REPEAT_SPECIFIC_DAYS);
-                    ScheduleCreationHelper.instance().setSelectedDays(s.days());
-                } else {
-                    Log.d(TAG, "REPEAT_INTERVAL");
-                    ScheduleCreationHelper.instance().setRepeatType(ScheduleTimetableFragment.REPEAT_INTERVAL);
-                    ScheduleCreationHelper.instance().setFrequency(freq);
-                    ScheduleCreationHelper.instance().setIcalInterval(interval);
-                    if (freq == Frequency.WEEKLY)
-                        ScheduleCreationHelper.instance().setSelectedDays(s.days());
-                }*/
                 mSchedule = s;
             } else {
                 Snack.show("Schedule not found :(", this);
@@ -189,7 +163,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
                     s.setMedicine(ScheduleHelper.instance().getSelectedMed());
                     s.save();
 
-                    Log.d(TAG, "Saving schedule...");
+                    Log.d(TAG, "Saving schedule..." + s.toString());
 
                     if (!s.repeatsHourly()) {
                         for (ScheduleItem item : ScheduleHelper.instance().getScheduleItems()) {
@@ -301,8 +275,6 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
     public void saveSchedule() {
 
-//        try {
-
         if (!validateBeforeSave()) {
             return;
         }
@@ -312,58 +284,6 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         } else {
             createSchedule();
         }
-
-//            ActiveAndroid.beginTransaction();
-//            ArrayList<Long> scheduleItemIds = new ArrayList<Long>();
-//            Medicine m = ScheduleCreationHelper.instance().getSelectedMed();
-//
-//            Schedule s = mSchedule != null ? mSchedule : new es.usc.citius.servando.calendula.persistence.Schedule();
-//            s.setMedicine(m);
-//            s.setDays(ScheduleCreationHelper.instance().getSelectedDays());
-//            s.save();
-//
-//            for (ScheduleItem item : ScheduleCreationHelper.instance().getScheduleItems()) {
-//                item.setSchedule(s);
-//                item.save();
-//                scheduleItemIds.add(item.getId());
-//                // for each item, add a new DailyScheduleItem item for it
-//                if (DailyScheduleItem.findByScheduleItem(item) == null) {
-//                    Log.d(TAG, "Creating daily schedule item for " + item.routine().name());
-//                    new DailyScheduleItem(item).save();
-//                } else {
-//                    Log.d(TAG, "Not creating daily schedule item for " + item.routine().name());
-//                }
-//
-//                Log.d(TAG, "Add item: " + s.getId() + ", " + item.getId());
-//            }
-//
-//            for (ScheduleItem scheduleItem : s.items()) {
-//                if (!ScheduleCreationHelper.instance().getScheduleItems().contains(scheduleItem)) {
-//                    Log.d(TAG, "Item to remove : " + scheduleItem.getId() + ", " + scheduleItem.routine().name() + ", " + scheduleItem.dose());
-//                    scheduleItem.deleteCascade();
-//                }
-//            }
-//
-//            Persistence.instance().save(s);
-//            Log.d(TAG, "Schedule saved successfully!");
-//            ActiveAndroid.setTransactionSuccessful();
-//            AlarmScheduler.instance().onCreateOrUpdateSchedule(s, this);
-//            ScheduleCreationHelper.instance().clear();
-//            Snack.show(R.string.schedule_created_message, this);
-//            // send result to caller activity
-//            Intent returnIntent = new Intent();
-//            returnIntent.putExtra("schedule_created", true);
-//            setResult(RESULT_OK, returnIntent);
-//            finish();
-//
-//        } catch (Exception e) {
-//            Snack.show("Error creating schedule",this);
-//            e.printStackTrace();
-//        } finally {
-//            if(ActiveAndroid.inTransaction()) {
-//                ActiveAndroid.endTransaction();
-//            }
-//        }
     }
 
 
@@ -471,6 +391,19 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
     }
 
+    public void onScheduleTypeSelected()
+    {
+        ((ScheduleTimetableFragment) getViewPagerFragment(2)).onTypeSelected();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run()
+            {
+                mViewPager.setCurrentItem(2);
+            }
+        }, 500);
+    }
+
+
 
     void showDeleteConfirmationDialog(final Schedule s) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -555,6 +488,9 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             if (position == 0) {
                 return new SelectMedicineListFragment();
             } else if (position == 1) {
+                return new ScheduleTypeFragment();
+            } else if (position == 2)
+            {
                 return new ScheduleTimetableFragment();
             } else {
                 return new ScheduleSummaryFragment();
@@ -567,6 +503,9 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             if (position == 0) {
                 return getString(R.string.medicine);
             } else if (position == 1) {
+                return getString(R.string.schedule_type);
+            } else if (position == 2)
+            {
                 return getString(R.string.schedule);
             } else {
                 return getString(R.string.summary);
@@ -576,7 +515,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 4;
         }
     }
 

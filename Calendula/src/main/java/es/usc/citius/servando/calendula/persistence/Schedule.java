@@ -1,26 +1,19 @@
 package es.usc.citius.servando.calendula.persistence;
 
 import android.content.Context;
-import android.text.format.Time;
 import android.util.Log;
-
-import com.doomonafireball.betterpickers.recurrencepicker.EventRecurrence;
-import com.doomonafireball.betterpickers.recurrencepicker.EventRecurrenceFormatter;
 import com.google.ical.values.DateValue;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-
-import java.util.Arrays;
-import java.util.List;
-
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.typeSerializers.BooleanArrayPersister;
 import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalDatePersister;
 import es.usc.citius.servando.calendula.persistence.typeSerializers.RRulePersister;
-
+import java.util.Arrays;
+import java.util.List;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 /**
  * Created by joseangel.pineiro
@@ -159,7 +152,10 @@ public class Schedule {
 
     public String toReadableString(Context ctx) {
 
-        EventRecurrence e = new EventRecurrence();
+        String ical = rrule.toIcal();
+        return ical;
+
+        /*EventRecurrence e = new EventRecurrence();
         Time t;
         if (start != null) {
             t = new Time();
@@ -170,11 +166,12 @@ public class Schedule {
             t.normalize(true);
             e.setStartDate(t);
         }
-        String ical = rrule.toIcal();
+
         if (ical != null)
             e.parse(ical.replace("RRULE:", ""));
 
         return EventRecurrenceFormatter.getRepeatString(ctx, ctx.getResources(), e, false);
+        */
     }
 
     // *************************************
@@ -236,9 +233,40 @@ public class Schedule {
         return v != null ? new LocalDate(v.year(), v.month(), v.day()) : null;
     }
 
+    public LocalTime startTime()
+    {
+        final int[] byHour = rule().iCalRule().getByHour();
+        if (byHour != null && byHour.length == 1)
+        {
+            final int[] byMinute = rule().iCalRule().getByMinute();
+            if (byMinute != null && byMinute.length == 1)
+            {
+                return new LocalTime(byHour[0], byMinute[0]);
+            }
+        }
+        return null;
+    }
+
+    public void setStartTime(LocalTime t)
+    {
+        rule().iCalRule().setByHour(new int[] { t.getHourOfDay() });
+        rule().iCalRule().setByMinute(new int[] { t.getMinuteOfHour() });
+    }
+
     public DateValue until() {
         return rrule.iCalRule().getUntil();
     }
 
+    @Override public String toString()
+    {
+        return "Schedule{" +
+            "id=" + id +
+            ", medicine=" + medicine +
+            ", rrule=" + rrule.toIcal() +
+            ", start=" + start +
+            ", dose=" + dose +
+            ", type=" + type +
+            '}';
+    }
 }
 

@@ -1,11 +1,12 @@
 package es.usc.citius.servando.calendula.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.ical.values.Frequency;
+import es.usc.citius.servando.calendula.fragments.ScheduleTypeFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by joseangel.pineiro on 12/12/13.
@@ -20,7 +21,7 @@ public class ScheduleHelper {
 
     private int selectedScheduleIdx = 0;
     private int timesPerDay = 1;
-
+    private int scheduleType;
 
     private ScheduleHelper() {
         setScheduleItems(new ArrayList<ScheduleItem>());
@@ -62,6 +63,16 @@ public class ScheduleHelper {
 
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
+        if (schedule != null)
+        {
+            if (schedule.rule().frequency() == Frequency.HOURLY)
+            {
+                this.setScheduleType(ScheduleTypeFragment.TYPE_HOURLY);
+            } else
+            {
+                this.setScheduleType(ScheduleTypeFragment.TYPE_ROUTINES);
+            }
+        }
     }
 
     public void setTimesPerDay(int timesPerDay) {
@@ -86,4 +97,13 @@ public class ScheduleHelper {
                 '}';
     }
 
+    public int getScheduleType()
+    {
+        return scheduleType;
+    }
+
+    public void setScheduleType(int scheduleType)
+    {
+        this.scheduleType = scheduleType;
+    }
 }
