@@ -26,14 +26,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.astuetz.PagerSlidingTabStrip;
 import com.makeramen.RoundedImageView;
 import com.melnykov.fab.FloatingActionButton;
-
-import java.util.Arrays;
-import java.util.List;
-
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.ReminderNotification;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
@@ -52,20 +47,21 @@ import es.usc.citius.servando.calendula.util.AppTutorial;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.view.ScrimInsetsFrameLayout;
+import java.util.Arrays;
+import java.util.List;
+import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
 
 //import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
 //import com.github.amlcurran.showcaseview.ShowcaseView;
 //import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 //import com.github.amlcurran.showcaseview.targets.PointTarget;
 
-public class HomeActivity extends ActionBarActivity implements
-        ViewPager.OnPageChangeListener,
-        ActionBar.OnNavigationListener,
-        View.OnClickListener,
-        RoutinesListFragment.OnRoutineSelectedListener,
-        MedicinesListFragment.OnMedicineSelectedListener,
-        ScheduleListFragment.OnScheduleSelectedListener {
-
+public class HomeActivity extends ActionBarActivity
+    implements ViewPager.OnPageChangeListener, ActionBar.OnNavigationListener, View.OnClickListener,
+    RoutinesListFragment.OnRoutineSelectedListener,
+    MedicinesListFragment.OnMedicineSelectedListener,
+    ScheduleListFragment.OnScheduleSelectedListener {
 
     public static final int ANIM_ACTION_BAR_DURATION = 100;
     public static final int ANIM_TABS_DURATION = 250;
@@ -105,23 +101,21 @@ public class HomeActivity extends ActionBarActivity implements
     boolean showcaseShown = false;
     private boolean toolbarVisible;
 
-//    ShowcaseView sv;
+    //    ShowcaseView sv;
 
     private AppTutorial tutorial;
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                getWindow().getDecorView().setSystemUiVisibility(
-//                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
-//        }
-
+        //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        //                getWindow().getDecorView().setSystemUiVisibility(
+        //                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        //                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        //                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+        //        }
 
         // set the content view layout
         setContentView(R.layout.activity_home);
@@ -137,7 +131,6 @@ public class HomeActivity extends ActionBarActivity implements
         tabsShadow = findViewById(R.id.tabs_shadow);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(5);
-
 
         tabs.setOnPageChangeListener(this);
         tabs.setShouldExpand(true);
@@ -178,14 +171,16 @@ public class HomeActivity extends ActionBarActivity implements
         setTutorial(new AppTutorial());
         getTutorial().init(this, tabs);
 
-        Log.d(TAG, "OnCreate  - Routine Id Extra: " + getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l));
+        Log.d(TAG, "OnCreate  - Routine Id Extra: " + getIntent().getLongExtra(
+            CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l));
         checkReminder(getIntent());
         startTutorialIfNeeded();
-
     }
 
-    public int getActionDrawable(int index) {
-        switch (index) {
+    public int getActionDrawable(int index)
+    {
+        switch (index)
+        {
 
             case 1:
                 return R.drawable.ic_small_home_w;
@@ -201,12 +196,13 @@ public class HomeActivity extends ActionBarActivity implements
                 return R.drawable.ic_small_plane_w;
             default:
                 return R.drawable.ic_small_home_w;
-
         }
     }
 
-    public int getActionColor(int index) {
-        switch (index) {
+    public int getActionColor(int index)
+    {
+        switch (index)
+        {
             case 3:
                 return R.color.android_orange;
             case 4:
@@ -219,12 +215,13 @@ public class HomeActivity extends ActionBarActivity implements
                 return R.color.android_red_light;
             default:
                 return R.color.dark_grey_home;
-
         }
     }
 
-    public int getAddButtonColor(int page) {
-        switch (page) {
+    public int getAddButtonColor(int page)
+    {
+        switch (page)
+        {
             case 1:
                 return R.color.android_orange;
             case 2:
@@ -233,12 +230,13 @@ public class HomeActivity extends ActionBarActivity implements
                 return R.color.android_green;
             default:
                 return R.color.android_blue_darker;
-
         }
     }
 
-    public int getSecondaryAddButtonColor(int page) {
-        switch (page) {
+    public int getSecondaryAddButtonColor(int page)
+    {
+        switch (page)
+        {
             case 1:
                 return R.color.android_orange_dark;
             case 2:
@@ -247,67 +245,66 @@ public class HomeActivity extends ActionBarActivity implements
                 return R.color.android_green_dark;
             default:
                 return R.color.android_blue_dark;
-
         }
     }
 
-
-    private void initializeDrawer() {
-
+    private void initializeDrawer()
+    {
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer_list);
         drawerView = (ScrimInsetsFrameLayout) findViewById(R.id.left_drawer);
 
-        List<String> items = Arrays.asList(getResources().getStringArray(R.array.home_drawer_actions));
+        List<String> items =
+            Arrays.asList(getResources().getStringArray(R.array.home_drawer_actions));
         // Set the adapter for the list view
-        mDrawerList.setAdapter(new DrawerListAdapter(getApplication(), R.layout.drawer_list_item, items));
+        mDrawerList.setAdapter(
+            new DrawerListAdapter(getApplication(), R.layout.drawer_list_item, items));
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                toolbar,//R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
-                R.string.drawer_open,  /* "open drawer" description */
-                R.string.drawer_close  /* "close drawer" description */
-        ) {
+        mDrawerToggle = new ActionBarDrawerToggle(this,                  /* host Activity */
+            mDrawerLayout,         /* DrawerLayout object */
+            toolbar,//R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+            R.string.drawer_open,  /* "open drawer" description */
+            R.string.drawer_close  /* "close drawer" description */) {
 
             /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
+            public void onDrawerClosed(View view)
+            {
                 super.onDrawerClosed(view);
-//                if (mViewPager.getCurrentItem() != 0) {
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                        //getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
-//                    }
-//                } else {
-////                    getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
-//                }
-//                updateTitle(mViewPager.getCurrentItem());
-//                int pageNum = mViewPager.getCurrentItem();
-//                MenuItem expand = toolbar.getMenu().findItem(R.id.action_expand);
-//                if (pageNum == 0 && expand != null) {
-//                    expand.setVisible(true);
-//                }
+                //                if (mViewPager.getCurrentItem() != 0) {
+                //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                //                        //getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
+                //                    }
+                //                } else {
+                ////                    getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
+                //                }
+                //                updateTitle(mViewPager.getCurrentItem());
+                //                int pageNum = mViewPager.getCurrentItem();
+                //                MenuItem expand = toolbar.getMenu().findItem(R.id.action_expand);
+                //                if (pageNum == 0 && expand != null) {
+                //                    expand.setVisible(true);
+                //                }
             }
 
             /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
+            public void onDrawerOpened(View drawerView)
+            {
                 super.onDrawerOpened(drawerView);
 
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                    //if (mViewPager.getCurrentItem() != 0)
-//                        //getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
-//                }
+                //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                //                    //if (mViewPager.getCurrentItem() != 0)
+                //                        //getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+                //                }
                 //setActionBarColor(getResources().getColor(R.color.toolbar_dark_background));
-//                toolbar.setTitle(R.string.toolbar_menu_title);
-//                int pageNum = mViewPager.getCurrentItem();
-//                MenuItem expand = toolbar.getMenu().findItem(R.id.action_expand);
-//                if (pageNum == 0 && expand != null) {
-//                    expand.setVisible(false);
-//                }
+                //                toolbar.setTitle(R.string.toolbar_menu_title);
+                //                int pageNum = mViewPager.getCurrentItem();
+                //                MenuItem expand = toolbar.getMenu().findItem(R.id.action_expand);
+                //                if (pageNum == 0 && expand != null) {
+                //                    expand.setVisible(false);
+                //                }
             }
-
         };
 
         // Set the drawer toggle as the DrawerListener
@@ -315,67 +312,77 @@ public class HomeActivity extends ActionBarActivity implements
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-
-
     }
 
     @Override
-    public void onRoutineSelected(Routine r) {
+    public void onRoutineSelected(Routine r)
+    {
         Intent i = new Intent(this, RoutinesActivity.class);
         i.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, r.getId());
         launchActivity(i);
     }
 
     @Override
-    public void onCreateRoutine() {
+    public void onCreateRoutine()
+    {
         //do nothing
     }
 
     @Override
-    public void onMedicineSelected(Medicine m) {
+    public void onMedicineSelected(Medicine m)
+    {
         Intent i = new Intent(this, MedicinesActivity.class);
         i.putExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, m.getId());
         launchActivity(i);
     }
 
     @Override
-    public void onCreateMedicine() {
+    public void onCreateMedicine()
+    {
 
         //do nothing
     }
 
     @Override
-    public void onScheduleSelected(Schedule r) {
+    public void onScheduleSelected(Schedule r)
+    {
         Intent i = new Intent(this, ScheduleCreationActivity.class);
         i.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, r.getId());
         launchActivity(i);
     }
 
     @Override
-    public void onCreateSchedule() {
+    public void onCreateSchedule()
+    {
 
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
+    protected void onPostCreate(Bundle savedInstanceState)
+    {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
     }
 
-    public AppTutorial getTutorial() {
+    public AppTutorial getTutorial()
+    {
         return tutorial;
     }
 
-    public void setTutorial(AppTutorial tutorial) {
+    public void setTutorial(AppTutorial tutorial)
+    {
         this.tutorial = tutorial;
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(View view)
+    {
 
-        if (view.getId() == R.id.add_button) {
+        if (view.getId() == R.id.add_button)
+        {
             Intent i;
-            switch (mViewPager.getCurrentItem()) {
+            switch (mViewPager.getCurrentItem())
+            {
                 case 0: // agenda
                     launchActivity(new Intent(this, ScheduleCreationActivity.class));
                     break;
@@ -390,12 +397,12 @@ public class HomeActivity extends ActionBarActivity implements
                 case 3: // schedules
                     launchActivity(new Intent(this, ScheduleCreationActivity.class));
                     break;
-
             }
         }
     }
 
-    private void launchActivity(Intent i) {
+    private void launchActivity(Intent i)
+    {
         startActivity(i);
         this.overridePendingTransition(0, 0);
     }
@@ -403,17 +410,23 @@ public class HomeActivity extends ActionBarActivity implements
     /**
      * Swaps fragments in the main content view
      */
-    public void selectItem(int position) {
+    public void selectItem(int position)
+    {
         Log.d("Agenda", "Position :" + position);
         if (position == 1)
+        {
             mViewPager.setCurrentItem(0);
-        else if (position > 2 && position < 6)
+        } else if (position > 2 && position < 6)
+        {
             mViewPager.setCurrentItem(position - 2);
-        else if (position > 6 && position < 9) {
+        } else if (position > 6 && position < 9)
+        {
             Snack.show(R.string.work_in_progress, this);
-        } else if (position == 9) {
+        } else if (position == 9)
+        {
             launchActivity(new Intent(this, SettingsActivity.class));
-        } else if (position == 10) {
+        } else if (position == 10)
+        {
             mViewPager.setCurrentItem(0);
             getTutorial().reset(this);
             getTutorial().show(AppTutorial.WELCOME, AppTutorial.HOME_INFO, this);
@@ -423,27 +436,38 @@ public class HomeActivity extends ActionBarActivity implements
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    protected void onNewIntent(Intent intent)
+    {
         super.onNewIntent(intent);
         checkReminder(intent);
     }
 
-    private void checkReminder(Intent intent) {
-        Log.d(TAG, "CheckReminder" + intent.getDataString());
-        final long remindRoutineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l);
-        final long delayRoutineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID, -1l);
+    private void checkReminder(Intent intent)
+    {
 
-        if (remindRoutineId != -1) {
+        Log.d(TAG, "CheckReminder: " + intent.getDataString());
+        final long remindRoutineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l);
+        final long delayRoutineId =
+            intent.getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID, -1l);
+        final long remindScheduleId =
+            intent.getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1l);
+        final long delayScheduleId =
+            intent.getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_SCHEDULE_ID, -1l);
+        final String scheduleTime = intent.getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME);
+
+        if (remindRoutineId != -1)
+        {
             mDrawerLayout.closeDrawer(drawerView);
             showReminder(remindRoutineId);
             getIntent().removeExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID);
-
-        } else if (delayRoutineId != -1) {
+        } else if (delayRoutineId != -1)
+        {
             Log.d(TAG, "isDelay! ");
 
             new Handler().postDelayed(new Runnable() {
                 @Override
-                public void run() {
+                public void run()
+                {
                     mViewPager.setCurrentItem(0);
                     mDrawerLayout.closeDrawer(drawerView);
                     final Routine r = Routine.findById(delayRoutineId);
@@ -452,19 +476,41 @@ public class HomeActivity extends ActionBarActivity implements
                     getIntent().removeExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID);
                 }
             }, 1000);
+        } else if (remindScheduleId != -1)
+        {
+            mDrawerLayout.closeDrawer(drawerView);
+            showReminder(remindScheduleId,
+                LocalTime.parse(scheduleTime, DateTimeFormat.forPattern("kk:mm")));
+            getIntent().removeExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID);
+        } else if (delayScheduleId != -1)
+        {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run()
+                {
+                    mViewPager.setCurrentItem(0);
+                    mDrawerLayout.closeDrawer(drawerView);
+                    final Schedule s = Schedule.findById(delayScheduleId);
+                    LocalTime t = LocalTime.parse(scheduleTime, DateTimeFormat.forPattern("kk:mm"));
+                    ((DailyAgendaFragment) getViewPagerFragment(0)).showDelayDialog(s, t);
 
-
+                    ReminderNotification.cancel(HomeActivity.this);
+                    getIntent().removeExtra(CalendulaApp.INTENT_EXTRA_DELAY_SCHEDULE_ID);
+                }
+            }, 1000);
         }
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy()
+    {
         CalendulaApp.eventBus().unregister(this);
         super.onDestroy();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
@@ -472,137 +518,162 @@ public class HomeActivity extends ActionBarActivity implements
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
         int pageNum = mViewPager.getCurrentItem();
-        if (pageNum == 0) {
+        if (pageNum == 0)
+        {
             boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
             menu.findItem(R.id.action_expand).setVisible(true);
-            menu.findItem(R.id.action_expand).setIcon(
-                    getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_white_48dp : R.drawable.ic_unfold_more_white_48dp)
-            );
-
-
-        } else {
+            menu.findItem(R.id.action_expand)
+                .setIcon(getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_white_48dp
+                    : R.drawable.ic_unfold_more_white_48dp));
+        } else
+        {
             menu.findItem(R.id.action_expand).setVisible(false);
         }
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+        if (mDrawerToggle.onOptionsItemSelected(item))
+        {
             return true;
         }
 
-        switch (item.getItemId()) {
+        switch (item.getItemId())
+        {
             case R.id.action_settings:
                 return true;
             case R.id.action_expand:
                 Log.d("Home", "ToogleExpand");
                 ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
                 boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
-                item.setIcon(
-                        getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_white_48dp : R.drawable.ic_unfold_more_white_48dp)
-                );
+                item.setIcon(getResources().getDrawable(
+                    expanded ? R.drawable.ic_unfold_less_white_48dp
+                        : R.drawable.ic_unfold_more_white_48dp));
 
                 return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
 
         boolean backProcesed = false;
 
-        if (tutorial.isOpen()) {
+        if (tutorial.isOpen())
+        {
             tutorial.hide();
             return;
         }
 
         Fragment current = getViewPagerFragment(mViewPager.getCurrentItem());
-        if (current instanceof OnBackPressedListener) {
+        if (current instanceof OnBackPressedListener)
+        {
             backProcesed = ((OnBackPressedListener) current).doBack();
         }
 
         if (mViewPager.getCurrentItem() != 0)
+        {
             mViewPager.setCurrentItem(0);
-        else if (!backProcesed) {
+        } else if (!backProcesed)
+        {
             super.onBackPressed();
         }
     }
 
     @Override
-    public boolean onNavigationItemSelected(int i, long l) {
+    public boolean onNavigationItemSelected(int i, long l)
+    {
         mViewPager.setCurrentItem(i);
         return true;
     }
 
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        if (position == 0) {
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+    {
+        if (position == 0)
+        {
             hideTabs();
-        } else {
+        } else
+        {
             showTabs();
         }
-
     }
 
-    void showReminder(final Long routineId) {
+    void showReminder(final Long routineId)
+    {
         new Handler().postDelayed(new Runnable() {
             @Override
-            public void run() {
+            public void run()
+            {
                 final Routine r = Routine.findById(routineId);
-                mViewPager.setCurrentItem(0);                
+                mViewPager.setCurrentItem(0);
                 ((DailyAgendaFragment) getViewPagerFragment(0)).showReminder(r);
             }
         }, 1000);
+    }
 
+    void showReminder(final Long scheduleId, final LocalTime scheduleTime)
+    {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run()
+            {
+                final Schedule r = Schedule.findById(scheduleId);
+                mViewPager.setCurrentItem(0);
+                ((DailyAgendaFragment) getViewPagerFragment(0)).showReminder(r, scheduleTime);
+            }
+        }, 1000);
     }
 
     @Override
-    public void onPageSelected(int page) {
+    public void onPageSelected(int page)
+    {
         invalidateOptionsMenu();
         updateTitle(page);
         showTutorialStage(page);
         updateAddButton(page);
-        if (page == 0) {
+        if (page == 0)
+        {
             ((FloatingActionButton) (addButton)).hide(false);
             hideTabs();
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
-//            }
-
-        } else {
-
+        } else if (page == 3)
+        {
+            ((FloatingActionButton) (addButton)).hide(false);
+        } else
+        {
             showAddButton();
-            if (toolbar.getVisibility() != View.VISIBLE) {
+            if (toolbar.getVisibility() != View.VISIBLE)
+            {
                 toolbar.setVisibility(View.VISIBLE);
             }
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
-//            }
             showTabs();
             setActionBarColor(getResources().getColor(R.color.android_blue_darker));
-
         }
     }
 
-    private void updateAddButton(int page) {
+    private void updateAddButton(int page)
+    {
 
         addButton.setColorNormalResId(getAddButtonColor(page));
         addButton.setColorPressedResId(getSecondaryAddButtonColor(page));
-
     }
 
-    private void updateTitle(int page) {
+    private void updateTitle(int page)
+    {
         String title = "";
 
-        switch (page) {
+        switch (page)
+        {
             case 1:
                 title = getString(R.string.title_activity_routines);
                 break;
@@ -620,142 +691,156 @@ public class HomeActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void onPageScrollStateChanged(int i) {
+    public void onPageScrollStateChanged(int i)
+    {
 
     }
 
-    public void hideAddButton() {
+    public void hideAddButton()
+    {
         ((FloatingActionButton) (addButton)).hide(true);
     }
 
-    public void showAddButton() {
+    public void showAddButton()
+    {
         ((FloatingActionButton) (addButton)).show(true);
     }
 
-    Fragment getViewPagerFragment(int position) {
-        return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
+    Fragment getViewPagerFragment(int position)
+    {
+        return getSupportFragmentManager().findFragmentByTag(
+            FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
     }
 
-    public void setCustomTitle(String title) {
+    public void setCustomTitle(String title)
+    {
         setTitle(title);
-//        ((TextView) findViewById(R.id.action_bar_custom_title)).setText(title);
+        //        ((TextView) findViewById(R.id.action_bar_custom_title)).setText(title);
     }
 
-    public void enableToolbarTransparency() {
-//        if (toolbarVisible) {
-//            toolbarVisible = false;
-//            Log.d("Home", "HideToolbar");
+    public void enableToolbarTransparency()
+    {
+        //        if (toolbarVisible) {
+        //            toolbarVisible = false;
+        //            Log.d("Home", "HideToolbar");
         setActionBarColor(getResources().getColor(R.color.transparent));
-//        }
+        //        }
 
     }
 
-    public void hideToolbar() {
+    public void hideToolbar()
+    {
         toolbar.setVisibility(View.GONE);
-
     }
 
-    public void showToolbar() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
-//        }
+    public void showToolbar()
+    {
+        //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        //            getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+        //        }
         toolbar.setVisibility(View.VISIBLE);
     }
 
-    public void showTabs() {
-        if (!(tabs.getVisibility() == View.VISIBLE)) {
+    public void showTabs()
+    {
+        if (!(tabs.getVisibility() == View.VISIBLE))
+        {
             tabs.setVisibility(View.VISIBLE);
             tabsShadow.setVisibility(View.VISIBLE);
-//            final Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_show_tabs);
-//            slide.setDuration(ANIM_TABS_DURATION);
-//            mHandler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
+            //            final Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_show_tabs);
+            //            slide.setDuration(ANIM_TABS_DURATION);
+            //            mHandler.postDelayed(new Runnable() {
+            //                @Override
+            //                public void run() {
 
-//                    tabs.startAnimation(slide);
-//                }
-//            }, ANIM_ACTION_BAR_DURATION);
+            //                    tabs.startAnimation(slide);
+            //                }
+            //            }, ANIM_ACTION_BAR_DURATION);
 
         }
-
     }
 
-    public void hideTabs() {
-        if (!(tabs.getVisibility() == View.GONE)) {
+    public void hideTabs()
+    {
+        if (!(tabs.getVisibility() == View.GONE))
+        {
             tabs.setVisibility(View.GONE);
             tabsShadow.setVisibility(View.GONE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            {
                 getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
             }
             setActionBarColor(getResources().getColor(R.color.transparent));
 
-//            if (Build.VERSION.SDK_INT >= 11) {
-//
-//                Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_hide_tabs);
-//                slide.setAnimationListener(new Animation.AnimationListener() {
-//                    @Override
-//                    public void onAnimationStart(Animation animation) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onAnimationEnd(Animation animation) {
-//                        tabs.setVisibility(View.GONE);
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                            getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
-//                        }
-//
-//                    }
-//
-//                    @Override
-//                    public void onAnimationRepeat(Animation animation) {
-//
-//                    }
-//                });
-//                setActionBarColor(getResources().getColor(R.color.transparent));
-//                tabs.startAnimation(slide);
-//            } else {
-//                setActionBarColor(getResources().getColor(R.color.transparent));
-//                tabs.setVisibility(View.GONE);
-//
-//            }
+            //            if (Build.VERSION.SDK_INT >= 11) {
+            //
+            //                Animation slide = AnimationUtils.loadAnimation(this, R.anim.anim_hide_tabs);
+            //                slide.setAnimationListener(new Animation.AnimationListener() {
+            //                    @Override
+            //                    public void onAnimationStart(Animation animation) {
+            //
+            //                    }
+            //
+            //                    @Override
+            //                    public void onAnimationEnd(Animation animation) {
+            //                        tabs.setVisibility(View.GONE);
+            //                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //                            getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+            //                        }
+            //
+            //                    }
+            //
+            //                    @Override
+            //                    public void onAnimationRepeat(Animation animation) {
+            //
+            //                    }
+            //                });
+            //                setActionBarColor(getResources().getColor(R.color.transparent));
+            //                tabs.startAnimation(slide);
+            //            } else {
+            //                setActionBarColor(getResources().getColor(R.color.transparent));
+            //                tabs.setVisibility(View.GONE);
+            //
+            //            }
         }
     }
 
-    private void setActionBarColor(final int color) {
+    private void setActionBarColor(final int color)
+    {
 
-//        if (Build.VERSION.SDK_INT >= 11) {
-//            previousActionBarColor = currentActionBarColor;
-//            final ObjectAnimator backgroundColorAnimator = ObjectAnimator.ofObject(
-//                    toolbar,
-//                    "backgroundColor",
-//                    new ArgbEvaluator(),
-//                    currentActionBarColor,
-//                    color);
-//            backgroundColorAnimator.setDuration(ANIM_ACTION_BAR_DURATION);
-//            backgroundColorAnimator.start();
-//            backgroundColorAnimator.addListener(new AnimatorListenerAdapter() {
-//                @Override
-//                public void onAnimationEnd(Animator animation) {
-//                    super.onAnimationEnd(animation);
-//                    currentActionBarColor = color;
-//                }
-//            });
-//        } else {
-//            toolbar.setBackgroundColor(color);
-//        }
+        //        if (Build.VERSION.SDK_INT >= 11) {
+        //            previousActionBarColor = currentActionBarColor;
+        //            final ObjectAnimator backgroundColorAnimator = ObjectAnimator.ofObject(
+        //                    toolbar,
+        //                    "backgroundColor",
+        //                    new ArgbEvaluator(),
+        //                    currentActionBarColor,
+        //                    color);
+        //            backgroundColorAnimator.setDuration(ANIM_ACTION_BAR_DURATION);
+        //            backgroundColorAnimator.start();
+        //            backgroundColorAnimator.addListener(new AnimatorListenerAdapter() {
+        //                @Override
+        //                public void onAnimationEnd(Animator animation) {
+        //                    super.onAnimationEnd(animation);
+        //                    currentActionBarColor = color;
+        //                }
+        //            });
+        //        } else {
+        //            toolbar.setBackgroundColor(color);
+        //        }
 
     }
 
     // Method called from the event bus
-    public void onEvent(PersistenceEvents.ModelCreateOrUpdateEvent event) {
-//        if (event.clazz.equals(Routine.class)) {
-//            ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
-//        } else if (event.clazz.equals(Medicine.class)) {
-//            ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
-//        } else if (event.clazz.equals(Schedule.class)) {
-//            ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
-//        }
+    public void onEvent(PersistenceEvents.ModelCreateOrUpdateEvent event)
+    {
+        //        if (event.clazz.equals(Routine.class)) {
+        //            ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
+        //        } else if (event.clazz.equals(Medicine.class)) {
+        //            ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
+        //        } else if (event.clazz.equals(Schedule.class)) {
+        //            ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
+        //        }
         Log.d(TAG, "onEvent: " + event.clazz.getName());
         ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
         ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
@@ -763,12 +848,15 @@ public class HomeActivity extends ActionBarActivity implements
         ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
     }
 
-    private void startTutorialIfNeeded() {
+    private void startTutorialIfNeeded()
+    {
         getTutorial().show(AppTutorial.WELCOME, AppTutorial.HOME_INFO, this);
     }
 
-    private void showTutorialStage(int step) {
-        switch (step) {
+    private void showTutorialStage(int step)
+    {
+        switch (step)
+        {
             case 0:
                 //Home
                 getTutorial().show(AppTutorial.HOME_INFO, this);
@@ -788,7 +876,6 @@ public class HomeActivity extends ActionBarActivity implements
             default:
                 break;
         }
-
     }
 
     public interface OnBackPressedListener {
@@ -797,19 +884,23 @@ public class HomeActivity extends ActionBarActivity implements
 
     class DrawerListAdapter extends ArrayAdapter<String> {
 
-        public DrawerListAdapter(Context context, int resource, List<String> items) {
+        public DrawerListAdapter(Context context, int resource, List<String> items)
+        {
             super(context, resource, items);
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, ViewGroup parent)
+        {
             String item = getItem(position);
 
             final LayoutInflater layoutInflater = getLayoutInflater();
 
-            if (item.equalsIgnoreCase(getString(R.string.drawer_top_option))) {
+            if (item.equalsIgnoreCase(getString(R.string.drawer_top_option)))
+            {
 
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                SharedPreferences prefs =
+                    PreferenceManager.getDefaultSharedPreferences(getContext());
                 String displayName = prefs.getString("display_name", "Calendula");
 
                 View v = layoutInflater.inflate(R.layout.drawer_top, null);
@@ -817,13 +908,15 @@ public class HomeActivity extends ActionBarActivity implements
 
                 return v;
             }
-            if (item.equalsIgnoreCase(getString(R.string.drawer_bottom_option))) {
+            if (item.equalsIgnoreCase(getString(R.string.drawer_bottom_option)))
+            {
                 View v = layoutInflater.inflate(R.layout.drawer_bottom, null);
                 TextView help = ((TextView) v.findViewById(R.id.text_help));
                 help.setText(getString(R.string.drawer_help_option));
                 help.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v)
+                    {
                         selectItem(10);
                     }
                 });
@@ -831,27 +924,34 @@ public class HomeActivity extends ActionBarActivity implements
                 settings.setText(getString(R.string.drawer_settings_option));
                 settings.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v)
+                    {
                         selectItem(9);
                     }
                 });
                 return v;
             }
-            if (item.equalsIgnoreCase(getString(R.string.drawer_menu_option)) ||
-                    item.equalsIgnoreCase(getString(R.string.drawer_services_option))) {
+            if (item.equalsIgnoreCase(getString(R.string.drawer_menu_option))
+                || item.equalsIgnoreCase(getString(R.string.drawer_services_option)))
+            {
                 View v = layoutInflater.inflate(R.layout.drawer_list_item_spacer, null);
                 ((TextView) v.findViewById(R.id.text)).setText(item);
                 v.setEnabled(false);
                 return v;
-            } else {
+            } else
+            {
                 View v = layoutInflater.inflate(R.layout.drawer_list_item, null);
                 ((TextView) v.findViewById(R.id.text)).setText(item);
-                ((ImageView) v.findViewById(R.id.imageView)).setImageResource(getActionDrawable(position));
-                ((RoundedImageView) v.findViewById(R.id.imageViewbg)).setImageResource(getActionColor(position));
+                ((ImageView) v.findViewById(R.id.imageView)).setImageResource(
+                    getActionDrawable(position));
+                ((RoundedImageView) v.findViewById(R.id.imageViewbg)).setImageResource(
+                    getActionColor(position));
                 ((RoundedImageView) v.findViewById(R.id.imageViewbg)).mutateBackground(true);
 
-                if (position == 7 || position == 8) {
-                    ((TextView) v.findViewById(R.id.text)).setTextColor(getResources().getColor(R.color.drawer_item_disabled));
+                if (position == 7 || position == 8)
+                {
+                    ((TextView) v.findViewById(R.id.text)).setTextColor(
+                        getResources().getColor(R.color.drawer_item_disabled));
                 }
 
                 return v;
@@ -859,17 +959,17 @@ public class HomeActivity extends ActionBarActivity implements
         }
 
         @Override
-        public boolean isEnabled(int position) {
+        public boolean isEnabled(int position)
+        {
             return (position != 0 && position != 2 && position != 6);
         }
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
+        public void onItemClick(AdapterView parent, View view, int position, long id)
+        {
             selectItem(position);
         }
     }
-
-
 }

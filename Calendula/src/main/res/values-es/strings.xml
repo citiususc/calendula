@@ -197,7 +197,11 @@
     <string name="title_select_dose_dialog">Introduce una dosis</string>
     <string name="schedule_timetable_time_column">HORA</string>
     <string name="schedule_timetable_dose_column">DOSIS</string>
-    <string name="schedule_day_selector_take">Días:</string>
+  <string name="hourly_repeat_dose">Dosis</string>
+  <string name="take">Tomar</string>
+  <string name="first_intake">Primera toma a las </string>
+
+  <string name="schedule_day_selector_take">Días:</string>
     <string name="schedule_day_selector_mo">LU</string>
     <string name="schedule_day_selector_tu">MA</string>
     <string name="schedule_day_selector_we">MI</string>
@@ -300,8 +304,9 @@
     <string name="button_schedule_repeat_until">Nunca</string>
     <string name="schedule_limits_date_format">\'El\' dd \'de\' MMMM \'de\' YYYY</string>
     <string name="schedule_week_days_connector">los</string>
+  <string name="schedule_repeat_period">Período + descanso</string>
 
-    <string-array name="schedule_repeat_units">
+  <string-array name="schedule_repeat_units">
         <item>Días</item>
         <item>Semanas</item>
         <item>Meses</item>
@@ -326,8 +331,8 @@
         <item>meses</item>
     </string-array>
     <string name="schedule_custom_rule_text">&lt;u> %1$s &lt;/u></string>
-    <string name="every">Cada</string>
-    <string name="summary_show_calendar">Ver calendario</string>
+  <string name="every">cada</string>
+  <string name="summary_show_calendar">Ver calendario</string>
 
     <string-array name="calendar_weekday_names">
         <item>NONE</item>
@@ -352,11 +357,13 @@
 
   <string name="schedule_type_routines_title">Vinculada a rutinas</string>
   <string name="schedule_type_hourly_title">Intervalo horario</string>
-  <string name="schedule_type_period_title">Período + descanso</string>
+  <string name="schedule_type_period_title">Cilo de toma/descanso</string>
 
   <string name="schedule_type_routines_description">Ex: Cada 3 días, con desayuno comida y cena</string>
   <string name="schedule_type_hourly_description">Ex: Cada 8 horas</string>
   <string name="schedule_type_period_description">Ex: 21 días + 7 de descanso</string>
+  <string name="schedule_type_common_periods">Ciclos habituales</string>
+  <string name="dialog_interval_title">Intervalo</string>
 
   <!--<string name="schedule_type_routines_description">Ejemplos:\n\t- Todos los días, con la comida\n\t- Cada 3 días, con desayuno y cena\n\t- Una vez al mes, a media mañana</string>
   <string name="schedule_type_hourly_description">Ejemplos:\n\t- Cada 6 horas\n\t- Cada 8 horas</string>

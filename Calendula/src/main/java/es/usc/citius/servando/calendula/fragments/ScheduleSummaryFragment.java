@@ -10,11 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.joda.time.LocalDate;
-
-import java.util.List;
-
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.SummaryCalendarActivity;
 import es.usc.citius.servando.calendula.persistence.Medicine;
@@ -23,6 +18,8 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
+import java.util.List;
+import org.joda.time.LocalDate;
 
 
 /**
@@ -84,13 +81,25 @@ public class ScheduleSummaryFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                LocalDate start = ScheduleHelper.instance().getSchedule().start();
+                Schedule s = ScheduleHelper.instance().getSchedule();
+
+                LocalDate start = s.start();
 
                 Intent i = new Intent(getActivity(), SummaryCalendarActivity.class);
-                i.putExtra("rule", ScheduleHelper.instance().getSchedule().rule().toIcal());
+
                 if (start != null) {
                     i.putExtra("start", start.toString(SummaryCalendarActivity.START_DATE_FORMAT));
                 }
+
+                if (s.type() == Schedule.SCHEDULE_TYPE_CYCLE)
+                {
+                    i.putExtra("active_days", s.getCycleDays());
+                    i.putExtra("rest_days", s.getCycleRest());
+                } else
+                {
+                    i.putExtra("rule", s.rule().toIcal());
+                }
+
                 startActivity(i);
             }
         });

@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/android_blue_darker">
@@ -13,52 +14,50 @@
         android:dividerHeight="0dp"
         android:id="@+id/schedule_list" />
 
-    <!--<ImageView-->
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="5dp"-->
-    <!--android:id="@+id/imageView2a"-->
-    <!--android:src="@drawable/daily_view_list_item_tab_shadow_top"-->
-    <!--android:scaleType="fitXY"-->
-    <!--android:layout_alignParentTop="true"-->
-    <!--android:visibility="visible"-->
-    <!--android:alpha="0.7" />-->
+  <com.getbase.floatingactionbutton.FloatingActionsMenu
+      android:id="@+id/fab_menu"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="false"
+      fab:fab_addButtonColorNormal="@color/android_green"
+      fab:fab_addButtonColorPressed="@color/android_green_dark"
+      fab:fab_addButtonPlusIconColor="@color/white"
+      fab:fab_labelStyle="@style/menu_labels_style"
+      fab:fab_labelsPosition="left"
+      android:layout_alignParentBottom="true"
+      android:layout_margin="10dp"
+      >
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/action_a"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fab:fab_icon="@drawable/ic_alarm_white_48dp"
+        fab:fab_colorNormal="@color/android_green_light_noalpha"
+        fab:fab_title="@string/schedule_type_routines_title"
+        fab:fab_colorPressed="@color/android_green"
+        />
 
-    <!--<ImageView-->
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="7dp"-->
-    <!--android:id="@+id/imageView2b"-->
-    <!--android:src="@drawable/daily_view_list_item_tab_shadow_bottom"-->
-    <!--android:scaleType="fitXY"-->
-    <!--android:alpha="0.7"-->
-    <!--android:layout_above="@+id/schedule_add_button"-->
-    <!--android:layout_alignParentLeft="true"-->
-    <!--android:layout_alignParentStart="true" />-->
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/action_b"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fab:fab_icon="@drawable/ic_history_white_24dp"
+        fab:fab_colorNormal="@color/android_green_light_noalpha"
+        fab:fab_title="@string/schedule_type_hourly_title"
+        fab:fab_colorPressed="@color/android_green"
+        />
 
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/action_c"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fab:fab_icon="@drawable/ic_autorenew_white_48dp"
+        fab:fab_colorNormal="@color/android_green_light_noalpha"
+        fab:fab_title="@string/schedule_type_period_title"
+        fab:fab_colorPressed="@color/android_green"
+        />
 
-    <!--<Button-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="@string/add_schedule_button"-->
-    <!--android:id="@+id/schedule_add_button"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:layout_alignParentLeft="true"-->
-    <!--style="@style/ok_button"-->
-    <!--android:background="@drawable/ok_button_selector" />-->
-
-    <!--<com.shamanland.fab.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"-->
-    <!--android:layout_width="70dp"-->
-    <!--android:layout_height="70dp"-->
-    <!--android:src="@drawable/ic_action_add"-->
-    <!--android:scaleType="fitCenter"-->
-    <!--app:floatingActionButtonColor="@color/android_blue"-->
-    <!--app:floatingActionButtonSize="normal"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_alignParentEnd="true"-->
-    <!--android:id="@+id/schedule_add_button"-->
-    <!--android:layout_margin="10dp"-->
-    <!--android:visibility="gone"-->
-    <!--android:adjustViewBounds="true"-->
-    <!--android:padding="10dip" />-->
+  </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </RelativeLayout>

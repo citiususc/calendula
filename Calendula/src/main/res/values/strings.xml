@@ -171,6 +171,9 @@
   <string name="toolbar_menu_title">Menu</string>
   <string name="schedule_timetable_time_column">TIME</string>
   <string name="schedule_timetable_dose_column">DOSE</string>
+  <string name="hourly_repeat_dose">Dose</string>
+  <string name="take">Take</string>
+  <string name="first_intake">First intake at</string>
   <string name="schedule_day_selector_take">Take:</string>
   <!-- Day Names -->
   <string-array name="day_names">
@@ -274,7 +277,8 @@
   <string name="driving_warning_show_prospect">Read leaflet</string>
   <string name="driving_warning_gotit">Understood</string>
   <string name="repeat_every">Repeats every</string>
-  <string name="every">Every</string>
+  <string name="dialog_interval_title">Interval</string>
+  <string name="every">every</string>
   <string name="from_hour">from</string>
   <string name="repeat_specific_days">Specific days</string>
   <string name="repeat_every_tostr">Every %1$s %2$s</string>
@@ -289,6 +293,7 @@
   <string name="schedule_week_days_connector">on</string>
   <string name="schedules_stop_after">Stop after %1$s intakes</string>
   <string name="schedule_custom_rule_text">&lt;u> %1$s &lt;/u></string>
+  <string name="schedule_repeat_period">Period + rest</string>
 
   <string-array name="schedule_repeat_types">
     <item>Every day</item>
@@ -326,10 +331,24 @@
   <string name="schedule_type_routines_title">Vinculada a rutinas</string>
   <string name="schedule_type_hourly_title">Intervalo horario</string>
   <string name="schedule_type_period_title">Período + descanso</string>
+  <string name="schedule_type_common_periods">Common cycles</string>
+
 
   <string name="schedule_type_routines_description">Ex: Cada 3 días, con desayuno comida y cena</string>
   <string name="schedule_type_hourly_description">Ex: Cada 8 horas</string>
   <string name="schedule_type_period_description">Ex: 21 días + 7 de descanso</string>
+
+  <string-array name="schedule_cycles">
+    <item>21 + 7</item>
+    <item>22 + 6</item>
+    <item>23 + 5</item>
+    <item>24 + 4</item>
+    <item>26 + 2</item>
+    <item>35 + 7</item>
+    <item>42 + 7</item>
+    <item>63 + 7</item>
+    <item>84 + 7</item>
+  </string-array>
 
 </resources>
 
