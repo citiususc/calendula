@@ -89,12 +89,14 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-
+        toolbar.setNavigationIcon(
+            new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 10,
+                10, 10, 10));
         //toolbar.setTitle(getString(R.string.title_activity_schedules));        
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         ((TextView) findViewById(R.id.textView2)).setText(getString(mScheduleId != -1 ? R.string.title_edit_schedule_activity : R.string.title_create_schedule_activity));
-        toolbar.setNavigationIcon(new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 10, 10, 10, 10));
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);

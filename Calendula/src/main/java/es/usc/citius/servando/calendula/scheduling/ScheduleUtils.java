@@ -2,17 +2,14 @@ package es.usc.citius.servando.calendula.scheduling;
 
 import android.content.Context;
 import android.util.Log;
-
-import org.joda.time.LocalDate;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.joda.time.LocalDate;
 
 ;
 
@@ -47,7 +44,7 @@ public class ScheduleUtils {
             case 4:
                 return ctx.getString(R.string.four_times_a_day);
             default:
-                return items + ctx.getString(R.string.times_a_day);
+                return items + " " + ctx.getString(R.string.times_a_day);
         }
 
     }

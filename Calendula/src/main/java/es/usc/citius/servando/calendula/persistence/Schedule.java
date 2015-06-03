@@ -203,6 +203,9 @@ public class Schedule {
         {
             return ctx.getString(R.string.repeat_every_tostr, rule().interval(),
                 ctx.getString(R.string.hours));
+        } else if (type == SCHEDULE_TYPE_CYCLE)
+        {
+            return getCycleDays() + " + " + getCycleRest();
         } else
         {
             String ical = rrule.toIcal();

@@ -67,15 +67,23 @@ public class ScheduleSummaryFragment extends Fragment {
         //String medName = med != null ? med.name() : "Unselected";
         int medIcon = med != null ? med.presentation().getDrawable() : Presentation.PILLS.getDrawable();
 
-        String freq = ScheduleUtils.getTimesStr(items != null ? items.size() : 0, getActivity());
-
         if (med != null) {
             medNameTv.setText(med.name());
         }
 
-        medDailyFreqTv.setText(freq);
         medDaysTv.setText(s.toReadableString(getActivity()));
         medIconImage.setImageDrawable(getResources().getDrawable(medIcon));
+
+        if (s.type() != Schedule.SCHEDULE_TYPE_HOURLY)
+        {
+            String freq =
+                ScheduleUtils.getTimesStr(items != null ? items.size() : 0, getActivity());
+            medDailyFreqTv.setText(freq);
+        } else
+        {
+            String freq = ScheduleUtils.getTimesStr(24 / s.rule().interval(), getActivity());
+            medDailyFreqTv.setText(freq);
+        }
 
         showCalendarButton.setOnClickListener(new View.OnClickListener() {
             @Override

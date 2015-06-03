@@ -22,6 +22,7 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Schedule;
+import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 import java.util.List;
 
@@ -52,6 +53,15 @@ public class ScheduleListFragment extends Fragment {
         setupFabMenu(rootView);
 
         return rootView;
+    }
+
+    @Override public void setUserVisibleHint(boolean isVisibleToUser)
+    {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && fabMenu != null)
+        {
+            fabMenu.collapse();
+        }
     }
 
     private void setupFabMenu(View rootView)
@@ -90,6 +100,8 @@ public class ScheduleListFragment extends Fragment {
                 Intent i = new Intent(getActivity(), ScheduleCreationActivity.class);
                 i.putExtra("scheduleType", scheduleType);
                 launchActivity(i);
+                fabMenu.collapse();
+
             }
         };
 
@@ -139,12 +151,24 @@ public class ScheduleListFragment extends Fragment {
 
         View item = inflater.inflate(R.layout.schedules_list_item, null);
         ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
+
+        String timeStr = "";
+        List<ScheduleItem> items = schedule.items();
+
+        if (schedule.type() != Schedule.SCHEDULE_TYPE_HOURLY)
+        {
+            timeStr = ScheduleUtils.getTimesStr(items != null ? items.size() : 0, getActivity());
+        } else
+        {
+            timeStr = ScheduleUtils.getTimesStr(24 / schedule.rule().interval(), getActivity());
+        }
+
+
         icon.setImageDrawable(
             getResources().getDrawable(schedule.medicine().presentation().getDrawable()));
         ((TextView) item.findViewById(R.id.schedules_list_item_medname)).setText(
             schedule.medicine().name());
-        ((TextView) item.findViewById(R.id.schedules_list_item_times)).setText(
-            ScheduleUtils.getTimesStr(schedule.items().size(), getActivity()));
+        ((TextView) item.findViewById(R.id.schedules_list_item_times)).setText(timeStr);
         ((TextView) item.findViewById(R.id.schedules_list_item_days)).setText(
             schedule.toReadableString(getActivity()));
 
