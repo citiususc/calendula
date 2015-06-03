@@ -1,20 +1,13 @@
 package es.usc.citius.servando.calendula.database;
 
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-
-import java.sql.SQLException;
-import java.util.List;
-import java.util.concurrent.Callable;
-
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Prescription;
@@ -22,6 +15,10 @@ import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.concurrent.Callable;
+import org.joda.time.LocalDate;
 
 /**
  * Database helper class used to manage the creation and upgrading of your database. This class also usually provides
@@ -93,12 +90,16 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.i(DatabaseHelper.class.getName(), "onUpgrade");
             Log.d(DatabaseHelper.class.getName(), "OldVersion: " + oldVersion + ", newVersion: " + newVersion);
 
+            if (oldVersion < 6)
+            {
+                oldVersion = 6;
+            }
 
-            switch (newVersion) {
-                //
-                // Database version 7: Add Ical
-                //
+            switch (oldVersion + 1)
+            {
+
                 case 7:
+                    // migrate to iCal
                     migrateToICal();
             }
 
@@ -110,13 +111,21 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     }
 
     /**
-     * Method that migrate schedules to the ical format
+     * Method that migrate schedules to the iCal format
      */
     private void migrateToICal() throws SQLException {
 
         getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Rrule TEXT;");
         getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Start TEXT;");
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Starttime TEXT;");
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Dose REAL;");
         getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Type INTEGER;");
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Cycle TEXT;");
+
+        getDailyScheduleItemsDao().executeRaw(
+            "ALTER TABLE DailyScheduleItems ADD COLUMN Schedule INTEGER;");
+        getDailyScheduleItemsDao().executeRaw(
+            "ALTER TABLE DailyScheduleItems ADD COLUMN Time TEXT;");
 
         // update schedules
         TransactionManager.callInTransaction(getConnectionSource(), new Callable<Void>() {
@@ -130,6 +139,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                         s.setRepetition(new RepetitionRule(RepetitionRule.DEFAULT_ICAL_VALUE));
                     }
                     s.setDays(s.getLegacyDays());
+
+                    if (s.allDaysSelected())
+                    {
+                        s.setType(Schedule.SCHEDULE_TYPE_EVERYDAY);
+                    } else
+                    {
+                        s.setType(Schedule.SCHEDULE_TYPE_SOMEDAYS);
+                    }
+                    s.setStart(LocalDate.now());
                     s.save();
                 }
 

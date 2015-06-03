@@ -325,12 +325,12 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             }
         }
 
-        if (ScheduleHelper.instance().getSchedule().allDaysSelected()
+       /* if (ScheduleHelper.instance().getSchedule().allDaysSelected()
                 && ScheduleHelper.instance().getSchedule().type() == Schedule.SCHEDULE_TYPE_SOMEDAYS) {
             mViewPager.setCurrentItem(0);
             showSnackBar(R.string.schedule_no_day_specified_message);
             return false;
-        }
+        }*/
 
         return true;
     }

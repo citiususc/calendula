@@ -31,7 +31,7 @@ public class Schedule {
     public static final int SCHEDULE_TYPE_EVERYDAY = 0; // DEFAULT
     public static final int SCHEDULE_TYPE_SOMEDAYS = 1;
     public static final int SCHEDULE_TYPE_INTERVAL = 2;
-    public static final int SCHEDULE_TYPE_CUSTOM = 3;
+
     public static final int SCHEDULE_TYPE_HOURLY = 4;
     public static final int SCHEDULE_TYPE_CYCLE = 5;
 
