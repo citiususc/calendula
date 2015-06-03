@@ -35,7 +35,6 @@ import com.google.ical.values.DateTimeValueImpl;
 import com.google.ical.values.DateValue;
 import com.google.ical.values.Frequency;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
@@ -311,6 +310,7 @@ public class ScheduleTimetableFragment extends Fragment
             checkSelectedDays(rootView, schedule.days());
             setupRepetitions(rootView);
             updateRepeatTypeAndInterval(rootView);
+            helpView.setText(getString(R.string.schedule_help_timesbyday));
 
         } else if (type == ScheduleTypeFragment.TYPE_HOURLY)
         {
@@ -318,13 +318,14 @@ public class ScheduleTimetableFragment extends Fragment
             boxHourlyInterval.setVisibility(View.VISIBLE);
             schedule.setDays(Schedule.noWeekDays());
             updateHourlyIntervalBox();
+            helpView.setText(getString(R.string.schedule_help_hourly));
         } else
         {
             schedule.setType(Schedule.SCHEDULE_TYPE_CYCLE);
             boxTimesByDay.setVisibility(View.VISIBLE);
             timesPerDay = ScheduleHelper.instance().getTimesPerDay();
             scheduleSpinner.setSelection(ScheduleHelper.instance().getSelectedScheduleIdx());
-
+            helpView.setText(getString(R.string.schedule_help_timesbyday));
             updatePeriodSelector();
         }
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -390,9 +391,7 @@ public class ScheduleTimetableFragment extends Fragment
         {
             if (boxTimesByDay.getVisibility() != View.VISIBLE)
             {
-                Medicine med = ScheduleHelper.instance().getSelectedMed();
-                helpView.setText(
-                    getString(R.string.schedule_help_type, med != null ? med.name() : "NO"));
+                helpView.setText(getString(R.string.schedule_help_timesbyday));
                 boxTimesByDay.setVisibility(View.VISIBLE);
                 boxHourlyInterval.setVisibility(View.INVISIBLE);
             } else if (boxTimetable.getVisibility() != View.VISIBLE)
@@ -415,6 +414,7 @@ public class ScheduleTimetableFragment extends Fragment
             {
                 boxHourlyInterval.setVisibility(View.VISIBLE);
                 boxTimesByDay.setVisibility(View.INVISIBLE);
+                helpView.setText(getString(R.string.schedule_help_hourly));
             } else if (boxDuration.getVisibility() != View.VISIBLE)
             {
                 helpView.setText(getString(R.string.schedule_help_duration));
@@ -425,9 +425,7 @@ public class ScheduleTimetableFragment extends Fragment
         {
             if (boxTimesByDay.getVisibility() != View.VISIBLE)
             {
-                Medicine med = ScheduleHelper.instance().getSelectedMed();
-                helpView.setText(
-                    getString(R.string.schedule_help_type, med != null ? med.name() : "NO"));
+                helpView.setText(getString(R.string.schedule_help_timesbyday));
                 boxTimesByDay.setVisibility(View.VISIBLE);
                 boxHourlyInterval.setVisibility(View.INVISIBLE);
             } else if (boxTimetable.getVisibility() != View.VISIBLE)
@@ -436,7 +434,7 @@ public class ScheduleTimetableFragment extends Fragment
                 showBox(boxTimetable);
             } else if (boxPeriod.getVisibility() != View.VISIBLE)
             {
-                helpView.setText(getString(R.string.schedule_help_repeat));
+                helpView.setText(getString(R.string.schedule_help_cycle));
                 showBox(boxPeriod);
             } else if (boxDuration.getVisibility() != View.VISIBLE)
             {

@@ -538,7 +538,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
     public void onEvent(PersistenceEvents.MedicineAddedEvent event) {
         Log.d("onEvent", event.id + " ----");
-        ((SelectMedicineListFragment) getViewPagerFragment(0)).setSelectedMed(event.id);
+        ((SelectMedicineListFragment) getViewPagerFragment(1)).setSelectedMed(event.id);
     }
 
 }
