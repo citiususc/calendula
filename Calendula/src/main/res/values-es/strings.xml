@@ -363,6 +363,8 @@
   <string name="schedule_type_period_description">Ex: 21 días + 7 de descanso</string>
   <string name="schedule_type_common_periods">Ciclos habituales</string>
   <string name="dialog_interval_title">Intervalo</string>
+  <string name="schedule_help_type">Para empezar, selecciona un tipo de pauta</string>
+  <string name="medicine_description"></string>
 
 </resources>
 

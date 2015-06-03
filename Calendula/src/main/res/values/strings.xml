@@ -325,7 +325,7 @@
   <string name="every_weekday"></string>
   <string name="summary_show_calendar">Show calendar</string>
   <string name="hours">hours</string>
-  <string name="schedule_help_type">Para empezar, selecciona un tipo de pauta</string>
+  <string name="schedule_help_type">First, select a schedule type</string>
   <string name="schedule_help_no_type_selected">Please, select a schedule type to keep on creating the schedule</string>
 
   <string name="schedule_type_routines_title">Vinculada a rutinas</string>
@@ -349,6 +349,13 @@
     <item>63 + 7</item>
     <item>84 + 7</item>
   </string-array>
+  <string name="yearly_plain">Yearly</string>
+  <string name="schedule_help_cycle">Setup repetition cycle (intake + rest)</string>
+  <string name="schedule_help_duration">Finally, you can specify the schedule start and end. Leave it as it is to repeat indefinitely.</string>
+  <string name="schedule_help_hourly">Please state the repeat period, dosage, and time of the first intake</string>
+  <string name="schedule_help_repeat">State the schedule repetition. If it repeats every day, you do not have to do anything.</string>
+  <string name="schedule_help_timesbyday">Please state the number of times per day that the schedule repeats</string>
+  <string name="schedule_help_timetable"> Now, link each intake to your routines and state the dosage for each of them</string>
 
 </resources>
 
