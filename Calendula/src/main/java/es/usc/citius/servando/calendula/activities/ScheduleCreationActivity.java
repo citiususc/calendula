@@ -327,6 +327,14 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             }
         }
 
+        if (ScheduleHelper.instance().getSchedule().type() == Schedule.SCHEDULE_TYPE_CYCLE && (
+            ScheduleHelper.instance().getSchedule().getCycleRest() <= 0
+                || ScheduleHelper.instance().getSchedule().getCycleDays() <= 0))
+        {
+            showSnackBar(R.string.cycle_period_cero_message);
+            return false;
+        }
+
        /* if (ScheduleHelper.instance().getSchedule().allDaysSelected()
                 && ScheduleHelper.instance().getSchedule().type() == Schedule.SCHEDULE_TYPE_SOMEDAYS) {
             mViewPager.setCurrentItem(0);

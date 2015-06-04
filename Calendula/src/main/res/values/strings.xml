@@ -207,6 +207,7 @@
   <string name="routine_edited_message">Routine updated!</string>
   <string name="schedule_created_message">Schedule created!</string>
   <string name="schedule_no_day_specified_message">You must specify at least one day</string>
+  <string name="cycle_period_cero_message">Cycle intake and rest must be greater than zero</string>
   <string name="reminder_delayed_message">Routine delayed </string>
   <string name="reminder_cancelled_message">Reminder cancelled</string>
   <string name="remove_routine_message_long">The routine %1$s has associated schedules that will be lost if you delete it. Do you want to remove it anyway?</string>
@@ -356,6 +357,17 @@
   <string name="schedule_help_repeat">State the schedule repetition. If it repeats every day, you do not have to do anything.</string>
   <string name="schedule_help_timesbyday">Please state the number of times per day that the schedule repeats</string>
   <string name="schedule_help_timetable"> Now, link each intake to your routines and state the dosage for each of them</string>
+
+  <string-array name="calendar_weekday_names">
+    <item>NONE</item>
+    <item>SU</item>
+    <item>MO</item>
+    <item>TU</item>
+    <item>WE</item>
+    <item>TH</item>
+    <item>FR</item>
+    <item>SA</item>
+  </string-array>
 
 </resources>
 
