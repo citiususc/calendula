@@ -38,14 +38,20 @@ public class CalendulaApp extends Application {
     public static final String INTENT_EXTRA_ROUTINE_ID = "routine_id";
     public static final String INTENT_EXTRA_MEDICINE_ID = "medicine_id";
     public static final String INTENT_EXTRA_SCHEDULE_ID = "schedule_id";
+    public static final String INTENT_EXTRA_SCHEDULE_TIME = "schedule_time";
     public static final String INTENT_EXTRA_DELAY_ROUTINE_ID = "delay_routine_id";
+    public static final String INTENT_EXTRA_DELAY_SCHEDULE_ID = "delay_schedule_id";
     // ACTIONS
     public static final int ACTION_ROUTINE_TIME = 1;
     public static final int ACTION_DAILY_ALARM = 2;
     public static final int ACTION_ROUTINE_DELAYED_TIME = 3;
     public static final int ACTION_DELAY_ROUTINE = 4;
     public static final int ACTION_CANCEL_ROUTINE = 5;
-    public static final int ACTION_CHECK_PICKUPS_ALARM = 6;
+    public static final int ACTION_HOURLY_SCHEDULE_TIME = 6;
+    public static final int ACTION_HOURLY_SCHEDULE_DELAYED_TIME = 7;
+    public static final int ACTION_DELAY_HOURLY_SCHEDULE = 8;
+    public static final int ACTION_CANCEL_HOURLY_SCHEDULE = 9;
+    public static final int ACTION_CHECK_PICKUPS_ALARM = 10;
 
 
     // REQUEST CODES
@@ -65,7 +71,7 @@ public class CalendulaApp extends Application {
 
         DefaultDataGenerator.fillDBWithDummyData(getApplicationContext());
         // initialize daily agenda
-        DailyAgenda.instance().setupForToday(this);
+        DailyAgenda.instance().setupForToday(this,false);
         // setup alarm for daily agenda update
         setupUpdateDailyAgendaAlarm();
         // set pickup reminder alarm

@@ -27,9 +27,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.makeramen.RoundedImageView;
 import com.melnykov.fab.FloatingActionButton;
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
+
+import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
 
 import java.util.Arrays;
 import java.util.List;
@@ -55,10 +58,6 @@ import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.view.ScrimInsetsFrameLayout;
 
-//import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
-//import com.github.amlcurran.showcaseview.ShowcaseView;
-//import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
-//import com.github.amlcurran.showcaseview.targets.PointTarget;
 
 public class HomeActivity extends ActionBarActivity implements
         ViewPager.OnPageChangeListener,
@@ -95,7 +94,7 @@ public class HomeActivity extends ActionBarActivity implements
     String[] titles;
 
     Toolbar toolbar;
-    SmartTabLayout tabs;
+    PagerSlidingTabStrip tabs;
     Handler mHandler;
     View tabsShadow;
 
@@ -135,14 +134,14 @@ public class HomeActivity extends ActionBarActivity implements
         mSectionsPagerAdapter = new HomePageAdapter(getSupportFragmentManager(), this, this);
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
-        tabs = (SmartTabLayout) findViewById(R.id.tabs);
+        tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabsShadow = findViewById(R.id.tabs_shadow);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(5);
 
 
         tabs.setOnPageChangeListener(this);
-       /* tabs.setShouldExpand(true);
+        tabs.setShouldExpand(true);
         tabs.setAllCaps(true);
         tabs.setTabPaddingLeftRight(30);
         tabs.setShouldExpand(true);
@@ -152,7 +151,7 @@ public class HomeActivity extends ActionBarActivity implements
 
         tabs.setIndicatorColor(getResources().getColor(R.color.white));
         tabs.setTextColor(getResources().getColor(R.color.white_80));
-        tabs.setUnderlineColor(getResources().getColor(R.color.transparent));*/
+        tabs.setUnderlineColor(getResources().getColor(R.color.transparent));
 
         tabs.setBackgroundColor(getResources().getColor(R.color.transparent));
         tabs.setVisibility(View.GONE);
@@ -178,7 +177,7 @@ public class HomeActivity extends ActionBarActivity implements
         CalendulaApp.eventBus().register(this);
 
         setTutorial(new AppTutorial());
-        //getTutorial().init(this, tabs);
+        getTutorial().init(this);
 
         Log.d(TAG, "OnCreate  - Routine Id Extra: " + getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l));
         checkReminder(getIntent());
@@ -434,6 +433,11 @@ public class HomeActivity extends ActionBarActivity implements
         Log.d(TAG, "CheckReminder" + intent.getDataString());
         final long remindRoutineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l);
         final long delayRoutineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID, -1l);
+        final long remindScheduleId =
+            intent.getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1l);
+        final long delayScheduleId =
+            intent.getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_SCHEDULE_ID, -1l);
+        final String scheduleTime = intent.getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME);
 
         if (remindRoutineId != -1) {
             mDrawerLayout.closeDrawer(drawerView);
@@ -454,8 +458,28 @@ public class HomeActivity extends ActionBarActivity implements
                     getIntent().removeExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID);
                 }
             }, 1000);
+        } else if (remindScheduleId != -1)
+        {
+            mDrawerLayout.closeDrawer(drawerView);
+            showReminder(remindScheduleId,
+                LocalTime.parse(scheduleTime, DateTimeFormat.forPattern("kk:mm")));
+            getIntent().removeExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID);
+        } else if (delayScheduleId != -1)
+        {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run()
+                {
+                    mViewPager.setCurrentItem(0);
+                    mDrawerLayout.closeDrawer(drawerView);
+                    final Schedule s = Schedule.findById(delayScheduleId);
+                    LocalTime t = LocalTime.parse(scheduleTime, DateTimeFormat.forPattern("kk:mm"));
+                    ((DailyAgendaFragment) getViewPagerFragment(0)).showDelayDialog(s, t);
 
-
+                    ReminderNotification.cancel(HomeActivity.this);
+                    getIntent().removeExtra(CalendulaApp.INTENT_EXTRA_DELAY_SCHEDULE_ID);
+                }
+            }, 1000);
         }
     }
 
@@ -577,36 +601,46 @@ public class HomeActivity extends ActionBarActivity implements
                 ((DailyAgendaFragment) getViewPagerFragment(0)).showReminder(r);
             }
         }, 1000);
-
     }
 
-    @Override
-    public void onPageSelected(int page) {
-        invalidateOptionsMenu();
-        updateTitle(page);
-        showTutorialStage(page);
-        updateAddButton(page);
-        if (page == 0) {
-            ((FloatingActionButton) (addButton)).hide(false);
-            hideTabs();
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
-//            }
-
-        } else {
-
-            showAddButton();
-            if (toolbar.getVisibility() != View.VISIBLE) {
-                toolbar.setVisibility(View.VISIBLE);
+    void showReminder(final Long scheduleId, final LocalTime scheduleTime)
+    {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run()
+            {
+                final Schedule r = Schedule.findById(scheduleId);
+                mViewPager.setCurrentItem(0);
+                ((DailyAgendaFragment) getViewPagerFragment(0)).showReminder(r, scheduleTime);
             }
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
-//            }
-            showTabs();
-            setActionBarColor(getResources().getColor(R.color.android_blue_darker));
-
-        }
+        }, 1000);
     }
+
+  @Override
+  public void onPageSelected(int page)
+  {
+    invalidateOptionsMenu();
+    updateTitle(page);
+    showTutorialStage(page);
+    updateAddButton(page);
+    if (page == 0)
+    {
+      ((FloatingActionButton) (addButton)).hide(false);
+      hideTabs();
+    } else if (page == 3)
+    {
+      ((FloatingActionButton) (addButton)).hide(false);
+    } else
+    {
+      showAddButton();
+      if (toolbar.getVisibility() != View.VISIBLE)
+      {
+        toolbar.setVisibility(View.VISIBLE);
+      }
+      showTabs();
+      setActionBarColor(getResources().getColor(R.color.android_blue_darker));
+    }
+  }
 
     private void updateAddButton(int page) {
 
@@ -701,7 +735,7 @@ public class HomeActivity extends ActionBarActivity implements
             tabs.setVisibility(View.GONE);
             tabsShadow.setVisibility(View.GONE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                //getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+                getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
             }
             setActionBarColor(getResources().getColor(R.color.transparent));
 

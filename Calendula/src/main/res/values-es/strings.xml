@@ -92,6 +92,7 @@
     <string name="unknown">Desconocido</string>
     <string name="effervescent">Efervescente</string>
     <string name="schedule">Pauta</string>
+  <string name="schedule_type">Tipo de pauta</string>
 
     <!-- Med presentation units -->
     <string name="injections_units">inyeccion</string>
@@ -196,7 +197,11 @@
     <string name="title_select_dose_dialog">Introduce una dosis</string>
     <string name="schedule_timetable_time_column">HORA</string>
     <string name="schedule_timetable_dose_column">DOSIS</string>
-    <string name="schedule_day_selector_take">Días:</string>
+  <string name="hourly_repeat_dose">Dosis</string>
+  <string name="take">Tomar</string>
+  <string name="first_intake">Primera toma a las </string>
+
+  <string name="schedule_day_selector_take">Días:</string>
     <string name="schedule_day_selector_mo">LU</string>
     <string name="schedule_day_selector_tu">MA</string>
     <string name="schedule_day_selector_we">MI</string>
@@ -285,12 +290,50 @@
     <string name="driving_warning_title">Ten prudencia</string>
     <string name="driving_warning_show_prospect">Ver prospecto</string>
     <string name="driving_warning_gotit">Entendido</string>
-    <string name="confirm_prescription_x_of_y">Prescripción %1$s de %2$s</string>
+    <string name="repeat_every">Se repite cada</string>
+    <string name="repeat_specific_days">Días específicos</string>
+    <string name="repeat_every_tostr">Cada %1$s %2$s</string>
+  <string name="from_hour"> desde las</string>
+  <string name="schedule_freq_days">días</string>
+    <string name="schedule_freq_weeks">semanas</string>
+    <string name="schedule_freq_months">meses</string>
+    <string name="label_schedule_repeat_today">Empieza</string>
+    <string name="schedules_stop_after">Parar después de %1$s tomas</string>
+    <string name="button_schedule_repeat_today">Hoy</string>
+    <string name="label_schedule_repeat_until">Acaba</string>
+    <string name="button_schedule_repeat_until">Nunca</string>
+    <string name="schedule_limits_date_format">\'El\' dd \'de\' MMMM \'de\' YYYY</string>
+    <string name="schedule_week_days_connector">los</string>
+  <string name="schedule_repeat_period">Período + descanso</string>
 
-    <string name="title_activity_calendar">Calendario</string>
-    <string name="title_pickups_bottom_sheet">Recogidas el %1$s</string>
-    <string name="pickup_interval">Hasta el %1$s</string>
-    <string name="pickup_date_format">dd \'de\' MMMM</string>
+  <string-array name="schedule_repeat_units">
+        <item>Días</item>
+        <item>Semanas</item>
+        <item>Meses</item>
+    </string-array>
+
+    <string-array name="schedule_repeat_types">
+        <item>Todos los días</item>
+        <item>Algunos días</item>
+        <item>Intervalo</item>
+        <!--<item>Personalizado</item>-->
+    </string-array>
+
+    <string-array name="schedule_repeat_frequencies">
+        <item>A diario</item>
+        <item>Semanalmente</item>
+        <item>Mensualmente</item>
+    </string-array>
+
+    <string-array name="schedule_repeat_frequency_units">
+        <item>días</item>
+        <item>semanas</item>
+        <item>meses</item>
+    </string-array>
+    <string name="schedule_custom_rule_text">&lt;u> %1$s &lt;/u></string>
+  <string name="every">cada</string>
+  <string name="summary_show_calendar">Ver calendario</string>
+
     <string-array name="calendar_weekday_names">
         <item>NONE</item>
         <item>DO</item>
@@ -301,6 +344,36 @@
         <item>VI</item>
         <item>SA</item>
     </string-array>
+
+
+  <string name="hours">horas</string>
+  <string name="schedule_help_timesbyday">Por favor, indica el número de veces al día que se repite la pauta</string>
+  <string name="schedule_help_timetable">Ahora, asocia cada toma a tus rutinas e indica la dósis para cada una</string>
+  <string name="schedule_help_repeat">Indica cómo se repite la pauta. Si se repite todos los días no tienes que hacer nada.</string>
+  <string name="schedule_help_duration">Para acabar, puedes indicar cuando empieza y acaba esta pauta. Puedes dejarlo como está para que se repita indefinidamente.</string>
+  <string name="schedule_help_cycle">Indica el ciclo de repetición (período + descanso)</string>
+  <string name="schedule_help_hourly">Por favor, indica el período de repetición, la dósis, y la hora de la primera toma</string>
+  <string name="schedule_help_no_type_selected">Por favor, selecciona un tipo de pauta para poder continuar</string>
+  <string name="schedule_type_routines_title">Vinculada a rutinas</string>
+  <string name="schedule_type_hourly_title">Intervalo horario</string>
+  <string name="schedule_type_period_title">Cilo de toma/descanso</string>
+  <string name="cycle_period_cero_message">El período de toma y descanso debe ser mayor de cero</string>
+
+  <string name="schedule_type_routines_description">Ex: Cada 3 días, con desayuno comida y cena</string>
+  <string name="schedule_type_hourly_description">Ex: Cada 8 horas</string>
+  <string name="schedule_type_period_description">Ex: 21 días + 7 de descanso</string>
+  <string name="schedule_type_common_periods">Ciclos habituales</string>
+  <string name="dialog_interval_title">Intervalo</string>
+  <string name="schedule_help_type">Para empezar, selecciona un tipo de pauta</string>
+  <string name="medicine_description"></string>
+  <string name="confirm_prescription_x_of_y">Prescripción %1$s de %2$s</string>
+
+    <string name="title_activity_calendar">Calendario</string>
+    <string name="title_pickups_bottom_sheet">Recogidas el %1$s</string>
+    <string name="pickup_interval">Hasta el %1$s</string>
+    <string name="pickup_date_format">dd \'de\' MMMM</string>
+    <string name="pref_title_pickup_notification">Notificaciones de recogida de medicamentos</string>
+    <string name="title_activity_confirm_schedules">Confirm schedules</string>
 
 </resources>
 

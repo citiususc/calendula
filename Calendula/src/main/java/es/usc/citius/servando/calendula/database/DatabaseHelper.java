@@ -7,16 +7,22 @@ import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
+import org.joda.time.LocalDate;
+
 import java.sql.SQLException;
+import java.util.List;
+import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
@@ -46,7 +52,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
@@ -99,18 +105,20 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.i(DatabaseHelper.class.getName(), "onUpgrade");
             Log.d(DatabaseHelper.class.getName(), "OldVersion: " + oldVersion + ", newVersion: " + newVersion);
 
+            if (oldVersion < 6)
+            {
+                oldVersion = 6;
+            }
 
-            switch (newVersion) {
-                //
-                // Database version 5: Add HomogeneousGroups table
-                //
-                case 5:
-                    TableUtils.createTable(connectionSource, HomogeneousGroup.class);
-                    //
-                    // Database version 6: Add PickupInfo table
-                    //
-                case 6:
-                    TableUtils.createTable(connectionSource, PickupInfo.class);
+            switch (oldVersion + 1)
+            {
+
+                case 7:
+                    // migrate to iCal
+                    migrateToICal();
+                
+                // TODO Create HGroup and PKInfo tables
+                  
             }
 
 
@@ -120,6 +128,51 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
+    /**
+     * Method that migrate schedules to the iCal format
+     */
+    private void migrateToICal() throws SQLException {
+
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Rrule TEXT;");
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Start TEXT;");
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Starttime TEXT;");
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Dose REAL;");
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Type INTEGER;");
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Cycle TEXT;");
+
+        getDailyScheduleItemsDao().executeRaw(
+            "ALTER TABLE DailyScheduleItems ADD COLUMN Schedule INTEGER;");
+        getDailyScheduleItemsDao().executeRaw(
+            "ALTER TABLE DailyScheduleItems ADD COLUMN Time TEXT;");
+
+        // update schedules
+        TransactionManager.callInTransaction(getConnectionSource(), new Callable<Object>() {
+          @Override
+          public Void call() throws Exception {
+            // iterate over schedules and replace days[] with rrule
+            List<Schedule> schedules = getSchedulesDao().queryForAll();
+            Log.d(TAG, "Upgrade " + schedules.size() + " schedules");
+            for (Schedule s : schedules) {
+              if (s.rule() == null) {
+                s.setRepetition(new RepetitionRule(RepetitionRule.DEFAULT_ICAL_VALUE));
+              }
+              s.setDays(s.getLegacyDays());
+
+              if (s.allDaysSelected()) {
+                s.setType(Schedule.SCHEDULE_TYPE_EVERYDAY);
+              } else {
+                s.setType(Schedule.SCHEDULE_TYPE_SOMEDAYS);
+              }
+              s.setStart(LocalDate.now());
+              s.save();
+            }
+
+            return null;
+          }
+        });
+
+
+    }
 
     /**
      * Returns the Database Access Object (DAO) for our Medicines class. It will create it or just give the cached

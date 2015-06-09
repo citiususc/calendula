@@ -13,7 +13,6 @@ import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.PointTarget;
 import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import java.util.HashMap;
 
@@ -176,7 +175,7 @@ public class AppTutorial {
         }
     }
 
-    public void init(final Activity activity, SmartTabLayout tabs) {
+    public void init(final Activity activity) {
 
 
         PointF size = Screen.getDpSize(activity);

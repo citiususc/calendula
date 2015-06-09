@@ -17,46 +17,58 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
  */
 public class ScheduleDao extends GenericDao<Schedule, Long> {
 
-
-    public ScheduleDao(DatabaseHelper db) {
+    public ScheduleDao(DatabaseHelper db)
+    {
         super(db);
     }
 
     @Override
-    public Dao<Schedule, Long> getConcreteDao() {
-        try {
+    public Dao<Schedule, Long> getConcreteDao()
+    {
+        try
+        {
             return dbHelper.getSchedulesDao();
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             throw new RuntimeException("Error creating medicines dao", e);
         }
     }
 
-    public List<Schedule> findByMedicine(Medicine m) {
+    public List<Schedule> findByMedicine(Medicine m)
+    {
         return findBy(Schedule.COLUMN_MEDICINE, m.getId());
     }
 
     @Override
-    public void fireEvent() {
+    public void fireEvent()
+    {
         CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
     }
 
-
-    public void deleteCascade(final Schedule s, boolean fireEvent) {
+    public void deleteCascade(final Schedule s, boolean fireEvent)
+    {
         DB.transaction(new Callable<Object>() {
             @Override
-            public Object call() throws Exception {
-                for (ScheduleItem i : s.items()) {
+            public Object call() throws Exception
+            {
+                for (ScheduleItem i : s.items())
+                {
                     i.deleteCascade();
                 }
+                DB.dailyScheduleItems().removeAllFrom(s);
                 DB.schedules().remove(s);
                 return null;
             }
         });
 
-        if (fireEvent) {
+        if (fireEvent)
+        {
             fireEvent();
         }
-
     }
 
+    public List<Schedule> findHourly()
+    {
+        return findBy(Schedule.COLUMN_TYPE, Schedule.SCHEDULE_TYPE_HOURLY);
+    }
 }

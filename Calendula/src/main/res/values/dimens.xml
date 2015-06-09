@@ -25,7 +25,6 @@
     <dimen name="showcase_radius_inner">60dp</dimen>
     <dimen name="showcase_radius_outer">70dp</dimen>
 
-
     <dimen name="calendar_day_headers_paddingbottom">10dp</dimen>
     <dimen name="calendar_month_topmargin">30dp</dimen>
     <dimen name="calendar_month_title_bottommargin">20dp</dimen>

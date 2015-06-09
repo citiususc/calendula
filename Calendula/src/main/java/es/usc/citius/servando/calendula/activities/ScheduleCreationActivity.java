@@ -28,6 +28,9 @@ import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 import com.nispok.snackbar.enums.SnackbarType;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -45,7 +48,7 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
-import es.usc.citius.servando.calendula.util.ScheduleCreationHelper;
+import es.usc.citius.servando.calendula.util.ScheduleHelper;
 import es.usc.citius.servando.calendula.util.Snack;
 
 //import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
@@ -90,17 +93,19 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-
+        toolbar.setNavigationIcon(
+            new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 10,
+                10, 10, 10));
         //toolbar.setTitle(getString(R.string.title_activity_schedules));        
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         ((TextView) findViewById(R.id.textView2)).setText(getString(mScheduleId != -1 ? R.string.title_edit_schedule_activity : R.string.title_create_schedule_activity));
-        toolbar.setNavigationIcon(new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 10, 10, 10, 10));
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOnPageChangeListener(this);
-        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setOffscreenPageLimit(3);
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 
         tabs.setOnPageChangeListener(this);
@@ -116,7 +121,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         tabs.setViewPager(mViewPager);
 
         if (mSchedule != null) {
-            mViewPager.setCurrentItem(1);
+            mViewPager.setCurrentItem(0);
         }
 
         CalendulaApp.eventBus().register(this);
@@ -138,56 +143,68 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
     private void processIntent() {
         mScheduleId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1);
+        int scheduleType = getIntent().getIntExtra("scheduleType", -1);
         if (mScheduleId != -1) {
             Schedule s = Schedule.findById(mScheduleId);
             if (s != null) {
-                ScheduleCreationHelper.instance().setSelectedMed(s.medicine());
-                ScheduleCreationHelper.instance().setSelectedDays(s.days());
-                ScheduleCreationHelper.instance().setTimesPerDay(s.items().size());
-                ScheduleCreationHelper.instance().setSelectedScheduleIdx(s.items().size() - 1);
-                ScheduleCreationHelper.instance().setScheduleItems(s.items());
+                ScheduleHelper.instance().setSelectedMed(s.medicine());
+                ScheduleHelper.instance().setTimesPerDay(s.items().size());
+                ScheduleHelper.instance().setSelectedScheduleIdx(s.items().size() - 1);
+                ScheduleHelper.instance().setScheduleItems(s.items());
+                ScheduleHelper.instance().setSchedule(s);
                 mSchedule = s;
             } else {
                 Snack.show("Schedule not found :(", this);
             }
+        } else if (scheduleType != -1)
+        {
+            ScheduleHelper.instance().setScheduleType(scheduleType);
         }
-
     }
-
 
     public void createSchedule() {
         try {
 
-            final Schedule s = new es.usc.citius.servando.calendula.persistence.Schedule();
+            final Schedule s = ScheduleHelper.instance().getSchedule();
 
             TransactionManager.callInTransaction(DB.helper().getConnectionSource(), new Callable<Object>() {
                 @Override
                 public Object call() throws Exception {
                     // save schedule
-
-                    s.setMedicine(ScheduleCreationHelper.instance().getSelectedMed());
-                    s.setDays(ScheduleCreationHelper.instance().getSelectedDays());
+                    s.setMedicine(ScheduleHelper.instance().getSelectedMed());
                     s.save();
 
-                    Log.d(TAG, "Saving schedule...");
+                    Log.d(TAG, "Saving schedule..." + s.toString());
 
-                    for (ScheduleItem item : ScheduleCreationHelper.instance().getScheduleItems()) {
-                        item.setSchedule(s);
-                        item.save();
-                        Log.d(TAG, "Saving item..." + item.getId());
-                        // add to daily schedule
-                        DailyScheduleItem dsi = new DailyScheduleItem(item);
-                        dsi.save();
-                        Log.d(TAG, "Saving daily schedule item..." + dsi.getId() + ", " + dsi.scheduleItem().getId());
+                    if (!s.repeatsHourly()) {
+                        for (ScheduleItem item : ScheduleHelper.instance().getScheduleItems()) {
+                            item.setSchedule(s);
+                            item.save();
+                            Log.d(TAG, "Saving item..." + item.getId());
+                            // add to daily schedule
+                            DailyScheduleItem dsi = new DailyScheduleItem(item);
+                            dsi.save();
+                            Log.d(TAG, "Saving daily schedule item..." + dsi.getId() + ", " + dsi.scheduleItem().getId());
+                        }
+                    } else {
+                        for (DateTime time : s.hourlyItemsToday())
+                        {
+                            LocalTime timeToday = time.toLocalTime();
+                            DailyScheduleItem dsi = new DailyScheduleItem(s, timeToday);
+                            dsi.save();
+                            Log.d(TAG, "Saving daily schedule item..."
+                                + dsi.getId()
+                                + " timeToday: "
+                                + timeToday.toString("kk:mm"));
+                        }
                     }
                     // save and fire event
                     DB.schedules().saveAndFireEvent(s);
-
                     return null;
                 }
             });
 
-            ScheduleCreationHelper.instance().clear();
+            ScheduleHelper.instance().clear();
             AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ScheduleCreationActivity.this);
             Log.d(TAG, "Schedule saved successfully!");
             Snack.show(R.string.schedule_created_message, this);
@@ -208,42 +225,63 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
                 public Object call() throws Exception {
                     // save schedule
 
-                    s.setMedicine(ScheduleCreationHelper.instance().getSelectedMed());
-                    s.setDays(ScheduleCreationHelper.instance().getSelectedDays());
+                    s.setMedicine(ScheduleHelper.instance().getSelectedMed());
+
 
                     List<Long> routinesTaken = new ArrayList<Long>();
 
-                    for (ScheduleItem item : s.items()) {
-                        DailyScheduleItem d = DailyScheduleItem.findByScheduleItem(item);
-                        // if taken today, add to the list
-                        if (d.takenToday()) {
-                            routinesTaken.add(item.routine().getId());
+                    if (!s.repeatsHourly())
+                    {
+                        for (ScheduleItem item : s.items())
+                        {
+                            DailyScheduleItem d = DailyScheduleItem.findByScheduleItem(item);
+                            // if taken today, add to the list
+                            if (d.takenToday())
+                            {
+                                routinesTaken.add(item.routine().getId());
+                            }
+                            item.deleteCascade();
                         }
-                        item.deleteCascade();
+
+                        // save new items
+                        for (ScheduleItem i : ScheduleHelper.instance().getScheduleItems())
+                        {
+
+                            ScheduleItem item = new ScheduleItem();
+                            item.setDose(i.dose());
+                            item.setRoutine(i.routine());
+                            item.setSchedule(s);
+                            item.save();
+                            // add to daily schedule
+                            DailyScheduleItem dsi = new DailyScheduleItem(item);
+                            if (routinesTaken.contains(item.routine().getId()))
+                            {
+                                dsi.setTakenToday(true);
+                            }
+                            dsi.save();
+                        }
+                    } else
+                    {
+                        DB.dailyScheduleItems().removeAllFrom(s);
+                        for (DateTime time : s.hourlyItemsToday())
+                        {
+                            LocalTime timeToday = time.toLocalTime();
+                            DailyScheduleItem dsi = new DailyScheduleItem(s, timeToday);
+                            dsi.save();
+                            Log.d(TAG, "Saving daily schedule item..."
+                                + dsi.getId()
+                                + " timeToday: "
+                                + timeToday.toString("kk:mm"));
+                        }
                     }
 
-                    // save new items
-                    for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems()) {
-
-                        ScheduleItem item = new ScheduleItem();
-                        item.setDose(i.dose());
-                        item.setRoutine(i.routine());
-                        item.setSchedule(s);
-                        item.save();
-                        // add to daily schedule
-                        DailyScheduleItem dsi = new DailyScheduleItem(item);
-                        if (routinesTaken.contains(item.routine().getId())) {
-                            dsi.setTakenToday(true);
-                        }
-                        dsi.save();
-                    }
                     // save and fire event
                     DB.schedules().saveAndFireEvent(s);
                     return null;
                 }
             });
 
-            ScheduleCreationHelper.instance().clear();
+            ScheduleHelper.instance().clear();
             AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ScheduleCreationActivity.this);
             Log.d(TAG, "Schedule saved successfully!");
             Toast.makeText(this, R.string.schedule_created_message, Toast.LENGTH_SHORT).show();
@@ -257,8 +295,6 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
     public void saveSchedule() {
 
-//        try {
-
         if (!validateBeforeSave()) {
             return;
         }
@@ -268,90 +304,47 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         } else {
             createSchedule();
         }
-
-//            ActiveAndroid.beginTransaction();
-//            ArrayList<Long> scheduleItemIds = new ArrayList<Long>();
-//            Medicine m = ScheduleCreationHelper.instance().getSelectedMed();
-//
-//            Schedule s = mSchedule != null ? mSchedule : new es.usc.citius.servando.calendula.persistence.Schedule();
-//            s.setMedicine(m);
-//            s.setDays(ScheduleCreationHelper.instance().getSelectedDays());
-//            s.save();
-//
-//            for (ScheduleItem item : ScheduleCreationHelper.instance().getScheduleItems()) {
-//                item.setSchedule(s);
-//                item.save();
-//                scheduleItemIds.add(item.getId());
-//                // for each item, add a new DailyScheduleItem item for it
-//                if (DailyScheduleItem.findByScheduleItem(item) == null) {
-//                    Log.d(TAG, "Creating daily schedule item for " + item.routine().name());
-//                    new DailyScheduleItem(item).save();
-//                } else {
-//                    Log.d(TAG, "Not creating daily schedule item for " + item.routine().name());
-//                }
-//
-//                Log.d(TAG, "Add item: " + s.getId() + ", " + item.getId());
-//            }
-//
-//            for (ScheduleItem scheduleItem : s.items()) {
-//                if (!ScheduleCreationHelper.instance().getScheduleItems().contains(scheduleItem)) {
-//                    Log.d(TAG, "Item to remove : " + scheduleItem.getId() + ", " + scheduleItem.routine().name() + ", " + scheduleItem.dose());
-//                    scheduleItem.deleteCascade();
-//                }
-//            }
-//
-//            Persistence.instance().save(s);
-//            Log.d(TAG, "Schedule saved successfully!");
-//            ActiveAndroid.setTransactionSuccessful();
-//            AlarmScheduler.instance().onCreateOrUpdateSchedule(s, this);
-//            ScheduleCreationHelper.instance().clear();
-//            Snack.show(R.string.schedule_created_message, this);
-//            // send result to caller activity
-//            Intent returnIntent = new Intent();
-//            returnIntent.putExtra("schedule_created", true);
-//            setResult(RESULT_OK, returnIntent);
-//            finish();
-//
-//        } catch (Exception e) {
-//            Snack.show("Error creating schedule",this);
-//            e.printStackTrace();
-//        } finally {
-//            if(ActiveAndroid.inTransaction()) {
-//                ActiveAndroid.endTransaction();
-//            }
-//        }
     }
 
 
     boolean validateBeforeSave() {
 
-        if (ScheduleCreationHelper.instance().getSelectedMed() == null) {
-            mViewPager.setCurrentItem(0);
+        if (ScheduleHelper.instance().getSelectedMed() == null) {
+            mViewPager.setCurrentItem(1);
             showSnackBar(R.string.create_schedule_unselected_med);
             return false;
         }
 
-        for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems()) {
+        for (ScheduleItem i : ScheduleHelper.instance().getScheduleItems()) {
             if (i.routine() == null) {
-                mViewPager.setCurrentItem(1);
+                mViewPager.setCurrentItem(0);
                 showSnackBar(R.string.create_schedule_incomplete_items);
                 return false;
             }
         }
 
-        for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems()) {
+        for (ScheduleItem i : ScheduleHelper.instance().getScheduleItems()) {
             if (i.dose() <= 0) {
-                mViewPager.setCurrentItem(1);
+                mViewPager.setCurrentItem(0);
                 showSnackBar(R.string.create_schedule_incomplete_doses);
                 return false;
             }
         }
 
-        if (ScheduleCreationHelper.instance().getDays(this).length <= 0) {
-            mViewPager.setCurrentItem(1);
-            showSnackBar(R.string.schedule_no_day_specified_message);
+        if (ScheduleHelper.instance().getSchedule().type() == Schedule.SCHEDULE_TYPE_CYCLE && (
+            ScheduleHelper.instance().getSchedule().getCycleRest() <= 0
+                || ScheduleHelper.instance().getSchedule().getCycleDays() <= 0))
+        {
+            showSnackBar(R.string.cycle_period_cero_message);
             return false;
         }
+
+       /* if (ScheduleHelper.instance().getSchedule().allDaysSelected()
+                && ScheduleHelper.instance().getSchedule().type() == Schedule.SCHEDULE_TYPE_SOMEDAYS) {
+            mViewPager.setCurrentItem(0);
+            showSnackBar(R.string.schedule_no_day_specified_message);
+            return false;
+        }*/
 
         return true;
     }
@@ -396,7 +389,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
     public void onMedicineSelected(Medicine m, boolean step) {
 
-        ScheduleCreationHelper.instance().setSelectedMed(m);
+        ScheduleHelper.instance().setSelectedMed(m);
 
         if (!step) {
             autoStepDone = true;
@@ -425,6 +418,19 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
 
     }
+
+    public void onScheduleTypeSelected()
+    {
+        ((ScheduleTimetableFragment) getViewPagerFragment(2)).onTypeSelected();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run()
+            {
+                mViewPager.setCurrentItem(2);
+            }
+        }, 500);
+    }
+
 
 
     void showDeleteConfirmationDialog(final Schedule s) {
@@ -465,7 +471,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
     @Override
     protected void onDestroy() {
         CalendulaApp.eventBus().unregister(this);
-        ScheduleCreationHelper.instance().clear();
+        ScheduleHelper.instance().clear();
         super.onDestroy();
     }
 
@@ -507,9 +513,13 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if (position == 0) {
+            if (position == 1)
+            {
                 return new SelectMedicineListFragment();
-            } else if (position == 1) {
+            } /*else if (position == 1) {
+                return new ScheduleTypeFragment();
+            } */ else if (position == 0)
+            {
                 return new ScheduleTimetableFragment();
             } else {
                 return new ScheduleSummaryFragment();
@@ -519,9 +529,13 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if (position == 0) {
+            if (position == 1)
+            {
                 return getString(R.string.medicine);
-            } else if (position == 1) {
+            } /*else if (position == 1) {
+                return getString(R.string.schedule_type);
+            }*/ else if (position == 0)
+            {
                 return getString(R.string.schedule);
             } else {
                 return getString(R.string.summary);
@@ -538,7 +552,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
     public void onEvent(PersistenceEvents.MedicineAddedEvent event) {
         Log.d("onEvent", event.id + " ----");
-        ((SelectMedicineListFragment) getViewPagerFragment(0)).setSelectedMed(event.id);
+        ((SelectMedicineListFragment) getViewPagerFragment(1)).setSelectedMed(event.id);
     }
 
 }

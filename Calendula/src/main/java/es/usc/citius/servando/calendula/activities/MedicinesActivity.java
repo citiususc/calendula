@@ -94,10 +94,12 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
         searchEditText = (EditText) findViewById(R.id.search_edit_text);
         searchList = (ListView) findViewById(R.id.search_list);
 
-
+        toolbar.setNavigationIcon(
+            new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 10,
+                10, 10, 10));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setNavigationIcon(new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 10, 10, 10, 10));
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);

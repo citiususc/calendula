@@ -23,9 +23,9 @@
         android:text="@string/medicine_unselected"
         android:id="@+id/sched_summary_medname"
         android:layout_below="@+id/sched_summary_medicon"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:textColor="@color/android_blue_dark"
-        android:textSize="22sp"
+        android:textSize="18dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:gravity="center" />
@@ -36,7 +36,7 @@
         android:id="@+id/sched_summary_medicon"
         android:layout_below="@id/summaryTitle"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="20dp"
         android:src="@drawable/ic_presentation_2" />
 
     <TextView
@@ -44,22 +44,32 @@
         android:layout_height="wrap_content"
         android:text="Every day"
         android:id="@+id/sched_summary_medi_days"
-        android:textSize="20sp"
+        android:textSize="18dp"
         android:textColor="@color/dark_grey_text"
         android:layout_below="@+id/sched_summary_medname"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp" />
+        android:layout_marginTop="40dp"
+        />
 
-    <TextView
+  <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Three times a day"
         android:id="@+id/sched_summary_medi_dailyfreq"
-        android:textSize="22dp"
+      android:textSize="18dp"
         android:textColor="@color/android_blue"
         android:layout_below="@+id/sched_summary_medi_days"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/summary_show_calendar"
+        android:id="@+id/button_show_calendar"
+        android:layout_below="@+id/sched_summary_medi_dailyfreq"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
 
 </RelativeLayout>

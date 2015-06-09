@@ -1,13 +1,30 @@
 package es.usc.citius.servando.calendula.persistence;
 
+import android.content.Context;
+import android.text.format.Time;
+import android.util.Log;
+
+import com.doomonafireball.betterpickers.recurrencepicker.EventRecurrence;
+import com.doomonafireball.betterpickers.recurrencepicker.EventRecurrenceFormatter;
+import com.google.ical.values.DateValue;
+import com.google.ical.values.Frequency;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+
+import java.util.Arrays;
 import java.util.List;
 
+import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.typeSerializers.BooleanArrayPersister;
-
+import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalDatePersister;
+import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimePersister;
+import es.usc.citius.servando.calendula.persistence.typeSerializers.RRulePersister;
+import es.usc.citius.servando.calendula.util.ScheduleHelper;
 
 /**
  * Created by joseangel.pineiro
@@ -15,9 +32,22 @@ import es.usc.citius.servando.calendula.persistence.typeSerializers.BooleanArray
 @DatabaseTable(tableName = "Schedules")
 public class Schedule {
 
+    public static final int SCHEDULE_TYPE_EVERYDAY = 0; // DEFAULT
+    public static final int SCHEDULE_TYPE_SOMEDAYS = 1;
+    public static final int SCHEDULE_TYPE_INTERVAL = 2;
+
+    public static final int SCHEDULE_TYPE_HOURLY = 4;
+    public static final int SCHEDULE_TYPE_CYCLE = 5;
+
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_MEDICINE = "Medicine";
     public static final String COLUMN_DAYS = "Days";
+    public static final String COLUMN_RRULE = "Rrule";
+    public static final String COLUMN_START = "Start";
+    public static final String COLUMN_START_TIME = "Starttime";
+    public static final String COLUMN_DOSE = "Dose";
+    public static final String COLUMN_TYPE = "Type";
+    public static final String COLUMN_CYCLE = "Cycle";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
@@ -26,77 +56,361 @@ public class Schedule {
     private Medicine medicine;
 
     @DatabaseField(columnName = COLUMN_DAYS, persisterClass = BooleanArrayPersister.class)
-    private boolean[] days = new boolean[]{true, true, true, true, true, true, true};
+    private boolean[] days = noWeekDays();
 
-    public Schedule() {
+    @DatabaseField(columnName = COLUMN_RRULE, persisterClass = RRulePersister.class)
+    private RepetitionRule rrule;
+
+    @DatabaseField(columnName = COLUMN_START, persisterClass = LocalDatePersister.class)
+    private LocalDate start;
+
+    @DatabaseField(columnName = COLUMN_START_TIME, persisterClass = LocalTimePersister.class)
+    private LocalTime startTime;
+
+    @DatabaseField(columnName = COLUMN_DOSE)
+    private float dose = 1f;
+
+    @DatabaseField(columnName = COLUMN_TYPE)
+    private int type = SCHEDULE_TYPE_EVERYDAY;
+
+    @DatabaseField(columnName = COLUMN_CYCLE)
+    private String cycle;
+
+    public RepetitionRule rule()
+    {
+        return rrule;
     }
 
-    public Schedule(Medicine medicine) {
+    public void setRepetition(RepetitionRule rrule)
+    {
+        this.rrule = rrule;
+    }
+
+    public int type()
+    {
+        return type;
+    }
+
+    public void setType(int type)
+    {
+        if (type < 0 || type > 5)
+        {
+            throw new RuntimeException("Invalid schedule type");
+        }
+        this.type = type;
+    }
+
+    public Schedule()
+    {
+        rrule = new RepetitionRule(null);
+    }
+
+    public Schedule(Medicine medicine)
+    {
         this.medicine = medicine;
     }
 
-    public Schedule(Medicine medicine, boolean[] days) {
+    public Schedule(Medicine medicine, boolean[] days)
+    {
         this.medicine = medicine;
-        this.days = days;
+        setDays(days);
     }
 
-    public Long getId() {
+    public Long getId()
+    {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Long id)
+    {
         this.id = id;
     }
 
-    public List<ScheduleItem> items() {
+    public List<ScheduleItem> items()
+    {
         return DB.scheduleItems().findBySchedule(this);
     }
 
-    public Medicine medicine() {
+    public List<DateTime> hourlyItemsToday()
+    {
+        DateTime today = DateTime.now().withTimeAtStartOfDay();
+        // get schedule occurrences for the current day
+        return rrule.occurrencesBetween(today, today.plusDays(1), this);
+    }
+
+    public Medicine medicine()
+    {
         return medicine;
     }
 
-    public void setMedicine(Medicine medicine) {
+    public void setMedicine(Medicine medicine)
+    {
         this.medicine = medicine;
     }
 
-    public boolean[] days() {
-        return days;
+    public boolean[] days()
+    {
+        return rrule.days();
     }
 
-    public void setDays(boolean[] days) {
-        this.days = days;
+    public void setDays(boolean[] days)
+    {
+        rrule.setDays(days);
     }
 
-    public boolean enabledFor(int dayOfWeek) {
-        if (dayOfWeek > 7 || dayOfWeek < 1)
-            throw new IllegalArgumentException("Day off week must be between 1 and 7");
+    public LocalDate start()
+    {
+        return start;
+    }
 
-        return days[dayOfWeek - 1];
+    public void setStart(LocalDate start)
+    {
+        this.start = start;
+    }
+
+    public float dose()
+    {
+        return dose;
+    }
+
+    public void setDose(float dose)
+    {
+        this.dose = dose;
+    }
+
+    public boolean enabledForDate(LocalDate date)
+    {
+
+        if (type == SCHEDULE_TYPE_CYCLE)
+        {
+            return cycleEnabledForDate(date);
+        } else
+        {
+            return rrule.hasOccurrencesAt(date);
+        }
+    }
+
+    private boolean cycleEnabledForDate(LocalDate date)
+    {
+        return ScheduleHelper.cycleEnabledForDate(date, start, getCycleDays(), getCycleRest());
+    }
+
+    public List<LocalDate> ocurrencesBetween(LocalDate start, LocalDate end)
+    {
+        return rrule.occurrencesBetween(start, end);
+    }
+
+    public String toReadableString(Context ctx)
+    {
+
+        if (rule().frequency() == Frequency.HOURLY)
+        {
+            return ctx.getString(R.string.repeat_every_tostr, rule().interval(),
+                ctx.getString(R.string.hours));
+        } else if (type == SCHEDULE_TYPE_CYCLE)
+        {
+            return getCycleDays() + " + " + getCycleRest();
+        } else
+        {
+            String ical = rrule.toIcal();
+
+            EventRecurrence e = new EventRecurrence();
+            Time t;
+            if (start != null)
+            {
+                t = new Time();
+                t.set(start.getDayOfWeek(), start.getMonthOfYear(), start.getYear());
+            } else
+            {
+                t = new Time();
+                t.setToNow();
+                t.normalize(true);
+                e.setStartDate(t);
+            }
+
+            if (ical != null) e.parse(ical.replace("RRULE:", ""));
+
+            return EventRecurrenceFormatter.getRepeatString(ctx, ctx.getResources(), e, false);
+        }
     }
 
     // *************************************
     // DB queries
     // *************************************
 
-    public static List<Schedule> findAll() {
+    public static List<Schedule> findAll()
+    {
         return DB.schedules().findAll();
     }
 
-    public static List<Schedule> findByMedicine(Medicine med) {
+    public static List<Schedule> findByMedicine(Medicine med)
+    {
         return DB.schedules().findByMedicine(med);
     }
 
-    public static Schedule findById(long id) {
+    public static Schedule findById(long id)
+    {
         return DB.schedules().findById(id);
     }
 
-    public void save() {
+    public void save()
+    {
         DB.schedules().save(this);
     }
 
-    public void deleteCascade() {
+    public void deleteCascade()
+    {
         DB.schedules().deleteCascade(this, false);
+    }
+
+    public boolean[] getLegacyDays()
+    {
+        return days;
+    }
+
+    public boolean allDaysSelected()
+    {
+        for (boolean d : days())
+            if (!d) return false;
+        return true;
+    }
+
+    public boolean repeatsHourly()
+    {
+        return type == SCHEDULE_TYPE_HOURLY;
+    }
+
+    public int dayCount()
+    {
+        int count = 0;
+        for (boolean d : days())
+            if (d) count += 1;
+        return count;
+    }
+
+    public void toggleSelectedDay(int i)
+    {
+        boolean[] d = days();
+        d[i] = !d[i];
+        rrule.setDays(d);
+        Log.d("Schedule", "Days: " + Arrays.toString(days()));
+    }
+
+    public LocalDate end()
+    {
+        DateValue v = rrule.iCalRule().getUntil();
+        return v != null ? new LocalDate(v.year(), v.month(), v.day()) : null;
+    }
+
+    public LocalTime startTime()
+    {
+        return startTime;
+    }
+    //    final int[] byHour = rule().iCalRule().getByHour();
+    //    if (byHour != null && byHour.length == 1)
+    //    {
+    //        final int[] byMinute = rule().iCalRule().getByMinute();
+    //        if (byMinute != null && byMinute.length == 1)
+    //        {
+    //            return new LocalTime(byHour[0], byMinute[0]);
+    //        }
+    //    }
+    //    return null;
+    //}
+
+    public void setStartTime(LocalTime t)
+    {
+        startTime = t;
+
+        //rule().iCalRule().setByHour(new int[] { t.getHourOfDay() });
+        //rule().iCalRule().setByMinute(new int[] { t.getMinuteOfHour() });
+    }
+
+    public DateValue until()
+    {
+        return rrule.iCalRule().getUntil();
+    }
+
+    @Override public String toString()
+    {
+        return "Schedule{" +
+            "id=" + id +
+            ", medicine=" + medicine +
+            ", rrule=" + rrule.toIcal() +
+            ", start=" + start +
+            ", dose=" + dose +
+            ", type=" + type +
+            '}';
+    }
+
+    public static final boolean[] noWeekDays()
+    {
+        return new boolean[] { false, false, false, false, false, false, false };
+    }
+
+    public static final boolean[] allWeekDays()
+    {
+        return new boolean[] { true, true, true, true, true, true, true };
+    }
+
+    public String displayDose()
+    {
+        int integerPart = (int) dose;
+        double fraction = dose - integerPart;
+
+        String fractionRational;
+        if (fraction == 0.125)
+        {
+            fractionRational = "1/8";
+        } else if (fraction == 0.25)
+        {
+            fractionRational = "1/4";
+        } else if (fraction == 0.5)
+        {
+            fractionRational = "1/2";
+        } else if (fraction == 0.75)
+        {
+            fractionRational = "3/4";
+        } else if (fraction == 0)
+        {
+            return "" + ((int) dose);
+        } else
+        {
+            return "" + dose;
+        }
+        return integerPart + "+" + fractionRational;
+    }
+
+    public DateTime startDateTime()
+    {
+        LocalDate s = start != null ? start : LocalDate.now();
+        LocalTime t = startTime != null ? startTime : LocalTime.MIDNIGHT;
+        return s.toDateTime(t);
+    }
+
+    public void setCycle(int days, int rest)
+    {
+        this.cycle = days + "," + rest;
+    }
+
+    public int getCycleDays()
+    {
+        if (cycle == null)
+        {
+            return 0;
+        }
+        String[] parts = cycle.split(",");
+        return Integer.valueOf(parts[0]);
+    }
+
+    public int getCycleRest()
+    {
+        if (cycle == null)
+        {
+            return 0;
+        }
+        String[] parts = cycle.split(",");
+        return Integer.valueOf(parts[1]);
     }
 }
 

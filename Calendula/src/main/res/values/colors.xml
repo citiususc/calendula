@@ -8,7 +8,9 @@
     <color name="android_green">#99CC00</color>
     <color name="android_green_dark">#669900</color>
     <color name="android_green_light">#55669900</color>
-    <color name="android_orange">#FFBB33</color>
+  <color name="android_green_light_noalpha">#ddB8DB57</color>
+
+  <color name="android_orange">#FFBB33</color>
     <color name="android_orange_dark">#FF8800</color>
     <color name="android_orange_light">#55FFBB33</color>
     <color name="android_orange_lighter">#22FFBB33</color>
@@ -19,15 +21,15 @@
     <color name="android_blue">#33B5E5</color>
     <color name="android_blue_dark">#0099CC</color>
     <color name="android_blue_darker">#0077aa</color>
-    <color name="android_blue_statusbar">#006f9f</color>
-    <!--#004F71-->
+    <color name="android_blue_statusbar">#004F71</color>
     <color name="android_blue_light">#5533B5E5</color>
     <color name="white_80">#EEFFFFFF</color>
     <color name="white_50">#55FFFFFF</color>
     <color name="white_20">#22FFFFFF</color>
     <color name="black_20">#22000000</color>
     <color name="black_40">#44000000</color>
-    <color name="list_item_shadow">#112c2c2c</color>
+  <color name="black_80">#88000000</color>
+  <color name="list_item_shadow">#112c2c2c</color>
     <color name="transparent">#00000000</color>
     <color name="android_orange_darker">#884411</color>
     <color name="list_item_active">#aaececec</color>
@@ -64,7 +66,7 @@
 
     <color name="actionbar_background_color">#0099CC</color>
     <color name="activity_background_color">#EFEFEF</color>
-
+    <!--#006699-->
 
     <!-- CALENDAR -->
     <color name="calendar_active_month_bg">#ffffff</color>
@@ -79,6 +81,5 @@
     <color name="calendar_text_selected">#ffffffff</color>
     <color name="calendar_text_unselectable">#22778088</color>
     <!-- /CALENDAR -->
-
 
 </resources>

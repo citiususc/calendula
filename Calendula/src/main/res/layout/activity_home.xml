@@ -53,15 +53,15 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 android:layout_marginTop="@dimen/status_bar_height" />
 
-            <!--<com.astuetz.PagerSlidingTabStrip
+            <com.astuetz.PagerSlidingTabStrip
                 android:id="@+id/tabs"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/tabs_height"
                 android:background="@color/android_blue_darker"
                 android:elevation="50dp"
-                android:layout_below="@+id/toolbar" />-->
+                android:layout_below="@+id/toolbar" />
 
-            <com.ogaclejapan.smarttablayout.SmartTabLayout
+            <!--<com.ogaclejapan.smarttablayout.SmartTabLayout
                 android:id="@+id/tabs"
                 android:layout_below="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                 app:stl_defaultTabTextSize="12sp"
                 app:stl_defaultTabTextHorizontalPadding="16dp"
                 app:stl_defaultTabTextMinWidth="100dp"
-                app:stl_distributeEvenly="true" />
+                app:stl_distributeEvenly="true" />-->
 
             <!-- tabs.setShouldExpand(true);
             tabs.setAllCaps(true);

@@ -40,17 +40,15 @@ public class StartActivity extends Activity {
     public static final String STATUS_SESSION_RESUMED = "STATUS_SESSION_RESUMED";
     public static final String STATUS_NO_SESSION = "STATUS_NO_SESSION";
 
-
     public static final int ACTION_DEFAULT = 1;
     public static final int ACTION_SHOW_REMINDERS = 2;
-
 
     int action = ACTION_DEFAULT;
     boolean mustShowSplash;
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
@@ -58,25 +56,31 @@ public class StartActivity extends Activity {
         new UserResumeSessionTask().execute((Void) null);
         mustShowSplash = mustShowSplashForAction(action);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.activity_background_color));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        {
+            getWindow().setStatusBarColor(
+                getResources().getColor(R.color.activity_background_color));
         }
 
-        if (mustShowSplash) {
+        if (mustShowSplash)
+        {
             startAnimations();
         }
-//        if(PopulatePrescriptionDBService.needUpdate(getApplicationContext())) {
-//            PopulatePrescriptionDBService.updateIfNeeded(getApplicationContext());
-//        }
+        //        if(PopulatePrescriptionDBService.needUpdate(getApplicationContext())) {
+        //            PopulatePrescriptionDBService.updateIfNeeded(getApplicationContext());
+        //        }
     }
 
-    private boolean mustShowSplashForAction(int action) {
+    private boolean mustShowSplashForAction(int action)
+    {
         return true;//!(action == ACTION_DELAY_ROUTINE || action == ACTION_CANCEL_ROUTINE);
     }
 
-    private void startAnimations() {
+    private void startAnimations()
+    {
 
-        RotateAnimation rotateAnim = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        RotateAnimation rotateAnim = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f,
+            Animation.RELATIVE_TO_SELF, 0.5f);
         rotateAnim.setInterpolator(new LinearInterpolator());
         rotateAnim.setRepeatCount(Animation.INFINITE);
         rotateAnim.setFillAfter(true);
@@ -104,7 +108,8 @@ public class StartActivity extends Activity {
         quote.startAnimation(brandFaceIn);
     }
 
-    private void stopAnimations() {
+    private void stopAnimations()
+    {
         brand.clearAnimation();
         splashLogo.clearAnimation();
     }
@@ -117,42 +122,53 @@ public class StartActivity extends Activity {
 
         boolean sessionIsOpen;
 
-
-        private void keepSplashVisible(int seconds) {
+        private void keepSplashVisible(int seconds)
+        {
             // Show splash
-            try {
-                if (action == ACTION_DEFAULT) {
+            try
+            {
+                if (action == ACTION_DEFAULT)
+                {
                     Thread.sleep(seconds * 2500);
                 }
-            } catch (InterruptedException e) {
+            } catch (InterruptedException e)
+            {
                 // do nothing
             }
         }
 
         @Override
-        protected void onPreExecute() {
+        protected void onPreExecute()
+        {
             super.onPreExecute();
             sessionIsOpen = Session.instance().isOpen();
         }
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected String doInBackground(Void... params)
+        {
 
-            try {
+            try
+            {
                 // session is open
-                if (sessionIsOpen) {
+                if (sessionIsOpen)
+                {
                     return STATUS_SESSION_OPEN;
                 }
                 // session is closed but there is a session stored
-                else if (Session.instance().open(getApplicationContext())) {
-                    if (mustShowSplash) {
+                else if (Session.instance().open(getApplicationContext()))
+                {
+                    if (mustShowSplash)
+                    {
                         keepSplashVisible(1);
                     }
                     return STATUS_SESSION_RESUMED;
                 }
                 // there is no previous session
-                else {
-                    if (mustShowSplash) {
+                else
+                {
+                    if (mustShowSplash)
+                    {
                         keepSplashVisible(1);
                     }
                     // create default session
@@ -161,7 +177,8 @@ public class StartActivity extends Activity {
                     Session.instance().open(getApplicationContext());
                     return STATUS_NO_SESSION;
                 }
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 e.printStackTrace();
             }
 
@@ -169,52 +186,47 @@ public class StartActivity extends Activity {
         }
 
         @Override
-        protected void onPostExecute(final String result) {
+        protected void onPostExecute(final String result)
+        {
 
-            if (mustShowSplash) {
+            if (mustShowSplash)
+            {
                 stopAnimations();
             }
 
-            if (STATUS_SESSION_OPEN.equals(result) || STATUS_SESSION_RESUMED.equals(result)) {
+            if (STATUS_SESSION_OPEN.equals(result) || STATUS_SESSION_RESUMED.equals(result))
+            {
                 Log.d("StartActivity", "Action: " + action);
-                long routineId;
-                switch (action) {
+                switch (action)
+                {
 
                     case ACTION_SHOW_REMINDERS:
+
                         Intent i = new Intent(getBaseContext(), HomeActivity.class);
-                        i.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1));
-                        i.putExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID, getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID, -1));
+                        i.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID,
+                            getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1));
+                        i.putExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID,
+                            getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID,
+                                -1));
+                        i.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID,
+                            getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1));
+                        i.putExtra(CalendulaApp.INTENT_EXTRA_DELAY_SCHEDULE_ID,
+                            getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_SCHEDULE_ID,
+                                -1));
+                        i.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME,
+                            getIntent().getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME));
+
+                        Log.d("StartActivity", i.toString());
+
                         ReminderNotification.cancel(StartActivity.this);
                         startActivity(i);
                         break;
-//                    case ACTION_DELAY_ROUTINE:
-//                        routineId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
-//                        if (routineId != -1) {
-//
-//                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(StartActivity.this);
-//                            String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
-//                            long delay = Long.parseLong(delayMinutesStr);
-//
-//                            if(delay < 0){
-//                                delay = 15;
-//                            }
-//
-//                            AlarmScheduler.instance().onDelayRoutine(routineId, StartActivity.this, (int)delay*60*1000);
-//                            Toast.makeText(StartActivity.this, "Routine delayed 1 hour", Toast.LENGTH_SHORT).show();
-//                        }
-//                        break;
-//                    case ACTION_CANCEL_ROUTINE:
-//                        routineId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
-//                        if (routineId != -1) {
-//                            AlarmScheduler.instance().onCancelRoutineNotifications(Routine.findById(routineId), StartActivity.this);
-//                            Toast.makeText(StartActivity.this, "Reminder cancelled", Toast.LENGTH_SHORT).show();
-//                        }
-//                        break;
                     default:
                         startActivity(new Intent(getBaseContext(), HomeActivity.class));
                         break;
                 }
-            } else {
+            } else
+            {
                 // user first time in the app
                 Intent welcome = new Intent(getBaseContext(), HomeActivity.class);
                 welcome.putExtra("welcome", true);
@@ -226,13 +238,15 @@ public class StartActivity extends Activity {
         }
 
         @Override
-        protected void onCancelled() {
+        protected void onCancelled()
+        {
 
         }
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
         // do nothing
     }
 }
