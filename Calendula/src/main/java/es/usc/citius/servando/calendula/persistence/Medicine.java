@@ -25,6 +25,7 @@ public class Medicine implements Comparable<Medicine> {
     public static final String COLUMN_NAME = "Name";
     public static final String COLUMN_PRESENTATION = "Presentation";
     public static final String COLUMN_CN = "cn";
+    public static final String COLUMN_HG = "hg";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
@@ -37,6 +38,9 @@ public class Medicine implements Comparable<Medicine> {
 
     @DatabaseField(columnName = COLUMN_CN)
     private String cn;
+
+    @DatabaseField(columnName = COLUMN_HG)
+    private Long homogeneousGroup;
 
     public Medicine() {
     }
@@ -56,6 +60,14 @@ public class Medicine implements Comparable<Medicine> {
 
     public void setCn(String cn) {
         this.cn = cn;
+    }
+
+    public Long homogeneousGroup() {
+        return homogeneousGroup;
+    }
+
+    public void setHomogeneousGroup(Long homogeneousGroup) {
+        this.homogeneousGroup = homogeneousGroup;
     }
 
     public Long getId() {

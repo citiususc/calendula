@@ -11,7 +11,7 @@
     <es.usc.citius.servando.calendula.util.view.ScrimInsetsFrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        app:insetForeground="#1000"
+        app:insetForeground="#0000"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         android:background="@color/android_blue_dark">

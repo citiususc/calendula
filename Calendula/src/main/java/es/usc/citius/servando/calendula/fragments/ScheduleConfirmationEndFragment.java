@@ -11,9 +11,6 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity;
-import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Prescription;
-import es.usc.citius.servando.calendula.util.Strings;
 
 
 /**
@@ -34,42 +31,42 @@ public class ScheduleConfirmationEndFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        prescriptions = ((ConfirmSchedulesActivity) getActivity()).getPrescriptions();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_schedule_confirmation_end, container, false);
-        prescriptions = ((ConfirmSchedulesActivity) getActivity()).getPrescriptions();
+        updateCounts(rootView);
+        return rootView;
+    }
 
-        int newMedsCount = 0;
+    private void updateCounts(View rootView){
 
-        for (ConfirmSchedulesActivity.PrescriptionWrapper p : prescriptions) {
+        int totalSchedules = prescriptions.size();
+        int newSchedules = ((ConfirmSchedulesActivity)getActivity()).getNewCount();
+        int updated = totalSchedules - newSchedules;
 
-            String name = "_";
-
-            if (p.cn != null) {
-                if (p.prescription == null) {
-                    p.prescription = Prescription.findByCn(p.cn);
-                }
-                name = p.prescription.shortName();
-
-            } else if (p.isGroup) {
-                name = Strings.firstPart(p.group.name);
-            }
-
-            if (Medicine.findByName(name) == null) {
-                newMedsCount++;
-            }
-        }
 
         StringBuffer sb = new StringBuffer();
 
         //.append(newMedsCount + " schedules will be updated")
-        sb.append((prescriptions.size()) + " schedules will be created")
+        sb.append(newSchedules + " schedules will be created")
                 .append("\n")
-                .append(newMedsCount + " meds will be added to your medical kit");
+                .append(updated + " schedules will be updated")
+                .append("\n")
+                .append(updated + " meds will be added to your medical kit");
 
         ((TextView) rootView.findViewById(R.id.textView)).setText(sb.toString());
-
-        return rootView;
     }
 
-
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser && getView() != null) {
+            updateCounts(getView());
+        }
+    }
 }

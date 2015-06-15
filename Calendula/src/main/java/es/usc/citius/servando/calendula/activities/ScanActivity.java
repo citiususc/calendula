@@ -73,9 +73,12 @@ public class ScanActivity extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
-        byte[] dataBytes = data.getByteArrayExtra("SCAN_RESULT_BYTE_SEGMENTS_0");
 
-        if (result != null && requestCode == IntentIntegrator.REQUEST_CODE) {
+
+        if (result != null && requestCode == IntentIntegrator.REQUEST_CODE && data !=null) {
+
+            byte[] dataBytes = data.getByteArrayExtra("SCAN_RESULT_BYTE_SEGMENTS_0");
+
             if (result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {

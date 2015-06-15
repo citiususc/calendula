@@ -1,6 +1,8 @@
 package es.usc.citius.servando.calendula.database;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -71,4 +73,19 @@ public class ScheduleDao extends GenericDao<Schedule, Long> {
     {
         return findBy(Schedule.COLUMN_TYPE, Schedule.SCHEDULE_TYPE_HOURLY);
     }
+
+    public Schedule findScannedByMedicine(Medicine m) {
+        try
+        {
+            QueryBuilder<Schedule, Long> qb = dao.queryBuilder();
+            Where w = qb.where();
+            w.and(w.eq(Schedule.COLUMN_MEDICINE, m),w.eq(Schedule.COLUMN_SCANNED, true));
+            qb.setWhere(w);
+            return qb.queryForFirst();
+        } catch (SQLException e)
+        {
+            throw new RuntimeException("Error finding scanned schedule", e);
+        }
+    }
+
 }

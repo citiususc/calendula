@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.database;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
 import org.joda.time.LocalDate;
@@ -64,5 +65,24 @@ public class PickupInfoDao extends GenericDao<PickupInfo, Long> {
             throw new RuntimeException("Error finding model", e);
         }
 
+    }
+
+    public boolean exists(PickupInfo pickupInfo) {
+        try
+        {
+            QueryBuilder<PickupInfo, Long> qb = dao.queryBuilder();
+            Where w = qb.where();
+            w.and(
+                    w.eq(PickupInfo.COLUMN_MEDICINE, pickupInfo.medicine()),
+                    w.eq(PickupInfo.COLUMN_FROM, pickupInfo.from()),
+                    w.eq(PickupInfo.COLUMN_TO, pickupInfo.to())
+            );
+            qb.setWhere(w);
+            return qb.countOf() > 0;
+
+        } catch (SQLException e)
+        {
+            throw new RuntimeException("Error finding scanned schedule", e);
+        }
     }
 }

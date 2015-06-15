@@ -1,52 +1,94 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="@color/android_blue_darker">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:background="@color/android_blue_darker"
+        android:background="@color/android_blue_dark"
         android:title="Routines"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="65dp"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        />
+        >
+
+
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/android_blue_darker"
+        android:id="@+id/schedule_type_selector"
+        android:gravity="center">
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="fill_parent"
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/schedule_type_routines"
+            android:src="@drawable/ic_alarm_white_48dp"
+            android:scaleType="fitCenter" />
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="fill_parent"
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/schedule_type_hourly"
+            android:src="@drawable/ic_history_white_48dp"
+            android:scaleType="fitCenter" />
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="fill_parent"
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/schedule_type_period"
+            android:src="@drawable/ic_autorenew_white_48dp"
+            android:scaleType="fitCenter" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="56dp"
+        android:text="Ibuprofeno 500 dsa dsadsa dsadsadas dsadas"
+        android:textSize="18sp"
+        android:id="@+id/textView2"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/android_blue_dark"
+        android:textColor="#fff"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_below="@+id/textView"
+        android:gravity="center"
+        android:paddingRight="26dp"
+        android:paddingLeft="26dp" />
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity"
-        android:layout_below="@+id/textView2" />
-
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="5dp"
-        android:id="@+id/tabs_shadow"
-        android:src="@drawable/daily_view_list_item_tab_shadow_top"
-        android:layout_below="@+id/textView2"
-        android:scaleType="fitXY"
-        android:alpha="0.7" />
+        android:layout_below="@+id/schedule_type_selector" />
 
     <TextView
         android:layout_width="fill_parent"
-        android:layout_height="56dp"
-        android:text="Ibuprofeno 500 dsa dsadsa dsadsadas dsadas"
-        android:textSize="20sp"
-        android:paddingLeft="52dp"
-        android:id="@+id/textView2"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/toolbar"
-        android:background="@color/android_blue_darker"
+        android:layout_height="40dp"
+        android:text="Confirm prescription"
+        android:id="@+id/textView"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="true"
+        android:textSize="14sp"
         android:textColor="#fff"
-        android:paddingTop="10dp"
-        android:gravity="top"
-        android:paddingRight="80dp"
-        android:ellipsize="end"
-        android:singleLine="true" />
+        android:layout_alignParentTop="true"
+        android:gravity="center|bottom" />
 
     <com.melnykov.fab.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/add_button"
@@ -57,25 +99,38 @@
         fab:fab_colorNormal="@color/android_green"
         fab:fab_colorPressed="@color/android_green_dark"
         fab:fab_colorRipple="@color/android_green_light"
-        android:layout_marginRight="38dp"
-        android:layout_marginTop="83dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="26dp"
+        android:layout_marginTop="65dp"
+        android:visibility="invisible" />
 
-    
-
-    <TextView
+    <RelativeLayout
+        android:id="@+id/reading_qr_box"
         android:layout_width="fill_parent"
-        android:layout_height="20dp"
-        android:text="Confirm prescription"
-        android:id="@+id/textView"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentStart="true"
-        android:textSize="14sp"
-        android:textColor="#fff"
-        android:gravity="bottom"
-        android:paddingLeft="52dp"
-        android:layout_marginTop="45dp" />
+        android:layout_height="fill_parent"
+        android:background="@color/android_blue_dark"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Reading QR..."
+            android:id="@+id/textView7"
+            android:layout_centerInParent="true"
+            android:textColor="#fff" />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar"
+            android:layout_below="@+id/textView7"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:indeterminate="true" />
+    </RelativeLayout>
 
 
 </RelativeLayout>

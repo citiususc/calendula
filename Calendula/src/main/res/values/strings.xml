@@ -308,7 +308,6 @@
   </string-array>
 
   <string-array name="schedule_repeat_frequency_units">
-    <item>hours</item>
     <item>days</item>
     <item>weeks</item>
     <item>months</item>
@@ -332,6 +331,11 @@
   <string name="schedule_type_period_title">Período + descanso</string>
   <string name="schedule_type_common_periods">Common cycles</string>
 
+    <string-array name="schedule_types">
+        <item>@string/schedule_type_routines_title</item>
+        <item>@string/schedule_type_hourly_title</item>
+        <item>@string/schedule_type_period_title</item>
+    </string-array>
 
   <string name="schedule_type_routines_description">Ex: Cada 3 días, con desayuno comida y cena</string>
   <string name="schedule_type_hourly_description">Ex: Cada 8 horas</string>

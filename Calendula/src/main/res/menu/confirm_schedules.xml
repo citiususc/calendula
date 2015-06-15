@@ -1,11 +1,22 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity" >
+<menu xmlns:tools="http://schemas.android.com/tools"
+    tools:context="es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity">
     
-    <item android:id="@+id/action_confirm_all"
+    <!--<item android:id="@+id/action_type_routines"
         android:title="@string/action_settings"
-        android:icon="@drawable/ic_check_normal_dark"
+        android:icon="@drawable/ic_alarm_white_48dp"
         android:orderInCategory="100"
         app:showAsAction="always" />
+
+    <item android:id="@+id/action_type_hourly"
+          android:title="@string/action_settings"
+          android:icon="@drawable/ic_history_white_48dp"
+          android:orderInCategory="100"
+          app:showAsAction="always" />
+
+    <item android:id="@+id/action_type_cycle"
+          android:title="@string/action_settings"
+          android:icon="@drawable/ic_autorenew_white_48dp"
+          android:orderInCategory="100"
+          app:showAsAction="always" />-->
+
 </menu>

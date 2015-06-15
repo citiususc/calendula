@@ -42,7 +42,7 @@
         android:id="@+id/action_b"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        fab:fab_icon="@drawable/ic_history_white_24dp"
+        fab:fab_icon="@drawable/ic_history_white_48dp"
         fab:fab_colorNormal="@color/android_green_light_noalpha"
         fab:fab_title="@string/schedule_type_hourly_title"
         fab:fab_colorPressed="@color/android_green"

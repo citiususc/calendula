@@ -13,8 +13,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +22,8 @@ import com.google.gson.Gson;
 import com.j256.ormlite.misc.TransactionManager;
 import com.melnykov.fab.FloatingActionButton;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -35,8 +37,8 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationEndFragment;
-import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationStartFragment;
+import es.usc.citius.servando.calendula.fragments.ScheduleImportFragment;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.Medicine;
@@ -50,8 +52,9 @@ import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
 
-public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener{
+public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener {
 
+    private static final String TAG = "ConfirmSchedules.class";
     Toolbar toolbar;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -70,52 +73,81 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
 
     List<PrescriptionWrapper> prescriptionList;
     int scheduleCount;
-    
+
     FloatingActionButton fab;
-    
+
     TextView medName;
     TextView title;
+
+    ImageButton routinesItem;
+    ImageButton hourlyItem;
+    ImageButton cycleItem;
+
+    View scheduleTypeSelector;
+    View readingQrBox;
 
     DateTimeFormatter df = DateTimeFormat.forPattern("yyMMdd");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*if (Build.VERSION.SDK_INT < 16) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        } else {
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+            decorView.setSystemUiVisibility(uiOptions);
+        }*/
         setContentView(R.layout.activity_confirm_schedules);
 
         title = (TextView) findViewById(R.id.textView);
         medName = (TextView) findViewById(R.id.textView2);
         fab = (FloatingActionButton) findViewById(R.id.add_button);
+        scheduleTypeSelector = findViewById(R.id.schedule_type_selector);
+        readingQrBox = findViewById(R.id.reading_qr_box);
+
+        routinesItem = (ImageButton) findViewById(R.id.schedule_type_routines);
+        hourlyItem = (ImageButton) findViewById(R.id.schedule_type_hourly);
+        cycleItem = (ImageButton) findViewById(R.id.schedule_type_period);
+
+        View.OnClickListener l = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickScheduleTypeButton(v.getId());
+            }
+        };
+
+        routinesItem.setOnClickListener(l);
+        hourlyItem.setOnClickListener(l);
+        cycleItem.setOnClickListener(l);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);        
         toolbar.setNavigationIcon(new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 15, 15, 15, 15));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_dark));
         }
 
         toolbar.setTitle("");
-        
+
         String qrData = getIntent().getStringExtra("qr_data");
-
-
         new ProcessQRTask().execute(qrData);
-        
+
 
     }
 
-    private List<PrescriptionWrapper> filterValidPrescriptions(PrescriptionListWrapper prescriptionListWrapper) {        
+    private List<PrescriptionWrapper> filterValidPrescriptions(PrescriptionListWrapper prescriptionListWrapper) {
         List<PrescriptionWrapper> p = new ArrayList<PrescriptionWrapper>();
 
         for (PrescriptionWrapper pw : prescriptionListWrapper.p) {
-            if(pw.cn!=null) {
+            if (pw.cn != null) {
                 Prescription pr = Prescription.findByCn(pw.cn);
                 boolean prescriptionExists = pr != null;
                 boolean medExists = DB.medicines().findOneBy(Prescription.COLUMN_CN, pw.cn) != null;
-                
-                if(prescriptionExists){
+
+                if (prescriptionExists) {
                     pw.exists = medExists;
                     pw.prescription = pr;
                     p.add(pw);
@@ -141,7 +173,6 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
             }
 
 
-
         }
         return p;
     }
@@ -158,25 +189,54 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_confirm_all) {            
-            saveSchedules();  
-            finish();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    private void hideScheduleTypeSelector() {
+        scheduleTypeSelector.setVisibility(View.INVISIBLE);
     }
 
-    private void saveSchedules() {
+    private void showScheduleTypeSelector() {
+        if (scheduleTypeSelector.getVisibility() != View.VISIBLE) {
+            scheduleTypeSelector.setVisibility(View.VISIBLE);
+        }
+    }
 
+
+    public void onClickScheduleTypeButton(int id) {
+        Fragment f = getViewPagerFragment(mViewPager.getCurrentItem());
+
+        routinesItem.setAlpha(0.3f);
+        hourlyItem.setAlpha(0.3f);
+        cycleItem.setAlpha(0.3f);
+
+        if (f instanceof ScheduleImportFragment) {
+            if (id == R.id.schedule_type_routines) {
+                routinesItem.setAlpha(1f);
+                ((ScheduleImportFragment) f).changeScheduleType(Schedule.SCHEDULE_TYPE_EVERYDAY);
+            } else if (id == R.id.schedule_type_hourly) {
+                hourlyItem.setAlpha(1f);
+                ((ScheduleImportFragment) f).changeScheduleType(Schedule.SCHEDULE_TYPE_HOURLY);
+            } else if (id == R.id.schedule_type_period) {
+                cycleItem.setAlpha(1f);
+                ((ScheduleImportFragment) f).changeScheduleType(Schedule.SCHEDULE_TYPE_CYCLE);
+            }
+        }
+    }
+
+
+    public int getNewCount(){
+        int count = 0;
+        for (int i = 0; i < scheduleCount; i++) {
+            Fragment f = getViewPagerFragment(i + 1);
+            if (f instanceof ScheduleImportFragment && ((ScheduleImportFragment) f).isNew()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+
+
+
+    private void saveSchedules() {
 
         try {
 
@@ -190,32 +250,47 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
 
                         Fragment f = getViewPagerFragment(i + 1);
 
-                        if (f instanceof ScheduleConfirmationFragment) {
+                        if (f instanceof ScheduleImportFragment) {
 
                             Log.d("PRESCRIPTION", "Fragment " + i);
 
-                            ScheduleConfirmationFragment c = (ScheduleConfirmationFragment) f;
+                            ScheduleImportFragment c = (ScheduleImportFragment) f;
 
                             if (c.validate()) {
                                 PrescriptionWrapper w = prescriptionList.get(i);
                                 Log.d("PRESCRIPTION", "Validate!");
                                 String cn = w.cn;
-
                                 Medicine m = null;
-
                                 if (cn != null) {
-                                    if (DB.medicines().findOneBy(Medicine.COLUMN_CN, cn) == null) {
+                                    m = DB.medicines().findOneBy(Medicine.COLUMN_CN, cn);
+                                    if (m == null) {
                                         Log.d("PRESCRIPTION", "Saving medicine!");
                                         m = Medicine.fromPrescription(Prescription.findByCn(cn));
                                         m.save();
                                     }
                                 } else if (w.isGroup) {
-                                    m = new Medicine(Strings.firstPart(w.group.name));
-                                    Presentation pres = Presentation.expected(w.group.name, w.group.name);
-                                    m.setPresentation(pres != null ? pres : Presentation.PILLS);
-                                    m.save();
+                                    m = DB.medicines().findOneBy(Medicine.COLUMN_HG, w.group.getId());
+                                    if (m == null) {
+                                        m = new Medicine(Strings.firstPart(w.group.name));
+                                        m.setHomogeneousGroup(w.group.getId());
+                                        Presentation pres = Presentation.expected(w.group.name, w.group.name);
+                                        m.setPresentation(pres != null ? pres : Presentation.PILLS);
+                                        m.save();
+                                    }
                                 } else {
                                     throw new RuntimeException(" Prescription must have a cn or group reference");
+                                }
+
+
+
+                                Schedule s = c.getSchedule();
+                                Schedule prev = DB.schedules().findOneBy(Schedule.COLUMN_MEDICINE, m);
+                                if (prev != null) {
+                                    Log.d("PRESCRIPTION", "Found previous schedule for med " + m.getId());
+                                    updateSchedule(prev, s, c.getScheduleItems());
+                                } else {
+                                    Log.d("PRESCRIPTION", "Not found previous schedule for med " + m.getId());
+                                    createSchedule(s, c.getScheduleItems(), m);
                                 }
 
                                 if (m != null && w.pk != null && w.pk.size() > 0) {
@@ -225,24 +300,12 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                                         pickupInfo.setFrom(df.parseLocalDate(pkw.f).plusMonths(2)); // TODO: remove plusMonths
                                         pickupInfo.taken(pkw.tk == 1 ? true : false);
                                         pickupInfo.setMedicine(m);
-                                        DB.pickups().save(pickupInfo);
+
+                                        if(!DB.pickups().exists(pickupInfo)) {
+                                            DB.pickups().save(pickupInfo);
+                                        }
                                     }
                                 }
-
-                                Schedule s = c.getSchedule();
-                                List<ScheduleItem> items = c.getScheduleItems();
-                                s.setMedicine(m);
-                                s.save();
-
-                                for (ScheduleItem item : items) {
-                                    item.setSchedule(s);
-                                    item.save();
-                                    // add to daily schedule
-                                    new DailyScheduleItem(item).save();
-                                }
-                                // save and fire event
-                                Log.d("PRESCRIPTION", "Saving schedule!");
-                                s.save();
 
                             } else {
                                 mViewPager.setCurrentItem(i + 1);
@@ -256,6 +319,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                 }
             });
             Toast.makeText(this, scheduleCount + " schedules saved!", Toast.LENGTH_SHORT).show();
+            finish();
 
         } catch (
                 Exception e
@@ -265,6 +329,100 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
             Log.e("ConfirmSchedulesAct", "Error saving prescriptions", e);
         }
     }
+
+
+    public void createSchedule(final Schedule s, List<ScheduleItem> items, Medicine m) {
+
+        // save schedule
+        s.setMedicine(m);
+        s.setScanned(true);
+        s.save();
+
+        Log.d(TAG, "Saving schedule..." + s.toString());
+
+        if (!s.repeatsHourly()) {
+            for (ScheduleItem item : items) {
+                item.setSchedule(s);
+                item.save();
+                Log.d(TAG, "Saving item..." + item.getId());
+                // add to daily schedule
+                DailyScheduleItem dsi = new DailyScheduleItem(item);
+                dsi.save();
+                Log.d(TAG, "Saving daily schedule item..." + dsi.getId() + ", " + dsi.scheduleItem().getId());
+            }
+        } else {
+            for (DateTime time : s.hourlyItemsToday()) {
+                LocalTime timeToday = time.toLocalTime();
+                DailyScheduleItem dsi = new DailyScheduleItem(s, timeToday);
+                dsi.save();
+                Log.d(TAG, "Saving daily schedule item..."
+                        + dsi.getId()
+                        + " timeToday: "
+                        + timeToday.toString("kk:mm"));
+            }
+        }
+        // save and fire event
+        DB.schedules().saveAndFireEvent(s);
+
+        AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ConfirmSchedulesActivity.this);
+
+    }
+
+
+    public void updateSchedule(final Schedule s, final Schedule current, List<ScheduleItem> items) {
+
+        s.setType(current.type());
+        s.setDays(current.days());
+        s.setDose(current.dose());
+        s.setStart(current.start());
+        s.setRepetition(current.rule());
+        s.setCycle(current.getCycleDays(), current.getCycleRest());
+        s.setStartTime(current.startTime());
+
+        List<Long> routinesTaken = new ArrayList<Long>();
+
+        if (!s.repeatsHourly()) {
+            for (ScheduleItem item : s.items()) {
+                DailyScheduleItem d = DailyScheduleItem.findByScheduleItem(item);
+                // if taken today, add to the list
+                if (d.takenToday()) {
+                    routinesTaken.add(item.routine().getId());
+                }
+                item.deleteCascade();
+            }
+
+            // save new items
+            for (ScheduleItem i : items) {
+                ScheduleItem item = new ScheduleItem();
+                item.setDose(i.dose());
+                item.setRoutine(i.routine());
+                item.setSchedule(s);
+                item.save();
+                // add to daily schedule
+                DailyScheduleItem dsi = new DailyScheduleItem(item);
+                if (routinesTaken.contains(item.routine().getId())) {
+                    dsi.setTakenToday(true);
+                }
+                dsi.save();
+            }
+        } else {
+            DB.dailyScheduleItems().removeAllFrom(s);
+            for (DateTime time : s.hourlyItemsToday()) {
+                LocalTime timeToday = time.toLocalTime();
+                DailyScheduleItem dsi = new DailyScheduleItem(s, timeToday);
+                dsi.save();
+                Log.d(TAG, "Saving daily schedule item..."
+                        + dsi.getId()
+                        + " timeToday: "
+                        + timeToday.toString("kk:mm"));
+            }
+        }
+
+        // save and fire event
+        DB.schedules().saveAndFireEvent(s);
+        AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ConfirmSchedulesActivity.this);
+    }
+
 
     private void updatePageTitle(int i) {
 
@@ -294,28 +452,56 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
             boolean isNew = Medicine.findByName(name) == null;
 
             title.setText(getResources().getString(R.string.confirm_prescription_x_of_y, i, scheduleCount) + (isNew ? " (new)" : ""));
-            
-            
+
+
         }
     }
 
     @Override
     public void onPageScrolled(int i, float v, int i2) {
-        
+
     }
 
     @Override
-    public void onPageSelected(int i) {        
+    public void onPageSelected(int i) {
         updatePageTitle(i);
 
         Log.d("ConfirmSchedulesAct", " Page Selected: " + i);
 
         if (i == 0) {
+            hideScheduleTypeSelector();
             fab.setVisibility(View.INVISIBLE);
-        } else {
+        } else if (i == scheduleCount + 1) {
+            hideScheduleTypeSelector();
             fab.setVisibility(View.VISIBLE);
+        } else {
+            showScheduleTypeSelector();
+            fab.setVisibility(View.INVISIBLE);
+            updateScheduleTypeSelector(i);
         }
-    }    
+    }
+
+    public void updateScheduleTypeSelector(int page) {
+        Fragment f = getViewPagerFragment(page);
+
+        routinesItem.setAlpha(0.3f);
+        hourlyItem.setAlpha(0.3f);
+        cycleItem.setAlpha(0.3f);
+
+        int type = ((ScheduleImportFragment) f).getSchedule().type();
+
+        Log.d("Confirm", "Type: " + type);
+
+        if (f instanceof ScheduleImportFragment) {
+            if (type == Schedule.SCHEDULE_TYPE_HOURLY) {
+                hourlyItem.setAlpha(1f);
+            } else if (type == Schedule.SCHEDULE_TYPE_CYCLE) {
+                cycleItem.setAlpha(1f);
+            } else {
+                routinesItem.setAlpha(1f);
+            }
+        }
+    }
 
     @Override
     public void onPageScrollStateChanged(int i) {
@@ -351,7 +537,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                 // getItem is called to instantiate the fragment for the given page.
                 // Return a PlaceholderFragment (defined as a static inner class below).            
                 PrescriptionWrapper pw = prescriptionList.get(position - 1);
-                return ScheduleConfirmationFragment.newInstance(pw);
+                return ScheduleImportFragment.newInstance(pw);
             }
         }
 
@@ -367,15 +553,23 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
     }
 
 
-    public PrescriptionListWrapper parseQRData(String data){
-        return new Gson().fromJson(data,PrescriptionListWrapper.class);
+    public PrescriptionListWrapper parseQRData(String data) {
+        return new Gson().fromJson(data, PrescriptionListWrapper.class);
     }
 
-    public static class PrescriptionListWrapper{
+    public void next() {
+        int next = mViewPager.getCurrentItem() + 1;
+        int size = mSectionsPagerAdapter.getCount();
+        if (next < size) {
+            mViewPager.setCurrentItem(next);
+        }
+    }
+
+    public static class PrescriptionListWrapper {
         public List<PrescriptionWrapper> p;
     }
 
-    public static class PrescriptionWrapper implements Serializable{
+    public static class PrescriptionWrapper implements Serializable {
         public String cn;
         public String g;
         public String sk;
@@ -385,13 +579,13 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
 
         public Prescription prescription;
         public HomogeneousGroup group;
-        
+
         public boolean exists;
 
         public boolean isGroup = false;
     }
 
-    public static class ScheduleWrapper implements Serializable{
+    public static class ScheduleWrapper implements Serializable {
         public float d = -1;
         public int i = -1;
         public int p = -1;
@@ -450,10 +644,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int current = mViewPager.getCurrentItem();
-                        if (current + 1 < scheduleCount) {
-                            mViewPager.setCurrentItem(current + 1);
-                        }
+                        saveSchedules();
                     }
                 });
                 // Create the adapter that will return a fragment for each of the three
@@ -464,6 +655,8 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                 mViewPager.setOnPageChangeListener(ConfirmSchedulesActivity.this);
                 mViewPager.setAdapter(mSectionsPagerAdapter);
                 mViewPager.setOffscreenPageLimit(20);
+                hideScheduleTypeSelector();
+                readingQrBox.setVisibility(View.GONE);
             }
             if (dialog.isShowing()) {
                 dialog.dismiss();

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity;
 
 
 /**
@@ -28,6 +29,12 @@ public class ScheduleConfirmationStartFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_schedule_confirmation_start, container, false);
+        rootView.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ConfirmSchedulesActivity)getActivity()).next();
+            }
+        });
         return rootView;
     }
 

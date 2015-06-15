@@ -49,6 +49,8 @@ public class Schedule {
     public static final String COLUMN_TYPE = "Type";
     public static final String COLUMN_CYCLE = "Cycle";
 
+    public static final String COLUMN_SCANNED = "Scanned";
+
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
 
@@ -75,6 +77,9 @@ public class Schedule {
 
     @DatabaseField(columnName = COLUMN_CYCLE)
     private String cycle;
+
+    @DatabaseField(columnName = COLUMN_SCANNED)
+    private boolean scanned;
 
     public RepetitionRule rule()
     {
@@ -411,6 +416,14 @@ public class Schedule {
         }
         String[] parts = cycle.split(",");
         return Integer.valueOf(parts[1]);
+    }
+
+    public boolean scanned() {
+        return scanned;
+    }
+
+    public void setScanned(boolean scanned) {
+        this.scanned = scanned;
     }
 }
 
