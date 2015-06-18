@@ -17,18 +17,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Please check carefully the scanned prescriptions, modify them if necessary, and confirm when you agree."
         android:id="@+id/textView"
         android:layout_below="@+id/imageView"
         android:layout_centerHorizontal="true"
         android:padding="30dp"
         android:gravity="center"
-        android:textColor="#222" />
+        android:textColor="#222"
+        android:text="@string/scan_review_text" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start"
+        android:text="@string/scan_review_prescriptions_start"
         android:id="@+id/button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
@@ -40,7 +40,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Review prescriptions "
+        android:text="@string/scan_review_prescriptions_title"
         android:id="@+id/textView2"
         android:layout_alignParentTop="true"
         android:layout_toStartOf="@+id/button"

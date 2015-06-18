@@ -8,7 +8,7 @@
     <color name="android_green">#99CC00</color>
     <color name="android_green_dark">#669900</color>
     <color name="android_green_light">#55669900</color>
-  <color name="android_green_light_noalpha">#ddB8DB57</color>
+  <color name="android_green_light_noalpha">#efB8DB57</color>
 
   <color name="android_orange">#FFBB33</color>
     <color name="android_orange_dark">#FF8800</color>

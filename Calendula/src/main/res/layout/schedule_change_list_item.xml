@@ -5,6 +5,6 @@
     android:layout_height="wrap_content"
     android:text="Medium Text"
     android:id="@+id/textView"
-    android:textColor="#333"
+    android:textColor="#111"
     android:textSize="14dp"
     tools:showIn="@layout/fragment_schedule_import" />

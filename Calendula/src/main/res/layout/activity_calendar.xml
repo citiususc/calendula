@@ -7,7 +7,7 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:background="@color/android_blue_darker"
+        android:background="@color/android_green_dark"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -41,7 +41,7 @@
             android:layout_alignParentTop="true"
             android:background="#f7f7f7"
             android:layout_marginTop="5dp"
-            android:textColor="@color/android_blue_darker"
+            android:textColor="@color/android_green_dark"
             android:textStyle="bold"
             android:textSize="18dp"
             android:paddingLeft="18dp"

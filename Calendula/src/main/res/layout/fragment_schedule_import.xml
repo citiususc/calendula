@@ -33,7 +33,7 @@
           <TextView
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="Nueva pauta"
+              android:text="@string/scan_new_schedule"
               android:id="@+id/new_schedule_text"
               android:layout_alignTop="@+id/new_schedule_icon"
               android:layout_toRightOf="@+id/new_schedule_icon"
@@ -57,7 +57,7 @@
 
           <ImageView
               android:layout_width="25dp"
-              android:layout_height="wrap_content"
+              android:layout_height="25dp"
               android:id="@+id/imageView6"
               android:src="@drawable/ic_visibility_black_48dp"
               android:layout_marginLeft="20dp"
@@ -68,7 +68,6 @@
           <TextView
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:text="Esta pauta ha cambiado:"
               android:id="@+id/textView8"
               android:layout_alignTop="@+id/imageView6"
               android:layout_toRightOf="@+id/imageView6"
@@ -77,7 +76,8 @@
               android:layout_alignParentEnd="true"
               android:layout_marginRight="20dp"
               android:gravity="center_vertical"
-              android:textColor="#111" />
+              android:textColor="#111"
+              android:text="@string/scan_schedule_changed" />
 
           <LinearLayout
               android:id="@+id/schedule_changes_list"
@@ -565,7 +565,7 @@
       <TextView
           android:layout_width="fill_parent"
           android:layout_height="40dp"
-          android:text="Duration"
+          android:text="@string/duration"
           android:id="@+id/duration_label"
           android:layout_alignParentTop="false"
           android:layout_alignParentLeft="false"
@@ -699,7 +699,7 @@
 
       <RelativeLayout
           android:layout_width="fill_parent"
-          android:layout_height="50dp"
+          android:layout_height="wrap_content"
           android:layout_below="@+id/box_schedule_duration">
 
           <Button
@@ -709,7 +709,8 @@
               android:id="@+id/button3"
               android:layout_alignParentRight="true"
               android:layout_alignParentBottom="false"
-              android:layout_marginRight="26dp" />
+              android:layout_marginRight="26dp"
+              android:layout_marginBottom="26dp" />
 
       </RelativeLayout>
 

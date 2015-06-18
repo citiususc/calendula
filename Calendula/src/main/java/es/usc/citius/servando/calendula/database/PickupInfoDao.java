@@ -67,7 +67,7 @@ public class PickupInfoDao extends GenericDao<PickupInfo, Long> {
 
     }
 
-    public boolean exists(PickupInfo pickupInfo) {
+    public PickupInfo exists(PickupInfo pickupInfo) {
         try
         {
             QueryBuilder<PickupInfo, Long> qb = dao.queryBuilder();
@@ -78,7 +78,7 @@ public class PickupInfoDao extends GenericDao<PickupInfo, Long> {
                     w.eq(PickupInfo.COLUMN_TO, pickupInfo.to())
             );
             qb.setWhere(w);
-            return qb.countOf() > 0;
+            return qb.queryForFirst();
 
         } catch (SQLException e)
         {

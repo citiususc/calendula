@@ -24,6 +24,7 @@ import es.usc.citius.servando.calendula.persistence.typeSerializers.BooleanArray
 import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalDatePersister;
 import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimePersister;
 import es.usc.citius.servando.calendula.persistence.typeSerializers.RRulePersister;
+import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 
 /**
@@ -215,6 +216,9 @@ public class Schedule {
         } else if (type == SCHEDULE_TYPE_CYCLE)
         {
             return getCycleDays() + " + " + getCycleRest();
+        } else if (type == SCHEDULE_TYPE_SOMEDAYS)
+        {
+            return ScheduleUtils.stringifyDays(days(),ctx);
         } else
         {
             String ical = rrule.toIcal();

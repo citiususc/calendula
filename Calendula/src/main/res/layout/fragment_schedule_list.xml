@@ -28,7 +28,8 @@
       android:layout_alignParentBottom="true"
       android:layout_margin="10dp"
       >
-    <com.getbase.floatingactionbutton.FloatingActionButton
+
+      <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/action_a"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -58,6 +59,15 @@
         fab:fab_colorPressed="@color/android_green"
         />
 
+      <com.getbase.floatingactionbutton.FloatingActionButton
+          android:id="@+id/action_d"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          fab:fab_icon="@drawable/ic_qrcode_white_48dp"
+          fab:fab_colorNormal="@color/android_green_light_noalpha"
+          fab:fab_title="@string/schedule_type_from_qr"
+          fab:fab_colorPressed="@color/android_green"
+          />
   </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </RelativeLayout>

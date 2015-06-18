@@ -373,7 +373,12 @@
     <string name="pickup_interval">Hasta el %1$s</string>
     <string name="pickup_date_format">dd \'de\' MMMM</string>
     <string name="pref_title_pickup_notification">Notificaciones de recogida de medicamentos</string>
-    <string name="title_activity_confirm_schedules">Confirm schedules</string>
+    <string name="title_activity_confirm_schedules">Confirmar pautas</string>
+    <string name="schedule_type_from_qr">From QR</string>
+
+    <string name="scan_prescriptions_title">Escanear prescripciones</string>
+    <string name="scan_qr">Scanear QR</string>
+    <string name="duration">Duración</string>
 
 </resources>
 

@@ -23,6 +23,7 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.ScanActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Schedule;
@@ -78,9 +79,10 @@ public class ScheduleListFragment extends Fragment {
         final FloatingActionButton actionC =
             (FloatingActionButton) rootView.findViewById(R.id.action_c);
 
-        //fabMenu.addButton(actionA);
-        //fabMenu.addButton(actionB);
-        //fabMenu.addButton(actionC);
+        final FloatingActionButton actionD =
+                (FloatingActionButton) rootView.findViewById(R.id.action_d);
+
+
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override public void onClick(View v)
@@ -98,6 +100,11 @@ public class ScheduleListFragment extends Fragment {
                     case R.id.action_c:
                         scheduleType = ScheduleTypeFragment.TYPE_PERIOD;
                         break;
+                    case R.id.action_d:
+                        Intent i = new Intent(getActivity(), ScanActivity.class);
+                        launchActivity(i);
+                        fabMenu.collapse();
+                        return;
                 }
 
                 Intent i = new Intent(getActivity(), ScheduleCreationActivity.class);
@@ -111,6 +118,7 @@ public class ScheduleListFragment extends Fragment {
         actionA.setOnClickListener(onClickListener);
         actionB.setOnClickListener(onClickListener);
         actionC.setOnClickListener(onClickListener);
+        actionD.setOnClickListener(onClickListener);
     }
 
     private void launchActivity(Intent i)

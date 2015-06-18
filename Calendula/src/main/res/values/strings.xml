@@ -330,6 +330,7 @@
   <string name="schedule_type_hourly_title">Intervalo horario</string>
   <string name="schedule_type_period_title">Período + descanso</string>
   <string name="schedule_type_common_periods">Common cycles</string>
+    <string name="schedule_type_from_qr">Desde QR</string>
 
     <string-array name="schedule_types">
         <item>@string/schedule_type_routines_title</item>
@@ -381,5 +382,8 @@
     <string name="cycle_period_cero_message">Intake and rest periods must be greater than zero</string>
     <string name="recurrence_end_date"></string>
     <string name="schedule_type">Schedule type</string>
+    <string name="scan_prescriptions_title">Scan prescriptions</string>
+    <string name="scan_qr">Scan QR</string>
+    <string name="duration">Duration</string>
 
 </resources>

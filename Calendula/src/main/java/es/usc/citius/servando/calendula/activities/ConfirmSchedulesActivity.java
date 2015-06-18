@@ -29,7 +29,9 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
@@ -139,13 +141,13 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
     }
 
     private List<PrescriptionWrapper> filterValidPrescriptions(PrescriptionListWrapper prescriptionListWrapper) {
-        List<PrescriptionWrapper> p = new ArrayList<PrescriptionWrapper>();
+        List<PrescriptionWrapper> p = new ArrayList<>();
 
         for (PrescriptionWrapper pw : prescriptionListWrapper.p) {
             if (pw.cn != null) {
                 Prescription pr = Prescription.findByCn(pw.cn);
                 boolean prescriptionExists = pr != null;
-                boolean medExists = DB.medicines().findOneBy(Prescription.COLUMN_CN, pw.cn) != null;
+                boolean medExists = DB.medicines().findOneBy(Medicine.COLUMN_CN, pw.cn) != null;
 
                 if (prescriptionExists) {
                     pw.exists = medExists;
@@ -221,16 +223,28 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
         }
     }
 
-
-    public int getNewCount(){
-        int count = 0;
+    public Map<Schedule, PrescriptionWrapper> getScheduleInfo(){
+        Map<Schedule, PrescriptionWrapper> schedules = new HashMap<>();
         for (int i = 0; i < scheduleCount; i++) {
             Fragment f = getViewPagerFragment(i + 1);
-            if (f instanceof ScheduleImportFragment && ((ScheduleImportFragment) f).isNew()) {
-                count++;
+            if (f instanceof ScheduleImportFragment) {
+                ScheduleImportFragment importFragment = (ScheduleImportFragment) f;
+                schedules.put(importFragment.getSchedule(),importFragment.getPrescriptionWrapper());
             }
         }
-        return count;
+        return schedules;
+    }
+
+
+    public List<Schedule> getSchedules(){
+        List<Schedule> schedules = new ArrayList<>();
+        for (int i = 0; i < scheduleCount; i++) {
+            Fragment f = getViewPagerFragment(i + 1);
+            if (f instanceof ScheduleImportFragment) {
+                schedules.add(((ScheduleImportFragment) f).getSchedule());
+            }
+        }
+        return schedules;
     }
 
 
@@ -238,96 +252,112 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
 
     private void saveSchedules() {
 
-        try {
+        final ProgressDialog progress = ProgressDialog.show(this,"Calendula","Actualizando pautas...", true);
 
-            TransactionManager.callInTransaction(DB.helper().getConnectionSource(), new Callable<Object>() {
-                @Override
-                public Object call() throws Exception {
+        AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(Void... arg0) {
+                try {
+                    TransactionManager.callInTransaction(DB.helper().getConnectionSource(), new Callable<Object>() {
+                        @Override
+                        public Object call() throws Exception {
 
-                    for (int i = 0; i < scheduleCount; i++) {
+                            for (int i = 0; i < scheduleCount; i++) {
 
-                        Log.d("PRESCRIPTION", "Item " + i);
+                                Log.d("PRESCRIPTION", "Item " + i);
 
-                        Fragment f = getViewPagerFragment(i + 1);
+                                Fragment f = getViewPagerFragment(i + 1);
 
-                        if (f instanceof ScheduleImportFragment) {
+                                if (f instanceof ScheduleImportFragment) {
 
-                            Log.d("PRESCRIPTION", "Fragment " + i);
+                                    Log.d("PRESCRIPTION", "Fragment " + i);
 
-                            ScheduleImportFragment c = (ScheduleImportFragment) f;
+                                    ScheduleImportFragment c = (ScheduleImportFragment) f;
 
-                            if (c.validate()) {
-                                PrescriptionWrapper w = prescriptionList.get(i);
-                                Log.d("PRESCRIPTION", "Validate!");
-                                String cn = w.cn;
-                                Medicine m = null;
-                                if (cn != null) {
-                                    m = DB.medicines().findOneBy(Medicine.COLUMN_CN, cn);
-                                    if (m == null) {
-                                        Log.d("PRESCRIPTION", "Saving medicine!");
-                                        m = Medicine.fromPrescription(Prescription.findByCn(cn));
-                                        m.save();
-                                    }
-                                } else if (w.isGroup) {
-                                    m = DB.medicines().findOneBy(Medicine.COLUMN_HG, w.group.getId());
-                                    if (m == null) {
-                                        m = new Medicine(Strings.firstPart(w.group.name));
-                                        m.setHomogeneousGroup(w.group.getId());
-                                        Presentation pres = Presentation.expected(w.group.name, w.group.name);
-                                        m.setPresentation(pres != null ? pres : Presentation.PILLS);
-                                        m.save();
-                                    }
-                                } else {
-                                    throw new RuntimeException(" Prescription must have a cn or group reference");
-                                }
-
-
-
-                                Schedule s = c.getSchedule();
-                                Schedule prev = DB.schedules().findOneBy(Schedule.COLUMN_MEDICINE, m);
-                                if (prev != null) {
-                                    Log.d("PRESCRIPTION", "Found previous schedule for med " + m.getId());
-                                    updateSchedule(prev, s, c.getScheduleItems());
-                                } else {
-                                    Log.d("PRESCRIPTION", "Not found previous schedule for med " + m.getId());
-                                    createSchedule(s, c.getScheduleItems(), m);
-                                }
-
-                                if (m != null && w.pk != null && w.pk.size() > 0) {
-                                    for (PickupWrapper pkw : w.pk) {
-                                        PickupInfo pickupInfo = new PickupInfo();
-                                        pickupInfo.setTo(df.parseLocalDate(pkw.t).plusMonths(2)); // TODO: remove plusMonths
-                                        pickupInfo.setFrom(df.parseLocalDate(pkw.f).plusMonths(2)); // TODO: remove plusMonths
-                                        pickupInfo.taken(pkw.tk == 1 ? true : false);
-                                        pickupInfo.setMedicine(m);
-
-                                        if(!DB.pickups().exists(pickupInfo)) {
-                                            DB.pickups().save(pickupInfo);
+                                    if (c.validate()) {
+                                        PrescriptionWrapper w = prescriptionList.get(i);
+                                        Log.d("PRESCRIPTION", "Validate!");
+                                        String cn = w.cn;
+                                        Medicine m = null;
+                                        if (cn != null) {
+                                            m = DB.medicines().findOneBy(Medicine.COLUMN_CN, cn);
+                                            if (m == null) {
+                                                Log.d("PRESCRIPTION", "Saving medicine!");
+                                                m = Medicine.fromPrescription(Prescription.findByCn(cn));
+                                                m.save();
+                                            }
+                                        } else if (w.isGroup) {
+                                            m = DB.medicines().findOneBy(Medicine.COLUMN_HG, w.group.getId());
+                                            if (m == null) {
+                                                m = new Medicine(Strings.firstPart(w.group.name));
+                                                m.setHomogeneousGroup(w.group.getId());
+                                                Presentation pres = Presentation.expected(w.group.name, w.group.name);
+                                                m.setPresentation(pres != null ? pres : Presentation.PILLS);
+                                                m.save();
+                                            }
+                                        } else {
+                                            throw new RuntimeException(" Prescription must have a cn or group reference");
                                         }
+
+                                        Schedule s = c.getSchedule();
+                                        Schedule prev = DB.schedules().findOneBy(Schedule.COLUMN_MEDICINE, m);
+                                        if (prev != null) {
+                                            Log.d("PRESCRIPTION", "Found previous schedule for med " + m.getId());
+                                            updateSchedule(prev, s, c.getScheduleItems());
+                                        } else {
+                                            Log.d("PRESCRIPTION", "Not found previous schedule for med " + m.getId());
+                                            createSchedule(s, c.getScheduleItems(), m);
+                                        }
+
+                                        if (m != null && w.pk != null && w.pk.size() > 0) {
+                                            for (PickupWrapper pkw : w.pk) {
+                                                PickupInfo pickupInfo = new PickupInfo();
+                                                pickupInfo.setTo(df.parseLocalDate(pkw.t).plusMonths(3)); // TODO: remove plusMonths
+                                                pickupInfo.setFrom(df.parseLocalDate(pkw.f).plusMonths(3)); // TODO: remove plusMonths
+                                                pickupInfo.taken(pkw.tk == 1 ? true : false);
+                                                pickupInfo.setMedicine(m);
+
+                                                PickupInfo existent = DB.pickups().exists(pickupInfo);
+                                                if(existent==null) {
+                                                    DB.pickups().save(pickupInfo);
+                                                }else{
+                                                    existent.taken(pickupInfo.taken());
+                                                    DB.pickups().save(existent);
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        mViewPager.setCurrentItem(i + 1);
+                                        Snack.show("Hmmmmmm....", ConfirmSchedulesActivity.this);
                                     }
                                 }
-
-                            } else {
-                                mViewPager.setCurrentItem(i + 1);
-                                Snack.show("Hmmmmmm....", ConfirmSchedulesActivity.this);
                             }
+                            CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
+                            AlarmScheduler.instance().updateAllAlarms(ConfirmSchedulesActivity.this);
+                            return null;
                         }
-                    }
-                    CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
-                    AlarmScheduler.instance().updateAllAlarms(ConfirmSchedulesActivity.this);
-                    return null;
+                    });
+
+                    return true;
+
+                } catch (Exception e){
+                    Log.e("ConfirmSchedulesAct", "Error saving prescriptions", e);
+                    return false;
                 }
-            });
-            Toast.makeText(this, scheduleCount + " schedules saved!", Toast.LENGTH_SHORT).show();
-            finish();
+            }
 
-        } catch (
-                Exception e
-                )
+            @Override
+            protected void onPostExecute(Boolean result) {
+                if(progress!=null) {
+                    progress.dismiss();
+                }
+                if(result){
+                    finish();
+                }
+            }
+        };
 
-        {
-            Log.e("ConfirmSchedulesAct", "Error saving prescriptions", e);
-        }
+        task.execute((Void[])null);
     }
 
 
@@ -337,7 +367,6 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
         s.setMedicine(m);
         s.setScanned(true);
         s.save();
-
         Log.d(TAG, "Saving schedule..." + s.toString());
 
         if (!s.repeatsHourly()) {
@@ -363,9 +392,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
         }
         // save and fire event
         DB.schedules().saveAndFireEvent(s);
-
         AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ConfirmSchedulesActivity.this);
-
     }
 
 
@@ -417,43 +444,30 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                         + timeToday.toString("kk:mm"));
             }
         }
-
         // save and fire event
         DB.schedules().saveAndFireEvent(s);
         AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ConfirmSchedulesActivity.this);
     }
 
-
     private void updatePageTitle(int i) {
-
         if (i == 0) {
-            title.setText(scheduleCount + " prescriptions");
-            medName.setText("Review");
+            title.setText(scheduleCount + " " + getString(R.string.scan_prescriptions));
+            medName.setText(getString(R.string.scan_review_title));
         } else if (i == scheduleCount + 1) {
-            title.setText(scheduleCount + " prescriptions");
-            medName.setText("Confirm");
+            title.setText(scheduleCount + " " + getString(R.string.scan_prescriptions));
+            medName.setText(getString(R.string.confirm));
         } else {
-
             PrescriptionWrapper pw = prescriptionList.get(i - 1);
-            String name = "_";
-
             if (pw.cn != null) {
                 if (pw.prescription == null) {
                     pw.prescription = Prescription.findByCn(pw.cn);
                 }
                 medName.setText(Strings.toProperCase(pw.prescription.name));
-                name = pw.prescription.shortName();
 
             } else if (pw.isGroup) {
                 medName.setText(pw.group.name);
-                name = Strings.firstPart(pw.group.name);
             }
-
-            boolean isNew = Medicine.findByName(name) == null;
-
-            title.setText(getResources().getString(R.string.confirm_prescription_x_of_y, i, scheduleCount) + (isNew ? " (new)" : ""));
-
-
+            title.setText(getResources().getString(R.string.confirm_prescription_x_of_y, i, scheduleCount));
         }
     }
 
@@ -554,6 +568,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
 
 
     public PrescriptionListWrapper parseQRData(String data) {
+        Log.d(TAG,"QRDATA: " + data);
         return new Gson().fromJson(data, PrescriptionListWrapper.class);
     }
 

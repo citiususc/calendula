@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:showIn="@layout/fragment_schedule_confirmation_end">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Ibuprofeno"
+        android:id="@+id/med_name"
+        android:textSize="18dp"
+        android:textColor="#111" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Every day"
+        android:id="@+id/med_schedule"
+        android:layout_marginLeft="16dp"
+        android:padding="2dp"
+        android:textColor="@color/android_blue_dark"  />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text=""
+        android:id="@+id/med_daily_schedule"
+        android:layout_marginLeft="16dp"
+        android:padding="2dp"
+        android:textColor="@color/android_blue_dark" />
+</LinearLayout>

@@ -1,20 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:background="#fff">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff"
+        android:padding="2dp"
+        android:paddingBottom="26dp">
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Medium Text"
-        android:id="@+id/textView"
-        android:layout_centerInParent="true"
-        android:textColor="@color/android_blue_dark"
-        android:paddingLeft="40dp"
-        android:paddingRight="26dp"
-        android:textSize="20sp"
-        android:gravity="center_vertical" />
-</RelativeLayout>
+        <TextView
+            android:id="@+id/new_schedules_title"
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
+            android:paddingRight="26dp"
+            android:text="1 schedules will be created"
+            android:textColor="@color/android_blue_dark"
+            android:textSize="20sp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="26dp"
+            android:layout_toEndOf="@+id/imageView7"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical|left" />
+
+        <LinearLayout
+            android:id="@+id/new_schedules"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/new_schedules_title"
+            android:layout_marginLeft="65dp"
+            android:layout_marginRight="26dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/updated_schedules_title"
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
+            android:layout_below="@+id/new_schedules"
+            android:layout_marginTop="26dp"
+            android:paddingRight="26dp"
+            android:text="2 schedules will be updated"
+            android:textColor="@color/android_blue_dark"
+            android:textSize="20sp"
+            android:layout_alignLeft="@+id/new_schedules_title"
+            android:layout_alignStart="@+id/new_schedules_title"
+            android:gravity="center_vertical|left" />
+
+        <LinearLayout
+            android:id="@+id/updated_schedules"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/updated_schedules_title"
+            android:layout_marginLeft="65dp"
+            android:layout_marginRight="26dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:layout_marginBottom="26dp">
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/imageView7"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="26dp"
+            android:src="@drawable/ic_done_black_48dp"
+            android:padding="2dp" />
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/imageView8"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="26dp"
+            android:src="@drawable/ic_edit_black_48dp"
+            android:layout_below="@+id/new_schedules"
+            android:padding="4dp" />
+
+
+
+    </RelativeLayout>
+</ScrollView>

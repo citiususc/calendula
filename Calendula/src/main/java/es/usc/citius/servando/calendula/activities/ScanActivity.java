@@ -53,7 +53,7 @@ public class ScanActivity extends ActionBarActivity {
     public void doScan() {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-        integrator.setPrompt("Scan QR");
+        integrator.setPrompt(getString(R.string.scan_qr));
         //integrator.setResultDisplayDuration(500);
         integrator.initiateScan();
     }

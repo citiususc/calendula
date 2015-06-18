@@ -41,7 +41,6 @@ import es.usc.citius.servando.calendula.activities.CalendarActivity;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.ReminderNotification;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
-import es.usc.citius.servando.calendula.activities.ScanActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.activities.SettingsActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
@@ -534,9 +533,9 @@ public class HomeActivity extends ActionBarActivity implements
         switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
-            case R.id.action_scan:
-                startActivity(new Intent(this, ScanActivity.class));
-                return true;
+//            case R.id.action_scan:
+//                startActivity(new Intent(this, ScanActivity.class));
+//                return true;
             case R.id.action_calendar:
                 startActivity(new Intent(this, CalendarActivity.class));
                 return true;
