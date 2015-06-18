@@ -17,11 +17,12 @@
     <string name="scan_schedules_to_update">Se actualizarán %1$s pautas</string>
 
     <string name="best_days_messge">Acude a la farmacia uno de los siguientes días y así podrás recoger %1$s medicamentos a la vez:</string>
-    <string name="best_single_day_messge">Acude a la farmacia el %1$s y así podrás recoger %2$s medicamentos a la vez:</string>
-    <string name="best_single_day_messge_one_med">Acude a la farmacia el %1$s para recoger:</string>
-    <string name="best_single_day_messge_after_pending">Después, podrías acudir de nuevo el %1$s y así recoger %2$s medicamentos a la vez:</string>
-    <string name="best_single_day_messge_after_pending_one_med">Después, podrías acudir de nuevo el %1$s y recoger:</string>
+    <string name="best_single_day_messge">Acude a la farmacia %1$s y así podrás recoger %2$s medicamentos a la vez:</string>
+    <string name="best_single_day_messge_one_med">Acude a la farmacia %1$s para recoger:</string>
+    <string name="best_single_day_messge_after_pending">Después, podrías acudir de nuevo %1$s y así recoger %2$s medicamentos a la vez:</string>
+    <string name="best_single_day_messge_after_pending_one_med">Después, podrías acudir de nuevo %1$s y recoger:</string>
     <string name="pending_meds_msg">Hay medicación en la farmacia pendiente de retirar. Por favor, acude en cuanto sea posible:</string>
+    <string name="calendar_date_tomorrow">mañana</string>
     <string name="best_date_format">EEEE dd \'de\' MMMM</string>
     <string name="best_date_recommendation_title">Recomendación</string>
 

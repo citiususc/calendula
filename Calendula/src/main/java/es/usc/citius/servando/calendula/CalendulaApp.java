@@ -20,7 +20,6 @@ import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
-import es.usc.citius.servando.calendula.scheduling.PickupReminderMgr;
 
 /**
  * Created by castrelo on 4/10/14.
@@ -74,8 +73,6 @@ public class CalendulaApp extends Application {
         DailyAgenda.instance().setupForToday(this,false);
         // setup alarm for daily agenda update
         setupUpdateDailyAgendaAlarm();
-        // set pickup reminder alarm
-        PickupReminderMgr.instance().setCheckPickupsAlarm(this);
         //exportDatabase(this, DB_NAME, new File(Environment.getExternalStorageDirectory() + File.separator + DB_NAME));
     }
 

@@ -3,8 +3,6 @@ package es.usc.citius.servando.calendula.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.InsetDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +21,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.timessquare.CalendarCellDecorator;
 import com.squareup.timessquare.CalendarCellView;
@@ -46,6 +45,7 @@ import java.util.Map;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
+import es.usc.citius.servando.calendula.scheduling.PickupReminderMgr;
 
 public class CalendarActivity extends ActionBarActivity {
 
@@ -59,13 +59,8 @@ public class CalendarActivity extends ActionBarActivity {
 
     String df;
 
-
-    private static DateFormat dtf = new SimpleDateFormat("MM/dd/yy");
     private static DateFormat dtf2 = new SimpleDateFormat("dd/MMM");
     private static PickupInfo.PickupComparator pickupComparator = new PickupInfo.PickupComparator();
-
-    private static int white = Color.parseColor("#ffffff");
-    private static int grey = Color.parseColor("#ff778088");
 
     private static Date selectedDate = null;
     private List<PickupInfo> pickupInfos;
@@ -90,23 +85,20 @@ public class CalendarActivity extends ActionBarActivity {
         bottomSheet = findViewById(R.id.pickup_list_container);
         bottomSheet.setVisibility(View.INVISIBLE);
 
-        int action = getIntent().getIntExtra("action", -1);
-        if (action == ACTION_SHOW_REMINDERS) {
-            final PickupInfo next = DB.pickups().findNext();
-            if (next != null) {
-                selectedDate = next.from().toDateTimeAtStartOfDay().toDate();
-            }
-        }
-
         setupCalendar();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.android_green_dark));
         }
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                calendar.scrollToDate(LocalDate.now().toDate());
+            }
+        }, 500);
+
         checkIntent();
-
-
     }
 
     @Override
@@ -135,9 +127,9 @@ public class CalendarActivity extends ActionBarActivity {
 
     private void onBestDaySelected() {
 
-        List<PickupInfo> urgent = urgentMeds(pickupInfos);
-        LocalDate best = bestDays.isEmpty() ? null : bestDays.get(0);
-        List<PickupInfo> next = best==null ? new ArrayList<PickupInfo>() : medsCanTakeAt(best);
+        final List<PickupInfo> urgent = urgentMeds(pickupInfos);
+        final LocalDate best = bestDays.isEmpty() ? null : bestDays.get(0);
+        final List<PickupInfo> next = best==null ? new ArrayList<PickupInfo>() : medsCanTakeAt(best);
 
         String msg = null;
         LocalDate today = LocalDate.now();
@@ -145,9 +137,15 @@ public class CalendarActivity extends ActionBarActivity {
         Log.d("Calendar", "Urgent: " + urgent.size());
         Log.d("Calendar", "Next: " + next.size());
 
+        boolean allowReminder = false;
+
+        String bestStr = best.equals(LocalDate.now().plusDays(1))? getString(R.string.calendar_date_tomorrow) : best.toString(getString(R.string.best_date_format));
 
         // there are not urgent meds, but there are others to pickup
         if(urgent.isEmpty() && best!=null){
+
+            allowReminder = true;
+
             Log.d("Calendar", "there are not urgent meds, but there are others to pickup");
             if(next.size() > 1){
                 msg = getString(R.string.best_single_day_messge, best.toString(getString(R.string.best_date_format)), next.size()) + "\n\n";
@@ -156,6 +154,7 @@ public class CalendarActivity extends ActionBarActivity {
             }
             msg = addPcikupList(msg, next);
         }
+
         // there are urgent meds
         Log.d("Calendar", "there are urgent meds");
         if(!urgent.isEmpty()){
@@ -168,20 +167,23 @@ public class CalendarActivity extends ActionBarActivity {
                     List<PickupInfo> all = new ArrayList<>();
                     all.addAll(urgent);
                     all.addAll(next);
-                    msg = getString(R.string.best_single_day_messge, best.toString(getString(R.string.best_date_format)), all.size()) + "\n\n";
+                    msg = getString(R.string.best_single_day_messge, bestStr, all.size()) + "\n\n";
                     msg = addPcikupList(msg, all);
                 }
                 // and the others date is not near
                 else{
+
+                    allowReminder = true;
+
                     Log.d("Calendar", "and the others date is not near");
                     msg = addPcikupList(getString(R.string.pending_meds_msg) + "\n\n", urgent);
                     msg +="\n";
                     if(next.size() > 1){
                         Log.d("Calendar", " size > 1");
-                        msg += getString(R.string.best_single_day_messge_after_pending, best.toString(getString(R.string.best_date_format)), next.size()) + "\n\n";
+                        msg += getString(R.string.best_single_day_messge_after_pending,bestStr, next.size()) + "\n\n";
                     }else{
                         Log.d("Calendar", " size <= 1");
-                        msg += getString(R.string.best_single_day_messge_after_pending_one_med, best.toString(getString(R.string.best_date_format))) + "\n\n";
+                        msg += getString(R.string.best_single_day_messge_after_pending_one_med, bestStr) + "\n\n";
                     }
                     msg = addPcikupList(msg, next);
                 }
@@ -192,15 +194,50 @@ public class CalendarActivity extends ActionBarActivity {
             }
         }
 
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle(R.string.best_date_recommendation_title);
-        alertDialog.setButton(getString(R.string.driving_warning_gotit), new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.best_date_recommendation_title)
+                        .setPositiveButton(getString(R.string.driving_warning_gotit), new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+        if(allowReminder) {
+            builder.setNeutralButton(getString(R.string.best_date_reminder), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    onActivateReminder(best);
+                }
+            });
+        }
+
+        AlertDialog alertDialog = builder.create();
 
         alertDialog.setMessage(msg);
+        alertDialog.show();
+    }
+
+    private void onActivateReminder(final LocalDate best) {
+
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setTitle(R.string.best_date_reminder)
+                .setSingleChoiceItems(
+                        getResources().getStringArray(R.array.calendar_pickup_reminder_values),
+                        -1,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                PickupReminderMgr.instance().setCheckPickupsAlarm(CalendarActivity.this, best.minusDays(which + 1));
+                                Toast.makeText(CalendarActivity.this,"Recordatorio activado!",Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
+                        }
+                )
+                .create();
         alertDialog.show();
     }
 
@@ -215,27 +252,8 @@ public class CalendarActivity extends ActionBarActivity {
 
         int action = getIntent().getIntExtra("action", -1);
         if (action == ACTION_SHOW_REMINDERS) {
-
-            final PickupInfo next = DB.pickups().findNext();
-            if (next != null) {
-                onDaySelected(next.from());
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        calendar.scrollToDate(next.from().toDate());
-                    }
-                }, 500);
-            }
-
-        } else {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    calendar.selectDate(LocalDate.now().toDate(), true);
-                }
-            }, 500);
+               onBestDaySelected();
         }
-
     }
 
     private void setupCalendar() {
@@ -263,7 +281,7 @@ public class CalendarActivity extends ActionBarActivity {
 
     private void updatePickups(){
         pickupInfos = DB.pickups().findAll();
-        Collections.sort(pickupInfos,pickupComparator);
+        Collections.sort(pickupInfos, pickupComparator);
         bestDays = bestDays(pickupInfos);
     }
 
@@ -483,17 +501,6 @@ public class CalendarActivity extends ActionBarActivity {
         });
         bottomSheet.startAnimation(anim);
     }
-
-
-
-    private void showNotification() {
-        String title = "Remember to pickup your meds";
-        String description = "2 prescriptions for next days";
-        Intent i = new Intent(this, CalendarActivity.class);
-        i.putExtra("action", ACTION_SHOW_REMINDERS);
-        PickupNotification.notify(this, title, description, i);
-    }
-
 
     @Override
     public void onBackPressed() {

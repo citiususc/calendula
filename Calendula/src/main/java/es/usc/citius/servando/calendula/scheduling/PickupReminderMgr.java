@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 
@@ -31,28 +32,22 @@ public class PickupReminderMgr {
 
 
     private PendingIntent alarmPendingIntent(Context ctx) {
-        // intent our receiver will receive
-        Intent intent = new Intent(ctx, AlarmReceiver.class);
-        // indicate thar is for a routine
+        Intent intent = new Intent(ctx, PickupAlarmReceiver.class);
         intent.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_CHECK_PICKUPS_ALARM);
-        // create pending intent
         int intent_id = "ACTION_CHECK_PICKUPS_ALARM".hashCode();
         return PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    public void setCheckPickupsAlarm(Context ctx) {
-        // TODO: Get time from settings
-        DateTime d = DateTime.now().withHourOfDay(10).withMinuteOfHour(0).withSecondOfMinute(0);
+    public void setCheckPickupsAlarm(Context ctx, LocalDate date) {
 
-        PendingIntent routinePendingIntent = alarmPendingIntent(ctx);
+        DateTime d = date.toDateTimeAtStartOfDay().withHourOfDay(12).withMinuteOfHour(0).withSecondOfMinute(0);
+        PendingIntent calendarReminderPendingIntent = alarmPendingIntent(ctx);
         // Get the AlarmManager service
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-        // set the routine alarm, with repetition every day
         if (alarmManager != null) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, d.getMillis(), AlarmManager.INTERVAL_DAY, routinePendingIntent);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, d.getMillis(), calendarReminderPendingIntent);
             Log.d(TAG, "Pickup check alarm scheduled!");
         }
-
     }
 
 

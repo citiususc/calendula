@@ -5,12 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import org.joda.time.DateTime;
-
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.activities.CalendarActivity;
 import es.usc.citius.servando.calendula.activities.PickupNotification;
-import es.usc.citius.servando.calendula.database.DB;
 
 /**
  * This class receives our pickup check alarms
@@ -32,19 +29,8 @@ public class PickupAlarmReceiver extends BroadcastReceiver {
             Log.d(TAG, "Alarm received - Action : " + action);
 
             if (action == CalendulaApp.ACTION_CHECK_PICKUPS_ALARM) {
-
-                DateTime next = DB.pickups().findNext().from().toDateTimeAtStartOfDay();
-
-                // TODO: Get strings from resources and intervals from settings
-
-                if (DateTime.now().plusDays(3).isAfter(next)) {
-                    String description = "2 prescriptions for next days";
-                    showNotification(context, description);
-                } else if (DateTime.now().plusDays(1).isAfter(next)) {
-                    String description = "There are prescriptions for tomorrow";
-                    showNotification(context, description);
-                }
-
+                String description = "Recuerda recoger tus medicinas!";
+                showNotification(context, description);
             }
         }
     }
