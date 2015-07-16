@@ -1,120 +1,119 @@
 buildscript {
-  repositories {
-    mavenCentral()
-  }
-  dependencies {
-    classpath 'com.android.tools.build:gradle:1.1.0'
-  }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.1.0'
+    }
 }
 apply plugin: 'com.android.application'
 apply plugin: 'idea'
 
 
-
 repositories {
-  mavenCentral()
-  jcenter()
-  maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    mavenCentral()
+    jcenter()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 idea {
-  module {
-    downloadJavadoc = true
-    downloadSources = true
-  }
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
 }
 
 def getDate() {
-  def date = new Date()
-  def formattedDate = date.format('yyyyMMddHHmmss')
-  return formattedDate
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmmss')
+    return formattedDate
 }
 
 android {
-  compileSdkVersion 21
-  buildToolsVersion "21.1.2"
-  defaultConfig {
-    minSdkVersion 14
-    targetSdkVersion 21
-    versionCode 17
-    versionName "2.3.1"
-    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    multiDexEnabled true
-  }
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 21
+        versionCode 18
+        versionName "2.3.2-SNAPSHOT"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
 
-  packagingOptions {
-    exclude 'LICENSE.txt'
-  }
+    packagingOptions {
+        exclude 'LICENSE.txt'
+    }
 
-  lintOptions {
-    abortOnError false
-    checkReleaseBuilds false
-  }
-  buildTypes {
-    release {
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),                 \
-                            'proguard-rules.txt'
+    lintOptions {
+        abortOnError false
+        checkReleaseBuilds false
     }
-    debug {
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),                 \
-                            'proguard-rules.txt'
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),                  \
+                             'proguard-rules.txt'
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),                  \
+                             'proguard-rules.txt'
+        }
+        beta {
+            minifyEnabled false
+            versionNameSuffix "-beta" + "-build" + getDate()
+        }
     }
-    beta {
-      minifyEnabled false
-      versionNameSuffix "-beta" + "-build" + getDate()
-    }
-  }
-  productFlavors {}
+    productFlavors {}
 
-  applicationVariants.all { variant ->
-    variant.outputs.each { output ->
-      output.outputFile = new File(output.outputFile.parent,
-          output.outputFile.name.replace(".apk", "-${variant.versionName}.apk"))
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFile = new File(output.outputFile.parent,
+                    output.outputFile.name.replace(".apk", "-${variant.versionName}.apk"))
+        }
     }
-  }
 }
 
 dependencies {
 
-  compile 'com.google.code.gson:gson'
-  compile project(':libraries:ExpandableListview')
-  compile 'com.nispok:snackbar:2.9.0'
-  compile 'com.doomonafireball.betterpickers:library:1.5.5'
-  compile 'com.github.filippudak.progresspieview:library:1.0.+'
-  compile 'com.github.amlcurran.showcaseview:library:5.0.0'
+    compile 'com.google.code.gson:gson'
+    compile project(':libraries:ExpandableListview')
+    compile 'com.nispok:snackbar:2.9.0'
+    compile 'com.doomonafireball.betterpickers:library:1.5.5'
+    compile 'com.github.filippudak.progresspieview:library:1.0.+'
+    compile 'com.github.amlcurran.showcaseview:library:5.0.0'
 
-  // support
-  compile 'com.android.support:appcompat-v7:21.0.3'
-  compile 'com.android.support:cardview-v7:21.0.3'
-  compile 'com.android.support:recyclerview-v7:21.0.3'
-  compile 'com.android.support:palette-v7:21.0.3'
-  compile 'com.android.support:support-v4:21.0.3'
+    // support
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:cardview-v7:21.0.3'
+    compile 'com.android.support:recyclerview-v7:21.0.3'
+    compile 'com.android.support:palette-v7:21.0.3'
+    compile 'com.android.support:support-v4:21.0.3'
 
-  compile 'joda-time:joda-time:2.3'
-  compile 'com.makeramen:roundedimageview:1.5.0'
-  compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.1.0'
-  compile 'com.ocpsoft:ocpsoft-pretty-time:1.0.7'
-  compile 'com.melnykov:floatingactionbutton:1.1.0'
-  compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
-  compile 'de.greenrobot:eventbus:2.2.1'
+    compile 'joda-time:joda-time:2.3'
+    compile 'com.makeramen:roundedimageview:1.5.0'
+    compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.1.0'
+    compile 'com.ocpsoft:ocpsoft-pretty-time:1.0.7'
+    compile 'com.melnykov:floatingactionbutton:1.1.0'
+    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
+    compile 'de.greenrobot:eventbus:2.2.1'
 
-  compile 'com.getbase:floatingactionbutton:1.9.0'
+    compile 'com.getbase:floatingactionbutton:1.9.0'
 
-  compile 'com.j256.ormlite:ormlite-android:4.45'
+    compile 'com.j256.ormlite:ormlite-android:4.45'
 
-  androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
-  // Set this dependency to build and run Espresso tests
-  androidTestCompile 'com.android.support.test.espresso:espresso-core:2.0'
+    androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
+    // Set this dependency to build and run Espresso tests
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.0'
 
-  testCompile 'junit:junit:4.12'
-  testCompile "org.mockito:mockito-core:1.9.5"
+    testCompile 'junit:junit:4.12'
+    testCompile "org.mockito:mockito-core:1.9.5"
 
-  // calendar view
-  compile 'com.squareup:android-times-square:1.6.1@aar'
-  //compile 'org.scala-saddle:google-rfc-2445:20110304'
+    // calendar view
+    compile 'com.squareup:android-times-square:1.6.1@aar'
+    //compile 'org.scala-saddle:google-rfc-2445:20110304'
 
-  // google rfc 2445
-  compile files('libs/rfc2445.jar')
+    // google rfc 2445
+    compile files('libs/rfc2445.jar')
 }
