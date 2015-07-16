@@ -7,8 +7,8 @@
     <!--app:showAsAction="never" />-->
     <item
         android:id="@+id/action_expand"
-        android:title="Expand"
         android:icon="@drawable/ic_list"
         android:orderInCategory="100"
+        android:title="Expand"
         app:showAsAction="always" />
 </menu>

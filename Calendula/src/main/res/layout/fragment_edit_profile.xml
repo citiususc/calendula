@@ -13,85 +13,85 @@
     <!--android:alpha="0.8" />-->
 
     <ImageView
+        android:id="@+id/imageView2"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/imageView2" />
+        android:layout_height="fill_parent" />
 
     <TextView
         android:id="@+id/textView2"
+        style="@style/dark_text_big"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="Profile Photo"
-        style="@style/dark_text_big"
         android:layout_marginTop="20dp"
-        android:textStyle="bold"
-        android:textSize="18dp"
-        android:textColor="@color/android_blue_dark"
+        android:gravity="left"
+        android:text="Profile Photo"
         android:textAllCaps="true"
-        android:gravity="left" />
+        android:textColor="@color/android_blue_dark"
+        android:textSize="18dp"
+        android:textStyle="bold" />
 
     <RelativeLayout
+        android:id="@+id/profile_image_container"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:id="@+id/profile_image_container"
-        android:background="@drawable/rounded_profile_image_container"
-        android:orientation="horizontal"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="10dp"
         android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/rounded_profile_image_container"
+        android:orientation="horizontal">
 
 
         <com.makeramen.RoundedImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_image"
             android:layout_width="100dp"
             android:layout_height="fill_parent"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:src="@drawable/default_avatar"
-            android:id="@+id/profile_image"
-            android:scaleType="centerCrop"
-            app:riv_corner_radius="30dp"
-            app:riv_border_width="3dp"
-            app:riv_border_color="@color/white"
-            app:riv_mutate_background="true"
-            app:riv_oval="true"
-            android:layout_margin="2dp"
             android:layout_alignParentLeft="false"
             android:layout_alignParentTop="false"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            android:layout_margin="2dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_avatar"
+            app:riv_border_color="@color/white"
+            app:riv_border_width="3dp"
+            app:riv_corner_radius="30dp"
+            app:riv_mutate_background="true"
+            app:riv_oval="true" />
 
     </RelativeLayout>
 
 
     <TextView
         android:id="@+id/textView3"
+        style="@style/dark_text_big"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/profile_image_container"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="PROFILE NAME"
-        style="@style/dark_text_big"
         android:layout_marginTop="30dp"
-        android:layout_below="@id/profile_image_container"
-        android:textStyle="bold"
-        android:textSize="18dp"
-        android:textColor="@color/android_blue_dark"
+        android:gravity="left"
+        android:text="PROFILE NAME"
         android:textAllCaps="true"
-        android:gravity="left" />
+        android:textColor="@color/android_blue_dark"
+        android:textSize="18dp"
+        android:textStyle="bold" />
 
 
     <EditText
         android:id="@+id/edit_profile_username"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
         android:text="Walter"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/dark_grey_home"
-        android:layout_below="@+id/textView3"
-        android:layout_marginTop="20dp" />
+        android:textColor="@color/dark_grey_home" />
 
     <Button
         android:id="@+id/profile_button_ok"

@@ -12,10 +12,15 @@ import java.sql.SQLException;
  */
 public class BooleanArrayPersister extends BaseDataType {
 
+    private static final BooleanArrayPersister singleton = new BooleanArrayPersister();
     String format = "kk:mm";
 
     public BooleanArrayPersister() {
         super(SqlType.STRING, new Class<?>[]{boolean[].class});
+    }
+
+    public static BooleanArrayPersister getSingleton() {
+        return singleton;
     }
 
     @Override
@@ -62,12 +67,5 @@ public class BooleanArrayPersister extends BaseDataType {
             }
         }
         return result;
-    }
-
-
-    private static final BooleanArrayPersister singleton = new BooleanArrayPersister();
-
-    public static BooleanArrayPersister getSingleton() {
-        return singleton;
     }
 }

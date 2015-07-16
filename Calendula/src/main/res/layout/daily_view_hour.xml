@@ -2,184 +2,184 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <RelativeLayout
-        android:orientation="vertical"
+        android:id="@+id/top"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:visibility="visible"
-        android:id="@+id/top"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <RelativeLayout
+            android:id="@+id/hide_if_empty"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/hide_if_empty">
+            android:layout_height="fill_parent">
 
             <ImageButton
+                android:id="@+id/agenda_item_top_bg"
                 android:layout_width="fill_parent"
                 android:layout_height="5dp"
+                android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="70dp"
-                android:background="@color/android_green"
-                android:id="@+id/agenda_item_top_bg"
                 android:layout_alignTop="@+id/count_container"
-                android:layout_alignParentBottom="true" />
+                android:layout_marginLeft="70dp"
+                android:background="@color/android_green" />
 
             <ImageView
+                android:id="@+id/imageView5"
                 android:layout_width="80dp"
                 android:layout_height="60dp"
-                android:id="@+id/imageView5"
+                android:layout_alignParentBottom="true"
                 android:layout_alignParentTop="true"
-                android:src="@drawable/daily_view_list_item_tab"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="130dp"
                 android:layout_marginTop="2dp"
                 android:scaleType="fitXY"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="3dp"
-                android:layout_marginLeft="130dp" />
+                android:src="@drawable/daily_view_list_item_tab" />
 
             <Button
+                android:id="@+id/count_container"
                 android:layout_width="fill_parent"
                 android:layout_height="60dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="70dp"
-                android:background="@null"
-                android:id="@+id/count_container"
-                android:layout_marginTop="2dp" />
+                android:layout_marginTop="2dp"
+                android:background="@null" />
 
             <ImageView
+                android:id="@+id/imageView2"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:id="@+id/imageView2"
-                android:src="@drawable/ic_pill"
-                android:layout_centerVertical="true"
                 android:layout_alignLeft="@+id/count_container"
-                android:layout_marginLeft="5dp" />
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/ic_pill" />
 
             <TextView
+                android:id="@+id/count_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="3"
-                android:id="@+id/count_text"
                 android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/imageView2"
+                android:text="3"
                 android:textAlignment="center"
 
-                android:textColor="@color/white"
-                android:layout_toRightOf="@+id/imageView2" />
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white" />
 
             <ImageView
+                android:id="@+id/imageView3"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:id="@+id/imageView3"
-                android:layout_alignTop="@+id/imageView5"
-                android:layout_toRightOf="@+id/imageView5"
                 android:layout_alignParentBottom="true"
+                android:layout_alignTop="@+id/imageView5"
                 android:layout_marginBottom="3dp"
+                android:layout_toRightOf="@+id/imageView5"
                 android:background="#ffffff" />
 
         </RelativeLayout>
 
         <ImageView
+            android:id="@+id/imageView"
             android:layout_width="10dp"
             android:layout_height="1dp"
-            android:id="@+id/imageView"
-            android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:background="@color/android_blue" />
 
         <TextView
+            android:id="@+id/hour_text"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
-            android:text="12"
-            android:id="@+id/hour_text"
-            android:fontFamily="sans-serif-light"
-            android:textColor="@color/android_blue"
-            android:textStyle="normal"
-            android:textSize="16sp"
-            android:layout_marginLeft="5dp"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/imageView" />
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/imageView"
+            android:fontFamily="sans-serif-light"
+            android:text="12"
+            android:textColor="@color/android_blue"
+            android:textSize="16sp"
+            android:textStyle="normal" />
 
 
         <TextView
+            android:id="@+id/current_hour_text"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
-            android:text="12"
-            android:id="@+id/current_hour_text"
-            android:textColor="@color/android_blue"
-            android:textStyle="bold"
-            android:textSize="22dp"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/imageView"
-            android:visibility="invisible"
-            android:textAlignment="center" />
+            android:text="12"
+            android:textAlignment="center"
+            android:textColor="@color/android_blue"
+            android:textSize="22dp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
 
         <TextView
+            android:id="@+id/current_minute_text"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
-            android:text="45"
-            android:id="@+id/current_minute_text"
-            android:textColor="@color/android_blue_light"
-            android:textSize="22dp"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/current_hour_text"
+            android:text="45"
+            android:textColor="@color/android_blue_light"
+            android:textSize="22dp"
             android:visibility="invisible" />
 
         <ImageView
-            android:layout_width="10dp"
             android:id="@+id/current_hour_indicator"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:background="@color/android_blue"
+            android:layout_width="10dp"
             android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/android_blue"
             android:visibility="invisible" />
 
         <ImageView
-            android:layout_width="fill_parent"
             android:id="@+id/current_hour_spacer"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:background="#22AA66CC"
+            android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:visibility="invisible"
-            android:layout_marginLeft="70dp" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="70dp"
+            android:background="#22AA66CC"
+            android:visibility="invisible" />
 
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/bottom"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/bottom">
+        android:layout_height="wrap_content">
 
 
         <include
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/item_spacer_top"
             layout="@layout/daily_agenda_item_med_spacer_top"
-            android:id="@+id/item_spacer_top" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/med_item_list"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:layout_below="@id/item_spacer_top"
-            android:id="@+id/med_item_list"
-            android:layout_alignParentLeft="true">
+            android:orientation="vertical">
 
 
         </LinearLayout>
 
         <include
+            android:id="@+id/item_spacer_bottom"
+            layout="@layout/daily_agenda_item_med_spacer_bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/med_item_list"
-            layout="@layout/daily_agenda_item_med_spacer_bottom"
-            android:id="@+id/item_spacer_bottom" />
+            android:layout_below="@id/med_item_list" />
 
 
     </RelativeLayout>

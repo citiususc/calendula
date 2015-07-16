@@ -98,20 +98,6 @@ public class SelectMedicineListFragment extends Fragment {
         return item;
     }
 
-
-    private class MedicinesListAdapter extends ArrayAdapter<Medicine> {
-
-        public MedicinesListAdapter(Context context, int layoutResourceId, List<Medicine> items) {
-            super(context, layoutResourceId, items);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-            return createMedicineListItem(layoutInflater, mMedicines.get(position));
-        }
-    }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -135,6 +121,19 @@ public class SelectMedicineListFragment extends Fragment {
             Collections.sort(mMedicines);
             mActivity.onMedicineSelected(m, false);
             adapter.notifyDataSetChanged();
+        }
+    }
+
+    private class MedicinesListAdapter extends ArrayAdapter<Medicine> {
+
+        public MedicinesListAdapter(Context context, int layoutResourceId, List<Medicine> items) {
+            super(context, layoutResourceId, items);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
+            return createMedicineListItem(layoutInflater, mMedicines.get(position));
         }
     }
 

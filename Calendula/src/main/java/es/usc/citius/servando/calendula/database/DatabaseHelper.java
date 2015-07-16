@@ -3,11 +3,19 @@ package es.usc.citius.servando.calendula.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+
+import org.joda.time.LocalDate;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.concurrent.Callable;
+
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Prescription;
@@ -15,10 +23,6 @@ import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.concurrent.Callable;
-import org.joda.time.LocalDate;
 
 /**
  * Database helper class used to manage the creation and upgrading of your database. This class also usually provides
@@ -27,7 +31,10 @@ import org.joda.time.LocalDate;
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     public static final String TAG = "DatabaseHelper";
-
+    // name of the database file for our application
+    private static final String DATABASE_NAME = DB.DB_NAME;
+    // any time you make changes to your database objects, you may have to increase the database version
+    private static final int DATABASE_VERSION = 7;
     // List of persisted classes to simplify table creation
     public Class<?>[] persistedClasses = new Class<?>[]{
             Routine.class,
@@ -37,12 +44,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             DailyScheduleItem.class,
             Prescription.class
     };
-
-    // name of the database file for our application
-    private static final String DATABASE_NAME = DB.DB_NAME;
-    // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 7;
-
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
     // the DAO object we use to access the Routines table
@@ -90,13 +91,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.i(DatabaseHelper.class.getName(), "onUpgrade");
             Log.d(DatabaseHelper.class.getName(), "OldVersion: " + oldVersion + ", newVersion: " + newVersion);
 
-            if (oldVersion < 6)
-            {
+            if (oldVersion < 6) {
                 oldVersion = 6;
             }
 
-            switch (oldVersion + 1)
-            {
+            switch (oldVersion + 1) {
 
                 case 7:
                     // migrate to iCal
@@ -123,9 +122,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Cycle TEXT;");
 
         getDailyScheduleItemsDao().executeRaw(
-            "ALTER TABLE DailyScheduleItems ADD COLUMN Schedule INTEGER;");
+                "ALTER TABLE DailyScheduleItems ADD COLUMN Schedule INTEGER;");
         getDailyScheduleItemsDao().executeRaw(
-            "ALTER TABLE DailyScheduleItems ADD COLUMN Time TEXT;");
+                "ALTER TABLE DailyScheduleItems ADD COLUMN Time TEXT;");
 
         // update schedules
         TransactionManager.callInTransaction(getConnectionSource(), new Callable<Void>() {
@@ -140,11 +139,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                     }
                     s.setDays(s.getLegacyDays());
 
-                    if (s.allDaysSelected())
-                    {
+                    if (s.allDaysSelected()) {
                         s.setType(Schedule.SCHEDULE_TYPE_EVERYDAY);
-                    } else
-                    {
+                    } else {
                         s.setType(Schedule.SCHEDULE_TYPE_SOMEDAYS);
                     }
                     s.setStart(LocalDate.now());

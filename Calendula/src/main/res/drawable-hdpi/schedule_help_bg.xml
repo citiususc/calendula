@@ -3,7 +3,7 @@
     <item>
         <shape>
             <solid android:color="@color/android_green_light" />
-            <corners android:topLeftRadius="5dp" android:topRightRadius="5dp" android:bottomLeftRadius="5dp" android:bottomRightRadius="5dp" />
+            <corners android:bottomLeftRadius="5dp" android:bottomRightRadius="5dp" android:topLeftRadius="5dp" android:topRightRadius="5dp" />
         </shape>
     </item>
 </selector>

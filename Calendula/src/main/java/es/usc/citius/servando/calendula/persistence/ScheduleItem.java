@@ -10,7 +10,7 @@ import es.usc.citius.servando.calendula.database.DB;
  */
 @DatabaseTable(tableName = "ScheduleItems")
 public class ScheduleItem {
-    
+
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_SCHEDULE = "Schedule";
     public static final String COLUMN_ROUTINE = "Routine";
@@ -52,7 +52,7 @@ public class ScheduleItem {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     public Routine routine() {
         return routine;
     }

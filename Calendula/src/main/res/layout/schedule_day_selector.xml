@@ -5,10 +5,10 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <!--<TextView-->
         <!--android:layout_width="60dp"-->
@@ -21,88 +21,88 @@
         <!--android:visibility="gone" />-->
 
         <TextView
-            android:text="@string/schedule_day_selector_mo"
             android:id="@+id/day_mo"
             style="@style/schedule_day_selected"
-            android:layout_height="40dp"
-            android:gravity="center"
             android:layout_width="40dp"
-            android:layout_weight="0"
+            android:layout_height="40dp"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
-            android:background="@drawable/dayselector_circle" />
+            android:layout_weight="0"
+            android:background="@drawable/dayselector_circle"
+            android:gravity="center"
+            android:text="@string/schedule_day_selector_mo" />
 
         <TextView
-            android:text="@string/schedule_day_selector_tu"
             android:id="@+id/day_tu"
             style="@style/schedule_day_selected"
-            android:layout_height="40dp"
-            android:gravity="center"
             android:layout_width="40dp"
-            android:layout_weight="0"
+            android:layout_height="40dp"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
-            android:background="@drawable/dayselector_circle" />
+            android:layout_weight="0"
+            android:background="@drawable/dayselector_circle"
+            android:gravity="center"
+            android:text="@string/schedule_day_selector_tu" />
 
         <TextView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:text="@string/schedule_day_selector_we"
             android:id="@+id/day_we"
-            android:layout_weight="0"
-            android:gravity="center"
             style="@style/schedule_day_selected"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:background="@drawable/dayselector_circle" />
-
-        <TextView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:text="@string/schedule_day_selector_th"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_weight="0"
+            android:background="@drawable/dayselector_circle"
+            android:gravity="center"
+            android:text="@string/schedule_day_selector_we" />
+
+        <TextView
             android:id="@+id/day_th"
-            android:layout_weight="0"
-            android:gravity="center"
             style="@style/schedule_day_selected"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:background="@drawable/dayselector_circle" />
-
-        <TextView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:text="@string/schedule_day_selector_fr"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_weight="0"
+            android:background="@drawable/dayselector_circle"
+            android:gravity="center"
+            android:text="@string/schedule_day_selector_th" />
+
+        <TextView
             android:id="@+id/day_fr"
-            android:layout_weight="0"
-            android:gravity="center"
             style="@style/schedule_day_selected"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:background="@drawable/dayselector_circle" />
-
-        <TextView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:text="@string/schedule_day_selector_sa"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_weight="0"
+            android:background="@drawable/dayselector_circle"
+            android:gravity="center"
+            android:text="@string/schedule_day_selector_fr" />
+
+        <TextView
             android:id="@+id/day_sa"
-            android:layout_weight="0"
-            android:gravity="center"
             style="@style/schedule_day_selected"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:background="@drawable/dayselector_circle" />
-
-        <TextView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:text="@string/schedule_day_selector_su"
-            android:id="@+id/day_su"
-            android:layout_weight="0"
-            android:gravity="center"
-            style="@style/schedule_day_selected"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
-            android:background="@drawable/dayselector_circle" />
+            android:layout_weight="0"
+            android:background="@drawable/dayselector_circle"
+            android:gravity="center"
+            android:text="@string/schedule_day_selector_sa" />
+
+        <TextView
+            android:id="@+id/day_su"
+            style="@style/schedule_day_selected"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_weight="0"
+            android:background="@drawable/dayselector_circle"
+            android:gravity="center"
+            android:text="@string/schedule_day_selector_su" />
 
         <!--<CheckBox-->
         <!--android:layout_width="0dp"-->

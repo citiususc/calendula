@@ -37,6 +37,21 @@ public class Routine {
         this.name = name;
     }
 
+    public static List<Routine> findAll() {
+        return DB.routines().findAll();
+    }
+
+    public static Routine findById(long id) {
+        return DB.routines().findById(id);
+    }
+
+    public static Routine findByName(String name) {
+        return DB.routines().findOneBy(COLUMN_NAME, name);
+    }
+
+    public static List<Routine> findInHour(int hour) {
+        return DB.routines().findInHour(hour);
+    }
 
     public Long getId() {
         return id;
@@ -54,6 +69,10 @@ public class Routine {
         this.time = time;
     }
 
+    // *************************************
+    // DB queries
+    // *************************************
+
     public String name() {
         return name;
     }
@@ -61,7 +80,6 @@ public class Routine {
     public void setName(String name) {
         this.name = name;
     }
-
 
     public void save() {
         DB.routines().save(this);
@@ -71,29 +89,8 @@ public class Routine {
         DB.routines().deleteCascade(this, false);
     }
 
-    // *************************************
-    // DB queries
-    // *************************************
-
-
     public List<ScheduleItem> scheduleItems() {
         return DB.scheduleItems().findByRoutine(this);
-    }
-
-    public static List<Routine> findAll() {
-        return DB.routines().findAll();
-    }
-
-    public static Routine findById(long id) {
-        return DB.routines().findById(id);
-    }
-
-    public static Routine findByName(String name) {
-        return DB.routines().findOneBy(COLUMN_NAME, name);
-    }
-
-    public static List<Routine> findInHour(int hour) {
-        return DB.routines().findInHour(hour);
     }
 
 

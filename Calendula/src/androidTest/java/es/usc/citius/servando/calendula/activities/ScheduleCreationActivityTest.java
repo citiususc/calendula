@@ -33,8 +33,8 @@ import static org.hamcrest.Matchers.allOf;
 
 public class ScheduleCreationActivityTest extends ActivityInstrumentationTestCase2<ScheduleCreationActivity> {
 
-    private ScheduleCreationActivity mActivity;
     boolean[] days = new boolean[]{true, false, true, false, true, false, true};
+    private ScheduleCreationActivity mActivity;
 
 
     public ScheduleCreationActivityTest() {

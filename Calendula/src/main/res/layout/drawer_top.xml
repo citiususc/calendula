@@ -6,42 +6,42 @@
     android:background="@color/drawerbg_default">
 
     <ImageView
+        android:id="@+id/settings_button"
         android:layout_width="fill_parent"
         android:layout_height="130dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/drawertopbg"
-        android:id="@+id/settings_button" />
+        android:src="@drawable/drawertopbg" />
 
     <ImageView
+        android:id="@+id/left_drawer_top_overlay"
         android:layout_width="fill_parent"
         android:layout_height="130dp"
-        android:scaleType="centerCrop"
-        android:id="@+id/left_drawer_top_overlay"
         android:alpha="0.4"
-        android:background="@color/android_blue_dark" />
+        android:background="@color/android_blue_dark"
+        android:scaleType="centerCrop" />
 
     <TextView
+        android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Calendula"
-        android:id="@+id/text"
+        android:layout_centerInParent="true"
         android:gravity="center"
-        android:textStyle="bold"
+        android:text="Calendula"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/android_orange_darker"
-        android:visibility="invisible"
-        android:layout_centerInParent="true" />
+        android:textStyle="bold"
+        android:visibility="invisible" />
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="170dp"
         android:layout_height="55dp"
-        android:src="@drawable/brand"
-        android:id="@+id/imageView"
-        android:paddingRight="20dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:paddingBottom="5dp" />
+        android:layout_alignParentRight="true"
+        android:paddingBottom="5dp"
+        android:paddingRight="20dp"
+        android:src="@drawable/brand" />
 
 
 </RelativeLayout>

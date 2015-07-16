@@ -11,13 +11,13 @@
         android:background="#fff" />
 
     <ImageView
+        android:id="@+id/tabs_shadow"
         android:layout_width="fill_parent"
         android:layout_height="5dp"
-        android:id="@+id/tabs_shadow"
-        android:src="@drawable/daily_view_list_item_tab_shadow_top"
         android:layout_below="@+id/textView2"
+        android:alpha="0.7"
         android:scaleType="fitXY"
-        android:alpha="0.7" />
+        android:src="@drawable/daily_view_list_item_tab_shadow_top" />
 
     <!--<android.support.v7.widget.Toolbar-->
     <!--android:id="@+id/toolbar"-->
@@ -35,57 +35,57 @@
         android:layout_marginTop="20dp" />
 
     <android.support.v7.widget.Toolbar
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/toolbar"
-        android:title="@string/title_create_schedule_activity"
-        android:background="@color/android_blue_darker"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        android:background="@color/android_blue_darker"
+        android:title="@string/title_create_schedule_activity"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="fill_parent"
         android:layout_height="56dp"
-        android:text="@string/title_create_schedule_activity"
-        android:textSize="24sp"
-        android:paddingLeft="72dp"
-        android:id="@+id/textView2"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/toolbar"
         android:background="@color/android_blue_darker"
-        android:textColor="#fff"
+        android:gravity="top"
+        android:paddingLeft="72dp"
         android:paddingTop="10dp"
-        android:gravity="top" />
+        android:text="@string/title_create_schedule_activity"
+        android:textColor="#fff"
+        android:textSize="24sp" />
 
     <com.melnykov.fab.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_gravity="bottom|right"
+        android:layout_marginRight="38dp"
+        android:layout_marginTop="83dp"
         android:src="@drawable/ic_done_white_36dp"
         fab:fab_colorNormal="@color/android_green"
         fab:fab_colorPressed="@color/android_green_dark"
-        fab:fab_colorRipple="@color/android_green_light"
-        android:layout_marginRight="38dp"
-        android:layout_marginTop="83dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        fab:fab_colorRipple="@color/android_green_light" />
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="fill_parent"
         android:layout_height="20dp"
-        android:text="@string/title_activity_schedules"
-        android:id="@+id/textView"
         android:layout_alignParentLeft="false"
         android:layout_alignParentStart="true"
-        android:textSize="14sp"
-        android:textColor="#fff"
+        android:layout_marginTop="45dp"
         android:gravity="bottom"
         android:paddingLeft="72dp"
-        android:layout_marginTop="45dp" />
+        android:text="@string/title_activity_schedules"
+        android:textColor="#fff"
+        android:textSize="14sp" />
 
 
 </RelativeLayout>

@@ -40,20 +40,28 @@ import es.usc.citius.servando.calendula.util.view.CustomDigitalClock;
 public class HomeUserInfoFragment extends Fragment {
 
 
+    public SharedPreferences mSharedPreferences;
     ImageSwitcher background;
     View profileImageContainer;
     TextView profileUsername;
+    // Listener defined by anonymous inner class.
+    public SharedPreferences.OnSharedPreferenceChangeListener mListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if ("display_name".equals(key) && profileUsername != null) {
+                profileUsername.setText(mSharedPreferences.getString("display_name", "Calendula"));
+            }
+        }
+    };
     RelativeLayout profileContainer;
     CustomDigitalClock clock;
-
     TextView monthTv;
     TextView dayTv;
-
     ImageView moodImg;
     RoundedImageView modFabButton;
     ListAdapter moodsAdapter;
     String[] moods;
-
     int[] moodRes = new int[]{
             R.drawable.mood_1,
             R.drawable.mood_2,
@@ -61,7 +69,6 @@ public class HomeUserInfoFragment extends Fragment {
             R.drawable.mood_4,
             R.drawable.mood_5,
     };
-
     int[] moodColor = new int[]{
             R.color.android_red,
             R.color.android_orange,
@@ -69,14 +76,15 @@ public class HomeUserInfoFragment extends Fragment {
             R.color.android_blue,
             R.color.android_green
     };
-
     int currentBgFileIdx = 0;
-
 
     public HomeUserInfoFragment() {
         // Required empty public constructor
     }
 
+    public static HomeUserInfoFragment newInstance() {
+        return new HomeUserInfoFragment();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,7 +93,7 @@ public class HomeUserInfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home_user_info, container, false);
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        
+
         Animation in = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
         Animation out = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
         moods = getResources().getStringArray(R.array.moods);
@@ -187,17 +195,12 @@ public class HomeUserInfoFragment extends Fragment {
         monthTv.setText(monthStr);
     }
 
-    public static HomeUserInfoFragment newInstance() {
-        return new HomeUserInfoFragment();
-    }
-
-    Bitmap getBackgroundBitmap() {       
+    Bitmap getBackgroundBitmap() {
         int width = (int) Screen.getDpSize(getActivity()).x;
         int height = getResources().getDimensionPixelSize(R.dimen.header_height);
         Integer idx = mSharedPreferences.getInt("profile_background_idx", 1);
         return Screen.getResizedBitmap(getActivity(), "home_bg_" + idx + ".jpg", width, height);
     }
-
 
     Bitmap getRandomBackground() {
         int width = (int) Screen.getDpSize(getActivity()).x;
@@ -209,23 +212,9 @@ public class HomeUserInfoFragment extends Fragment {
         currentBgFileIdx = rand;
 
         mSharedPreferences.edit().putInt("profile_background_idx", rand).commit();
-        
+
         return Screen.getResizedBitmap(getActivity(), "home_bg_" + rand + ".jpg", width, height);
     }
-
-
-    public SharedPreferences mSharedPreferences;
-
-    // Listener defined by anonymous inner class.
-    public SharedPreferences.OnSharedPreferenceChangeListener mListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if ("display_name".equals(key) && profileUsername != null) {
-                profileUsername.setText(mSharedPreferences.getString("display_name", "Calendula"));
-            }
-        }
-    };
 
     @Override
     public void onAttach(Activity activity) {

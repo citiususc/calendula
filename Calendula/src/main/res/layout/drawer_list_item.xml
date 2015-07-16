@@ -6,40 +6,40 @@
 
     <TextView
         android:id="@+id/text"
-        android:text="Option text"
         android:layout_width="fill_parent"
         android:layout_height="55dp"
-        android:gravity="center_vertical"
-        android:textColor="#8a8a8a"
-        android:layout_alignParentRight="false"
         android:layout_alignParentEnd="false"
         android:layout_alignParentLeft="false"
-        android:textSize="18sp"
-        android:paddingLeft="26dp" />
+        android:layout_alignParentRight="false"
+        android:gravity="center_vertical"
+        android:paddingLeft="26dp"
+        android:text="Option text"
+        android:textColor="#8a8a8a"
+        android:textSize="18sp" />
 
 
     <com.makeramen.RoundedImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/imageViewbg"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:id="@+id/imageViewbg"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:src="@color/android_blue"
-        android:scaleType="centerCrop"
-        app:riv_corner_radius="30dip"
-        app:riv_border_width="0dip"
-        app:riv_oval="true"
-        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp" />
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:scaleType="centerCrop"
+        android:src="@color/android_blue"
+        app:riv_border_width="0dip"
+        app:riv_corner_radius="30dip"
+        app:riv_oval="true" />
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:id="@+id/imageView"
         android:layout_alignLeft="@id/imageViewbg"
         android:layout_alignRight="@id/imageViewbg"
-        android:src="@drawable/ic_small_alarm"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_small_alarm" />
 
 
 </RelativeLayout>

@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center_vertical"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="horizontal">
 
     <LinearLayout
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:layout_width="0px"
-        android:layout_height="0px" />
+        android:layout_height="0px"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
 
     <LinearLayout
         android:id="@+id/pickers_layout"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:visibility="gone">
 
         <NumberPicker
+            android:id="@+id/interval_picker"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:id="@+id/interval_picker"
-            android:layout_marginRight="0dp"
             android:layout_margin="0dp"
             android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
             android:layout_marginTop="0dp" />
 
         <NumberPicker
+            android:id="@+id/interval_units_picker"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:id="@+id/interval_units_picker"
-            android:layout_marginLeft="0dp"
             android:layout_margin="0dp"
+            android:layout_marginLeft="0dp"
             android:layout_marginRight="0dp"
             android:layout_marginTop="0dp" />
 
@@ -45,50 +45,50 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/every"
-            android:id="@+id/textView5"
+            android:layout_alignBottom="@+id/interval_edit_text"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignBottom="@+id/interval_edit_text"
             android:layout_alignTop="@+id/interval_edit_text"
             android:gravity="center"
-            android:textSize="18dp"
-            android:textColor="#222" />
+            android:text="@string/every"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#222"
+            android:textSize="18dp" />
 
         <Button
+            android:id="@+id/interval_edit_text"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:inputType="number"
-            android:ems="10"
-            style="?android:attr/borderlessButtonStyle"
-            android:id="@+id/interval_edit_text"
-            android:nextFocusUp="@id/interval_edit_text"
-            android:nextFocusLeft="@id/interval_edit_text"
-            android:layout_toRightOf="@+id/textView5"
-            android:layout_toEndOf="@+id/textView5"
-            android:text="2"
-            android:gravity="center"
-            android:textSize="20dp"
-            android:textColor="@color/android_blue_dark"
             android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@+id/textView5"
+            android:layout_toRightOf="@+id/textView5"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="number"
+            android:nextFocusLeft="@id/interval_edit_text"
+            android:nextFocusUp="@id/interval_edit_text"
+            android:text="2"
+            android:textColor="@color/android_blue_dark"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <Spinner
+            android:id="@+id/freq_spinner"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:id="@+id/freq_spinner"
             android:layout_alignTop="@+id/interval_edit_text"
-            android:layout_toRightOf="@+id/interval_edit_text"
             android:layout_toEndOf="@+id/interval_edit_text"
+            android:layout_toRightOf="@+id/interval_edit_text"
             android:gravity="center"
             android:spinnerMode="dropdown" />
     </LinearLayout>

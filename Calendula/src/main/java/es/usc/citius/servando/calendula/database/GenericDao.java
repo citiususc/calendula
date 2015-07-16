@@ -32,8 +32,8 @@ import java.util.concurrent.Callable;
  */
 public abstract class GenericDao<T extends Object, I> implements Dao<T, I> {
 
-    DatabaseHelper dbHelper;
     protected Dao<T, I> dao;
+    DatabaseHelper dbHelper;
 
     public GenericDao(DatabaseHelper db) {
         dbHelper = db;
@@ -49,8 +49,6 @@ public abstract class GenericDao<T extends Object, I> implements Dao<T, I> {
     public void fireEvent() {
         // default implementation: do nothing
     }
-
-    ;
 
     public void save(T model) {
         try {
@@ -122,8 +120,6 @@ public abstract class GenericDao<T extends Object, I> implements Dao<T, I> {
         }
 
     }
-
-    ;
 
     public void remove(T model) {
         try {
@@ -372,13 +368,13 @@ public abstract class GenericDao<T extends Object, I> implements Dao<T, I> {
     }
 
     @Override
-    public void setObjectCache(ObjectCache objectCache) throws SQLException {
-        dao.setObjectCache(objectCache);
+    public ObjectCache getObjectCache() {
+        return dao.getObjectCache();
     }
 
     @Override
-    public ObjectCache getObjectCache() {
-        return dao.getObjectCache();
+    public void setObjectCache(ObjectCache objectCache) throws SQLException {
+        dao.setObjectCache(objectCache);
     }
 
     @Override
@@ -416,12 +412,6 @@ public abstract class GenericDao<T extends Object, I> implements Dao<T, I> {
     }
 
     @Override
-    @Deprecated
-    public void setAutoCommit(boolean autoCommit) throws SQLException {
-        dao.setAutoCommit(autoCommit);
-    }
-
-    @Override
     public void setAutoCommit(DatabaseConnection connection, boolean autoCommit) throws SQLException {
         dao.setAutoCommit(connection, autoCommit);
     }
@@ -430,6 +420,12 @@ public abstract class GenericDao<T extends Object, I> implements Dao<T, I> {
     @Deprecated
     public boolean isAutoCommit() throws SQLException {
         return dao.isAutoCommit();
+    }
+
+    @Override
+    @Deprecated
+    public void setAutoCommit(boolean autoCommit) throws SQLException {
+        dao.setAutoCommit(autoCommit);
     }
 
     @Override

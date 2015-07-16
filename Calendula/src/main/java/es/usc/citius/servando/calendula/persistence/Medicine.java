@@ -44,6 +44,18 @@ public class Medicine implements Comparable<Medicine> {
         this.presentation = presentation;
     }
 
+    public static List<Medicine> findAll() {
+        return DB.medicines().findAll();
+    }
+
+    public static Medicine findById(long id) {
+        return DB.medicines().findById(id);
+    }
+
+    public static Medicine findByName(String name) {
+        return DB.medicines().findOneBy(COLUMN_NAME, name);
+    }
+
     public String cn() {
         return cn;
     }
@@ -68,6 +80,10 @@ public class Medicine implements Comparable<Medicine> {
         this.name = name;
     }
 
+    // *************************************
+    // DB queries
+    // *************************************
+
     public Presentation presentation() {
         return presentation;
     }
@@ -79,22 +95,6 @@ public class Medicine implements Comparable<Medicine> {
     @Override
     public int compareTo(Medicine another) {
         return name.compareTo(another.name);
-    }
-
-    // *************************************
-    // DB queries
-    // *************************************
-    
-    public static List<Medicine> findAll() {
-        return DB.medicines().findAll();
-    }
-
-    public static Medicine findById(long id) {
-        return DB.medicines().findById(id);
-    }
-
-    public static Medicine findByName(String name) {
-        return DB.medicines().findOneBy(COLUMN_NAME, name);
     }
 
     public void deleteCascade() {

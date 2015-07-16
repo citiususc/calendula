@@ -28,7 +28,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.melnykov.fab.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
@@ -40,8 +45,6 @@ import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MedicinesActivity extends ActionBarActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
 
@@ -92,8 +95,8 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
         searchList = (ListView) findViewById(R.id.search_list);
 
         toolbar.setNavigationIcon(
-            new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 10,
-                10, 10, 10));
+                new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 10,
+                        10, 10, 10));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -234,6 +237,24 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
         finish();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (searchView.getVisibility() == View.VISIBLE) {
+            hideSearchView();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    Fragment getViewPagerFragment(int position) {
+        return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
+    }
 
     /**
      * A {@link android.support.v4.app.FragmentPagerAdapter} that returns a fragment corresponding to
@@ -263,28 +284,7 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
 
     }
 
-    @Override
-    public void onBackPressed() {
-        if (searchView.getVisibility() == View.VISIBLE) {
-            hideSearchView();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-
-    Fragment getViewPagerFragment(int position) {
-        return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        overridePendingTransition(0, 0);
-    }
-
     // Search adapter
-
 
     public class AutoCompleteAdapter extends ArrayAdapter<Prescription> implements Filterable {
         private List<Prescription> mData;

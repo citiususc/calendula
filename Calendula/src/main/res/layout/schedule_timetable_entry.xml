@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
     <TextView
-        android:layout_width="42dp"
-        android:layout_height="50dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="08:"
         android:id="@+id/hour_text"
-        android:textColor="@color/android_blue"
-        android:textStyle="bold"
-        android:textSize="@dimen/routine_label_from_schedule_creation"
-        android:gravity="center_vertical|right"
-        android:layout_gravity="right" />
-
-    <TextView
         android:layout_width="42dp"
         android:layout_height="50dp"
+        android:layout_gravity="right"
+        android:gravity="center_vertical|right"
+        android:text="08:"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="00"
-        android:id="@+id/minute_text"
         android:textColor="@color/android_blue"
         android:textSize="@dimen/routine_label_from_schedule_creation"
-        android:gravity="center_vertical|left"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/minute_text"
+        android:layout_width="42dp"
+        android:layout_height="50dp"
+        android:layout_gravity="left"
         android:layout_weight="0"
+        android:gravity="center_vertical|left"
+        android:text="00"
         android:textAlignment="center"
-        android:layout_gravity="left" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/android_blue"
+        android:textSize="@dimen/routine_label_from_schedule_creation" />
 
     <Spinner
+        android:id="@+id/entry_routine_spinner"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:tag="routine_spinner"
-        android:id="@+id/entry_routine_spinner"
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:spinnerMode="dialog"
+        android:tag="routine_spinner"
         android:textAlignment="gravity" />
 
     <!--<Spinner-->
@@ -51,24 +51,24 @@
     <!--android:spinnerMode="dialog" />-->
 
     <TextView
+        android:id="@+id/entry_dose_textview"
         android:layout_width="75dp"
         android:layout_height="fill_parent"
-        android:id="@+id/entry_dose_textview"
+        android:gravity="center_vertical|center_horizontal"
         android:text="N/A"
         android:textAlignment="center"
-        android:gravity="center_vertical|center_horizontal"
         android:textColor="#111" />
 
     <!--android:src="@drawable/abc_ic_clear_holo_light"-->
     <ImageButton
+        android:id="@+id/entry_remove"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/entry_remove"
-        android:src="@drawable/ic_clear_black_48dp"
-        android:scaleType="fitStart"
-        android:baselineAlignBottom="false"
-        android:visibility="visible"
+        android:alpha="0.9"
         android:background="@null"
-        android:alpha="0.9" />
+        android:baselineAlignBottom="false"
+        android:scaleType="fitStart"
+        android:src="@drawable/ic_clear_black_48dp"
+        android:visibility="visible" />
 
 </LinearLayout>

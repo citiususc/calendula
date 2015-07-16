@@ -18,8 +18,8 @@ import es.usc.citius.servando.calendula.util.Screen;
  */
 public class HomePageAdapter extends FragmentPagerAdapter {
 
-    private float dpWidth;
     String[] titles;
+    private float dpWidth;
 
     public HomePageAdapter(FragmentManager fm, Context ctx, Activity activity) {
         super(fm);
@@ -47,22 +47,6 @@ public class HomePageAdapter extends FragmentPagerAdapter {
                 return new ScheduleListFragment();
         }
         return null;
-
-        //return position == 1 ? new DailyAgendaFragment() : new HomeFragment();
-    }
-
-    @Override
-    public float getPageWidth(int position) {
-
-        // show 80dp of the agenda view
-        int dipsToShow = 80;
-        // get the percentage of the screen width that represents that 80dp
-        // according to the current device
-        float percent = 1.0f - (dipsToShow / dpWidth);
-        // page width will be only reduced for home page to allow showing a
-        // fragment of the agenda view
-        return 1.0f;
-        //return position == 0 ? percent : 1.0f;
     }
 
     @Override

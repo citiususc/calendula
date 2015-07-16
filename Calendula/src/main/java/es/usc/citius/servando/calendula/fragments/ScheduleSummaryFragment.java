@@ -10,6 +10,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.joda.time.LocalDate;
+
+import java.util.List;
+
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.SummaryCalendarActivity;
 import es.usc.citius.servando.calendula.persistence.Medicine;
@@ -18,8 +23,6 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
-import java.util.List;
-import org.joda.time.LocalDate;
 
 
 /**
@@ -74,13 +77,11 @@ public class ScheduleSummaryFragment extends Fragment {
         medDaysTv.setText(s.toReadableString(getActivity()));
         medIconImage.setImageDrawable(getResources().getDrawable(medIcon));
 
-        if (s.type() != Schedule.SCHEDULE_TYPE_HOURLY)
-        {
+        if (s.type() != Schedule.SCHEDULE_TYPE_HOURLY) {
             String freq =
-                ScheduleUtils.getTimesStr(items != null ? items.size() : 0, getActivity());
+                    ScheduleUtils.getTimesStr(items != null ? items.size() : 0, getActivity());
             medDailyFreqTv.setText(freq);
-        } else
-        {
+        } else {
             String freq = ScheduleUtils.getTimesStr(24 / s.rule().interval(), getActivity());
             medDailyFreqTv.setText(freq);
         }
@@ -99,12 +100,10 @@ public class ScheduleSummaryFragment extends Fragment {
                     i.putExtra("start", start.toString(SummaryCalendarActivity.START_DATE_FORMAT));
                 }
 
-                if (s.type() == Schedule.SCHEDULE_TYPE_CYCLE)
-                {
+                if (s.type() == Schedule.SCHEDULE_TYPE_CYCLE) {
                     i.putExtra("active_days", s.getCycleDays());
                     i.putExtra("rest_days", s.getCycleRest());
-                } else
-                {
+                } else {
                     i.putExtra("rule", s.rule().toIcal());
                 }
 

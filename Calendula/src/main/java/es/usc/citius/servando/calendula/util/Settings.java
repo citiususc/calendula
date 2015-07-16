@@ -22,6 +22,13 @@ public class Settings {
 
     Properties properties;
 
+    private Settings() {
+    }
+
+    public static Settings instance() {
+        return instance;
+    }
+
     public void load(Context ctx) throws Exception {
         Resources resources = ctx.getResources();
         AssetManager assetManager = resources.getAssets();
@@ -49,14 +56,6 @@ public class Settings {
         if (properties == null)
             throw new IllegalStateException("Settings not loaded");
         return properties.getProperty(key, defaultValue);
-    }
-
-
-    private Settings() {
-    }
-
-    public static Settings instance() {
-        return instance;
     }
 
 }

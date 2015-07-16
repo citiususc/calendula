@@ -9,8 +9,6 @@ import es.usc.citius.servando.calendula.R;
  */
 public class RandomColorChooser {
 
-    private static int colorIndex = 0;
-
     private static final int[] primary_colors = {
             R.color.android_blue,
             R.color.android_pink,
@@ -25,6 +23,7 @@ public class RandomColorChooser {
             R.color.android_orange_light,
             R.color.android_red_light
     };
+    private static int colorIndex = 0;
 
     public static int getNextColorIndex() {
         return (colorIndex++) % primary_colors.length;

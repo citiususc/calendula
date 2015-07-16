@@ -1,15 +1,17 @@
 package es.usc.citius.servando.calendula.util;
 
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 
 /**
  * Created by joseangel.pineiro on 11/15/13.
@@ -34,13 +36,11 @@ public class DailyAgendaItemStub {
     public int hour;
     public int minute;
 
-    public DailyAgendaItemStub(LocalTime time)
-    {
+    public DailyAgendaItemStub(LocalTime time) {
         this.time = time;
     }
 
-    public static List<DailyAgendaItemStub> fromHour(int hour)
-    {
+    public static List<DailyAgendaItemStub> fromHour(int hour) {
 
         //int today = DateTime.now().getDayOfWeek();
         LocalDate today = LocalDate.now();
@@ -48,27 +48,22 @@ public class DailyAgendaItemStub {
         List<Routine> routines = Routine.findInHour(hour);
         List<DailyAgendaItemStub> items = new ArrayList<DailyAgendaItemStub>(routines.size());
 
-        if (!routines.isEmpty())
-        {
+        if (!routines.isEmpty()) {
 
-            for (Routine r : routines)
-            {
+            for (Routine r : routines) {
                 // Find doses off all routines in this hour
                 List<ScheduleItem> doses = r.scheduleItems();
 
-                if (doses.size() > 0)
-                {
+                if (doses.size() > 0) {
 
                     // create an ItemStub for the current hour
                     DailyAgendaItemStub item = new DailyAgendaItemStub(r.time());
 
                     item.meds = new ArrayList<>();
 
-                    for (ScheduleItem scheduleItem : doses)
-                    {
+                    for (ScheduleItem scheduleItem : doses) {
                         if (scheduleItem.schedule() != null && scheduleItem.schedule()
-                            .enabledForDate(today))
-                        {
+                                .enabledForDate(today)) {
                             item.hasEvents = true;
                             int minute = r.time().getMinuteOfHour();
                             Medicine med = scheduleItem.schedule().medicine();
@@ -80,27 +75,24 @@ public class DailyAgendaItemStub {
                             el.presentation = med.presentation();
                             el.minute = minute < 10 ? "0" + minute : String.valueOf(minute);
                             el.taken =
-                                DailyScheduleItem.findByScheduleItem(scheduleItem).takenToday();
+                                    DailyScheduleItem.findByScheduleItem(scheduleItem).takenToday();
                             item.meds.add(el);
                         }
                     }
                     Collections.sort(item.meds);
 
-                    if (!item.meds.isEmpty())
-                    {
+                    if (!item.meds.isEmpty()) {
                         item.id = r.getId();
                         item.title = r.name();
                         item.hour = r.time().getHourOfDay();
                         item.minute = r.time().getMinuteOfHour();
                         items.add(item);
                     }
-                } else
-                {
+                } else {
                     items.add(new DailyAgendaItemStub(new LocalTime(hour, 0)));
                 }
             }
-        } else
-        {
+        } else {
             items.add(new DailyAgendaItemStub(new LocalTime(hour, 0)));
         }
 
@@ -139,7 +131,7 @@ public class DailyAgendaItemStub {
     }
 
     public static class DailyAgendaItemStubElement
-        implements Comparable<DailyAgendaItemStubElement> {
+            implements Comparable<DailyAgendaItemStubElement> {
 
         public String medName;
         public String minute;
@@ -151,8 +143,7 @@ public class DailyAgendaItemStub {
         public int res;
 
         @Override
-        public int compareTo(DailyAgendaItemStubElement other)
-        {
+        public int compareTo(DailyAgendaItemStubElement other) {
             int result = minute.compareTo(other.minute);
             if (result == 0) result = taken ? 0 : 1;
             if (result == 0) result = medName.compareTo(other.medName);

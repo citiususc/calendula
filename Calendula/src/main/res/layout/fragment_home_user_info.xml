@@ -4,32 +4,32 @@
 
 
     <RelativeLayout
+        android:id="@+id/profile_container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/profile_container"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="0dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp">
 
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="5dp"
-            android:src="@drawable/daily_view_list_item_tab_shadow_top"
             android:layout_alignParentBottom="true"
+            android:alpha="0.5"
             android:scaleType="fitXY"
-            android:alpha="0.5" />
+            android:src="@drawable/daily_view_list_item_tab_shadow_top" />
 
         <RelativeLayout
+            android:id="@+id/profile_info"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/profile_info"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="0dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:elevation="5dp"
-            android:layout_marginBottom="5dp">
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="0dp"
+            android:elevation="5dp">
 
             <!--<ImageView-->
             <!--android:layout_width="fill_parent"-->
@@ -45,14 +45,14 @@
 
             <ImageSwitcher
                 android:id="@+id/image_switcher"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:layout_alignParentBottom="false"
                 android:layout_alignParentLeft="false"
                 android:layout_alignParentStart="true"
-                android:layout_width="fill_parent"
-                android:scaleType="centerCrop"
-                android:layout_height="fill_parent"
                 android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"></ImageSwitcher>
+                android:layout_centerVertical="true"
+                android:scaleType="centerCrop"></ImageSwitcher>
 
             <FrameLayout
                 android:layout_width="fill_parent"
@@ -60,118 +60,118 @@
                 android:background="@drawable/transparent_black_overlay_transition"></FrameLayout>
 
             <TextView
-                android:layout_width="fill_parent"
-                android:visibility="visible"
-                android:layout_height="wrap_content"
-                android:text="Ángel Piñeiro"
                 android:id="@+id/profile_username"
+                style="@style/whiteTextWithShadow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="60dp"
+                android:fontFamily="sans-serif-light"
+                android:gravity="center"
+                android:text="Ángel Piñeiro"
+                android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textAllCaps="false"
-                android:fontFamily="sans-serif-light"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="60dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="false"
-                android:gravity="center"
-                style="@style/whiteTextWithShadow" />
+                android:visibility="visible" />
 
 
             <es.usc.citius.servando.calendula.util.view.CustomDigitalClock
+                android:id="@+id/home_clock"
+                style="@style/whiteTextWithShadow"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/home_clock"
-                android:fontFamily="sans-serif-light"
-                android:textSize="45sp"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:layout_below="@+id/profile_username"
-                android:layout_alignParentRight="false"
                 android:layout_alignParentEnd="false"
-                style="@style/whiteTextWithShadow" />
+                android:layout_alignParentRight="false"
+                android:layout_below="@+id/profile_username"
+                android:fontFamily="sans-serif-light"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="45sp" />
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="24dp"
                 android:layout_alignParentEnd="false"
-                android:layout_marginRight="24dp"
+                android:layout_alignParentLeft="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/month_text"
+                    style="@style/whiteTextWithShadow"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="OCT"
 
-                    android:id="@+id/month_text"
-                    android:layout_toStartOf="@+id/profile_image_container"
-                    android:gravity="center|top"
-                    android:textSize="20sp"
-                    android:textColor="@color/white"
-                    android:layout_toLeftOf="@+id/profile_image_container"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/day_text"
-                    android:textStyle="bold"
-                    style="@style/whiteTextWithShadow" />
+                    android:layout_toLeftOf="@+id/profile_image_container"
+                    android:layout_toStartOf="@+id/profile_image_container"
+                    android:gravity="center|top"
+                    android:text="OCT"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/day_text"
+                    style="@style/whiteTextWithShadow"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="12"
-                    android:id="@+id/day_text"
-                    android:layout_toStartOf="@+id/profile_username"
-                    android:fontFamily="sans-serif-light"
-                    android:gravity="center|bottom"
-                    android:textSize="35sp"
-                    android:textColor="@color/white"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="false"
                     android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/profile_username"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center|bottom"
                     android:padding="0dp"
-                    style="@style/whiteTextWithShadow" />
+                    android:text="12"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/white"
+                    android:textSize="35sp" />
 
 
             </LinearLayout>
 
             <com.makeramen.RoundedImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/mod_circle"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:id="@+id/mod_circle"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:src="@color/android_blue"
-                android:scaleType="centerCrop"
-                app:riv_corner_radius="30dip"
-                app:riv_border_width="1px"
-                app:riv_border_color="@color/white_50"
-                app:riv_oval="true"
-                android:layout_margin="24dp"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:visibility="gone" />
+                android:layout_alignParentRight="true"
+                android:layout_margin="24dp"
+                android:scaleType="centerCrop"
+                android:src="@color/android_blue"
+                android:visibility="gone"
+                app:riv_border_color="@color/white_50"
+                app:riv_border_width="1px"
+                app:riv_corner_radius="30dip"
+                app:riv_oval="true" />
 
             <ImageView
+                android:id="@+id/mood_button"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:id="@+id/mood_button"
-                android:scaleType="fitCenter"
-                android:padding="10dp"
-                android:visibility="gone"
-                android:layout_alignLeft="@+id/mod_circle"
-                android:layout_alignStart="@id/mod_circle"
-                android:layout_alignRight="@+id/mod_circle"
-                android:layout_alignEnd="@id/mod_circle"
                 android:layout_alignBottom="@+id/mod_circle"
+                android:layout_alignEnd="@id/mod_circle"
+                android:layout_alignLeft="@+id/mod_circle"
+                android:layout_alignRight="@+id/mod_circle"
+                android:layout_alignStart="@id/mod_circle"
+                android:layout_alignTop="@+id/mod_circle"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/mood_3"
-                android:layout_alignTop="@+id/mod_circle" />
+                android:visibility="gone" />
 
         </RelativeLayout>
 

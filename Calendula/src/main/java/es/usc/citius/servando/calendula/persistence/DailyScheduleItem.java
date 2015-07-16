@@ -53,6 +53,18 @@ public class DailyScheduleItem {
         this.time = time;
     }
 
+    public static DailyScheduleItem findById(long id) {
+        return DB.dailyScheduleItems().findById(id);
+    }
+
+    public static List<DailyScheduleItem> findAll() {
+        return DB.dailyScheduleItems().findAll();
+    }
+
+    public static DailyScheduleItem findByScheduleItem(ScheduleItem item) {
+        return DB.dailyScheduleItems().findByScheduleItem(item);
+    }
+
     public Long getId() {
         return id;
     }
@@ -117,19 +129,6 @@ public class DailyScheduleItem {
                 ", takenToday=" + takenToday +
                 ", timeTaken=" + timeTaken +
                 '}';
-    }
-
-    public static DailyScheduleItem findById(long id) {
-        return DB.dailyScheduleItems().findById(id);
-    }
-
-
-    public static List<DailyScheduleItem> findAll() {
-        return DB.dailyScheduleItems().findAll();
-    }
-
-    public static DailyScheduleItem findByScheduleItem(ScheduleItem item) {
-        return DB.dailyScheduleItems().findByScheduleItem(item);
     }
 
     public void save() {

@@ -19,18 +19,14 @@ import java.util.Calendar;
 
 public class CustomDigitalClock extends TextView {
 
-    Calendar mCalendar;
     private final static String m12 = "kk:mm";
     private final static String m24 = "kk:mm";
-
-    private FormatChangeObserver mFormatChangeObserver;
-
+    Calendar mCalendar;
+    String mFormat;
+    private FormatChangeObserver mFormatChangeObserver = new FormatChangeObserver();
     private Runnable mTicker;
     private Handler mHandler;
-
     private boolean mTickerStopped = false;
-
-    String mFormat;
 
     public CustomDigitalClock(Context context) {
         super(context);
@@ -49,7 +45,6 @@ public class CustomDigitalClock extends TextView {
             mCalendar = Calendar.getInstance();
         }
 
-        mFormatChangeObserver = new FormatChangeObserver();
         getContext().getContentResolver().registerContentObserver(Settings.System.CONTENT_URI, true, mFormatChangeObserver);
 
         setFormat();

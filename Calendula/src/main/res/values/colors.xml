@@ -8,9 +8,9 @@
     <color name="android_green">#99CC00</color>
     <color name="android_green_dark">#669900</color>
     <color name="android_green_light">#55669900</color>
-  <color name="android_green_light_noalpha">#ddB8DB57</color>
+    <color name="android_green_light_noalpha">#ddB8DB57</color>
 
-  <color name="android_orange">#FFBB33</color>
+    <color name="android_orange">#FFBB33</color>
     <color name="android_orange_dark">#FF8800</color>
     <color name="android_orange_light">#55FFBB33</color>
     <color name="android_orange_lighter">#22FFBB33</color>
@@ -28,8 +28,8 @@
     <color name="white_20">#22FFFFFF</color>
     <color name="black_20">#22000000</color>
     <color name="black_40">#44000000</color>
-  <color name="black_80">#88000000</color>
-  <color name="list_item_shadow">#112c2c2c</color>
+    <color name="black_80">#88000000</color>
+    <color name="list_item_shadow">#112c2c2c</color>
     <color name="transparent">#00000000</color>
     <color name="android_orange_darker">#884411</color>
     <color name="list_item_active">#aaececec</color>

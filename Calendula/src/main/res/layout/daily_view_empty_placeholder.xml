@@ -2,86 +2,86 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="#000">
+    android:background="#000"
+    android:orientation="vertical">
     <!--android:background="@color/android_blue_dark"-->
 
     <RelativeLayout
-        android:orientation="vertical"
+        android:id="@+id/top"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:visibility="visible"
-        android:id="@+id/top"
-        android:background="#fff">
+        android:background="#fff"
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <RelativeLayout
+            android:id="@+id/hide_if_empty"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/hide_if_empty"
-            android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:background="#fff">
 
             <Button
+                android:id="@+id/count_container"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
-                android:id="@+id/count_container"
                 android:background="@null"
                 android:visibility="gone" />
 
         </RelativeLayout>
 
         <ImageView
+            android:id="@+id/imageView_ok"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/imageView_ok"
-            android:src="@drawable/alldone"
-            android:layout_centerHorizontal="true"
             android:layout_below="@+id/textView3"
+            android:layout_centerHorizontal="true"
+            android:alpha="0.3"
             android:paddingLeft="80dp"
             android:paddingRight="60dp"
-            android:alpha="0.3" />
+            android:src="@drawable/alldone" />
 
         <TextView
+            android:id="@+id/textView3"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/home_no_pending_meds_message"
-            android:id="@+id/textView3"
-            android:textAllCaps="false"
-            android:gravity="center"
-            android:textColor="#222"
-            android:textSize="18sp"
             android:layout_alignParentLeft="false"
             android:layout_alignParentStart="false"
             android:layout_centerHorizontal="true"
-            android:paddingBottom="15dp"
-            android:paddingTop="15dp"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
             android:layout_marginLeft="0dp"
             android:layout_marginRight="0dp"
-            android:visibility="visible"
+            android:background="#aaececec"
             android:fontFamily="sans-serif-light"
-            android:background="#aaececec" />
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:paddingTop="15dp"
+            android:text="@string/home_no_pending_meds_message"
+            android:textAllCaps="false"
+            android:textColor="#222"
+            android:textSize="18sp"
+            android:visibility="visible" />
 
         <ImageView
+            android:id="@+id/tabs_shadow"
             android:layout_width="fill_parent"
             android:layout_height="5dp"
-            android:id="@+id/tabs_shadow"
-            android:src="@drawable/daily_view_list_item_tab_shadow_top"
             android:layout_below="@+id/textView3"
+            android:alpha="0.7"
             android:scaleType="fitXY"
-            android:alpha="0.7" />
+            android:src="@drawable/daily_view_list_item_tab_shadow_top" />
 
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/bottom"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:id="@+id/bottom"
         android:visibility="gone">
 
 

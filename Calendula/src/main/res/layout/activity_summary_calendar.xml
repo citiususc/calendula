@@ -15,9 +15,9 @@
 
     <com.squareup.timessquare.CalendarPickerView
         android:id="@+id/calendar_view"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp" />
 
 </RelativeLayout>

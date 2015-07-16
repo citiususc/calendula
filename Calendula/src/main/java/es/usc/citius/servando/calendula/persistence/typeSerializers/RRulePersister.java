@@ -14,8 +14,14 @@ import es.usc.citius.servando.calendula.persistence.RepetitionRule;
  */
 public class RRulePersister extends BaseDataType {
 
+    private static final RRulePersister singleton = new RRulePersister();
+
     public RRulePersister() {
         super(SqlType.STRING, new Class<?>[]{RepetitionRule.class});
+    }
+
+    public static RRulePersister getSingleton() {
+        return singleton;
     }
 
     @Override
@@ -47,12 +53,5 @@ public class RRulePersister extends BaseDataType {
             ical += "$$$" + rule.start();
         }
         return ical;
-    }
-
-
-    private static final RRulePersister singleton = new RRulePersister();
-
-    public static RRulePersister getSingleton() {
-        return singleton;
     }
 }

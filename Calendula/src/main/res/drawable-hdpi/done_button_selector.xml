@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <level-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:maxLevel="0"
-        android:drawable="@drawable/done_button_red_selector" />
+        android:drawable="@drawable/done_button_red_selector"
+        android:maxLevel="0" />
     <item
-        android:maxLevel="1"
-        android:drawable="@drawable/done_button_green_selector" />
+        android:drawable="@drawable/done_button_green_selector"
+        android:maxLevel="1" />
 </level-list>

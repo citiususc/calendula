@@ -3,73 +3,72 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/summaryTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/summary_title"
-        android:id="@+id/summaryTitle"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="20dp"
-        android:textSize="20dp"
-        android:textColor="@color/android_blue"
-        android:layout_marginRight="20dp"
+        android:layout_alignParentTop="true"
         android:layout_marginLeft="20dp"
-        android:gravity="center" />
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="@string/summary_title"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/android_blue"
+        android:textSize="20dp" />
 
     <TextView
+        android:id="@+id/sched_summary_medname"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/medicine_unselected"
-        android:id="@+id/sched_summary_medname"
-        android:layout_below="@+id/sched_summary_medicon"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/android_blue_dark"
-        android:textSize="18dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:gravity="center" />
+        android:layout_below="@+id/sched_summary_medicon"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/medicine_unselected"
+        android:textColor="@color/android_blue_dark"
+        android:textSize="18dp" />
 
     <ImageView
+        android:id="@+id/sched_summary_medicon"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:id="@+id/sched_summary_medicon"
         android:layout_below="@id/summaryTitle"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:src="@drawable/ic_presentation_2" />
 
     <TextView
+        android:id="@+id/sched_summary_medi_days"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Every day"
-        android:id="@+id/sched_summary_medi_days"
-        android:textSize="18dp"
-        android:textColor="@color/dark_grey_text"
         android:layout_below="@+id/sched_summary_medname"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
-        />
+        android:text="Every day"
+        android:textColor="@color/dark_grey_text"
+        android:textSize="18dp" />
 
-  <TextView
+    <TextView
+        android:id="@+id/sched_summary_medi_dailyfreq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Three times a day"
-        android:id="@+id/sched_summary_medi_dailyfreq"
-      android:textSize="18dp"
-        android:textColor="@color/android_blue"
         android:layout_below="@+id/sched_summary_medi_days"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:text="Three times a day"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/android_blue"
+        android:textSize="18dp" />
 
     <Button
+        android:id="@+id/button_show_calendar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/summary_show_calendar"
-        android:id="@+id/button_show_calendar"
         android:layout_below="@+id/sched_summary_medi_dailyfreq"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:text="@string/summary_show_calendar" />
 
 </RelativeLayout>

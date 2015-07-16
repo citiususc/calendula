@@ -1,18 +1,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginTop="@dimen/action_bar_height"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="es.usc.citius.servando.calendula.activities.ReminderActivity"
-    android:background="@color/white">
+    android:layout_marginTop="@dimen/action_bar_height"
+    android:background="@color/white"
+    tools:context="es.usc.citius.servando.calendula.activities.ReminderActivity">
 
     <LinearLayout
         android:id="@+id/prof_container"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:gravity="center_vertical"
         android:orientation="vertical"
-        android:gravity="center_vertical">
+        android:padding="10dp">
 
         <!--<es.usc.citius.servando.calendula.util.view.CustomDigitalClock-->
         <!--android:id="@+id/clock"-->
@@ -28,62 +28,62 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:textColor="@color/android_blue_dark"
-            android:textSize="30sp"
+            android:gravity="center"
             android:text="12:45"
-            android:gravity="center" />
+            android:textColor="@color/android_blue_dark"
+            android:textSize="30sp" />
 
         <TextView
+            android:id="@+id/routine_name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Lunch"
             android:layout_below="@+id/prof_container"
-            android:id="@+id/routine_name"
-            android:fontFamily="sans-serif-light"
             android:layout_centerInParent="true"
+            android:fontFamily="sans-serif-light"
             android:gravity="center"
+            android:text="Lunch"
             android:textColor="@color/android_blue_dark"
             android:textSize="20sp" />
 
         <TextView
+            android:id="@+id/meds_time_view"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/agenda_zoom_meds_time"
             android:layout_below="@+id/prof_container"
-            android:id="@+id/meds_time_view"
-            android:fontFamily="sans-serif-condensed"
             android:layout_centerInParent="true"
+            android:fontFamily="sans-serif-condensed"
             android:gravity="center"
+            android:text="@string/agenda_zoom_meds_time"
             android:textColor="#444"
             android:textSize="20dp" />
 
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="1px"
-            android:background="#efefef"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp" />
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="10dp"
+            android:background="#efefef" />
 
 
     </LinearLayout>
 
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/scrollView"
-        android:padding="10dp"
         android:layout_below="@+id/prof_container"
-        android:layout_toRightOf="@+id/delays_spinner"
+        android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/delays_spinner"
-        android:layout_marginTop="10dp">
+        android:layout_toRightOf="@+id/delays_spinner"
+        android:padding="10dp">
 
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/reminder_list"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/reminder_list"></LinearLayout>
+            android:orientation="vertical"></LinearLayout>
 
     </ScrollView>
 
@@ -91,54 +91,54 @@
         android:id="@+id/delays_spinner"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="@string/delay"
-        android:visibility="visible"
-        android:layout_marginRight="0dp"
         android:layout_alignParentBottom="true"
-        android:gravity="center_horizontal|center_vertical"
         android:layout_alignParentLeft="true"
-        android:spinnerMode="dialog" />
+        android:layout_marginRight="0dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:spinnerMode="dialog"
+        android:text="@string/delay"
+        android:visibility="visible" />
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="@string/done"
         android:id="@+id/reminder_done_button"
         style="@style/delay_button"
-        android:layout_marginLeft="5dp"
-        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_marginLeft="5dp"
+        android:gravity="center"
+        android:text="@string/done"
         android:visibility="gone" />
 
 
     <ImageButton
+        android:id="@+id/button"
         android:layout_width="45dp"
         android:layout_height="45dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/simple_highlight_click_selector"
+        android:padding="7dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_arrow_back_black_48dp"
         android:text="Close"
-        android:id="@+id/button"
-        android:textSize="15sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="@drawable/simple_highlight_click_selector"
-        android:padding="7dp" />
+        android:textSize="15sp" />
 
     <ImageButton
+        android:id="@+id/delay_button"
         android:layout_width="45dp"
         android:layout_height="45dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/simple_highlight_click_selector"
+        android:padding="7dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_history_black_48dp"
         android:text="Delay"
-        android:id="@+id/delay_button"
         android:textSize="15sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:visibility="visible"
-        android:background="@drawable/simple_highlight_click_selector"
-        android:padding="7dp" />
+        android:visibility="visible" />
 
 </RelativeLayout>

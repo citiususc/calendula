@@ -15,83 +15,83 @@
     <!--android:layout_marginRight="20dp" />-->
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/routine_name"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true"
         android:layout_marginLeft="72dp"
-        android:textSize="20sp"
+        android:layout_marginTop="30dp"
+        android:gravity="center_vertical"
+        android:text="@string/routine_name"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/dark_grey_text"
-        android:gravity="center_vertical" />
+        android:textSize="20sp" />
 
     <EditText
+        android:id="@+id/routine_edit_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/routine_edit_name"
         android:layout_below="@+id/textView"
-        android:layout_marginTop="24dp"
+        android:layout_marginLeft="72dp"
         android:layout_marginRight="24dp"
+        android:layout_marginTop="24dp"
         android:imeOptions="actionDone"
         android:textColor="@color/dark_grey_home"
-        android:textSize="22dp"
-        android:layout_marginLeft="72dp" />
+        android:textSize="22dp" />
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/routine_time"
-        android:id="@+id/textView2"
         android:layout_below="@+id/routine_edit_name"
-        android:layout_marginTop="20dp"
-        android:textSize="20sp"
-        android:textColor="@color/dark_grey_text"
         android:layout_marginLeft="72dp"
-        android:gravity="center_vertical" />
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:text="@string/routine_time"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/dark_grey_text"
+        android:textSize="20sp" />
 
     <Button
+        android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="18:30h"
-        android:id="@+id/button2"
-        android:textSize="35sp"
-        android:textColor="@color/android_blue"
-        android:background="@null"
-        android:layout_below="@+id/textView2"
-        android:layout_marginTop="10dp"
-        android:padding="10dp"
-        android:layout_alignRight="@+id/routine_edit_name"
         android:layout_alignEnd="@+id/routine_edit_name"
         android:layout_alignLeft="@+id/textView2"
-        android:layout_alignStart="@+id/textView2" />
+        android:layout_alignRight="@+id/routine_edit_name"
+        android:layout_alignStart="@+id/textView2"
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="10dp"
+        android:background="@null"
+        android:padding="10dp"
+        android:text="18:30h"
+        android:textColor="@color/android_blue"
+        android:textSize="35sp" />
 
     <Button
-        android:layout_width="fill_parent"
         android:id="@+id/done_button"
-        android:layout_height="50dp"
         style="@style/next_button"
-        android:text="@string/done"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:text="@string/done"
         android:visibility="gone" />
 
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:src="@drawable/ic_edit_black_48dp"
         android:layout_alignTop="@+id/textView"
-        android:layout_marginLeft="16dp" />
+        android:layout_marginLeft="16dp"
+        android:src="@drawable/ic_edit_black_48dp" />
 
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:src="@drawable/ic_alarm_black_48dp"
         android:layout_alignTop="@+id/textView2"
-        android:layout_marginLeft="16dp" />
+        android:layout_marginLeft="16dp"
+        android:src="@drawable/ic_alarm_black_48dp" />
 
 
 </RelativeLayout>

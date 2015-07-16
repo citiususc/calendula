@@ -9,6 +9,10 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
  */
 public class PersistenceEvents {
 
+    public static ModelCreateOrUpdateEvent ROUTINE_EVENT = new ModelCreateOrUpdateEvent(Routine.class);
+    public static ModelCreateOrUpdateEvent MEDICINE_EVENT = new ModelCreateOrUpdateEvent(Medicine.class);
+    public static ModelCreateOrUpdateEvent SCHEDULE_EVENT = new ModelCreateOrUpdateEvent(Schedule.class);
+
     public static class ModelCreateOrUpdateEvent {
         public Class<?> clazz;
 
@@ -16,11 +20,6 @@ public class PersistenceEvents {
             this.clazz = clazz;
         }
     }
-
-    public static ModelCreateOrUpdateEvent ROUTINE_EVENT = new ModelCreateOrUpdateEvent(Routine.class);
-    public static ModelCreateOrUpdateEvent MEDICINE_EVENT = new ModelCreateOrUpdateEvent(Medicine.class);
-    public static ModelCreateOrUpdateEvent SCHEDULE_EVENT = new ModelCreateOrUpdateEvent(Schedule.class);
-
 
     public static class MedicineAddedEvent {
 

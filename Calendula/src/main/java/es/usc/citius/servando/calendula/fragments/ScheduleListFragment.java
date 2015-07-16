@@ -16,15 +16,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+
+import java.util.List;
+
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
-import java.util.List;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -42,8 +45,7 @@ public class ScheduleListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState)
-    {
+                             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_schedule_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.schedule_list);
         mSchedules = Schedule.findAll();
@@ -55,37 +57,34 @@ public class ScheduleListFragment extends Fragment {
         return rootView;
     }
 
-    @Override public void setUserVisibleHint(boolean isVisibleToUser)
-    {
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && fabMenu != null)
-        {
+        if (isVisibleToUser && fabMenu != null) {
             fabMenu.collapse();
         }
     }
 
-    private void setupFabMenu(View rootView)
-    {
+    private void setupFabMenu(View rootView) {
         fabMenu = (FloatingActionsMenu) rootView.findViewById(R.id.fab_menu);
 
         final FloatingActionButton actionA =
-            (FloatingActionButton) rootView.findViewById(R.id.action_a);
+                (FloatingActionButton) rootView.findViewById(R.id.action_a);
         final FloatingActionButton actionB =
-            (FloatingActionButton) rootView.findViewById(R.id.action_b);
+                (FloatingActionButton) rootView.findViewById(R.id.action_b);
         final FloatingActionButton actionC =
-            (FloatingActionButton) rootView.findViewById(R.id.action_c);
+                (FloatingActionButton) rootView.findViewById(R.id.action_c);
 
         //fabMenu.addButton(actionA);
         //fabMenu.addButton(actionB);
         //fabMenu.addButton(actionC);
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
-            @Override public void onClick(View v)
-            {
+            @Override
+            public void onClick(View v) {
                 int scheduleType = -1;
                 Log.d(TAG, "Click " + v.getId());
-                switch (v.getId())
-                {
+                switch (v.getId()) {
                     case R.id.action_a:
                         scheduleType = ScheduleTypeFragment.TYPE_ROUTINES;
                         break;
@@ -110,44 +109,17 @@ public class ScheduleListFragment extends Fragment {
         actionC.setOnClickListener(onClickListener);
     }
 
-    private void launchActivity(Intent i)
-    {
+    private void launchActivity(Intent i) {
         startActivity(i);
         getActivity().overridePendingTransition(0, 0);
     }
 
-    public void notifyDataChange()
-    {
+    public void notifyDataChange() {
         Log.d(getTag(), "Schedules - Notify data change");
         new ReloadItemsTask().execute();
     }
 
-    private class ReloadItemsTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params)
-        {
-            mSchedules = Schedule.findAll();
-
-            Log.d(TAG, "Schedules after reload: " + mSchedules.size());
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid)
-        {
-            super.onPostExecute(aVoid);
-            adapter.clear();
-            for (Schedule s : mSchedules)
-            {
-                adapter.add(s);
-            }
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    private View createScheduleListItem(LayoutInflater inflater, final Schedule schedule)
-    {
+    private View createScheduleListItem(LayoutInflater inflater, final Schedule schedule) {
 
         View item = inflater.inflate(R.layout.schedules_list_item, null);
         ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
@@ -155,37 +127,32 @@ public class ScheduleListFragment extends Fragment {
         String timeStr = "";
         List<ScheduleItem> items = schedule.items();
 
-        if (schedule.type() != Schedule.SCHEDULE_TYPE_HOURLY)
-        {
+        if (schedule.type() != Schedule.SCHEDULE_TYPE_HOURLY) {
             timeStr = ScheduleUtils.getTimesStr(items != null ? items.size() : 0, getActivity());
-        } else
-        {
+        } else {
             timeStr = ScheduleUtils.getTimesStr(24 / schedule.rule().interval(), getActivity());
         }
 
 
         icon.setImageDrawable(
-            getResources().getDrawable(schedule.medicine().presentation().getDrawable()));
+                getResources().getDrawable(schedule.medicine().presentation().getDrawable()));
         ((TextView) item.findViewById(R.id.schedules_list_item_medname)).setText(
-            schedule.medicine().name());
+                schedule.medicine().name());
         ((TextView) item.findViewById(R.id.schedules_list_item_times)).setText(timeStr);
         ((TextView) item.findViewById(R.id.schedules_list_item_days)).setText(
-            schedule.toReadableString(getActivity()));
+                schedule.toReadableString(getActivity()));
 
         View overlay = item.findViewById(R.id.schedules_list_item_container);
         overlay.setTag(schedule);
 
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Schedule s = (Schedule) view.getTag();
-                if (mScheduleSelectedCallback != null && s != null)
-                {
+                if (mScheduleSelectedCallback != null && s != null) {
                     Log.d(getTag(), "Click at " + s.medicine().name() + " schedule");
                     mScheduleSelectedCallback.onScheduleSelected(s);
-                } else
-                {
+                } else {
                     Log.d(getTag(), "No callback set");
                 }
             }
@@ -193,8 +160,7 @@ public class ScheduleListFragment extends Fragment {
         overlay.setOnClickListener(clickListener);
         overlay.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onLongClick(View view)
-            {
+            public boolean onLongClick(View view) {
                 if (view.getTag() != null) showDeleteConfirmationDialog((Schedule) view.getTag());
                 return true;
             }
@@ -202,67 +168,81 @@ public class ScheduleListFragment extends Fragment {
         return item;
     }
 
-    void showDeleteConfirmationDialog(final Schedule s)
-    {
+    void showDeleteConfirmationDialog(final Schedule s) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(
-            String.format(getString(R.string.remove_medicine_message_short), s.medicine().name()))
-            .setCancelable(true)
-            .setPositiveButton(getString(R.string.dialog_yes_option),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id)
-                    {
-                        DB.schedules().deleteCascade(s, true);
-                        notifyDataChange();
-                    }
-                })
-            .setNegativeButton(getString(R.string.dialog_no_option),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id)
-                    {
-                        dialog.cancel();
-                    }
-                });
+                String.format(getString(R.string.remove_medicine_message_short), s.medicine().name()))
+                .setCancelable(true)
+                .setPositiveButton(getString(R.string.dialog_yes_option),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                DB.schedules().deleteCascade(s, true);
+                                notifyDataChange();
+                            }
+                        })
+                .setNegativeButton(getString(R.string.dialog_no_option),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
         AlertDialog alert = builder.create();
         alert.show();
     }
 
-    private class ScheduleListAdapter extends ArrayAdapter<Schedule> {
-
-        public ScheduleListAdapter(Context context, int layoutResourceId, List<Schedule> items)
-        {
-            super(context, layoutResourceId, items);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
-            final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-            return createScheduleListItem(layoutInflater, mSchedules.get(position));
-        }
-    }
-
     @Override
-    public void onAttach(Activity activity)
-    {
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
 
         Log.d(getTag(), "Activity "
-            + activity.getClass().getName()
-            + ", "
-            + (activity instanceof OnScheduleSelectedListener));
+                + activity.getClass().getName()
+                + ", "
+                + (activity instanceof OnScheduleSelectedListener));
         // If the container activity has implemented
         // the callback interface, set it as listener
-        if (activity instanceof OnScheduleSelectedListener)
-        {
+        if (activity instanceof OnScheduleSelectedListener) {
             mScheduleSelectedCallback = (OnScheduleSelectedListener) activity;
         }
     }
 
     // Container Activity must implement this interface
     public interface OnScheduleSelectedListener {
-        public void onScheduleSelected(Schedule r);
+        void onScheduleSelected(Schedule r);
 
-        public void onCreateSchedule();
+        void onCreateSchedule();
+    }
+
+    private class ReloadItemsTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            mSchedules = Schedule.findAll();
+
+            Log.d(TAG, "Schedules after reload: " + mSchedules.size());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            adapter.clear();
+            for (Schedule s : mSchedules) {
+                adapter.add(s);
+            }
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    private class ScheduleListAdapter extends ArrayAdapter<Schedule> {
+
+        public ScheduleListAdapter(Context context, int layoutResourceId, List<Schedule> items) {
+            super(context, layoutResourceId, items);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
+            return createScheduleListItem(layoutInflater, mSchedules.get(position));
+        }
     }
 }

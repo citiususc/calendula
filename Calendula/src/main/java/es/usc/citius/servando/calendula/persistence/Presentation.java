@@ -22,7 +22,7 @@ public enum Presentation {
 
     UNKNOWN(R.drawable.ic_presentation_6, R.string.unknown, R.string.unknown_units);
 
-    private int drawable = R.drawable.ic_presentation_1;
+    private int drawable = R.drawable.icp_injection;
     private int nameString = R.string.unknown;
     private int unitsString = R.string.unknown_units;
 

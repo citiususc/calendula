@@ -4,104 +4,104 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
+        android:id="@+id/medicines_list_item_container"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/medicines_list_item_container"
         android:background="@drawable/touchable_white">
 
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="1px"
 
-            android:background="#efefef"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp"
+            android:background="#efefef" />
 
 
         <ImageButton
+            android:id="@+id/imageButton"
             android:layout_width="30dp"
             android:layout_height="70dp"
-            android:id="@+id/imageButton"
-            android:src="@drawable/ic_presentation_2"
-            android:background="@null"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="false"
-            android:layout_marginLeft="26dp"
-            android:scaleType="fitStart"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="15dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Atrovent with another thing here"
-            android:fontFamily="sans-serif-light"
-            android:id="@+id/medicines_list_item_name"
-            android:textColor="#222"
-            android:textSize="20sp"
-            android:layout_alignTop="@+id/imageButton"
-            android:layout_toRightOf="@+id/imageButton"
-            android:layout_toEndOf="@+id/imageButton"
             android:layout_marginLeft="26dp"
-            android:layout_toLeftOf="@+id/drive_icon"
-            android:layout_toStartOf="@+id/drive_icon" />
+            android:layout_marginTop="15dp"
+            android:background="@null"
+            android:scaleType="fitStart"
+            android:src="@drawable/ic_presentation_2" />
 
         <TextView
+            android:id="@+id/medicines_list_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/no_stock_info_msg"
+            android:layout_alignTop="@+id/imageButton"
+            android:layout_marginLeft="26dp"
+            android:layout_toEndOf="@+id/imageButton"
+            android:layout_toLeftOf="@+id/drive_icon"
+            android:layout_toRightOf="@+id/imageButton"
+            android:layout_toStartOf="@+id/drive_icon"
+            android:fontFamily="sans-serif-light"
+            android:text="Atrovent with another thing here"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#222"
+            android:textSize="20sp" />
+
+        <TextView
             android:id="@+id/textView"
-            android:layout_below="@+id/medicines_list_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/medicines_list_item_name"
             android:layout_alignStart="@+id/medicines_list_item_name"
-            android:textColor="@color/android_blue"
+            android:layout_below="@+id/medicines_list_item_name"
+            android:layout_marginBottom="10dp"
             android:fontFamily="sans-serif-condensed"
-            android:layout_marginBottom="10dp" />
+            android:text="@string/no_stock_info_msg"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/android_blue" />
 
         <ImageView
+            android:id="@+id/drive_icon"
             android:layout_width="50dp"
             android:layout_height="60dp"
-            android:id="@+id/drive_icon"
-            android:src="@drawable/ic_warning_amber_48dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@+id/imageView"
             android:alpha="0.9"
             android:background="@drawable/simple_highlight_click_selector"
-            android:layout_toLeftOf="@+id/imageView"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:padding="10dp"
+            android:src="@drawable/ic_warning_amber_48dp"
             android:visibility="invisible" />
 
         <ImageView
+            android:id="@+id/imageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:id="@+id/imageView"
-            android:src="@drawable/icprospect"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
             android:alpha="0.9"
+            android:background="@drawable/simple_highlight_click_selector"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
-            android:background="@drawable/simple_highlight_click_selector"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp" />
+            android:src="@drawable/icprospect" />
 
         <ImageView
+            android:id="@+id/download_indicator"
             android:layout_width="22dp"
             android:layout_height="22dp"
-            android:id="@+id/download_indicator"
-            android:src="@drawable/ic_get_app_white_48dp"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
-            android:scaleType="fitCenter"
             android:layout_marginTop="42dp"
             android:background="@drawable/white_circle"
-            android:padding="3dp" />
+            android:padding="3dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_get_app_white_48dp" />
 
     </RelativeLayout>
 

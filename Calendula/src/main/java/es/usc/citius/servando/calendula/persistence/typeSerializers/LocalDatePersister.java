@@ -16,10 +16,15 @@ import java.sql.SQLException;
  */
 public class LocalDatePersister extends BaseDataType {
 
+    private static final LocalDatePersister singleton = new LocalDatePersister();
     String format = "ddMMYYYY";
 
     public LocalDatePersister() {
         super(SqlType.STRING, new Class<?>[]{LocalTime.class});
+    }
+
+    public static LocalDatePersister getSingleton() {
+        return singleton;
     }
 
     @Override
@@ -40,12 +45,5 @@ public class LocalDatePersister extends BaseDataType {
     @Override
     public Object javaToSqlArg(FieldType fieldType, Object javaObject) throws SQLException {
         return ((LocalDate) javaObject).toString(format);
-    }
-
-
-    private static final LocalDatePersister singleton = new LocalDatePersister();
-
-    public static LocalDatePersister getSingleton() {
-        return singleton;
     }
 }
