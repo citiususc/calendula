@@ -5,7 +5,7 @@ import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
+import android.content.res.Configuration;
 import android.util.Log;
 
 import org.joda.time.DateTime;
@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Locale;
 
 import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
@@ -96,8 +97,16 @@ public class CalendulaApp extends Application {
             }
         }).start();
 
-        exportDatabase(this, DB.DB_NAME,
-                new File(Environment.getExternalStorageDirectory() + File.separator + DB.DB_NAME));
+        // exportDatabase(this, DB.DB_NAME, new File(Environment.getExternalStorageDirectory() + File.separator + DB.DB_NAME));
+        //forceLocale(Locale.GERMAN);
+    }
+
+    private void forceLocale(Locale l) {
+        Locale locale = new Locale(l.getLanguage());
+        Locale.setDefault(locale);
+        Configuration config = getApplicationContext().getResources().getConfiguration();
+        config.locale = locale;
+        getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
     }
 
     public void initializeDatabase() {

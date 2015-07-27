@@ -125,7 +125,7 @@ public class HomeActivity extends ActionBarActivity
         tabs.setDividerColor(getResources().getColor(R.color.white_50));
         tabs.setDividerColor(getResources().getColor(R.color.transparent));
         tabs.setIndicatorHeight(getResources().getDimensionPixelSize(R.dimen.tab_indicator_height));
-
+        tabs.setScrollOffset(50);
         tabs.setIndicatorColor(getResources().getColor(R.color.white));
         tabs.setTextColor(getResources().getColor(R.color.white_80));
         tabs.setUnderlineColor(getResources().getColor(R.color.transparent));

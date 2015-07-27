@@ -245,11 +245,11 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="45dp"
+                        android:layout_width="100dp"
                         android:layout_height="40dp"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:gravity="center"
+                        android:gravity="center|right"
                         android:text="@string/take"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="#444"
@@ -292,12 +292,12 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:layout_width="45dp"
+                        android:layout_width="100dp"
                         android:layout_height="40dp"
                         android:layout_alignTop="@+id/hourinterval_edit_text"
                         android:layout_toEndOf="@+id/hourinterval_edit_text"
                         android:layout_toRightOf="@+id/hourinterval_edit_text"
-                        android:gravity="center"
+                        android:gravity="center|left"
                         android:text="@string/hours"
                         android:textColor="#444"
                         android:textSize="15dp" />
