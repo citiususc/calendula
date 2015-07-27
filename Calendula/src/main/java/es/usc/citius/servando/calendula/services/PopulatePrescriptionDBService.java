@@ -18,14 +18,7 @@ public class PopulatePrescriptionDBService {
 
 
     public static final String DB_VERSION_KEY = "AEMPS_DB_VERSION";
-    public static final String TAG = "PopulatePrescriptionDBService.class";
-
-//    /**
-//     * Creates an IntentService.  Invoked by your subclass's constructor.
-//     */
-//    public PopulatePrescriptionDBService() {
-//        super("PopulatePrescriptionDBService");
-//    }
+    public static final String TAG = "PopulatePrescriptionDB";
 
 
     public void updateIfNeeded(Context ctx) {
@@ -42,12 +35,6 @@ public class PopulatePrescriptionDBService {
             Log.d(TAG, "Do not need to update prescription database");
         }
     }
-
-//    public static boolean needUpdate(Context ctx){
-//        final int manifestVersion = getAempDbVersionFromManifest(ctx);
-//        final int currentVersion = getAempDbVersionFromPreferences(ctx);
-//        return (currentVersion < manifestVersion);
-//    }
 
     public int getAempDbVersionFromPreferences(Context ctx) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -68,10 +55,4 @@ public class PopulatePrescriptionDBService {
         }
         return databaseVersion;
     }
-
-//    @Override
-//    protected void onHandleIntent(Intent intent) {
-//        Log.d(TAG, "onHandleIntent");
-//        updateIfNeeded(this);
-//    }
 }
