@@ -237,6 +237,24 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
         finish();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (searchView.getVisibility() == View.VISIBLE) {
+            hideSearchView();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    Fragment getViewPagerFragment(int position) {
+        return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
+    }
 
     /**
      * A {@link android.support.v4.app.FragmentPagerAdapter} that returns a fragment corresponding to
@@ -266,28 +284,7 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
 
     }
 
-    @Override
-    public void onBackPressed() {
-        if (searchView.getVisibility() == View.VISIBLE) {
-            hideSearchView();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-
-    Fragment getViewPagerFragment(int position) {
-        return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        overridePendingTransition(0, 0);
-    }
-
     // Search adapter
-
 
     public class AutoCompleteAdapter extends ArrayAdapter<Prescription> implements Filterable {
         private List<Prescription> mData;

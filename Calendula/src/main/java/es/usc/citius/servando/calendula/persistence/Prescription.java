@@ -30,36 +30,26 @@ public class Prescription {
     public static final String COLUMN_GENERIC = "Generic";
     public static final String COLUMN_PROSPECT = "Prospect";
     public static final String COLUMN_AFFECT_DRIVING = "Affectdriving";
-
-    @DatabaseField(columnName = COLUMN_ID, generatedId = true)
-    private Long id;
-
     @DatabaseField(columnName = COLUMN_PID)
     public String pid;
-
     @DatabaseField(columnName = COLUMN_CN)
     public String cn;
-
     @DatabaseField(columnName = COLUMN_NAME)
     public String name;
-
     @DatabaseField(columnName = COLUMN_DOSE)
     public String dose;
-
     @DatabaseField(columnName = COLUMN_CONTENT)
     public String content;
-
     @DatabaseField(columnName = COLUMN_PACK_UNITS)
     public Float packagingUnits;
-
     @DatabaseField(columnName = COLUMN_GENERIC)
     public boolean generic;
-
     @DatabaseField(columnName = COLUMN_PROSPECT)
     public boolean hasProspect;
-
     @DatabaseField(columnName = COLUMN_AFFECT_DRIVING)
     public boolean affectsDriving;
+    @DatabaseField(columnName = COLUMN_ID, generatedId = true)
+    private Long id;
 
     public static Prescription fromCsv(String csvLine, String separator) {
         String[] values = csvLine.split(separator);
@@ -88,10 +78,7 @@ public class Prescription {
     }
 
     private static boolean getBoolean(String s) {
-        if (s.contains("1")) {
-            return true;
-        }
-        return false;
+        return s.contains("1");
     }
 
     public static int count() {
@@ -100,6 +87,15 @@ public class Prescription {
 
     public static boolean empty() {
         return count() <= 0;
+    }
+
+    public static List<Prescription> findByName(String name, int limit) {
+        Log.d("Prescription", "Query by name: " + name);
+        return DB.prescriptions().like(COLUMN_NAME, name + "%", Long.valueOf(limit));
+    }
+
+    public static Prescription findByCn(String cn) {
+        return DB.prescriptions().findOneBy(COLUMN_CN, cn);
     }
 
     public String shortName() {
@@ -118,15 +114,6 @@ public class Prescription {
 
     public Presentation expectedPresentation() {
         return Presentation.expected(name, content);
-    }
-
-    public static List<Prescription> findByName(String name, int limit) {
-        Log.d("Prescription", "Query by name: " + name);
-        return DB.prescriptions().like(COLUMN_NAME, name + "%", Long.valueOf(limit));
-    }
-
-    public static Prescription findByCn(String cn) {
-        return DB.prescriptions().findOneBy(COLUMN_CN, cn);
     }
 
     public boolean isProspectDownloaded(Context ctx) {

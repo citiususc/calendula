@@ -2,8 +2,8 @@
 
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true" android:drawable="@color/android_green_dark" />
-    <item android:state_selected="true" android:drawable="@color/android_green_dark" />
+    <item android:drawable="@color/android_green_dark" android:state_pressed="true" />
+    <item android:drawable="@color/android_green_dark" android:state_selected="true" />
     <item android:drawable="@color/android_green" />
 </selector>
 

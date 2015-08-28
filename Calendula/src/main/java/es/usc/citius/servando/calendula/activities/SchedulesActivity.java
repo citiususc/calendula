@@ -120,6 +120,24 @@ public class SchedulesActivity extends ActionBarActivity implements ScheduleList
         }
     }//onActivityResult
 
+    @Override
+    public void onBackPressed() {
+        if (mViewPager.getCurrentItem() != 0) {
+            mViewPager.setCurrentItem(0);
+            setTitle(R.string.title_activity_schedule_list);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    Fragment getViewPagerFragment(int position) {
+        return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
+    }
+
+    private void launchActivity(Class activityCls) {
+        Intent intent = new Intent(this, activityCls);
+        startActivity(intent);
+    }
 
     /**
      * A {@link android.support.v4.app.FragmentPagerAdapter} that returns a fragment corresponding to
@@ -144,26 +162,6 @@ public class SchedulesActivity extends ActionBarActivity implements ScheduleList
             // Show 1 total pages.
             return 1;
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mViewPager.getCurrentItem() != 0) {
-            mViewPager.setCurrentItem(0);
-            setTitle(R.string.title_activity_schedule_list);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-
-    Fragment getViewPagerFragment(int position) {
-        return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
-    }
-
-    private void launchActivity(Class activityCls) {
-        Intent intent = new Intent(this, activityCls);
-        startActivity(intent);
     }
 
 }

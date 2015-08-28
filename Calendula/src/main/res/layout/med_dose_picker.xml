@@ -2,52 +2,52 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ppv="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_vertical"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
     <LinearLayout
         android:id="@+id/pickers_layout"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <NumberPicker
+            android:id="@+id/dosePickerInteger"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/dosePickerInteger" />
+            android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="+"
-            android:id="@+id/textView"
-            android:textStyle="bold"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="10dp"
+            android:text="+"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold" />
 
         <NumberPicker
+            android:id="@+id/dosePickerDecimal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/dosePickerDecimal" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
 
     <LinearLayout
         android:id="@+id/picker_progress"
-        android:padding="20dp"
-
-        android:layout_below="@id/pickers_layout"
-        android:orientation="horizontal"
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:layout_below="@id/pickers_layout"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="20dp">
 
         <!--<TextView-->
         <!--android:layout_width="wrap_content"-->
@@ -61,36 +61,36 @@
         <!--android:layout_marginRight="10dp" />-->
 
         <com.filippudak.ProgressPieView.ProgressPieView
+            android:id="@+id/progressPieView"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_margin="5dp"
-            android:textSize="20sp"
-            ppv:ppvStrokeWidth="1dp"
-            ppv:ppvStrokeColor="@color/android_blue"
-            android:textColor="@color/android_blue_darker"
             android:layout_gravity="center"
-            android:id="@+id/progressPieView" />
+            android:layout_margin="5dp"
+            android:textColor="@color/android_blue_darker"
+            android:textSize="20sp"
+            ppv:ppvStrokeColor="@color/android_blue"
+            ppv:ppvStrokeWidth="1dp" />
 
         <TextView
+            android:id="@+id/text_progress_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="+"
-            android:id="@+id/text_progress_2"
-            android:textStyle="bold"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="10dp"
+            android:text="+"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold" />
 
         <com.filippudak.ProgressPieView.ProgressPieView
+            android:id="@+id/progressPieView2"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_margin="5dp"
-            android:textSize="20sp"
-            ppv:ppvStrokeWidth="1dp"
-            ppv:ppvStrokeColor="@color/android_blue"
-            android:textColor="@color/android_blue_darker"
             android:layout_gravity="center"
-            android:id="@+id/progressPieView2" />
+            android:layout_margin="5dp"
+            android:textColor="@color/android_blue_darker"
+            android:textSize="20sp"
+            ppv:ppvStrokeColor="@color/android_blue"
+            ppv:ppvStrokeWidth="1dp" />
 
     </LinearLayout>
 

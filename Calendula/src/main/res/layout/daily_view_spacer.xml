@@ -6,35 +6,35 @@
     <!--android:background="@color/android_blue_dark"-->
 
     <RelativeLayout
+        android:id="@+id/bottom"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:id="@+id/bottom"
         android:visibility="invisible">
 
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:orientation="vertical"
+        android:id="@+id/top"
         android:layout_width="match_parent"
         android:layout_height="215dp"
-        android:visibility="visible"
-        android:id="@+id/top"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
 
-        android:layout_gravity="bottom">
+        android:visibility="visible">
 
         <RelativeLayout
+            android:id="@+id/hide_if_empty"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/hide_if_empty"
             android:layout_marginBottom="5dp">
 
             <Button
+                android:id="@+id/count_container"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
-                android:id="@+id/count_container"
                 android:background="@null"
                 android:visibility="gone" />
 

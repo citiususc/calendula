@@ -14,8 +14,6 @@ import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
-;
-
 /**
  * Created by joseangel.pineiro on 7/8/14.
  */

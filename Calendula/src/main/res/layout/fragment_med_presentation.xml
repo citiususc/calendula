@@ -5,12 +5,12 @@
     android:layout_height="match_parent">
 
     <HorizontalScrollView
+        android:id="@+id/med_presentation_scroll"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:scrollbars="none"
         android:layout_centerHorizontal="true"
-        android:id="@+id/med_presentation_scroll">
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -21,190 +21,190 @@
 
 
             <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
                 android:id="@+id/med_presentation_2"
-                android:tag="med_type"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:adjustViewBounds="false"
+                android:alpha="1"
+                android:baselineAlignBottom="false"
+                android:clickable="false"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/icp_capsule"
-                android:baselineAlignBottom="false"
-                android:clickable="false"
-                android:scaleType="fitCenter"
-                android:layout_marginLeft="1dp"
-                android:alpha="1"
-                android:padding="20dp"
-                android:adjustViewBounds="false"
-                android:layout_marginRight="1dp" />
+                android:tag="med_type" />
 
             <ImageView
-                android:layout_width="80dp"
-                android:tag="med_type"
-                android:layout_height="80dp"
                 android:id="@+id/med_presentation_3"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:adjustViewBounds="false"
+                android:alpha="1"
+                android:baselineAlignBottom="false"
+                android:clickable="false"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/icp_effervescent"
-                android:baselineAlignBottom="false"
-                android:clickable="false"
-                android:scaleType="fitCenter"
-                android:layout_marginLeft="1dp"
-                android:alpha="1"
-                android:padding="20dp"
-                android:adjustViewBounds="false"
-                android:layout_marginRight="1dp" />
+                android:tag="med_type" />
 
             <ImageView
-                android:layout_width="80dp"
-                android:tag="med_type"
-                android:layout_height="80dp"
                 android:id="@+id/med_presentation_4"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:adjustViewBounds="false"
+                android:alpha="1"
+                android:baselineAlignBottom="false"
+                android:clickable="false"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/icp_pill"
-                android:baselineAlignBottom="false"
-                android:clickable="false"
-                android:scaleType="fitCenter"
-                android:layout_marginLeft="1dp"
-                android:alpha="1"
-                android:padding="20dp"
-                android:adjustViewBounds="false"
-                android:layout_marginRight="1dp" />
+                android:tag="med_type" />
 
             <ImageView
-                android:layout_width="80dp"
-                android:tag="med_type"
-                android:layout_height="80dp"
                 android:id="@+id/med_presentation_5"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:adjustViewBounds="false"
+                android:alpha="1"
+                android:baselineAlignBottom="false"
+                android:clickable="false"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/icp_syrup"
-                android:baselineAlignBottom="false"
-                android:clickable="false"
-                android:scaleType="fitCenter"
-                android:layout_marginLeft="1dp"
-                android:alpha="1"
-                android:padding="20dp"
-                android:adjustViewBounds="false"
-                android:layout_marginRight="1dp" />
+                android:tag="med_type" />
 
             <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:tag="med_type"
                 android:id="@+id/med_presentation_6"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:adjustViewBounds="false"
+                android:alpha="1"
+                android:baselineAlignBottom="false"
+                android:clickable="false"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/icp_drop"
-                android:baselineAlignBottom="false"
-                android:clickable="false"
-                android:scaleType="fitCenter"
-                android:layout_marginLeft="1dp"
-                android:alpha="1"
-                android:padding="20dp"
-                android:adjustViewBounds="false"
-                android:layout_marginRight="1dp" />
+                android:tag="med_type" />
 
             <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:tag="med_type"
                 android:id="@+id/med_presentation_7"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:adjustViewBounds="false"
+                android:alpha="1"
+                android:baselineAlignBottom="false"
+                android:clickable="false"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/icp_nasalspray"
-                android:baselineAlignBottom="false"
-                android:clickable="false"
-                android:scaleType="fitCenter"
-                android:layout_marginLeft="1dp"
-                android:alpha="1"
-                android:padding="20dp"
-                android:adjustViewBounds="false"
-                android:layout_marginRight="1dp" />
+                android:tag="med_type" />
 
             <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:tag="med_type"
                 android:id="@+id/med_presentation_8"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:adjustViewBounds="false"
+                android:alpha="1"
+                android:baselineAlignBottom="false"
+                android:clickable="false"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/icp_inhaler"
-                android:baselineAlignBottom="false"
-                android:clickable="false"
-                android:scaleType="fitCenter"
-                android:layout_marginLeft="1dp"
-                android:alpha="1"
-                android:padding="20dp"
-                android:adjustViewBounds="false"
-                android:layout_marginRight="1dp" />
+                android:tag="med_type" />
 
             <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
                 android:id="@+id/med_presentation_10"
-                android:src="@drawable/ic_ppomade"
-                android:baselineAlignBottom="false"
-                android:clickable="false"
-                android:scaleType="fitCenter"
-                android:tag="med_type"
-                android:alpha="1"
-                android:padding="20dp"
-                android:adjustViewBounds="false"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp" />
-
-            <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:id="@+id/med_presentation_9"
-                android:src="@drawable/icp_injection"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:adjustViewBounds="false"
+                android:alpha="1"
                 android:baselineAlignBottom="false"
                 android:clickable="false"
-                android:scaleType="fitCenter"
-                android:tag="med_type"
-                android:alpha="1"
                 android:padding="20dp"
-                android:adjustViewBounds="false"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_ppomade"
+                android:tag="med_type" />
+
+            <ImageView
+                android:id="@+id/med_presentation_9"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp" />
+                android:layout_marginRight="1dp"
+                android:adjustViewBounds="false"
+                android:alpha="1"
+                android:baselineAlignBottom="false"
+                android:clickable="false"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icp_injection"
+                android:tag="med_type" />
 
 
         </LinearLayout>
     </HorizontalScrollView>
 
     <ImageView
-        android:layout_width="1dp"
-        android:layout_height="1dp"
         android:id="@+id/imageView3l"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:layout_margin="0dp"
+        android:adjustViewBounds="false"
+        android:cropToPadding="false"
+        android:scaleType="fitXY"
         android:src="@drawable/presentation_box_left"
-        android:adjustViewBounds="false"
-        android:cropToPadding="false"
-        android:scaleType="fitXY"
-        android:visibility="gone"
-        android:layout_margin="0dp" />
+        android:visibility="gone" />
 
     <ImageView
-        android:layout_width="1dp"
-        android:layout_height="1dp"
         android:id="@+id/imageView3r"
-        android:src="@drawable/presentation_box_right"
-        android:adjustViewBounds="false"
-        android:layout_alignParentRight="true"
-        android:cropToPadding="false"
-        android:scaleType="fitXY"
-        android:visibility="gone"
-        android:layout_margin="0dp" />
-
-    <ImageView
         android:layout_width="1dp"
         android:layout_height="1dp"
-        android:id="@+id/imageView4t"
-        android:src="@drawable/presentation_box_shadow_top"
+        android:layout_alignParentRight="true"
+        android:layout_margin="0dp"
+        android:adjustViewBounds="false"
+        android:cropToPadding="false"
         android:scaleType="fitXY"
+        android:src="@drawable/presentation_box_right"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/imageView4t"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:layout_margin="0dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginTop="4dp"
-        android:visibility="gone"
-        android:layout_margin="0dp" />
+        android:scaleType="fitXY"
+        android:src="@drawable/presentation_box_shadow_top"
+        android:visibility="gone" />
 
     <ImageView
+        android:id="@+id/imageView4b"
         android:layout_width="1dp"
         android:layout_height="1dp"
-        android:id="@+id/imageView4b"
-        android:src="@drawable/presentation_box_shadow_bottom"
-        android:scaleType="fitXY"
+        android:layout_alignParentBottom="false"
+        android:layout_margin="0dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:layout_alignParentBottom="false"
         android:layout_marginTop="113dp"
-        android:visibility="gone"
-        android:layout_margin="0dp" />
+        android:scaleType="fitXY"
+        android:src="@drawable/presentation_box_shadow_bottom"
+        android:visibility="gone" />
 
 </RelativeLayout>

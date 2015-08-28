@@ -4,13 +4,13 @@
     android:background="@color/android_blue_darker">
 
     <ListView
-        android:layout_marginTop="@dimen/fragment_tabs_margin_top"
+        android:id="@+id/medicines_list"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
+        android:layout_marginTop="@dimen/fragment_tabs_margin_top"
+        android:background="#fcfcfc"
         android:divider="#E0EAEF"
         android:dividerHeight="0dp"
-        android:background="#fcfcfc"
-        android:id="@+id/medicines_list"
         android:scrollbars="none" />
 
     <!--<ImageView-->

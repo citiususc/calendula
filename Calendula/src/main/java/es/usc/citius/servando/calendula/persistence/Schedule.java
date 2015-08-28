@@ -27,6 +27,7 @@ import es.usc.citius.servando.calendula.persistence.typeSerializers.RRulePersist
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 
+
 /**
  * Created by joseangel.pineiro
  */
@@ -116,8 +117,7 @@ public class Schedule {
         this.medicine = medicine;
     }
 
-    public Schedule(Medicine medicine, boolean[] days)
-    {
+    public Schedule(Medicine medicine, boolean[] days) {
         this.medicine = medicine;
         setDays(days);
     }
@@ -127,13 +127,11 @@ public class Schedule {
         return id;
     }
 
-    public void setId(Long id)
-    {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public List<ScheduleItem> items()
-    {
+    public List<ScheduleItem> items() {
         return DB.scheduleItems().findBySchedule(this);
     }
 
@@ -164,40 +162,52 @@ public class Schedule {
         rrule.setDays(days);
     }
 
-    public LocalDate start()
-    {
+    public LocalDate start() {
         return start;
     }
 
-    public void setStart(LocalDate start)
-    {
+    public void setStart(LocalDate start) {
         this.start = start;
     }
 
-    public float dose()
-    {
+    public float dose() {
         return dose;
     }
 
-    public void setDose(float dose)
+    // *************************************
+    // DB queries
+    // *************************************
+
+    public static List<Schedule> findAll()
     {
+        return DB.schedules().findAll();
+    }
+
+    public static List<Schedule> findByMedicine(Medicine med)
+    {
+        return DB.schedules().findByMedicine(med);
+    }
+
+    public static Schedule findById(long id)
+    {
+        return DB.schedules().findById(id);
+    }
+    
+
+    public void setDose(float dose) {
         this.dose = dose;
     }
 
-    public boolean enabledForDate(LocalDate date)
-    {
+    public boolean enabledForDate(LocalDate date) {
 
-        if (type == SCHEDULE_TYPE_CYCLE)
-        {
+        if (type == SCHEDULE_TYPE_CYCLE) {
             return cycleEnabledForDate(date);
-        } else
-        {
+        } else {
             return rrule.hasOccurrencesAt(date);
         }
     }
 
-    private boolean cycleEnabledForDate(LocalDate date)
-    {
+    private boolean cycleEnabledForDate(LocalDate date) {
         return ScheduleHelper.cycleEnabledForDate(date, start, getCycleDays(), getCycleRest());
     }
 
@@ -212,7 +222,7 @@ public class Schedule {
         if (rule().frequency() == Frequency.HOURLY)
         {
             return ctx.getString(R.string.repeat_every_tostr, rule().interval(),
-                ctx.getString(R.string.hours));
+                    ctx.getString(R.string.hours));
         } else if (type == SCHEDULE_TYPE_CYCLE)
         {
             return getCycleDays() + " + " + getCycleRest();
@@ -243,77 +253,40 @@ public class Schedule {
         }
     }
 
-    // *************************************
-    // DB queries
-    // *************************************
-
-    public static List<Schedule> findAll()
-    {
-        return DB.schedules().findAll();
-    }
-
-    public static List<Schedule> findByMedicine(Medicine med)
-    {
-        return DB.schedules().findByMedicine(med);
-    }
-
-    public static Schedule findById(long id)
-    {
-        return DB.schedules().findById(id);
-    }
-
-    public void save()
-    {
+    public void save() {
         DB.schedules().save(this);
     }
 
-    public void deleteCascade()
-    {
+    public void deleteCascade() {
         DB.schedules().deleteCascade(this, false);
     }
 
-    public boolean[] getLegacyDays()
-    {
+    public boolean[] getLegacyDays() {
         return days;
     }
 
-    public boolean allDaysSelected()
-    {
+    public boolean allDaysSelected() {
         for (boolean d : days())
             if (!d) return false;
         return true;
     }
 
-    public boolean repeatsHourly()
-    {
+    public boolean repeatsHourly() {
         return type == SCHEDULE_TYPE_HOURLY;
     }
 
-    public int dayCount()
-    {
+    public int dayCount() {
         int count = 0;
         for (boolean d : days())
             if (d) count += 1;
         return count;
     }
 
-    public void toggleSelectedDay(int i)
-    {
+    public void toggleSelectedDay(int i) {
         boolean[] d = days();
         d[i] = !d[i];
         rrule.setDays(d);
         Log.d("Schedule", "Days: " + Arrays.toString(days()));
-    }
-
-    public LocalDate end()
-    {
-        DateValue v = rrule.iCalRule().getUntil();
-        return v != null ? new LocalDate(v.year(), v.month(), v.day()) : null;
-    }
-
-    public LocalTime startTime()
-    {
-        return startTime;
     }
     //    final int[] byHour = rule().iCalRule().getByHour();
     //    if (byHour != null && byHour.length == 1)
@@ -327,29 +300,36 @@ public class Schedule {
     //    return null;
     //}
 
-    public void setStartTime(LocalTime t)
-    {
+    public LocalDate end() {
+        DateValue v = rrule.iCalRule().getUntil();
+        return v != null ? new LocalDate(v.year(), v.month(), v.day()) : null;
+    }
+
+    public LocalTime startTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalTime t) {
         startTime = t;
 
         //rule().iCalRule().setByHour(new int[] { t.getHourOfDay() });
         //rule().iCalRule().setByMinute(new int[] { t.getMinuteOfHour() });
     }
 
-    public DateValue until()
-    {
+    public DateValue until() {
         return rrule.iCalRule().getUntil();
     }
 
-    @Override public String toString()
-    {
+    @Override
+    public String toString() {
         return "Schedule{" +
-            "id=" + id +
-            ", medicine=" + medicine +
-            ", rrule=" + rrule.toIcal() +
-            ", start=" + start +
-            ", dose=" + dose +
-            ", type=" + type +
-            '}';
+                "id=" + id +
+                ", medicine=" + medicine +
+                ", rrule=" + rrule.toIcal() +
+                ", start=" + start +
+                ", dose=" + dose +
+                ", type=" + type +
+                '}';
     }
 
     public static final boolean[] noWeekDays()
@@ -362,60 +342,47 @@ public class Schedule {
         return new boolean[] { true, true, true, true, true, true, true };
     }
 
-    public String displayDose()
-    {
+    public String displayDose() {
         int integerPart = (int) dose;
         double fraction = dose - integerPart;
 
         String fractionRational;
-        if (fraction == 0.125)
-        {
+        if (fraction == 0.125) {
             fractionRational = "1/8";
-        } else if (fraction == 0.25)
-        {
+        } else if (fraction == 0.25) {
             fractionRational = "1/4";
-        } else if (fraction == 0.5)
-        {
+        } else if (fraction == 0.5) {
             fractionRational = "1/2";
-        } else if (fraction == 0.75)
-        {
+        } else if (fraction == 0.75) {
             fractionRational = "3/4";
-        } else if (fraction == 0)
-        {
+        } else if (fraction == 0) {
             return "" + ((int) dose);
-        } else
-        {
+        } else {
             return "" + dose;
         }
         return integerPart + "+" + fractionRational;
     }
 
-    public DateTime startDateTime()
-    {
+    public DateTime startDateTime() {
         LocalDate s = start != null ? start : LocalDate.now();
         LocalTime t = startTime != null ? startTime : LocalTime.MIDNIGHT;
         return s.toDateTime(t);
     }
 
-    public void setCycle(int days, int rest)
-    {
+    public void setCycle(int days, int rest) {
         this.cycle = days + "," + rest;
     }
 
-    public int getCycleDays()
-    {
-        if (cycle == null)
-        {
+    public int getCycleDays() {
+        if (cycle == null) {
             return 0;
         }
         String[] parts = cycle.split(",");
         return Integer.valueOf(parts[0]);
     }
 
-    public int getCycleRest()
-    {
-        if (cycle == null)
-        {
+    public int getCycleRest() {
+        if (cycle == null) {
             return 0;
         }
         String[] parts = cycle.split(",");

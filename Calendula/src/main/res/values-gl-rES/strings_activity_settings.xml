@@ -1,0 +1,30 @@
+<resources>
+
+    <string-array name="pref_alarm_repeat_titles">
+        <item>Cada 5 min</item>
+        <item>Cada 15 min</item>
+        <item>Cada media hora</item>
+        <item>Cada hora</item>
+    </string-array>
+
+    <string-array name="pref_alarm_repeat_values">
+        <item>5</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+    </string-array>
+
+    <string-array name="pref_alarm_reminder_window_titles">
+        <item>30 min</item>
+        <item>1 hora</item>
+        <item>2 horas</item>
+    </string-array>
+
+    <string-array name="pref_alarm_reminder_window_values">
+        <item>30</item>
+        <item>65</item>
+        <item>125</item>
+    </string-array>
+
+
+</resources>

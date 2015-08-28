@@ -255,11 +255,11 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
 
     // Container Activity must implement this interface
     public interface OnRoutineEditListener {
-        public void onRoutineEdited(Routine r);
+        void onRoutineEdited(Routine r);
 
-        public void onRoutineCreated(Routine r);
+        void onRoutineCreated(Routine r);
 
-        public void onRoutineDeleted(Routine r);
+        void onRoutineDeleted(Routine r);
     }
 
 }

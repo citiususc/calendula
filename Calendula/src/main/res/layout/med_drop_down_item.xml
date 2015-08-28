@@ -7,82 +7,82 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:orientation="vertical"
         android:layout_height="wrap_content"
         android:layout_marginLeft="72dp"
+        android:orientation="vertical"
         android:paddingBottom="10dp">
 
         <TextView
             android:id="@+id/text1"
-            android:singleLine="true"
             android:layout_width="fill_parent"
-            android:ellipsize="marquee"
             android:layout_height="wrap_content"
-            android:text="Medicine name"
-            android:textSize="22dp"
-            android:textColor="@color/android_blue_darker"
-            android:paddingTop="5dp"
-            android:gravity="center_vertical"
+            android:layout_marginRight="16dp"
+            android:ellipsize="marquee"
             android:fontFamily="sans-serif"
-            android:paddingRight="5dp"
+            android:gravity="center_vertical"
             android:paddingBottom="2dp"
-            android:layout_marginRight="16dp" />
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:singleLine="true"
+            android:text="Medicine name"
+            android:textColor="@color/android_blue_darker"
+            android:textSize="22dp" />
 
         <TextView
             android:id="@+id/text2"
-            android:singleLine="true"
             android:layout_width="fill_parent"
-            android:ellipsize="marquee"
             android:layout_height="fill_parent"
-            android:text="100 microgramos"
-            android:textSize="15dp"
-            android:textColor="#000"
-            android:paddingTop="2dp"
-            android:gravity="center_vertical"
-            android:fontFamily="sans-serif"
-            android:paddingBottom="2dp"
             android:layout_marginRight="16dp"
+            android:ellipsize="marquee"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp"
+            android:singleLine="true"
+            android:text="100 microgramos"
+            android:textColor="#000"
+            android:textSize="15dp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/text3"
-            android:singleLine="true"
             android:layout_width="fill_parent"
-            android:ellipsize="marquee"
             android:layout_height="fill_parent"
-            android:text="50 frascos de 100 ml"
-            android:textSize="15dp"
-            android:textColor="#000"
-            android:paddingTop="0dp"
-            android:gravity="center_vertical"
+            android:layout_marginRight="16dp"
+            android:ellipsize="marquee"
             android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
             android:paddingBottom="2dp"
-            android:layout_marginRight="16dp" />
+            android:paddingTop="0dp"
+            android:singleLine="true"
+            android:text="50 frascos de 100 ml"
+            android:textColor="#000"
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/text4"
-            android:singleLine="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAllCaps="false"
-            android:text="Med description large name Med description large name Med description large name"
-            android:textSize="14dp"
-            android:textColor="@color/android_blue_darker"
-            android:paddingBottom="2dp"
-            android:gravity="top"
             android:layout_marginBottom="1px"
+            android:layout_marginRight="16dp"
             android:fontFamily="sans-serif-light"
+            android:gravity="top"
+            android:paddingBottom="2dp"
             android:paddingTop="5dp"
-            android:visibility="visible"
-            android:layout_marginRight="16dp" />
+            android:singleLine="false"
+            android:text="Med description large name Med description large name Med description large name"
+            android:textAllCaps="false"
+            android:textColor="@color/android_blue_darker"
+            android:textSize="14dp"
+            android:visibility="visible" />
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/presentation_image"
         android:layout_width="72dp"
         android:layout_height="55dp"
-        android:id="@+id/presentation_image"
-        android:scaleType="fitCenter"
-        android:padding="10dp" />
+        android:padding="10dp"
+        android:scaleType="fitCenter" />
 
 
 </RelativeLayout>

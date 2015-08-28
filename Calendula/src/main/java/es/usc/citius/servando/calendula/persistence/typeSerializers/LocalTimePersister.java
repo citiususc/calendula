@@ -15,10 +15,15 @@ import java.sql.SQLException;
  */
 public class LocalTimePersister extends BaseDataType {
 
+    private static final LocalTimePersister singleton = new LocalTimePersister();
     String format = "kk:mm";
 
     public LocalTimePersister() {
         super(SqlType.STRING, new Class<?>[]{LocalTime.class});
+    }
+
+    public static LocalTimePersister getSingleton() {
+        return singleton;
     }
 
     @Override
@@ -39,12 +44,5 @@ public class LocalTimePersister extends BaseDataType {
     @Override
     public Object javaToSqlArg(FieldType fieldType, Object javaObject) throws SQLException {
         return ((LocalTime) javaObject).toString(format);
-    }
-
-
-    private static final LocalTimePersister singleton = new LocalTimePersister();
-
-    public static LocalTimePersister getSingleton() {
-        return singleton;
     }
 }

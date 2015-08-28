@@ -56,20 +56,6 @@ public class RoutinesListFragment extends Fragment {
         }
     }
 
-    private class RoutinesListAdapter extends ArrayAdapter<Routine> {
-
-        public RoutinesListAdapter(Context context, int layoutResourceId, List<Routine> items) {
-            super(context, layoutResourceId, items);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-            return createRoutineListItem(layoutInflater, mRoutines.get(position));
-        }
-
-    }
-
     private View createRoutineListItem(LayoutInflater inflater, final Routine routine) {
 
         int hour = routine.time().getHourOfDay();
@@ -112,7 +98,6 @@ public class RoutinesListFragment extends Fragment {
         return item;
     }
 
-
     void showDeleteConfirmationDialog(final Routine r) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -152,6 +137,27 @@ public class RoutinesListFragment extends Fragment {
         new ReloadItemsTask().execute();
     }
 
+    // Container Activity must implement this interface
+    public interface OnRoutineSelectedListener {
+        void onRoutineSelected(Routine r);
+
+        void onCreateRoutine();
+    }
+
+    private class RoutinesListAdapter extends ArrayAdapter<Routine> {
+
+        public RoutinesListAdapter(Context context, int layoutResourceId, List<Routine> items) {
+            super(context, layoutResourceId, items);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
+            return createRoutineListItem(layoutInflater, mRoutines.get(position));
+        }
+
+    }
+
     private class ReloadItemsTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -170,13 +176,5 @@ public class RoutinesListFragment extends Fragment {
             }
             adapter.notifyDataSetChanged();
         }
-    }
-
-
-    // Container Activity must implement this interface
-    public interface OnRoutineSelectedListener {
-        public void onRoutineSelected(Routine r);
-
-        public void onCreateRoutine();
     }
 }

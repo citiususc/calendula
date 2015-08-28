@@ -19,8 +19,7 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
  */
 public class ScheduleDao extends GenericDao<Schedule, Long> {
 
-    public ScheduleDao(DatabaseHelper db)
-    {
+    public ScheduleDao(DatabaseHelper db) {
         super(db);
     }
 
@@ -47,8 +46,7 @@ public class ScheduleDao extends GenericDao<Schedule, Long> {
         CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
     }
 
-    public void deleteCascade(final Schedule s, boolean fireEvent)
-    {
+    public void deleteCascade(final Schedule s, boolean fireEvent) {
         DB.transaction(new Callable<Object>() {
             @Override
             public Object call() throws Exception
@@ -87,5 +85,4 @@ public class ScheduleDao extends GenericDao<Schedule, Long> {
             throw new RuntimeException("Error finding scanned schedule", e);
         }
     }
-
 }

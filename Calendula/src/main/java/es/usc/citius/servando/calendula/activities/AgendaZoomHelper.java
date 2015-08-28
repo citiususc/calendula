@@ -49,6 +49,7 @@ import es.usc.citius.servando.calendula.util.Snack;
  */
 public class AgendaZoomHelper {
 
+    public ZoomHelperListener mListener;
     LinearLayout list;
     ImageButton doneButton = null;
     ImageButton delayButton = null;
@@ -58,13 +59,11 @@ public class AgendaZoomHelper {
     List<ScheduleItem> doses;
     boolean totalChecked;
     View v;
-
     boolean somethingChanged = false;
     AnimatorSet animator;
     Activity activity;
 
-    public AgendaZoomHelper(View v, Activity activity, ZoomHelperListener listener)
-    {
+    public AgendaZoomHelper(View v, Activity activity, ZoomHelperListener listener) {
         this.v = v;
         this.activity = activity;
         this.mListener = listener;
@@ -72,8 +71,7 @@ public class AgendaZoomHelper {
         doneButton = (ImageButton) v.findViewById(R.id.button);
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 hide();
             }
         });
@@ -81,61 +79,51 @@ public class AgendaZoomHelper {
         delayButton = (ImageButton) v.findViewById(R.id.delay_button);
         delayButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                if (routine != null)
-                {
+            public void onClick(View view) {
+                if (routine != null) {
                     showDelayDialog(routine);
                 } else if (schedule != null) showDelayDialog(schedule, time);
             }
         });
     }
 
-    public void showDelayDialog(final Routine routineToDelay)
-    {
+    public void showDelayDialog(final Routine routineToDelay) {
         final int[] values = activity.getResources().getIntArray(R.array.delays_array_values);
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(R.string.notification_delay)
-            .setItems(R.array.delays_array, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which)
-                {
-                    int minutes = values[which];
-                    AlarmScheduler.instance().onDelayRoutine(routineToDelay, activity, minutes);
-                    Snack.show(activity.getString(R.string.alarm_delayed_message, minutes),
-                        activity);
-                }
-            });
+                .setItems(R.array.delays_array, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        int minutes = values[which];
+                        AlarmScheduler.instance().onDelayRoutine(routineToDelay, activity, minutes);
+                        Snack.show(activity.getString(R.string.alarm_delayed_message, minutes),
+                                activity);
+                    }
+                });
         builder.create().show();
     }
 
-    public void showDelayDialog(final Schedule schedule, final LocalTime time)
-    {
+    public void showDelayDialog(final Schedule schedule, final LocalTime time) {
         final int[] values = activity.getResources().getIntArray(R.array.delays_array_values);
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(R.string.notification_delay)
-            .setItems(R.array.delays_array, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which)
-                {
-                    int minutes = values[which];
-                    AlarmScheduler.instance()
-                        .onDelayHourlySchedule(schedule, time, activity, minutes);
-                    Snack.show(activity.getString(R.string.alarm_delayed_message, minutes),
-                        activity);
-                }
-            });
+                .setItems(R.array.delays_array, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        int minutes = values[which];
+                        AlarmScheduler.instance()
+                                .onDelayHourlySchedule(schedule, time, activity, minutes);
+                        Snack.show(activity.getString(R.string.alarm_delayed_message, minutes),
+                                activity);
+                    }
+                });
         builder.create().show();
     }
 
-    public void show(Activity activity, View from, Routine r)
-    {
-        if (animator == null)
-        {
+    public void show(Activity activity, View from, Routine r) {
+        if (animator == null) {
 
-            if (AlarmScheduler.instance().isWithinDefaultMargins(r, activity))
-            {
+            if (AlarmScheduler.instance().isWithinDefaultMargins(r, activity)) {
                 delayButton.setVisibility(View.VISIBLE);
-            } else
-            {
+            } else {
                 delayButton.setVisibility(View.INVISIBLE);
             }
 
@@ -144,26 +132,22 @@ public class AgendaZoomHelper {
             list.removeAllViews();
             ((TextView) v.findViewById(R.id.clock)).setText(r.time().toString("kk:mm"));
             ((TextView) v.findViewById(R.id.routine_name)).setText(
-                r.name() + ", " + doses.size() + " " + activity.getResources()
-                    .getString(R.string.medicine) + (doses.size() > 1 ? "s" : ""));
+                    r.name() + ", " + doses.size() + " " + activity.getResources()
+                            .getString(R.string.medicine) + (doses.size() > 1 ? "s" : ""));
             String hr = new PrettyTime().format(r.time().toDateTimeToday().toDate());
             ((TextView) v.findViewById(R.id.meds_time_view)).setText(
-                hr.replaceFirst(hr.charAt(0) + "", (hr.charAt(0) + "").toUpperCase()));
+                    hr.replaceFirst(hr.charAt(0) + "", (hr.charAt(0) + "").toUpperCase()));
             zoomInView(from, activity);
             if (mListener != null) mListener.onShow(r);
         }
     }
 
-    public void show(Activity activity, View from, Schedule s, LocalTime time)
-    {
-        if (animator == null)
-        {
+    public void show(Activity activity, View from, Schedule s, LocalTime time) {
+        if (animator == null) {
 
-            if (AlarmScheduler.instance().isWithinDefaultMargins(time.toDateTimeToday(), activity))
-            {
+            if (AlarmScheduler.instance().isWithinDefaultMargins(time.toDateTimeToday(), activity)) {
                 delayButton.setVisibility(View.VISIBLE);
-            } else
-            {
+            } else {
                 delayButton.setVisibility(View.INVISIBLE);
             }
 
@@ -175,32 +159,27 @@ public class AgendaZoomHelper {
             list.removeAllViews();
             ((TextView) v.findViewById(R.id.clock)).setText(time.toString("kk:mm"));
             ((TextView) v.findViewById(R.id.routine_name)).setText(
-                activity.getString(R.string.every).toLowerCase()
-                    + " "
-                    + s.rule().interval()
-                    + " "
-                    + activity.getString(R.string.hours));
+                    activity.getString(R.string.every).toLowerCase()
+                            + " "
+                            + s.rule().interval()
+                            + " "
+                            + activity.getString(R.string.hours));
             String hr = new PrettyTime().format(time.toDateTimeToday().toDate());
             ((TextView) v.findViewById(R.id.meds_time_view)).setText(
-                hr.replaceFirst(hr.charAt(0) + "", (hr.charAt(0) + "").toUpperCase()));
+                    hr.replaceFirst(hr.charAt(0) + "", (hr.charAt(0) + "").toUpperCase()));
             zoomInView(from, activity);
-            if (mListener != null)
-            {
+            if (mListener != null) {
                 // mListener.onShow(r); TODO
             }
         }
     }
 
-    public void remind(Activity activity, Routine r)
-    {
-        if (animator == null)
-        {
+    public void remind(Activity activity, Routine r) {
+        if (animator == null) {
 
-            if (AlarmScheduler.instance().isWithinDefaultMargins(r, activity))
-            {
+            if (AlarmScheduler.instance().isWithinDefaultMargins(r, activity)) {
                 delayButton.setVisibility(View.VISIBLE);
-            } else
-            {
+            } else {
                 delayButton.setVisibility(View.INVISIBLE);
             }
 
@@ -210,21 +189,17 @@ public class AgendaZoomHelper {
             ((TextView) v.findViewById(R.id.clock)).setText(DateTime.now().toString("kk:mm"));
             ((TextView) v.findViewById(R.id.routine_name)).setText(r.name());
             ((TextView) v.findViewById(R.id.meds_time_view)).setText(
-                activity.getString(R.string.agenda_zoom_meds_time));
+                    activity.getString(R.string.agenda_zoom_meds_time));
             zoomInView(null, activity);
         }
     }
 
-    public void remind(Activity activity, Schedule s, LocalTime time)
-    {
-        if (animator == null)
-        {
+    public void remind(Activity activity, Schedule s, LocalTime time) {
+        if (animator == null) {
 
-            if (AlarmScheduler.instance().isWithinDefaultMargins(time.toDateTimeToday(), activity))
-            {
+            if (AlarmScheduler.instance().isWithinDefaultMargins(time.toDateTimeToday(), activity)) {
                 delayButton.setVisibility(View.VISIBLE);
-            } else
-            {
+            } else {
                 delayButton.setVisibility(View.INVISIBLE);
             }
 
@@ -235,53 +210,46 @@ public class AgendaZoomHelper {
             list.removeAllViews();
             ((TextView) v.findViewById(R.id.clock)).setText(DateTime.now().toString("kk:mm"));
             ((TextView) v.findViewById(R.id.routine_name)).setText(
-                activity.getString(R.string.every).toLowerCase()
-                    + " "
-                    + s.rule().interval()
-                    + " "
-                    + activity.getString(R.string.hours));
+                    activity.getString(R.string.every).toLowerCase()
+                            + " "
+                            + s.rule().interval()
+                            + " "
+                            + activity.getString(R.string.hours));
             ((TextView) v.findViewById(R.id.meds_time_view)).setText(
-                activity.getString(R.string.agenda_zoom_meds_time));
+                    activity.getString(R.string.agenda_zoom_meds_time));
             zoomInView(null, activity);
         }
     }
 
-    public void hide()
-    {
-        if (somethingChanged)
-        {
+    public void hide() {
+        if (somethingChanged) {
             mListener.onChange();
         }
         mListener.onHide();
         zoomOutView();
     }
 
-    private void zoomOutView()
-    {
+    private void zoomOutView() {
         TransitionDrawable transition = (TransitionDrawable) v.getBackground();
         new Handler().postDelayed(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 v.setVisibility(View.INVISIBLE);
             }
         }, 250);
         transition.reverseTransition(250);
     }
 
-    private void zoomInView(View from, final Activity activity)
-    {
+    private void zoomInView(View from, final Activity activity) {
 
         final Rect startBounds = new Rect();
         final Rect finalBounds = new Rect();
         final Point globalOffset = new Point();
 
         v.setVisibility(View.VISIBLE);
-        if (from != null)
-        {
+        if (from != null) {
             //animate only for ice cream sandwich and newer versions
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-            {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 
                 from.getGlobalVisibleRect(startBounds);
                 v.getGlobalVisibleRect(finalBounds, globalOffset);
@@ -300,81 +268,71 @@ public class AgendaZoomHelper {
                 // scale properties (X, Y, SCALE_X, and SCALE_Y).
                 AnimatorSet set = new AnimatorSet();
                 set.play(
-                    ObjectAnimator.ofFloat(v, View.X, startBounds.left, finalBounds.left)).with(
-                    ObjectAnimator.ofFloat(v, View.Y, startBounds.top, finalBounds.top))
-                    //                .with(ObjectAnimator.ofFloat(v, View.SCALE_X,startScale, 1f))
-                    .with(ObjectAnimator.ofFloat(v, View.SCALE_Y, startScale, 1f));
+                        ObjectAnimator.ofFloat(v, View.X, startBounds.left, finalBounds.left)).with(
+                        ObjectAnimator.ofFloat(v, View.Y, startBounds.top, finalBounds.top))
+                        //                .with(ObjectAnimator.ofFloat(v, View.SCALE_X,startScale, 1f))
+                        .with(ObjectAnimator.ofFloat(v, View.SCALE_Y, startScale, 1f));
                 set.setDuration(250);
                 set.setStartDelay(0);
                 set.setInterpolator(new DecelerateInterpolator());
                 set.addListener(new AnimatorListenerAdapter() {
                     @Override
-                    public void onAnimationEnd(Animator animation)
-                    {
+                    public void onAnimationEnd(Animator animation) {
                         onAfterShow(activity);
                     }
 
                     @Override
-                    public void onAnimationCancel(Animator animation)
-                    {
+                    public void onAnimationCancel(Animator animation) {
 
                     }
                 });
                 animator = set;
                 set.start();
             }
-        } else
-        {
+        } else {
             onAfterShow(activity);
         }
     }
 
-    void onAfterShow(Activity activity)
-    {
+    void onAfterShow(Activity activity) {
         v.findViewById(R.id.content).setVisibility(View.VISIBLE);
-        if (routine != null)
-        {
+        if (routine != null) {
             fillReminderList(activity);
-        } else
-        {
+        } else {
             fillReminderListForSchedule(activity);
         }
         list.setLayoutAnimation(
-            AnimationUtils.loadLayoutAnimation(activity, R.anim.reminder_list_controller));
+                AnimationUtils.loadLayoutAnimation(activity, R.anim.reminder_list_controller));
         list.getLayoutAnimation().start();
         TransitionDrawable transition = (TransitionDrawable) v.getBackground();
         transition.startTransition(250);
 
-        if (v.findViewById(R.id.check_button) != null)
-        {
+        if (v.findViewById(R.id.check_button) != null) {
             Log.d("AgendaZoomHelper", "Show tutorial if needed...");
             ((HomeActivity) activity).getTutorial()
-                .show(AppTutorial.NOTIFICATION_INFO, R.id.check_button, activity);
+                    .show(AppTutorial.NOTIFICATION_INFO, R.id.check_button, activity);
         }
         animator = null;
     }
 
-    public String getDisplayableDose(Activity activity, String dose, Medicine m)
-    {
+    public String getDisplayableDose(Activity activity, String dose, Medicine m) {
         return dose + " " + m.presentation().units(activity.getResources());
         //                + " - "
         //                + r.time().toString("kk:mm")
         //                + "h";
     }
 
-    void fillReminderList(final Activity activity)
-    {
+    void fillReminderList(final Activity activity) {
 
         LayoutInflater inflater = activity.getLayoutInflater();
 
         LinearLayout.LayoutParams params =
-            new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
 
         params.setMargins(0, 0, 0, 15);
 
-        for (ScheduleItem scheduleItem : doses)
-        {
+        for (ScheduleItem scheduleItem : doses) {
             final Routine r = scheduleItem.routine();
             final Medicine med = scheduleItem.schedule().medicine();
             final DailyScheduleItem dsi = DailyScheduleItem.findByScheduleItem(scheduleItem);
@@ -384,16 +342,15 @@ public class AgendaZoomHelper {
 
             ((TextView) entry.findViewById(R.id.med_item_name)).setText(med.name());
             ((ImageView) entry.findViewById(R.id.imageView)).setImageResource(
-                med.presentation().getDrawable());
+                    med.presentation().getDrawable());
             ((TextView) entry.findViewById(R.id.med_item_dose)).setText(
-                getDisplayableDose(activity, scheduleItem.displayDose(), med));
+                    getDisplayableDose(activity, scheduleItem.displayDose(), med));
 
             entry.setTag(dsi);
 
             checkButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean checked)
-                {
+                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                     background.setSelected(checked);
                     DailyScheduleItem dailyScheduleItem = (DailyScheduleItem) entry.getTag();
                     dailyScheduleItem.setTakenToday(checked);
@@ -401,21 +358,19 @@ public class AgendaZoomHelper {
                     somethingChanged = true;
                     onReminderChecked(activity);
                     Log.d("Detail", dailyScheduleItem.scheduleItem().schedule().medicine().name()
-                        + " taken: "
-                        + checked);
+                            + " taken: "
+                            + checked);
                 }
             });
 
             entry.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     checkButton.performClick();
                 }
             });
 
-            if (dsi.takenToday())
-            {
+            if (dsi.takenToday()) {
                 checkButton.setChecked(true);
                 background.setSelected(true);
             }
@@ -424,14 +379,13 @@ public class AgendaZoomHelper {
         }
     }
 
-    void fillReminderListForSchedule(final Activity activity)
-    {
+    void fillReminderListForSchedule(final Activity activity) {
 
         LayoutInflater inflater = activity.getLayoutInflater();
 
         LinearLayout.LayoutParams params =
-            new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
 
         params.setMargins(0, 0, 0, 15);
 
@@ -444,16 +398,15 @@ public class AgendaZoomHelper {
 
         ((TextView) entry.findViewById(R.id.med_item_name)).setText(med.name());
         ((ImageView) entry.findViewById(R.id.imageView)).setImageResource(
-            med.presentation().getDrawable());
+                med.presentation().getDrawable());
         ((TextView) entry.findViewById(R.id.med_item_dose)).setText(
-            getDisplayableDose(activity, schedule.displayDose(), med));
+                getDisplayableDose(activity, schedule.displayDose(), med));
 
         entry.setTag(dsi);
 
         checkButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked)
-            {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 background.setSelected(checked);
                 DailyScheduleItem dailyScheduleItem = (DailyScheduleItem) entry.getTag();
                 dailyScheduleItem.setTakenToday(checked);
@@ -466,14 +419,12 @@ public class AgendaZoomHelper {
 
         entry.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 checkButton.performClick();
             }
         });
 
-        if (dsi.takenToday())
-        {
+        if (dsi.takenToday()) {
             checkButton.setChecked(true);
             background.setSelected(true);
         }
@@ -481,44 +432,34 @@ public class AgendaZoomHelper {
         list.addView(entry, params);
     }
 
-    private void onReminderChecked(Activity activity)
-    {
+    private void onReminderChecked(Activity activity) {
 
         int total = routine != null ? doses.size() : 1;
         int checked = 0;
 
-        if (routine != null)
-        {
-            for (ScheduleItem s : doses)
-            {
+        if (routine != null) {
+            for (ScheduleItem s : doses) {
                 boolean taken = DailyScheduleItem.findByScheduleItem(s).takenToday();
                 if (taken) checked++;
             }
-        } else
-        {
+        } else {
             boolean taken =
-                DB.dailyScheduleItems().findByScheduleAndTime(schedule, time).takenToday();
+                    DB.dailyScheduleItems().findByScheduleAndTime(schedule, time).takenToday();
             if (taken) checked++;
         }
 
-        if (checked == total)
-        {
+        if (checked == total) {
             totalChecked = true;
-            if (routine != null)
-            {
+            if (routine != null) {
                 AlarmScheduler.instance().onCancelRoutineNotifications(routine, activity);
-            } else
-            {
+            } else {
                 AlarmScheduler.instance()
-                    .onCancelHourlyScheduleNotifications(schedule, time, activity);
+                        .onCancelHourlyScheduleNotifications(schedule, time, activity);
             }
-        } else
-        {
-            if (routine != null)
-            {
+        } else {
+            if (routine != null) {
                 AlarmScheduler.instance().onDelayRoutine(routine, activity);
-            } else
-            {
+            } else {
                 AlarmScheduler.instance().onDelayHourlySchedule(schedule, time, activity);
             }
             totalChecked = false;
@@ -532,7 +473,5 @@ public class AgendaZoomHelper {
 
         void onShow(Routine r);
     }
-
-    public ZoomHelperListener mListener;
 }
 

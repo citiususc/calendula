@@ -2,20 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="2dp"
-    android:background="#fff">
+    android:background="#fff"
+    android:padding="2dp">
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:id="@+id/imageView"
         android:src="#dfdfdf"
         android:visibility="visible" />
 
     <TextView
         android:id="@+id/text"
-        android:layout_height="0dp"
         android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="invisible" />
 
 

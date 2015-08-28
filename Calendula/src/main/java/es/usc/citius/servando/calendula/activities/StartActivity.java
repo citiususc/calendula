@@ -39,9 +39,9 @@ public class StartActivity extends Activity {
     public static final String STATUS_SESSION_OPEN = "STATUS_SESSION_OPEN";
     public static final String STATUS_SESSION_RESUMED = "STATUS_SESSION_RESUMED";
     public static final String STATUS_NO_SESSION = "STATUS_NO_SESSION";
-
     public static final int ACTION_DEFAULT = 1;
     public static final int ACTION_SHOW_REMINDERS = 2;
+
 
     int action = ACTION_DEFAULT;
     boolean mustShowSplash;
@@ -56,14 +56,11 @@ public class StartActivity extends Activity {
         new UserResumeSessionTask().execute((Void) null);
         mustShowSplash = mustShowSplashForAction(action);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
-            getWindow().setStatusBarColor(
-                getResources().getColor(R.color.activity_background_color));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.activity_background_color));
         }
 
-        if (mustShowSplash)
-        {
+        if (mustShowSplash) {
             startAnimations();
         }
         //        if(PopulatePrescriptionDBService.needUpdate(getApplicationContext())) {
@@ -76,11 +73,9 @@ public class StartActivity extends Activity {
         return true;//!(action == ACTION_DELAY_ROUTINE || action == ACTION_CANCEL_ROUTINE);
     }
 
-    private void startAnimations()
-    {
+    private void startAnimations() {
 
-        RotateAnimation rotateAnim = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f,
-            Animation.RELATIVE_TO_SELF, 0.5f);
+        RotateAnimation rotateAnim = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotateAnim.setInterpolator(new LinearInterpolator());
         rotateAnim.setRepeatCount(Animation.INFINITE);
         rotateAnim.setFillAfter(true);
@@ -108,10 +103,14 @@ public class StartActivity extends Activity {
         quote.startAnimation(brandFaceIn);
     }
 
-    private void stopAnimations()
-    {
+    private void stopAnimations() {
         brand.clearAnimation();
         splashLogo.clearAnimation();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // do nothing
     }
 
     /**
@@ -122,8 +121,8 @@ public class StartActivity extends Activity {
 
         boolean sessionIsOpen;
 
-        private void keepSplashVisible(int seconds)
-        {
+
+        private void keepSplashVisible(int seconds) {
             // Show splash
             try
             {
@@ -197,24 +196,23 @@ public class StartActivity extends Activity {
             if (STATUS_SESSION_OPEN.equals(result) || STATUS_SESSION_RESUMED.equals(result))
             {
                 Log.d("StartActivity", "Action: " + action);
-                switch (action)
-                {
+                switch (action) {
 
                     case ACTION_SHOW_REMINDERS:
 
                         Intent i = new Intent(getBaseContext(), HomeActivity.class);
                         i.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID,
-                            getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1));
+                                getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1));
                         i.putExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID,
-                            getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID,
-                                -1));
+                                getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID,
+                                        -1));
                         i.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID,
-                            getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1));
+                                getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1));
                         i.putExtra(CalendulaApp.INTENT_EXTRA_DELAY_SCHEDULE_ID,
-                            getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_SCHEDULE_ID,
-                                -1));
+                                getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_SCHEDULE_ID,
+                                        -1));
                         i.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME,
-                            getIntent().getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME));
+                                getIntent().getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME));
 
                         Log.d("StartActivity", i.toString());
 
@@ -242,11 +240,5 @@ public class StartActivity extends Activity {
         {
 
         }
-    }
-
-    @Override
-    public void onBackPressed()
-    {
-        // do nothing
     }
 }

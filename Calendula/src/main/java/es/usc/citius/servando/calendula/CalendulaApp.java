@@ -5,6 +5,7 @@ import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.util.Log;
 
 import org.joda.time.LocalTime;
@@ -15,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Locale;
 
 import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
@@ -56,8 +58,7 @@ public class CalendulaApp extends Application {
     // REQUEST CODES
     public static final int RQ_SHOW_ROUTINE = 1;
     public static final int RQ_DELAY_ROUTINE = 2;
-
-
+    
     private static EventBus eventBus = EventBus.getDefault();
 
 
@@ -74,6 +75,15 @@ public class CalendulaApp extends Application {
         // setup alarm for daily agenda update
         setupUpdateDailyAgendaAlarm();
         //exportDatabase(this, DB_NAME, new File(Environment.getExternalStorageDirectory() + File.separator + DB_NAME));
+        //forceLocale(Locale.GERMAN);
+    }
+
+    private void forceLocale(Locale l) {
+        Locale locale = new Locale(l.getLanguage());
+        Locale.setDefault(locale);
+        Configuration config = getApplicationContext().getResources().getConfiguration();
+        config.locale = locale;
+        getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
     }
 
     public void initializeDatabase() {

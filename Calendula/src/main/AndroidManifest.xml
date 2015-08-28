@@ -5,31 +5,11 @@
     android:versionCode="1"
     android:versionName="1.0">
 
-    <uses-sdk
-        android:minSdkVersion="9"
-        android:targetSdkVersion="18" />
-
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- <uses-permission android:name="android.permission.INTERNET" /> -->
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--
-     To retrieve OAuth 2.0 tokens or invalidate tokens to disconnect a user. This disconnect
-     option is required to comply with the Google+ Sign-In developer policies
-    -->
-    <!-- <uses-permission android:name="android.permission.USE_CREDENTIALS" /> -->
-
-
-    <!-- To retrieve the account name (email) as part of sign-in: -->
-    <!-- <uses-permission android:name="android.permission.GET_ACCOUNTS" /> -->
-
-
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <!-- <uses-permission android:name="android.permission.READ_PROFILE" /> -->
-    <!-- <uses-permission android:name="android.permission.READ_CONTACTS" /> -->
 
     <supports-screens
         android:largeScreens="true"
@@ -38,9 +18,6 @@
         android:smallScreens="true"
         android:xlargeScreens="true" />
 
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!-- <android:uses-permission android:name="android.permission.READ_PHONE_STATE" /> -->
-    <!-- <android:uses-permission android:name="android.permission.READ_CALL_LOG" /> -->
     <application
         android:name="es.usc.citius.servando.calendula.CalendulaApp"
         android:allowBackup="true"
@@ -49,7 +26,6 @@
         android:theme="@style/AppTheme"
         tools:replace="icon, label">
 
-        <!-- android:launchMode="singleInstance" -->
         <activity
             android:name="es.usc.citius.servando.calendula.HomeActivity"
             android:label="@string/app_name"
@@ -78,24 +54,6 @@
             android:label="@string/title_activity_schedules"
             android:screenOrientation="portrait" />
         <activity
-            android:name="es.usc.citius.servando.calendula.activities.ScanActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="ScanActivity"
-            android:parentActivityName="es.usc.citius.servando.calendula.HomeActivity" />
-        <activity
-            android:name="es.usc.citius.servando.calendula.activities.CalendarActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_calendar"
-            android:parentActivityName="es.usc.citius.servando.calendula.HomeActivity" />
-        <activity
-            android:name="es.usc.citius.servando.calendula.activities.AlertFullScreenActivity"
-            android:label="@string/title_activity_schedules"
-            android:screenOrientation="portrait" />
-        <!-- <activity -->
-        <!-- android:name="es.usc.citius.servando.calendula.activities.LoginActivity" -->
-        <!-- android:label="@string/title_activity_login" -->
-        <!-- android:windowSoftInputMode="adjustResize|stateVisible" /> -->
-        <activity
             android:name="es.usc.citius.servando.calendula.activities.StartActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
@@ -103,7 +61,6 @@
             android:label="@string/title_activity_start" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -112,10 +69,15 @@
             android:name="es.usc.citius.servando.calendula.activities.SummaryCalendarActivity"
             android:label="@string/title_activity_schedules"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/Theme.AppCompat.Translucent" />
+            android:theme="@style/Theme.AppCompat.Translucent"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name="es.usc.citius.servando.calendula.activities.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
 
         <receiver android:name="es.usc.citius.servando.calendula.scheduling.AlarmReceiver" />
+
         <receiver android:name="es.usc.citius.servando.calendula.scheduling.PickupAlarmReceiver" />
         <receiver android:name="es.usc.citius.servando.calendula.scheduling.NotificationEventReceiver" />
         <receiver android:name="es.usc.citius.servando.calendula.scheduling.BootReceiver">
@@ -125,40 +87,22 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name="es.usc.citius.servando.calendula.activities.ReminderActivity"
-            android:label="@string/title_activity_reminder"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="es.usc.citius.servando.calendula.activities.AgendaDetailActivity"
-            android:label="@string/title_activity_agenda_detail"
-            android:screenOrientation="portrait" />
-
-
-        <meta-data
-            android:name="AA_DB_NAME"
-            android:value="calendula.db" />
-        <meta-data
-            android:name="AA_DB_VERSION"
-            android:value="4" />
         <meta-data
             android:name="AEMPS_DB_VERSION"
-            android:value="3" />
-        <meta-data
-            android:name="AA_MODELS"
-            android:value="es.usc.citius.servando.calendula.persistence.DailyScheduleItem,              es.usc.citius.servando.calendula.persistence.Medicine,              es.usc.citius.servando.calendula.persistence.Routine,              es.usc.citius.servando.calendula.persistence.Schedule,              es.usc.citius.servando.calendula.persistence.ScheduleItem,              es.usc.citius.servando.calendula.util.medicine.Prescription" />
-        <meta-data
-            android:name="AA_SERIALIZERS"
-            android:value="es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimeSerializer,                          es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimeSerializer,                          es.usc.citius.servando.calendula.persistence.typeSerializers.BooleanArraySerializer" />
+            android:value="2" />
 
         <activity
-            android:name="es.usc.citius.servando.calendula.activities.SettingsActivity"
-            android:label="@string/title_activity_settings" />
-
-        <!-- <service -->
-        <!-- android:name="es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService" -->
-        <!-- android:process=":populatedbservice" /> -->
-
+            android:name="es.usc.citius.servando.calendula.activities.CalendarActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_calendar"
+            android:parentActivityName="es.usc.citius.servando.calendula.HomeActivity" />
+        
+        <activity
+            android:name="es.usc.citius.servando.calendula.activities.ScanActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="ScanActivity"
+            android:parentActivityName="es.usc.citius.servando.calendula.HomeActivity" />
+        
         <activity
             android:name="es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity"
             android:screenOrientation="portrait"

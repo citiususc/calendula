@@ -1,0 +1,54 @@
+<resources>
+    <string name="title_activity_settings">Einstellungen</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">Allgemein</string>
+    <string name="pref_title_display_name">Zeige Name</string>
+    <string name="pref_default_display_name">Calendula</string>
+
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Benachrichtigungen</string>
+    <string name="pref_title_new_alarm_notification">Alarme Medikamenteneinnahme</string>
+    <string name="pref_title_insistent_alarms">Hartnäckige Benachrichtigungen</string>
+
+
+    <string name="pref_title_repeat_alarms">Wiederhole Alarme</string>
+    <string name="pref_title_sync_frequency">Wiederhole jede</string>
+    <string name="pref_title_reminder_window">Alarme abstellen nach</string>
+
+    <string name="pref_notification_tone">Benachrichtigungston</string>
+    <string name="pref_notification_tone_sum">Standard</string>
+
+
+    <string-array name="pref_alarm_repeat_titles">
+        <item>5 min</item>
+        <item>15 min</item>
+        <item>30 min</item>
+        <item>60 min</item>
+    </string-array>
+
+    <string-array name="pref_alarm_repeat_values">
+        <item>5</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+    </string-array>
+
+
+    <string-array name="pref_alarm_reminder_window_titles">
+        <item>30 min</item>
+        <item>1 hour</item>
+        <item>2 hours</item>
+    </string-array>
+
+    <string-array name="pref_alarm_reminder_window_values">
+        <item>30</item>
+        <item>65</item>
+        <item>125</item>
+    </string-array>
+
+
+</resources>

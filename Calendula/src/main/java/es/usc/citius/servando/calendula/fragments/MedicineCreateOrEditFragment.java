@@ -63,6 +63,23 @@ public class MedicineCreateOrEditFragment extends Fragment {
     long mMedicineId;
     String cn;
 
+    private static ArrayList<View> getViewsByTag(ViewGroup root, String tag) {
+        ArrayList<View> views = new ArrayList<View>();
+        final int childCount = root.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            final View child = root.getChildAt(i);
+            if (child instanceof ViewGroup) {
+                views.addAll(getViewsByTag((ViewGroup) child, tag));
+            }
+
+            final Object tagObj = child.getTag();
+            if (tagObj != null && tagObj.equals(tag)) {
+                views.add(child);
+            }
+
+        }
+        return views;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -231,7 +248,6 @@ public class MedicineCreateOrEditFragment extends Fragment {
         }
     }
 
-
     void setupMedPresentationChooser(final View rootView) {
 
         View.OnClickListener listener = new View.OnClickListener() {
@@ -245,7 +261,6 @@ public class MedicineCreateOrEditFragment extends Fragment {
             v.setOnClickListener(listener);
         }
     }
-
 
     void onClickMedicine(int viewId, View rootView) {
 
@@ -299,7 +314,6 @@ public class MedicineCreateOrEditFragment extends Fragment {
         }
     }
 
-
     public void scrollToMedPresentation(View view) {
         Log.d(getTag(), "Scroll to: " + view.getLeft());
 
@@ -309,25 +323,6 @@ public class MedicineCreateOrEditFragment extends Fragment {
         }
         presentationScroll.smoothScrollTo(amount, 0);
 
-    }
-
-
-    private static ArrayList<View> getViewsByTag(ViewGroup root, String tag) {
-        ArrayList<View> views = new ArrayList<View>();
-        final int childCount = root.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            final View child = root.getChildAt(i);
-            if (child instanceof ViewGroup) {
-                views.addAll(getViewsByTag((ViewGroup) child, tag));
-            }
-
-            final Object tagObj = child.getTag();
-            if (tagObj != null && tagObj.equals(tag)) {
-                views.add(child);
-            }
-
-        }
-        return views;
     }
 
     @Override
@@ -523,16 +518,58 @@ public class MedicineCreateOrEditFragment extends Fragment {
         imm.hideSoftInputFromWindow(mNameTextView.getWindowToken(), 0);
     }
 
+    public void askForPrescriptionUsage() {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        boolean adviceShown = prefs.getBoolean("show_use_prescriptions_advice", false);
+
+        if (!adviceShown) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(getString(R.string.enable_prescriptions_dialog_title));
+            builder.setCancelable(false);
+            builder.setMessage(getString(R.string.enable_prescriptions_dialog_message))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.enable_prescriptions_dialog_yes), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            new PopulatePrescriptionDatabaseTask().execute("");
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.enable_prescriptions_dialog_no), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+            prefs.edit().putBoolean("show_use_prescriptions_advice", true).commit();
+        } else {
+
+            showSoftInput();
+
+        }
+
+    }
+
+    private void showSoftInput() {
+        mNameTextView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                keyboard.showSoftInput(mNameTextView, 0);
+            }
+        }, 10);
+
+    }
+
 
     // Container Activity must implement this interface
     public interface OnMedicineEditListener {
-        public void onMedicineEdited(Medicine r);
+        void onMedicineEdited(Medicine r);
 
-        public void onMedicineCreated(Medicine r);
+        void onMedicineCreated(Medicine r);
 
-        public void onMedicineDeleted(Medicine r);
+        void onMedicineDeleted(Medicine r);
     }
-
 
     public class AutoCompleteAdapter extends ArrayAdapter<Prescription> implements Filterable {
         private List<Prescription> mData;
@@ -604,51 +641,6 @@ public class MedicineCreateOrEditFragment extends Fragment {
             return myFilter;
         }
     }
-
-
-    public void askForPrescriptionUsage() {
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        boolean adviceShown = prefs.getBoolean("show_use_prescriptions_advice", false);
-
-        if (!adviceShown) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle(getString(R.string.enable_prescriptions_dialog_title));
-            builder.setCancelable(false);
-            builder.setMessage(getString(R.string.enable_prescriptions_dialog_message))
-                    .setCancelable(false)
-                    .setPositiveButton(getString(R.string.enable_prescriptions_dialog_yes), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            new PopulatePrescriptionDatabaseTask().execute("");
-                        }
-                    })
-                    .setNegativeButton(getString(R.string.enable_prescriptions_dialog_no), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-            AlertDialog alert = builder.create();
-            alert.show();
-            prefs.edit().putBoolean("show_use_prescriptions_advice", true).commit();
-        } else {
-
-            showSoftInput();
-
-        }
-
-    }
-
-    private void showSoftInput() {
-        mNameTextView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                keyboard.showSoftInput(mNameTextView, 0);
-            }
-        }, 10);
-
-    }
-
 
     public class PopulatePrescriptionDatabaseTask extends AsyncTask<String, String, Void> {
 

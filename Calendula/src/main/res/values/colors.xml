@@ -29,8 +29,8 @@
     <color name="white_20">#22FFFFFF</color>
     <color name="black_20">#22000000</color>
     <color name="black_40">#44000000</color>
-  <color name="black_80">#88000000</color>
-  <color name="list_item_shadow">#112c2c2c</color>
+    <color name="black_80">#88000000</color>
+    <color name="list_item_shadow">#112c2c2c</color>
     <color name="transparent">#00000000</color>
     <color name="android_orange_darker">#884411</color>
     <color name="list_item_active">#aaececec</color>

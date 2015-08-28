@@ -98,6 +98,7 @@
     <string name="unknown">Unknown</string>
     <string name="effervescent">Effervescent</string>
     <string name="schedule">Schedule</string>
+    <string name="schedule_type">Schedule type</string>
 
     <!-- Med presentation units -->
     <string name="injections_units">injection</string>
@@ -170,9 +171,9 @@
     <string name="toolbar_menu_title">Menu</string>
     <string name="schedule_timetable_time_column">TIME</string>
     <string name="schedule_timetable_dose_column">DOSE</string>
-  <string name="hourly_repeat_dose">Dose</string>
-  <string name="take">Take</string>
-  <string name="first_intake">First intake at</string>
+    <string name="hourly_repeat_dose">Dose</string>
+    <string name="take">Take</string>
+    <string name="first_intake">First intake at</string>
     <string name="schedule_day_selector_take">Take:</string>
     <!-- Day Names -->
     <string-array name="day_names">
@@ -206,6 +207,7 @@
     <string name="routine_edited_message">Routine updated!</string>
     <string name="schedule_created_message">Schedule created!</string>
     <string name="schedule_no_day_specified_message">You must specify at least one day</string>
+    <string name="cycle_period_cero_message">Cycle intake and rest must be greater than zero</string>
     <string name="reminder_delayed_message">Routine delayed </string>
     <string name="reminder_cancelled_message">Reminder cancelled</string>
     <string name="remove_routine_message_long">The routine %1$s has associated schedules that will be lost if you delete it. Do you want to remove it anyway?</string>
@@ -271,65 +273,66 @@
   <string name="prescriptions_download_complete">The leaflet is available now!</string>
 
 
-  <string name="driving_warning">Taking this medicine may have effects on your ability to drive. \n\nPlease carefully read the leaflet or ask your pharmacist before you get behind the wheel. \n\nThank you very much.</string>
-  <string name="driving_warning_title">Be careful</string>
-  <string name="driving_warning_show_prospect">Read leaflet</string>
-  <string name="driving_warning_gotit">Understood</string>
-  <string name="repeat_every">Repeats every</string>
-  <string name="dialog_interval_title">Interval</string>
-  <string name="every">every</string>
-  <string name="from_hour">from</string>
-  <string name="repeat_specific_days">Specific days</string>
-  <string name="repeat_every_tostr">Every %1$s %2$s</string>
-  <string name="schedule_freq_days">days</string>
-  <string name="schedule_freq_weeks">weeks</string>
-  <string name="schedule_freq_months">months</string>
-  <string name="label_schedule_repeat_today">Start</string>
-  <string name="button_schedule_repeat_today">Today</string>
-  <string name="label_schedule_repeat_until">Stop</string>
-  <string name="button_schedule_repeat_until">Never</string>
-  <string name="schedule_limits_date_format">MMMM dd, YYYY</string>
-  <string name="schedule_week_days_connector">on</string>
-  <string name="schedules_stop_after">Stop after %1$s intakes</string>
-  <string name="schedule_custom_rule_text">&lt;u> %1$s &lt;/u></string>
-  <string name="schedule_repeat_period">Period + rest</string>
+    <string name="driving_warning">Taking this medicine may have effects on your ability to drive. \n\nPlease carefully read the leaflet or ask your pharmacist before you get behind the wheel. \n\nThank you very much.</string>
+    <string name="driving_warning_title">Be careful</string>
+    <string name="driving_warning_show_prospect">Read leaflet</string>
+    <string name="driving_warning_gotit">Understood</string>
+    <string name="repeat_every">Repeats every</string>
+    <string name="dialog_interval_title">Interval</string>
+    <string name="every">every</string>
+    <string name="from_hour">from</string>
+    <string name="repeat_specific_days">Specific days</string>
+    <string name="repeat_every_tostr">Every %1$s %2$s</string>
+    <string name="schedule_freq_days">days</string>
+    <string name="schedule_freq_weeks">weeks</string>
+    <string name="schedule_freq_months">months</string>
+    <string name="label_schedule_repeat_today">Start</string>
+    <string name="button_schedule_repeat_today">Today</string>
+    <string name="label_schedule_repeat_until">Stop</string>
+    <string name="button_schedule_repeat_until">Never</string>
+    <string name="schedule_limits_date_format">MMMM dd, YYYY</string>
+    <string name="schedule_week_days_connector">on</string>
+    <string name="schedules_stop_after">Stop after %1$s intakes</string>
+    <string name="schedule_custom_rule_text">&lt;u> %1$s &lt;/u></string>
+    <string name="schedule_repeat_period">Period + rest</string>
 
-  <string-array name="schedule_repeat_types">
-    <item>Every day</item>
-    <item>Some week days</item>
-    <item>Interval</item>
-    <!--<item>Customize</item>-->
-  </string-array>
+    <string-array name="schedule_repeat_types">
+        <item>Every day</item>
+        <item>Some week days</item>
+        <item>Interval</item>
+        <!--<item>Customize</item>-->
+    </string-array>
 
-  <string-array name="schedule_repeat_frequencies">
-    <item>Daily</item>
-    <item>Weekly</item>
-    <item>Monthly</item>
-  </string-array>
+    <string-array name="schedule_repeat_frequencies">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+    </string-array>
 
-  <string-array name="schedule_repeat_frequency_units">
-    <item>days</item>
-    <item>weeks</item>
-    <item>months</item>
-  </string-array>
+    <string-array name="schedule_repeat_frequency_units">
+        <item>hours</item>
+        <item>days</item>
+        <item>weeks</item>
+        <item>months</item>
+    </string-array>
 
-  <string-array name="schedule_repeat_units">
-    <item>Days</item>
-    <item>Weeks</item>
-    <item>Months</item>
-  </string-array>
-  <string name="recurrence_end_continously"></string>
-  <string name="recurrence_end_count_label">For a number of intakes</string>
-  <string name="every_weekday"></string>
-  <string name="summary_show_calendar">Show calendar</string>
-  <string name="hours">hours</string>
-  <string name="schedule_help_type">First, select a schedule type</string>
-  <string name="schedule_help_no_type_selected">Please, select a schedule type to keep on creating the schedule</string>
+    <string-array name="schedule_repeat_units">
+        <item>Days</item>
+        <item>Weeks</item>
+        <item>Months</item>
+    </string-array>
+    <string name="recurrence_end_continously"></string>
+    <string name="recurrence_end_count_label">For a number of intakes</string>
+    <string name="every_weekday"></string>
+    <string name="summary_show_calendar">Show calendar</string>
+    <string name="hours">hours</string>
+    <string name="schedule_help_type">First, select a schedule type</string>
+    <string name="schedule_help_no_type_selected">Please, select a schedule type to keep on creating the schedule</string>
 
-  <string name="schedule_type_routines_title">Vinculada a rutinas</string>
-  <string name="schedule_type_hourly_title">Intervalo horario</string>
-  <string name="schedule_type_period_title">Período + descanso</string>
-  <string name="schedule_type_common_periods">Common cycles</string>
+    <string name="schedule_type_routines_title">Vinculada a rutinas</string>
+    <string name="schedule_type_hourly_title">Intervalo horario</string>
+    <string name="schedule_type_period_title">Período + descanso</string>
+    <string name="schedule_type_common_periods">Common cycles</string>
     <string name="schedule_type_from_qr">Desde QR</string>
 
     <string-array name="schedule_types">
@@ -338,39 +341,39 @@
         <item>@string/schedule_type_period_title</item>
     </string-array>
 
-  <string name="schedule_type_routines_description">Ex: Cada 3 días, con desayuno comida y cena</string>
-  <string name="schedule_type_hourly_description">Ex: Cada 8 horas</string>
-  <string name="schedule_type_period_description">Ex: 21 días + 7 de descanso</string>
+    <string name="schedule_type_routines_description">Ex: Cada 3 días, con desayuno comida y cena</string>
+    <string name="schedule_type_hourly_description">Ex: Cada 8 horas</string>
+    <string name="schedule_type_period_description">Ex: 21 días + 7 de descanso</string>
 
-  <string-array name="schedule_cycles">
-    <item>21 + 7</item>
-    <item>22 + 6</item>
-    <item>23 + 5</item>
-    <item>24 + 4</item>
-    <item>26 + 2</item>
-    <item>35 + 7</item>
-    <item>42 + 7</item>
-    <item>63 + 7</item>
-    <item>84 + 7</item>
-  </string-array>
-  <string name="yearly_plain">Yearly</string>
-  <string name="schedule_help_cycle">Setup repetition cycle (intake + rest)</string>
-  <string name="schedule_help_duration">Finally, you can specify the schedule start and end. Leave it as it is to repeat indefinitely.</string>
-  <string name="schedule_help_hourly">Please state the repeat period, dosage, and time of the first intake</string>
-  <string name="schedule_help_repeat">State the schedule repetition. If it repeats every day, you do not have to do anything.</string>
-  <string name="schedule_help_timesbyday">Please state the number of times per day that the schedule repeats</string>
-  <string name="schedule_help_timetable"> Now, link each intake to your routines and state the dosage for each of them</string>
+    <string-array name="schedule_cycles">
+        <item>21 + 7</item>
+        <item>22 + 6</item>
+        <item>23 + 5</item>
+        <item>24 + 4</item>
+        <item>26 + 2</item>
+        <item>35 + 7</item>
+        <item>42 + 7</item>
+        <item>63 + 7</item>
+        <item>84 + 7</item>
+    </string-array>
+    <string name="yearly_plain">Yearly</string>
+    <string name="schedule_help_cycle">Setup repetition cycle (intake + rest)</string>
+    <string name="schedule_help_duration">Finally, you can specify the schedule start and end. Leave it as it is to repeat indefinitely.</string>
+    <string name="schedule_help_hourly">Please state the repeat period, dosage, and time of the first intake</string>
+    <string name="schedule_help_repeat">State the schedule repetition. If it repeats every day, you do not have to do anything.</string>
+    <string name="schedule_help_timesbyday">Please state the number of times per day that the schedule repeats</string>
+    <string name="schedule_help_timetable"> Now, link each intake to your routines and state the dosage for each of them</string>
 
-  <string-array name="calendar_weekday_names">
-    <item>NONE</item>
-    <item>SU</item>
-    <item>MO</item>
-    <item>TU</item>
-    <item>WE</item>
-    <item>TH</item>
-    <item>FR</item>
-    <item>SA</item>
-  </string-array>
+    <string-array name="calendar_weekday_names">
+        <item>NONE</item>
+        <item>SU</item>
+        <item>MO</item>
+        <item>TU</item>
+        <item>WE</item>
+        <item>TH</item>
+        <item>FR</item>
+        <item>SA</item>
+    </string-array>
 
     <string name="title_activity_calendar">Pickups calendar</string>
     <string name="title_pickups_bottom_sheet">Pickups on %1$s</string>
@@ -379,11 +382,10 @@
 
     <string name="title_activity_confirm_schedules">Confirm schedules</string>
     <string name="confirm_prescription_x_of_y">Prescription %1$s of %2$s</string>
-    <string name="cycle_period_cero_message">Intake and rest periods must be greater than zero</string>
     <string name="recurrence_end_date"></string>
-    <string name="schedule_type">Schedule type</string>
     <string name="scan_prescriptions_title">Scan prescriptions</string>
     <string name="scan_qr">Scan QR</string>
     <string name="duration">Duration</string>
 
 </resources>
+

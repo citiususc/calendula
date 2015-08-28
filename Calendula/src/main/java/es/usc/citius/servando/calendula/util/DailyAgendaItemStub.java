@@ -43,7 +43,7 @@ public class DailyAgendaItemStub {
 
     public static List<DailyAgendaItemStub> fromHour(int hour)
     {
-
+        
         //int today = DateTime.now().getDayOfWeek();
         LocalDate today = LocalDate.now();
 
@@ -53,8 +53,7 @@ public class DailyAgendaItemStub {
         if (!routines.isEmpty())
         {
 
-            for (Routine r : routines)
-            {
+            for (Routine r : routines) {
                 // Find doses off all routines in this hour
                 List<ScheduleItem> doses = r.scheduleItems();
 
@@ -66,11 +65,9 @@ public class DailyAgendaItemStub {
 
                     item.meds = new ArrayList<>();
 
-                    for (ScheduleItem scheduleItem : doses)
-                    {
+                    for (ScheduleItem scheduleItem : doses) {
                         if (scheduleItem.schedule() != null && scheduleItem.schedule()
-                            .enabledForDate(today))
-                        {
+                                .enabledForDate(today)) {
                             item.hasEvents = true;
                             int minute = r.time().getMinuteOfHour();
                             Medicine med = scheduleItem.schedule().medicine();
@@ -81,8 +78,7 @@ public class DailyAgendaItemStub {
                             el.res = med.presentation().getDrawable();
                             el.presentation = med.presentation();
                             el.minute = minute < 10 ? "0" + minute : String.valueOf(minute);
-                            el.taken =
-                                DailyScheduleItem.findByScheduleItem(scheduleItem).takenToday();
+                            el.taken = DailyScheduleItem.findByScheduleItem(scheduleItem).takenToday();
                             item.meds.add(el);
                         }
                     }
@@ -141,7 +137,7 @@ public class DailyAgendaItemStub {
     }
 
     public static class DailyAgendaItemStubElement
-        implements Comparable<DailyAgendaItemStubElement> {
+            implements Comparable<DailyAgendaItemStubElement> {
 
         public String medName;
         public String minute;

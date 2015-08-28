@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Calendula</string>
+    <string name="title_home">Home</string>
+    <string name="title_daily_agenda">Heute</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="action_remove">Entfernen</string>
+    <string name="action_remove_all">Alles entfernen</string>
+
+    <string name="action_exit">Exit</string>
+    <string name="home_menu_routines">ROUTINEN</string>
+    <string name="home_menu_medicines">MEDIKAMENTE</string>
+    <string name="home_menu_schedules">Einnahmepläne</string>
+    <string name="home_menu_pharmacies">APOTHEKEN</string>
+    <string name="home_menu_plantrip">REISEPLANUNG</string>
+    <string name="action_bar_title_today">Heute</string>
+    <string name="action_bar_title_home">Home</string>
+    <string name="medicine">Medikamente</string>
+
+    <string-array name="home_action_list">
+        <item>Calendula</item>
+        <item>Routinen</item>
+        <item>Medikamente</item>
+        <item>Zeitpläne</item>
+    </string-array>
+
+    <string name="drawer_top_option">Oben</string>
+    <string name="drawer_menu_option">Menu</string>
+    <string name="drawer_bottom_option">Unten</string>
+    <string name="drawer_services_option">Werkzeuge</string>
+    <string name="drawer_help_option">Tour</string>
+    <string name="drawer_settings_option">Einstellungen</string>
+
+    <string-array name="home_drawer_actions">
+        <item>@string/drawer_top_option</item>
+        <item>Home</item>
+        <item>@string/drawer_menu_option</item>
+        <item>Routinen</item>
+        <item>@string/title_activity_medicines</item>
+        <item>Zeitpläne</item>
+        <item>@string/drawer_services_option</item>
+        <item>Apotheken</item>
+        <item>Reiseplan</item>
+        <item>@string/drawer_bottom_option</item>
+
+    </string-array>
+
+    <string name="title_activity_routines">Routinen</string>
+    <string name="title_edit_routine_activity">Routinen bearbeiten</string>
+    <string name="title_create_routine_activity">Routine erstellen</string>
+    <string name="title_activity_medicines">Medizine</string>
+    <string name="title_edit_medicine_activity">Medikamente bearbeiten</string>
+    <string name="title_create_medicine_activity">Medikament erstellen</string>
+    <string name="title_edit_schedule_activity">Einnahmeplan bearbeiten</string>
+    <string name="title_create_schedule_activity">Einnahmeplan erstellen</string>
+    <string name="routine_name">Name der Routine</string>
+    <string name="routine_time">Zeit</string>
+    <string name="edit_routine_button_text">Änderungen speichern</string>
+    <string name="create_routine_button_text">Routine erstellen</string>
+    <string name="create_new_routine">Neue Routine erstellen...</string>
+    <string name="add_routine_button">ROUTINE HINZUFÜGEN </string>
+    <string name="medicine_name">Medikamentenname</string>
+    <string name="medicine_description">Medikamentenbeschreibung</string>
+    <string name="medicine_presentation">Präsentation</string>
+    <string name="edit_medicine_button_text">Änderungen speichern</string>
+    <string name="create_medicine_button_text">Medikament erstellen</string>
+    <string name="add_medicine_button">MEDIKAMENT HINZUFÜGEN</string>
+    <string name="no_stock_info_msg">Keine Bestandsinformation</string>
+    <string name="title_activity_schedules">Pläne</string>
+    <string name="prev">Vorhergehend</string>
+    <string name="next">Nächste(r)</string>
+    <string name="delay">Verzögerung</string>
+    <string name="done">Erledigt</string>
+    <string name="cancel">Rückgängig</string>
+    <string name="confirm">Bestätigen</string>
+    <string name="meds_time">Denken Sie daran Ihre Medikamente zu nehmen</string>
+    <string name="title_select_dose_dialog">Legen Sie Dosierung fest</string>
+    <string name="doses_and_times">Zeiten und Dosierungen</string>
+    <string name="schedule_repeat_days">Wiederholen</string>
+
+
+    <!-- Schedule creation -->
+    <string name="summary_title">Kontrollieren und Bestätigen</string>
+    <string name="title_activity_schedule_list">Einnahmepläne</string>
+    <string name="add_schedule_button">PLAN HINZUFÜGEN</string>
+    <string name="summary">Zusammenfassung</string>
+
+    <!-- Med presentations -->
+    <string name="injections">Injektionen</string>
+    <string name="pills">Tabletten</string>
+    <string name="capsules">Kapseln</string>
+    <string name="inhaler">Inhalationen</string>
+    <string name="drops">Tropfen</string>
+    <string name="pomade">Creme</string>
+    <string name="syrup">Sirup</string>
+    <string name="spray">Spray</string>
+    <string name="unknown">Unbekannt</string>
+    <string name="effervescent">Brausetablette/pulver</string>
+    <string name="schedule">Plan</string>
+    <string name="schedule_type">Plan Typ</string>
+
+    <!-- Med presentation units -->
+    <string name="injections_units">Injektion</string>
+    <string name="pills_units">Tablette</string>
+    <string name="capsules_units">Kapsel</string>
+    <string name="inhaler_units">Inhalationsstoß</string>
+    <string name="spray_units">Spraystöße</string>
+    <string name="drops_units">Tropfen</string>
+    <string name="pomade_units">Anwendungen</string>
+    <string name="syrup_units">Siruplöffel</string>
+    <string name="unknown_units">Unbekannt</string>
+    <string name="effervescent_units">Päckchen</string>
+
+    <string name="never">Nie</string>
+    <string name="every_day">Jeden Tag</string>
+    <string name="once_a_day">Einmal täglich</string>
+    <string name="twice_a_day">Zweimal täglich</string>
+    <string name="tree_times_a_day">Dreimal täglich</string>
+    <string name="four_times_a_day">Viermal täglich</string>
+    <string name="times_a_day">Mal pro Tag</string>
+    <string name="and">und</string>
+
+    <!-- Med schedules -->
+    <string-array name="schedules_array">
+        <item>@string/once_a_day</item>
+        <item>@string/twice_a_day</item>
+        <item>@string/tree_times_a_day</item>
+        <item>@string/four_times_a_day</item>
+    </string-array>
+
+
+    <!-- Med schedules -->
+    <string-array name="delays_array">
+        <item>1 min</item>
+        <item>15 min</item>
+        <item>30 min</item>
+        <item>60 min</item>
+    </string-array>
+
+    <integer-array name="delays_array_values">
+        <item>1</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+    </integer-array>
+
+
+    <!-- Default routines -->
+    <string name="routine_breakfast">Frühstück</string>
+    <string name="routine_lunch">Mittagessen</string>
+    <string name="routine_dinner">Abendessen</string>
+
+
+    <string name="hello_blank_fragment">Hallo leeres Bruchstück</string>
+    <string name="message_notification_title_template">%1$s</string>
+    <string name="message_notification_placeholder_text_template">%1$s</string>
+    <string name="action_take_now">Jetzt einnehmen</string>
+    <string name="action_delay">Verzöderung</string>
+    <string name="title_activity_start">StartActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_reminder">ReminderActivity</string>
+    <string name="title_activity_agenda_detail">AgendaDetailActivity</string>
+
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="splash_quote">Therapie Management leicht gemacht</string>
+    <string name="toolbar_menu_title">Menu</string>
+    <string name="schedule_timetable_time_column">ZEIT</string>
+    <string name="schedule_timetable_dose_column">DOSIERUNG</string>
+    <string name="hourly_repeat_dose">Dosierung</string>
+    <string name="take">Einnahme</string>
+    <string name="first_intake">Erste Einnahme um</string>
+    <string name="schedule_day_selector_take">Einnahme:</string>
+    <!-- Day Names -->
+    <string-array name="day_names">
+        <item>Montag</item>
+        <item>Dienstag</item>
+        <item>Mittwoch</item>
+        <item>Donnerstag</item>
+        <item>Freitag</item>
+        <item>Sonnabend</item>
+        <item>Sonntag</item>
+    </string-array>
+    <string name="schedule_day_selector_mo">MO</string>
+    <string name="schedule_day_selector_tu">DI</string>
+    <string name="schedule_day_selector_we">MI</string>
+    <string name="schedule_day_selector_th">DO</string>
+    <string name="schedule_day_selector_fr">FR</string>
+    <string name="schedule_day_selector_sa">SA</string>
+    <string name="schedule_day_selector_su">SO</string>
+    <string name="agenda_zoom_meds_time">Es ist Zeit Medikamente zu nehmen!</string>
+    <string name="create_schedule_unselected_med">Wählen Sie ein Medikament um einen Plan zu erstellen</string>
+    <string name="create_schedule_incomplete_items">Wählen Sie Routinen für alle Ihre Einnahmen</string>
+    <string name="create_schedule_incomplete_doses">Dosierungen müssen größer wie Null sein</string>
+    <string name="home_no_pending_meds_message">Es gibt keine ausstehenden Medikationen für heute</string>
+    <string name="work_in_progress">This feature will be available in future versions. Thanks you!</string>
+    <string name="medicine_created_message">Medizin erstellt!</string>
+    <string name="medicine_deleted_message">Medizin gelöscht!</string>
+    <string name="medicine_edited_message">Medizin aktualisiert!</string>
+
+    <string name="routine_created_message">Routine erstellt!</string>
+    <string name="routine_deleted_message">Routine gelöscht!</string>
+    <string name="routine_edited_message">Routine aktualisiert!</string>
+    <string name="schedule_created_message">Plan erstellt!</string>
+    <string name="schedule_no_day_specified_message">Sie müssen mindestens einen Tag angeben</string>
+    <string name="cycle_period_cero_message">Cycle intake and rest must be greater than zero</string>
+    <string name="reminder_delayed_message">Routine verzögert </string>
+    <string name="reminder_cancelled_message">Erinnerung rückgängig</string>
+    <string name="remove_routine_message_long">Die Routine %1$s hat assoziierte Pläne, die verloren gehen wenn Sie die Routine löschen. Wollen Sie trotzdem löschen?</string>
+    <string name="remove_routine_message_short">Routine %1$s entfernen?</string>
+    <string name="remove_medicine_message_short">Entfernen %1$s?</string>
+    <string name="remove_routine_dialog_title">Routine entfernen</string>
+
+    <string name="dialog_yes_option">Ja</string>
+    <string name="dialog_no_option">Nein</string>
+
+    <string name="medicine_no_name_error_message">Bitte geben Sie einen Namen ein</string>
+    <string name="medicine_unselected">Noch nichts ausgewählt</string>
+    <string name="medicine_no_presentation_error_message">Bitte wählen Sie eine Präsentation</string>
+
+    <!-- App Tutorial-->
+    <string name="tutorial_welcome_title">Willkommen zu Calendula!</string>
+    <string name="tutorial_welcome_text">Calendula wird Ihnen helfen Ihren Therapieplan zu erstellen. Ausstehende Medikationen für heute sehen Sie auf diesem Bildschirm.</string>
+    <string name="tutorial_homeinfo_title">Erkunden Sie!</string>
+    <string name="tutorial_homeinfo_text">Sie können alle Calendulafeatures durch das Menu erreichen. Die häufigsten Optionen können Sie auch durch nach rechts wischen erreichen!</string>
+    <string name="tutorial_routine_title">Gute Gewohnheiten</string>
+    <string name="tutorial_routine_text">Routinen erlauben es Ihnen die Medikamenteneinnahme mit Ihren täglichen Aktivitäten zu verbinden. Fügen Sie Ihre eigenen Routinen hinzu!</string>
+    <string name="tutorial_meds_title">Organisieren Sie Ihre Medikamente</string>
+    <string name="tutorial_meds_text">Behalten Sie die Übersicht über Ihre Medikamente durch Hinzufügen zum Medikamentensatz. Zukünftige Versionen werden ein verbessertes Bestandsmanagement haben!</string>
+    <string name="tutorial_schedule_title">Verwalten und organisieren Ihre Einnahmepläne!</string>
+    <string name="tutorial_schedule_text">Einnahmepläne erlauben uns Benachrichtigungen, wenn es für Sie Zeit ist  Ihre Medikamte zu nehmen. Fügen Sie Ihre Zeiten und Dosierungen hinzu und vergessen Sie keine Medikamenteneinnahme mehr!</string>
+    <string name="tutorial_next">Nächste</string>
+    <string name="tutorial_understood">Verstanden</string>
+    <string name="tutorial_notifications_title">Überprüfen Sie Ihre eingenommmenen Medikamente!</string>
+    <string name="tutorial_notifications_text">Denken Sie daran Ihre Einnahme zu bestätigen oder Sie werden laufend erinnert. Sie können die Benachrichtigungseinstellungen im Optionsmenu ändern. </string>
+
+    <string name="notification_repeat_message">Der Alarm wird wiederholt um %1$s</string>
+    <string name="notification_cancel_now">Jetzt löschen</string>
+    <string name="notification_delay">Verzögern</string>
+    <string name="alarm_delayed_message">Alarm ist verzögert um %1$s Minuten</string>
+
+    <string name="moods_dialog_title">Wie fühlen Sie sich?</string>
+    <string-array name="moods">
+        <item>sehr schlecht</item>
+        <item>schlecht</item>
+        <item>indifferent</item>
+        <item>gut</item>
+        <item>sehr gut
+</item>
+    </string-array>
+
+    <string name="search_med_hint">Suche...</string>
+    <string name="download_prospect_message">%1$s Beipackzettel wird jetzt heruntergeladen. Einmal heruntergeladen ist er auch ohne Internetverbindung verfügbar.</string>
+    <string name="download_prospect_title">Beipackzettel herunterladen</string>
+    <string name="download_prospect_not_available_message">Kein Beipackzetell für dieses Medikament verfügbar.</string>
+    <string name="download_prospect_continue">Öffnen</string>
+    <string name="download_prospect_cancel">Abbrechen</string>
+    <string name="search_no_results_found">Keine Medikamente gefunden</string>
+    <string name="pref_header_prescriptions">Medikamentensuche</string>
+    <string name="pref_enable_prescriptions_db">Assistent aktivieren</string>
+    <string name="medicine_edit_name_hint">Hier schreiben...</string>
+
+    <string name="enable_prescriptions_progress_messgae">Setting up med information. It will take only a few seconds</string>
+    <string name="enable_prescriptions_dialog_message">Sie können einfach Medikamente hinzufügen und Beipackzettel ansehen durch Aktivierung des Suchassistenten. Sie können die Aktivierung auch später über das Menu vornehmen.</string>
+    <string name="enable_prescriptions_dialog_title">Suchassistent</string>
+    <string name="enable_prescriptions_finish_message">Sie können die Suche jetzt starten</string>
+    <string name="enable_prescriptions_dialog_yes">Aktivieren (Emppfohlen)</string>
+    <string name="enable_prescriptions_dialog_no">Abbrechen</string>
+
+    <string name="prescriptions_download_complete">Der Beipackzettel ist jetzt verfügbar!</string>
+
+
+    <string name="driving_warning">Dieses Medikament kann Ihre Fahrtüchtigkeit beeinflussen. \n\nLesen Sie den Beipackzetel sorgfältig oder fragen Sie Ihren Arzt oder Apotheker. \n\nDanke.</string>
+    <string name="driving_warning_title">Seien Sie vorsichtig</string>
+    <string name="driving_warning_show_prospect">Lesen Sie den Beipackzettel</string>
+    <string name="driving_warning_gotit">Verstanden</string>
+    <string name="repeat_every">Wiederhole jede</string>
+    <string name="dialog_interval_title">Intervall</string>
+    <string name="every">jede</string>
+    <string name="from_hour">von</string>
+    <string name="repeat_specific_days">Bestimmte Tage</string>
+    <string name="repeat_every_tostr">Jede %1$s %2$s</string>
+    <string name="schedule_freq_days">Tage</string>
+    <string name="schedule_freq_weeks">Wochen</string>
+    <string name="schedule_freq_months">Monate</string>
+    <string name="label_schedule_repeat_today">Start</string>
+    <string name="button_schedule_repeat_today">Heute</string>
+    <string name="label_schedule_repeat_until">Stop</string>
+    <string name="button_schedule_repeat_until">Nie</string>
+    <string name="schedule_limits_date_format">MMMM dd, YYYY</string>
+    <string name="schedule_week_days_connector">on</string>
+    <string name="schedules_stop_after">Stop nach %1$s Einnahmen</string>
+    <string name="schedule_custom_rule_text">&lt;u> %1$s &lt;/u></string>
+    <string name="schedule_repeat_period">Periode + Unterbrechung</string>
+
+    <string-array name="schedule_repeat_types">
+        <item>Jeden Tag</item>
+        <item>Einige Wochentage</item>
+        <item>Intervall</item>
+        <!--<item>Customize</item>-->
+    </string-array>
+
+    <string-array name="schedule_repeat_frequencies">
+        <item>Täglich</item>
+        <item>Wöchentlich</item>
+        <item>Monatlich</item>
+    </string-array>
+
+    <string-array name="schedule_repeat_frequency_units">
+        <item>Stunden</item>
+        <item>Tage</item>
+        <item>Wochen</item>
+        <item>Monate</item>
+    </string-array>
+
+    <string-array name="schedule_repeat_units">
+        <item>Tage</item>
+        <item>Wochen</item>
+        <item>Monate</item>
+    </string-array>
+    <string name="recurrence_end_continously"></string>
+    <string name="recurrence_end_count_label">Für eine Anzahl von Einnahmen</string>
+    <string name="every_weekday"></string>
+    <string name="summary_show_calendar">Kalender anzeigen</string>
+    <string name="hours">Stunden</string>
+    <string name="schedule_help_type">Erst einen Plantyp auswählen</string>
+    <string name="schedule_help_no_type_selected">Bitte wählen Sie einen Plantyp aus um dann einen Plan zu erstellen</string>
+
+    <string name="schedule_type_routines_title">Verknüpft mit Routinen</string>
+    <string name="schedule_type_hourly_title">stündliches Intervall</string>
+    <string name="schedule_type_period_title">Perioden + Pausen</string>
+    <string name="schedule_type_common_periods">Üblche Zyklen</string>
+
+
+    <string name="schedule_type_routines_description">Ex: Alle 3 Tage  mit dem Frühstück Mittagessen Abendessen</string>
+    <string name="schedule_type_hourly_description">Ex: Alle 8 Stunden</string>
+    <string name="schedule_type_period_description">Ex: 21 Tage + 7 Pause</string>
+
+    <string-array name="schedule_cycles">
+        <item>21 + 7</item>
+        <item>22 + 6</item>
+        <item>23 + 5</item>
+        <item>24 + 4</item>
+        <item>26 + 2</item>
+        <item>35 + 7</item>
+        <item>42 + 7</item>
+        <item>63 + 7</item>
+        <item>84 + 7</item>
+    </string-array>
+    <string name="yearly_plain">Jährlich</string>
+    <string name="schedule_help_cycle">Wiederholungszyklus einrichten (Einnahme + Unterbrechungen)</string>
+    <string name="schedule_help_duration">Sie können Anfang und Ende des Plans angeben. Ohne Angabe wird der Plan immer wiederholt.</string>
+    <string name="schedule_help_hourly">Bitte geben Sie den Wiederholungszeitraum, Dosierung ind Zeitpunkt der ersten Einnahme an</string>
+    <string name="schedule_help_repeat">Geben Sie den Wiederholungsplan an, sind die Wiederholungen täglich müssen Sie nichts eingeben.</string>
+    <string name="schedule_help_timesbyday">Bitte geben Sie die Anzahl pro Tag an die der Plan wiederholt</string>
+    <string name="schedule_help_timetable"> Jetzt verknüpfen jede Einnahme mit Ihren Routinen und geben die Dosierung jeder Einnahme an</string>
+
+    <string-array name="calendar_weekday_names">
+        <item>NONE</item>
+        <item>SO</item>
+        <item>MO</item>
+        <item>DI</item>
+        <item>MI</item>
+        <item>DO</item>
+        <item>FR</item>
+        <item>SA</item>
+    </string-array>
+
+</resources>
+

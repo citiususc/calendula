@@ -4,8 +4,8 @@
     <item android:drawable="@drawable/list_item_shadow" />
 
     <item
-        android:drawable="@drawable/shape_list_item_bg"
         android:bottom="2px"
+        android:drawable="@drawable/shape_list_item_bg"
         android:right="2px" />
 
 </layer-list>

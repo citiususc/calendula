@@ -28,16 +28,14 @@ public class SummaryCalendarActivity extends Activity {
     CalendarPickerView calendar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary_calendar);
         updateStatusBarColor();
         setupCalendar();
     }
 
-    private void setupCalendar()
-    {
+    private void setupCalendar() {
 
         calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
 
@@ -51,8 +49,7 @@ public class SummaryCalendarActivity extends Activity {
         LocalDate from = date != null ? LocalDate.parse(date, fmt) : LocalDate.now();
         LocalDate to = from.plusMonths(6);
 
-        if (rule != null)
-        {
+        if (rule != null) {
             r = new RepetitionRule(rule);
             List<LocalDate> dates = r.occurrencesBetween(from, to);
             List<Date> hdates = new ArrayList<>();
@@ -67,17 +64,14 @@ public class SummaryCalendarActivity extends Activity {
 
             decorators.add(new HighlightDecorator(hdates, start, end));
             calendar.setDecorators(decorators);
-        } else if (activeDays > 0 && restDays > 0)
-        {
+        } else if (activeDays > 0 && restDays > 0) {
 
             List<Date> hdates = new ArrayList<>();
 
             LocalDate d = from.plusDays(0); // copy
 
-            while (d.isBefore(to))
-            {
-                if (ScheduleHelper.cycleEnabledForDate(d, from, activeDays, restDays))
-                {
+            while (d.isBefore(to)) {
+                if (ScheduleHelper.cycleEnabledForDate(d, from, activeDays, restDays)) {
                     hdates.add(d.toDate());
                 }
                 d = d.plusDays(1);
@@ -92,13 +86,11 @@ public class SummaryCalendarActivity extends Activity {
         }
 
         calendar.init(from.toDate(), to.toDate())
-            .setShortWeekdays(getResources().getStringArray(R.array.calendar_weekday_names));
+                .setShortWeekdays(getResources().getStringArray(R.array.calendar_weekday_names));
     }
 
-    private void updateStatusBarColor()
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
+    private void updateStatusBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.dark_grey_home));
         }
     }
@@ -111,46 +103,37 @@ public class SummaryCalendarActivity extends Activity {
         Date start;
         Date end;
 
-        public HighlightDecorator(List<Date> days, Date start, Date end)
-        {
+        public HighlightDecorator(List<Date> days, Date start, Date end) {
             this.days = days;
             this.start = start;
             this.end = end;
         }
 
         @Override
-        public void decorate(final CalendarCellView cellView, Date date)
-        {
+        public void decorate(final CalendarCellView cellView, Date date) {
 
             boolean highlight = days.contains(date);
 
-            if (highlight && cellView.isCurrentMonth())
-            {
+            if (highlight && cellView.isCurrentMonth()) {
                 cellView.setBackgroundResource(R.drawable.summary_calendar_day_hightlighted);
                 cellView.setTextAppearance(cellView.getContext(), R.style.calendar_day_highlighted);
-            } else if (!cellView.isEnabled())
-            {
+            } else if (!cellView.isEnabled()) {
                 cellView.setBackgroundResource(R.color.white);
                 cellView.setTextAppearance(cellView.getContext(), R.style.calendar_day_disabled);
-            } else if (date.equals(today))
-            {
+            } else if (date.equals(today)) {
                 cellView.setBackgroundResource(R.drawable.calendar_today_selector);
                 cellView.setTextAppearance(cellView.getContext(), R.style.calendar_day_today);
-            } else
-            {
+            } else {
                 cellView.setBackgroundResource(R.color.white);
                 cellView.setTextAppearance(cellView.getContext(), R.style.calendar_day);
             }
 
-            if (cellView.isCurrentMonth())
-            {
-                if (date.equals(start))
-                {
+            if (cellView.isCurrentMonth()) {
+                if (date.equals(start)) {
                     //cellView.setBackgroundColor(Color.parseColor("#bebebe"));
                     cellView.setTextAppearance(cellView.getContext(), R.style.calendar_day_today);
                     cellView.setText("[ " + cellView.getText());
-                } else if (date.equals(end))
-                {
+                } else if (date.equals(end)) {
                     //cellView.setBackgroundColor(Color.parseColor("#bebebe"));
                     cellView.setText(cellView.getText() + " ]");
                     cellView.setTextAppearance(cellView.getContext(), R.style.calendar_day_today);

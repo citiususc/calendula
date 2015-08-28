@@ -141,34 +141,34 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Cycle TEXT;");
 
         getDailyScheduleItemsDao().executeRaw(
-            "ALTER TABLE DailyScheduleItems ADD COLUMN Schedule INTEGER;");
+                "ALTER TABLE DailyScheduleItems ADD COLUMN Schedule INTEGER;");
         getDailyScheduleItemsDao().executeRaw(
-            "ALTER TABLE DailyScheduleItems ADD COLUMN Time TEXT;");
+                "ALTER TABLE DailyScheduleItems ADD COLUMN Time TEXT;");
 
         // update schedules
-        TransactionManager.callInTransaction(getConnectionSource(), new Callable<Object>() {
-          @Override
-          public Void call() throws Exception {
-            // iterate over schedules and replace days[] with rrule
-            List<Schedule> schedules = getSchedulesDao().queryForAll();
-            Log.d(TAG, "Upgrade " + schedules.size() + " schedules");
-            for (Schedule s : schedules) {
-              if (s.rule() == null) {
-                s.setRepetition(new RepetitionRule(RepetitionRule.DEFAULT_ICAL_VALUE));
-              }
-              s.setDays(s.getLegacyDays());
+        TransactionManager.callInTransaction(getConnectionSource(), new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                // iterate over schedules and replace days[] with rrule
+                List<Schedule> schedules = getSchedulesDao().queryForAll();
+                Log.d(TAG, "Upgrade " + schedules.size() + " schedules");
+                for (Schedule s : schedules) {
+                    if (s.rule() == null) {
+                        s.setRepetition(new RepetitionRule(RepetitionRule.DEFAULT_ICAL_VALUE));
+                    }
+                    s.setDays(s.getLegacyDays());
 
-              if (s.allDaysSelected()) {
-                s.setType(Schedule.SCHEDULE_TYPE_EVERYDAY);
-              } else {
-                s.setType(Schedule.SCHEDULE_TYPE_SOMEDAYS);
-              }
-              s.setStart(LocalDate.now());
-              s.save();
+                    if (s.allDaysSelected()) {
+                        s.setType(Schedule.SCHEDULE_TYPE_EVERYDAY);
+                    } else {
+                        s.setType(Schedule.SCHEDULE_TYPE_SOMEDAYS);
+                    }
+                    s.setStart(LocalDate.now());
+                    s.save();
+                }
+
+                return null;
             }
-
-            return null;
-          }
         });
 
 
