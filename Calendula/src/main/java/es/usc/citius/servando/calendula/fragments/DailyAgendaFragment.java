@@ -572,9 +572,16 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
     }
 
     public void notifyDataChange() {
-        items.clear();
-        items.addAll(buildItems()); // allow user to change day
-        adapter.notifyDataSetChanged();
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                items.clear();
+                items.addAll(buildItems()); // allow user to change day
+                adapter.notifyDataSetChanged();
+            }
+        });
+
     }
 
     private class AgendaItemAdapter extends ArrayAdapter<DailyAgendaItemStub> {

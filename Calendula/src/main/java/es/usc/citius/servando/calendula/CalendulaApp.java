@@ -5,7 +5,9 @@ import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.joda.time.LocalTime;
@@ -29,6 +31,8 @@ import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 public class CalendulaApp extends Application {
 
     public static boolean disableReceivers = false;
+
+    public static final String PHARMACY_MODE_ENABLED = "PHARMACY_MODE_ENABLED";
 
     // PREFERENCES
     public static final String PREFERENCES_NAME = "CalendulaPreferences";
@@ -77,6 +81,12 @@ public class CalendulaApp extends Application {
         //exportDatabase(this, DB_NAME, new File(Environment.getExternalStorageDirectory() + File.separator + DB_NAME));
         //forceLocale(Locale.GERMAN);
     }
+
+    public static boolean isPharmaModeEnabled(Context ctx){
+        SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(ctx);
+        return prefs.getBoolean(PHARMACY_MODE_ENABLED, false);
+    }
+
 
     private void forceLocale(Locale l) {
         Locale locale = new Locale(l.getLanguage());

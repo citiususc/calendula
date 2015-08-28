@@ -43,16 +43,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             ScheduleItem.class,
             DailyScheduleItem.class,
             Prescription.class,
-            // v5
+            // v8
             HomogeneousGroup.class,
-            // v6
             PickupInfo.class
     };
 
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
@@ -116,9 +115,25 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 case 7:
                     // migrate to iCal
                     migrateToICal();
-                
-                // TODO Create HGroup and PKInfo tables
-                  
+                case 8:
+                    // Add column scanned (boolean, INTEGER in SQLite) to schedules table
+                    getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Scanned INTEGER;");
+                    // update schedules scanned value
+                    TransactionManager.callInTransaction(getConnectionSource(), new Callable<Void>() {
+                        @Override
+                        public Void call() throws Exception {
+                            // iterate over schedules and set Scanned to false
+                            List<Schedule> schedules = getSchedulesDao().queryForAll();
+                            for (Schedule s : schedules) {
+                                s.setScanned(false);
+                                s.save();
+                            }
+                            return null;
+                        }
+                    });
+                    // Create HomogeneousGroup and PickupInfo tables
+                    TableUtils.createTable(connectionSource, HomogeneousGroup.class);
+                    TableUtils.createTable(connectionSource, PickupInfo.class);
             }
 
 

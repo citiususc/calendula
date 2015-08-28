@@ -22,9 +22,12 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.List;
 
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.ScanActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.events.PharmaModeChangeEvent;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
@@ -42,6 +45,7 @@ public class ScheduleListFragment extends Fragment {
     ListView listview;
 
     FloatingActionsMenu fabMenu;
+    FloatingActionButton actionD;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,6 +55,7 @@ public class ScheduleListFragment extends Fragment {
         mSchedules = Schedule.findAll();
         adapter = new ScheduleListAdapter(getActivity(), R.layout.schedules_list_item, mSchedules);
         listview.setAdapter(adapter);
+        CalendulaApp.eventBus().register(this);
 
         setupFabMenu(rootView);
 
@@ -65,6 +70,19 @@ public class ScheduleListFragment extends Fragment {
         }
     }
 
+    // Method called from the event bus
+    @SuppressWarnings("unused")
+    public void onEvent(PharmaModeChangeEvent event) {
+
+        final FloatingActionButton actionD = (FloatingActionButton) getView().findViewById(R.id.action_d);
+
+       if(actionD != null && event.enabled){
+           actionD.setVisibility(View.VISIBLE);
+       }else if(actionD != null){
+           actionD.setVisibility(View.GONE);
+       }
+    }
+
     private void setupFabMenu(View rootView) {
         fabMenu = (FloatingActionsMenu) rootView.findViewById(R.id.fab_menu);
 
@@ -75,9 +93,13 @@ public class ScheduleListFragment extends Fragment {
         final FloatingActionButton actionC =
                 (FloatingActionButton) rootView.findViewById(R.id.action_c);
 
-        //fabMenu.addButton(actionA);
-        //fabMenu.addButton(actionB);
-        //fabMenu.addButton(actionC);
+        actionD = (FloatingActionButton) rootView.findViewById(R.id.action_d);
+
+        if(! CalendulaApp.isPharmaModeEnabled(getActivity())) {
+            actionD.setVisibility(View.GONE);
+        }
+
+
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
@@ -94,6 +116,11 @@ public class ScheduleListFragment extends Fragment {
                     case R.id.action_c:
                         scheduleType = ScheduleTypeFragment.TYPE_PERIOD;
                         break;
+                    case R.id.action_d:
+                        Intent i = new Intent(getActivity(), ScanActivity.class);
+                        launchActivity(i);
+                        fabMenu.collapse();
+                        return;
                 }
 
                 Intent i = new Intent(getActivity(), ScheduleCreationActivity.class);
@@ -107,6 +134,7 @@ public class ScheduleListFragment extends Fragment {
         actionA.setOnClickListener(onClickListener);
         actionB.setOnClickListener(onClickListener);
         actionC.setOnClickListener(onClickListener);
+        actionD.setOnClickListener(onClickListener);
     }
 
     private void launchActivity(Intent i) {

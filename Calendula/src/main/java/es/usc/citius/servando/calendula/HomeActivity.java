@@ -45,6 +45,7 @@ import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.activities.SettingsActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
+import es.usc.citius.servando.calendula.events.PharmaModeChangeEvent;
 import es.usc.citius.servando.calendula.fragments.DailyAgendaFragment;
 import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
 import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
@@ -238,7 +239,7 @@ public class HomeActivity extends ActionBarActivity
         mDrawerList.setAdapter(new DrawerListAdapter(getApplication(), R.layout.drawer_list_item, items));
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
+        mDrawerList.setOnItemLongClickListener(new DrawerItemLongClickListener());
         mDrawerToggle = new ActionBarDrawerToggle(this,
                 mDrawerLayout,
                 toolbar,
@@ -345,6 +346,7 @@ public class HomeActivity extends ActionBarActivity
     /**
      * Swaps fragments in the main content view
      */
+    private int pharmaModeEnableCount = 0;
     public void selectItem(int position) {
         Log.d("Agenda", "Position :" + position);
         if (position == 1) {
@@ -433,8 +435,11 @@ public class HomeActivity extends ActionBarActivity
         return true;
     }
 
+
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+
         int pageNum = mViewPager.getCurrentItem();
         if (pageNum == 0) {
             boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
@@ -446,7 +451,7 @@ public class HomeActivity extends ActionBarActivity
             menu.findItem(R.id.action_expand).setVisible(false);
         }
 
-        if (pageNum == 2) {
+        if (pageNum == 2 && CalendulaApp.isPharmaModeEnabled(this)) {
             menu.findItem(R.id.action_calendar).setVisible(true);
         } else {
             menu.findItem(R.id.action_calendar).setVisible(false);
@@ -466,6 +471,9 @@ public class HomeActivity extends ActionBarActivity
         }
 
         switch (item.getItemId()) {
+            case R.id.action_calendar:
+                startActivity(new Intent(this, CalendarActivity.class));
+                return true;
             case R.id.action_expand:
                 Log.d("Home", "ToogleExpand");
                 ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
@@ -748,4 +756,27 @@ public class HomeActivity extends ActionBarActivity
             selectItem(position);
         }
     }
+
+    private class DrawerItemLongClickListener implements ListView.OnItemLongClickListener{
+
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            if(position == 7){
+                SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                if(CalendulaApp.isPharmaModeEnabled(getApplicationContext())){
+                    prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED,false).commit();
+                    Snack.show("Acabas de deshabilitar el modo farmacia!", HomeActivity.this);
+                    CalendulaApp.eventBus().post(new PharmaModeChangeEvent(false));
+                }else{
+                    prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED,true).commit();
+                    Snack.show("Acabas de habilitar el modo farmacia!", HomeActivity.this);
+                    CalendulaApp.eventBus().post(new PharmaModeChangeEvent(true));
+                }
+                return true;
+            }
+            return false;
+        }
+    }
+
 }

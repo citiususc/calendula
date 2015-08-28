@@ -139,8 +139,6 @@ public class CalendarActivity extends ActionBarActivity {
 
         boolean allowReminder = false;
 
-        String bestStr = best.equals(LocalDate.now().plusDays(1))? getString(R.string.calendar_date_tomorrow) : best.toString(getString(R.string.best_date_format));
-
         // there are not urgent meds, but there are others to pickup
         if(urgent.isEmpty() && best!=null){
 
@@ -161,6 +159,9 @@ public class CalendarActivity extends ActionBarActivity {
             // and others
             Log.d("Calendar", "and others");
             if(best!=null){
+
+                String bestStr = best.equals(LocalDate.now().plusDays(1))? getString(R.string.calendar_date_tomorrow) : best.toString(getString(R.string.best_date_format));
+
                 // and the others date is near
                 Log.d("Calendar", "and the others date is near");
                 if(today.plusDays(3).isAfter(best)){
