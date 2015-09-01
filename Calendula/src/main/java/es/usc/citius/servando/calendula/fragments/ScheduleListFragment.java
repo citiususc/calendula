@@ -99,8 +99,6 @@ public class ScheduleListFragment extends Fragment {
             actionD.setVisibility(View.GONE);
         }
 
-
-
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {

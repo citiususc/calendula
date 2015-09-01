@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Specifies that a repeating event to repeat forever (based on the defined frequency) instead of ending at a future date[CHAR LIMIT=20] -->
+    <string name="recurrence_end_continously">Indéfiniment</string>
+    <!-- Specifies that a repeating event to repeat until a certain date[CHAR LIMIT=25] -->
+    <string name="recurrence_end_date_label">Jusqu\'à la date</string>
+    <!-- Specifies that a repeating event to repeat until a certain date[CHAR LIMIT=20] -->
+    <string name="recurrence_end_date">Jusqu\'à <xliff:g id="date">%s</xliff:g></string>
+    <!-- Specifies that a repeating event to repeat for a number of times. A repeating event can repeat forever, repeat in a certain frequency until a certain date, or repeat for a number of times. e.g. repeat 10 times and stop. This string is for the last case [CHAR LIMIT=25] -->
+    <string name="recurrence_end_count_label">Jusqu\'au nombre de doses</string>
+    <!-- Strings to describe how frequently to repeat an event (e.g. every 5 days) -->
+    <plurals name="recurrence_interval_daily">
+        <!-- Singular form [CHAR LIMIT=30] -->
+
+<!-- EN QUANTITY=ONE PONDRIA UNICAMENTE "Tous les jours" sin cifra, LO MISMO PARA SEMANA, MES Y AÑO -->
+
+        <item quantity="one">Tous les <xliff:g id="count">%d</xliff:g> jours</item>
+        <!-- Plural form [CHAR LIMIT=30] -->
+        <item quantity="other">Tous les <xliff:g id="count">%d</xliff:g> jours</item>
+    </plurals>
+    <!-- Strings to describe how frequently to repeat an event (e.g. every 5 weeks) -->
+    <plurals name="recurrence_interval_weekly">
+        <!-- Singular form [CHAR LIMIT=30] -->
+        <item quantity="one">Toutes les <xliff:g id="count">%d</xliff:g> semaines</item>
+        <!-- Plural form [CHAR LIMIT=30] -->
+        <item quantity="other">Toutes les <xliff:g id="count">%d</xliff:g> semaines</item>
+    </plurals>
+    <!-- Strings to describe how frequently to repeat an event (e.g. every 5 months) -->
+    <plurals name="recurrence_interval_monthly">
+        <!-- Singular form [CHAR LIMIT=30] -->
+        <item quantity="one">Tous les <xliff:g id="count">%d</xliff:g> mois</item>
+        <!-- Plural form [CHAR LIMIT=30] -->
+        <item quantity="other">Tous les <xliff:g id="count">%d</xliff:g> mois</item>
+    </plurals>
+    <!-- Strings to describe how frequently to repeat an event (e.g. every 5 years) -->
+    <plurals name="recurrence_interval_yearly">
+        <!-- Singular form [CHAR LIMIT=30] -->
+        <item quantity="one">Tous les <xliff:g id="count">%d</xliff:g> ans</item>
+        <!-- Plural form [CHAR LIMIT=30] -->
+        <item quantity="other">Tous les <xliff:g id="count">%d</xliff:g> ans</item>
+    </plurals>
+    <!-- Specifies that a repeating event should repeat for a certain number of iterations. [CHAR LIMIT=20]-->
+    <plurals name="recurrence_end_count">
+        <item quantity="one">\u0020Jusqu\'à<xliff:g id="event_count">%d</xliff:g> dose</item>
+        <item quantity="other">\u0020Jusqu\'à<xliff:g id="event_count">%d</xliff:g> doses</item>
+    </plurals>
+    <!-- Part of a description of an repeating event. This part states the date when a repeating
+    event ends. The part before the semi-colon describes how it repeats.
+    e.g. Every 2 weeks; until 1/1/2030 [CHAR LIMIT=21] -->
+    <string name="endByDate">\u0020(jusqu\'à <xliff:g id="date">%s</xliff:g>)</string>
+    <!-- Part of a description of an repeating event. This part how many times the event repeats.
+    The part before the semi-colon describes how it repeats.
+    e.g. Every 2 weeks; for 15 times [CHAR LIMIT=15] -->
+    <plurals name="endByCount">
+        <item quantity="one"> (une fois)</item>
+        <item quantity="other">\u0020(<xliff:g id="number">%d</xliff:g> fois)</item>
+    </plurals>
+    <!-- A description for an event that repeats daily. For example, Every 2 days [CHAR LIMIT=15]-->
+    <plurals name="daily">
+        <item quantity="one">Tous les jours</item>
+        <item quantity="other">Tous les <xliff:g id="number">%d</xliff:g> jours</item>
+    </plurals>
+    <!-- A label in a multiple-choice list for the specifying that an event
+    repeats every weekday (Monday through Friday) -->
+    <string name="every_weekday">"Du lundi au vendredi"</string>
+    <!-- A description for an event that repeats weekly on some day of the week. For example,
+    'Weekly on Tuesday' or Every 2 weeks on Monday, Tuesday. [CHAR LIMIT=25]-->
+    <plurals name="weekly">
+        <item quantity="one">Chaque semaine, les <xliff:g id="days_of_week">%2$s</xliff:g></item>
+        <item quantity="other">Toutes les <xliff:g id="number">%1$d</xliff:g> semaines, les <xliff:g id="days_of_week">%2$s</xliff:g></item>
+    </plurals>
+    <!-- The common portion of a string describing how often an event repeats,
+    example: 'Monthly (on day 2)' -->
+    <string name="monthly">Mensuellement</string>
+    <!-- Calendar spinner item, to select that an event recurs every year. -->
+    <string name="yearly_plain">Annuellement</string>
+
+    <!-- Repeat an monthly event on the same day of every month [CHAR LIMIT=20] -->
+    <string name="recurrence_month_pattern_by_day">le même jour de chaque mois</string>
+
+
+    <!-- Recurrence picker: How events are to be repeated. [CHAR LIMIT = 20] -->
+    <string-array name="recurrence_freq">
+        <item>Répéter tous les jours</item>
+        <item>Répéter toutes les semaines</item>
+        <item>Répéter tous les mois</item>
+        <item>Répéter tous les ans</item>
+    </string-array>
+    <!-- The following sets of strings describe a monthly recurring event, which will repeat
+    on the Nth WEEKDAY of every month. For example, the 3rd Monday of every month, or
+    the last Sunday. These are set up like this to resolve any gender-matching issues
+    that were present in some languages.
+    -->
+    <!-- Repeat a monthly event on the same nth day of every Sunday. [CHAR LIMIT=30] -->
+    <string-array name="repeat_by_nth_sun">
+        <item>chaque premier dimanche</item>
+        <item>chaque deuxième dimanche</item>
+        <item>chaque troisième dimanche</item>
+        <item>chaque quatrième dimanche</item>
+        <item>chaque dernier dimanche</item>
+    </string-array>
+    <!-- Repeat a monthly event on the same nth day of every Monday. [CHAR LIMIT=30] -->
+    <string-array name="repeat_by_nth_mon">
+        <item>chaque premier lundi</item>
+        <item>chaque deuxième lundi</item>
+        <item>chaque troisième lundi</item>
+        <item>chaque quatrième lundi</item>
+        <item>chaque dernier lundi</item>
+    </string-array>
+    <!-- Repeat a monthly event on the same nth day of every Tuesday. [CHAR LIMIT=30] -->
+    <string-array name="repeat_by_nth_tues">
+        <item>chaque premier mardi</item>
+        <item>chaque deuxième mardi</item>
+        <item>chaque troisième mardi</item>
+        <item>chaque quatrième mardi</item>
+        <item>chaque dernier mardi</item>
+    </string-array>
+    <!-- Repeat a monthly event on the same nth day of every Wednesday. [CHAR LIMIT=30] -->
+    <string-array name="repeat_by_nth_wed">
+        <item>chaque premier mercredi</item>
+        <item>chaque deuxième mercredi</item>
+        <item>chaque troisième mercredi</item>
+        <item>chaque quatrième mercredi</item>
+        <item>chaque dernier mercredi</item>
+    </string-array>
+    <!-- Repeat a monthly event on the same nth day of every Thursday. [CHAR LIMIT=30] -->
+    <string-array name="repeat_by_nth_thurs">
+        <item>chaque premier jeudi</item>
+        <item>chaque deuxième jeudi</item>
+        <item>chaque troisième jeudi</item>
+        <item>chaque quatrième jeudi</item>
+        <item>chaque dernier jeudi</item>
+    </string-array>
+    <!-- Repeat a monthly event on the same nth day of every Friday. [CHAR LIMIT=30] -->
+    <string-array name="repeat_by_nth_fri">
+        <item>chaque premier vendredi</item>
+        <item>chaque deuxième vendredi</item>
+        <item>chaque troisième vendredi</item>
+        <item>chaque quatrième vendredi</item>
+        <item>chaque dernier vendredi</item>
+    </string-array>
+    <!-- Repeat a monthly event on the same nth day of every Saturday. [CHAR LIMIT=30] -->
+    <string-array name="repeat_by_nth_sat">
+        <item>chaque premier samedi</item>
+        <item>chaque deuxième samedi</item>
+        <item>chaque troisième samedi</item>
+        <item>chaque quatrième samedi</item>
+        <item>chaque dernier samedi</item>
+    </string-array>
+
+
+</resources>
+
