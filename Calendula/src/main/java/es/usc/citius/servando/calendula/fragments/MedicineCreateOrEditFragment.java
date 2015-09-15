@@ -522,8 +522,9 @@ public class MedicineCreateOrEditFragment extends Fragment {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean adviceShown = prefs.getBoolean("show_use_prescriptions_advice", false);
+        boolean dbEnabled = prefs.getBoolean("enable_prescriptions_db", false);
 
-        if (!adviceShown) {
+        if (!adviceShown && !dbEnabled) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(getString(R.string.enable_prescriptions_dialog_title));
             builder.setCancelable(false);
@@ -541,12 +542,10 @@ public class MedicineCreateOrEditFragment extends Fragment {
                     });
             AlertDialog alert = builder.create();
             alert.show();
-            prefs.edit().putBoolean("show_use_prescriptions_advice", true).commit();
         } else {
-
             showSoftInput();
-
         }
+        prefs.edit().putBoolean("show_use_prescriptions_advice", true).commit();
 
     }
 

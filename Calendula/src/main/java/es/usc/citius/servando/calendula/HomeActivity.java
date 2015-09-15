@@ -1,8 +1,10 @@
 package es.usc.citius.servando.calendula;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +36,7 @@ import com.melnykov.fab.FloatingActionButton;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,6 +47,7 @@ import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.activities.SettingsActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.events.PharmaModeChangeEvent;
 import es.usc.citius.servando.calendula.fragments.DailyAgendaFragment;
@@ -53,6 +57,7 @@ import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
+import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 import es.usc.citius.servando.calendula.util.AppTutorial;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Snack;
@@ -769,13 +774,54 @@ public class HomeActivity extends ActionBarActivity
                     Snack.show("Acabas de deshabilitar el modo farmacia!", HomeActivity.this);
                     CalendulaApp.eventBus().post(new PharmaModeChangeEvent(false));
                 }else{
-                    prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED,true).commit();
+
+                    prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, true)
+                            .putBoolean("enable_prescriptions_db",true)
+                            .commit();
+
+                    try {
+                        DB.prescriptions().executeRaw("DELETE FROM Prescriptions;");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    new PopulatePrescriptionDatabaseTask().execute("");
                     Snack.show("Acabas de habilitar el modo farmacia!", HomeActivity.this);
                     CalendulaApp.eventBus().post(new PharmaModeChangeEvent(true));
+
                 }
                 return true;
             }
             return false;
+        }
+    }
+
+    public class PopulatePrescriptionDatabaseTask extends AsyncTask<String, String, Void> {
+
+
+        ProgressDialog dialog;
+
+        @Override
+        protected Void doInBackground(String... params) {
+            new PopulatePrescriptionDBService().updateIfNeeded(HomeActivity.this);
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(HomeActivity.this);
+            dialog.setIndeterminate(true);
+            dialog.setCancelable(false);
+            dialog.setMessage(getString(R.string.enable_prescriptions_progress_messgae));
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
         }
     }
 

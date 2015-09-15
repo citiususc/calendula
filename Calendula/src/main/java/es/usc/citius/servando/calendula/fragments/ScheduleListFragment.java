@@ -74,13 +74,12 @@ public class ScheduleListFragment extends Fragment {
     @SuppressWarnings("unused")
     public void onEvent(PharmaModeChangeEvent event) {
 
-        final FloatingActionButton actionD = (FloatingActionButton) getView().findViewById(R.id.action_d);
+        if (actionD != null && event.enabled) {
+            actionD.setVisibility(View.VISIBLE);
+        } else if (actionD != null) {
+            actionD.setVisibility(View.GONE);
+        }
 
-       if(actionD != null && event.enabled){
-           actionD.setVisibility(View.VISIBLE);
-       }else if(actionD != null){
-           actionD.setVisibility(View.GONE);
-       }
     }
 
     private void setupFabMenu(View rootView) {
