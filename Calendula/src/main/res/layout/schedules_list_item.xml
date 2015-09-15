@@ -5,27 +5,27 @@
 
     <RelativeLayout
         android:id="@+id/schedules_list_item_container"
-        android:layout_width="fill_parent"
-        android:layout_height="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@drawable/touchable_white">
 
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="1px"
 
-            android:layout_alignParentBottom="true"
+            android:layout_alignParentBottom="false"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:background="#efefef" />
+            android:background="#efefef"
+            android:layout_below="@+id/schedules_list_item_times"/>
 
         <ImageButton
             android:id="@+id/imageButton"
             android:layout_width="30dp"
-            android:layout_height="fill_parent"
+            android:layout_height="70dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="false"
             android:layout_alignParentTop="true"
-            android:layout_centerVertical="true"
             android:layout_marginLeft="26dp"
             android:layout_marginTop="10dp"
             android:background="@null"
@@ -50,13 +50,13 @@
         <TextView
             android:id="@+id/schedules_list_item_times"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:layout_alignLeft="@+id/schedules_list_item_days"
             android:layout_alignStart="@+id/schedules_list_item_days"
             android:layout_below="@+id/schedules_list_item_days"
             android:layout_marginTop="3dp"
             android:fontFamily="sans-serif-condensed"
-            android:gravity="center_vertical"
+            android:gravity="top"
             android:text="Three times a day"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/android_blue" />
@@ -70,13 +70,13 @@
             android:layout_marginTop="0dp"
             android:fontFamily="sans-serif-light"
             android:text="Every day"
-            android:textColor="#9a9a9a"
+            android:textColor="#3a3a3a"
             android:textSize="14dp" />
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="30dp"
-            android:layout_height="fill_parent"
+            android:layout_height="80dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="23dp"
