@@ -116,6 +116,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                     // migrate to iCal
                     migrateToICal();
                 case 8:
+                    getMedicinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN hg INTEGER;");
                     // Add column scanned (boolean, INTEGER in SQLite) to schedules table
                     getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Scanned INTEGER;");
                     // update schedules scanned value

@@ -15,7 +15,7 @@ import java.sql.SQLException;
  */
 public class LocalDatePersister extends BaseDataType {
 
-    String format = "yyyy/MM/dd";
+    String format = "ddMMYYYY";
 
     public LocalDatePersister() {
         super(SqlType.STRING, new Class<?>[]{LocalDate.class});

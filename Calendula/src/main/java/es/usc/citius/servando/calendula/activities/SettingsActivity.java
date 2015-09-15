@@ -20,10 +20,12 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 
@@ -177,6 +179,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
                 if (checked) {
                     new PopulatePrescriptionDatabaseTask().execute("");
+                }else{
+                    try {
+                        DB.prescriptions().executeRaw("DELETE FROM Prescriptions;");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
                 return true;
             }

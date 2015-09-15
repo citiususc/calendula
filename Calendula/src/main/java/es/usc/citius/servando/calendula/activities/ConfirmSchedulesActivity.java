@@ -312,8 +312,8 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                                         if (m != null && w.pk != null && w.pk.size() > 0) {
                                             for (PickupWrapper pkw : w.pk) {
                                                 PickupInfo pickupInfo = new PickupInfo();
-                                                pickupInfo.setTo(df.parseLocalDate(pkw.t).plusMonths(3)); // TODO: remove plusMonths
-                                                pickupInfo.setFrom(df.parseLocalDate(pkw.f).plusMonths(3)); // TODO: remove plusMonths
+                                                pickupInfo.setTo(df.parseLocalDate(pkw.t)); // TODO: remove plusMonths
+                                                pickupInfo.setFrom(df.parseLocalDate(pkw.f)); // TODO: remove plusMonths
                                                 pickupInfo.taken(pkw.tk == 1 ? true : false);
                                                 pickupInfo.setMedicine(m);
 
