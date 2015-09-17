@@ -41,6 +41,15 @@ public class RoutineDao extends GenericDao<Routine, Long> {
         CalendulaApp.eventBus().post(PersistenceEvents.ROUTINE_EVENT);
     }
 
+    @Override
+    public List<Routine> findAll() {
+        try {
+            return dao.queryBuilder().orderBy(Routine.COLUMN_TIME,true).query();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding models", e);
+        }
+    }
+
     public List<Routine> findInHour(int hour) {
         try {
             LocalTime time = new LocalTime(hour, 0);
