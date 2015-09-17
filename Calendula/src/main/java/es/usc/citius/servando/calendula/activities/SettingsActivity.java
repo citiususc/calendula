@@ -62,7 +62,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             if (preference instanceof es.usc.citius.servando.calendula.util.RingtonePreference) {
                 Uri ringtoneUri = Uri.parse(stringValue);
                 Ringtone ringtone = RingtoneManager.getRingtone(ctx, ringtoneUri);
-                String name = ringtone.getTitle(ctx);
+                String name = ringtone!=null ? ringtone.getTitle(ctx) :ctx.getString(R.string.pref_notification_tone_sum);
                 preference.setSummary(name);
             } else if (preference instanceof ListPreference) {
                 // For list preferences, look up the correct display value in
