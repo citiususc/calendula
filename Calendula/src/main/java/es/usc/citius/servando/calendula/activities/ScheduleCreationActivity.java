@@ -121,7 +121,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         tabs.setViewPager(mViewPager);
 
         if (mSchedule != null) {
-            mViewPager.setCurrentItem(0);
+            mViewPager.setCurrentItem(1);
         }
 
         CalendulaApp.eventBus().register(this);
@@ -301,14 +301,14 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
     boolean validateBeforeSave() {
 
         if (ScheduleHelper.instance().getSelectedMed() == null) {
-            mViewPager.setCurrentItem(1);
+            mViewPager.setCurrentItem(0);
             showSnackBar(R.string.create_schedule_unselected_med);
             return false;
         }
 
         for (ScheduleItem i : ScheduleHelper.instance().getScheduleItems()) {
             if (i.routine() == null) {
-                mViewPager.setCurrentItem(0);
+                mViewPager.setCurrentItem(1);
                 showSnackBar(R.string.create_schedule_incomplete_items);
                 return false;
             }
@@ -316,7 +316,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
         for (ScheduleItem i : ScheduleHelper.instance().getScheduleItems()) {
             if (i.dose() <= 0) {
-                mViewPager.setCurrentItem(0);
+                mViewPager.setCurrentItem(1);
                 showSnackBar(R.string.create_schedule_incomplete_doses);
                 return false;
             }
@@ -486,7 +486,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
     public void onEvent(PersistenceEvents.MedicineAddedEvent event) {
         Log.d("onEvent", event.id + " ----");
-        ((SelectMedicineListFragment) getViewPagerFragment(1)).setSelectedMed(event.id);
+        ((SelectMedicineListFragment) getViewPagerFragment(0)).setSelectedMed(event.id);
     }
 
     /**
@@ -506,11 +506,12 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 1) {
-                return new SelectMedicineListFragment();
+                return new ScheduleTimetableFragment();
             } /*else if (position == 1) {
                 return new ScheduleTypeFragment();
             } */ else if (position == 0) {
-                return new ScheduleTimetableFragment();
+                return new SelectMedicineListFragment();
+
             } else {
                 return new ScheduleSummaryFragment();
             }
@@ -519,11 +520,11 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if (position == 1) {
+            if (position == 0) {
                 return getString(R.string.medicine);
             } /*else if (position == 1) {
                 return getString(R.string.schedule_type);
-            }*/ else if (position == 0) {
+            }*/ else if (position == 1) {
                 return getString(R.string.schedule);
             } else {
                 return getString(R.string.summary);
