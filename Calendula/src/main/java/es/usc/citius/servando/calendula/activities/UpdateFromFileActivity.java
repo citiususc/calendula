@@ -1,0 +1,134 @@
+package es.usc.citius.servando.calendula.activities;
+
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.util.List;
+
+import es.usc.citius.servando.calendula.R;
+
+public class UpdateFromFileActivity extends ActionBarActivity {
+
+    public static final String TAG = "UpdateActivity";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_scan);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
+        }
+
+        try{
+            String fileContents = readFile();
+            Log.d(TAG, "Text from file: " + fileContents);
+
+            if(fileContents!=null){
+                Intent intent = new Intent(getApplicationContext(), ConfirmSchedulesActivity.class);
+                Bundle b = new Bundle();
+                b.putString("qr_data", fileContents);
+                intent.putExtras(b);
+                startActivity(intent);
+                finish();
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+
+    String readFile(){
+        Intent intent = getIntent();
+        InputStream is = null;
+        String fullPath = null;
+
+        try {
+            String action = intent.getAction();
+            if (!Intent.ACTION_VIEW.equals(action)) {
+                return null;
+            }
+
+            Uri uri = intent.getData();
+            String scheme = uri.getScheme();
+            String name = null;
+
+            if (scheme.equals("file")) {
+                List<String> pathSegments = uri.getPathSegments();
+                if (pathSegments.size() > 0) {
+                    name = pathSegments.get(pathSegments.size() - 1);
+                }
+            } else if (scheme.equals("content")) {
+                Cursor cursor = getContentResolver().query(uri, new String[] {
+                        MediaStore.MediaColumns.DISPLAY_NAME
+                }, null, null, null);
+                cursor.moveToFirst();
+                int nameIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
+                if (nameIndex >= 0) {
+                    name = cursor.getString(nameIndex);
+                }
+            } else {
+                return null;
+            }
+
+            if (name == null) {
+                return null;
+            }
+
+            int n = name.lastIndexOf(".");
+            String fileName, fileExt;
+
+            if (n == -1) {
+                return null;
+            } else {
+                fileName = name.substring(0, n);
+                fileExt = name.substring(n);
+                if (!fileExt.equals(".txt")) {
+                    return null;
+                }
+            }
+
+            is = getContentResolver().openInputStream(uri);
+
+
+            byte[] buffer = new byte[4096];
+            int count;
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            while ((count = is.read(buffer)) > 0) {
+                os.write(buffer, 0, count);
+            }
+            os.close();
+            is.close();
+
+            return os.toString("UTF-8");
+
+        } catch (Exception e) {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (Exception e1) {
+                }
+            }
+
+            if (fullPath != null) {
+                File f = new File(fullPath);
+                f.delete();
+            }
+        }
+        return null;
+    }
+
+
+
+}

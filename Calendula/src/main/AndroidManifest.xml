@@ -102,6 +102,21 @@
             android:configChanges="orientation|screenSize"
             android:label="ScanActivity"
             android:parentActivityName="es.usc.citius.servando.calendula.HomeActivity" />
+
+        <activity
+            android:name="es.usc.citius.servando.calendula.activities.UpdateFromFileActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="Calendula">
+
+            <intent-filter>
+                <data android:mimeType="text/plain" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
+
+
         
         <activity
             android:name="es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity"
