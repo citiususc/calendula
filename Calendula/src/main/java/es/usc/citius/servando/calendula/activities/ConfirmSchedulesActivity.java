@@ -135,8 +135,13 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
         toolbar.setTitle("");
 
         String qrData = getIntent().getStringExtra("qr_data");
-        new ProcessQRTask().execute(qrData);
-
+        try {
+            new ProcessQRTask().execute(qrData);
+        }catch (Exception e){
+            Log.e(TAG, "Error processing QR",e);
+            Toast.makeText(this,"Error inseperado actualizando!", Toast.LENGTH_LONG).show();
+            finish();
+        }
 
     }
 
@@ -633,12 +638,17 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
             String qrData = data[0];
 
             if (qrData != null) {
-                prescriptionList = filterValidPrescriptions(parseQRData(qrData));
-                Long sCount = (long) prescriptionList.size();
-                if (sCount > 0) {
-                    return sCount;
-                } else {
-                    return 0l;
+                try {
+                    prescriptionList = filterValidPrescriptions(parseQRData(qrData));
+                    Long sCount = (long) prescriptionList.size();
+                    if (sCount > 0) {
+                        return sCount;
+                    } else {
+                        return 0l;
+                    }
+                }catch (Exception e){
+                    Log.e(TAG, "Error processing QR", e);
+                    return -1l;
                 }
             } else {
                 return -1l;
@@ -651,9 +661,10 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
             scheduleCount = schedules.intValue();
 
             if (schedules == -1) {
+                Toast.makeText(ConfirmSchedulesActivity.this, "Error inseperado actualizando!", Toast.LENGTH_LONG).show();
                 finish();
             } else if (schedules == 0) {
-                Toast.makeText(ConfirmSchedulesActivity.this, "No prescriptions found!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ConfirmSchedulesActivity.this, "Non se encontraron prespripciones válidas!", Toast.LENGTH_SHORT).show();
             } else {
                 updatePageTitle(0);
                 fab.setOnClickListener(new View.OnClickListener() {
