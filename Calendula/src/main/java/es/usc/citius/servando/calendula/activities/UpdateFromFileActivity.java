@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -23,7 +24,7 @@ public class UpdateFromFileActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scan);
+        setContentView(R.layout.activity_update_from_file);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
@@ -39,17 +40,19 @@ public class UpdateFromFileActivity extends ActionBarActivity {
                 b.putString("qr_data", fileContents);
                 intent.putExtras(b);
                 startActivity(intent);
-                finish();
+            }else{
+                Toast.makeText(this,"El fichero de actualización no es válido!", Toast.LENGTH_LONG).show();
             }
-
+            finish();
         }catch (Exception e){
             e.printStackTrace();
+            finish();
         }
 
     }
 
 
-    String readFile(){
+    private String readFile(){
         Intent intent = getIntent();
         InputStream is = null;
         String fullPath = null;
@@ -94,7 +97,7 @@ public class UpdateFromFileActivity extends ActionBarActivity {
             } else {
                 fileName = name.substring(0, n);
                 fileExt = name.substring(n);
-                if (!fileExt.equals(".txt")) {
+                if (!fileName.contains("calendula") && !fileName.contains("Calendula")) {
                     return null;
                 }
             }
@@ -128,7 +131,5 @@ public class UpdateFromFileActivity extends ActionBarActivity {
         }
         return null;
     }
-
-
 
 }
