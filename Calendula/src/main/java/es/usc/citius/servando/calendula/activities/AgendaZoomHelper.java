@@ -295,6 +295,7 @@ public class AgendaZoomHelper {
     }
 
     void onAfterShow(Activity activity) {
+        hideOnCheckEvents = false;
         v.findViewById(R.id.content).setVisibility(View.VISIBLE);
         if (routine != null) {
             fillReminderList(activity);
@@ -313,6 +314,7 @@ public class AgendaZoomHelper {
                     .show(AppTutorial.NOTIFICATION_INFO, R.id.check_button, activity);
         }
         animator = null;
+        hideOnCheckEvents = true;
     }
 
     public String getDisplayableDose(Activity activity, String dose, Medicine m) {
@@ -432,6 +434,8 @@ public class AgendaZoomHelper {
         list.addView(entry, params);
     }
 
+    private boolean hideOnCheckEvents = false;
+
     private void onReminderChecked(Activity activity) {
 
         int total = routine != null ? doses.size() : 1;
@@ -455,6 +459,10 @@ public class AgendaZoomHelper {
             } else {
                 AlarmScheduler.instance()
                         .onCancelHourlyScheduleNotifications(schedule, time, activity);
+            }
+            if(activity!=null && hideOnCheckEvents) {
+                hide();
+                Snack.show(R.string.all_meds_taken, activity);
             }
         } else {
             if (routine != null) {

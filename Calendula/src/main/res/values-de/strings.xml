@@ -370,5 +370,9 @@
         <item>SA</item>
     </string-array>
 
+
+    <string name="all_meds_taken">Alle Medikamente eingenommen!</string>
+
+
 </resources>
 

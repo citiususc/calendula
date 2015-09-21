@@ -367,5 +367,8 @@
     <string name="schedule_help_type">Pour commencer, choisissez un type de traitement</string>
     <string name="medicine_description"></string>
 
+    <string name="all_meds_taken">Tous les médicaments pris!</string>
+
+
 </resources>
 

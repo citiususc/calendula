@@ -387,5 +387,8 @@
     <string name="scan_qr">Scan QR</string>
     <string name="duration">Duration</string>
 
+    <string name="all_meds_taken">All meds taken!</string>
+
+
 </resources>
 

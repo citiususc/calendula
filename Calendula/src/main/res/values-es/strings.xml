@@ -380,5 +380,8 @@
     <string name="scan_qr">Scanear QR</string>
     <string name="duration">Duración</string>
 
+
+    <string name="all_meds_taken">Has tomado todas tus medicinas!</string>
+
 </resources>
 

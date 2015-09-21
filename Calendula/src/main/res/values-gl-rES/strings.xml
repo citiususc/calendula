@@ -367,5 +367,7 @@
     <string name="schedule_help_type">Para comezar, selecciona un tipo de pauta</string>
     <string name="medicine_description"></string>
 
+
+    <string name="all_meds_taken">Tódolos medicamentos tomados!</string>
 </resources>
 
