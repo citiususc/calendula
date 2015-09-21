@@ -369,6 +369,8 @@
 
 
     <string name="all_meds_taken">Tous les médicaments pris!</string>
+    <string name="patches">Emplâtre</string>
+    <string name="patches_units">emplâtre</string>
 
 </resources>
 

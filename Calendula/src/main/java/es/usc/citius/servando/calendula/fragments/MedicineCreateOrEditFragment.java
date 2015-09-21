@@ -307,6 +307,10 @@ public class MedicineCreateOrEditFragment extends Fragment {
                 selectedPresentation = Presentation.POMADE;
                 Log.d(getTag(), "Pomade");
                 break;
+            case R.id.med_presentation_11:
+                selectedPresentation = Presentation.PATCHES;
+                Log.d(getTag(), "Patches");
+                break;
         }
 
         if (selectedPresentation != null) {
@@ -507,6 +511,8 @@ public class MedicineCreateOrEditFragment extends Fragment {
                 return R.id.med_presentation_7;
             case INHALER:
                 return R.id.med_presentation_8;
+            case PATCHES:
+                return R.id.med_presentation_11;
             default:
                 return -1;
         }

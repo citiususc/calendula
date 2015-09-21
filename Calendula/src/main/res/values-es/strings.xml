@@ -89,6 +89,7 @@
     <string name="pomade">Pomada</string>
     <string name="drops">Gotas</string>
     <string name="syrup">Jarabe</string>
+    <string name="patches">Parches</string>
     <string name="unknown">Desconocido</string>
     <string name="effervescent">Efervescente</string>
     <string name="schedule">Pauta</string>
@@ -103,6 +104,7 @@
     <string name="pomade_units">aplicación</string>
     <string name="drops_units">gota</string>
     <string name="syrup_units">cucharada</string>
+    <string name="patches_units">parche</string>
     <string name="unknown_units">Desconocido</string>
     <string name="effervescent_units">sobre</string>
 

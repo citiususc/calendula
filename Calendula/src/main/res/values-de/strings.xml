@@ -95,6 +95,7 @@
     <string name="pomade">Creme</string>
     <string name="syrup">Sirup</string>
     <string name="spray">Spray</string>
+    <string name="patches">Aufnäher</string>
     <string name="unknown">Unbekannt</string>
     <string name="effervescent">Brausetablette/pulver</string>
     <string name="schedule">Plan</string>
@@ -109,6 +110,7 @@
     <string name="drops_units">Tropfen</string>
     <string name="pomade_units">Anwendungen</string>
     <string name="syrup_units">Siruplöffel</string>
+    <string name="patches_units">Flicken</string>
     <string name="unknown_units">Unbekannt</string>
     <string name="effervescent_units">Päckchen</string>
 

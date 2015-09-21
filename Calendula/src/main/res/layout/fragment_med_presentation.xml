@@ -155,6 +155,21 @@
                 android:src="@drawable/icp_injection"
                 android:tag="med_type" />
 
+            <ImageView
+                android:id="@+id/med_presentation_11"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:adjustViewBounds="false"
+                android:alpha="1"
+                android:baselineAlignBottom="false"
+                android:clickable="false"
+                android:padding="20dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/icp_patches"
+                android:tag="med_type" />
+
 
         </LinearLayout>
     </HorizontalScrollView>

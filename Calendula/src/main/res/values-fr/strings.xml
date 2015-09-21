@@ -89,6 +89,7 @@
     <string name="pomade">Pommade</string>
     <string name="drops">Gouttes</string>
     <string name="syrup">Sirop</string>
+    <string name="patches">Emplâtre</string>
     <string name="unknown">Inconnu</string>
     <string name="effervescent">Effervescent</string>
     <string name="schedule">Traitement</string>
@@ -103,6 +104,7 @@
     <string name="pomade_units">application</string>
     <string name="drops_units">goutte</string>
     <string name="syrup_units">cuillerée</string>
+    <string name="patches_units">emplâtre</string>
     <string name="unknown_units">Inconnu</string>
     <string name="effervescent_units">sachet</string>
 

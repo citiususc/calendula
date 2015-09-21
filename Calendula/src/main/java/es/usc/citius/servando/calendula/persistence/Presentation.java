@@ -18,6 +18,7 @@ public enum Presentation {
     POMADE(R.drawable.ic_ppomade, R.string.pomade, R.string.pomade_units),
     INHALER(R.drawable.icp_inhaler, R.string.inhaler, R.string.inhaler_units),
     SPRAY(R.drawable.icp_nasalspray, R.string.spray, R.string.spray_units),
+    PATCHES(R.drawable.icp_patches, R.string.patches, R.string.patches_units),
 
 
     UNKNOWN(R.drawable.ic_presentation_6, R.string.unknown, R.string.unknown_units);
@@ -63,8 +64,10 @@ public enum Presentation {
             return Presentation.POMADE;
         } else if (n.contains("pulverizacion nasal") || n.contains("pulverización nasal") || n.contains("spray")) {
             return Presentation.SPRAY;
-        } else if (!n.contains("jarabe")) {
+        } else if (n.contains("jarabe")) {
             return Presentation.SYRUP;
+        }else if (n.contains("parche")) {
+                return Presentation.PATCHES;
         } else if (n.contains("suspension oral")) {
             if (!n.contains("polvo") && !n.contains("granulado")) {
                 return Presentation.SYRUP;

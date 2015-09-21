@@ -95,6 +95,7 @@
     <string name="pomade">Pomade</string>
     <string name="syrup">Syrup</string>
     <string name="spray">Spray</string>
+    <string name="patches">Patches</string>
     <string name="unknown">Unknown</string>
     <string name="effervescent">Effervescent</string>
     <string name="schedule">Schedule</string>
@@ -109,6 +110,7 @@
     <string name="drops_units">drop</string>
     <string name="pomade_units">applications</string>
     <string name="syrup_units">syrup spoon</string>
+    <string name="patches_units">patch</string>
     <string name="unknown_units">Unknown</string>
     <string name="effervescent_units">sachet</string>
 
