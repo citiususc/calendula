@@ -89,6 +89,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
     View readingQrBox;
 
     DateTimeFormatter df = DateTimeFormat.forPattern("yyMMdd");
+    private String qrData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,15 +132,13 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_dark));
         }
-
         toolbar.setTitle("");
-
-        String qrData = getIntent().getStringExtra("qr_data");
+        qrData = getIntent().getStringExtra("qr_data");
         try {
             new ProcessQRTask().execute(qrData);
         }catch (Exception e){
             Log.e(TAG, "Error processing QR",e);
-            Toast.makeText(this,"Error inseperado actualizando!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Error inesperado actualizando!", Toast.LENGTH_LONG).show();
             finish();
         }
 
@@ -252,9 +251,6 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
         return schedules;
     }
 
-
-
-
     private void saveSchedules() {
 
         final ProgressDialog progress = ProgressDialog.show(this,"Calendula","Actualizando pautas...", true);
@@ -322,6 +318,8 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                                                 pickupInfo.taken(pkw.tk == 1 ? true : false);
                                                 pickupInfo.setMedicine(m);
 
+                                                // TODO: remove old pickups
+
                                                 PickupInfo existent = DB.pickups().exists(pickupInfo);
                                                 if(existent==null) {
                                                     DB.pickups().save(pickupInfo);
@@ -365,7 +363,6 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
         task.execute((Void[])null);
     }
 
-
     public void createSchedule(final Schedule s, List<ScheduleItem> items, Medicine m) {
 
         // save schedule
@@ -399,7 +396,6 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
         DB.schedules().saveAndFireEvent(s);
         AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ConfirmSchedulesActivity.this);
     }
-
 
     public void updateSchedule(final Schedule s, final Schedule current, List<ScheduleItem> items) {
 
@@ -661,10 +657,10 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
             scheduleCount = schedules.intValue();
 
             if (schedules == -1) {
-                Toast.makeText(ConfirmSchedulesActivity.this, "Error inseperado actualizando!", Toast.LENGTH_LONG).show();
+                Toast.makeText(ConfirmSchedulesActivity.this, "Error inesperado actualizando!", Toast.LENGTH_LONG).show();
                 finish();
             } else if (schedules == 0) {
-                Toast.makeText(ConfirmSchedulesActivity.this, "Non se encontraron prespripciones válidas!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ConfirmSchedulesActivity.this, "No se encontraron prescripciones válidas!", Toast.LENGTH_SHORT).show();
             } else {
                 updatePageTitle(0);
                 fab.setOnClickListener(new View.OnClickListener() {
