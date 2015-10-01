@@ -156,6 +156,10 @@ public class ScheduleImportFragment extends Fragment
             Schedule s = findByPrescriptionWrapper(prescriptionWrapper);
             if (s != null) {
                 schedule = s;
+                sItems = schedule.items();
+                if(sItems == null){
+                    sItems = new ArrayList<>();
+                }
                 setNew(false);
                 changes = changes(s, prescriptionWrapper);
             } else {
