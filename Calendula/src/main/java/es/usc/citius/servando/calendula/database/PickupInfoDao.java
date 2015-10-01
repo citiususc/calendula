@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.database;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
@@ -83,6 +84,18 @@ public class PickupInfoDao extends GenericDao<PickupInfo, Long> {
         } catch (SQLException e)
         {
             throw new RuntimeException("Error finding scanned schedule", e);
+        }
+    }
+
+    public void removeByMed(Medicine med) {
+        try
+        {
+            DeleteBuilder<PickupInfo, Long> qb = dao.deleteBuilder();
+            qb.setWhere(qb.where().eq(PickupInfo.COLUMN_MEDICINE, med));
+            qb.delete();
+        } catch (SQLException e)
+        {
+            throw new RuntimeException("Error deleting pickups by medicine", e);
         }
     }
 }

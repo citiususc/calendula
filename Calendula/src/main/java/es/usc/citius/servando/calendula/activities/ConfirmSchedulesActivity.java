@@ -233,7 +233,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
             Fragment f = getViewPagerFragment(i + 1);
             if (f instanceof ScheduleImportFragment) {
                 ScheduleImportFragment importFragment = (ScheduleImportFragment) f;
-                schedules.put(importFragment.getSchedule(),importFragment.getPrescriptionWrapper());
+                schedules.put(importFragment.getSchedule(), importFragment.getPrescriptionWrapper());
             }
         }
         return schedules;
@@ -310,23 +310,21 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                                             createSchedule(s, c.getScheduleItems(), m);
                                         }
 
+                                        if(m!=null){
+                                            // remove old pickups before inserting the new ones
+                                            DB.pickups().removeByMed(m);
+                                        }
+
                                         if (m != null && w.pk != null && w.pk.size() > 0) {
+
+
                                             for (PickupWrapper pkw : w.pk) {
                                                 PickupInfo pickupInfo = new PickupInfo();
-                                                pickupInfo.setTo(df.parseLocalDate(pkw.t)); // TODO: remove plusMonths
-                                                pickupInfo.setFrom(df.parseLocalDate(pkw.f)); // TODO: remove plusMonths
+                                                pickupInfo.setTo(df.parseLocalDate(pkw.t));
+                                                pickupInfo.setFrom(df.parseLocalDate(pkw.f));
                                                 pickupInfo.taken(pkw.tk == 1 ? true : false);
                                                 pickupInfo.setMedicine(m);
-
-                                                // TODO: remove old pickups
-
-                                                PickupInfo existent = DB.pickups().exists(pickupInfo);
-                                                if(existent==null) {
-                                                    DB.pickups().save(pickupInfo);
-                                                }else{
-                                                    existent.taken(pickupInfo.taken());
-                                                    DB.pickups().save(existent);
-                                                }
+                                                DB.pickups().save(pickupInfo);
                                             }
                                         }
                                     } else {
