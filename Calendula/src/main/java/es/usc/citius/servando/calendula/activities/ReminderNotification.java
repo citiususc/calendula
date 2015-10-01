@@ -10,14 +10,12 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -94,15 +92,16 @@ public class ReminderNotification {
             res.getString(R.string.message_notification_title_template, exampleString);
 
         NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
-
+        // DecimalFormat df = new DecimalFormat("#"); //TODO: Use DecimalFormat
         for (ScheduleItem scheduleItem : doses)
         {
+
+            //String dfDose = df.format(scheduleItem.dose());
 
             Medicine med = scheduleItem.schedule().medicine();
             final SpannableStringBuilder SpItem = new SpannableStringBuilder();
             SpItem.append(med.name());
-            SpItem.setSpan(new ForegroundColorSpan(Color.WHITE), 0, SpItem.length(), 0);
-            SpItem.append("   " + scheduleItem.dose() + " " + med.presentation()
+            SpItem.append(":  " + scheduleItem.dose()  + " " + med.presentation()
                 .units(context.getResources()));
             // add to style
             style.addLine(SpItem);
