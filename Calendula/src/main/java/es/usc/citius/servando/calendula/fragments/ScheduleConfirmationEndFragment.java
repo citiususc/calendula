@@ -14,6 +14,7 @@ import java.util.Map;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity;
+import es.usc.citius.servando.calendula.activities.qrWrappers.PrescriptionWrapper;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.util.Strings;
@@ -26,7 +27,7 @@ public class ScheduleConfirmationEndFragment extends Fragment {
 
     public static final String TAG = ScheduleConfirmationEndFragment.class.getName();
 
-    List<ConfirmSchedulesActivity.PrescriptionWrapper> prescriptions;
+    List<PrescriptionWrapper> prescriptions;
 
     LinearLayout createdSchedulesList;
     LinearLayout updatedSchedulesList;
@@ -63,7 +64,7 @@ public class ScheduleConfirmationEndFragment extends Fragment {
     }
 
     private void updateCounts(){
-        Map<Schedule,ConfirmSchedulesActivity.PrescriptionWrapper> schedules = ((ConfirmSchedulesActivity)getActivity()).getScheduleInfo();
+        Map<Schedule,PrescriptionWrapper> schedules = ((ConfirmSchedulesActivity)getActivity()).getScheduleInfo();
         int totalSchedules = schedules.size();
         int newSchedules = getNewSchedules(new ArrayList<>(schedules.keySet()));
         int updated = totalSchedules - newSchedules;
@@ -91,14 +92,14 @@ public class ScheduleConfirmationEndFragment extends Fragment {
         }
     }
 
-    private View getScheduleView(Schedule s, ConfirmSchedulesActivity.PrescriptionWrapper p, LayoutInflater li){
+    private View getScheduleView(Schedule s, PrescriptionWrapper p, LayoutInflater li){
         View v = li.inflate(R.layout.schedule_confirmation_end_list_item, null);
         ((TextView)v.findViewById(R.id.med_name)).setText(getMedicineName(p));
         ((TextView)v.findViewById(R.id.med_schedule)).setText(s.toReadableString(getActivity()));
         return v;
     }
 
-    public String getMedicineName(ConfirmSchedulesActivity.PrescriptionWrapper p){
+    public String getMedicineName(PrescriptionWrapper p){
         String name = "";
         if(p.cn != null){
             Prescription prescription = Prescription.findByCn(p.cn);

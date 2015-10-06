@@ -46,6 +46,8 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity;
+import es.usc.citius.servando.calendula.activities.qrWrappers.PrescriptionWrapper;
+import es.usc.citius.servando.calendula.activities.qrWrappers.ScheduleWrapper;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
@@ -127,7 +129,7 @@ public class ScheduleImportFragment extends Fragment
     ScrollView scrollView;
 
 
-    ConfirmSchedulesActivity.PrescriptionWrapper prescriptionWrapper;
+    PrescriptionWrapper prescriptionWrapper;
     float doses[] = new float[]{1f};
     public int selectedScheduleIdx;
     List<ScheduleItem> sItems = new ArrayList<>();
@@ -137,10 +139,10 @@ public class ScheduleImportFragment extends Fragment
     private boolean hasEnd;
     private int daysToEnd;
 
-    public static ScheduleImportFragment newInstance(ConfirmSchedulesActivity.PrescriptionWrapper pw) {
+    public static ScheduleImportFragment newInstance(PrescriptionWrapper pw) {
         ScheduleImportFragment fragment = new ScheduleImportFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_PRESCRIPTION, pw);
+        args.putSerializable(ARG_PRESCRIPTION, pw.holder());
         fragment.setArguments(args);
         return fragment;
     }
@@ -149,7 +151,10 @@ public class ScheduleImportFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        prescriptionWrapper = (ConfirmSchedulesActivity.PrescriptionWrapper) getArguments().getSerializable(ARG_PRESCRIPTION);
+
+        PrescriptionWrapper.Holder h = (PrescriptionWrapper.Holder) getArguments().getSerializable(ARG_PRESCRIPTION);
+        prescriptionWrapper = PrescriptionWrapper.from(h);
+
         if (prescriptionWrapper != null && prescriptionWrapper.s != null && (prescriptionWrapper.cn != null || prescriptionWrapper.g != null)) {
             Log.d(TAG, "Wrapper: " + prescriptionWrapper.cn + "," + (prescriptionWrapper.s.d));
             updatePrescriptionValues();
@@ -172,7 +177,7 @@ public class ScheduleImportFragment extends Fragment
     }
 
     private void updatePrescriptionValues() {
-        ConfirmSchedulesActivity.ScheduleWrapper sw = prescriptionWrapper.s;
+        ScheduleWrapper sw = prescriptionWrapper.s;
 
         Log.d(TAG, "UpdatePrescriptionValues: " + prescriptionWrapper.g + ", " + sw.p + ", " + sw.d + ", " + sw.i);
 
@@ -1332,11 +1337,11 @@ public class ScheduleImportFragment extends Fragment
     }
 
 
-    public ConfirmSchedulesActivity.PrescriptionWrapper getPrescriptionWrapper() {
+    public PrescriptionWrapper getPrescriptionWrapper() {
         return prescriptionWrapper;
     }
 
-    public Schedule findByPrescriptionWrapper(ConfirmSchedulesActivity.PrescriptionWrapper pw) {
+    public Schedule findByPrescriptionWrapper(PrescriptionWrapper pw) {
         if (pw.cn != null) {
             Log.d("FindByPW", "Prescription: " + pw.cn);
             Medicine m = DB.medicines().findOneBy(Medicine.COLUMN_CN, pw.cn);
@@ -1353,7 +1358,7 @@ public class ScheduleImportFragment extends Fragment
         return null;
     }
 
-    public List<String> changes(Schedule s, ConfirmSchedulesActivity.PrescriptionWrapper pw) {
+    public List<String> changes(Schedule s, PrescriptionWrapper pw) {
 
         List<String> changes = new ArrayList<>();
 

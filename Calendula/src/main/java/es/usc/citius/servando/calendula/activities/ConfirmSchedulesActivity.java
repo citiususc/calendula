@@ -27,7 +27,6 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +35,9 @@ import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.qrWrappers.PickupWrapper;
+import es.usc.citius.servando.calendula.activities.qrWrappers.PrescriptionListWrapper;
+import es.usc.citius.servando.calendula.activities.qrWrappers.PrescriptionWrapper;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationEndFragment;
@@ -177,8 +179,6 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                     Log.d("ConfirmSchedulesAct", "Pickup : " + pkw.tk);
                 }
             }
-
-
         }
         return p;
     }
@@ -577,38 +577,6 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
         if (next < size) {
             mViewPager.setCurrentItem(next);
         }
-    }
-
-    public static class PrescriptionListWrapper {
-        public List<PrescriptionWrapper> p;
-    }
-
-    public static class PrescriptionWrapper implements Serializable {
-        public String cn;
-        public String g;
-        public String sk;
-        public List<PickupWrapper> pk;
-        public ScheduleWrapper s;
-
-
-        public Prescription prescription;
-        public HomogeneousGroup group;
-
-        public boolean exists;
-
-        public boolean isGroup = false;
-    }
-
-    public static class ScheduleWrapper implements Serializable {
-        public float d = -1;
-        public int i = -1;
-        public int p = -1;
-    }
-
-    public static class PickupWrapper implements Serializable {
-        public String t;
-        public String f;
-        public int tk = 0;
     }
 
 
