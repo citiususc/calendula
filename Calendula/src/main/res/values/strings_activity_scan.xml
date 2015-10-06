@@ -6,6 +6,7 @@
     <string name="scan_review_text">Please check carefully the scanned prescriptions, modify them if necessary, and confirm when you agree.</string>
     <string name="scan_prescriptions">prescriptions</string>
 
+    <string name="scan_dose_zero_msg">The specified schedule is ambiguous. Please adjust it manually</string>
     <string name="scan_dose_changed_msg">Dose has changed</string>
     <string name="scan_interval_changed_msg">Interval has changed  from %1$s to %2$s</string>
     <string name="scan_frequency_changed_msg">Frequency has changed from %1$s to %2$s times by day</string>

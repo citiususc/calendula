@@ -1364,10 +1364,17 @@ public class ScheduleImportFragment extends Fragment
 
         int interval = pw.s.p;
 
+        if (pw.s.d == 0.0) {
+            // dose is zero
+            Log.d(TAG, "Item dose is zero");
+            changes.add("• " + getString(R.string.scan_dose_zero_msg));
+        }
+
+
         if (!s.repeatsHourly()) {
             List<ScheduleItem> items = s.items();
             for (ScheduleItem i : items) {
-                if (i.dose() != pw.s.d && pw.s.d != -1.0) {
+                if (i.dose() != pw.s.d && pw.s.d > 0) {
                     // dose is different
                     Log.d(TAG, "Item dose is different [" + i.dose() + ", " + pw.s.d + ", " + items.size() + "]");
                     changes.add("• " + getString(R.string.scan_dose_changed_msg));

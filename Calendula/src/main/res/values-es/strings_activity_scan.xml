@@ -13,6 +13,8 @@
     <string name="scan_existing_schedule">Pauta existente (se actualizará)</string>
     <string name="scan_schedule_changed">Por favor, revise:</string>
 
+    <string name="scan_dose_zero_msg">La pauta especificada es ambigua. Por favor, ajústela manualmente</string>
+
     <string name="scan_schedules_to_create">Se crearán %1$s pautas nuevas</string>
     <string name="scan_schedules_to_update">Se actualizarán %1$s pautas</string>
 
