@@ -173,9 +173,10 @@ public class ScheduleImportFragment extends Fragment
                     sItems = new ArrayList<>();
                 }
                 setNew(false);
-                changes = changes(s, prescriptionWrapper);
+                // changes = changes(s, prescriptionWrapper);
             } else {
                 setNew(true);
+                // changes = changes(s, prescriptionWrapper);
                 Log.d(TAG, "Schedule not found found");
             }
         }
@@ -194,7 +195,7 @@ public class ScheduleImportFragment extends Fragment
             timesPerDay = times;
             doses = new float[timesPerDay];
             for (int i = 0; i < doses.length; i++) {
-                doses[i] = dose;
+                doses[i] = dose > 0 ? dose : 1;
             }
             Log.d(TAG, " Values: " + timesPerDay + ", " + dose);
         } else if (sw.i != -1) {
@@ -204,11 +205,14 @@ public class ScheduleImportFragment extends Fragment
             timesPerDay = 1;
             doses = new float[timesPerDay];
             for (int i = 0; i < doses.length; i++) {
-                doses[i] = dose;
+                doses[i] = dose > 0 ? dose : 1;
             }
         } else {
             Log.d(TAG, "Period not avilable");
         }
+
+        Log.d(TAG, "Updated prescription values " + (prescriptionWrapper.g != null ? prescriptionWrapper.g : prescriptionWrapper.cn)
+                + "," + timesPerDay + ", " + Arrays.toString(doses));
     }
 
     public void changeScheduleType(int type) {
@@ -304,9 +308,8 @@ public class ScheduleImportFragment extends Fragment
         setupCycleSpinner();
         setupForKnownSchedule(rootView);
 
-        if (!isNew) {
-            setupChanges(changes);
-        }
+        changes = changes(schedule, prescriptionWrapper);
+        setupChanges(changes);
 
         setupNewMessage();
 
@@ -954,7 +957,10 @@ public class ScheduleImportFragment extends Fragment
                 ScheduleItem toCopy = sItems.get(i);
                 s = new ScheduleItem(null, toCopy.routine(), toCopy.dose());
             } else {
-                s = new ScheduleItem(null, (i < routines.size()) ? routines.get(i) : null, 1);
+
+                float dose = doses.length > 0 ? doses[0] : 1;
+                Log.d(TAG, "Creating new scheduleItem with dose " + dose + ", " + Arrays.toString(doses));
+                s = new ScheduleItem(null, (i < routines.size()) ? routines.get(i) : null, dose);
             }
 
             if (s != null) {
@@ -1425,7 +1431,7 @@ public class ScheduleImportFragment extends Fragment
         }
 
 
-        if (!s.repeatsHourly()) {
+        if (s!=null && !isNew && !s.repeatsHourly()) {
             List<ScheduleItem> items = s.items();
             for (ScheduleItem i : items) {
                 if (i.dose() != pw.s.d && pw.s.d > 0) {
@@ -1443,13 +1449,13 @@ public class ScheduleImportFragment extends Fragment
                     changes.add("• " + getString(R.string.scan_frequency_changed_msg, items.size(), times));
                 }
             }
-        } else {
-            if (s.dose() != pw.s.d && pw.s.d != -1.0) {
+        } else if(s!=null && !isNew ){
+            if (s.dose() != pw.s.d && pw.s.d > 0) {
                 // dose is different
                 changes.add("• " + getString(R.string.scan_dose_changed_msg));
                 Log.d(TAG, "Dose is different [" + s.dose() + ", " + pw.s.d + "]");
             }
-            if (s.rule().interval() != interval) {
+            if (s.rule().interval() != interval ) {
                 changes.add("• " + getString(R.string.scan_interval_changed_msg, s.rule().interval(), interval));
                 Log.d(TAG, "Interval is different[" + interval + ", " + s.rule().interval() + "]");
             }
