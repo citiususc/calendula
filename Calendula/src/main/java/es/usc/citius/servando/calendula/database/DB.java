@@ -50,6 +50,8 @@ public class DB {
             manager = new DatabaseManager<>();
             db = manager.getHelper(context, DatabaseHelper.class);
 
+            db.getReadableDatabase().enableWriteAheadLogging();
+
             Medicines = new MedicineDao(db);
             Routines = new RoutineDao(db);
             Schedules = new ScheduleDao(db);
