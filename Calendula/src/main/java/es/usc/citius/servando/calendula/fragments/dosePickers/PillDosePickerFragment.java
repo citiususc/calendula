@@ -1,14 +1,7 @@
-package es.usc.citius.servando.calendula.fragments;
+package es.usc.citius.servando.calendula.fragments.dosePickers;
 
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
 
@@ -20,35 +13,25 @@ import es.usc.citius.servando.calendula.R;
 /**
  * Created by joseangel.pineiro on 12/4/13.
  */
-public class DosePickerFragment extends DialogFragment {
-
-    OnDoseSelectedListener mDoseSelectedListener;
+public class PillDosePickerFragment extends DosePickerFragment {
 
     NumberPicker integerPicker;
     NumberPicker fractionPicker;
     ProgressPieView progress1;
     ProgressPieView progress2;
 
-
     String[] integers = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
     int[] integersValues = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     String[] fractions = new String[]{"0", "1/8", "1/4", "1/2", "3/4"};
     float[] fractionValues = new float[]{0, 0.125f, 0.25f, 0.5f, 0.75f};
 
-    double initialDose = 1.0f;
-
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle args = getArguments();
-        initialDose = args.getDouble("dose", 1d);
+    protected int getLayoutResource() {
+        return R.layout.med_dose_picker;
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View rootView = inflater.inflate(R.layout.med_dose_picker, null);
+    protected void setupRootView(View rootView) {
 
         integerPicker = (NumberPicker) rootView.findViewById(R.id.dosePickerInteger);
         fractionPicker = (NumberPicker) rootView.findViewById(R.id.dosePickerDecimal);
@@ -79,26 +62,10 @@ public class DosePickerFragment extends DialogFragment {
         integerPicker.setOnValueChangedListener(valueChangeListener);
         fractionPicker.setOnValueChangedListener(valueChangeListener);
 
-        setInitialValue();
-
-        if (getDialog() != null) {
-            getDialog().setTitle(R.string.title_select_dose_dialog);
-        }
-
-        return new AlertDialog.Builder(getActivity())
-                .setView(rootView)
-                .setTitle(R.string.title_select_dose_dialog)
-                .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (mDoseSelectedListener != null)
-                            mDoseSelectedListener.onDoseSelected(getDose());
-                    }
-                })
-                .setNegativeButton(R.string.cancel, null).create();
     }
 
-    void setInitialValue() {
+    @Override
+    protected void setInitialValue(double initialDose) {
         int integerPart = (int) initialDose;
         double fraction = initialDose - integerPart;
 
@@ -130,8 +97,14 @@ public class DosePickerFragment extends DialogFragment {
             progress1.setProgress(100);
             progress1.setText(integerPart + "");
         }
+    }
 
 
+    @Override
+    protected double getSelectedDose() {
+        double dose = integersValues[integerPicker.getValue()] + fractionValues[fractionPicker.getValue()];
+        Log.d("VALUE ", integersValues[integerPicker.getValue()] + "." + fractionValues[fractionPicker.getValue()]);
+        return dose;
     }
 
     void updateProgress() {
@@ -171,31 +144,5 @@ public class DosePickerFragment extends DialogFragment {
     }
 
 
-    public double getDose() {
-        double dose = integersValues[integerPicker.getValue()] + fractionValues[fractionPicker.getValue()];
-        Log.d("VALUE ", integersValues[integerPicker.getValue()] + "." + fractionValues[fractionPicker.getValue()]);
-        return dose;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        Log.d(getTag(), "Activity " + activity.getClass().getName() + ", " + (activity instanceof OnDoseSelectedListener));
-        // If the container activity has implemented
-        // the callback interface, set it as listener
-        if (activity instanceof OnDoseSelectedListener) {
-            mDoseSelectedListener = (OnDoseSelectedListener) activity;
-        }
-    }
-
-    void setOnDoseSelectedListener(OnDoseSelectedListener l) {
-        mDoseSelectedListener = l;
-    }
-
-
-    // Container Activity must implement this interface
-    public interface OnDoseSelectedListener {
-        void onDoseSelected(double dose);
-    }
 
 }

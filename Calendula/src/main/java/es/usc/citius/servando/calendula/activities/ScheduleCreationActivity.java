@@ -405,8 +405,6 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             title.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.white_50)), titleStart.length(), titleStart.length() + medName.length(), 0);
             getSupportActionBar().setTitle(title);
         }
-
-
     }
 
     public void onScheduleTypeSelected() {
@@ -417,6 +415,11 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
                 mViewPager.setCurrentItem(2);
             }
         }, 500);
+    }
+
+    public void onDoseSelectedWithNoMed() {
+        mViewPager.setCurrentItem(0);
+        Snack.show(getString(R.string.create_schedule_select_med_before_dose), this);
     }
 
 

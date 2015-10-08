@@ -95,15 +95,15 @@
     <string name="schedule_type">Tipo de pauta</string>
 
     <!-- Med presentation units -->
-    <string name="injections_units">inxección</string>
+    <string name="injections_units">inxeccións</string>
     <string name="pills_units">pastilla</string>
     <string name="capsules_units">cápsula</string>
     <string name="inhaler_units">inhalación</string>
     <string name="spray_units">aplicación</string>
     <string name="pomade_units">aplicación</string>
     <string name="drops_units">gota</string>
-    <string name="syrup_units">cullerada</string>
-    <string name="unknown_units">Descoñecido</string>
+    <string name="syrup_units">ml</string>
+    <string name="unknown_units">Unidades</string>
     <string name="effervescent_units">sobre</string>
 
     <string name="never">Nunca</string>
@@ -370,5 +370,7 @@
     <string name="all_meds_taken">Tódolos medicamentos tomados!</string>
     <string name="patches">Parches</string>
     <string name="patches_units">parche</string>
+
+    <string name="create_schedule_select_med_before_dose">Por favor, selecciona un medicamento primeiro</string>
 </resources>
 

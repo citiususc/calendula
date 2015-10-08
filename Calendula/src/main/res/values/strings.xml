@@ -102,16 +102,16 @@
     <string name="schedule_type">Schedule type</string>
 
     <!-- Med presentation units -->
-    <string name="injections_units">injection</string>
+    <string name="injections_units">injections</string>
     <string name="pills_units">pill</string>
     <string name="capsules_units">capsule</string>
-    <string name="inhaler_units">inhalation</string>
+    <string name="inhaler_units">inhalations</string>
     <string name="spray_units">applications</string>
     <string name="drops_units">drop</string>
     <string name="pomade_units">applications</string>
-    <string name="syrup_units">syrup spoon</string>
+    <string name="syrup_units">ml</string>
     <string name="patches_units">patch</string>
-    <string name="unknown_units">Unknown</string>
+    <string name="unknown_units">Units</string>
     <string name="effervescent_units">sachet</string>
 
     <string name="never">Never</string>
@@ -390,6 +390,8 @@
     <string name="duration">Duration</string>
 
     <string name="all_meds_taken">All meds taken!</string>
+
+    <string name="create_schedule_select_med_before_dose">Please, select a med first</string>
 
 
 </resources>

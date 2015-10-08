@@ -109,9 +109,9 @@
     <string name="spray_units">Spraystöße</string>
     <string name="drops_units">Tropfen</string>
     <string name="pomade_units">Anwendungen</string>
-    <string name="syrup_units">Siruplöffel</string>
+    <string name="syrup_units">ml</string>
     <string name="patches_units">Flicken</string>
-    <string name="unknown_units">Unbekannt</string>
+    <string name="unknown_units">Einheiten</string>
     <string name="effervescent_units">Päckchen</string>
 
     <string name="never">Nie</string>

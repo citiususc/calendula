@@ -50,13 +50,13 @@ public enum Presentation {
         String n = name.toLowerCase() + " " + content.toLowerCase();
         if (n.contains("comprimidos")) {
             return Presentation.PILLS;
-        } else if (n.contains("capsulas")) {
+        } else if (n.contains("capsulas") || n.contains("cápsulas")) {
             return Presentation.CAPSULES;
         } else if (n.contains("inhala")) {
             return Presentation.INHALER;
         } else if (n.contains("viales") || n.contains("jeringa") || n.contains("perfusi") || n.contains("inyectable")) {
             return Presentation.INJECTIONS;
-        } else if (n.contains("gotas")) {
+        } else if (n.contains("gotas") || n.contains("colirio")) {
             return Presentation.DROPS;
         } else if (n.contains("sobres")) {
             return Presentation.EFFERVESCENT;

@@ -26,6 +26,7 @@ import android.widget.NumberPicker;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.doomonafireball.betterpickers.numberpicker.NumberPickerBuilder;
 import com.doomonafireball.betterpickers.numberpicker.NumberPickerDialogFragment;
@@ -46,6 +47,13 @@ import java.util.Collections;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
+import es.usc.citius.servando.calendula.fragments.dosePickers.DefaultDosePickerFragment;
+import es.usc.citius.servando.calendula.fragments.dosePickers.DosePickerFragment;
+import es.usc.citius.servando.calendula.fragments.dosePickers.LiquidDosePickerFragment;
+import es.usc.citius.servando.calendula.fragments.dosePickers.PillDosePickerFragment;
+import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
@@ -1121,42 +1129,50 @@ public class ScheduleTimetableFragment extends Fragment
         addRoutineFragment.show(fm, "fragment_edit_name");
     }
 
+
+    private DosePickerFragment getDosePickerFragment(Medicine med, ScheduleItem item, Schedule s) {
+        DosePickerFragment dpf = null;
+        Bundle arguments = new Bundle();
+
+
+//        if (med.presentation().equals(Presentation.SYRUP)) {
+//            dpf = new LiquidDosePickerFragment();
+//        }
+        if (med.presentation().equals(Presentation.DROPS)
+                || med.presentation().equals(Presentation.PILLS)
+                || med.presentation().equals(Presentation.CAPSULES)
+                || med.presentation().equals(Presentation.EFFERVESCENT)){
+            dpf = new PillDosePickerFragment();
+        }else{
+            dpf = new DefaultDosePickerFragment();
+            arguments.putSerializable("presentation", med.presentation());
+        }
+        if(item != null){
+            arguments.putDouble("dose", item.dose());
+        }else if(s != null){
+            arguments.putDouble("dose", s.dose());
+        }
+
+        dpf.setArguments(arguments);
+        return dpf;
+
+    }
+
     void showDosePickerDialog(final ScheduleItem item, final TextView tv) {
 
-//        if(isLiquid()){
-//            FragmentManager fm = getActivity().getSupportFragmentManager();
-//            final LiquidDosePickerFragment liquidDosePickerFragment = new LiquidDosePickerFragment();
-//            Bundle arguments = new Bundle();
-//            arguments.putDouble("dose", item.dose());
-//            liquidDosePickerFragment.setArguments(arguments);
-//
-//            liquidDosePickerFragment.setOnDoseSelectedListener(
-//                    new LiquidDosePickerFragment.OnDoseSelectedListener() {
-//                        @Override
-//                        public void onDoseSelected(double dose) {
-//                            Log.d(TAG, "Set dose "
-//                                    + dose
-//                                    + " to item "
-//                                    + item.routine().name()
-//                                    + ", "
-//                                    + item.getId());
-//                            item.setDose((float) dose);
-//                            tv.setText(item.displayDose());
-//
-//                            logScheduleItems();
-//                        }
-//                    });
-//            liquidDosePickerFragment.show(fm, "fragment_select_dose");
-//        }else {
+        Medicine med = ScheduleHelper.instance().getSelectedMed();
 
+        if(med == null){
+            ((ScheduleCreationActivity)getActivity()).onDoseSelectedWithNoMed();
+            return;
+        }
+
+        final DosePickerFragment dpf = getDosePickerFragment(med,item,null);
+
+        if(dpf != null){
             FragmentManager fm = getActivity().getSupportFragmentManager();
-            final DosePickerFragment dosePickerFragment = new DosePickerFragment();
-            Bundle arguments = new Bundle();
-            arguments.putDouble("dose", item.dose());
-            dosePickerFragment.setArguments(arguments);
-
-            dosePickerFragment.setOnDoseSelectedListener(
-                    new DosePickerFragment.OnDoseSelectedListener() {
+            dpf.setOnDoseSelectedListener(
+                    new LiquidDosePickerFragment.OnDoseSelectedListener() {
                         @Override
                         public void onDoseSelected(double dose) {
                             Log.d(TAG, "Set dose "
@@ -1167,37 +1183,40 @@ public class ScheduleTimetableFragment extends Fragment
                                     + item.getId());
                             item.setDose((float) dose);
                             tv.setText(item.displayDose());
-
                             logScheduleItems();
                         }
                     });
-
-            dosePickerFragment.show(fm, "fragment_select_dose");
-//        }
+            dpf.show(fm, "fragment_select_dose");
+        }
 
     }
 
-//    private boolean isLiquid() {
-//        Medicine med = ScheduleHelper.instance().getSelectedMed();
-//        return med != null && (med.presentation().equals(Presentation.DROPS) || med.presentation().equals(Presentation.SYRUP));
-//    }
 
     void showHourlyDosePickerDialog() {
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        final DosePickerFragment dosePickerFragment = new DosePickerFragment();
-        Bundle arguments = new Bundle();
-        arguments.putDouble("dose", schedule.dose());
-        dosePickerFragment.setArguments(arguments);
-        dosePickerFragment.setOnDoseSelectedListener(
-                new DosePickerFragment.OnDoseSelectedListener() {
-                    @Override
-                    public void onDoseSelected(double dose) {
+        Medicine med = ScheduleHelper.instance().getSelectedMed();
 
-                        schedule.setDose((float) dose);
-                        hourlyIntervalRepeatDose.setText(schedule.displayDose());
-                    }
-                });
-        dosePickerFragment.show(fm, "fragment_select_dose");
+        if(med == null){
+            // TODO: get from resources and use snack.show()
+            Toast.makeText(getActivity(), "Por favor, selecciona un medicamento antes", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        final DosePickerFragment dpf = getDosePickerFragment(med,null,schedule);
+
+        if(dpf != null){
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            dpf.setOnDoseSelectedListener(
+                    new LiquidDosePickerFragment.OnDoseSelectedListener() {
+                        @Override
+                        public void onDoseSelected(double dose) {
+                            schedule.setDose((float) dose);
+                            hourlyIntervalRepeatDose.setText(schedule.displayDose());
+                        }
+                    });
+            dpf.show(fm, "fragment_select_dose");
+        }else{
+
+        }
     }
 
     void checkSelectedDays(View rootView, boolean[] days) {
