@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -78,24 +79,28 @@ public class ScanActivity extends ActionBarActivity {
         if (result != null && requestCode == IntentIntegrator.REQUEST_CODE && data !=null) {
 
             byte[] dataBytes = data.getByteArrayExtra("SCAN_RESULT_BYTE_SEGMENTS_0");
+            byte[] dataBytes2 = data.getByteArrayExtra("SCAN_RESULT_BYTE_SEGMENTS_1");
 
             if (result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
 
-                boolean gziped = true;
+                boolean gziped = false;
                 String content = result.getContents();
 
-                byte[] raw = dataBytes;
+                Log.d("ScanActivity", "SCAN_RESULT_BYTE_SEGMENTS_0 : " + Arrays.toString(byteArrayToHex(dataBytes)));
+                Log.d("ScanActivity", "SCAN_RESULT_BYTE_SEGMENTS_1: " + Arrays.toString(byteArrayToHex(dataBytes2)));
+                Log.d("ScanActivity", "CONTENTS: " + Arrays.toString(byteArrayToHex(content.getBytes())));
 
-                Log.d("ScanActivity", "QR bytes 4: " + Arrays.toString(byteArrayToHex(dataBytes)));
+                // first, decode base64 QR content
+                byte[] raw = Base64.decode(content.getBytes(), Base64.DEFAULT);
 
+                Log.d("ZIP", "Raw length:" + raw.length + " contents: " + content);
 
+                // now, try decompress GZIP
                 if (raw[0] == (byte) 0x1f && raw[1] == (byte) 0x8b) {
                     Log.d("ScanActivity", "Has GZIP magic");
-                }
 
-                if (gziped) {
                     Reader reader;
                     StringWriter writer;
                     try {
