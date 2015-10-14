@@ -55,7 +55,7 @@ public class Prescription {
         String[] values = csvLine.split(separator);
 
         if (values.length != 9) {
-            throw new RuntimeException("Invalid CSV. Input string must contain exactly 6 members. " + csvLine);
+            throw new RuntimeException("Invalid CSV. Input string must contain exactly 9 members. " + csvLine);
         }
 
         Prescription p = new Prescription();

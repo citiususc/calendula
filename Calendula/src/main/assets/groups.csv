@@ -441,9 +441,9 @@
 6471000140105|Brotizolam 0,25 mg 20 comprimidos
 6501000140102|Brovanexina 2,5 mg/ml solución/suspensión oral 200 ml 1 frasco
 6511000140104|Bumetanida 1 mg 20 comprimidos
-6621000140107|Bupropión 150 mg 30 comprimidos liberación modificada
-6631000140105|Bupropión 150 mg 60 comprimidos liberación modificada
-6641000140104|Bupropión 150 mg 100 comprimidos liberación modificada
+6621000140107|Bupropión 150 mg 30 comprimidos liberación modificada (tipo 1)
+6631000140105|Bupropión 150 mg 60 comprimidos liberación modificada (tipo 1)
+6641000140104|Bupropión 150 mg 100 comprimidos liberación modificada (tipo 1)
 6651000140102|Bupropión 300 mg 30 comprimidos liberación modificada
 6671000140108|Busulfano 2 mg 100 comprimidos
 6681000140106|Busulfano 6 mg/ml inyectable perfusión 10 ml 8 viales
@@ -602,7 +602,7 @@
 9141000140104|Ciclosporina 50 mg 30 cápsulas
 9171000140108|Cidofovir 75 mg/ml inyectable perfusión 5 ml 1 vial
 9181000140106|Imipenem/Cilastatina 500 mg/500 mg inyectable 1 vial
-9191000140109|Imipenem/Cilastatina 500 mg/500 mg inyectable 10 viales
+9191000140109|Imipenem/Cilastatina 500 mg/500 mg inyectable 10 viales/frascos
 9201000140107|Imipenem/Cilastatina 250 mg/250 mg inyectable 10 viales
 9211000140105|Cilazapril 1 mg 30 comprimidos
 9221000140101|Cilazapril 2,5 mg 28 comprimidos
@@ -1274,10 +1274,7 @@
 18721000140102|Fentanilo 200 microgramos 30 comprimidos sublinguales
 18731000140104|Fentanilo 300 microgramos 30 comprimidos sublinguales
 18741000140105|Fentanilo 300 microgramos 10 comprimidos sublinguales
-18751000140107|Fentanilo 400 microgramos 10 comprimidos sublinguales
-18761000140109|Fentanilo 400 microgramos 30 comprimidos sublinguales
 18771000140101|Fentanilo 600 microgramos 30 comprimidos sublinguales
-18781000140103|Fentanilo 800 microgramos 30 comprimidos sublinguales
 18821000140105|Remifentanilo 1 mg inyectable 5 viales
 18831000140108|Remifentanilo 2 mg inyectable 5 viales
 18841000140102|Remifentanilo 5 mg inyectable 5 viales
@@ -1508,6 +1505,7 @@
 21851000140102|Valproato sodio (Valproato sodio/Ácido valproico) 500 mg 100 comprimidos liberación modificada
 21861000140100|Valproato sodio (Valproato sodio/Ácido valproico) 300 mg 100 comprimidos liberación modificada
 21871000140108|Valproato sodio 400 mg inyectable 1 vial
+21891000140109|Valproato sodio 200 mg/ml solución/suspensión oral 60 ml 1 frasco
 21911000140106|Valpromida 300 mg 30 comprimidos
 21981000140103|Ibuprofeno lisina 600 mg solución/suspensión oral 20 sobres
 21991000140100|Ibuprofeno lisina 600 mg solución/suspensión oral 40 sobres
@@ -1965,7 +1963,7 @@
 28801000140107|Lidocaína 500 mg inyectable 10 ml 100 ampollas
 28821000140101|Lidocaína 250 mg inyectable 5 ml 100 ampollas
 28831000140103|Linezolid 600 mg 10 comprimidos
-28841000140109|Linezolid 600 mg inyectable perfusión 300 ml 10 bolsas
+28841000140109|Linezolid 600 mg inyectable perfusión 300 ml 10 bolsas/frascos
 28851000140106|Linezolid 100 mg/5 ml solución/suspensión oral 150 ml 1 frasco
 28861000140108|Iodixanol 270 mg/ml inyectable 100 ml 1 frasco
 28871000140100|Iodixanol 270 mg/ml inyectable 50 ml 1 frasco
@@ -2668,7 +2666,7 @@
 38351000140103|Itraconazol 100 mg 18 cápsulas
 38361000140101|Itraconazol 100 mg 100 cápsulas
 38371000140109|Itraconazol 10 mg/ml solución/suspensión oral 150 ml 1 frasco
-38381000140107|Itraconazol 10 mg/ml inyectable perfusión 25 ml 1 ampolla
+38381000140107|Itraconazol 10 mg/ml inyectable perfusión 25 ml 1 ampolla/bolsa
 38391000140105|Amitriptilina/Perfenazina 10 mg/2 mg 40 comprimidos
 38401000140107|Amitriptilina/Perfenazina 25 mg/2 mg 40 comprimidos
 38411000140105|Amitriptilina/Perfenazina 25 mg/4 mg 40 comprimidos
@@ -2860,8 +2858,8 @@
 40911000140102|Amitriptilina 25 mg 60 comprimidos
 40921000140106|Amitriptilina 50 mg 30 comprimidos
 40931000140109|Amitriptilina 75 mg 30 comprimidos
-40941000140103|Betametasona 12 mg inyectable 2 ml 1 vial
-40951000140101|Betametasona 12 mg inyectable 2 ml 3 viales
+40941000140103|Betametasona acetato/Betametasona fosfato sódico 6 mg/6 mg inyectable 2 ml 1 vial
+40951000140101|Betametasona acetato/Betametasona fosfato sódico 6 mg/6 mg inyectable 2 ml 3 viales
 40961000140104|Daptomicina 500 mg inyectable perfusión 1 vial
 40971000140107|Micofenolato de mofetilo 250 mg 100 cápsulas
 40981000140105|Peginterferón alfa-2b 120 microgramos inyectable 1 pluma precargada
@@ -3805,6 +3803,7 @@
 53471000140109|Ergotamina/Cafeína/Paracetamol 1 mg/100 mg/300 mg 20 comprimidos
 53491000140105|Ergotamina/Cafeína/Paracetamol 2 mg/100 mg/400 mg 10 supositorios
 53511000140103|Ergotamina/Cafeína/Propifenazona 0,5 mg/40 mg/175 mg 20 comprimidos
+53521000140107|Dihidroergotamina 1 mg 20 comprimidos
 53561000140100|Pramocaína 10 mg/ml emulsión cutánea 80 ml 1 frasco
 53571000140108|Dexrazoxano 500 mg inyectable perfusión 1 vial
 53581000140106|Dexrazoxano 500 mg inyectable perfusión 10 viales
@@ -3998,6 +3997,7 @@
 56111000140104|Peróxido de benzoilo 100 mg/g gel 40 g 1 tubo
 56121000140108|Peróxido de benzoilo 100 mg/g gel 60 g 1 tubo
 56131000140106|Peróxido de benzoilo 25 mg/g gel 30 g 1 tubo
+56141000140100|Peróxido de benzoilo 25 mg/g gel 40 g 1 tubo
 56151000140103|Peróxido de benzoilo 50 mg/g gel 30 g 1 tubo
 56161000140101|Peróxido de benzoilo 50 mg/g gel 40 g 1 tubo
 56171000140109|Peróxido de benzoilo 50 mg/g gel 60 g 1 tubo
@@ -4054,7 +4054,6 @@
 56871000140100|Minoxidil 20 mg/ml líquido uso tópico 60 ml 1 frasco
 56881000140102|Fenilefrina 100 mg/ml colirio 10 ml 1 frasco
 56901000140100|Fenilefrina 1,25 mg/ml colirio 10 ml 1 frasco
-56911000140102|Fenilefrina 100 mg/ml colirio 5 ml 1 frasco
 56921000140106|Sertaconazol 20 mg/g crema 30 g 1 tubo
 56931000140109|Sertaconazol 20 mg/g crema 60 g 1 tubo
 56951000140101|Sertaconazol 20 mg/g gel 100 g 1 tubo
@@ -4178,7 +4177,6 @@
 58541000140106|Levofolinato calcio 2,5 mg 30 comprimidos
 58551000140108|Levofolinato calcio 7,5 mg 30 comprimidos
 58561000140105|Levofolinato calcio 7,5 mg 10 comprimidos
-58571000140102|Calcio acetato 667 mg 200 comprimidos
 58591000140101|Ácido folínico 15 mg 10 comprimidos
 58611000140108|Calcio acetato 500 mg 60 cápsulas
 58621000140104|Calcio acetato 500 mg 120 cápsulas
@@ -4876,6 +4874,7 @@
 71461000140104|Estroncio cloruro (89Sr) 37 mBq/ml inyectable 4 ml 1 vial
 71481000140105|Isosorbida dinitrato 60 mg 30 comprimidos liberación modificada
 71491000140108|Isosorbida dinitrato 20 mg 20 comprimidos liberación modificada
+71501000140104|Isosorbida dinitrato 20 mg 50 comprimidos liberación modificada
 71511000140101|Isosorbida dinitrato 5 mg 50 comprimidos
 71521000140105|Vacuna inactivada anti meningococo A/C/W135/Y conjugada inyectable 1 dosis
 71541000140102|Vacuna inactivada anti meningococo C conjugada inyectable 1 dosis
@@ -5017,7 +5016,6 @@
 74001000140105|Ácido folínico 50 mg inyectable 5 viales
 74011000140108|Ácido folínico 50 mg inyectable 1 vial
 74031000140101|Ácido folínico 300 mg inyectable 10 ml 1 vial
-74051000140109|Calcio gluconato 94 mg/ml inyectable 10 ml 20 ampollas
 74081000140100|Pentetato de calcio y trisodio 9,1 mg radiofármaco 5 viales
 74091000140102|Pentetato de calcio y trisodio 25 mg radiofármaco 5 viales
 74111000140107|Complejo hemostático local adhesivo tisular epilesional
@@ -5088,7 +5086,7 @@
 75321000140102|Producto combinado con corticoide para tratamiento bucal tópico
 75341000140105|Hidrocortisona/Neomicina 5 mg/ml + 3,5 mg/ml líquido ótico 5 ml 1 frasco
 75361000140109|Producto combinado con corticoide para el tratamiento de hemorroides/fisura anal tópico
-75381000140103|Hidrocortisona/Neomicina 10 mg/17,5 mg 5 óvulos/comprimidos vaginales
+75381000140103|Hidrocortisona/Neomicina/Lactosa 10 mg/17,5 mg/500 mg 5 óvulos/comprimidos vaginales
 75401000140103|Producto combinado antiséptico para la garganta oral
 75421000140109|Producto combinado antibiótico para la garganta oral
 75461000140102|Amoniaco 35 mg/ml líquido uso tópico 14 ml 1 frasco
@@ -5502,7 +5500,6 @@
 82671000140107|Sodio cloruro 0,9% producto uso nasal 25 ml 1 frasco
 82681000140105|Sodio cloruro 0,9% producto uso nasal 50 ml 1 frasco
 82691000140108|Sodio cloruro 0,9% producto uso nasal 30 ml 1 frasco
-82711000140106|Sodio cloruro 0,45% inyectable 5 ml
 82731000140104|Sodio fluoruro 1,4 mg/ml solución/suspensión gotas orales 30 ml 1 frasco
 82751000140107|Perborato sodio/Ácido ascórbico 656 mg/g + 45 mg/g producto uso bucal tópico 40 g 1 frasco
 82771000140101|Biborato sodio/Resorcinol 50 mg/ml + 50 mg/ml gel/pasta/líquido bucal 25 ml 1 frasco
@@ -5772,7 +5769,6 @@
 87301000140105|Gadobutrol 1 mmol/ml inyectable 30 ml 1 vial
 87311000140108|Gadobutrol 1 mmol/ml inyectable 15 ml 1 vial
 87321000140104|Gadobutrol 1 mmol/ml inyectable 65 ml 1 vial
-87331000140101|Gadobutrol 1 mmol/ml inyectable 15 ml 1 jeringa precargada
 87341000140107|Gadobutrol 1 mmol/ml inyectable 5 ml 1 jeringa precargada
 87351000140109|Gadobutrol 1 mmol/ml inyectable 7,5 ml 1 jeringa precargada
 87371000140103|Subcitrato bismuto coloidal 180 mg 50 comprimidos
@@ -5810,6 +5806,7 @@
 87861000140101|Edetato disodio 20 mg/ml colirio 5 ml 1 frasco
 87901000140109|Tintura de partes aéreas/raíz de Echinacea purpurea 1.140 mg/60 mg 30 comprimidos
 87931000140100|Producto combinado antipsoriásico tópico
+87951000140108|Producto combinado para champú medicinal tópico
 87961000140105|Vindesina 5 mg inyectable 1 vial
 88001000140107|Albúmina macroagregados para Tecnecio (99mTc) 2 mg radiofármaco 5 viales
 88011000140105|Albúmina nanocoloides para Tecnecio (99mTc) 500 microgramos radiofármaco 5 viales
@@ -6029,6 +6026,7 @@
 92921000140104|Dorzolamida/Timolol 20 mg/ml + 5 mg/ml colirio 0,2 ml 60 envases unidosis
 92971000140103|Pravastatina/Fenofibrato 40 mg/160 mg 30 cápsulas
 93021000140107|Tramadol/Paracetamol 37,5 mg/325 mg 100 comprimidos
+93041000140104|Tramadol/Paracetamol 75 mg/650 mg 100 comprimidos
 93051000140102|Tramadol/Paracetamol 75 mg/650 mg 20 comprimidos
 93061000140100|Tramadol/Paracetamol 75 mg/650 mg 60 comprimidos
 93091000140109|Tramadol/Paracetamol 37,5 mg/325 mg 60 comprimidos
@@ -6147,6 +6145,11 @@
 97481000140109|Hierro isomaltósido 100 mg/ml inyectable 5 ml 5 viales
 97491000140107|Cromo (51Cr) EDTA 3,7 MBq/ml inyectable 10 ml 1 vial
 97511000140100|Ytrio citrato (90Y) 37 - 370 MBq/ml inyectable 1 - 10 ml 1 vial
+97531000140107|Lycopodium 5 CH 10 globulos
+97681000140107|Lycopodium 15 CH 10 globulos
+97711000140108|Lycopodium 30 CH 10 globulos
+97741000140107|Lycopodium 7 CH 10 globulos
+97751000140109|Lycopodium 9 CH 10 globulos
 98551000140103|Levetiracetam 500 mg inyectable perfusión 5 ml 50 bolsas/viales
 98641000140104|Lipasa/Amilasa/Proteasa 25.000 U/18.000 U/1.000 U 50 cápsulas
 98651000140102|Lipasa/Amilasa/Proteasa 25.000 U/18.000 U/1.000 U 100 cápsulas
@@ -6167,6 +6170,8 @@
 99621000140103|Preparado de raíz de Urtica dioica y Urtica urens (raíz de ortiga) 290 mg 48 capsulas
 99641000140106|Talio cloruro (201Tl) 37 MBq/ml inyectable 15 ml 1 vial
 99681000140104|Extracto de partes aéreas/raíz de Echinacea purpurea/Extracto de hoja de Salvia officinalis 863,3 mg/ml + 45,5 mg/ml + 430 mg/ml pulverización bucal 30 ml 1 envase pulverizador
+99781000140106|Eplerenona 25 mg 50 comprimidos
+99791000140109|Eplerenona 50 mg 50 comprimidos
 99811000140108|Ácido acetilsalicílico 75 mg 30 comprimidos
 99821000140104|Remifentanilo 1 mg inyectable 50 viales
 99831000140101|Remifentanilo 2 mg inyectable 50 viales
@@ -6286,6 +6291,8 @@
 104701000140105|Ácido folínico 50 mg inyectable 50 viales
 104801000140101|Fluorometolona 1 mg/ml colirio 10 ml 1 frasco
 104861000140100|Fluoresceína 100 mg/ml inyectable 5 ml 1 ampolla
+104891000140109|Cobre tetrakis 1 mg radiofármaco 3 viales
+104901000140108|Cobre tetrakis 1 mg radiofármaco 6 viales
 104921000140102|Cobre tetrakis 500 microgramos radiofármaco 6 viales
 105291000140109|Metotrexato 12,5 mg inyectable 0,25 ml 1 jeringa precargada
 105301000140105|Metotrexato 17,5 mg inyectable 0,35 ml 1 jeringa precargada
@@ -6316,9 +6323,11 @@
 106461000140109|Bifonazol 10 mg/g champú 100 g 1 frasco
 106471000140101|Ibuprofeno 600 mg 20 comprimidos
 106491000140100|Ibuprofeno arginina 400 mg solución/suspensión oral 12 sobres
+106521000140103|Ibuprofeno arginina 400 mg 30 comprimidos
 106711000140104|Epoetina alfa 40.000 UI inyectable 1 ml 1 vial
 107021000140109|Claritromicina 250 mg 14 comprimidos
 107191000140107|Gliclazida 60 mg 60 comprimidos liberación modificada
+107331000140105|Omeprazol 40 mg 56 cápsulas
 107351000140102|Omeprazol 20 mg 7 cápsulas
 107391000140109|Ketoprofeno/Omeprazol 100 mg/20 mg 30 cápsulas liberación modificada
 107411000140109|Ketoprofeno/Omeprazol 200 mg/20 mg 30 cápsulas liberación modificada
@@ -6356,6 +6365,7 @@
 109071000140104|Agua estéril inyectable 50 ml 20 frascos
 109081000140101|Agua estéril inyectable 50 ml 1 frasco
 109101000140105|Glucosa 10% inyectable perfusión 1.000 ml 10 frascos/bolsas
+109191000140102|Bisoprolol 1,25 mg 20 comprimidos
 109391000140100|Candesartán/Hidroclorotiazida 16 mg/12,5 mg 30 comprimidos
 109441000140101|Glucosa 50% inyectable perfusión 20 ml 20 ampollas
 109461000140102|Glucosa 33% inyectable perfusión 10 ml 20 ampollas
@@ -6368,10 +6378,13 @@
 110151000140102|Zofenopril/Hidroclorotiazida 30 mg/12,5 mg 28 comprimidos
 110191000140109|Piritiona zíncica/Coaltar (Brea de hulla) 10 mg/ml + 4 mg/ml champú 300 ml 1 frasco
 110201000140107|Piritiona zíncica/Coaltar (Brea de hulla) 10 mg/ml + 4 mg/ml champú 125 ml 1 frasco
+110231000140103|Zinc óxido/Cloruro bencetonio/Retinol 150 mg/g + 1,5 mg/g + 6.000 UI/g pomada 45 g 1 tubo
+110241000140109|Zinc óxido/Cloruro bencetonio/Retinol 100 mg/g + 0,5 mg/g + 6.000 UI/g pomada 45 g 1 tubo
 110321000140109|Producto combinado emoliente y protector tópico
 110361000140102|Bacitracina/Neomicina/Polimixina B 400 UI/g + 3,5 mg/g + 8.000 UI/g pomada 15 g 1 tubo
 110551000140108|Levofloxacino 500 mg inyectable perfusión 100 ml 25 bolsas/frascos
 110561000140105|Loperamida 0,2 mg/ml solución/suspensión oral 100 ml 20 frascos
+111501000140104|Metformina 850 mg 100 comprimidos
 111671000140105|Alitretinoína 10 mg 30 cápsulas
 111681000140108|Alitretinoína 30 mg 30 cápsulas
 111741000140108|Tobramicina 3 mg/ml colirio 4 ml 1 frasco
@@ -6392,7 +6405,6 @@
 113091000140104|Dexketoprofeno 25 mg 50 comprimidos
 113101000140106|Exemestano 25 mg 100 comprimidos
 113181000140101|Isosorbida mononitrato 20 mg 60 cápsulas liberación modificada
-113221000140106|Isosorbida mononitrato 20 mg 50 comprimidos
 113241000140103|Extracto seco de semillas de Glycine max (soja) 24 mg 30 cápsulas
 113261000140104|Extracto seco de hipocótilos de Glycine max (soja) 35,35 mg 15 cápsulas
 113281000140105|Extracto seco de semillas de Glycine max (soja)/Extracto seco de flor y hoja de Trifolium pratense (trébol rojo) 75 mg/32 mg 30 cápsulas
@@ -6450,8 +6462,11 @@
 115301000140108|Cefuroxima 500 mg 10 comprimidos
 115311000140106|Cefuroxima 500 mg 15 comprimidos
 115321000140102|Cefuroxima 500 mg 20 comprimidos
+115331000140104|Iopamidol 370 mg/ml inyectable 200 ml 10 viales
 115341000140105|Clomipramina 25 mg 500 comprimidos
+115351000140107|Iopamidol 370 mg/ml inyectable 100 ml 10 viales
 115411000140100|Iopamidol 370 mg/ml inyectable 500 ml 1 frasco
+115431000140107|Iopamidol 300 mg/ml inyectable 100 ml 10 viales
 115481000140108|Iopamidol 300 mg/ml inyectable 500 ml 1 vial/frasco
 115531000140106|Naltrexona 50 mg 14 cápsulas
 115561000140101|Piperaquina tetrafosfato/Dihidroartemisinina 320 mg/40 mg 12 comprimidos
@@ -6477,15 +6492,19 @@
 116211000140108|Cefalexina 500 mg 28 cápsulas
 116251000140109|Cefixima 200 mg 21 cápsulas
 116261000140106|Cefixima 200 mg 14 cápsulas
+116301000140101|Celecoxib 200 mg 20 cápsulas
+116311000140103|Celecoxib 200 mg 100 cápsulas
 116361000140100|Melatonina 2 mg 30 comprimidos liberación modificada
 116401000140106|Octreotida 100 microgramos/ml inyectable 1 ml 5 jeringas precargadas
 116411000140109|Octreotida 50 microgramos/ml inyectable 1 ml 5 jeringas precargadas
 116421000140100|Octreotida 500 microgramos/ml inyectable 1 ml 5 jeringas precargadas
 116471000140104|Dextrometorfano/Sulfoguayacolato potásico 10 mg/5 ml + 50 mg/5 ml solución/suspensión oral 180 ml 1 frasco
+116511000140105|Bencidamina 0,255 mg/dosis pulverización bucal 15 ml 1 frasco
 116551000140106|Xipamida 20 mg 500 comprimidos
 116591000140104|Doxiciclina 100 mg 14 cápsulas
 116601000140108|Doxiciclina 100 mg 42 cápsulas
-116671000140101|Preparado de raíz de Echinacea angustifolia 250 mg 200 cápsulas
+116631000140104|Memantina 10 mg 28 comprimidos
+116641000140105|Memantina 10 mg 56 comprimidos
 116681000140103|Pentoxifilina 400 mg 500 comprimidos liberación modificada
 116701000140100|Fusidato sodio 250 mg 20 comprimidos
 116731000140109|Ritonavir 80 mg/ml solución/suspensión oral 90 ml 1 frasco
@@ -6519,8 +6538,11 @@
 118131000140107|Espectinomicina 2.000 mg inyectable 1 vial
 118201000140109|Fluocinolona 0,25 mg/g líquido uso tópico 15 g 1 tubo
 118211000140107|Fluocinolona 2 mg/g crema 60 g 1 tubo
+118231000140100|Dihidroergocristina/Cinarizina 1,5 mg/ml + 20 mg/ml solución/suspensión gotas orales 50 ml 1 frasco
 118261000140105|Mesalazina 3.000 mg polvo/granulado liberación modificada 60 sobres
 118281000140104|Mesalazina 500 mg 50 comprimidos liberación modificada
+118311000140102|Preparado de raíz de Valeriana officinalis 200 mg 60 comprimidos
+118321000140106|Preparado de raíz de Valeriana officinalis 200 mg 30 comprimidos
 118371000140107|Preparado de raíz de Valeriana officinalis 350 mg 200 cápsulas
 118391000140108|Extracto seco de estróbilos de Humulus lupulus/raíz de Valeriana officinalis 27,8 mg/125 mg 6 cápsulas
 118441000140107|Extracto seco de raíz de Harpagophytum procumbens 480 mg 60 comprimidos
@@ -6563,11 +6585,9 @@
 120251000140102|Hidrocortisona 20 mg 10 comprimidos
 120301000140105|Insulina glulisina 100 U/ml inyectable 3 ml 5 cartuchos precargados
 120351000140109|Insulina glargina 100 U/ml inyectable 5 ml 1 vial
-120561000140103|Bupivacaína 50 mg inyectable 1 ampolla
 120631000140107|Bupivacaína 100 mg inyectable 20 ml 100 ampollas
 120721000140100|Clindamicina 900 mg inyectable 6 ml 1 ampolla/vial
 120771000140104|Vacuna inactivada anti gripal (virus fraccionados) inyectable 10 dosis
-120801000140102|Calcipotriol/Betametasona 50 microgramos/g + 500 microgramos/g pomada 30 g 1 tubo
 120851000140103|Dexmedetomidina 100 microgramos/ml inyectable perfusión 10 ml 4 viales
 120861000140101|Dexmedetomidina 100 microgramos/ml inyectable perfusión 2 ml 25 ampollas
 121001000140100|Doxorubicina 2 mg/ml inyectable perfusión 5 ml 1 vial
@@ -6687,6 +6707,7 @@
 123891000140104|Azelastina 0,5 mg/ml colirio 0,25 ml 20 envases unidosis
 123911000140102|Dienogest/Etinilestradiol 2 mg/0,03 mg 28 comprimidos (21 + 7)
 123951000140101|Amoxicilina/Bromhexina 250 mg/5ml + 4 mg/5 ml solución/suspensión oral 120 ml 1 frasco
+124001000140103|Fluticasona 125 microgramos/dosis inhalación pulmonar 120 dosis 1 inhalador
 124081000140108|Citarabina 2.000 mg inyectable 20 ml 1 vial
 124201000140105|Diosmina 500 mg 30 comprimidos
 124221000140104|Diosmina 500 mg 60 comprimidos
@@ -6726,6 +6747,7 @@
 125771000140106|Nicotina 2 mg 12 chicles medicamentosos
 125801000140108|Atorvastatina 60 mg 28 comprimidos
 125821000140102|Somatropina 3,3 mg/ml inyectable 1,5 ml 10 cartuchos precargados
+125831000140104|Somatropina 10 mg/ml inyectable 1,5 ml 1 cartucho precargado
 125931000140105|Tripelenamina 20 mg/g crema 10 g 1 tubo
 125961000140100|Nonacog alfa 3.000 UI inyectable 1 vial
 125981000140106|Fenoximetilpenicilina 250.000 UI/5 ml solución/suspensión oral 100 ml 1 frasco
@@ -6742,13 +6764,14 @@
 126351000140106|Clorhexidina/Benzocaína 5 mg/2,5 mg 20 comprimidos bucales/para chupar
 126411000140104|Ibuprofeno 92,6 mg/ml líquido uso tópico 125 ml 1 envase pulverizador
 126421000140108|Ibuprofeno 92,6 mg/ml líquido uso tópico 60 ml 1 envase pulverizador
-126441000140100|Exenatida 2 mg inyectable 1 vial
 126461000140101|Cefaclor 500 mg 30 cápsulas
 126471000140109|Ceftibuteno 400 mg 10 cápsulas
 126491000140105|Cefpodoxima 200 mg 14 comprimidos
 126551000140102|Clevidipino 0,5 mg/ml inyectable 50 ml 1 vial
 126621000140106|Linaclotida 290 mg 28 cápsulas
 126721000140102|Ácido folínico 100 mg inyectable 10 ml 1 vial
+126771000140101|Degarelix 120 mg inyectable 2 viales
+126781000140103|Degarelix 80 mg inyectable 1 vial
 126821000140105|Nitrofurantoína 50 mg 21 comprimidos
 126831000140108|Nitrofurantoína 50 mg 42 comprimidos
 126851000140100|Nitrofurantoína 10 mg/ml solución/suspensión oral 250 ml 10 frascos
@@ -6763,6 +6786,7 @@
 127121000140100|Glucosa 3,3%/Sodio cloruro 0,3%/Potasio cloruro 20 mEq/1.000 ml inyectable perfusión 10 frascos/bolsas
 127131000140102|Glucosa 3,3%/Sodio cloruro 0,3%/Potasio cloruro 20 mEq/500 ml inyectable perfusión 10 frascos/bolsas
 127141000140108|Glucosa 3,3%/Sodio cloruro 0,3%/Potasio cloruro 40 mEq/1.000 ml inyectable perfusión 10 frascos/bolsas
+127151000140105|Filgrastim 12 millones U inyectable 0,2 ml 1 jeringa precargada
 127311000140107|Oxibutinina 3,9 mg/24 h 8 parches transdérmicos
 127361000140105|Efedrina 30 mg inyectable 10 ampollas
 127381000140104|Argatrobán 100 mg/ml inyectable perfusión 2,5 ml 1 vial
@@ -6795,6 +6819,7 @@
 128331000140104|Preparado de hojas de Peumus boldus (boldo) 260 mg 84 cápsulas
 128341000140105|Preparado de hojas de Peumus boldus (boldo) 260 mg 168 cápsulas
 128471000140105|Decitabina 50 mg inyectable perfusión 1 vial
+128511000140104|Decualinio cloruro 10 mg 6 óvulos/comprimidos vaginales
 128521000140108|Fusidato sodio 250 mg 10 comprimidos
 128631000140105|Iomeprol 200 mg/ml inyectable 200 ml 1 frasco
 128681000140106|Glicopirronio 44 microgramos/dosis inhalación pulmonar 30 dosis 1 inhalador
@@ -6812,6 +6837,7 @@
 128881000140105|Extracto fluido de flores de Arnica montana/Artemisia absinthium 30,8 mg/ml + 15,5 mg/ml líquido uso tópico 125 ml 1 frasco
 128961000140108|Eritromicina 250 mg 40 cápsulas
 129071000140106|Ezetimiba 10 mg 98 comprimidos
+129181000140105|Iopamidol 300 mg/ml inyectable 500 ml 6 viales
 129191000140108|Paracetamol 500 mg solución/suspensión oral 12 sobres
 129201000140106|Paracetamol 250 mg solución/suspensión oral 12 sobres
 129261000140107|Simeticona 240 mg 20 cápsulas
@@ -6838,6 +6864,8 @@
 130151000140108|Fentanilo 67 microgramos 30 comprimidos sublinguales
 130251000140104|Abatacept 125 mg inyectable 1 ml 4 jeringas precargadas
 130281000140108|Ácido pamidrónico 15 mg inyectable perfusión 1 vial
+130321000140101|Extracto seco de partes aéreas de Passiflora incarnata 200 mg 42 comprimidos
+130331000140103|Extracto seco de partes aéreas de Passiflora incarnata 200 mg 98 comprimidos
 130341000140109|Doxiciclina 200 mg 42 cápsulas
 130411000140104|Fentanilo 267 microgramos 4 comprimidos sublinguales
 130421000140108|Fentanilo 267 microgramos 30 comprimidos sublinguales
@@ -6925,12 +6953,17 @@
 133641000140105|Sildenafilo 50 mg 2 comprimidos bucodispersables/liotabs
 133651000140107|Sildenafilo 50 mg 8 comprimidos bucodispersables/liotabs
 134021000140106|Metotrexato 20 mg inyectable 1 ml 1 jeringa precargada
+134041000140103|Metotrexato 20 mg inyectable 0,8 ml 1 jeringa precargada
 134071000140107|Metotrexato 20 mg inyectable 0,4 ml 1 jeringa precargada
 134141000140104|Metotrexato 10 mg inyectable 0,2 ml 1 jeringa precargada
 134161000140100|Metotrexato 15 mg inyectable 0,3 ml 1 jeringa precargada
 134181000140106|Metotrexato 25 mg inyectable 0,5 ml 1 jeringa precargada
 134201000140107|Metotrexato 30 mg inyectable 0,6 ml 1 jeringa precargada
 134221000140101|Metotrexato 7,5 mg inyectable 0,15 ml 1 jeringa precargada
+134281000140102|Metotrexato 25 mg inyectable 1 ml 1 jeringa precargada
+134301000140103|Metotrexato 15 mg inyectable 0,6 ml 1 jeringa precargada
+134321000140109|Metotrexato 10 mg inyectable 0,4 ml 1 jeringa precargada
+134341000140101|Metotrexato 7,5 mg inyectable 0,3 ml 1 jeringa precargada
 134571000140102|Nitroglicerina 10 mg/24 h 30 parches transdérmicos (tipo 2)
 134591000140101|Nitroglicerina 15 mg/24 h 30 parches transdérmicos (tipo 2)
 134611000140108|Nitroglicerina 5 mg/24 h 30 parches transdérmicos (tipo 2)
@@ -6957,7 +6990,6 @@
 135051000140100|Urofolitropina 225 UI inyectable 10 viales
 135061000140103|Urofolitropina 300 UI inyectable 1 vial
 135081000140109|Urofolitropina 300 UI inyectable 10 viales
-135091000140107|Oximetazolina 0,5 mg/ml producto uso nasal 12 ml 1 envase pulverizador
 135101000140100|Carbocisteína lisina 2.700 mg solución/suspensión oral 8 sobres
 135121000140106|Mesalazina 2.000 mg polvo/granulado liberación modificada 60 sobres
 135141000140103|Diclofenaco 10 mg/g gel 100 g 1 tubo
@@ -6967,7 +6999,7 @@
 135291000140103|Fluorouracilo/Ácido salicílico 5 mg/g + 100 mg/g líquido uso tópico 25 ml 1 frasco
 135301000140102|Folitropina alfa/Lutropina alfa 150 UI/75 UI inyectable 3 viales
 135321000140108|Sodio ioduro (131I) 111 MBq/ml inyectable 0,5 - 10 ml 1 vial
-135411000140105|Memantina 10 mg/ml (5 mg/dosis) solución/suspensión oral 100 ml 1 frasco
+135411000140105|Memantina 10 mg/ml o 5 mg/dosis solución/suspensión oral 100 ml 1 frasco
 135481000140102|Esomeprazol 20 mg 50 comprimidos
 135491000140104|Esomeprazol 40 mg 50 comprimidos
 135521000140102|Almagato 500 mg 30 comprimidos masticables
@@ -6983,9 +7015,9 @@
 135971000140105|Clorhexidina/Benzocaína 5 mg/2 mg 30 comprimidos bucal/para chupar
 135981000140108|Clorhexidina/Benzocaína 5 mg/2 mg 18 comprimidos bucal/para chupar
 136031000140103|Bimatoprost/Timolol 0,3 mg/ml + 5 mg/ml colirio 0,4 ml 20 envases unidosis
+136051000140106|Colistimetato de sodio 1.662.500 UI inhalación pulmonar 56 dosis 1 inhalador
 136101000140106|Lipegfilgrastim 6 mg inyectable 1 jeringa precargada
 136111000140109|Paracetamol 325 mg solución/suspensión oral 12 sobres
-136171000140104|Capecitabina 500 mg 60 comprimidos
 136221000140106|Extracto seco de raíz de Valeriana officinalis 125 mg 50 comprimidos
 136311000140107|Extracto seco de corteza de Rhamnus frangula/Polvo de cutícula de semillas de Plantago ovata 38 mg/2500 mg solución/suspensión 16 sobres
 136341000140106|Regorafenib 40 mg 84 comprimidos
@@ -7003,6 +7035,8 @@
 136941000140105|Afatinib 40 mg 28 comprimidos
 136961000140109|Afatinib 50 mg 28 comprimidos
 137001000140109|Pramipexol 0,52 mg 30 comprimidos de liberación modificada
+137011000140107|Pramipexol 2,62 mg 30 comprimidos de liberación modificada
+137021000140103|Pramipexol 3,15 mg 30 comprimidos de liberación modificada
 137041000140106|Pramipexol 1,57 mg 30 comprimidos de liberación modificada
 137101000140108|Indacaterol/Glicopirronio 85 microgramos/43 microgramos inhalación pulmonar 30 dosis 1 inhalador
 137131000140104|Citicolina 100 mg/ml solución/suspensión oral 180 ml 1 frasco
@@ -7041,12 +7075,15 @@
 138071000140101|Radio (223Ra) dicloruro 1000 kBq/ml inyectable 1 vial de 6 ml
 138081000140103|Progesterona 100 mg 60 óvulos/comprimidos vaginales
 138091000140100|Magnesio sulfato 1.500 mg inyectable 10 ml 100 ampollas
+138151000140106|Trastuzumab 100 mg inyectable perfusión 1 vial
+138161000140108|Trastuzumab 160 mg inyectable perfusión 1 vial
 138191000140104|Pomalidomida 3 mg 21 cápsulas
 138201000140101|Pomalidomida 4 mg 21 cápsulas
 138211000140103|Isotretinoína 30 mg 50 cápsulas
 138221000140107|Isotretinoína 30 mg 30 cápsulas
 138241000140104|Alemtuzumab 10 mg/ml intectable perfusión 1,2 ml 1 vial
 138251000140102|Tocoferol 50 mg 60 cápsulas
+138261000140100|Tocoferol 200 mg 60 cápsulas
 138281000140106|Sodio fitato 20 mg radiofármaco 5 viales
 138291000140109|Nitroglicerina 10 mg/24 h 7 parches transdérmicos (tipo 2)
 138301000140105|Nitroglicerina 15 mg/24 h 7 parches transdérmicos (tipo 2)
@@ -7063,6 +7100,15 @@
 138531000140108|Avanafilo 50 mg 4 comprimidos
 138541000140102|Avanafilo 50 mg 8 comprimidos
 138561000140103|Colecalciferol 25.000 UI solución/suspensión oral 1 envase unidosis
+138621000140109|Pioglitazona/Alogliptina 30 mg/12,5 mg 28 comprimidos
+138631000140107|Pioglitazona/Alogliptina 30 mg/25 mg 28 comprimidos
+138691000140106|Alogliptina 12,5 mg 28 comprimidos
+138711000140109|Alogliptina 6,25 mg 28 comprimidos
+138731000140102|Alogliptina 25 mg 28 comprimidos
+138741000140108|Alogliptina/Metformina 12,5 mg/850 mg 56 comprimidos
+138751000140105|Alogliptina/Metformina 12,5 mg/850 mg 112 comprimidos
+138761000140107|Alogliptina/Metformina 12,5 mg/1.000 mg 56 comprimidos
+138771000140104|Alogliptina/Metformina 12,5 mg/1.000 mg 112 comprimidos
 145041000140103|Diclofenaco 20 mg/g gel 50 g 1 tubo
 145061000140104|Vacuna inactivada anti meningococo B conjugada inyectable 1 dosis
 145091000140108|Estradiol 7,5 mg/24 h 1 dispositivo vaginal
@@ -7077,6 +7123,7 @@
 146211000140103|Buprenorfina 70 microgramos/h (96 h) 5 parches transdérmicos
 146221000140107|Buprenorfina 70 microgramos/h (96 h) 10 parches transdérmicos
 146361000140106|Betahistina 24 mg 60 comprimidos
+146381000140100|Hierro carboximaltosa 50 mg/ml inyectable 20 ml 1 vial
 147481000140107|Dolutegravir 50 mg 30 comprimidos
 147511000140103|Dapagliflozina/Metformina 5 mg/1.000 mg 56 comprimidos
 147521000140107|Dapagliflozina/Metformina 5 mg/850 mg 56 comprimidos
@@ -7084,10 +7131,12 @@
 147551000140102|Riluzol 5 mg/ml solución/suspensión oral 300 ml 1 frasco
 147571000140108|Ranibizumab 10 mg/ml inyectable 0,165 ml 1 jeringa precargada
 147591000140109|Trastuzumab 120 mg inyectable perfusión 1 vial
-147631000140109|Lornoxicam 8 mg 30 comprimidos (liberación rápida)
+147631000140109|Lornoxicam 8 mg 30 comprimidos liberación modificada (rápida)
 147751000140107|Dabrafenib 50 mg 28 cápsulas
 147781000140103|Dimetilfumarato 120 mg 14 cápsulas
 147791000140100|Dimetilfumarato 240 mg 56 cápsulas
+147811000140101|Extracto seco de hojas de Ginkgo biloba 120 mg 30 comprimidos
+147841000140102|Extracto seco de hojas de Ginkgo biloba 120 mg 15 comprimidos
 147961000140107|Tocoferol 400 mg 60 cápsulas
 147991000140103|Hipromelosa 3,2 mg/ml colirio 0,5 ml 30 envases unidosis
 148011000140107|Fenilbutirato de sodio 483 mg/g solución/suspensión oral 1 frasco de 174 g
@@ -7099,6 +7148,7 @@
 148151000140107|Aripiprazol 300 mg inyectable 1 vial
 148181000140103|Aripiprazol 400 mg inyectable 1 vial
 148291000140105|Metoclopramida 10 mg inyectable 2 ml 120 ampollas
+148321000140100|Extracto seco de hoja de Salvia officinalis 51 mg 30 comprimidos
 148361000140107|Trazodona 100 mg 500 comprimidos
 148401000140101|Atorvastatina/Ácido acetilsalicílico/Ramipril 20 mg/100 mg/10 mg 7 cápsulas
 148421000140107|Atorvastatina/Ácido acetilsalicílico/Ramipril 20 mg/100 mg/10 mg 28 cápsulas
@@ -7110,6 +7160,7 @@
 148541000140103|Amoxicilina/Bromhexina 500 mg/8 mg 20 cápsulas
 148611000140101|Brimonidina 3 mg/g gel 30 g 1 tubo
 148741000140109|Tamsulosina/Solifenacina 0,4 mg/6 mg 30 comprimidos liberación modificada
+148761000140108|Cobicistat 150 mg 30 comprimidos
 148851000140104|Valsartán/Amlodipino/Hidroclorotiazida 320 mg/10 mg/25 mg 28 comprimidos
 148861000140102|Vacuna inactivada anti meningococo A y C conjugada inyectable 1 dosis
 148871000140105|Vacuna inactivada anti meningococo A/C/W135/Y conjugada inyectable 5 dosis
@@ -7273,18 +7324,29 @@
 150861000140102|Solución Ringer lactato inyectable perfusión 500 ml 10 frascos/bolsas
 150871000140105|Solución Ringer lactato inyectable perfusión 500 ml 20 frascos/bolsas
 150881000140108|Solución Ringer lactato inyectable perfusión 500 ml 12 frascos/bolsas
+151211000140106|Everolimus 2 mg 30 comprimidos
+151221000140102|Everolimus 3 mg 30 comprimidos
+151241000140105|Alprostadil 3 mg/g crema 100 mg 4 envases unidosis
 151331000140108|Paracetamol/Clorfenamina/Fenilefrina 650 mg/2,8 mg/8,21 mg comprimido efervescente
 151351000140100|Paracetamol/Clorfenamina/Fenilefrina 650 mg/2,8 mg/8,21 mg solución/suspensión oral efervescente 10 sobres
 151361000140103|Paracetamol/Clorfenamina/Fenilefrina 650 mg/2,8 mg/8,21 mg solución/suspensión oral efervescente 20 sobres
 151391000140107|Dexketoprofeno 25 mg 20 cápsulas
 151581000140100|Nicotina 2 mg 108 chicles medicamentosos
 151591000140102|Nicotina 4 mg 108 chicles medicamentosos
+151611000140109|Macitentán 10 mg 30 comprimidos
 151681000140101|Albiglutida 30 mg inyectable 4 plumas precargadas
 151701000140103|Albiglutida 50 mg inyecatable 4 plumas precargadas
 151721000140109|Levetiracetam 1.000 mg inyectable perfusión 20 bolsas/viales
 151761000140102|Tocilizumab 162 mg inyectable 0,9 ml 4 jeringas precargadas
+151861000140108|Riociguat 1 mg 42 comprimidos
+151871000140100|Riociguat 1,5 mg 42 comprimidos
+151881000140102|Riociguat 2 mg 42 comprimidos
+151891000140104|Riociguat 2,5 mg 42 comprimidos
+152051000140109|Dextrometorfano 15 mg solución/suspensión oral 18 sobres
 152071000140103|Posaconazol 100 mg 24 comprimidos
 152161000140105|Fluticasona/Azelastina 50 microgramos/137 microgramos/dosis producto uso nasal 28 dosis 1 envase pulverizador
+152191000140101|Canagliflozina 100 mg 30 comprimidos
+152201000140103|Canagliflozina 300 mg 30 comprimidos
 152301000140107|Bromuro umeclidinio 55 microgramos/dosis inhalación pulmonar 30 dosis 1 inhalador
 152331000140103|Moroctocog alfa 2.000 UI inyectable 1 jeringa precargada
 152351000140106|Moroctocog alfa 1.000 UI inyectable 1 jeringa precargada
@@ -7292,36 +7354,58 @@
 152401000140102|Colistimetato de sodio 2.000.000 UI inyectable/inhalación pulmonar 10 viales
 152431000140106|Simeprevir 150 mg 28 cápsulas
 152451000140103|Bromuro umeclidinio/Vilanterol 55 microgramos/22 microgramos/dosis inhalación pulmonar 30 dosis 1 inhalador
+152531000140105|Glucosa 5%/Potasio cloruro 40 meq/1.000 ml inyectable perfusión 10 frascos/bolsas
 152581000140106|Empagliflozina 10 mg 30 comprimidos
 152601000140100|Empagliflozina 25 mg 30 comprimidos
 152701000140108|Folitropina alfa 150 UI inyectable 0,25 ml 1 pluma precargada
 152711000140106|Folitropina alfa 225 UI inyectable 0,375 ml 1 pluma precargada
+152781000140103|Ibuprofeno lisina 20 mg/ml solución/suspensión oral 200 ml 1 frasco
 152801000140104|Folitropina alfa 75 UI inyectable 0,125 ml 1 pluma precargada
 152821000140105|Valproato sodio 200 mg/ml solución/suspensión oral 40 ml 1 frasco
+152841000140102|Vedolizumab 300 mg inyectable perfusión 1 vial
 152891000140107|Acetilcisteína 5.000 mg inyectable perfusión 25 ml 1 vial
 152961000140107|Paracetamol 1.000 mg 10 comprimidos efervescentes
 153061000140101|Propranolol 3,75 mg/ml solución/suspensión oral 120 ml 1 frasco
+153081000140107|Sulodexida 30 mg 30 cápsulas
 153101000140103|Bromelaína 2 g gel 1 vial
 153141000140101|Doxiciclina 40 mg 28 cápsulas liberación modificada
 153161000140102|Florbetaben (18F) 300 MBq/ml inyectable 10 ml 1 vial
+153181000140108|Fosfomicina 4.000 mg inyectable IV 50 viales
+153191000140106|Fosfomicina 1.000 mg inyectable IV 50 viales
+153241000140106|Canagliflozina/Metformina 150 mg/1.000 mg 60 comprimido
+153251000140108|Canagliflozina/Metformina 150 mg/850 mg 60 comprimidos
+153261000140105|Canagliflozina/Metformina 50 mg/1.000 mg 60 comprimidos
+153271000140102|Canagliflozina/Metformina 50 mg/850 mg 60 comprimidos
 153281000140104|Colchicina 0,5 mg 20 comprimidos
 153321000140106|Dimetindeno 1 mg/g gel 50 g 1 tubo
-153341000140103|Paricalcitol 4 microgramos inyectable de 2 ml 5 viales
 153351000140101|Minoxidil 50 mg/ml liquido uso tópico 120 ml 2 frascos
+153361000140104|Apixabán 5 mg 28 comprimidos
+153401000140105|Obinutuzumab 1.000 mg inyectable perfusión 40 ml 1 vial
+153431000140101|Metilergometrina 0,125 mg 30 comprimidos
 153541000140108|Acetilcisteína 600 mg 6 comprimidos
+153561000140107|Dextrometorfano/Guaifenesina 10 mg/100 mg solución/suspensión oral 18 sobres
 153671000140100|Folitropina alfa 300 UI inyectable 0,5 ml 10 plumas precargadas
 153681000140102|Folitropina alfa 75 UI inyectable 0,125 ml 10 plumas precargadas
 153691000140104|Folitropina alfa 225 UI inyectable 0,375 ml 10 plumas precargadas
 153701000140104|Folitropina alfa 150 UI inyectable 0,25 ml 10 plumas precargadas
 153741000140102|Calcio carbonato/Sodio alginato/Sodio bicarbonato 187,5 mg/250 mg/106,5 mg 32 comprimidos masticables
+153791000140107|Calcio carbonato/Sodio alginato/Sodio bicarbonato 325 mg/500 mg/213 mg solución/suspensión oral 12 sobres
 153861000140109|Brinzolamida/Brimonidina 10 mg/ml + 2 mg/ml colirio 5 ml 1 frasco
 153891000140100|Daclatasvir 30 mg 28 comprimidos
 153901000140101|Daclatasvir 60 mg 28 comprimidos
 153951000140102|Bromelaína 5 g gel 1 vial
 154081000140109|Tiamina/Piridoxina/Cianocobalamina 250 mg/250 mg/0,5 mg 30 comprimidos
 154091000140107|Tianeptina 12,5 mg 90 comprimidos
+154101000140100|Furosemida 250 mg inyectable perfusión 25 ml 6 ampollas/viales
 154111000140102|Dorzolamida/Timolol 20 mg/ml + 5 mg/ml colirio 10 ml 1 frasco
+154161000140104|Extracto seco de hojas y flores de Thymus vulgaris/zygis 59,5 mg 20 comprimidos
+154191000140108|Dolutegravir/Abacavir/Lamivudina 50 mg/600 mg/300 mg 30 comprimidos
 154231000140102|Exenatida 2 mg inyectable 4 plumas precargadas
+154251000140105|Levodopa/Carbidopa/Entacapona 175 mg/43,75 mg/200 mg 100 comprimidos
+154381000140107|Aripiprazol 10 mg 100 comprimidos
+154391000140105|Aripiprazol 15 mg 100 comprimidos
+154401000140107|Aripiprazol 5 mg 100 comprimidos
+154481000140102|Extracto seco de hojas y flores de Thymus vulgaris/Extracto líquido de raíz de Althaea officinalis 120 mg/15 ml + 830 mg/15 ml solución/suspensión oral 200 ml 1 frasco
 154581000140103|Vancomicina 1.000 mg inyectable 1 vial
 154601000140109|Vancomicina 1.000 mg inyectable 100 viales
 154611000140107|Vancomicina 500 mg inyectable 1 vial
@@ -7334,12 +7418,24 @@
 154741000140104|Levetiracetam 500 mg inyectable perfusión 100 ml 10 bolsas
 154751000140102|Levetiracetam 500 mg inyectable perfusión 100 ml 24 bolsas
 154761000140100|Levetiracetam 500 mg inyectable perfusión 100 ml 50 bolsas
+154821000140104|Vardenafilo 5 mg 20 comprimidos
 154861000140106|Colecalciferol 2.000 UI/ml solución/suspensión oral 30 ml 1 frasco
+154901000140103|Insulina lispro 200 U/ml inyectable 3 ml 5 plumas precargadas
 154921000140109|Ácido zoledrónico 4 mg inyectable perfusión 5 ml 1 jeringa precargada
 155011000140100|Carbetocina 100 microgramos inyectable 1 ml 5 jeringas precargadas
+155021000140109|Metoclopramida 1 mg/ml solución/suspensión oral 200 ml 1 frasco
+155081000140108|Extracto seco de tallo de Fucus vesiculosus/corteza de Rhamnus frangula/Rhamnus purshiana 126 mg/86,8 mg/170 mg 30 cápsulas
 155291000140102|Nisoldipino 10 mg 500 comprimidos liberación modificada
 155301000140101|Nisoldipino 20 mg 500 comprimidos liberación modificada
+155351000140102|Enalapril/Lercanidipino 20 mg/20 mg 28 comprimidos
+155451000140105|Diclofenaco 30 mg/g gel 90 g 1 tubo
+155471000140104|Posaconazol 300 mg inyectable perfusión 16,7 ml 1 vial
+155521000140101|Simoctocog alfa 250 UI inyectable 1 vial
+155531000140103|Simoctocog alfa 500 UI inyectable 1 vial
+155541000140109|Simoctocog alfa 2.000 UI inyectable 1 vial
+155551000140106|Simoctocog alfa 1.000 UI inyectable 1 vial
 155611000140106|Ledipasvir/Sofosbuvir 90 mg/400 mg 28 comprimidos
+155721000140106|Insulina asparta 100 U/ml inyectable 3 ml 5 cartuchos
 155761000140104|Pregabalina 100 mg 100 cápsulas
 155771000140107|Pregabalina 100 mg 84 cápsulas
 155781000140105|Pregabalina 100 mg 21 cápsulas
@@ -7348,9 +7444,56 @@
 155811000140107|Pregabalina 200 mg 84 cápsulas
 155851000140108|Pregabalina 50 mg 100 cápsulas
 155861000140105|Pregabalina 50 mg 56 cápsulas
+155881000140104|Darunavir/Cobicistat 800 mg/150 mg 30 comprimidos
+155941000140100|Peginterferón beta-1a 125 microgramos inyectable 0,5 ml 2 jeringas precargadas
+155961000140101|Peginterferón beta-1a 125 microgramos inyectable 0,5 ml 2 plumas precargadas
+156141000140107|Peginterferón beta-1a 63 + 94 inyectable microgramos 0,5 ml 2 jeringas precargadas
+156161000140106|Peginterferón beta-1a 63 + 94 microgramos inyectable 0,5 ml 2 plumas precargadas
+156181000140100|Clobetasol 0,5 mg/ml líquido uso tópico 100 ml 1 frasco
 156451000140104|Tacrolimus 2 mg 30 cápsulas
 156491000140106|Dasabuvir 250 mg 56 comprimidos
 156531000140106|Ombitasvir/Paritaprevir/Ritonavir 12,5 mg/75 mg/50 mg 56 comprimidos
+156701000140109|Atorvastatina/Ezetimiba 20 mg/10 mg 30 comprimidos
+156741000140106|Atorvastatina/Ezetimiba 40 mg/10 mg 30 comprimidos
+156761000140105|Atorvastatina/Ezetimiba 80 mg/10 mg 30 comprimidos
+156791000140101|Aclidinio/Formoterol 340 microgramos/12 microgramos/dosis inhalación pulmonar 60 dosis 1 inhalador
 156801000140100|Sodio cloruro 0,9 % inyectable perfusión 1.000 ml 12 frascos/bolsas
 156851000140101|Solución Ringer lactato  inyectable perfusión 1.000 ml 12 frascos/bolsas
 156861000140104|Glucosa 10 % inyectable perfusión 1.000 ml 12 frascos/bolsas
+157581000140109|Secukinumab 150 mg inyectable 1 ml 2 jeringas precargadas
+157591000140107|Secukinumab 150 mg inyectable 1 ml 2 plumas precargadas
+157651000140104|Ambroxol 2,5 mg/dosis (17,86 mg/ml) pulverización bucal 20 ml 1 frasco
+157741000140108|Turoctocog alfa 1.000 UI inyectable 1 vial
+157761000140107|Turoctocog alfa 1.500 UI inyectable 1 vial
+157781000140101|Turoctocog alfa 2.000 UI inyectable 1 vial
+157801000140102|Turoctocog alfa 3.000 UI inyectable 1 vial
+157821000140108|Turoctocog alfa 500 UI inyectable 1 vial
+157981000140104|Flurbiprofeno 8,75 mg/dosis pulverización bucal 15 ml 1 frasco
+158271000140107|Fentanilo 400 microgramos 10 comprimidos sublinguales (tipo 1)
+158281000140105|Fentanilo 400 microgramos 30 comprimidos sublinguales (tipo 1)
+158301000140109|Fentanilo 400 microgramos 30 comprimidos sublinguales (tipo 2)
+158311000140107|Fentanilo 800 microgramos 30 comprimidos sublinguales (tipo 1)
+158331000140100|Fentanilo 800 microgramos 30 comprimidos sublinguales (tipo 2)
+158421000140105|Tintura de partes aéreas/raíz de Echinacea purpurea 380 mg/20 mg 120 comprimidos
+158511000140100|Lenalidomida 20 mg 21 cápsulas
+158531000140107|Tedizolid 200 mg 6 comprimidos
+159121000140107|Bupropión 150 mg 30 comprimidos liberación modificada (tipo 2)
+159131000140105|Somatropina 0,6 mg inyectable 28 jeringas precargadas
+159141000140104|Somatropina 1,2 mg inyectable 28 jeringas precargadas
+159151000140102|Somatropina 2 mg inyectable 28 jeringas precargadas
+159171000140108|Somatropina 0,4 mg inyectable 28 jeringas precargadas
+159181000140106|Somatropina 1 mg inyectable 28 jeringas precargadas
+159191000140109|Somatropina 1,4 mg inyectable 28 jeringas precargadas
+159201000140107|Somatropina 1,6 mg inyectable 28 jeringas precargadas
+159211000140105|Somatropina 1,8 mg inyectable 28 jeringas precargadas
+159221000140101|Somatropina 0,8 mg inyectable 28 jeringas precargadas
+159311000140100|Tedizolid 200 mg inyectable perfusión 10 ml 6 viales
+159471000140101|Exenatida 2 mg inyectable 4 viales
+159511000140107|Ivermectina 10 mg/g crema 30 g 1 tubo
+159751000140103|Preparado de raíz de Echinacea purpúrea 250 mg 200 cápsulas
+160161000140101|Glatiramero acetato 40 mg inyectable 1 ml 12 jeringas precargadas
+160171000140109|Calcipotriol/Betametasona 50 microgramos/g + 500 microgramos/g gel 30 g 1 tubo
+160191000140105|Macrogol 500 mg/ml solución/suspensión oral 200 ml 1 frasco
+160261000140109|Calcio acetato 660 mg 200 comprimidos
+161171000140101|Fenilefrina/Tetracaína 100 mg/ml + 1,5 mg/ml colirio 5 ml 1 frasco
+161181000140103|Gadobutrol 1 mmol/ml inyectable 15 ml 1 cartucho precargado

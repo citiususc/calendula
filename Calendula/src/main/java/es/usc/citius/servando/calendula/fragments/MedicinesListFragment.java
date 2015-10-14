@@ -123,22 +123,23 @@ public class MedicinesListFragment extends Fragment {
         boolean hasProspect = (p != null && p.hasProspect);
 
         if (hasProspect) {
-            if (p.isProspectDownloaded(getActivity())) {
+//            if (p.isProspectDownloaded(getActivity())) {
+//                item.findViewById(R.id.download_indicator).setVisibility(View.GONE);
+//                item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        openProspect(p);
+//                    }
+//                });
+//            } else {
                 item.findViewById(R.id.download_indicator).setVisibility(View.GONE);
-                item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openProspect(p);
-                    }
-                });
-            } else {
                 item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         onClickProspect(medicine, p);
                     }
                 });
-            }
+//            }
         } else {
             item.findViewById(R.id.imageView).setAlpha(0.1f);
             item.findViewById(R.id.download_indicator).setVisibility(View.GONE);
@@ -205,29 +206,32 @@ public class MedicinesListFragment extends Fragment {
         try {
             if (p != null) {
 
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                boolean downloadProspectMessageShown = prefs.getBoolean("prospect_download_message_shown", false);
-                ;
-                if (downloadProspectMessageShown) {
-                    downloadProspect(p);
-                } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle(getString(R.string.download_prospect_title));
-                    builder.setMessage(getString(R.string.download_prospect_message, p.shortName()))
-                            .setCancelable(true)
-                            .setPositiveButton(getString(R.string.download_prospect_continue), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    downloadProspect(p);
-                                }
-                            })
-                            .setNegativeButton(getString(R.string.download_prospect_cancel), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                    prefs.edit().putBoolean("prospect_download_message_shown", true).commit();
+                if (p.isProspectDownloaded(getActivity())) {
+                    openProspect(p);
+                }else {
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    boolean downloadProspectMessageShown = prefs.getBoolean("prospect_download_message_shown", false);
+//                    if (downloadProspectMessageShown) {
+//                        downloadProspect(p);
+//                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle(getString(R.string.download_prospect_title));
+                        builder.setMessage(getString(R.string.download_prospect_message, p.shortName()))
+                                .setCancelable(true)
+                                .setPositiveButton(getString(R.string.download_prospect_continue), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        downloadProspect(p);
+                                    }
+                                })
+                                .setNegativeButton(getString(R.string.download_prospect_cancel), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                        prefs.edit().putBoolean("prospect_download_message_shown", true).commit();
+//                    }
                 }
 
             } else {

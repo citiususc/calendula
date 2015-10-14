@@ -167,6 +167,15 @@ public class HomeActivity extends ActionBarActivity
                 CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l));
         checkReminder(getIntent());
         startTutorialIfNeeded();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                updateAempsIfNeeded();
+            }
+        }, 1000);
+
+
     }
 
     public int getActionDrawable(int index) {
@@ -799,6 +808,14 @@ public class HomeActivity extends ActionBarActivity
 
 
         ProgressDialog dialog;
+        int msgResource = R.string.enable_prescriptions_progress_messgae;
+
+
+        public  PopulatePrescriptionDatabaseTask(){}
+
+        public PopulatePrescriptionDatabaseTask(int msgResource){
+            this.msgResource = msgResource;
+        }
 
         @Override
         protected Void doInBackground(String... params) {
@@ -812,7 +829,7 @@ public class HomeActivity extends ActionBarActivity
             dialog = new ProgressDialog(HomeActivity.this);
             dialog.setIndeterminate(true);
             dialog.setCancelable(false);
-            dialog.setMessage(getString(R.string.enable_prescriptions_progress_messgae));
+            dialog.setMessage(getString(msgResource));
             dialog.show();
         }
 
@@ -824,5 +841,15 @@ public class HomeActivity extends ActionBarActivity
             }
         }
     }
+
+    void updateAempsIfNeeded(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        int msgRes = R.string.updating_prescriptions_db_msg;
+        boolean dbEnabled = prefs.getBoolean("enable_prescriptions_db", false);
+        if(dbEnabled){
+            new PopulatePrescriptionDatabaseTask(msgRes).execute("");
+        }
+    }
+
 
 }

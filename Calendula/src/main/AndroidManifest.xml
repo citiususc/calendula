@@ -89,7 +89,7 @@
 
         <meta-data
             android:name="AEMPS_DB_VERSION"
-            android:value="2" />
+            android:value="3" /> <!-- 3, 13/10/2015 -->
 
         <activity
             android:name="es.usc.citius.servando.calendula.activities.CalendarActivity"

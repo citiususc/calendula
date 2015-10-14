@@ -386,6 +386,7 @@
     <string name="all_meds_taken">Has tomado todas tus medicinas!</string>
 
     <string name="create_schedule_select_med_before_dose">Por favor, selecciona un medicamento primero</string>
+    <string name="updating_prescriptions_db_msg">La base de datos de medicamentos está siendo actualizada. Estará lista en muy pocos segundos</string>
 
 </resources>
 
