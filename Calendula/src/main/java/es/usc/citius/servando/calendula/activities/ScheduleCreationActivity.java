@@ -206,6 +206,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ScheduleCreationActivity.this);
             Log.d(TAG, "Schedule saved successfully!");
             Snack.show(R.string.schedule_created_message, this);
+            CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
             finish();
         } catch (Exception e) {
             Snack.show("Error creating schedule", this);

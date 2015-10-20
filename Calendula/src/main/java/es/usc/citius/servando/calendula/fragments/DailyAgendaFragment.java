@@ -318,7 +318,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         final List<Schedule> hourly = DB.schedules().findHourly();
         Log.d(TAG, "Hourly schedules: " + hourly.size());
         for (Schedule s : hourly) {
-            final List<DateTime> times = s.rule().occurrencesBetween(from, to, s);
+            final List<DateTime> times = s.rule().occurrencesBetween(from, to, s.startDateTime());
             Log.d(TAG, "RFC - From : " + from.toString("E dd MMM, kk:mm ZZZ"));
             Log.d(TAG, "RFC - To : " + from.toString("E dd MMM, kk:mm ZZZ"));
             Log.d(TAG, "Hourly schedules times: " + times.size());

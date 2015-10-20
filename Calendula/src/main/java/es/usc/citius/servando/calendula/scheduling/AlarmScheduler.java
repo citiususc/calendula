@@ -231,17 +231,18 @@ public class AlarmScheduler {
         // when cancelling reminder, update time taken to now, but don't set as taken
 
         DailyScheduleItem ds = DB.dailyScheduleItems().findByScheduleAndTime(s, t);
-        ds.setTimeTaken(LocalTime.now());
-        ds.save();
+        if(ds!=null) {
+            ds.setTimeTaken(LocalTime.now());
+            ds.save();
 
-        // get hourly delay pending intent
-        PendingIntent pendingIntent =
-            hourlyScheduleAlarmDelayPendingIntent(ctx, s, t.toDateTimeToday());
-        // Get the AlarmManager service
-        AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null)
-        {
-            alarmManager.cancel(pendingIntent);
+            // get hourly delay pending intent
+            PendingIntent pendingIntent =
+                    hourlyScheduleAlarmDelayPendingIntent(ctx, s, t.toDateTimeToday());
+            // Get the AlarmManager service
+            AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+            if (alarmManager != null) {
+                alarmManager.cancel(pendingIntent);
+            }
         }
     }
 

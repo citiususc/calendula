@@ -51,7 +51,7 @@ public class SummaryCalendarActivity extends Activity {
 
         if (rule != null) {
             r = new RepetitionRule(rule);
-            List<LocalDate> dates = r.occurrencesBetween(from, to);
+            List<LocalDate> dates = r.occurrencesBetween(from, to, from);
             List<Date> hdates = new ArrayList<>();
             for (LocalDate d : dates)
                 hdates.add(d.toDate());

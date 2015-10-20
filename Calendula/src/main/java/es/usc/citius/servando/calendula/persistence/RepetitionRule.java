@@ -93,7 +93,6 @@ public class RepetitionRule {
             }
         }
         rrule.setByDay(byDay);
-
         // invalidate cached value
         this.days = null;
     }
@@ -108,20 +107,18 @@ public class RepetitionRule {
         return this.days;
     }
 
-    public boolean hasOccurrencesToday() throws Exception {
-        return hasOccurrencesAt(LocalDate.now());
-    }
-
-    public boolean hasOccurrencesAt(LocalDate date) {
+    public boolean hasOccurrencesAt(LocalDate date, LocalDate scheduleStart) {
         try {
 
             LocalDate start = date.minusDays(1);
             LocalDate end = date.plusDays(1);
-            Log.d("Schedule", "------  Start: " + date.toString("dd/MM/YY - kk:mm"));
-            Log.d("Schedule", "------  End: " + end.toString("dd/MM/YY - kk:mm"));
 
-            LocalDateIterator it = createLocalDateIterator(rrule.toIcal(), start, true);
-            it.advanceTo(date);
+            LocalDate iterateFrom = scheduleStart;
+            // to allow first occurrence at current hour, advance to the hour before it
+            LocalDate firstOccurrence = (start.isAfter(scheduleStart) ? start : scheduleStart).minusDays(1);
+
+            LocalDateIterator it = createLocalDateIterator(rrule.toIcal(), iterateFrom, true);
+            it.advanceTo(firstOccurrence);
             while (it.hasNext()) {
                 if (it.next().isBefore(end)) {
                     Log.d("Schedule", "------  There are ocurrences in range");
@@ -137,17 +134,18 @@ public class RepetitionRule {
         }
     }
 
-    public List<LocalDate> occurrencesBetween(LocalDate start, LocalDate to) {
+    public List<LocalDate> occurrencesBetween(LocalDate start, LocalDate to, LocalDate scheduleStart) {
         try {
-            LocalDate from = start.minusDays(1);
+            LocalDate iterateFrom = scheduleStart;
+            // to allow first occurrence at current hour, advance to the hour before it
+            LocalDate firstOccurrence = (start.isAfter(scheduleStart) ? start : scheduleStart).minusDays(1);
 
-            Log.d("Schedule", "------  Start: " + from.toString("dd/MM/YY - kk:mm"));
+            Log.d("Schedule", "------  Start: " + firstOccurrence.toString("dd/MM/YY - kk:mm"));
             Log.d("Schedule", "------  End: " + to.toString("dd/MM/YY - kk:mm"));
 
             List<LocalDate> occurrences = new ArrayList<>();
-            LocalDateIterator it =
-                    createLocalDateIterator(rrule.toIcal(), from, DateTimeZone.UTC, true);
-            it.advanceTo(start);
+            LocalDateIterator it = createLocalDateIterator(rrule.toIcal(), iterateFrom, DateTimeZone.UTC, true);
+            it.advanceTo(firstOccurrence);
             while (it.hasNext()) {
                 LocalDate n = it.next();
                 if (n.isBefore(to)) {
@@ -164,16 +162,15 @@ public class RepetitionRule {
         }
     }
 
-    public List<DateTime> occurrencesBetween(DateTime start, DateTime to, Schedule s) {
+    public List<DateTime> occurrencesBetween(DateTime start, DateTime to, DateTime scheduleStart) {
         try {
 
             // start iterating from a date before today, to avoid having the passed time
             // as the first occurrence
-            DateTime iterateFrom =
-                    s.startDateTime();//(start.isAfter(s.startDateTime()) ? start : s.startDateTime()).minusHours(s.rule().interval());
+            DateTime iterateFrom = scheduleStart;//(start.isAfter(s.startDateTime()) ? start : s.startDateTime()).minusHours(s.rule().interval());
             // to allow first occurrence at current hour, advance to the hour before it
             DateTime firstOccurrence =
-                    (start.isAfter(s.startDateTime()) ? start : s.startDateTime()).minusMinutes(1);
+                    (start.isAfter(scheduleStart) ? start : scheduleStart).minusMinutes(1);
             // start at previous day and then advance
             // to prevent start date be returned on the recurrences list
             //DateTime from = start.minusDays(1);
@@ -181,7 +178,7 @@ public class RepetitionRule {
                     "-------------------------------------------------------------------");
             Log.d("Schedule", "Start: " + start.toString("dd/MM/YY - kk:mm ZZZ"));
             Log.d("Schedule",
-                    "ScheduleStart: " + s.startDateTime().toString("dd/MM/YY - kk:mm ZZZ"));
+                    "ScheduleStart: " + scheduleStart.toString("dd/MM/YY - kk:mm ZZZ"));
             Log.d("Schedule", "IterateFrom: " + iterateFrom.toString("dd/MM/YY - kk:mm ZZZ"));
             Log.d("Schedule",
                     "FirstOccurrence: " + firstOccurrence.toString("dd/MM/YY - kk:mm ZZZ"));

@@ -139,7 +139,7 @@ public class Schedule {
     {
         DateTime today = DateTime.now().withTimeAtStartOfDay();
         // get schedule occurrences for the current day
-        return rrule.occurrencesBetween(today, today.plusDays(1), this);
+        return rrule.occurrencesBetween(today, today.plusDays(1), startDateTime());
     }
 
     public Medicine medicine()
@@ -203,7 +203,7 @@ public class Schedule {
         if (type == SCHEDULE_TYPE_CYCLE) {
             return cycleEnabledForDate(date);
         } else {
-            return rrule.hasOccurrencesAt(date);
+            return rrule.hasOccurrencesAt(date, start);
         }
     }
 
@@ -211,10 +211,6 @@ public class Schedule {
         return ScheduleHelper.cycleEnabledForDate(date, start, getCycleDays(), getCycleRest());
     }
 
-    public List<LocalDate> ocurrencesBetween(LocalDate start, LocalDate end)
-    {
-        return rrule.occurrencesBetween(start, end);
-    }
 
     public String toReadableString(Context ctx)
     {

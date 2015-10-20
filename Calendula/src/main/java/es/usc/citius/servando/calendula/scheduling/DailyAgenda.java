@@ -77,10 +77,11 @@ public class DailyAgenda {
         {
             for (ScheduleItem s : r.scheduleItems())
             {
-                s.schedule().enabledForDate(d.toLocalDate());
-                // create a dailyScheduleItem and save it
-                new DailyScheduleItem(s).save();
-                items++;
+                if(s.schedule().enabledForDate(d.toLocalDate())){
+                    // create a dailyScheduleItem and save it
+                    new DailyScheduleItem(s).save();
+                    items++;
+                }
             }
         }
         // Do the same for hourly schedules
