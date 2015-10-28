@@ -13,5 +13,6 @@
         <item name="windowActionModeOverlay">true</item>
         <!-- The rest of your attributes -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 </resources>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_height="wrap_content"
+             android:layout_width="fill_parent"
+              android:orientation="vertical"
+              android:gravity="center_vertical"
+
+
+    >
+
+    <RelativeLayout
+        android:id="@+id/patient_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:id="@+id/patient_avatar_bg"
+            android:layout_height="130dp"
+            android:background="@color/android_blue"
+            />
+
+        <ImageView
+            android:id="@+id/patient_avatar"
+            android:layout_width="wrap_content"
+            android:src="@drawable/avatar_default"
+            android:transitionName="transition"
+            android:layout_height="130dp"
+            android:scaleType="fitCenter"
+            android:padding="0dp"
+            android:layout_gravity="center_vertical"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/patient_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/android_blue"
+        android:maxLines="1"
+        android:padding="8dp"
+        android:text="Patient name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="@android:color/white"
+        android:layout_below="@+id/patient_item"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:editable="false"
+        />
+
+    <FrameLayout
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/active_indicator"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/triangle_corner">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_beenhere_white_48dp"
+            android:layout_alignParentRight="true"
+            android:visibility="visible"
+            android:layout_gravity="right"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"/>
+    </FrameLayout>
+
+</RelativeLayout>

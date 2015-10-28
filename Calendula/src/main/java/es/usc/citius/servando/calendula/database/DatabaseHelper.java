@@ -20,6 +20,7 @@ import java.util.concurrent.Callable;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
@@ -45,13 +46,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Prescription.class,
             // v8
             HomogeneousGroup.class,
-            PickupInfo.class
+            PickupInfo.class,
+            // v9
+            Patient.class
     };
 
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
 
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
@@ -69,6 +72,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<HomogeneousGroup, Long> homogeneousGroupsDao = null;
     // the DAO object we use to access the pcikupInfo table
     private Dao<PickupInfo, Long> pickupInfoDao = null;
+    // the DAO object we use to access the patients table
+    private Dao<Patient, Long> patientDao = null;
+
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -135,6 +141,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                     // Create HomogeneousGroup and PickupInfo tables
                     TableUtils.createTable(connectionSource, HomogeneousGroup.class);
                     TableUtils.createTable(connectionSource, PickupInfo.class);
+                case 9:
+                    TableUtils.createTable(connectionSource, Patient.class);
+                    migrateToMultiPatient();
             }
 
 
@@ -142,6 +151,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.e(DatabaseHelper.class.getName(), "Can't upgrade databases", e);
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Method that migrate models to multi-user
+     */
+    private void migrateToMultiPatient() {
+        // Steps TODO:
+        // Create a default patient
+        // add patient references where needed
+        // assign all routines and schedules to the default patient
+        // getSchedulesDao().executeRaw("ALTER TABLE Routines ADD COLUMN Patient TEXT;");
     }
 
     /**
@@ -277,6 +297,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             pickupInfoDao = getDao(PickupInfo.class);
         }
         return pickupInfoDao;
+    }
+
+    /**
+     * Returns the Database Access Object (DAO) for our User class. It will create it or just give the cached
+     * value.
+     */
+    public Dao<Patient, Long> getPatientDao() throws SQLException {
+        if (patientDao == null) {
+            patientDao = getDao(Patient.class);
+        }
+        return patientDao;
     }
 
     @Override

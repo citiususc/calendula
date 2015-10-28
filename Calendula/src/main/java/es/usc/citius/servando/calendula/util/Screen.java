@@ -114,4 +114,20 @@ public class Screen {
         }
         return null;
     }
+
+    public static int equivalentNoAlpha(int color, float factor) {
+
+        int white = 255;
+
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+
+        int r = (int) (white + (red - white) * factor);
+        int g = (int) (white + (green - white) * factor);
+        int b = (int) (white + (blue - white) * factor);
+
+        return Color.rgb(r, g, b);
+
+    }
 }

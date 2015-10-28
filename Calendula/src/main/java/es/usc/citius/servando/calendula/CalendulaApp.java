@@ -18,10 +18,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.SQLException;
 import java.util.Locale;
 
 import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.database.PatientDao;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 
@@ -72,6 +75,8 @@ public class CalendulaApp extends Application {
 
         // initialize SQLite engine
         initializeDatabase();
+        // create default patient
+        createDefaultPatient(this);
 
         DefaultDataGenerator.fillDBWithDummyData(getApplicationContext());
         // initialize daily agenda
@@ -80,6 +85,58 @@ public class CalendulaApp extends Application {
         setupUpdateDailyAgendaAlarm();
         //exportDatabase(this, DB_NAME, new File(Environment.getExternalStorageDirectory() + File.separator + DB_NAME));
         //forceLocale(Locale.GERMAN);
+    }
+
+    private void createDefaultPatient(Context ctx) {
+        try {
+            if(DB.patients().countOf() <= 0){
+                // Create default
+                Patient p = new Patient();
+                p.setName("Usuario"); // R.string.default_patient_name
+                p.setDefault(true);
+                DB.patients().save(p);
+                SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(ctx);
+                prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT,p.id()).commit();
+            }
+
+            // For testing purposes
+            if(DB.patients().countOf() <= 1){
+
+                // Create default
+                Patient p = new Patient();
+                p.setName("Angel"); // R.string.default_patient_name
+                p.setAvatar(R.drawable.avatar5);
+                DB.patients().save(p);
+
+                p = new Patient();
+                p.setName("Avoa"); // R.string.default_patient_name
+                p.setAvatar(R.drawable.avatar2);
+                DB.patients().save(p);
+
+                p = new Patient();
+                p.setName("Eva"); // R.string.default_patient_name
+                p.setAvatar(R.drawable.avatar1);
+                DB.patients().save(p);
+
+                p = new Patient();
+                p.setName("Mamá"); // R.string.default_patient_name
+                p.setAvatar(R.drawable.avatar7);
+                DB.patients().save(p);
+
+
+                p = new Patient();
+                p.setName("Avó"); // R.string.default_patient_name
+                p.setAvatar(R.drawable.avatar8);
+                DB.patients().save(p);
+
+                p = new Patient();
+                p.setName("Papá"); // R.string.default_patient_name
+                p.setAvatar(R.drawable.avatar6);
+                DB.patients().save(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static boolean isPharmaModeEnabled(Context ctx){

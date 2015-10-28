@@ -40,7 +40,8 @@
                 fab:fab_colorPressed="@color/android_blue"
                 fab:fab_colorRipple="@color/android_blue_light"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true" />
+                android:layout_alignParentRight="true" android:transitionName="transition"/>
+
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

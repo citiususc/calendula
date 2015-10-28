@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.activities.CalendarActivity;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
+import es.usc.citius.servando.calendula.activities.PatientsActivity;
 import es.usc.citius.servando.calendula.activities.ReminderNotification;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
@@ -55,11 +57,14 @@ import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
 import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 import es.usc.citius.servando.calendula.util.AppTutorial;
+import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
+import es.usc.citius.servando.calendula.util.Screen;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.view.ScrimInsetsFrameLayout;
 
@@ -103,6 +108,7 @@ public class HomeActivity extends ActionBarActivity
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+    DrawerListAdapter drawerListAdapter;
 
     private AppTutorial tutorial;
 
@@ -250,7 +256,8 @@ public class HomeActivity extends ActionBarActivity
         List<String> items =
                 Arrays.asList(getResources().getStringArray(R.array.home_drawer_actions));
         // Set the adapter for the list view
-        mDrawerList.setAdapter(new DrawerListAdapter(getApplication(), R.layout.drawer_list_item, items));
+        drawerListAdapter = new DrawerListAdapter(getApplication(), R.layout.drawer_list_item, items);
+        mDrawerList.setAdapter(drawerListAdapter);
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         mDrawerList.setOnItemLongClickListener(new DrawerItemLongClickListener());
@@ -352,6 +359,19 @@ public class HomeActivity extends ActionBarActivity
         }
     }
 
+
+//    private void launchActivityWithAnimation(Intent intent) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                    this,
+//                    new Pair<>((View)addButton, "transition")
+//            );
+//            ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
+//        } else {
+//            startActivity(intent);
+//        }
+//    }
+
     private void launchActivity(Intent i) {
         startActivity(i);
         this.overridePendingTransition(0, 0);
@@ -363,7 +383,10 @@ public class HomeActivity extends ActionBarActivity
     private int pharmaModeEnableCount = 0;
     public void selectItem(int position) {
         Log.d("Agenda", "Position :" + position);
-        if (position == 1) {
+
+        if (position == 0) {
+            launchActivity(new Intent(this, PatientsActivity.class));
+        }else if (position == 1) {
             mViewPager.setCurrentItem(0);
         } else if (position > 2 && position < 6) {
             mViewPager.setCurrentItem(position - 2);
@@ -652,12 +675,19 @@ public class HomeActivity extends ActionBarActivity
 
     // Method called from the event bus
     @SuppressWarnings("unused")
-    public void onEvent(PersistenceEvents.ModelCreateOrUpdateEvent event) {
-        Log.d(TAG, "onEvent: " + event.clazz.getName());
-        ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
-        ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
-        ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
-        ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
+    public void onEvent(Object evt) {
+        if(evt instanceof  PersistenceEvents.ModelCreateOrUpdateEvent){
+            PersistenceEvents.ModelCreateOrUpdateEvent event = (PersistenceEvents.ModelCreateOrUpdateEvent)evt;
+            Log.d(TAG, "onEvent: " + event.clazz.getName());
+            ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
+            ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
+            ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
+            ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
+        }else if(evt instanceof PersistenceEvents.ActiveUserChangeEvent){
+            drawerListAdapter.notifyDataSetChanged();
+        }
+
+
     }
 
     private void startTutorialIfNeeded() {
@@ -705,17 +735,27 @@ public class HomeActivity extends ActionBarActivity
 
             if (item.equalsIgnoreCase(getString(R.string.drawer_top_option))) {
 
-                SharedPreferences prefs =
-                        PreferenceManager.getDefaultSharedPreferences(getContext());
-                String displayName = prefs.getString("display_name", "Calendula");
+                View v = getTopView(layoutInflater);
+//                SharedPreferences prefs =PreferenceManager.getDefaultSharedPreferences(getContext());
+//                String displayName = prefs.getString("display_name", "Calendula");
+//
+//                View v = layoutInflater.inflate(R.layout.drawer_top, null);
+//                ((TextView) v.findViewById(R.id.text)).setText(displayName);
 
-                View v = layoutInflater.inflate(R.layout.drawer_top, null);
-                ((TextView) v.findViewById(R.id.text)).setText(displayName);
 
                 return v;
             }
             if (item.equalsIgnoreCase(getString(R.string.drawer_bottom_option))) {
                 View v = layoutInflater.inflate(R.layout.drawer_bottom, null);
+
+                TextView patients = ((TextView) v.findViewById(R.id.text_patients));
+                patients.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selectItem(0);
+                    }
+                });
+
                 TextView help = ((TextView) v.findViewById(R.id.text_help));
                 help.setText(getString(R.string.drawer_help_option));
                 help.setOnClickListener(new View.OnClickListener() {
@@ -756,6 +796,25 @@ public class HomeActivity extends ActionBarActivity
 
                 return v;
             }
+        }
+
+        private View getTopView(LayoutInflater layoutInflater) {
+
+            Patient p = DB.patients().getActive(getContext());
+            View v = layoutInflater.inflate(R.layout.drawer_top, null);
+
+            TextView name = (TextView) v.findViewById(R.id.name);
+            ImageButton avatar = (ImageButton) v.findViewById(R.id.avatar);
+            ImageButton changePatient = (ImageButton) v.findViewById(R.id.swich_patient);
+            View overlay = v.findViewById(R.id.left_drawer_top_overlay);
+            overlay.setBackgroundColor(Screen.equivalentNoAlpha(AvatarMgr.colorsFor(getResources(),p.avatar())[0],0.7f));
+
+            avatar.setImageResource(p.avatar());
+            name.setText(p.name());
+
+
+
+            return v;
         }
 
         @Override

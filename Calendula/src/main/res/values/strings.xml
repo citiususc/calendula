@@ -393,6 +393,8 @@
 
     <string name="create_schedule_select_med_before_dose">Please, select a med first</string>
     <string name="updating_prescriptions_db_msg">The medicines database is being updated. It will take only a few seconds</string>
+    <string name="title_activity_patients">PatientsActivity</string>
+    <string name="title_activity_patient_detail">PatientDetailActivity</string>
 
 
 </resources>
