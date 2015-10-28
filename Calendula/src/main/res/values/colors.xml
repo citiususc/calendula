@@ -83,4 +83,24 @@
     <color name="calendar_text_unselectable">#22778088</color>
     <!-- /CALENDAR -->
 
+  <!-- Material DEFAULT colors -->
+  <color name="material_drawer_primary">@color/dark_grey_text</color>
+  <color name="material_drawer_primary_dark">@color/transparent</color>
+  <color name="material_drawer_primary_light">#BBDEFB</color>
+  <color name="material_drawer_accent">#FF4081</color>
+
+  <!-- OVERWRITE THESE COLORS FOR A LIGHT THEME -->
+  <!-- MaterialDrawer DEFAULT colors -->
+  <color name="material_drawer_background">#F9F9F9</color>
+  <!-- Material DEFAULT text / items colors -->
+  <color name="material_drawer_primary_text">#DE000000</color>
+  <color name="material_drawer_primary_icon">#8A000000</color>
+  <color name="material_drawer_secondary_text">#8A000000</color>
+  <color name="material_drawer_hint_text">#42000000</color>
+  <color name="material_drawer_divider">#1F222222</color>
+  <!-- Material DEFAULT drawer colors -->
+  <color name="material_drawer_selected">#ececec</color>
+  <color name="material_drawer_selected_text">@color/dark_grey_text</color>
+  <color name="material_drawer_header_selection_text">#FFF</color>
+
 </resources>

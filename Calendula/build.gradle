@@ -136,4 +136,9 @@ dependencies {
     compile('com.mikepenz:materialdrawer:4.4.1@aar') {
         transitive = true
     }
+
+    compile 'com.mikepenz:iconics-core:1.7.9@aar'
+    compile 'com.mikepenz:google-material-typeface:1.2.0.1@aar'
+    compile 'com.mikepenz:community-material-typeface:1.2.64.1@aar'
+
 }
