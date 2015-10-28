@@ -809,7 +809,7 @@ public class HomeActivity extends ActionBarActivity
             View overlay = v.findViewById(R.id.left_drawer_top_overlay);
             overlay.setBackgroundColor(Screen.equivalentNoAlpha(AvatarMgr.colorsFor(getResources(),p.avatar())[0],0.7f));
 
-            avatar.setImageResource(p.avatar());
+            avatar.setImageResource(AvatarMgr.res(p.avatar()));
             name.setText(p.name());
 
 

@@ -83,6 +83,14 @@ public class PatientsActivity extends ActionBarActivity implements GridView.OnIt
         });
 
         CalendulaApp.eventBus().register(this);
+        
+        
+        setupDrawer();
+        
+    }
+
+    private void setupDrawer() {
+        //new DrawerBuilder().withActivity(this).build();
     }
 
     @Override
@@ -177,7 +185,7 @@ public class PatientsActivity extends ActionBarActivity implements GridView.OnIt
 
             patientName.setText(p.name());
             patientName.setBackgroundColor(color[0]);
-            patientAvatar.setImageResource(p.avatar());
+            patientAvatar.setImageResource(AvatarMgr.res(p.avatar()));
 
             if(isActive){
                 activeIndicator.setVisibility(View.VISIBLE);

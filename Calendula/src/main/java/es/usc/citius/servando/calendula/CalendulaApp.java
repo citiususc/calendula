@@ -27,6 +27,7 @@ import es.usc.citius.servando.calendula.database.PatientDao;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
+import es.usc.citius.servando.calendula.util.AvatarMgr;
 
 /**
  * Created by castrelo on 4/10/14.
@@ -105,33 +106,33 @@ public class CalendulaApp extends Application {
                 // Create default
                 Patient p = new Patient();
                 p.setName("Angel"); // R.string.default_patient_name
-                p.setAvatar(R.drawable.avatar5);
+                p.setAvatar(AvatarMgr.AVATAR_5);
                 DB.patients().save(p);
 
                 p = new Patient();
                 p.setName("Avoa"); // R.string.default_patient_name
-                p.setAvatar(R.drawable.avatar2);
+                p.setAvatar(AvatarMgr.AVATAR_2);
                 DB.patients().save(p);
 
                 p = new Patient();
                 p.setName("Eva"); // R.string.default_patient_name
-                p.setAvatar(R.drawable.avatar1);
+                p.setAvatar(AvatarMgr.AVATAR_1);
                 DB.patients().save(p);
 
                 p = new Patient();
                 p.setName("Mamá"); // R.string.default_patient_name
-                p.setAvatar(R.drawable.avatar7);
+                p.setAvatar(AvatarMgr.AVATAR_7);
                 DB.patients().save(p);
 
 
                 p = new Patient();
                 p.setName("Avó"); // R.string.default_patient_name
-                p.setAvatar(R.drawable.avatar8);
+                p.setAvatar(AvatarMgr.AVATAR_8);
                 DB.patients().save(p);
 
                 p = new Patient();
                 p.setName("Papá"); // R.string.default_patient_name
-                p.setAvatar(R.drawable.avatar6);
+                p.setAvatar(AvatarMgr.AVATAR_6);
                 DB.patients().save(p);
             }
         } catch (SQLException e) {

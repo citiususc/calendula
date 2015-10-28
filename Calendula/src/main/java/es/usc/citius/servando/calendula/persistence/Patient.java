@@ -3,7 +3,7 @@ package es.usc.citius.servando.calendula.persistence;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.util.AvatarMgr;
 
 /**
  * Models an user
@@ -27,7 +27,7 @@ public class Patient {
     private boolean isDefault;
 
     @DatabaseField(columnName = COLUMN_AVATAR)
-    private int avatar = R.drawable.avatar_default;
+    private String avatar = AvatarMgr.DEFAULT_AVATAR;
 
 
     public Long id() {
@@ -54,11 +54,12 @@ public class Patient {
         this.isDefault = isDefault;
     }
 
-    public int avatar() {
+    public String avatar() {
         return avatar;
     }
 
-    public void setAvatar(int avatar) {
+
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 }

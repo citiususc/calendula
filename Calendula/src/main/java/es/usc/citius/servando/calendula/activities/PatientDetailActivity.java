@@ -23,6 +23,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Patient;
@@ -45,7 +48,7 @@ public class PatientDetailActivity extends ActionBarActivity implements GridView
     View bg;
     View shadowTop;
     EditText patientName;
-    int[] avatars = AvatarMgr.avatars;
+    List<String> avatars = new ArrayList<>(AvatarMgr.avatars.keySet());
 
     float avatarSelectorY = -1;
     private Menu menu;
@@ -166,9 +169,9 @@ public class PatientDetailActivity extends ActionBarActivity implements GridView
         updateAvatar(patient.avatar(), 200, 300);
     }
 
-    private void updateAvatar(int avatar, int delay, final int duration){
+    private void updateAvatar(String avatar, int delay, final int duration){
         int[] color = AvatarMgr.colorsFor(getResources(), avatar);
-        patientAvatar.setImageResource(avatar);
+        patientAvatar.setImageResource(AvatarMgr.res(avatar));
         int colorAlpha = Screen.equivalentNoAlpha(color[0], 0.7f);
         top.setBackgroundColor(Screen.equivalentNoAlpha(color[0], 0.4f));
         patientAvatarBg.setBackgroundColor(colorAlpha);
@@ -246,9 +249,9 @@ public class PatientDetailActivity extends ActionBarActivity implements GridView
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        int imageResource = avatars[position];
-        patient.setAvatar(imageResource);
-        updateAvatar(imageResource, 0, 0);
+        String avatar = avatars.get(position);
+        patient.setAvatar(avatar);
+        updateAvatar(avatar, 0, 0);
         adapter.notifyDataSetChanged();
 
     }
@@ -264,23 +267,24 @@ public class PatientDetailActivity extends ActionBarActivity implements GridView
 
         @Override
         public int getCount() {
-            return avatars.length;
+            return avatars.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return avatars[position];
+            return avatars.get(position);
         }
 
         @Override
         public long getItemId(int position) {
-            return avatars[position];
+            return avatars.get(position).hashCode();
         }
 
         @Override
         public View getView(int position, View view, ViewGroup viewGroup) {
             ImageView v;
-            int resource = avatars[position];
+            String avatar = avatars.get(position);
+            int resource = AvatarMgr.res(avatar);
             if (view == null) {
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 view = inflater.inflate(R.layout.avatar_list_item, viewGroup, false);
@@ -289,7 +293,7 @@ public class PatientDetailActivity extends ActionBarActivity implements GridView
             v = (ImageView) view;
             v.setImageResource(resource);
 
-            if(resource == patient.avatar()){
+            if(avatar.equals(patient.avatar())){
                 v.setBackgroundResource(R.drawable.avatar_list_item_bg);
             }else{
                 v.setBackgroundResource(R.color.transparent);
