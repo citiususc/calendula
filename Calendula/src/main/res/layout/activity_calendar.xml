@@ -22,8 +22,8 @@
         android:id="@+id/calendar_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:titleTextColor="#222"
-        app:headerTextColor="@color/android_blue" />
+        app:tsquare_titleTextColor="#222"
+        app:tsquare_headerTextColor="@color/android_blue" />
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

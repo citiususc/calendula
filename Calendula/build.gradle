@@ -32,11 +32,11 @@ def getDate() {
 }
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 23
         versionCode 24
         versionName "2.4-SNAPSHOT"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -105,7 +105,7 @@ dependencies {
     compile 'com.melnykov:floatingactionbutton:1.1.0'
 
     // calendar view
-    compile 'com.squareup:android-times-square:1.6.1@aar'
+    compile 'com.squareup:android-times-square:1.6.3@aar'
 
     // Tab strip
     //compile 'com.ogaclejapan.smarttablayout:library:1.1.0@aar'
@@ -132,4 +132,8 @@ dependencies {
 
     // google rfc 2445
     compile files('libs/rfc2445.jar')
+
+    compile('com.mikepenz:materialdrawer:4.4.1@aar') {
+        transitive = true
+    }
 }
