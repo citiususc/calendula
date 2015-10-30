@@ -12,8 +12,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,14 +45,13 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 import es.usc.citius.servando.calendula.util.AppTutorial;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
-import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 
 
 /**
  * Main activity holding fragments for agenda, routine, medicine, a schedule management
  */
-public class HomeActivity extends ActionBarActivity
+public class HomeActivity extends CalendulaActivity
         implements ViewPager.OnPageChangeListener, View.OnClickListener,
         RoutinesListFragment.OnRoutineSelectedListener,
         MedicinesListFragment.OnMedicineSelectedListener,
@@ -81,7 +78,6 @@ public class HomeActivity extends ActionBarActivity
     FloatingActionButton addButton;
     String[] titles;
 
-    Toolbar toolbar;
     PagerSlidingTabStrip tabs;
     Handler mHandler;
     View tabsShadow;
@@ -100,7 +96,12 @@ public class HomeActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         // set the content view layout
         setContentView(R.layout.activity_home);
-        mHandler = new Handler();
+
+        setupToolbar(null, Color.TRANSPARENT);
+        initializeDrawer(savedInstanceState);
+        setupStatusBar(Color.TRANSPARENT);
+        subscribeToEvents();
+
         // initialize current and previous action bar colors
         currentActionBarColor = getResources().getColor(R.color.transparent);
         previousActionBarColor = getResources().getColor(R.color.transparent);
@@ -112,6 +113,10 @@ public class HomeActivity extends ActionBarActivity
         tabsShadow = findViewById(R.id.tabs_shadow);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(5);
+
+        titles = getResources().getStringArray(R.array.home_action_list);
+        addButton = (FloatingActionButton) findViewById(R.id.add_button);
+        addButton.setOnClickListener(this);
 
         tabs.setOnPageChangeListener(this);
         tabs.setShouldExpand(true);
@@ -130,37 +135,19 @@ public class HomeActivity extends ActionBarActivity
         tabs.setVisibility(View.GONE);
         tabsShadow.setVisibility(View.GONE);
         tabs.setViewPager(mViewPager);
-        // set up the toolbar
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
-        toolbar.setNavigationIcon(R.drawable.ic_launcher_white);
-        // configure toolbar as action bar
-        setSupportActionBar(toolbar);
-
-        // initialize left drawer
-        initializeDrawer(savedInstanceState);
-
-        titles = getResources().getStringArray(R.array.home_action_list);
-        addButton = (FloatingActionButton) findViewById(R.id.add_button);
-        addButton.setOnClickListener(this);
 
         hideAddButton();
-        CalendulaApp.eventBus().register(this);
 
         setTutorial(new AppTutorial());
         getTutorial().init(this);
-
-        Log.d(TAG, "OnCreate  - Routine Id Extra: " + getIntent().getLongExtra(
-                CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1l));
         checkReminder(getIntent());
         startTutorialIfNeeded();
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 updateAempsIfNeeded();
             }
-        }, 1000);
+        }, 1500);
 
 
     }
@@ -231,12 +218,6 @@ public class HomeActivity extends ActionBarActivity
     private void initializeDrawer(Bundle savedInstanceState) {
         drawerMgr = new LeftDrawerMgr(this,toolbar);
         drawerMgr.init(savedInstanceState);
-        //set the back arrow in the toolbar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(false);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        ScreenUtils.setStatusBarColor(this, Color.TRANSPARENT);
     }
 
     @Override
