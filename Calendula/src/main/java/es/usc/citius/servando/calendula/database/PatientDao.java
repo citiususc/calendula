@@ -64,4 +64,11 @@ public class PatientDao extends GenericDao<Patient, Long> {
         .commit();
         CalendulaApp.eventBus().post(new PersistenceEvents.ActiveUserChangeEvent(patient));
     }
+    public void setActiveById(Long id, Context ctx) {
+        Patient patient = findById(id);
+        PreferenceManager.getDefaultSharedPreferences(ctx).edit()
+                .putLong(PREFERENCE_ACTIVE_PATIENT, patient.id())
+                .commit();
+        CalendulaApp.eventBus().post(new PersistenceEvents.ActiveUserChangeEvent(patient));
+    }
 }

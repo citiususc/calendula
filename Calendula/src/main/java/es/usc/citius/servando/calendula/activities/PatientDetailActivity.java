@@ -3,11 +3,9 @@ package es.usc.citius.servando.calendula.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.graphics.drawable.InsetDrawable;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,19 +21,21 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mikepenz.materialize.Materialize;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
-import es.usc.citius.servando.calendula.util.Screen;
+import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 
-public class PatientDetailActivity extends ActionBarActivity implements GridView.OnItemClickListener {
+public class PatientDetailActivity extends CalendulaActivity implements GridView.OnItemClickListener {
 
-    Toolbar toolbar;
     GridView avatarGrid;
     BaseAdapter adapter;
     Patient patient;
@@ -52,18 +52,13 @@ public class PatientDetailActivity extends ActionBarActivity implements GridView
 
     float avatarSelectorY = -1;
     private Menu menu;
+    private int avatarBackgroundColor;
+    Materialize mt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_detail);
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(
-                new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 10, 10, 10, 10));
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         top = findViewById(R.id.top);
         bg = findViewById(R.id.bg);
         shadowTop = findViewById(R.id.shadow_top);
@@ -81,14 +76,15 @@ public class PatientDetailActivity extends ActionBarActivity implements GridView
         });
 
         long patientId = getIntent().getLongExtra("patient_id", -1);
-
-        setupAvatarList();
-
         if(patientId!=-1){
-            loadPatient(patientId);
+            patient = DB.patients().findById(patientId);
         }else{
             patient = new Patient();
         }
+
+        setupToolbar(patient.name(), Color.TRANSPARENT);
+        setupAvatarList();
+        loadPatient();
     }
 
 
@@ -163,8 +159,7 @@ public class PatientDetailActivity extends ActionBarActivity implements GridView
         });
     }
 
-    private void loadPatient(long patientId) {
-        patient = DB.patients().findById(patientId);
+    private void loadPatient() {
         patientName.setText(patient.name());
         updateAvatar(patient.avatar(), 200, 300);
     }
@@ -172,13 +167,12 @@ public class PatientDetailActivity extends ActionBarActivity implements GridView
     private void updateAvatar(String avatar, int delay, final int duration){
         int[] color = AvatarMgr.colorsFor(getResources(), avatar);
         patientAvatar.setImageResource(AvatarMgr.res(avatar));
-        int colorAlpha = Screen.equivalentNoAlpha(color[0], 0.7f);
-        top.setBackgroundColor(Screen.equivalentNoAlpha(color[0], 0.4f));
-        patientAvatarBg.setBackgroundColor(colorAlpha);
-        selectAvatarMsg.setBackgroundColor(colorAlpha);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(colorAlpha);
-        }
+        avatarBackgroundColor = ScreenUtils.equivalentNoAlpha(color[0], 0.7f);
+        top.setBackgroundColor(ScreenUtils.equivalentNoAlpha(color[0], 0.4f));
+        patientAvatarBg.setBackgroundColor(avatarBackgroundColor);
+        selectAvatarMsg.setBackgroundColor(avatarBackgroundColor);
+
+        ScreenUtils.setStatusBarColor(this, avatarBackgroundColor);
 
         if(delay > 0) {
             patientAvatarBg.postDelayed(new Runnable() {

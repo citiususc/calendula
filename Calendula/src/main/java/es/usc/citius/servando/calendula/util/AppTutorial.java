@@ -178,9 +178,9 @@ public class AppTutorial {
     public void init(final Activity activity) {
 
 
-        PointF size = Screen.getDpSize(activity);
-        int width = (int) (size.x * Screen.getDensity(activity));
-        int height = (int) (size.y * Screen.getDensity(activity));
+        PointF size = ScreenUtils.getDpSize(activity);
+        int width = (int) (size.x * ScreenUtils.getDensity(activity));
+        int height = (int) (size.y * ScreenUtils.getDensity(activity));
         int gap = width / 8;
         int pointY = gap * 2;
 
@@ -198,7 +198,7 @@ public class AppTutorial {
             @Override
             public void onHide() {
                 if (activity instanceof HomeActivity) {
-                    ((HomeActivity) activity).onNavigationItemSelected(1, 0);
+                    ((HomeActivity) activity).showPagerItem(1);
                 }
             }
         }));
@@ -206,7 +206,7 @@ public class AppTutorial {
             @Override
             public void onHide() {
                 if (activity instanceof HomeActivity) {
-                    ((HomeActivity) activity).onNavigationItemSelected(2, 0);
+                    ((HomeActivity) activity).showPagerItem(2);
                 }
             }
         }));
@@ -214,7 +214,7 @@ public class AppTutorial {
             @Override
             public void onHide() {
                 if (activity instanceof HomeActivity) {
-                    ((HomeActivity) activity).onNavigationItemSelected(3, 0);
+                    ((HomeActivity) activity).showPagerItem(3);
                 }
             }
         }));
@@ -222,7 +222,7 @@ public class AppTutorial {
             @Override
             public void onHide() {
                 if (activity instanceof HomeActivity) {
-                    ((HomeActivity) activity).onNavigationItemSelected(0, 0);
+                    ((HomeActivity) activity).showPagerItem(0);
                 }
             }
         }));

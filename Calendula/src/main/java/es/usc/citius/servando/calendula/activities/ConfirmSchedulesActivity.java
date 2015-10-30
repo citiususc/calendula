@@ -96,13 +96,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*if (Build.VERSION.SDK_INT < 16) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        } else {
-            View decorView = getWindow().getDecorView();
-            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-            decorView.setSystemUiVisibility(uiOptions);
-        }*/
+
         setContentView(R.layout.activity_confirm_schedules);
 
         title = (TextView) findViewById(R.id.textView);
@@ -142,6 +136,10 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
             Log.e(TAG, "Error processing QR",e);
             Toast.makeText(this,"Error inesperado actualizando!", Toast.LENGTH_LONG).show();
             finish();
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_darker));
         }
 
     }

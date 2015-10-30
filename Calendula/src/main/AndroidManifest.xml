@@ -36,7 +36,8 @@
             android:label="@string/title_activity_routines"
             android:parentActivityName=".HomeActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".activities.MedicinesActivity"
             android:label="@string/title_activity_medicines"
@@ -48,10 +49,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent"
             android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".activities.SchedulesActivity"
-            android:label="@string/title_activity_schedules"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activities.StartActivity"
             android:launchMode="singleInstance"
@@ -117,6 +115,7 @@
         <activity
             android:name=".activities.PatientsActivity"
             android:label="@string/title_activity_patients"
+            android:theme="@style/AppTheme"
             android:parentActivityName=".HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -124,6 +123,7 @@
         </activity>
         <activity
             android:name=".activities.PatientDetailActivity"
+            android:theme="@style/AppTheme"
             android:label="@string/title_activity_patient_detail" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

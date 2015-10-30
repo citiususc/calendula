@@ -2,14 +2,11 @@ package es.usc.citius.servando.calendula.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.InsetDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,17 +23,16 @@ import com.melnykov.fab.FloatingActionButton;
 import java.util.Collections;
 import java.util.List;
 
-import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
-import es.usc.citius.servando.calendula.util.Screen;
+import es.usc.citius.servando.calendula.util.ScreenUtils;
 
-public class PatientsActivity extends ActionBarActivity implements GridView.OnItemClickListener{
+public class PatientsActivity extends CalendulaActivity implements GridView.OnItemClickListener {
 
-    Toolbar toolbar;
     GridView gridView;
     PatientAdapter adapter;
     FloatingActionButton fab;
@@ -46,20 +42,12 @@ public class PatientsActivity extends ActionBarActivity implements GridView.OnIt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.dark_grey_home));
-        }
-
         setContentView(R.layout.activity_patients);
-        patients = DB.patients().findAll();
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(
-                new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 10, 10, 10, 10));
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        setupStatusBar(getResources().getColor(R.color.dark_grey_home));
+        setupToolbar("Pacientes", getResources().getColor(R.color.dark_grey_home));
+        subscribeToEvents();
 
-        toolbar.setTitle("Usuarios");
+        patients = DB.patients().findAll();
         fab = (FloatingActionButton) findViewById(R.id.add_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,22 +69,13 @@ public class PatientsActivity extends ActionBarActivity implements GridView.OnIt
                 return false;
             }
         });
-
-        CalendulaApp.eventBus().register(this);
-        
-        
-        setupDrawer();
-        
     }
 
-    private void setupDrawer() {
-        //new DrawerBuilder().withActivity(this).build();
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        CalendulaApp.eventBus().unregister(this);
+        unsubscribeFromEvents();
     }
 
     @Override
@@ -122,8 +101,6 @@ public class PatientsActivity extends ActionBarActivity implements GridView.OnIt
     }
 
 
-
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Patient item = (Patient) parent.getItemAtPosition(position);
@@ -133,16 +110,28 @@ public class PatientsActivity extends ActionBarActivity implements GridView.OnIt
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                            this,
-                            new Pair<>(view.findViewById(R.id.patient_avatar), "transition")
-                    );
+                    this,
+                    new Pair<>(view.findViewById(R.id.patient_avatar), "transition")
+            );
             ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
         } else
             startActivity(intent);
     }
 
+    // Method called from the event bus
+    @SuppressWarnings("unused")
+    public void onEvent(PersistenceEvents.UserEvent event) {
+        this.patients = DB.patients().findAll();
+        this.adapter.notifyDataSetChanged();
+    }
 
-    private class PatientAdapter extends BaseAdapter{
+    // Method called from the event bus
+    @SuppressWarnings("unused")
+    public void onEvent(PersistenceEvents.ActiveUserChangeEvent event) {
+        this.adapter.notifyDataSetChanged();
+    }
+
+    private class PatientAdapter extends BaseAdapter {
 
 
         private Context context;
@@ -175,7 +164,7 @@ public class PatientsActivity extends ActionBarActivity implements GridView.OnIt
             }
 
             final Patient p = (Patient) getItem(position);
-            boolean isActive = DB.patients().isActive(p,context);
+            boolean isActive = DB.patients().isActive(p, context);
 
             ImageView patientAvatar = (ImageView) view.findViewById(R.id.patient_avatar);
             ImageView patientAvatarBg = (ImageView) view.findViewById(R.id.patient_avatar_bg);
@@ -187,32 +176,17 @@ public class PatientsActivity extends ActionBarActivity implements GridView.OnIt
             patientName.setBackgroundColor(color[0]);
             patientAvatar.setImageResource(AvatarMgr.res(p.avatar()));
 
-            if(isActive){
+            if (isActive) {
                 activeIndicator.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 activeIndicator.setVisibility(View.GONE);
             }
-            
-            int colorAlpha = Screen.equivalentNoAlpha(color[0], 0.7f);
+
+            int colorAlpha = ScreenUtils.equivalentNoAlpha(color[0], 0.7f);
             patientAvatarBg.setBackgroundColor(colorAlpha);
             return view;
 
         }
-    }
-
-
-    // Method called from the event bus
-    @SuppressWarnings("unused")
-    public void onEvent(PersistenceEvents.UserEvent event) {
-        this.patients = DB.patients().findAll();
-        this.adapter.notifyDataSetChanged();
-    }
-
-
-    // Method called from the event bus
-    @SuppressWarnings("unused")
-    public void onEvent(PersistenceEvents.ActiveUserChangeEvent event) {
-        this.adapter.notifyDataSetChanged();
     }
 
 

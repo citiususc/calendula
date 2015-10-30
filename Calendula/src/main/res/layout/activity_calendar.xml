@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+                android:paddingTop="@dimen/status_bar_height">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -23,7 +24,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:tsquare_titleTextColor="#222"
-        app:tsquare_headerTextColor="@color/android_blue" />
+        app:tsquare_headerTextColor="@color/android_blue"
+        />
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

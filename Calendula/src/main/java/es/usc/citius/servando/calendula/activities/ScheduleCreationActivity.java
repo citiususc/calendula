@@ -2,15 +2,12 @@ package es.usc.citius.servando.calendula.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.drawable.InsetDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -35,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
@@ -53,7 +51,7 @@ import es.usc.citius.servando.calendula.util.Snack;
 
 //import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 
-public class ScheduleCreationActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener {
+public class ScheduleCreationActivity extends CalendulaActivity implements ViewPager.OnPageChangeListener {
 
     public static final String TAG = ScheduleCreationActivity.class.getName();
     /**
@@ -66,9 +64,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
 
-    int selectedPage = -1;
     Schedule mSchedule;
-
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -85,20 +81,12 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedules);
-
+        setupToolbar(null, getResources().getColor(R.color.android_blue_darker));
+        setupStatusBar(getResources().getColor(R.color.android_blue_darker));
+        subscribeToEvents();
         processIntent();
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(
-                new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 10,
-                        10, 10, 10));
-        //toolbar.setTitle(getString(R.string.title_activity_schedules));        
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
         ((TextView) findViewById(R.id.textView2)).setText(getString(mScheduleId != -1 ? R.string.title_edit_schedule_activity : R.string.title_create_schedule_activity));
 
         // Set up the ViewPager with the sections adapter.
@@ -122,13 +110,6 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
         if (mSchedule != null) {
             mViewPager.setCurrentItem(1);
-        }
-
-        CalendulaApp.eventBus().register(this);
-
-        // set first page indicator
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
         }
 
         findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
@@ -329,14 +310,6 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             showSnackBar(R.string.cycle_period_cero_message);
             return false;
         }
-
-       /* if (ScheduleHelper.instance().getSchedule().allDaysSelected()
-                && ScheduleHelper.instance().getSchedule().type() == Schedule.SCHEDULE_TYPE_SOMEDAYS) {
-            mViewPager.setCurrentItem(0);
-            showSnackBar(R.string.schedule_no_day_specified_message);
-            return false;
-        }*/
-
         return true;
     }
 
@@ -369,9 +342,6 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             case R.id.action_remove:
                 showDeleteConfirmationDialog(mSchedule);
                 return true;
-//            case R.id.action_done:
-//                saveSchedule();
-//                return true;
             default:
                 finish();
                 return true;
@@ -461,22 +431,10 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
 
     @Override
     protected void onDestroy() {
-        CalendulaApp.eventBus().unregister(this);
+        unsubscribeFromEvents();
         ScheduleHelper.instance().clear();
         super.onDestroy();
     }
-
-//    @Override
-//    public void onBackPressed() {
-        /*
-        if (mViewPager.getCurrentItem() > 0) {
-            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
-        } else {
-            ScheduleCreationHelper.instance().clear();
-            super.onBackPressed();
-        }
-        */
-//    }
 
     Fragment getViewPagerFragment(int position) {
         return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));

@@ -1,15 +1,11 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.content.Context;
-import android.graphics.drawable.InsetDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -34,6 +30,7 @@ import com.melnykov.fab.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
@@ -46,7 +43,7 @@ import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
 
-public class MedicinesActivity extends ActionBarActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
+public class MedicinesActivity extends CalendulaActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -66,7 +63,6 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
     ViewPager mViewPager;
 
     Long mMedicineId;
-    Toolbar toolbar;
     MenuItem removeItem;
     View searchView;
     EditText searchEditText;
@@ -79,32 +75,19 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicines);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
-        }
+        setupToolbar(null, getResources().getColor(R.color.android_blue_darker));
+        setupStatusBar(getResources().getColor(R.color.android_blue_darker));
 
         processIntent();
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         searchView = findViewById(R.id.search_view);
         closeSearchButton = findViewById(R.id.close_search_button);
         addButton = (FloatingActionButton) findViewById(R.id.add_button);
         searchEditText = (EditText) findViewById(R.id.search_edit_text);
         searchList = (ListView) findViewById(R.id.search_list);
-
-        toolbar.setNavigationIcon(
-            new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 10,
-                10, 10, 10));
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        boolean create = getIntent().getBooleanExtra("create", false);
-
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,8 +133,6 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
         });
 
         hideSearchView();
-
-
     }
 
 

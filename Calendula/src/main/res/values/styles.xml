@@ -2,7 +2,7 @@
 <resources>
 
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="MaterialDrawerTheme.Light.TranslucentStatus">
         <!-- Set AppCompat’s actionBarStyle -->
         <!--<item name="actionBarStyle">@style/MyActionBar</item>-->
         <item name="windowActionBar">false</item>
@@ -15,7 +15,7 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <!-- dialog theme stuff -->
         <item name="android:dialogTheme">@style/AppTheme.DialogTheme</item>
-
+        <item name="siv_insetForeground">#01ffffff</item>
     </style>
 
     <!-- Styles for pop-up dialogs -->
@@ -258,6 +258,8 @@
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
+
 
 
 

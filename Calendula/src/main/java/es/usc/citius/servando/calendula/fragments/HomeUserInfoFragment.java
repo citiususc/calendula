@@ -29,7 +29,7 @@ import com.makeramen.RoundedImageView;
 import org.joda.time.DateTime;
 
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.util.Screen;
+import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.view.CustomDigitalClock;
 
@@ -196,14 +196,14 @@ public class HomeUserInfoFragment extends Fragment {
     }
 
     Bitmap getBackgroundBitmap() {
-        int width = (int) Screen.getDpSize(getActivity()).x;
+        int width = (int) ScreenUtils.getDpSize(getActivity()).x;
         int height = getResources().getDimensionPixelSize(R.dimen.header_height);
         Integer idx = mSharedPreferences.getInt("profile_background_idx", 1);
-        return Screen.getResizedBitmap(getActivity(), "home_bg_" + idx + ".jpg", width, height);
+        return ScreenUtils.getResizedBitmap(getActivity(), "home_bg_" + idx + ".jpg", width, height);
     }
 
     Bitmap getRandomBackground() {
-        int width = (int) Screen.getDpSize(getActivity()).x;
+        int width = (int) ScreenUtils.getDpSize(getActivity()).x;
         int height = getResources().getDimensionPixelSize(R.dimen.header_height);
         int rand = (((int) (Math.random() * 1000)) % 5) + 1;
         if (rand == currentBgFileIdx) {
@@ -213,7 +213,7 @@ public class HomeUserInfoFragment extends Fragment {
 
         mSharedPreferences.edit().putInt("profile_background_idx", rand).commit();
 
-        return Screen.getResizedBitmap(getActivity(), "home_bg_" + rand + ".jpg", width, height);
+        return ScreenUtils.getResizedBitmap(getActivity(), "home_bg_" + rand + ".jpg", width, height);
     }
 
     @Override

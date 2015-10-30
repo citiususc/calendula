@@ -2,7 +2,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+                android:paddingTop="@dimen/status_bar_height">
 
     <ImageView
         android:layout_width="fill_parent"

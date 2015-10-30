@@ -3,12 +3,8 @@ package es.usc.citius.servando.calendula.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.drawable.InsetDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
@@ -42,16 +38,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.scheduling.PickupReminderMgr;
 
-public class CalendarActivity extends ActionBarActivity {
+public class CalendarActivity extends CalendulaActivity {
 
     public static final int ACTION_SHOW_REMINDERS = 1;
 
-    Toolbar toolbar;
     View bottomSheet;
     CalendarPickerView calendar;
     DateTime from;
@@ -71,33 +67,20 @@ public class CalendarActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+        setupToolbar(getString(R.string.title_activity_calendar), getResources().getColor(R.color.android_green_dark));
+        setupStatusBar(getResources().getColor(R.color.android_green_dark));
         df = getString(R.string.pickup_date_format);
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 20, 20, 20, 20));
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setTitle(getString(R.string.title_activity_calendar));
-
         from = DateTime.now().minusMonths(3);
         to = DateTime.now().plusMonths(3);
-
         bottomSheet = findViewById(R.id.pickup_list_container);
         bottomSheet.setVisibility(View.INVISIBLE);
-
         setupCalendar();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.android_green_dark));
-        }
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 calendar.scrollToDate(LocalDate.now().toDate());
             }
         }, 500);
-
         checkIntent();
     }
 

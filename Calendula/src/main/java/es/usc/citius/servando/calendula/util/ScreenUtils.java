@@ -11,18 +11,27 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+
+import com.mikepenz.materialize.Materialize;
+import com.mikepenz.materialize.MaterializeBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+import es.usc.citius.servando.calendula.R;
+
 /**
  * Created by joseangel.pineiro on 11/20/13.
  */
-public class Screen {
+public class ScreenUtils {
 
     private static Palette p;
 
@@ -41,14 +50,6 @@ public class Screen {
         DisplayMetrics outMetrics = new DisplayMetrics();
         display.getMetrics(outMetrics);
         return outMetrics.density;
-    }
-
-    public static void createPalette(Context ctx, Bitmap bmp) {
-        p = Palette.generate(bmp);
-    }
-
-    public static Palette getPalette() {
-        return p;
     }
 
     public static int alpha(int color, int alpha) {
@@ -129,5 +130,68 @@ public class Screen {
 
         return Color.rgb(r, g, b);
 
+    }
+
+
+    public static int equivalentNoAlpha(int color, int background, float factor) {
+
+        int r_background = Color.red(background);
+        int g_background = Color.green(background);
+        int b_background = Color.blue(background);
+
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+
+        int r = (int) (r_background + (red - r_background) * factor);
+        int g = (int) (g_background + (green - g_background) * factor);
+        int b = (int) (b_background + (blue - b_background) * factor);
+
+        return Color.rgb(r, g, b);
+
+    }
+
+    public static void setStatusBarColor(Activity activity, int color) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = activity.getWindow();
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            setWindowFlag(activity, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+            window.setStatusBarColor(color);
+        }
+    }
+
+    public static void setWindowFlag(Activity activity, final int bits, boolean on) {
+        Window win = activity.getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        win.setAttributes(winParams);
+    }
+
+
+    public static Materialize materialize(Activity activity) {
+        return materialize(activity, R.color.android_blue_statusbar);
+    }
+
+    public static Materialize materialize(Activity activity, int colorRes) {
+        return new MaterializeBuilder()
+                .withActivity(activity)
+                .withTintedStatusBar(true)
+                .withTranslucentStatusBar(true)
+                .withStatusBarColorRes(colorRes)
+                .build();
+    }
+
+    public static Materialize materializeForColor(Activity activity, int color) {
+        return new MaterializeBuilder()
+                .withActivity(activity)
+                .withTintedStatusBar(true)
+                .withTranslucentStatusBar(true)
+                .withStatusBarColor(color)
+                .build();
     }
 }

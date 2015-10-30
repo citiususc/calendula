@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/android_blue_darker">
+    android:background="@color/android_blue_darker"
+                android:paddingTop="@dimen/status_bar_height">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -110,7 +111,8 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/android_blue_dark"
-        android:visibility="visible">
+        android:visibility="visible"
+        >
 
         <TextView
             android:layout_width="wrap_content"

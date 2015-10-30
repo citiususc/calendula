@@ -4,14 +4,16 @@
                 android:layout_height="match_parent"
                 tools:context="es.usc.citius.servando.calendula.activities.PatientDetailActivity"
                 android:id="@+id/bg"
-                android:background="#fff">
+                android:background="#fff"
+                android:paddingTop="@dimen/status_bar_height">
 
 
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="200dp"
-        android:id="@+id/top">
+        android:id="@+id/top"
+        android:background="#567678">
 
         <View
             android:layout_width="fill_parent"

@@ -11,7 +11,7 @@ import es.usc.citius.servando.calendula.fragments.DailyAgendaFragment;
 import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
 import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
-import es.usc.citius.servando.calendula.util.Screen;
+import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 /**
  * Created by joseangel.pineiro on 11/15/13.
@@ -24,7 +24,7 @@ public class HomePageAdapter extends FragmentPagerAdapter {
     public HomePageAdapter(FragmentManager fm, Context ctx, Activity activity) {
         super(fm);
         // obtain the window width in dp to use later
-        dpWidth = Screen.getDpSize(activity).x;
+        dpWidth = ScreenUtils.getDpSize(activity).x;
 
         titles = new String[]{
                 ctx.getString(R.string.title_home),

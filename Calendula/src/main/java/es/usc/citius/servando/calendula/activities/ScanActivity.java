@@ -1,9 +1,7 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -20,9 +18,10 @@ import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.zip.GZIPInputStream;
 
+import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
 
-public class ScanActivity extends ActionBarActivity {
+public class ScanActivity extends CalendulaActivity {
 
 
     TextView textView;
@@ -31,18 +30,13 @@ public class ScanActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
-
-        Log.d("ScanActivity", "onCreate");
+        setupStatusBar(getResources().getColor(R.color.android_blue_darker));
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 doScan();
             }
         });
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
-        }
     }
 
     @Override

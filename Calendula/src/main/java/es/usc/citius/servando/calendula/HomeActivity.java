@@ -1,9 +1,9 @@
 package es.usc.citius.servando.calendula;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,42 +12,27 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.makeramen.RoundedImageView;
 import com.melnykov.fab.FloatingActionButton;
 
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
 
 import es.usc.citius.servando.calendula.activities.CalendarActivity;
+import es.usc.citius.servando.calendula.activities.LeftDrawerMgr;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
-import es.usc.citius.servando.calendula.activities.PatientsActivity;
 import es.usc.citius.servando.calendula.activities.ReminderNotification;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
-import es.usc.citius.servando.calendula.activities.SettingsActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
@@ -57,23 +42,20 @@ import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
 import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 import es.usc.citius.servando.calendula.util.AppTutorial;
-import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
-import es.usc.citius.servando.calendula.util.Screen;
+import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
-import es.usc.citius.servando.calendula.util.view.ScrimInsetsFrameLayout;
 
 
 /**
  * Main activity holding fragments for agenda, routine, medicine, a schedule management
  */
 public class HomeActivity extends ActionBarActivity
-        implements ViewPager.OnPageChangeListener, ActionBar.OnNavigationListener, View.OnClickListener,
+        implements ViewPager.OnPageChangeListener, View.OnClickListener,
         RoutinesListFragment.OnRoutineSelectedListener,
         MedicinesListFragment.OnMedicineSelectedListener,
         ScheduleListFragment.OnScheduleSelectedListener {
@@ -89,10 +71,10 @@ public class HomeActivity extends ActionBarActivity
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     HomePageAdapter mSectionsPagerAdapter;
-    DrawerLayout mDrawerLayout;
-    ListView mDrawerList;
-    ScrimInsetsFrameLayout drawerView;
-    ActionBarDrawerToggle mDrawerToggle;
+    //DrawerLayout mDrawerLayout;
+    //ListView mDrawerList;
+    //ScrimInsetsFrameLayout drawerView;
+    //ActionBarDrawerToggle mDrawerToggle;
     int currentActionBarColor;
     int previousActionBarColor;
 
@@ -108,9 +90,10 @@ public class HomeActivity extends ActionBarActivity
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
-    DrawerListAdapter drawerListAdapter;
+//    DrawerListAdapter drawerListAdapter;
 
     private AppTutorial tutorial;
+    private LeftDrawerMgr drawerMgr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,11 +136,9 @@ public class HomeActivity extends ActionBarActivity
         toolbar.setNavigationIcon(R.drawable.ic_launcher_white);
         // configure toolbar as action bar
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
 
         // initialize left drawer
-        initializeDrawer();
+        initializeDrawer(savedInstanceState);
 
         titles = getResources().getStringArray(R.array.home_action_list);
         addButton = (FloatingActionButton) findViewById(R.id.add_button);
@@ -247,41 +228,15 @@ public class HomeActivity extends ActionBarActivity
         }
     }
 
-    private void initializeDrawer() {
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer_list);
-        drawerView = (ScrimInsetsFrameLayout) findViewById(R.id.left_drawer);
-
-        List<String> items =
-                Arrays.asList(getResources().getStringArray(R.array.home_drawer_actions));
-        // Set the adapter for the list view
-        drawerListAdapter = new DrawerListAdapter(getApplication(), R.layout.drawer_list_item, items);
-        mDrawerList.setAdapter(drawerListAdapter);
-        // Set the list's click listener
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        mDrawerList.setOnItemLongClickListener(new DrawerItemLongClickListener());
-        mDrawerToggle = new ActionBarDrawerToggle(this,
-                mDrawerLayout,
-                toolbar,
-                R.string.drawer_open,
-                R.string.drawer_close) {
-
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-            }
-
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-        };
-
-        // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+    private void initializeDrawer(Bundle savedInstanceState) {
+        drawerMgr = new LeftDrawerMgr(this,toolbar);
+        drawerMgr.init(savedInstanceState);
+        //set the back arrow in the toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        ScreenUtils.setStatusBarColor(this, Color.TRANSPARENT);
     }
 
     @Override
@@ -321,12 +276,6 @@ public class HomeActivity extends ActionBarActivity
 
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
-
     public AppTutorial getTutorial() {
         return tutorial;
     }
@@ -359,48 +308,23 @@ public class HomeActivity extends ActionBarActivity
         }
     }
 
-
-//    private void launchActivityWithAnimation(Intent intent) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                    this,
-//                    new Pair<>((View)addButton, "transition")
-//            );
-//            ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
-//        } else {
-//            startActivity(intent);
-//        }
-//    }
-
     private void launchActivity(Intent i) {
         startActivity(i);
         this.overridePendingTransition(0, 0);
     }
 
-    /**
-     * Swaps fragments in the main content view
-     */
-    private int pharmaModeEnableCount = 0;
-    public void selectItem(int position) {
-        Log.d("Agenda", "Position :" + position);
+    public void showPagerItem(int position){
+        showPagerItem(position,true);
+    }
 
-        if (position == 0) {
-            launchActivity(new Intent(this, PatientsActivity.class));
-        }else if (position == 1) {
-            mViewPager.setCurrentItem(0);
-        } else if (position > 2 && position < 6) {
-            mViewPager.setCurrentItem(position - 2);
-        } else if (position > 6 && position < 9) {
-            Snack.show(R.string.work_in_progress, this);
-        } else if (position == 9) {
-            launchActivity(new Intent(this, SettingsActivity.class));
-        } else if (position == 10) {
-            mViewPager.setCurrentItem(0);
-            getTutorial().reset(this);
-            getTutorial().show(AppTutorial.WELCOME, AppTutorial.HOME_INFO, this);
+
+    public void showPagerItem(int position, boolean updateDrawer){
+        if(position >= 0 && position < mViewPager.getChildCount()){
+            mViewPager.setCurrentItem(position);
+            if(updateDrawer) {
+                drawerMgr.onPagerPositionChange(position);
+            }
         }
-
-        mDrawerLayout.closeDrawer(drawerView);
     }
 
     @Override
@@ -419,7 +343,7 @@ public class HomeActivity extends ActionBarActivity
         final String scheduleTime = intent.getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME);
 
         if (remindRoutineId != -1) {
-            mDrawerLayout.closeDrawer(drawerView);
+            // TODO mDrawerLayout.closeDrawer(drawerView);
             showReminder(remindRoutineId);
             getIntent().removeExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID);
         } else if (delayRoutineId != -1) {
@@ -428,8 +352,8 @@ public class HomeActivity extends ActionBarActivity
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mViewPager.setCurrentItem(0);
-                    mDrawerLayout.closeDrawer(drawerView);
+                    showPagerItem(0);
+                    // TODO mDrawerLayout.closeDrawer(drawerView);
                     final Routine r = Routine.findById(delayRoutineId);
                     ((DailyAgendaFragment) getViewPagerFragment(0)).showDelayDialog(r);
                     ReminderNotification.cancel(HomeActivity.this);
@@ -437,7 +361,7 @@ public class HomeActivity extends ActionBarActivity
                 }
             }, 1000);
         } else if (remindScheduleId != -1) {
-            mDrawerLayout.closeDrawer(drawerView);
+            // TODO mDrawerLayout.closeDrawer(drawerView);
             showReminder(remindScheduleId,
                     LocalTime.parse(scheduleTime, DateTimeFormat.forPattern("kk:mm")));
             getIntent().removeExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID);
@@ -445,8 +369,8 @@ public class HomeActivity extends ActionBarActivity
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mViewPager.setCurrentItem(0);
-                    mDrawerLayout.closeDrawer(drawerView);
+                    showPagerItem(0);
+                    // TODO mDrawerLayout.closeDrawer(drawerView);
                     final Schedule s = Schedule.findById(delayScheduleId);
                     LocalTime t = LocalTime.parse(scheduleTime, DateTimeFormat.forPattern("kk:mm"));
                     ((DailyAgendaFragment) getViewPagerFragment(0)).showDelayDialog(s, t);
@@ -503,9 +427,9 @@ public class HomeActivity extends ActionBarActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
+//        if (mDrawerToggle.onOptionsItemSelected(item)) {
+//            return true;
+//        }
 
         switch (item.getItemId()) {
             case R.id.action_calendar:
@@ -540,16 +464,10 @@ public class HomeActivity extends ActionBarActivity
         }
 
         if (mViewPager.getCurrentItem() != 0) {
-            mViewPager.setCurrentItem(0);
+            showPagerItem(0);
         } else if (!backProcesed) {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(int i, long l) {
-        mViewPager.setCurrentItem(i);
-        return true;
     }
 
     @Override
@@ -566,7 +484,7 @@ public class HomeActivity extends ActionBarActivity
             @Override
             public void run() {
                 final Routine r = Routine.findById(routineId);
-                mViewPager.setCurrentItem(0);
+                showPagerItem(0);
                 ((DailyAgendaFragment) getViewPagerFragment(0)).showReminder(r);
             }
         }, 1000);
@@ -577,7 +495,7 @@ public class HomeActivity extends ActionBarActivity
             @Override
             public void run() {
                 final Schedule r = Schedule.findById(scheduleId);
-                mViewPager.setCurrentItem(0);
+                showPagerItem(0);
                 ((DailyAgendaFragment) getViewPagerFragment(0)).showReminder(r, scheduleTime);
             }
         }, 1000);
@@ -684,7 +602,7 @@ public class HomeActivity extends ActionBarActivity
             ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
             ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
         }else if(evt instanceof PersistenceEvents.ActiveUserChangeEvent){
-            drawerListAdapter.notifyDataSetChanged();
+            // TODO
         }
 
 
@@ -717,151 +635,39 @@ public class HomeActivity extends ActionBarActivity
         }
     }
 
+    public void showTutorial() {
+        showPagerItem(0);
+        getTutorial().reset(this);
+        getTutorial().show(AppTutorial.WELCOME, AppTutorial.HOME_INFO, this);
+    }
+
     public interface OnBackPressedListener {
         boolean doBack();
     }
 
-    class DrawerListAdapter extends ArrayAdapter<String> {
 
-        public DrawerListAdapter(Context context, int resource, List<String> items) {
-            super(context, resource, items);
-        }
+    public void enableOrDisablePharmacyMode(){
+        SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            String item = getItem(position);
-
-            final LayoutInflater layoutInflater = getLayoutInflater();
-
-            if (item.equalsIgnoreCase(getString(R.string.drawer_top_option))) {
-
-                View v = getTopView(layoutInflater);
-//                SharedPreferences prefs =PreferenceManager.getDefaultSharedPreferences(getContext());
-//                String displayName = prefs.getString("display_name", "Calendula");
-//
-//                View v = layoutInflater.inflate(R.layout.drawer_top, null);
-//                ((TextView) v.findViewById(R.id.text)).setText(displayName);
-
-
-                return v;
+        if(CalendulaApp.isPharmaModeEnabled(getApplicationContext())){
+            prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED,false).commit();
+            Snack.show("Acabas de deshabilitar el modo farmacia!", HomeActivity.this);
+            CalendulaApp.eventBus().post(new PharmaModeChangeEvent(false));
+        }else {
+            prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, true)
+                    .putBoolean("enable_prescriptions_db", true)
+                    .commit();
+            try {
+                DB.prescriptions().executeRaw("DELETE FROM Prescriptions;");
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            if (item.equalsIgnoreCase(getString(R.string.drawer_bottom_option))) {
-                View v = layoutInflater.inflate(R.layout.drawer_bottom, null);
-
-                TextView patients = ((TextView) v.findViewById(R.id.text_patients));
-                patients.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        selectItem(0);
-                    }
-                });
-
-                TextView help = ((TextView) v.findViewById(R.id.text_help));
-                help.setText(getString(R.string.drawer_help_option));
-                help.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        selectItem(10);
-                    }
-                });
-                TextView settings = ((TextView) v.findViewById(R.id.text_settings));
-                settings.setText(getString(R.string.drawer_settings_option));
-                settings.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        selectItem(9);
-                    }
-                });
-                return v;
-            }
-            if (item.equalsIgnoreCase(getString(R.string.drawer_menu_option))
-                    || item.equalsIgnoreCase(getString(R.string.drawer_services_option))) {
-                View v = layoutInflater.inflate(R.layout.drawer_list_item_spacer, null);
-                ((TextView) v.findViewById(R.id.text)).setText(item);
-                v.setEnabled(false);
-                return v;
-            } else {
-                View v = layoutInflater.inflate(R.layout.drawer_list_item, null);
-                ((TextView) v.findViewById(R.id.text)).setText(item);
-                ((ImageView) v.findViewById(R.id.imageView)).setImageResource(
-                        getActionDrawable(position));
-                ((RoundedImageView) v.findViewById(R.id.imageViewbg)).setImageResource(
-                        getActionColor(position));
-                ((RoundedImageView) v.findViewById(R.id.imageViewbg)).mutateBackground(true);
-
-                if (position == 7 || position == 8) {
-                    ((TextView) v.findViewById(R.id.text)).setTextColor(
-                            getResources().getColor(R.color.drawer_item_disabled));
-                }
-
-                return v;
-            }
-        }
-
-        private View getTopView(LayoutInflater layoutInflater) {
-
-            Patient p = DB.patients().getActive(getContext());
-            View v = layoutInflater.inflate(R.layout.drawer_top, null);
-
-            TextView name = (TextView) v.findViewById(R.id.name);
-            ImageButton avatar = (ImageButton) v.findViewById(R.id.avatar);
-            ImageButton changePatient = (ImageButton) v.findViewById(R.id.swich_patient);
-            View overlay = v.findViewById(R.id.left_drawer_top_overlay);
-            overlay.setBackgroundColor(Screen.equivalentNoAlpha(AvatarMgr.colorsFor(getResources(),p.avatar())[0],0.7f));
-
-            avatar.setImageResource(AvatarMgr.res(p.avatar()));
-            name.setText(p.name());
-
-
-
-            return v;
-        }
-
-        @Override
-        public boolean isEnabled(int position) {
-            return (position != 0 && position != 2 && position != 6);
+            new PopulatePrescriptionDatabaseTask().execute("");
+            Snack.show("Acabas de habilitar el modo farmacia!", HomeActivity.this);
+            CalendulaApp.eventBus().post(new PharmaModeChangeEvent(true));
         }
     }
 
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
-            selectItem(position);
-        }
-    }
-
-    private class DrawerItemLongClickListener implements ListView.OnItemLongClickListener{
-
-        @Override
-        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-            if(position == 7){
-                SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-                if(CalendulaApp.isPharmaModeEnabled(getApplicationContext())){
-                    prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED,false).commit();
-                    Snack.show("Acabas de deshabilitar el modo farmacia!", HomeActivity.this);
-                    CalendulaApp.eventBus().post(new PharmaModeChangeEvent(false));
-                }else{
-
-                    prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, true)
-                            .putBoolean("enable_prescriptions_db",true)
-                            .commit();
-
-                    try {
-                        DB.prescriptions().executeRaw("DELETE FROM Prescriptions;");
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    new PopulatePrescriptionDatabaseTask().execute("");
-                    Snack.show("Acabas de habilitar el modo farmacia!", HomeActivity.this);
-                    CalendulaApp.eventBus().post(new PharmaModeChangeEvent(true));
-
-                }
-                return true;
-            }
-            return false;
-        }
-    }
 
     public class PopulatePrescriptionDatabaseTask extends AsyncTask<String, String, Void> {
 
