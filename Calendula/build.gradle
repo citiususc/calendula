@@ -142,5 +142,8 @@ dependencies {
     compile('com.mikepenz:materialize:0.2.7@aar') {
         transitive = true
     }
+    compile('com.mikepenz:aboutlibraries:5.2.5@aar') {
+        transitive = true
+    }
 
 }

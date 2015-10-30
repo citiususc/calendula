@@ -47,6 +47,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
     public static final int SETTINGS = 6;
     public static final int TRAVELPLAN = 8;
     public static final int PHARMACIES = 9;
+    public static final int ABOUT = 10;
 
 
     private AccountHeader headerResult = null;
@@ -129,7 +130,12 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                         new PrimaryDrawerItem()
                                 .withName("Ajustes")
                                 .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_settings, R.color.dark_grey_home))
-                                .withIdentifier(SETTINGS)
+                                .withIdentifier(SETTINGS),
+                        new DividerDrawerItem(),
+                        new SecondaryDrawerItem()
+                                .withName("Open Source")
+                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_github_circle, R.color.dark_grey_home))
+                                .withIdentifier(ABOUT)
                 )
                 .withOnDrawerItemClickListener(this)
                 .withOnDrawerItemLongClickListener(this)
@@ -143,7 +149,6 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                 headerResult.setActiveProfile(p.id().intValue(),false);
                 updateHeaderBackground(p);
     }
-
 
     @Override
     public boolean onItemClick(View view, int i, IDrawerItem iDrawerItem) {
@@ -173,6 +178,10 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                 break;
             case SETTINGS:
                 launchActivity(new Intent(home, SettingsActivity.class));
+                drawer.setSelection(HOME,false);
+                break;
+            case ABOUT:
+                showAbout();
                 drawer.setSelection(HOME,false);
                 break;
             default:
@@ -231,12 +240,18 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
         return false;
     }
 
+    private void showAbout(){
+        launchActivity(new Intent(home, AboutActivity.class));
+    }
+
     public void updateHeaderBackground(Patient p){
         int colors[] = AvatarMgr.colorsFor(home.getResources(), p.avatar());
         LayerDrawable layers = (LayerDrawable) headerResult.getHeaderBackgroundView().getDrawable();
         ColorDrawable color = (ColorDrawable) layers.findDrawableByLayerId(R.id.color_layer);
         color.setColor(ScreenUtils.equivalentNoAlpha(colors[0],0.7f));
     }
+
+
 
     public Drawer drawer(){
         return drawer;

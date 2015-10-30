@@ -36,8 +36,8 @@
             android:label="@string/title_activity_routines"
             android:parentActivityName=".HomeActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.MedicinesActivity"
             android:label="@string/title_activity_medicines"
@@ -49,7 +49,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent"
             android:windowSoftInputMode="stateHidden" />
-
         <activity
             android:name=".activities.StartActivity"
             android:launchMode="singleInstance"
@@ -115,19 +114,24 @@
         <activity
             android:name=".activities.PatientsActivity"
             android:label="@string/title_activity_patients"
-            android:theme="@style/AppTheme"
-            android:parentActivityName=".HomeActivity" >
+            android:parentActivityName=".HomeActivity"
+            android:theme="@style/AppTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="es.usc.citius.servando.calendula.HomeActivity" />
         </activity>
         <activity
             android:name=".activities.PatientDetailActivity"
-            android:theme="@style/AppTheme"
-            android:label="@string/title_activity_patient_detail" >
+            android:label="@string/title_activity_patient_detail"
+            android:theme="@style/AppTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="es.usc.citius.servando.calendula.activities.PatientsActivity"/>
+                android:value="es.usc.citius.servando.calendula.activities.PatientsActivity" />
+        </activity>
+        <activity
+            android:name=".activities.AboutActivity"
+            android:parentActivityName=".HomeActivity"
+            android:label="@string/title_activity_about" >
         </activity>
     </application>
 
