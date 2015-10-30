@@ -133,6 +133,10 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                                 .withIdentifier(SETTINGS),
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem()
+                                .withName("Recorrido")
+                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_assistant, R.color.dark_grey_home))
+                                .withIdentifier(HELP),
+                        new SecondaryDrawerItem()
                                 .withName("Open Source")
                                 .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_github_circle, R.color.dark_grey_home))
                                 .withIdentifier(ABOUT)
