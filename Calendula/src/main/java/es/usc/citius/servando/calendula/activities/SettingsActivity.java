@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -18,7 +19,14 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
+
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -28,6 +36,7 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
+import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -132,11 +141,35 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.dark_grey_home));
-        }
+
+        ScreenUtils.setStatusBarColor(this, getResources().getColor(R.color.dark_grey_home));
+
+        LinearLayout root = (LinearLayout)findViewById(android.R.id.list).getParent().getParent().getParent();
+        Toolbar toolbar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.settings_toolbar, root, false);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.dark_grey_home));
+        toolbar.setNavigationIcon(getNavigationIcon());
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        root.addView(toolbar, 0); // insert at top
+
         ctx = getBaseContext();
         setupSimplePreferencesScreen();
+
+
+
+    }
+
+    protected Drawable getNavigationIcon(){
+        return new IconicsDrawable(this, GoogleMaterial.Icon.gmd_arrow_back)
+                .sizeDp(24)
+                .paddingDp(2)
+                .colorRes(R.color.white);
     }
 
     /**
