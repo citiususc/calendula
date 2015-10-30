@@ -111,7 +111,8 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     this,
-                    new Pair<>(view.findViewById(R.id.patient_avatar), "transition")
+                    new Pair<>(view.findViewById(R.id.patient_avatar), "transition"),
+                    new Pair<>(view.findViewById(R.id.patient_avatar_bg), "background")
             );
             ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
         } else
@@ -182,7 +183,7 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
                 activeIndicator.setVisibility(View.GONE);
             }
 
-            int colorAlpha = ScreenUtils.equivalentNoAlpha(color[0], 0.7f);
+            int colorAlpha = ScreenUtils.equivalentNoAlpha(color[0], 0.4f);
             patientAvatarBg.setBackgroundColor(colorAlpha);
             return view;
 

@@ -161,7 +161,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
 
     private void loadPatient() {
         patientName.setText(patient.name());
-        updateAvatar(patient.avatar(), 200, 300);
+        updateAvatar(patient.avatar(), 400, 400);
     }
 
     private void updateAvatar(String avatar, int delay, final int duration){
@@ -169,7 +169,6 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         patientAvatar.setImageResource(AvatarMgr.res(avatar));
         avatarBackgroundColor = ScreenUtils.equivalentNoAlpha(color[0], 0.7f);
         top.setBackgroundColor(ScreenUtils.equivalentNoAlpha(color[0], 0.4f));
-        patientAvatarBg.setBackgroundColor(avatarBackgroundColor);
         selectAvatarMsg.setBackgroundColor(avatarBackgroundColor);
 
         ScreenUtils.setStatusBarColor(this, avatarBackgroundColor);
@@ -178,7 +177,8 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             patientAvatarBg.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    animateAvatarBg(duration);
+                   patientAvatarBg.setBackgroundColor(avatarBackgroundColor);
+                   animateAvatarBg(duration);
                 }
             }, delay);
         }
@@ -210,6 +210,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 supportFinishAfterTransition();
+
                 return true;
 
             case R.id.action_active:

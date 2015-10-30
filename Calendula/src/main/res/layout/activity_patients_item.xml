@@ -4,8 +4,6 @@
              android:layout_width="fill_parent"
               android:orientation="vertical"
               android:gravity="center_vertical"
-
-
     >
 
     <RelativeLayout
@@ -15,6 +13,7 @@
 
         <ImageView
             android:layout_width="fill_parent"
+            android:transitionName="background"
             android:id="@+id/patient_avatar_bg"
             android:layout_height="130dp"
             android:background="@color/android_blue"
@@ -25,11 +24,12 @@
             android:layout_width="wrap_content"
             android:src="@drawable/avatar_default"
             android:transitionName="transition"
-            android:layout_height="130dp"
+            android:layout_height="80dp"
             android:scaleType="fitCenter"
             android:padding="0dp"
             android:layout_gravity="center_vertical"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"/>
     </RelativeLayout>
 
 
@@ -46,6 +46,7 @@
         android:textColor="@android:color/white"
         android:layout_below="@+id/patient_item"
         android:textAlignment="center"
+        android:transitionName="patient_name"
         android:gravity="center"
         android:editable="false"
         />
