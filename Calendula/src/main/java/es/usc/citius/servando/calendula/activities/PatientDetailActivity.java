@@ -55,6 +55,9 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
     private int avatarBackgroundColor;
     Materialize mt;
 
+    int color1;
+    int color2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +90,13 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         loadPatient();
     }
 
+    @Override
+    public void onBackPressed() {
+        ScreenUtils.setStatusBarColor(this, color2);
+        patientAvatarBg.setVisibility(View.INVISIBLE);
+        super.onBackPressed();
+    }
+
 
 
     private void animateAvatarBg(int duration) {
@@ -112,7 +122,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             selectAvatarMsg.setVisibility(View.INVISIBLE);
             shadowTop.setVisibility(View.INVISIBLE);
             gridContainer.animate()
-                    .y(avatarSelectorY - gridContainer.getHeight())
+                    .y(avatarSelectorY - patientAvatarBg.getHeight())
                     .alpha(0)
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
@@ -129,12 +139,12 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
     void showAvatarSelector(){
 
             if(avatarSelectorY == -1){
-                avatarSelectorY = top.getHeight();
+                avatarSelectorY = top.getHeight() + ScreenUtils.getStatusBarHeight(this);
             }
             selectAvatarMsg.setVisibility(View.VISIBLE);
             shadowTop.setVisibility(View.VISIBLE);
             gridContainer.setVisibility(View.VISIBLE);
-            gridContainer.setY(avatarSelectorY - gridContainer.getHeight());
+            gridContainer.setY(avatarSelectorY - patientAvatarBg.getHeight());
             gridContainer.animate().y(avatarSelectorY).alpha(1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
@@ -167,8 +177,12 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
     private void updateAvatar(String avatar, int delay, final int duration){
         int[] color = AvatarMgr.colorsFor(getResources(), avatar);
         patientAvatar.setImageResource(AvatarMgr.res(avatar));
-        avatarBackgroundColor = ScreenUtils.equivalentNoAlpha(color[0], 0.7f);
-        top.setBackgroundColor(ScreenUtils.equivalentNoAlpha(color[0], 0.4f));
+
+        color1 = ScreenUtils.equivalentNoAlpha(color[0], 0.6f);
+        color2 = ScreenUtils.equivalentNoAlpha(color[0], 0.4f);
+
+        avatarBackgroundColor = color1;
+        top.setBackgroundColor(color2);
         selectAvatarMsg.setBackgroundColor(avatarBackgroundColor);
 
         ScreenUtils.setStatusBarColor(this, avatarBackgroundColor);
@@ -181,6 +195,8 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
                    animateAvatarBg(duration);
                 }
             }, delay);
+        }else{
+            patientAvatarBg.setBackgroundColor(avatarBackgroundColor);
         }
 
     }
@@ -209,8 +225,9 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
+                ScreenUtils.setStatusBarColor(this, color2);
+                patientAvatarBg.setVisibility(View.INVISIBLE);
                 supportFinishAfterTransition();
-
                 return true;
 
             case R.id.action_active:
