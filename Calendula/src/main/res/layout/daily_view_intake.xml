@@ -39,6 +39,23 @@
                 android:src="@drawable/arrow_down"
                 android:visibility="visible" />
 
+
+            <ImageView
+                android:id="@+id/patient_avatar"
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:layout_toLeftOf="@id/count_container"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:paddingBottom="3dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="8dp"
+                android:scaleType="fitCenter"
+                android:visibility="visible" />
+
+
+
             <TextView
                 android:id="@+id/routines_list_item_name"
                 android:layout_width="wrap_content"

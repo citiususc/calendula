@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,6 +43,7 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
+import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 
 /**
@@ -131,18 +131,6 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
 
         userInfoFragment = rootView.findViewById(R.id.user_info_fragment);
         zoomContainer = rootView.findViewById(R.id.zoom_container);
-
-        //        new Handler().postDelayed(new Runnable() {
-        //            @Override
-        //            public void run() {
-        //                items = buildItems(); // allow user to change day
-        //                adapter = new AgendaItemAdapter(getActivity(), R.layout.daily_view_hour, items);
-        //                slideAdapter = new SlideExpandableListAdapter(adapter, R.id.count_container, R.id.bottom, 1);
-        //                listview.setAdapter(slideAdapter);
-        //
-        //            }
-        //        },1000);
-
         zoomHelper = new AgendaZoomHelper(zoomContainer, getActivity(),
                 new AgendaZoomHelper.ZoomHelperListener() {
                     @Override
@@ -202,11 +190,8 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
             });
         }
 
-        LayoutAnimationController controller =
-                AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.list_animation);
+        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.list_animation);
         listview.setLayoutAnimation(controller);
-
-        updateHeaderHeight();
 
         new LoadDailyAgendaTask().execute(null, null, null);
 
@@ -230,34 +215,6 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         return 0;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Restore preferences
-        SharedPreferences settings =
-                getActivity().getSharedPreferences(CalendulaApp.PREFERENCES_NAME, 0);
-
-        //        items.clear();
-        //        items.addAll(buildItems()); // allow user to change day
-        //        adapter.notifyDataSetChanged();
-    }
-
-
-    /*public String getNextRoutineHour() {
-        int now = DateTime.now().getHourOfDay();
-        for (Routine r : Routine.findAll()) {
-            if (r.time().getHourOfDay() >= now) {
-                return r.time().toString("kk:mm");
-            }
-        }
-        return "00:00";
-    }*/
-
     public int getNextRoutinePosition() {
         int now = DateTime.now().getHourOfDay();
         for (Routine r : Routine.findAll()) {
@@ -273,10 +230,6 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             Log.d(getTag(), "Visible to user");
-            //            if (profileShown)
-            //                ((HomeActivity) getActivity()).setCustomTitle("Calendula");
-            //            else
-            //                ((HomeActivity) getActivity()).setCustomTitle(Session.instance().getUser().getName());
         }
     }
 
@@ -321,11 +274,10 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                                 .findByScheduleAndTime(s, t.toLocalTime())
                                 .takenToday();
                         item.meds.add(el);
-
                         item.id = s.getId();
+                        item.patient = s.patient();
                         item.isRoutine = false;
                         item.title = med.name();
-                        //item.title = " " + getString(R.string.every) + " " + s.rule().interval() + " " + getString(R.string.hours);
                         item.hour = t.getHourOfDay();
                         item.minute = t.getMinuteOfHour();
                         item.time = new LocalTime(item.hour, item.minute);
@@ -392,8 +344,6 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
             restoreHeader();
         }
 
-        updateHeaderHeight();
-
         // refresh adapter items
         items.clear();
         items.addAll(dailyAgendaItemStubs);
@@ -404,31 +354,6 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         adapter.notifyDataSetChanged();
         // open next routine item
         slideAdapter.setLastOpenPosition(expanded ? nextRoutineHour + 1 : 1);
-    }
-
-    private void updateHeaderHeight() {
-        if (showPlaceholder) {
-            //            RelativeLayout.LayoutParams p = (RelativeLayout.LayoutParams) userInfoFragment.getLayoutParams();
-            //            Log.d("DailyAgenda", "Current height " + p.height);
-            //            p.height = (int)(p.height*2f);
-            //            userInfoFragment.setLayoutParams(p);
-            //            Log.d("DailyAgenda", "Current height 2 " + p.height);
-            //            userInfoFragment.requestLayout();
-            //            Log.d("DailyAgenda", "Updating height " + userInfoFragment.getHeight());
-
-            //            new Handler().postDelayed(new Runnable() {
-            //                @Override
-            //                public void run() {
-            //                    Log.d("DailyAgenda", "Updating height " +  userInfoFragment.getHeight());
-            //                    RelativeLayout.LayoutParams p = (RelativeLayout.LayoutParams) userInfoFragment.getLayoutParams();
-            //                    p.height = 1000;//getResources().getDimensionPixelSize(R.dimen.header_height_empty);
-            //                    userInfoFragment.setLayoutParams(p);
-            //                    userInfoFragment.requestLayout();
-            //                    Log.d("DailyAgenda", "Current height " + userInfoFragment.getHeight());
-            //                }
-            //            },3000);
-
-        }
     }
 
     LayoutAnimationController getAnimationController(boolean expand) {
@@ -461,6 +386,9 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                 }
             });
         } else {
+
+
+
             v = layoutInflater.inflate(R.layout.daily_view_intake, null);
             LinearLayout medList = (LinearLayout) v.findViewById(R.id.med_item_list);
 
@@ -484,16 +412,16 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
             }
 
             if (!item.isRoutine) {
-                //v.findViewById(R.id.routine_list_item_container).setBackgroundColor(getResources().getColor(R.color.android_blue_light));
-                ((ImageButton) v.findViewById(R.id.imageButton2)).setImageResource(
-                        R.drawable.ic_history_black_48dp);
+                ((ImageButton) v.findViewById(R.id.imageButton2)).setImageResource(R.drawable.ic_history_black_48dp);
+            }
+
+            if(item.patient != null){
+                ((ImageView) v.findViewById(R.id.patient_avatar)).setImageResource(AvatarMgr.res(item.patient.avatar()));
             }
 
             ((TextView) v.findViewById(R.id.routines_list_item_name)).setText(item.title);
-            ((TextView) v.findViewById(R.id.routines_list_item_hour)).setText(
-                    (item.hour > 9 ? item.hour : "0" + item.hour) + ":");
-            ((TextView) v.findViewById(R.id.routines_list_item_minute)).setText(
-                    (item.minute > 9 ? item.minute : "0" + item.minute) + "");
+            ((TextView) v.findViewById(R.id.routines_list_item_hour)).setText((item.hour > 9 ? item.hour : "0" + item.hour) + ":");
+            ((TextView) v.findViewById(R.id.routines_list_item_minute)).setText((item.minute > 9 ? item.minute : "0" + item.minute) + "");
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override

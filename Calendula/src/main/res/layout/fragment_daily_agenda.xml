@@ -41,17 +41,17 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@drawable/transparent_black_overlay_transition"
-        android:padding="20dp"
+        android:padding="15dp"
         android:visibility="invisible">
 
         <FrameLayout
             android:id="@+id/content_wrapper"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginTop="65dp"
             android:background="@drawable/reminder_view_bg"
             android:padding="10dp"
-            android:visibility="visible">
+            android:visibility="visible"
+            android:layout_marginTop="@dimen/status_bar_height">
 
             <FrameLayout
                 android:id="@+id/content"

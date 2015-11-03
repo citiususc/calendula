@@ -36,12 +36,14 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 import es.usc.citius.servando.calendula.util.AppTutorial;
+import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.Snack;
 
 /**
@@ -57,11 +59,15 @@ public class AgendaZoomHelper {
     Schedule schedule;
     LocalTime time;
     List<ScheduleItem> doses;
+    ImageView patientAvatar;
+    TextView patientName;
+    View patientAvatarContainer;
     boolean totalChecked;
     View v;
     boolean somethingChanged = false;
     AnimatorSet animator;
     Activity activity;
+    boolean showAvatar = true;
 
     public AgendaZoomHelper(View v, Activity activity, ZoomHelperListener listener) {
         this.v = v;
@@ -75,8 +81,11 @@ public class AgendaZoomHelper {
                 hide();
             }
         });
+        patientName =  (TextView) v.findViewById(R.id.zoom_patient_name);
+        patientAvatar =  (ImageView) v.findViewById(R.id.zoom_patient_avatar);
+        patientAvatarContainer = v.findViewById(R.id.zoom_avatar_container);
 
-        delayButton = (ImageButton) v.findViewById(R.id.delay_button);
+        delayButton =   (ImageButton) v.findViewById(R.id.delay_button);
         delayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,6 +137,7 @@ public class AgendaZoomHelper {
             }
 
             routine = r;
+            updatePatient(r.patient());
             doses = ScheduleUtils.getRoutineScheduleItems(r, true);
             list.removeAllViews();
             ((TextView) v.findViewById(R.id.clock)).setText(r.time().toString("kk:mm"));
@@ -139,6 +149,15 @@ public class AgendaZoomHelper {
                     hr.replaceFirst(hr.charAt(0) + "", (hr.charAt(0) + "").toUpperCase()));
             zoomInView(from, activity);
             if (mListener != null) mListener.onShow(r);
+        }
+    }
+
+    public void updatePatient(Patient p){
+        if(showAvatar) {
+            patientAvatar.setImageResource(AvatarMgr.res(p.avatar()));
+            patientName.setText(p.name());
+        }else{
+            patientAvatarContainer.setVisibility(View.GONE);
         }
     }
 
@@ -155,7 +174,7 @@ public class AgendaZoomHelper {
             doses = null;
             this.schedule = s;
             this.time = time;
-
+            updatePatient(s.patient());
             list.removeAllViews();
             ((TextView) v.findViewById(R.id.clock)).setText(time.toString("kk:mm"));
             ((TextView) v.findViewById(R.id.routine_name)).setText(
@@ -184,6 +203,7 @@ public class AgendaZoomHelper {
             }
 
             routine = r;
+            updatePatient(r.patient());
             doses = ScheduleUtils.getRoutineScheduleItems(r, true);
             list.removeAllViews();
             ((TextView) v.findViewById(R.id.clock)).setText(DateTime.now().toString("kk:mm"));
@@ -207,6 +227,7 @@ public class AgendaZoomHelper {
             doses = null;
             this.schedule = s;
             this.time = time;
+            updatePatient(s.patient());
             list.removeAllViews();
             ((TextView) v.findViewById(R.id.clock)).setText(DateTime.now().toString("kk:mm"));
             ((TextView) v.findViewById(R.id.routine_name)).setText(
