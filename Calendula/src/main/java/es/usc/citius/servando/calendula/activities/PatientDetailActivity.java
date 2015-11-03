@@ -207,15 +207,6 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_patient_detail, menu);
         this.menu = menu;
-
-        if(patient!=null && DB.patients().isActive(patient,this)){
-            menu.getItem(0).getIcon().setAlpha(255);
-        }else if(patient!=null && patient.id() == null){
-            menu.getItem(0).setVisible(false);
-        }else{
-            menu.getItem(0).getIcon().setAlpha(100);
-        }
-
         return true;
     }
 
@@ -228,15 +219,6 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
                 ScreenUtils.setStatusBarColor(this, color2);
                 patientAvatarBg.setVisibility(View.INVISIBLE);
                 supportFinishAfterTransition();
-                return true;
-
-            case R.id.action_active:
-                if(!DB.patients().isActive(patient,this)){
-                    DB.patients().setActive(patient,this);
-                    item.getIcon().setAlpha(255);
-                }else{
-                    // Show message: set another active, pls
-                }
                 return true;
 
             case R.id.action_done:
