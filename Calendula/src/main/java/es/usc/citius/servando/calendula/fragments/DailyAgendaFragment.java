@@ -172,27 +172,15 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                 }
 
                 @Override
-                public void onScroll(AbsListView absListView, int firstVisibleItem,
-                                     int visibleItemCount, int totalItemCount) {
+                public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
                     if (expanded && getUserVisibleHint()) { // expanded and visible
-                        //                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)userInfoFragment.getLayoutParams();
                         int scrollY = getScroll();
                         int scrollDiff = (scrollY - lastScroll);
 
                         if (Math.abs(lastVisibleItemCount - visibleItemCount) <= 5) {
 
-                            int translationY =
-                                    (int) (userInfoFragment.getTranslationY() - scrollDiff);
-
-                            Log.d(getTag(), "Scroll Y: "
-                                    + scrollY
-                                    + ", translationY: "
-                                    + translationY
-                                    + ", firstItem: "
-                                    + firstVisibleItem
-                                    + ", profileHeight: "
-                                    + profileFragmentHeight);
+                            int translationY = (int) (userInfoFragment.getTranslationY() - scrollDiff);
 
                             if (translationY < -profileFragmentHeight) {
                                 translationY = -profileFragmentHeight;
@@ -201,20 +189,10 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                             }
 
                             if (translationY < toolbarHeight - profileFragmentHeight) {
-                                ((HomeActivity) getActivity()).hideAddButton();
                                 ((HomeActivity) getActivity()).hideToolbar();
                             } else if (translationY > (toolbarHeight - profileFragmentHeight)) {
-                                ((HomeActivity) getActivity()).showAddButton();
                                 ((HomeActivity) getActivity()).showToolbar();
                             }
-
-                            //                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            //                                if (translationY <= statusbarHeight -profileFragmentHeight) {
-                            //                                    getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.black_20));
-                            //                                } else if (translationY > (statusbarHeight-profileFragmentHeight)) {
-                            //                                    getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
-                            //                                }
-                            //                            }
                             userInfoFragment.setTranslationY(translationY);
                         }
                         lastScroll = scrollY;
@@ -412,7 +390,6 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         // restore header if not expanded
         if (!expanded) {
             restoreHeader();
-            ((HomeActivity) getActivity()).hideAddButton();
         }
 
         updateHeaderHeight();

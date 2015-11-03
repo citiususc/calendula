@@ -1,5 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/android_blue_darker">
@@ -13,61 +12,5 @@
         android:background="#fcfcfc"
         android:dividerHeight="0dp"
         android:id="@+id/schedule_list" />
-
-  <com.getbase.floatingactionbutton.FloatingActionsMenu
-      android:id="@+id/fab_menu"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
-      android:layout_alignParentEnd="false"
-      fab:fab_addButtonColorNormal="@color/android_green"
-      fab:fab_addButtonColorPressed="@color/android_green_dark"
-      fab:fab_addButtonPlusIconColor="@color/white"
-      fab:fab_labelStyle="@style/menu_labels_style"
-      fab:fab_labelsPosition="left"
-      android:layout_alignParentBottom="true"
-      android:layout_margin="10dp"
-      >
-
-      <com.getbase.floatingactionbutton.FloatingActionButton
-        android:id="@+id/action_a"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        fab:fab_icon="@drawable/ic_alarm_white_48dp"
-        fab:fab_colorNormal="@color/android_green_light_noalpha"
-        fab:fab_title="@string/schedule_type_routines_title"
-        fab:fab_colorPressed="@color/android_green"
-        />
-
-    <com.getbase.floatingactionbutton.FloatingActionButton
-        android:id="@+id/action_b"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        fab:fab_icon="@drawable/ic_history_white_48dp"
-        fab:fab_colorNormal="@color/android_green_light_noalpha"
-        fab:fab_title="@string/schedule_type_hourly_title"
-        fab:fab_colorPressed="@color/android_green"
-        />
-
-    <com.getbase.floatingactionbutton.FloatingActionButton
-        android:id="@+id/action_c"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        fab:fab_icon="@drawable/ic_autorenew_white_48dp"
-        fab:fab_colorNormal="@color/android_green_light_noalpha"
-        fab:fab_title="@string/schedule_type_period_title"
-        fab:fab_colorPressed="@color/android_green"
-        />
-
-      <com.getbase.floatingactionbutton.FloatingActionButton
-          android:id="@+id/action_d"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          fab:fab_icon="@drawable/ic_qrcode_white_48dp"
-          fab:fab_colorNormal="@color/android_green_light_noalpha"
-          fab:fab_title="@string/schedule_type_from_qr"
-          fab:fab_colorPressed="@color/android_green"
-          />
-  </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </RelativeLayout>

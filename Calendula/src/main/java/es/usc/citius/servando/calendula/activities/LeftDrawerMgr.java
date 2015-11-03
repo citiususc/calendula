@@ -260,4 +260,8 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
     public Drawer drawer(){
         return drawer;
     }
+
+    public AccountHeader header(){
+        return headerResult;
+    }
 }

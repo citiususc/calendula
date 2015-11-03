@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,17 +16,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
-
 import java.util.List;
 
-import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.activities.ScanActivity;
-import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.events.PharmaModeChangeEvent;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
@@ -44,8 +36,7 @@ public class ScheduleListFragment extends Fragment {
     ArrayAdapter adapter;
     ListView listview;
 
-    FloatingActionsMenu fabMenu;
-    FloatingActionButton actionD;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,88 +46,7 @@ public class ScheduleListFragment extends Fragment {
         mSchedules = Schedule.findAll();
         adapter = new ScheduleListAdapter(getActivity(), R.layout.schedules_list_item, mSchedules);
         listview.setAdapter(adapter);
-        CalendulaApp.eventBus().register(this);
-
-        setupFabMenu(rootView);
-
         return rootView;
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && fabMenu != null) {
-            fabMenu.collapse();
-        }
-    }
-
-    // Method called from the event bus
-    @SuppressWarnings("unused")
-    public void onEvent(PharmaModeChangeEvent event) {
-
-        if (actionD != null && event.enabled) {
-            actionD.setVisibility(View.VISIBLE);
-        } else if (actionD != null) {
-            actionD.setVisibility(View.GONE);
-        }
-
-    }
-
-    private void setupFabMenu(View rootView) {
-        fabMenu = (FloatingActionsMenu) rootView.findViewById(R.id.fab_menu);
-
-        final FloatingActionButton actionA =
-                (FloatingActionButton) rootView.findViewById(R.id.action_a);
-        final FloatingActionButton actionB =
-                (FloatingActionButton) rootView.findViewById(R.id.action_b);
-        final FloatingActionButton actionC =
-                (FloatingActionButton) rootView.findViewById(R.id.action_c);
-
-        actionD = (FloatingActionButton) rootView.findViewById(R.id.action_d);
-
-        if(! CalendulaApp.isPharmaModeEnabled(getActivity())) {
-            actionD.setVisibility(View.GONE);
-        }
-
-        View.OnClickListener onClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int scheduleType = -1;
-                Log.d(TAG, "Click " + v.getId());
-                switch (v.getId()) {
-                    case R.id.action_a:
-                        scheduleType = ScheduleTypeFragment.TYPE_ROUTINES;
-                        break;
-                    case R.id.action_b:
-                        scheduleType = ScheduleTypeFragment.TYPE_HOURLY;
-                        break;
-                    case R.id.action_c:
-                        scheduleType = ScheduleTypeFragment.TYPE_PERIOD;
-                        break;
-                    case R.id.action_d:
-                        Intent i = new Intent(getActivity(), ScanActivity.class);
-                        launchActivity(i);
-                        fabMenu.collapse();
-                        return;
-                }
-
-                Intent i = new Intent(getActivity(), ScheduleCreationActivity.class);
-                i.putExtra("scheduleType", scheduleType);
-                launchActivity(i);
-                fabMenu.collapse();
-
-            }
-        };
-
-        actionA.setOnClickListener(onClickListener);
-        actionB.setOnClickListener(onClickListener);
-        actionC.setOnClickListener(onClickListener);
-        actionD.setOnClickListener(onClickListener);
-    }
-
-    private void launchActivity(Intent i) {
-        startActivity(i);
-        getActivity().overridePendingTransition(0, 0);
     }
 
     public void notifyDataChange() {

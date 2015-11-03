@@ -18,7 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.melnykov.fab.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
@@ -34,7 +35,6 @@ import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
-import es.usc.citius.servando.calendula.events.PharmaModeChangeEvent;
 import es.usc.citius.servando.calendula.fragments.DailyAgendaFragment;
 import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
 import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
@@ -68,18 +68,15 @@ public class HomeActivity extends CalendulaActivity
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     HomePageAdapter mSectionsPagerAdapter;
-    //DrawerLayout mDrawerLayout;
-    //ListView mDrawerList;
-    //ScrimInsetsFrameLayout drawerView;
-    //ActionBarDrawerToggle mDrawerToggle;
+
     int currentActionBarColor;
     int previousActionBarColor;
 
-    FloatingActionButton addButton;
+    FloatingActionsMenu addButton;
+    FabMenuMgr fabMgr;
     String[] titles;
 
     PagerSlidingTabStrip tabs;
-    Handler mHandler;
     View tabsShadow;
 
     /**
@@ -90,6 +87,7 @@ public class HomeActivity extends CalendulaActivity
 
     private AppTutorial tutorial;
     private LeftDrawerMgr drawerMgr;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,8 +113,10 @@ public class HomeActivity extends CalendulaActivity
         mViewPager.setOffscreenPageLimit(5);
 
         titles = getResources().getStringArray(R.array.home_action_list);
-        addButton = (FloatingActionButton) findViewById(R.id.add_button);
-        addButton.setOnClickListener(this);
+        addButton = (FloatingActionsMenu) findViewById(R.id.fab_menu);
+        fab = (FloatingActionButton) findViewById(R.id.add_button);
+        fabMgr = new FabMenuMgr(fab, addButton, drawerMgr, this);
+        fabMgr.init();
 
         tabs.setOnPageChangeListener(this);
         tabs.setShouldExpand(true);
@@ -136,8 +136,6 @@ public class HomeActivity extends CalendulaActivity
         tabsShadow.setVisibility(View.GONE);
         tabs.setViewPager(mViewPager);
 
-        hideAddButton();
-
         setTutorial(new AppTutorial());
         getTutorial().init(this);
         checkReminder(getIntent());
@@ -150,69 +148,6 @@ public class HomeActivity extends CalendulaActivity
         }, 1500);
 
 
-    }
-
-    public int getActionDrawable(int index) {
-        switch (index) {
-
-            case 1:
-                return R.drawable.ic_small_home_w;
-            case 3:
-                return R.drawable.ic_alarm_white_48dp;
-            case 4:
-                return R.drawable.ic_pill;
-            case 5:
-                return R.drawable.ic_event_white_48dp;
-            case 7:
-                return R.drawable.ic_room_white_48dp;
-            case 8:
-                return R.drawable.ic_small_plane_w;
-            default:
-                return R.drawable.ic_small_home_w;
-        }
-    }
-
-    public int getActionColor(int index) {
-        switch (index) {
-            case 3:
-                return R.color.android_orange;
-            case 4:
-                return R.color.android_pink;
-            case 5:
-                return R.color.android_green;
-            case 7:
-                return R.color.android_blue_light;
-            case 8:
-                return R.color.android_red_light;
-            default:
-                return R.color.dark_grey_home;
-        }
-    }
-
-    public int getAddButtonColor(int page) {
-        switch (page) {
-            case 1:
-                return R.color.android_orange;
-            case 2:
-                return R.color.android_pink_dark;
-            case 3:
-                return R.color.android_green;
-            default:
-                return R.color.android_blue_darker;
-        }
-    }
-
-    public int getSecondaryAddButtonColor(int page) {
-        switch (page) {
-            case 1:
-                return R.color.android_orange_dark;
-            case 2:
-                return R.color.android_pink;
-            case 3:
-                return R.color.android_green_dark;
-            default:
-                return R.color.android_blue_dark;
-        }
     }
 
     private void initializeDrawer(Bundle savedInstanceState) {
@@ -405,12 +340,6 @@ public class HomeActivity extends CalendulaActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-//        if (mDrawerToggle.onOptionsItemSelected(item)) {
-//            return true;
-//        }
 
         switch (item.getItemId()) {
             case R.id.action_calendar:
@@ -485,28 +414,16 @@ public class HomeActivity extends CalendulaActivity
     @Override
     public void onPageSelected(int page) {
         invalidateOptionsMenu();
+        fabMgr.onViewPagerItemChange(page);
         updateTitle(page);
+        drawerMgr.onPagerPositionChange(page);
         showTutorialStage(page);
-        updateAddButton(page);
         if (page == 0) {
-            addButton.hide(false);
             hideTabs();
-        } else if (page == 3) {
-            addButton.hide(false);
-        } else {
-            showAddButton();
-            if (toolbar.getVisibility() != View.VISIBLE) {
-                toolbar.setVisibility(View.VISIBLE);
-            }
+        } else if (toolbar.getVisibility() != View.VISIBLE) {
+            toolbar.setVisibility(View.VISIBLE);
             showTabs();
         }
-    }
-  
-
-    private void updateAddButton(int page) {
-
-        addButton.setColorNormalResId(getAddButtonColor(page));
-        addButton.setColorPressedResId(getSecondaryAddButtonColor(page));
     }
 
     private void updateTitle(int page) {
@@ -532,14 +449,6 @@ public class HomeActivity extends CalendulaActivity
     @Override
     public void onPageScrollStateChanged(int i) {
 
-    }
-
-    public void hideAddButton() {
-        addButton.hide(true);
-    }
-
-    public void showAddButton() {
-        addButton.show(true);
     }
 
     Fragment getViewPagerFragment(int position) {
@@ -631,9 +540,9 @@ public class HomeActivity extends CalendulaActivity
         SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         if(CalendulaApp.isPharmaModeEnabled(getApplicationContext())){
-            prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED,false).commit();
+            prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, false).commit();
             Snack.show("Acabas de deshabilitar el modo farmacia!", HomeActivity.this);
-            CalendulaApp.eventBus().post(new PharmaModeChangeEvent(false));
+            fabMgr.onPharmacyModeChanged(false);
         }else {
             prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, true)
                     .putBoolean("enable_prescriptions_db", true)
@@ -644,8 +553,6 @@ public class HomeActivity extends CalendulaActivity
                 e.printStackTrace();
             }
             new PopulatePrescriptionDatabaseTask().execute("");
-            Snack.show("Acabas de habilitar el modo farmacia!", HomeActivity.this);
-            CalendulaApp.eventBus().post(new PharmaModeChangeEvent(true));
         }
     }
 
@@ -685,6 +592,8 @@ public class HomeActivity extends CalendulaActivity
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
+            Snack.show("Acabas de habilitar el modo farmacia!", HomeActivity.this);
+            fabMgr.onPharmacyModeChanged(true);
         }
     }
 
