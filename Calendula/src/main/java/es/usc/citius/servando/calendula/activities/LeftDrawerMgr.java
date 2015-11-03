@@ -270,6 +270,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
         if(profile instanceof ProfileSettingDrawerItem){
             Intent intent = new Intent(home, PatientDetailActivity.class);
             launchActivity(intent);
+            return true;
         }else{
             Long id = Long.valueOf(profile.getIdentifier());
             Patient p = DB.patients().findById(id);
@@ -283,8 +284,6 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                 updateHeaderBackground(p);
             }
         }
-
-
         return false;
     }
 
@@ -318,5 +317,16 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
             headerResult.updateProfile(profile);
             updateHeaderBackground(p);
         }
+    }
+
+    public void onPatientCreated(Patient p) {
+
+        IProfile profile = new ProfileDrawerItem()
+                .withIdentifier(p.id().intValue())
+                .withName(p.name())
+                .withEmail(p.name() + "@calendula")
+                .withIcon(AvatarMgr.res(p.avatar()));
+
+        headerResult.addProfiles(profile);
     }
 }

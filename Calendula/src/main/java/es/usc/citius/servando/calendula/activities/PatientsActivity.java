@@ -121,7 +121,7 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
 
     // Method called from the event bus
     @SuppressWarnings("unused")
-    public void onEvent(PersistenceEvents.UserEvent event) {
+    public void onEvent(PersistenceEvents.UserCreateEvent event) {
         this.patients = DB.patients().findAll();
         this.adapter.notifyDataSetChanged();
     }

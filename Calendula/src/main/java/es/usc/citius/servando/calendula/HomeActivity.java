@@ -503,6 +503,10 @@ public class HomeActivity extends CalendulaActivity
         }else if(evt instanceof PersistenceEvents.ActiveUserChangeEvent){
             activePatient = ((PersistenceEvents.ActiveUserChangeEvent) evt).patient;
             updateTitle(mViewPager.getCurrentItem());
+        }else if(evt instanceof PersistenceEvents.UserCreateEvent){
+            Patient created = ((PersistenceEvents.UserCreateEvent) evt).patient;
+            drawerMgr.onPatientCreated(created);
+
         }
 
 
