@@ -110,29 +110,13 @@ public class CalendulaApp extends Application {
                 DB.patients().save(p);
 
                 p = new Patient();
-                p.setName("Avoa"); // R.string.default_patient_name
+                p.setName("Avó"); // R.string.default_patient_name
                 p.setAvatar(AvatarMgr.AVATAR_2);
-                DB.patients().save(p);
-
-                p = new Patient();
-                p.setName("Eva"); // R.string.default_patient_name
-                p.setAvatar(AvatarMgr.AVATAR_1);
                 DB.patients().save(p);
 
                 p = new Patient();
                 p.setName("Mamá"); // R.string.default_patient_name
                 p.setAvatar(AvatarMgr.AVATAR_7);
-                DB.patients().save(p);
-
-
-                p = new Patient();
-                p.setName("Avó"); // R.string.default_patient_name
-                p.setAvatar(AvatarMgr.AVATAR_8);
-                DB.patients().save(p);
-
-                p = new Patient();
-                p.setName("Papá"); // R.string.default_patient_name
-                p.setAvatar(AvatarMgr.AVATAR_6);
                 DB.patients().save(p);
             }
         } catch (SQLException e) {
