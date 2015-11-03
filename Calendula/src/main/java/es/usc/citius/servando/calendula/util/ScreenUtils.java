@@ -194,4 +194,8 @@ public class ScreenUtils {
                 .withStatusBarColor(color)
                 .build();
     }
+
+    public static int getStatusBarHeight(Context ctx) {
+        return ctx.getResources().getDimensionPixelSize(R.dimen.status_bar_height);
+    }
 }

@@ -40,6 +40,7 @@ import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
 import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
@@ -148,6 +149,13 @@ public class HomeActivity extends CalendulaActivity
         }, 1500);
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Patient p = DB.patients().getActive(this);
+        drawerMgr.onActivityResume(p);
     }
 
     private void initializeDrawer(Bundle savedInstanceState) {
@@ -543,6 +551,7 @@ public class HomeActivity extends CalendulaActivity
             prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, false).commit();
             Snack.show("Acabas de deshabilitar el modo farmacia!", HomeActivity.this);
             fabMgr.onPharmacyModeChanged(false);
+            drawerMgr.onPharmacyModeChanged(false);
         }else {
             prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, true)
                     .putBoolean("enable_prescriptions_db", true)
@@ -594,6 +603,7 @@ public class HomeActivity extends CalendulaActivity
             }
             Snack.show("Acabas de habilitar el modo farmacia!", HomeActivity.this);
             fabMgr.onPharmacyModeChanged(true);
+            drawerMgr.onPharmacyModeChanged(true);
         }
     }
 
@@ -601,7 +611,7 @@ public class HomeActivity extends CalendulaActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         int msgRes = R.string.updating_prescriptions_db_msg;
         boolean dbEnabled = prefs.getBoolean("enable_prescriptions_db", false);
-        if(dbEnabled){
+        if(dbEnabled && PopulatePrescriptionDBService.isDbOutdated(this)){
             new PopulatePrescriptionDatabaseTask(msgRes).execute("");
         }
     }

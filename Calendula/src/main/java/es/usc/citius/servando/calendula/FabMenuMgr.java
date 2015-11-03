@@ -84,7 +84,8 @@ public class FabMenuMgr implements View.OnClickListener{
         int[] ids = new int[]{R.id.user1, R.id.user2, R.id.user3};
         ArrayList<IProfile> profiles = drawerMgr.header().getProfiles();
 
-        for(int i = 0; i < Math.min(ids.length,profiles.size()); i++){
+        // First one is "Add patient"
+        for(int i = 1; i < Math.min(ids.length,profiles.size()); i++){
 
             FloatingActionButton userFab;
 
