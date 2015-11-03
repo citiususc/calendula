@@ -18,8 +18,10 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 
@@ -38,7 +40,7 @@ public class RoutinesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_routines_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.routines_list);
-        mRoutines = DB.routines().findAll();
+        mRoutines = DB.routines().findAllForActivePatient(getContext());
         adapter = new RoutinesListAdapter(getActivity(), R.layout.daily_view_hour, mRoutines);
         listview.setAdapter(adapter);
         return rootView;
@@ -47,7 +49,6 @@ public class RoutinesListFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
         Log.d(getTag(), "Activity " + activity.getClass().getName() + ", " + (activity instanceof OnRoutineSelectedListener));
         // If the container activity has implemented
         // the callback interface, set it as listener
@@ -140,7 +141,6 @@ public class RoutinesListFragment extends Fragment {
     // Container Activity must implement this interface
     public interface OnRoutineSelectedListener {
         void onRoutineSelected(Routine r);
-
         void onCreateRoutine();
     }
 
@@ -162,7 +162,7 @@ public class RoutinesListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            mRoutines = DB.routines().findAll();
+            mRoutines = DB.routines().findAllForActivePatient(getContext());
 
             return null;
         }
@@ -177,4 +177,27 @@ public class RoutinesListFragment extends Fragment {
             adapter.notifyDataSetChanged();
         }
     }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        CalendulaApp.eventBus().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        CalendulaApp.eventBus().unregister(this);
+        super.onStop();
+    }
+
+    // Method called from the event bus
+    @SuppressWarnings("unused")
+    public void onEvent(Object evt) {
+        if(evt instanceof PersistenceEvents.ActiveUserChangeEvent){
+            notifyDataChange();
+        }
+    }
+
+
 }

@@ -18,8 +18,10 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
@@ -43,7 +45,7 @@ public class ScheduleListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_schedule_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.schedule_list);
-        mSchedules = Schedule.findAll();
+        mSchedules = DB.schedules().findAllForActivePatient(getContext());
         adapter = new ScheduleListAdapter(getActivity(), R.layout.schedules_list_item, mSchedules);
         listview.setAdapter(adapter);
         return rootView;
@@ -151,7 +153,7 @@ public class ScheduleListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            mSchedules = Schedule.findAll();
+            mSchedules = DB.schedules().findAllForActivePatient(getContext());
 
             Log.d(TAG, "Schedules after reload: " + mSchedules.size());
             return null;
@@ -178,6 +180,26 @@ public class ScheduleListFragment extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
             return createScheduleListItem(layoutInflater, mSchedules.get(position));
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        CalendulaApp.eventBus().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        CalendulaApp.eventBus().unregister(this);
+        super.onStop();
+    }
+
+    // Method called from the event bus
+    @SuppressWarnings("unused")
+    public void onEvent(Object evt) {
+        if(evt instanceof PersistenceEvents.ActiveUserChangeEvent){
+            notifyDataChange();
         }
     }
 }

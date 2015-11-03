@@ -1,5 +1,7 @@
 package es.usc.citius.servando.calendula.database;
 
+import android.content.Context;
+
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
@@ -11,6 +13,7 @@ import java.util.concurrent.Callable;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
@@ -22,6 +25,26 @@ public class ScheduleDao extends GenericDao<Schedule, Long> {
     public ScheduleDao(DatabaseHelper db) {
         super(db);
     }
+
+    public List<Schedule> findAllForActivePatient(Context ctx) {
+        return findAll(DB.patients().getActive(ctx));
+    }
+
+    public List<Schedule> findAll(Patient p) {
+        return findAll(p.id());
+    }
+
+
+    public List<Schedule> findAll(Long patientId) {
+        try {
+            return dao.queryBuilder()
+                    .where().eq(Schedule.COLUMN_PATIENT, patientId)
+                    .query();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding models", e);
+        }
+    }
+
 
     @Override
     public Dao<Schedule, Long> getConcreteDao()

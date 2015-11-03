@@ -152,6 +152,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                 public Object call() throws Exception {
                     // save schedule
                     s.setMedicine(ScheduleHelper.instance().getSelectedMed());
+                    s.setPatient(DB.patients().getActive(getBaseContext()));
                     s.save();
 
                     Log.d(TAG, "Saving schedule..." + s.toString());

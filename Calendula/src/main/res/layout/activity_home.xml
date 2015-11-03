@@ -101,44 +101,6 @@
             />
 
 
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/user1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_icon="@drawable/avatar6"
-            fab:fab_colorNormal="@color/android_green_light_noalpha"
-            fab:fab_title="@string/schedule_type_routines_title"
-            fab:fab_colorPressed="@color/android_green"
-            />
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/user2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_icon="@drawable/avatar6"
-            fab:fab_colorNormal="@color/android_green_light_noalpha"
-            fab:fab_title="@string/schedule_type_routines_title"
-            fab:fab_colorPressed="@color/android_green"
-            />
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/user3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_icon="@drawable/avatar6"
-            fab:fab_colorNormal="@color/android_green_light_noalpha"
-            fab:fab_title="@string/schedule_type_routines_title"
-            fab:fab_colorPressed="@color/android_green"
-            />
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/user_all"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/android_green_light_noalpha"
-            fab:fab_title="@string/schedule_type_routines_title"
-            fab:fab_colorPressed="@color/android_green"
-            />
-
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 

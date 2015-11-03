@@ -157,9 +157,6 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             case R.id.action_remove:
                 ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).showDeleteConfirmationDialog(Medicine.findById(mMedicineId));
                 return true;
-//            case R.id.action_search:
-//                showSearchView();
-//                return true;
             default:
                 finish();
                 return true;

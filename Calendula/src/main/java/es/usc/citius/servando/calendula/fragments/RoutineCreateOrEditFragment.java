@@ -65,7 +65,6 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
             setRoutine(mRoutine);
             hour = mRoutine.time().getHourOfDay();
             minute = mRoutine.time().getMinuteOfHour();
-//            mConfirmButton.setText(getString(R.string.edit_routine_button_text));
         } else {
             DateTime now = DateTime.now();
             hour = now.getHourOfDay();
@@ -125,17 +124,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
         mRoutine = r;
         mNameTextView.setText(mRoutine.name());
         updateTime();
-//        mConfirmButton.setText(getString(R.string.edit_routine_button_text));
-
     }
-
-//    prievate void clear() {
-//        mRoutine = null;
-//        mNameTextView.setText("");
-//        mTimePicker.setCurrentHour(12);
-//        mTimePicker.setCurrentMinute(00);
-//        mConfirmButton.setText(getString(R.string.create_routine_button_text));
-//    }
 
 
     void updateTime() {
@@ -162,31 +151,15 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
             // if creating
             else {
                 mRoutine = new Routine(new LocalTime(hour, minute), name);
+                mRoutine.setPatient(DB.patients().getActive(getContext()));
                 Log.d(getTag(), "Routine created");
                 DB.routines().saveAndFireEvent(mRoutine);
-                //mRoutine.save();
                 if (mRoutineEditCallback != null) {
                     mRoutineEditCallback.onRoutineCreated(mRoutine);
                 }
             }
         } else {
             Snack.show(R.string.medicine_no_name_error_message, getActivity());
-//            mNameTextView.setError("Please, type a name");
-//            mNameTextView.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-//                    mNameTextView.setError(null);
-//                    mNameTextView.removeTextChangedListener(this);
-//                }
-//
-//                @Override
-//                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable editable) {
-//                }
-//            });
         }
     }
 
@@ -198,9 +171,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
 
         if (r.scheduleItems().size() > 0) {
             message = String.format(getString(R.string.remove_routine_message_long), r.name());
-            //message = "The routine " + r.name() + " has associated schedules that will be lost if you delete it. Do you want to remove it anyway?";
         } else {
-            //message = "Remove " + r.name() + " routine?";
             message = String.format(getString(R.string.remove_routine_message_short), r.name());
         }
 

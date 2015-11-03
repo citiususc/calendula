@@ -20,6 +20,7 @@ import java.util.List;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 
@@ -54,7 +55,7 @@ public class SelectMedicineListFragment extends Fragment {
             }
         });
 
-        mMedicines = Medicine.findAll();
+        mMedicines = DB.medicines().findAllForActivePatient(getContext());
         Collections.sort(mMedicines);
         adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
         listview.setAdapter(adapter);
@@ -117,7 +118,7 @@ public class SelectMedicineListFragment extends Fragment {
         Medicine m = Medicine.findById(id);
         if (m != null) {
             mMedicines.clear();
-            mMedicines.addAll(Medicine.findAll());
+            mMedicines.addAll(DB.medicines().findAllForActivePatient(getContext()));
             Collections.sort(mMedicines);
             mActivity.onMedicineSelected(m, false);
             adapter.notifyDataSetChanged();

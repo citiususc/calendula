@@ -53,6 +53,8 @@ public class Schedule {
 
     public static final String COLUMN_SCANNED = "Scanned";
 
+    public static final String COLUMN_PATIENT = "Patient";
+
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
 
@@ -82,6 +84,9 @@ public class Schedule {
 
     @DatabaseField(columnName = COLUMN_SCANNED)
     private boolean scanned;
+
+    @DatabaseField(columnName = COLUMN_PATIENT, foreign = true, foreignAutoRefresh = true)
+    private Patient patient;
 
     public RepetitionRule rule()
     {
@@ -172,6 +177,14 @@ public class Schedule {
 
     public float dose() {
         return dose;
+    }
+
+    public Patient patient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     // *************************************

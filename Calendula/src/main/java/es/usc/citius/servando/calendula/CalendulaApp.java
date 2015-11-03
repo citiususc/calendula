@@ -18,7 +18,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.SQLException;
 import java.util.Locale;
 
 import de.greenrobot.event.EventBus;
@@ -27,7 +26,6 @@ import es.usc.citius.servando.calendula.database.PatientDao;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
-import es.usc.citius.servando.calendula.util.AvatarMgr;
 
 /**
  * Created by castrelo on 4/10/14.
@@ -89,39 +87,39 @@ public class CalendulaApp extends Application {
     }
 
     private void createDefaultPatient(Context ctx) {
-        try {
-            if(DB.patients().countOf() <= 0){
-                // Create default
-                Patient p = new Patient();
-                p.setName("Usuario"); // R.string.default_patient_name
-                p.setDefault(true);
-                DB.patients().save(p);
-                SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(ctx);
-                prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT,p.id()).commit();
-            }
-
-            // For testing purposes
-            if(DB.patients().countOf() <= 1){
-
-                // Create default
-                Patient p = new Patient();
-                p.setName("Angel"); // R.string.default_patient_name
-                p.setAvatar(AvatarMgr.AVATAR_5);
-                DB.patients().save(p);
-
-                p = new Patient();
-                p.setName("Avó"); // R.string.default_patient_name
-                p.setAvatar(AvatarMgr.AVATAR_2);
-                DB.patients().save(p);
-
-                p = new Patient();
-                p.setName("Mamá"); // R.string.default_patient_name
-                p.setAvatar(AvatarMgr.AVATAR_7);
-                DB.patients().save(p);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            if(DB.patients().countOf() <= 0){
+//                // Create default
+//                Patient p = new Patient();
+//                p.setName("Usuario"); // R.string.default_patient_name
+//                p.setDefault(true);
+//                DB.patients().save(p);
+//                SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(ctx);
+//                prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT,p.id()).commit();
+//            }
+//
+//            // For testing purposes
+//            if(DB.patients().countOf() <= 1){
+//
+//                // Create default
+//                Patient p = new Patient();
+//                p.setName("Angel"); // R.string.default_patient_name
+//                p.setAvatar(AvatarMgr.AVATAR_5);
+//                DB.patients().save(p);
+//
+//                p = new Patient();
+//                p.setName("Avó"); // R.string.default_patient_name
+//                p.setAvatar(AvatarMgr.AVATAR_2);
+//                DB.patients().save(p);
+//
+//                p = new Patient();
+//                p.setName("Mamá"); // R.string.default_patient_name
+//                p.setAvatar(AvatarMgr.AVATAR_7);
+//                DB.patients().save(p);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public static boolean isPharmaModeEnabled(Context ctx){
@@ -140,6 +138,16 @@ public class CalendulaApp extends Application {
 
     public void initializeDatabase() {
         DB.init(this);
+        try{
+            if(DB.patients().countOf() == 1) {
+                SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(this);
+                Patient p = DB.patients().getDefault();
+                prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).commit();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override

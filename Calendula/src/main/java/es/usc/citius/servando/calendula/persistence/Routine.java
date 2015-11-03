@@ -19,6 +19,7 @@ public class Routine {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_TIME = "Time";
     public static final String COLUMN_NAME = "Name";
+    public static final String COLUMN_PATIENT = "Patient";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
@@ -29,10 +30,19 @@ public class Routine {
     @DatabaseField(columnName = COLUMN_NAME)
     private String name;
 
+    @DatabaseField(columnName = COLUMN_PATIENT, foreign = true, foreignAutoRefresh = true)
+    private Patient patient;
+
     public Routine() {
     }
 
     public Routine(LocalTime time, String name) {
+        this.time = time;
+        this.name = name;
+    }
+
+    public Routine(Patient p, LocalTime time, String name) {
+        this.patient = p;
         this.time = time;
         this.name = name;
     }
@@ -69,6 +79,14 @@ public class Routine {
         this.time = time;
     }
 
+    public Patient patient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
     // *************************************
     // DB queries
     // *************************************
@@ -92,6 +110,7 @@ public class Routine {
     public List<ScheduleItem> scheduleItems() {
         return DB.scheduleItems().findByRoutine(this);
     }
+
 
 
 }

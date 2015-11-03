@@ -89,6 +89,7 @@ public class HomeActivity extends CalendulaActivity
     private AppTutorial tutorial;
     private LeftDrawerMgr drawerMgr;
     private FloatingActionButton fab;
+    private Patient activePatient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +101,7 @@ public class HomeActivity extends CalendulaActivity
         initializeDrawer(savedInstanceState);
         setupStatusBar(Color.TRANSPARENT);
         subscribeToEvents();
-
+        activePatient = DB.patients().getActive(this);
         // initialize current and previous action bar colors
         currentActionBarColor = getResources().getColor(R.color.transparent);
         previousActionBarColor = getResources().getColor(R.color.transparent);
@@ -439,13 +440,13 @@ public class HomeActivity extends CalendulaActivity
 
         switch (page) {
             case 1:
-                title = getString(R.string.title_activity_routines);
+                title = getString(R.string.title_activity_routines) + " de " + activePatient.name();
                 break;
             case 2:
-                title = getString(R.string.title_activity_medicines);
+                title = getString(R.string.title_activity_medicines) + " de " + activePatient.name();
                 break;
             case 3:
-                title = getString(R.string.title_activity_schedules);
+                title = getString(R.string.title_activity_schedules) + " de " + activePatient.name();
                 break;
             default:
                 title = "";
@@ -500,7 +501,8 @@ public class HomeActivity extends CalendulaActivity
             ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
             ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
         }else if(evt instanceof PersistenceEvents.ActiveUserChangeEvent){
-            // TODO
+            activePatient = ((PersistenceEvents.ActiveUserChangeEvent) evt).patient;
+            updateTitle(mViewPager.getCurrentItem());
         }
 
 

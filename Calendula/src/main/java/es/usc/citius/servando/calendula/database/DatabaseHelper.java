@@ -8,6 +8,7 @@ import android.util.Log;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.misc.TransactionManager;
+import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -94,10 +95,21 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 TableUtils.createTable(connectionSource, c);
             }
 
+            createDefaultPatient();
+
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
             throw new RuntimeException(e);
         }
+    }
+
+    private Patient createDefaultPatient() throws SQLException{
+        // Create a default patient
+        Patient p = new Patient();
+        p.setName("Usuario");
+        p.setDefault(true);
+        getPatientDao().create(p);
+        return p;
     }
 
     /**
@@ -156,12 +168,27 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     /**
      * Method that migrate models to multi-user
      */
-    private void migrateToMultiPatient() {
-        // Steps TODO:
-        // Create a default patient
-        // add patient references where needed
-        // assign all routines and schedules to the default patient
-        // getSchedulesDao().executeRaw("ALTER TABLE Routines ADD COLUMN Patient TEXT;");
+    private void migrateToMultiPatient() throws SQLException{
+
+        // add patient column to routines, schedules and medicines
+        getRoutinesDao().executeRaw("ALTER TABLE Routines ADD COLUMN Patient INTEGER;");
+        getRoutinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN Patient INTEGER;");
+        getRoutinesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Patient INTEGER;");
+
+        Patient p = createDefaultPatient();
+        // SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences();
+        // prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).commit();
+
+        // Assign all routines to the default patient
+        UpdateBuilder<Routine,Long> rUpdateBuilder = getRoutinesDao().updateBuilder();
+        rUpdateBuilder.updateColumnValue(Routine.COLUMN_PATIENT,p.id());
+        rUpdateBuilder.update();
+
+        UpdateBuilder<Schedule,Long> sUpdateBuilder = getSchedulesDao().updateBuilder();
+        sUpdateBuilder.updateColumnValue(Schedule.COLUMN_PATIENT,p.id());
+        sUpdateBuilder.update();
+
+
     }
 
     /**

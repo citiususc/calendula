@@ -27,8 +27,10 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.List;
 
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.util.Snack;
@@ -50,7 +52,7 @@ public class MedicinesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_medicines_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.medicines_list);
-        mMedicines = DB.medicines().findAll();
+        mMedicines = DB.medicines().findAllForActivePatient(getContext());
         adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
         listview.setAdapter(adapter);
 
@@ -83,7 +85,7 @@ public class MedicinesListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            mMedicines = DB.medicines().findAll();
+            mMedicines = DB.medicines().findAllForActivePatient(getContext());
 
             return null;
         }
@@ -370,5 +372,26 @@ public class MedicinesListFragment extends Fragment {
 
         }
     };
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        CalendulaApp.eventBus().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        CalendulaApp.eventBus().unregister(this);
+        super.onStop();
+    }
+
+    // Method called from the event bus
+    @SuppressWarnings("unused")
+    public void onEvent(Object evt) {
+        if(evt instanceof PersistenceEvents.ActiveUserChangeEvent){
+            notifyDataChange();
+        }
+    }
 
 }

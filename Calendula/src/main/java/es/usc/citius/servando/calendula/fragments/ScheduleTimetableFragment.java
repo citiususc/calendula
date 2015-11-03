@@ -48,6 +48,7 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.fragments.dosePickers.DefaultDosePickerFragment;
 import es.usc.citius.servando.calendula.fragments.dosePickers.DosePickerFragment;
 import es.usc.citius.servando.calendula.fragments.dosePickers.LiquidDosePickerFragment;
@@ -757,7 +758,7 @@ public class ScheduleTimetableFragment extends Fragment
                 break;
             }
         }
-        addTimetableEntries(timesPerDay, Routine.findAll());
+        addTimetableEntries(timesPerDay, DB.routines().findAllForActivePatient(getContext()));
     }
 
     void setupDaySelectionListeners(final View rootView) {
@@ -942,7 +943,7 @@ public class ScheduleTimetableFragment extends Fragment
 
     String[] getUpdatedRoutineNames() {
 
-        List<Routine> routines = Routine.findAll();
+        List<Routine> routines = DB.routines().findAllForActivePatient(getContext());
 
         int j = 0;
         String[] routineNames = new String[routines.size() + 1];
