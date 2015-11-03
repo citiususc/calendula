@@ -5,8 +5,6 @@ import android.view.View;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +15,6 @@ import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.ScanActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.fragments.ScheduleTypeFragment;
-import es.usc.citius.servando.calendula.util.IconUtils;
 
 /**
  * Helper to manage the home screen floating action button behaviour
@@ -29,11 +26,8 @@ public class FabMenuMgr implements View.OnClickListener{
     FloatingActionsMenu fabMenu;
     FloatingActionButton fab;
     HomeActivity activity;
-
-    List<FloatingActionButton> homeActions;
     List<FloatingActionButton> scheduleActions;
     FloatingActionButton scanQrAction;
-    FloatingActionButton all;
 
     private int currentPage = 0;
 
@@ -43,10 +37,7 @@ public class FabMenuMgr implements View.OnClickListener{
         this.fabMenu = fabMenu;
         this.activity = activity;
         this.drawerMgr = drawerMgr;
-        this.homeActions = getHomeActions();
         this.scheduleActions = getScheduleActions();
-
-
     }
 
     private List<FloatingActionButton> getScheduleActions() {
@@ -59,9 +50,7 @@ public class FabMenuMgr implements View.OnClickListener{
         actions.add(actionA);
         actions.add(actionB);
         actions.add(actionC);
-
         scanQrAction = (FloatingActionButton) fabMenu.findViewById(R.id.action_d);
-
         if(CalendulaApp.isPharmaModeEnabled(activity)) {
             scanQrAction.setVisibility(View.VISIBLE);
             actions.add(scanQrAction);
@@ -71,95 +60,44 @@ public class FabMenuMgr implements View.OnClickListener{
         return actions;
     }
 
-    private List<FloatingActionButton> getHomeActions() {
-        ArrayList<FloatingActionButton> actions = new ArrayList<>();
-        all = (FloatingActionButton) fabMenu.findViewById(R.id.user_all);
-        all.setIconDrawable(IconUtils.icon(activity, GoogleMaterial.Icon.gmd_group, R.color.white, 36));
-        all.setTitle("Todos");
-        updateHomeActions(actions);
-        return actions;
-    }
-
-    private void updateHomeActions(List<FloatingActionButton> actions){
-        int[] ids = new int[]{R.id.user1, R.id.user2, R.id.user3};
-        ArrayList<IProfile> profiles = drawerMgr.header().getProfiles();
-
-        // First one is "Add patient"
-        for(int i = 1; i < Math.min(ids.length,profiles.size()); i++){
-
-            FloatingActionButton userFab;
-
-            if(i < actions.size()){
-                userFab = actions.get(i);
-                IProfile p = profiles.get(i);
-                userFab.setIcon(p.getIcon().getIconRes());
-                userFab.setTitle(p.getName().getText());
-            }else{
-                userFab = (FloatingActionButton) fabMenu.findViewById(ids[i]);
-                IProfile p = profiles.get(i);
-                userFab.setIcon(p.getIcon().getIconRes());
-                userFab.setTitle(p.getName().getText());
-                actions.add(userFab);
-            }
-        }
-    }
 
     public void init() {
 
-        for(FloatingActionButton f : homeActions){
-            f.setOnClickListener(this);
-        }
         for(FloatingActionButton f : scheduleActions){
             f.setOnClickListener(this);
         }
 
         fab.setOnClickListener(this);
-
         onViewPagerItemChange(0);
     }
 
     public void onViewPagerItemChange(int currentPage){
+
         this.currentPage = currentPage;
 
         fab.setColorNormalResId(getFabColor(currentPage));
         fab.setColorPressedResId(getFabPressedColor(currentPage));
 
         switch (currentPage){
-            case 0:
-                for(FloatingActionButton f : homeActions){
-                    f.setVisibility(View.GONE);
-                }
-                for(FloatingActionButton f : scheduleActions){
-                    f.setVisibility(View.GONE);
-                }
-                all.setVisibility(View.GONE);
-                fab.setVisibility(View.GONE);
-                fabMenu.setVisibility(View.GONE);
-                scanQrAction.setVisibility(View.GONE);
-                break;
 
+            case 0:
+                fabMenu.setVisibility(View.GONE);
+                fab.setVisibility(View.GONE);
+                break;
             case 1:
             case 2:
-                for(FloatingActionButton f : homeActions){
-                    f.setVisibility(View.GONE);
-                }
                 for(FloatingActionButton f : scheduleActions){
                     f.setVisibility(View.GONE);
                 }
-                all.setVisibility(View.GONE);
                 fabMenu.setVisibility(View.GONE);
                 fab.setVisibility(View.VISIBLE);
                 fab.bringToFront();
                 break;
 
             case 3:
-                for(FloatingActionButton f : homeActions){
-                    f.setVisibility(View.GONE);
-                }
                 for(FloatingActionButton f : scheduleActions){
                     f.setVisibility(View.VISIBLE);
                 }
-                all.setVisibility(View.GONE);
                 fab.setVisibility(View.GONE);
                 fabMenu.setVisibility(View.VISIBLE);
                 fabMenu.bringToFront();
