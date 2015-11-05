@@ -18,7 +18,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.melnykov.fab.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.util.Collections;
 import java.util.List;
@@ -112,7 +112,7 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
             ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     this,
                     new Pair<>(view.findViewById(R.id.patient_avatar), "transition"),
-                    new Pair<>(view.findViewById(R.id.patient_avatar_bg), "background")
+                    new Pair<>(findViewById(R.id.add_button), "fab")
             );
             ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
         } else

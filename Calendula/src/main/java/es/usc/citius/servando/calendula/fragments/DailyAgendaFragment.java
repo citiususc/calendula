@@ -90,7 +90,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         items = new ArrayList<>();
-        items.addAll(buildItems()); // allow user to change day
+
     }
 
     public void showReminder(Routine r) {
@@ -176,9 +176,9 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                                 translationY = 0;
                             }
 
-                            if (translationY < toolbarHeight - profileFragmentHeight) {
+                            if (translationY < toolbarHeight - profileFragmentHeight + statusbarHeight) {
                                 ((HomeActivity) getActivity()).hideToolbar();
-                            } else if (translationY > (toolbarHeight - profileFragmentHeight)) {
+                            } else if (translationY > (toolbarHeight - profileFragmentHeight + statusbarHeight)) {
                                 ((HomeActivity) getActivity()).showToolbar();
                             }
                             userInfoFragment.setTranslationY(translationY);
@@ -192,6 +192,8 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
 
         LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.list_animation);
         listview.setLayoutAnimation(controller);
+
+
 
         new LoadDailyAgendaTask().execute(null, null, null);
 

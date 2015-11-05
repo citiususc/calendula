@@ -54,6 +54,11 @@
     <color name="drawerbg_default">#272727</color>
     <color name="drawerbg">#3c3c3c</color>
 
+    <color name="fab_light_normal">#efefef</color>
+    <color name="fab_light_pressed">#b7b7b7</color>
+    <color name="fab_dark_normal">#272727</color>
+    <color name="fab_dark_pressed">#373737</color>
+
     <!-- List items -->
     <color name="list_item_selector_normal">#00111111</color>
     <color name="drawer_item_disabled">#22222222</color>

@@ -1,11 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 tools:context="es.usc.citius.servando.calendula.activities.PatientDetailActivity"
                 android:id="@+id/bg"
                 android:background="#fff"
                 android:paddingTop="@dimen/status_bar_height">
+
 
 
 
@@ -14,7 +16,7 @@
         android:layout_height="200dp"
         android:id="@+id/top"
         android:transitionName="background"
-        android:background="#567678">
+        android:background="@color/android_blue_dark">
 
         <View
             android:layout_width="fill_parent"
@@ -26,19 +28,23 @@
         <ImageView
             android:id="@+id/patient_avatar"
             android:transitionName="transition"
-            android:layout_width="wrap_content"
+            android:layout_width="140dp"
             android:src="@drawable/avatar_default"
-            android:layout_height="130dp"
+            android:layout_height="140dp"
             android:scaleType="fitCenter"
             android:padding="0dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
 
+
+
+
+
+
     <android.support.v7.widget.Toolbar
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -69,27 +75,39 @@
         android:layout_marginTop="30dp"
         android:gravity="center_vertical"
         android:text="Name"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/dark_grey_text"
         android:textSize="20sp" />
 
 
-    <ImageView
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Añadir rutinas por defecto"
+        android:id="@+id/checkBox"
+        android:layout_below="@+id/patient_name"
+        android:layout_alignLeft="@+id/patient_name"
+        android:layout_marginTop="36dp"
+        android:elegantTextHeight="false"
+        android:textColor="@color/dark_grey_text"
+        android:textSize="16sp"/>
 
+    <com.mikepenz.iconics.view.IconicsImageView
+        app:iiv_color="@color/dark_grey_home"
+        app:iiv_icon="cmd-account"
+        app:iiv_padding="3dp"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_below="@+id/top"
-        android:layout_marginLeft="16dp"
-        android:src="@drawable/ic_edit_black_48dp"
+        android:layout_marginLeft="18dp"
         android:layout_marginTop="30dp"/>
+
 
     <RelativeLayout
         android:id="@+id/grid_container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:visibility="gone"
-        android:layout_below="@+id/top"
-        android:background="#fff">
+        android:visibility="visible"
+        android:layout_below="@+id/top">
 
 
         <GridView
@@ -98,55 +116,40 @@
             android:layout_height="match_parent"
             android:horizontalSpacing="20dp"
             android:numColumns="3"
-            android:verticalSpacing="20dp"
+            android:verticalSpacing="0dp"
             android:scrollbars="none"
-            android:layout_centerInParent="true"
             android:paddingLeft="20dp"
             android:paddingTop="0dp"
             android:paddingRight="20dp"
             android:paddingBottom="0dp"
-            android:layout_below="@+id/select_avatar_message"/>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="10dp"
-            android:background="@drawable/presentation_box_shadow_top"
-            android:alpha="0.5"
-            android:layout_below="@+id/select_avatar_message"
-            android:id="@+id/shadow_top"/>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="10dp"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/presentation_box_shadow_bottom"
-            android:alpha="0.5"/>
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:background="@color/android_green"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Selecciona un avatar"
-            android:id="@+id/select_avatar_message"
-            android:gravity="center_vertical"
-            android:paddingLeft="28dp"
-            android:textColor="#fff"/>
-
-        <ImageButton
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentRight="true"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            style="?android:attr/borderlessButtonStyle"
-            android:src="@drawable/ic_cancel_white_48dp"
-            android:id="@+id/close_avatar_selector_button"
-            android:alpha="0.8"
-            android:layout_marginRight="10dp"
-            android:padding="10dp"
-            android:scaleType="fitCenter"/>
+            android:layout_alignParentTop="true"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="10dp"
+        android:background="@drawable/presentation_box_shadow_top"
+        android:alpha="0.4"
+        android:layout_below="@+id/top"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/avatar_change"
+        android:transitionName="fab"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="-35dp"
+        android:layout_marginRight="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/top"
+        fab:fab_icon="@drawable/ic_autorenew_white_48dp"
+        fab:fab_colorNormal="#efefef"
+        fab:fab_colorPressed="#b7b7b7"
+        />
 
 </RelativeLayout>

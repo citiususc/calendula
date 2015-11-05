@@ -39,17 +39,18 @@
         android:paddingBottom="10dp"
         android:paddingTop="15dp"/>
 
-    <com.melnykov.fab.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
-                                           android:id="@+id/add_button"
-                                           android:layout_width="wrap_content"
-                                           android:layout_height="wrap_content"
-                                           android:layout_gravity="bottom|right"
-                                           android:layout_margin="16dp"
-                                           android:src="@drawable/ic_action_add"
-                                           fab:fab_colorNormal="@color/dark_grey_home"
-                                           fab:fab_colorPressed="#222"
-                                           fab:fab_colorRipple="@color/dark_grey_text"
-                                           android:layout_alignParentBottom="true"
-                                           android:layout_alignParentRight="true" />
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/add_button"
+        android:layout_margin="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:transitionName="fab"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        fab:fab_icon="@drawable/ic_action_add"
+        fab:fab_colorNormal="@color/fab_dark_normal"
+        fab:fab_colorPressed="@color/fab_dark_pressed"
+        />
 
 </RelativeLayout>
