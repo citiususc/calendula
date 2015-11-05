@@ -23,7 +23,6 @@ import android.widget.TextView;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.HomeActivity;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 /**
  * Start activity:
@@ -57,11 +56,10 @@ public class StartActivity extends Activity {
         if(action != ACTION_DEFAULT || CalendulaApp.isOpen()){
             CalendulaApp.open(true);
             handleAction();
+            overridePendingTransition(0, 0);
             finish();
-            overridePendingTransition(0,0);
         }else{
             CalendulaApp.open(true);
-            ScreenUtils.setStatusBarColor(this, getResources().getColor(R.color.white));
             bg = findViewById(R.id.background);
             brand = (ImageView) findViewById(R.id.splash_brand);
             quote = (TextView) findViewById(R.id.splash_quote);
