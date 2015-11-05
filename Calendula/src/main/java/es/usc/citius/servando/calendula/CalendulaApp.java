@@ -34,6 +34,8 @@ public class CalendulaApp extends Application {
 
     public static boolean disableReceivers = false;
 
+    private static boolean isOpen;
+
     public static final String PHARMACY_MODE_ENABLED = "PHARMACY_MODE_ENABLED";
 
     // PREFERENCES
@@ -66,6 +68,14 @@ public class CalendulaApp extends Application {
     public static final int RQ_DELAY_ROUTINE = 2;
     
     private static EventBus eventBus = EventBus.getDefault();
+
+    public static boolean isOpen() {
+        return isOpen;
+    }
+
+    public static void open(boolean isOpen) {
+        CalendulaApp.isOpen = isOpen;
+    }
 
 
     @Override
