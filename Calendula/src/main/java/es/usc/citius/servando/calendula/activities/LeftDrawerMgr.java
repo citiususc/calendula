@@ -117,7 +117,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                                 .withIdentifier(HOME),
                         new PrimaryDrawerItem()
                                 .withName("Pacientes")
-                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_account, R.color.dark_grey_home))
+                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_account_multiple, R.color.dark_grey_home))
                                 .withIdentifier(PATIENTS),
                         new DividerDrawerItem(),
                         new PrimaryDrawerItem()
@@ -126,7 +126,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                                 .withIdentifier(ROUTINES),
                         new PrimaryDrawerItem()
                                 .withName(R.string.title_activity_medicines)
-                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_pill, R.color.android_pink_dark))
+                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_hospital, R.color.android_pink_dark))
                                 .withIdentifier(MEDICINES),
                         new PrimaryDrawerItem()
                                 .withName(R.string.title_activity_schedules)
