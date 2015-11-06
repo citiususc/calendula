@@ -1,5 +1,6 @@
 package es.usc.citius.servando.calendula.fragments;
 
+import android.animation.Animator;
 import android.animation.FloatEvaluator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -11,9 +12,11 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.view.animation.LinearInterpolator;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -27,7 +30,6 @@ import com.tjerkw.slideexpandable.library.SlideExpandableListAdapter;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -55,12 +57,13 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
     DailyAgendaItemStubComparator dailyAgendaItemStubComparator =
             new DailyAgendaItemStubComparator();
     List<DailyAgendaItemStub> items = new ArrayList<>();
-    HomeUserInfoFragment userProInfoFragment;
+    HomeProfileMgr homeProfileMgr;
 
     ArrayAdapter adapter = null;
     ListView listview = null;
     int lastScroll = 0;
     View userInfoFragment;
+    View emptyListPlaceholder;
     boolean showPlaceholder = false;
     boolean expanded = false;
     int profileFragmentHeight = 0;
@@ -70,43 +73,15 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
     private int toolbarHeight;
     private int statusbarHeight;
     private int lastVisibleItemCount;
-    private Dictionary<Integer, Integer> listViewItemHeights = new Hashtable<Integer, Integer>();
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        try {
-            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
-            childFragmentManager.setAccessible(true);
-            childFragmentManager.set(this, null);
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private Dictionary<Integer, Integer> listViewItemHeights = new Hashtable<>();
+    private boolean isEmpty = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         items = new ArrayList<>();
+        homeProfileMgr = new HomeProfileMgr();
 
-    }
-
-    public void showReminder(Routine r) {
-        zoomHelper.remind(getActivity(), r);
-    }
-
-    public void showReminder(Schedule s, LocalTime t) {
-        zoomHelper.remind(getActivity(), s, t);
-    }
-
-    public void showDelayDialog(Routine r) {
-        zoomHelper.showDelayDialog(r);
-    }
-
-    public void showDelayDialog(Schedule s, LocalTime t) {
-        zoomHelper.showDelayDialog(s, t);
     }
 
     @Override
@@ -115,21 +90,13 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
 
         View rootView = inflater.inflate(R.layout.fragment_daily_agenda, container, false);
         listview = (ListView) rootView.findViewById(R.id.listview);
-
         inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
-        Log.d(getTag(), "Fragments: " + (getChildFragmentManager().getFragments() != null
-                ? getChildFragmentManager().getFragments().size() : 0));
-        userProInfoFragment = HomeUserInfoFragment.newInstance();
         profileFragmentHeight = (int) getResources().getDimension(R.dimen.header_height);
         toolbarHeight = (int) getResources().getDimension(R.dimen.action_bar_height);
         statusbarHeight = (int) getResources().getDimension(R.dimen.status_bar_height);
-
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.user_info_fragment, userProInfoFragment)
-                .commit();
-
         userInfoFragment = rootView.findViewById(R.id.user_info_fragment);
+        emptyListPlaceholder = rootView.findViewById(R.id.empty_list_container);
         zoomContainer = rootView.findViewById(R.id.zoom_container);
         zoomHelper = new AgendaZoomHelper(zoomContainer, getActivity(),
                 new AgendaZoomHelper.ZoomHelperListener() {
@@ -193,12 +160,54 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.list_animation);
         listview.setLayoutAnimation(controller);
 
-
-
-        new LoadDailyAgendaTask().execute(null, null, null);
+        homeProfileMgr.init(userInfoFragment, getActivity(),new Runnable() {
+            @Override
+            public void run() {
+                new LoadDailyAgendaTask().execute(null, null, null);
+            }
+        });
 
         return rootView;
     }
+
+    private void showEmptyView() {
+        backgroundRevealIn();
+    }
+
+    private void backgroundRevealIn() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            emptyListPlaceholder.setVisibility(View.VISIBLE);
+            View reveal = emptyListPlaceholder.findViewById(R.id.empty_reveal);
+            // get the center for the clipping circle
+            int cx = reveal.getWidth()/2 ;
+            int cy = reveal.getTop();
+            // get the final radius for the clipping circle
+            int finalRadius =  (int) Math.hypot(emptyListPlaceholder.getWidth(), emptyListPlaceholder.getHeight());
+            // create the animator for this view (the start radius is zero)
+            Animator anim = ViewAnimationUtils.createCircularReveal(reveal, cx, cy, 0, finalRadius);
+            anim.setInterpolator(new LinearInterpolator());
+            // make the view visible and start the animation
+            reveal.setVisibility(View.VISIBLE);
+            anim.setDuration(600).start();
+        }
+    }
+
+    public void showReminder(Routine r) {
+        zoomHelper.remind(getActivity(), r);
+    }
+
+    public void showReminder(Schedule s, LocalTime t) {
+        zoomHelper.remind(getActivity(), s, t);
+    }
+
+    public void showDelayDialog(Routine r) {
+        zoomHelper.showDelayDialog(r);
+    }
+
+    public void showDelayDialog(Schedule s, LocalTime t) {
+        zoomHelper.showDelayDialog(s, t);
+    }
+
 
     private int getScroll() {
         View c = listview.getChildAt(0); //this is the first visible row
@@ -306,6 +315,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         if (items.size() == 1) {
             showPlaceholder = true;
             addEmptyPlaceholder(items);
+            isEmpty = true;
         }
 
         Collections.sort(items, dailyAgendaItemStubComparator);
@@ -514,10 +524,12 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
 
         @Override
         protected void onPostExecute(final Void result) {
-            adapter = new AgendaItemAdapter(getActivity(), R.layout.daily_view_hour, items);
-            slideAdapter =
-                    new SlideExpandableListAdapter(adapter, R.id.count_container, R.id.bottom, 1);
+            adapter = new AgendaItemAdapter(getActivity(), R.layout.daily_view_empty_hour, items);
+            slideAdapter = new SlideExpandableListAdapter(adapter, R.id.count_container, R.id.bottom, 1);
             listview.setAdapter(slideAdapter);
+            if(isEmpty){
+                // showEmptyView();
+            }
         }
     }
 

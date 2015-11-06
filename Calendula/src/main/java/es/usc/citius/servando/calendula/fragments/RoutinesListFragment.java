@@ -41,7 +41,7 @@ public class RoutinesListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_routines_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.routines_list);
         mRoutines = DB.routines().findAllForActivePatient(getContext());
-        adapter = new RoutinesListAdapter(getActivity(), R.layout.daily_view_hour, mRoutines);
+        adapter = new RoutinesListAdapter(getActivity(), R.layout.routines_list_item, mRoutines);
         listview.setAdapter(adapter);
         return rootView;
     }

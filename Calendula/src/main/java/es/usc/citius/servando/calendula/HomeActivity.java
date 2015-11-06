@@ -96,7 +96,6 @@ public class HomeActivity extends CalendulaActivity
         super.onCreate(savedInstanceState);
         // set the content view layout
         setContentView(R.layout.activity_home);
-
         setupToolbar(null, Color.TRANSPARENT);
         initializeDrawer(savedInstanceState);
         setupStatusBar(Color.TRANSPARENT);
