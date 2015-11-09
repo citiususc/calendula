@@ -9,7 +9,7 @@
         android:id="@+id/bottom"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:visibility="invisible">
+        >
 
 
     </RelativeLayout>

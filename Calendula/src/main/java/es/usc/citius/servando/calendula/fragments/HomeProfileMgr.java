@@ -154,6 +154,7 @@ public class HomeProfileMgr {
                 .load("file:///android_asset/" + getRandomBackgroundPath())
                 .resize(background.getWidth(),background.getHeight())
                 .placeholder(background.getDrawable())
+                .centerCrop()
                 .into(background);
     }
 

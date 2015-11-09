@@ -24,7 +24,7 @@ public class DailyAgendaItemStub {
     public boolean isEmptyPlaceholder = false;
     public boolean isRoutine = true;
     public boolean isNext = false;
-    public boolean hasEvents;
+    public boolean hasEvents = false;
     public List<DailyAgendaItemStubElement> meds;
     public String title = "";
     public LocalTime time;
@@ -32,6 +32,7 @@ public class DailyAgendaItemStub {
     public int hour;
     public int minute;
     public Patient patient;
+    public boolean isExpanded = false;
 
     public DailyAgendaItemStub(LocalTime time)
     {
@@ -101,6 +102,21 @@ public class DailyAgendaItemStub {
         }
 
         return items;
+    }
+
+    @Override
+    public String toString() {
+        return "DailyAgendaItemStub{" +
+                "isSpacer=" + isSpacer +
+                ", isEmptyPlaceholder=" + isEmptyPlaceholder +
+                ", isRoutine=" + isRoutine +
+                ", isNext=" + isNext +
+                ", hasEvents=" + hasEvents +
+                ", title='" + title + '\'' +
+                ", hour=" + hour +
+                ", minute=" + minute +
+                ", isExpanded=" + isExpanded +
+                '}';
     }
 
     public static class DailyAgendaItemStubElement

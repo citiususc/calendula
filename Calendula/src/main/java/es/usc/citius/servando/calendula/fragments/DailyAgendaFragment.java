@@ -1,31 +1,20 @@
 package es.usc.citius.servando.calendula.fragments;
 
-import android.animation.Animator;
-import android.animation.FloatEvaluator;
-import android.animation.ObjectAnimator;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
-import android.view.animation.LinearInterpolator;
-import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-
-import com.tjerkw.slideexpandable.library.SlideExpandableListAdapter;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -38,6 +27,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.DailyAgendaRecyclerAdapter;
 import es.usc.citius.servando.calendula.HomeActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.AgendaZoomHelper;
@@ -59,22 +49,26 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
     List<DailyAgendaItemStub> items = new ArrayList<>();
     HomeProfileMgr homeProfileMgr;
 
-    ArrayAdapter adapter = null;
-    ListView listview = null;
+    //ArrayAdapter adapter = null;
+    //ListView listview = null;
     int lastScroll = 0;
     View userInfoFragment;
-    View emptyListPlaceholder;
+    //View emptyListPlaceholder;
     boolean showPlaceholder = false;
     boolean expanded = false;
-    int profileFragmentHeight = 0;
+
     View zoomContainer;
     AgendaZoomHelper zoomHelper;
-    private SlideExpandableListAdapter slideAdapter;
+    //private SlideExpandableListAdapter slideAdapter;
     private int toolbarHeight;
     private int statusbarHeight;
     private int lastVisibleItemCount;
     private Dictionary<Integer, Integer> listViewItemHeights = new Hashtable<>();
     private boolean isEmpty = false;
+
+    RecyclerView rv;
+    DailyAgendaRecyclerAdapter rvAdapter;
+    private DailyAgendaRecyclerAdapter.AgendaItemClickListener rvListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,14 +83,11 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_daily_agenda, container, false);
-        listview = (ListView) rootView.findViewById(R.id.listview);
+        rv = (RecyclerView) rootView.findViewById(R.id.rv);
         inflater.inflate(R.layout.fragment_edit_profile, container, false);
-
-        profileFragmentHeight = (int) getResources().getDimension(R.dimen.header_height);
         toolbarHeight = (int) getResources().getDimension(R.dimen.action_bar_height);
         statusbarHeight = (int) getResources().getDimension(R.dimen.status_bar_height);
         userInfoFragment = rootView.findViewById(R.id.user_info_fragment);
-        emptyListPlaceholder = rootView.findViewById(R.id.empty_list_container);
         zoomContainer = rootView.findViewById(R.id.zoom_container);
         zoomHelper = new AgendaZoomHelper(zoomContainer, getActivity(),
                 new AgendaZoomHelper.ZoomHelperListener() {
@@ -104,7 +95,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                     public void onChange() {
                         items.clear();
                         items.addAll(buildItems()); // allow user to change day
-                        adapter.notifyDataSetChanged();
+                        rvAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -118,78 +109,36 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                     }
                 });
 
-        if (Build.VERSION.SDK_INT >= 11) {
-            listview.setOnScrollListener(new AbsListView.OnScrollListener() {
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        rv.setLayoutManager(llm);
+        rvAdapter = new DailyAgendaRecyclerAdapter(items);
+        rv.setAdapter(rvAdapter);
+        rv.setItemAnimator(new DefaultItemAnimator());
 
-                @Override
-                public void onScrollStateChanged(AbsListView absListView, int i) {
+        rvListener = new DailyAgendaRecyclerAdapter.AgendaItemClickListener() {
+            @Override
+            public void onClick(View v, DailyAgendaItemStub item) {
 
+                Log.d(TAG, "OnRcycleViewItemClick" + item.toString());
+
+                if (item.isRoutine) {
+                    zoomHelper.show(getActivity(), v, Routine.findById(item.id));
+                } else {
+                    zoomHelper.show(getActivity(), v, Schedule.findById(item.id),new LocalTime(item.hour, item.minute));
                 }
+            }
+        };
 
-                @Override
-                public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        rvAdapter.setListener(rvListener);
 
-                    if (expanded && getUserVisibleHint()) { // expanded and visible
-                        int scrollY = getScroll();
-                        int scrollDiff = (scrollY - lastScroll);
-
-                        if (Math.abs(lastVisibleItemCount - visibleItemCount) <= 5) {
-
-                            int translationY = (int) (userInfoFragment.getTranslationY() - scrollDiff);
-
-                            if (translationY < -profileFragmentHeight) {
-                                translationY = -profileFragmentHeight;
-                            } else if (translationY >= 0) {
-                                translationY = 0;
-                            }
-
-                            if (translationY < toolbarHeight - profileFragmentHeight + statusbarHeight) {
-                                ((HomeActivity) getActivity()).hideToolbar();
-                            } else if (translationY > (toolbarHeight - profileFragmentHeight + statusbarHeight)) {
-                                ((HomeActivity) getActivity()).showToolbar();
-                            }
-                            userInfoFragment.setTranslationY(translationY);
-                        }
-                        lastScroll = scrollY;
-                    }
-                    lastVisibleItemCount = visibleItemCount;
-                }
-            });
-        }
-
-        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.list_animation);
-        listview.setLayoutAnimation(controller);
-
-        homeProfileMgr.init(userInfoFragment, getActivity(),new Runnable() {
+        homeProfileMgr.init(userInfoFragment, getActivity(), new Runnable() {
             @Override
             public void run() {
                 new LoadDailyAgendaTask().execute(null, null, null);
             }
         });
-
         return rootView;
-    }
 
-    private void showEmptyView() {
-        backgroundRevealIn();
-    }
-
-    private void backgroundRevealIn() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            emptyListPlaceholder.setVisibility(View.VISIBLE);
-            View reveal = emptyListPlaceholder.findViewById(R.id.empty_reveal);
-            // get the center for the clipping circle
-            int cx = reveal.getWidth()/2 ;
-            int cy = reveal.getTop();
-            // get the final radius for the clipping circle
-            int finalRadius =  (int) Math.hypot(emptyListPlaceholder.getWidth(), emptyListPlaceholder.getHeight());
-            // create the animator for this view (the start radius is zero)
-            Animator anim = ViewAnimationUtils.createCircularReveal(reveal, cx, cy, 0, finalRadius);
-            anim.setInterpolator(new LinearInterpolator());
-            // make the view visible and start the animation
-            reveal.setVisibility(View.VISIBLE);
-            anim.setDuration(600).start();
-        }
     }
 
     public void showReminder(Routine r) {
@@ -208,34 +157,6 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         zoomHelper.showDelayDialog(s, t);
     }
 
-
-    private int getScroll() {
-        View c = listview.getChildAt(0); //this is the first visible row
-        if (c != null) {
-            int scrollY = -c.getTop();
-            listViewItemHeights.put(listview.getFirstVisiblePosition(), c.getHeight());
-            for (int i = 0; i < listview.getFirstVisiblePosition(); ++i) {
-                if (listViewItemHeights.get(i) != null) // (this is a sanity check)
-                {
-                    scrollY +=
-                            listViewItemHeights.get(i); //add all heights of the views that are gone
-                }
-            }
-            return scrollY;
-        }
-        return 0;
-    }
-
-    public int getNextRoutinePosition() {
-        int now = DateTime.now().getHourOfDay();
-        for (Routine r : Routine.findAll()) {
-            if (r.time().getHourOfDay() >= now) {
-                return r.time().getHourOfDay();
-            }
-        }
-        return 0;
-    }
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -249,7 +170,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         int now = DateTime.now().getHourOfDay();
         //String nextRoutineTime = getNextRoutineHour();
         ArrayList<DailyAgendaItemStub> items = new ArrayList<DailyAgendaItemStub>();
-        addSpacerTop(items);
+        //addSpacerTop(items);
 
         ///////////////////////////////////////
 
@@ -261,9 +182,6 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         Log.d(TAG, "Hourly schedules: " + hourly.size());
         for (Schedule s : hourly) {
             final List<DateTime> times = s.rule().occurrencesBetween(from, to, s.startDateTime());
-            Log.d(TAG, "RFC - From : " + from.toString("E dd MMM, kk:mm ZZZ"));
-            Log.d(TAG, "RFC - To : " + from.toString("E dd MMM, kk:mm ZZZ"));
-            Log.d(TAG, "Hourly schedules times: " + times.size());
             if (times.size() > 0) {
                 for (DateTime t : times) {
                     if (t.plusHours(1).isAfterNow() || expanded) {
@@ -298,21 +216,18 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
             }
         }
 
-        ////////////////////////////////////////
 
         for (int i = 0; i < 24; i++) {
             List<DailyAgendaItemStub> hourItems = DailyAgendaItemStub.fromHour(i);
             for (DailyAgendaItemStub item : hourItems) {
                 if (item.hasEvents && i >= now || expanded) {
-                    //if (item.time.toString("kk:mm") == nextRoutineTime)
-                    //    item.isNext = true;
                     items.add(item);
                 }
             }
         }
 
         Log.d(getTag(), "Items: " + items.size());
-        if (items.size() == 1) {
+        if (items.size() == 0) {
             showPlaceholder = true;
             addEmptyPlaceholder(items);
             isEmpty = true;
@@ -337,129 +252,12 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         items.add(spacer);
     }
 
-    private void addSpacerTop(ArrayList<DailyAgendaItemStub> items) {
-        DailyAgendaItemStub spacer = new DailyAgendaItemStub(null);
-        spacer.isSpacer = true;
-        items.add(spacer);
-    }
 
     public void toggleViewMode() {
-        //update expand/collapse flag
         expanded = !expanded;
-        // get next routine item index
-        final int nextRoutineHour = getNextRoutinePosition();
-
-        List<DailyAgendaItemStub> dailyAgendaItemStubs = buildItems();
-
-        // restore header if not expanded
-        if (!expanded) {
-            restoreHeader();
-        }
-
-        // refresh adapter items
-        items.clear();
-        items.addAll(dailyAgendaItemStubs);
-
-        // set expand/collapse animation
-        listview.setLayoutAnimation(getAnimationController(expanded));
-        // perform update
-        adapter.notifyDataSetChanged();
-        // open next routine item
-        slideAdapter.setLastOpenPosition(expanded ? nextRoutineHour + 1 : 1);
+        new LoadDailyAgendaTask().execute(null, null, null);
     }
 
-    LayoutAnimationController getAnimationController(boolean expand) {
-        return AnimationUtils.loadLayoutAnimation(getActivity(),
-                expand ? R.anim.list_animation_expand : R.anim.list_animation);
-    }
-
-    private View getAgendaItemView(int position, View convertView, ViewGroup parent) {
-
-        final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-
-        final DailyAgendaItemStub item = items.get(position);
-
-        View v;
-
-        if (item.isSpacer) {
-            v = layoutInflater.inflate(R.layout.daily_view_spacer, null);
-        } else if (item.isEmptyPlaceholder) {
-            v = layoutInflater.inflate(R.layout.daily_view_empty_placeholder, null);
-        } else if (!item.hasEvents && expanded) {
-            v = layoutInflater.inflate(R.layout.daily_view_empty_hour, null);
-            // select the correct layout
-            ((TextView) v.findViewById(R.id.hour_text)).setText(item.time.toString("kk:mm"));
-            v.findViewById(R.id.bottom).setVisibility(View.GONE);
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int hour = Integer.valueOf((String) v.getTag());
-                    onClickEmptyHour(hour);
-                }
-            });
-        } else {
-
-
-
-            v = layoutInflater.inflate(R.layout.daily_view_intake, null);
-            LinearLayout medList = (LinearLayout) v.findViewById(R.id.med_item_list);
-
-            for (DailyAgendaItemStub.DailyAgendaItemStubElement element : item.meds) {
-                View medNameView = layoutInflater.inflate(R.layout.daily_view_intake_med, null);
-                ((TextView) medNameView.findViewById(R.id.med_item_name)).setText(element.medName);
-
-                if (element.taken) {
-                    medNameView.findViewById(R.id.ic_done).setVisibility(View.VISIBLE);
-                } else {
-                    medNameView.findViewById(R.id.ic_done).setVisibility(View.INVISIBLE);
-                }
-
-                ((TextView) medNameView.findViewById(R.id.med_item_dose)).setText(
-                        element.displayDose + " " +
-                                (element.presentation.units(getResources())) + (element.dose > 1 ? "s"
-                                : ""));
-                ((ImageView) medNameView.findViewById(R.id.imageView)).setImageResource(
-                        element.res);
-                medList.addView(medNameView);
-            }
-
-            if (!item.isRoutine) {
-                ((ImageButton) v.findViewById(R.id.imageButton2)).setImageResource(R.drawable.ic_history_black_48dp);
-            }
-
-            if(item.patient != null){
-                ((ImageView) v.findViewById(R.id.patient_avatar)).setImageResource(AvatarMgr.res(item.patient.avatar()));
-            }
-
-            ((TextView) v.findViewById(R.id.routines_list_item_name)).setText(item.title);
-            ((TextView) v.findViewById(R.id.routines_list_item_hour)).setText((item.hour > 9 ? item.hour : "0" + item.hour) + ":");
-            ((TextView) v.findViewById(R.id.routines_list_item_minute)).setText((item.minute > 9 ? item.minute : "0" + item.minute) + "");
-
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (item.isRoutine) {
-                        zoomHelper.show(getActivity(), v, Routine.findById(item.id));
-                    } else {
-                        zoomHelper.show(getActivity(), v, Schedule.findById(item.id),
-                                new LocalTime(item.hour, item.minute));
-                    }
-                }
-            });
-        }
-        v.setTag("" + item.hour);
-        return v;
-    }
-
-    private void onClickEmptyHour(int hour) {
-        //Toast.makeText(getActivity(), " Add new routine or med here!", Toast.LENGTH_SHORT).show();
-    }
-
-    private void restoreHeader() {
-        // translate header to its original position (y=0)
-        ObjectAnimator.ofObject(userInfoFragment, "translationY", new FloatEvaluator(),
-                (int) userInfoFragment.getTranslationY(), 0).setDuration(300).start();
-    }
 
     void updatePrefs() {
         SharedPreferences settings =
@@ -495,24 +293,92 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
             public void run() {
                 items.clear();
                 items.addAll(buildItems()); // allow user to change day
-                adapter.notifyDataSetChanged();
+                rvAdapter.notifyDataSetChanged();
+                //adapter.notifyDataSetChanged();
             }
         });
 
     }
 
-    private class AgendaItemAdapter extends ArrayAdapter<DailyAgendaItemStub> {
 
-        public AgendaItemAdapter(Context context, int layoutResourceId,
-                                 List<DailyAgendaItemStub> items) {
-            super(context, layoutResourceId, items);
-        }
+    private View getAgendaItemView(int position, View convertView, ViewGroup parent) {
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            return getAgendaItemView(position, convertView, parent);
+        final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
+
+        final DailyAgendaItemStub item = items.get(position);
+
+        View v;
+
+        if (item.isSpacer) {
+            v = layoutInflater.inflate(R.layout.daily_view_spacer, null);
+        } else if (item.isEmptyPlaceholder) {
+            v = layoutInflater.inflate(R.layout.daily_view_empty_placeholder, null);
+        } else if (!item.hasEvents && expanded) {
+            v = layoutInflater.inflate(R.layout.daily_view_empty_hour, null);
+            // select the correct layout
+            ((TextView) v.findViewById(R.id.hour_text)).setText(item.time.toString("kk:mm"));
+            v.findViewById(R.id.bottom).setVisibility(View.GONE);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int hour = Integer.valueOf((String) v.getTag());
+                    //onClickEmptyHour(hour);
+                }
+            });
+        } else {
+
+
+            v = layoutInflater.inflate(R.layout.daily_view_intake, null);
+            LinearLayout medList = (LinearLayout) v.findViewById(R.id.med_item_list);
+
+            for (DailyAgendaItemStub.DailyAgendaItemStubElement element : item.meds) {
+                View medNameView = layoutInflater.inflate(R.layout.daily_view_intake_med, null);
+                ((TextView) medNameView.findViewById(R.id.med_item_name)).setText(element.medName);
+
+                if (element.taken) {
+                    medNameView.findViewById(R.id.ic_done).setVisibility(View.VISIBLE);
+                } else {
+                    medNameView.findViewById(R.id.ic_done).setVisibility(View.INVISIBLE);
+                }
+
+                ((TextView) medNameView.findViewById(R.id.med_item_dose)).setText(
+                        element.displayDose + " " +
+                                (element.presentation.units(getResources())) + (element.dose > 1 ? "s"
+                                : ""));
+                ((ImageView) medNameView.findViewById(R.id.imageView)).setImageResource(
+                        element.res);
+                medList.addView(medNameView);
+            }
+
+            if (!item.isRoutine) {
+                ((ImageButton) v.findViewById(R.id.imageButton2)).setImageResource(R.drawable.ic_history_black_48dp);
+            }
+
+            if (item.patient != null) {
+                ((ImageView) v.findViewById(R.id.patient_avatar)).setImageResource(AvatarMgr.res(item.patient.avatar()));
+            }
+
+            ((TextView) v.findViewById(R.id.routines_list_item_name)).setText(item.title);
+            ((TextView) v.findViewById(R.id.routines_list_item_hour)).setText((item.hour > 9 ? item.hour : "0" + item.hour) + ":");
+            ((TextView) v.findViewById(R.id.routines_list_item_minute)).setText((item.minute > 9 ? item.minute : "0" + item.minute) + "");
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (item.isRoutine) {
+                        zoomHelper.show(getActivity(), v, Routine.findById(item.id));
+                    } else {
+                        zoomHelper.show(getActivity(), v, Schedule.findById(item.id),
+                                new LocalTime(item.hour, item.minute));
+                    }
+                }
+            });
         }
+        v.setTag("" + item.hour);
+        return v;
     }
+
+
 
     public class LoadDailyAgendaTask extends AsyncTask<Void, Void, Void> {
 
@@ -524,12 +390,12 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
 
         @Override
         protected void onPostExecute(final Void result) {
-            adapter = new AgendaItemAdapter(getActivity(), R.layout.daily_view_empty_hour, items);
-            slideAdapter = new SlideExpandableListAdapter(adapter, R.id.count_container, R.id.bottom, 1);
-            listview.setAdapter(slideAdapter);
-            if(isEmpty){
-                // showEmptyView();
+            for(DailyAgendaItemStub i : items){
+                Log.d("Recycler", i.toString());
             }
+            rvAdapter = new DailyAgendaRecyclerAdapter(items);
+            rvAdapter.setListener(rvListener);
+            rv.setAdapter(rvAdapter);
         }
     }
 
@@ -538,15 +404,11 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         @Override
         public int compare(DailyAgendaItemStub a, DailyAgendaItemStub b) {
 
-            if (a.isSpacer) {
+            if (a.isSpacer || a.time == null) {
                 return -1;
-            } else if (b.isSpacer) {
+            } else if (b.isSpacer || b.time == null) {
                 return 1;
             }
-
-            //String aTime = (a.hour>9?a.hour:"0"+a.hour)+":"+(a.minute>9?a.minute:"0"+a.minute);
-            //String bTime = (b.hour>9?b.hour:"0"+b.hour)+":"+(b.minute>9?b.minute:"0"+b.minute);
-            //return aTime.compareTo(bTime);
             return a.time.compareTo(b.time);
         }
     }
