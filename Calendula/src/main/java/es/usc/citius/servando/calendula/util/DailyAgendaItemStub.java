@@ -32,7 +32,7 @@ public class DailyAgendaItemStub {
     public int hour;
     public int minute;
     public Patient patient;
-    public boolean isExpanded = false;
+    public boolean isExpanded = true;
 
     public DailyAgendaItemStub(LocalTime time)
     {

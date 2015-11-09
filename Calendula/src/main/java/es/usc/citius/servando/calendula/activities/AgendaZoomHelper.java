@@ -31,7 +31,7 @@ import org.joda.time.LocalTime;
 
 import java.util.List;
 
-import es.usc.citius.servando.calendula.HomeActivity;
+import es.usc.citius.servando.calendula.HomePagerActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
@@ -331,7 +331,7 @@ public class AgendaZoomHelper {
 
         if (v.findViewById(R.id.check_button) != null) {
             Log.d("AgendaZoomHelper", "Show tutorial if needed...");
-            ((HomeActivity) activity).getTutorial()
+            ((HomePagerActivity) activity).getTutorial()
                     .show(AppTutorial.NOTIFICATION_INFO, R.id.check_button, activity);
         }
         animator = null;

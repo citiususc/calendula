@@ -8,14 +8,7 @@
     android:layout_alignParentTop="true"
     >
 
-    <ImageView
-        android:id="@+id/bottom_shadow"
-        android:layout_width="fill_parent"
-        android:layout_height="5dp"
-        android:layout_alignParentBottom="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/daily_view_list_item_tab_shadow_bottom"
-        android:alpha="0.5"/>
+
 
     <ImageView
         android:id="@+id/image_switcher"
@@ -23,7 +16,24 @@
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
         android:scaleType="centerCrop"
-        ></ImageView>
+        />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:src="@drawable/blur_mask"
+        android:scaleType="centerCrop"
+        android:alpha="0.9"/>
+
+    <ImageView
+        android:id="@+id/bottom_shadow"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:alpha="0.5"
+        android:scaleType="fitXY"
+        android:src="@drawable/daily_view_list_item_tab_shadow_bottom"/>
+
 
     <RelativeLayout
         android:id="@+id/profile_info"
@@ -32,27 +42,7 @@
         android:layout_alignParentLeft="false"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="false"
-        android:visibility="visible"
-        >
-
-        <TextView
-            android:id="@+id/profile_username"
-            style="@style/whiteTextWithShadow"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentTop="true"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="60dp"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center"
-            android:text="Ángel Piñeiro"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:visibility="visible"/>
-
+        android:visibility="visible">
 
         <es.usc.citius.servando.calendula.util.view.CustomDigitalClock
             android:id="@+id/home_clock"
@@ -61,11 +51,27 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="false"
             android:layout_alignParentRight="false"
-            android:layout_below="@+id/profile_username"
+            android:layout_marginTop="90dp"
             android:fontFamily="sans-serif-light"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="45sp"/>
+
+
+        <TextView
+            android:id="@+id/profile_username"
+            style="@style/whiteTextWithShadow"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/home_clock"
+            android:layout_centerInParent="true"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center"
+            android:text="Ángel Piñeiro"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -74,7 +80,7 @@
             android:layout_alignParentEnd="false"
             android:layout_alignParentLeft="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="70dp"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
             android:orientation="vertical">
@@ -151,6 +157,11 @@
 
 
     </RelativeLayout>
+
+
+
+
+
 
 
 </RelativeLayout>

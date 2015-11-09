@@ -30,7 +30,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import java.util.ArrayList;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
-import es.usc.citius.servando.calendula.HomeActivity;
+import es.usc.citius.servando.calendula.HomePagerActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Patient;
@@ -61,10 +61,10 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
     private AccountHeader headerResult = null;
     private Drawer drawer = null;
     private Toolbar toolbar;
-    private HomeActivity home;
+    private HomePagerActivity home;
     private Patient currentPatient;
 
-    public LeftDrawerMgr(HomeActivity activity, Toolbar toolbar) {
+    public LeftDrawerMgr(HomePagerActivity activity, Toolbar toolbar) {
         this.toolbar = toolbar;
         this.home = activity;
     }
@@ -78,7 +78,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
         profiles.add(new ProfileSettingDrawerItem()
                 .withName("Añadir paciente")
                 .withDescription("Gestionar la pautas de otra persona")
-                .withIcon(new IconicsDrawable(home, GoogleMaterial.Icon.gmd_add)
+                .withIcon(new IconicsDrawable(home, GoogleMaterial.Icon.gmd_account_add)
                         .sizeDp(24)
                         .paddingDp(5)
                         .colorRes(R.color.dark_grey_home))
@@ -113,48 +113,48 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                 .addDrawerItems(
                         new PrimaryDrawerItem()
                                 .withName(R.string.title_home)
-                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_home, R.color.dark_grey_home))
+                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_home, R.color.black).alpha(110))
                                 .withIdentifier(HOME),
                         new PrimaryDrawerItem()
                                 .withName("Pacientes")
-                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_account_multiple, R.color.dark_grey_home))
+                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_account_multiple, R.color.black).alpha(110))
                                 .withIdentifier(PATIENTS),
                         new DividerDrawerItem(),
                         new PrimaryDrawerItem()
                                 .withName(R.string.title_activity_routines)
-                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_alarm, R.color.android_orange_dark))
+                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_alarm, R.color.black).alpha(110))
                                 .withIdentifier(ROUTINES),
                         new PrimaryDrawerItem()
                                 .withName(R.string.title_activity_medicines)
-                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_hospital, R.color.android_pink_dark))
+                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_hospital, R.color.black).alpha(110))
                                 .withIdentifier(MEDICINES),
                         new PrimaryDrawerItem()
                                 .withName(R.string.title_activity_schedules)
-                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_event, R.color.android_green_dark))
+                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_calendar, R.color.black).alpha(110))
                                 .withIdentifier(SCHEDULES),
                         new PrimaryDrawerItem()
                                 .withName("Farmacias")
-                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_location_on, R.color.light_grey))
+                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_my_location, R.color.black).alpha(38))
                                 .withEnabled(false)
                                 .withIdentifier(PHARMACIES),
                         new PrimaryDrawerItem()
                                 .withName("Plan de viaje")
-                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_airplanemode_active, R.color.light_grey))
+                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_airplanemode_active, R.color.black).alpha(38))
                                 .withEnabled(false)
                                 .withIdentifier(TRAVELPLAN),
                         new DividerDrawerItem(),
                         new PrimaryDrawerItem()
                                 .withName("Recorrido")
-                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_assistant, R.color.dark_grey_home))
+                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_pin_assistant,R.color.black).alpha(130))
                                 .withIdentifier(HELP),
                         new PrimaryDrawerItem()
                                 .withName("Ajustes")
-                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_settings, R.color.dark_grey_home))
+                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_settings, R.color.black).alpha(110))
                                 .withIdentifier(SETTINGS),
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem()
                                 .withName("Open Source")
-                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_github_circle, R.color.dark_grey_home))
+                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_github_circle, R.color.black).alpha(110))
                                 .withIdentifier(ABOUT)
                 )
                 .withOnDrawerItemClickListener(this)

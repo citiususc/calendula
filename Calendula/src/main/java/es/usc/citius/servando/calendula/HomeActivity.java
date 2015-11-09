@@ -116,7 +116,7 @@ public class HomeActivity extends CalendulaActivity
         titles = getResources().getStringArray(R.array.home_action_list);
         addButton = (FloatingActionsMenu) findViewById(R.id.fab_menu);
         fab = (FloatingActionButton) findViewById(R.id.add_button);
-        fabMgr = new FabMenuMgr(fab, addButton, drawerMgr, this);
+        //fabMgr = new FabMenuMgr(fab, addButton, drawerMgr, this);
         fabMgr.init();
 
         tabs.setOnPageChangeListener(this);
@@ -159,7 +159,7 @@ public class HomeActivity extends CalendulaActivity
     }
 
     private void initializeDrawer(Bundle savedInstanceState) {
-        drawerMgr = new LeftDrawerMgr(this,toolbar);
+        //drawerMgr = new LeftDrawerMgr(this,toolbar);
         drawerMgr.init(savedInstanceState);
     }
 

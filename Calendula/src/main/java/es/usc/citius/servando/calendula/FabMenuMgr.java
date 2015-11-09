@@ -25,14 +25,14 @@ public class FabMenuMgr implements View.OnClickListener{
     LeftDrawerMgr drawerMgr;
     FloatingActionsMenu fabMenu;
     FloatingActionButton fab;
-    HomeActivity activity;
+    HomePagerActivity activity;
     List<FloatingActionButton> scheduleActions;
     FloatingActionButton scanQrAction;
 
     private int currentPage = 0;
 
 
-    public FabMenuMgr(FloatingActionButton fab, FloatingActionsMenu fabMenu, LeftDrawerMgr drawerMgr, HomeActivity activity) {
+    public FabMenuMgr(FloatingActionButton fab, FloatingActionsMenu fabMenu, LeftDrawerMgr drawerMgr, HomePagerActivity activity) {
         this.fab = fab;
         this.fabMenu = fabMenu;
         this.activity = activity;

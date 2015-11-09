@@ -25,7 +25,6 @@ import org.joda.time.DateTime;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
-import es.usc.citius.servando.calendula.util.view.CustomDigitalClock;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,7 +33,7 @@ import es.usc.citius.servando.calendula.util.view.CustomDigitalClock;
 public class HomeProfileMgr {
 
 
-
+    public static final int BG_COUNT = 8;
     int[] moodRes = new int[]{
             R.drawable.mood_1,
             R.drawable.mood_2,
@@ -54,7 +53,7 @@ public class HomeProfileMgr {
     View profileImageContainer;
     TextView profileUsername;
     RelativeLayout profileContainer;
-    CustomDigitalClock clock;
+    //CustomDigitalClock clock;
     TextView monthTv;
     TextView dayTv;
     ImageView moodImg;
@@ -71,7 +70,7 @@ public class HomeProfileMgr {
 
     }
 
-    public void init(View view, final Activity ctx, final Runnable taskCb){
+    public void init(View view, final Activity ctx){
         this.context = ctx;
         this.rootView = view;
 
@@ -80,7 +79,7 @@ public class HomeProfileMgr {
         moods = ctx.getResources().getStringArray(R.array.moods);
         monthTv = (TextView) view.findViewById(R.id.month_text);
         dayTv = (TextView) view.findViewById(R.id.day_text);
-        clock = (CustomDigitalClock) view.findViewById(R.id.home_clock);
+        //clock = (CustomDigitalClock) view.findViewById(R.id.home_clock);
         bottomShadow = (ImageView) view.findViewById(R.id.bottom_shadow);
         profileInfo = view.findViewById(R.id.profile_info);
 
@@ -116,14 +115,14 @@ public class HomeProfileMgr {
             .load("file:///android_asset/" + getBackgroundPath())
             .into(background);
 
-        background.postDelayed(new Runnable() {
+        background.post(new Runnable() {
             @Override
             public void run() {
                 bottomShadow.setVisibility(View.VISIBLE);
                 background.setVisibility(View.VISIBLE);
                 background.animate().alpha(1).setDuration(200);
             }
-        },100);
+        });
 
         background.postDelayed(new Runnable() {
             @Override
@@ -131,9 +130,6 @@ public class HomeProfileMgr {
                 profileInfo.setVisibility(View.VISIBLE);
                 profileInfo.setAlpha(0);
                 profileInfo.animate().alpha(1).setDuration(400);
-                if(taskCb!=null) {
-                    background.post(taskCb);
-                }
             }
         },300);
 
@@ -151,11 +147,11 @@ public class HomeProfileMgr {
 
     public void updateBackground() {
         Picasso.with(context)
-                .load("file:///android_asset/" + getRandomBackgroundPath())
-                .resize(background.getWidth(),background.getHeight())
-                .placeholder(background.getDrawable())
-                .centerCrop()
-                .into(background);
+            .load("file:///android_asset/" + getRandomBackgroundPath())
+            .centerCrop()
+            .resize(background.getWidth(), background.getHeight())
+            .placeholder(background.getDrawable())
+            .into(background);
     }
 
     void updateProfileInfo() {
@@ -189,9 +185,9 @@ public class HomeProfileMgr {
     }
 
     public String getRandomBackgroundPath() {
-        int rand = (((int) (Math.random() * 1000)) % 5) + 1;
+        int rand = (((int) (Math.random() * 1000)) % BG_COUNT) + 1;
         if (rand == currentBgFileIdx) {
-            rand = ((rand + 1) % 5) + 1;
+            rand = ((rand + 1) % BG_COUNT) + 1;
         }
         currentBgFileIdx = rand;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -216,6 +212,14 @@ public class HomeProfileMgr {
                         updateModButton();
                     }
                 }).show();
+    }
+
+    public void onCollapse() {
+        profileInfo.animate().alpha(0);
+    }
+
+    public void onExpand() {
+        profileInfo.animate().alpha(1);
     }
 
     public class MoodListAdapter extends ArrayAdapter<String> {

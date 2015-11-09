@@ -1,13 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
-    android:background="@color/android_blue_darker">
+    >
 
     <ListView
         android:id="@+id/medicines_list"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:layout_marginTop="@dimen/fragment_tabs_margin_top"
         android:background="#fcfcfc"
         android:divider="#E0EAEF"
         android:dividerHeight="0dp"

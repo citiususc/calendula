@@ -10,7 +10,7 @@
         android:icon="@drawable/ic_list"
         android:orderInCategory="100"
         android:title="Expand"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_calendar"

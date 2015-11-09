@@ -13,7 +13,7 @@ public class IconUtils {
     public static IconicsDrawable icon(Context ctx, IIcon ic, int color){
         return new IconicsDrawable(ctx, ic)
                 .sizeDp(48)
-                .paddingDp(0)
+                .paddingDp(2)
                 .colorRes(color);
     }
 

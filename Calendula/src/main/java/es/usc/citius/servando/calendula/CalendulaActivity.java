@@ -24,11 +24,11 @@ public class CalendulaActivity extends AppCompatActivity{
         toolbar.setNavigationIcon(getNavigationIcon());
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(false);
 
         if (title == null) {
             //set the back arrow in the toolbar
             getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setHomeButtonEnabled(true);
         } else {
             getSupportActionBar().setTitle(title);
         }
