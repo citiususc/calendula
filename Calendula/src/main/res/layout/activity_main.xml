@@ -25,15 +25,17 @@
                 android:background="#00000000"
                 android:layout_height="300dp"
                 android:fitsSystemWindows="true"
-                app:contentScrim="#de1976D2"
+                android:clipToPadding="true"
+                app:contentScrim="#1976D2"
                 app:statusBarScrim="#00000000"
+                app:titleEnabled="false"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:collapsedTitleGravity="top"
-                app:expandedTitleGravity="center"
-                app:expandedTitleTextAppearance="@android:style/TextAppearance.Medium"
-                app:expandedTitleMarginBottom="150dp"
-                app:collapsedTitleTextAppearance="@style/TextAppearance.AppCompat.Medium"
                 >
+
+                <!--app:titleEnabled="true"-->
+                <!--app:expandedTitleGravity="center_vertical"-->
+                <!--app:expandedTitleTextAppearance="@style/ToolbarExpandedTitle"-->
+                <!--app:collapsedTitleTextAppearance="@style/ToolbarCollapsedTitle"-->
 
                 <FrameLayout
                     android:fitsSystemWindows="true"
@@ -54,18 +56,10 @@
                     android:gravity="top"
                     android:minHeight="?attr/actionBarSize"
                     app:layout_collapseMode="pin"
-                    app:titleMarginTop="@dimen/status_bar_height"
+                    app:layout_scrollFlags="scroll|enterAlways|snap"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                     android:layout_marginTop="@dimen/status_bar_height"
-                    >
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:text="Calendula"
-                        android:textColor="@color/white">
-
-                    </TextView>
-                </android.support.v7.widget.Toolbar>
+                    />
 
 
                 <android.support.design.widget.TabLayout
@@ -180,5 +174,19 @@
 
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:height="@dimen/action_bar_height"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/status_bar_height"
+        android:layout_marginLeft="64dp"
+        style="@style/ToolbarTitle"
+        android:id="@+id/toolbar_title"
+        android:text="Calendula"/>
 
 </RelativeLayout>

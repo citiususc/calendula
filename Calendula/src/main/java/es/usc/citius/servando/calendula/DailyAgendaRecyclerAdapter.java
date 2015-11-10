@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,8 +15,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mikepenz.iconics.IconicsDrawable;
+
 import java.util.List;
 
+import es.usc.citius.servando.calendula.fragments.HomeProfileMgr;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 
@@ -24,6 +28,8 @@ import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
  */
 public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+
+
     public interface AgendaItemClickListener{
         void onClick(View v, DailyAgendaItemStub item);
     }
@@ -31,6 +37,8 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     private final int SPACER = 1;
     private final int EMPTY = 2;
     private final int NORMAL = 3;
+
+    private int lastPosition = -1;
 
     List<DailyAgendaItemStub> items;
     private AgendaItemClickListener listener;
@@ -99,6 +107,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
 
         holder.itemView.setTag(String.valueOf(item.hour));
+        setAnimation(holder.itemView, position);
     }
 
     @Override
@@ -213,13 +222,16 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
-    public void onBindViewSpacerItemViewHolder(SpacerItemViewHolder viewHolder, DailyAgendaItemStub item, int i) {
+    public void onBindViewSpacerItemViewHolder(SpacerItemViewHolder holder, DailyAgendaItemStub item, int position) {
         // do nothing
+        View background = holder.itemView.findViewById(R.id.top);
+        background.setBackgroundColor(HomeProfileMgr.colorForCurrent(holder.itemView.getContext()));
     }
 
-    public void onBindEmptyItemViewHolder(EmptyItemViewHolder viewHolder, DailyAgendaItemStub item, int i) {
+    public void onBindEmptyItemViewHolder(EmptyItemViewHolder viewHolder, DailyAgendaItemStub item, int position) {
         viewHolder.hourText.setText(item.time != null ? item.time.toString("kk:mm") : "--");
         viewHolder.stub = item;
+
     }
 
     public void onBindNormalItemViewHolder(NormalItemViewHolder viewHolder, DailyAgendaItemStub item, int i) {
@@ -253,6 +265,8 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private void addMeds(NormalItemViewHolder viewHolder, DailyAgendaItemStub item) {
 
+        //HomeProfileMgr.colorForCurrent(viewHolder.medList.getContext());
+
         viewHolder.medList.removeAllViews();
 
         for (DailyAgendaItemStub.DailyAgendaItemStubElement element : item.meds) {
@@ -266,10 +280,29 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             ((TextView) medNameView.findViewById(R.id.med_item_dose)).setText(
                     element.displayDose + " " + (element.presentation.units(viewHolder.context.getResources()))
                             + (element.dose > 1 ? "s" : ""));
-            ((ImageView) medNameView.findViewById(R.id.imageView)).setImageResource(
-                    element.res);
+
+            Drawable icon = new IconicsDrawable(medNameView.getContext())
+                    .icon(element.presentation.icon())
+                    .colorRes(R.color.white)
+                    .sizeDp(24)
+                    .paddingDp(0);
+
+
+                    ((ImageView) medNameView.findViewById(R.id.imageView)).setImageDrawable(icon);
+
             viewHolder.medList.addView(medNameView);
         }
+    }
+
+    private void setAnimation(View viewToAnimate, int position)
+    {
+//        // If the bound view wasn't previously displayed on screen, it's animated
+//        if (position > lastPosition)
+//        {
+//            Animation animation = AnimationUtils.loadAnimation(viewToAnimate.getContext(), android.R.anim.fade_in);
+//            viewToAnimate.startAnimation(animation);
+//            lastPosition = position;
+//        }
     }
 
 

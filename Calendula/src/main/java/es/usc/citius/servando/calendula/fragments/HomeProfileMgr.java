@@ -5,9 +5,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v7.graphics.Palette;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +26,12 @@ import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 
 /**
@@ -112,7 +120,7 @@ public class HomeProfileMgr {
         bottomShadow.setVisibility(View.INVISIBLE);
 
         Picasso.with(context)
-            .load("file:///android_asset/" + getBackgroundPath())
+            .load("file:///android_asset/" + getBackgroundPath(ctx))
             .into(background);
 
         background.post(new Runnable() {
@@ -152,6 +160,8 @@ public class HomeProfileMgr {
             .resize(background.getWidth(), background.getHeight())
             .placeholder(background.getDrawable())
             .into(background);
+
+        CalendulaApp.eventBus().post(new BackgroundUpdatedEvent());
     }
 
     void updateProfileInfo() {
@@ -166,23 +176,23 @@ public class HomeProfileMgr {
     }
 
 
-    String getBackgroundPath(){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+    static String getBackgroundPath(Context ctx){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
         Integer idx = preferences.getInt("profile_background_idx", 1);
         return "home_bg_" + idx + ".jpg";
     }
 
-    Bitmap getBackgroundBitmap() {
-        int width = (int) ScreenUtils.getDpSize(context).x;
-        int height = context.getResources().getDimensionPixelSize(R.dimen.header_height);
-        return ScreenUtils.getResizedBitmap(context, getBackgroundPath(), width, height);
-    }
+//    Bitmap getBackgroundBitmap() {
+//        int width = (int) ScreenUtils.getDpSize(context).x;
+//        int height = context.getResources().getDimensionPixelSize(R.dimen.header_height);
+//        return ScreenUtils.getResizedBitmap(context, getBackgroundPath(), width, height);
+//    }
 
-    Bitmap getRandomBackground() {
-        int width = (int) ScreenUtils.getDpSize(context).x;
-        int height = context.getResources().getDimensionPixelSize(R.dimen.header_height);
-        return ScreenUtils.getResizedBitmap(context, getRandomBackgroundPath(), width, height);
-    }
+//    Bitmap getRandomBackground() {
+//        int width = (int) ScreenUtils.getDpSize(context).x;
+//        int height = context.getResources().getDimensionPixelSize(R.dimen.header_height);
+//        return ScreenUtils.getResizedBitmap(context, getRandomBackgroundPath(), width, height);
+//    }
 
     public String getRandomBackgroundPath() {
         int rand = (((int) (Math.random() * 1000)) % BG_COUNT) + 1;
@@ -251,4 +261,38 @@ public class HomeProfileMgr {
     }
 
 
+    private static HashMap<String, Integer> cache = new HashMap<>();
+
+    public static int colorForCurrent(Context ctx){
+
+        String path = getBackgroundPath(ctx);
+        int color = Color.BLACK;
+        if(!cache.containsKey(path)) {
+            Bitmap bm = getBitmapFromAsset(ctx, path);
+            if(bm != null) {
+                Palette p = Palette.generate(bm);
+                color = p.getVibrantColor(color);
+            }
+            cache.put(path, color);
+        }
+        return cache.get(path);
+    }
+
+    public static Bitmap getBitmapFromAsset(Context context, String filePath) {
+        AssetManager assetManager = context.getAssets();
+
+        InputStream istr;
+        Bitmap bitmap = null;
+        try {
+            istr = assetManager.open(filePath);
+            bitmap = BitmapFactory.decodeStream(istr);
+        } catch (IOException e) {
+            // handle exception
+        }
+
+        return bitmap;
+    }
+
+
+    public class BackgroundUpdatedEvent {}
 }

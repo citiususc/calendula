@@ -6,31 +6,42 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="2dp"
-    android:paddingTop="5dp">
+    android:paddingTop="2dp"
+    >
 
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="30dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="36dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="35dp"
         android:cropToPadding="false"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_presentation_2" />
+        android:background="@drawable/circle_white"
+        android:src="@drawable/ic_presentation_2"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="2dp"
+        android:visibility="visible"
+        android:padding="8dp"/>
+
 
     <TextView
         android:id="@+id/med_item_name"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_marginLeft="90dp"
+        android:layout_height="30dp"
         android:layout_marginTop="0dp"
         android:fontFamily="sans-serif-light"
 
         android:gravity="center_vertical"
         android:paddingBottom="3dp"
         android:text="Ibuprofeno"
-        android:textColor="#444"
-        android:textSize="19dp" />
+        android:textColor="#222"
+        android:textSize="16dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/imageView"
+        android:layout_marginLeft="10dp"/>
 
     <TextView
         android:id="@+id/med_item_dose"
@@ -40,22 +51,23 @@
         android:layout_alignParentRight="false"
         android:layout_below="@+id/med_item_name"
         android:layout_marginLeft="90dp"
-
         android:fontFamily="sans-serif-condensed"
         android:gravity="center_vertical"
         android:text="(1 capsule)"
-        android:textColor="#000" />
+        android:textColor="#000"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/ic_done"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="20dp"
         android:src="@drawable/ic_done_black_48dp"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:alpha="0.7"/>
 
     <ImageView
         android:id="@+id/imageView2"
@@ -67,7 +79,8 @@
         android:layout_marginLeft="90dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"
-        android:background="#efefef" />
+        android:background="#efefef"
+        android:visibility="gone"/>
 
 </RelativeLayout>
 

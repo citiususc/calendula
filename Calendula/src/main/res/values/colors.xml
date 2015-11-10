@@ -67,6 +67,9 @@
     <color name="dark_grey_text">#5e5e5e</color>
     <color name="light_grey">#55ABABAB</color>
     <color name="light_grey_pressed">#99989898</color>
+    <color name="agenda_item_title">#66000000</color>
+
+
     <!-- #ececec -->
     <!--<color name="actionbar_background_color">#161616</color>-->
     <color name="med_presentation_circle_bg">#aaefefef</color>

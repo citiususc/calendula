@@ -10,6 +10,8 @@ import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.mikepenz.iconics.Iconics;
+
 import org.joda.time.LocalTime;
 
 import java.io.File;
@@ -26,6 +28,7 @@ import es.usc.citius.servando.calendula.database.PatientDao;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
+import es.usc.citius.servando.calendula.util.PresentationsTypeface;
 
 /**
  * Created by castrelo on 4/10/14.
@@ -89,11 +92,15 @@ public class CalendulaApp extends Application {
 
         DefaultDataGenerator.fillDBWithDummyData(getApplicationContext());
         // initialize daily agenda
-        DailyAgenda.instance().setupForToday(this,false);
+        DailyAgenda.instance().setupForToday(this, false);
         // setup alarm for daily agenda update
         setupUpdateDailyAgendaAlarm();
         //exportDatabase(this, DB_NAME, new File(Environment.getExternalStorageDirectory() + File.separator + DB_NAME));
         //forceLocale(Locale.GERMAN);
+        //only required if you add a custom or generic font on your own
+        Iconics.init(getApplicationContext());
+        //register custom fonts like this (or also provide a font definition file)
+        Iconics.registerFont(new PresentationsTypeface());
     }
 
     private void createDefaultPatient(Context ctx) {

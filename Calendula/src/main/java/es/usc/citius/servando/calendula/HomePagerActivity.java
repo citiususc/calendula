@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -86,6 +87,8 @@ public class HomePagerActivity extends CalendulaActivity implements
     FloatingActionsMenu addButton;
     FabMenuMgr fabMgr;
 
+    TextView toolbarTitle;
+
 
     private Patient activePatient;
 
@@ -103,11 +106,13 @@ public class HomePagerActivity extends CalendulaActivity implements
         mSectionsPagerAdapter = new HomePageAdapter(getSupportFragmentManager(),this,this);
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        toolbarTitle = (TextView)findViewById(R.id.toolbar_title);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(getPageChangeListener());
+        mViewPager.setOffscreenPageLimit(5);
 
         // Set up home profile
         homeProfileMgr = new HomeProfileMgr();
@@ -130,8 +135,22 @@ public class HomePagerActivity extends CalendulaActivity implements
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if(toolbarLayout.getHeight() + verticalOffset < 2 * ViewCompat.getMinimumHeight(toolbarLayout)) {
                     homeProfileMgr.onCollapse();
+                    toolbarTitle.animate().alpha(1);
                 } else {
-                    homeProfileMgr.onExpand();
+
+                    if(mViewPager.getCurrentItem()==0) {
+                        toolbarTitle.animate().alpha(0);
+                    }
+                    toolbarTitle.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            homeProfileMgr.onExpand();
+                        }
+                    }, 300);
+                }
+
+                if(toolbarLayout.getHeight() + verticalOffset <= ViewCompat.getMinimumHeight(toolbarLayout)+10) {
+                    //((DailyAgendaFragment) getViewPagerFragment(0)).expand();
                 }
             }
         };
@@ -224,10 +243,10 @@ public class HomePagerActivity extends CalendulaActivity implements
                 title = getString(R.string.title_activity_schedules) + " de " + activePatient.name();
                 break;
             default:
-                title = "";
+                title = "Calendula";
                 break;
         }
-        toolbar.setTitle(title);
+        toolbarTitle.setText(title);
     }
 
 
@@ -272,6 +291,16 @@ public class HomePagerActivity extends CalendulaActivity implements
 
         int pageNum = mViewPager.getCurrentItem();
 
+        if (pageNum == 0) {
+            boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
+            menu.findItem(R.id.action_expand).setVisible(true);
+            menu.findItem(R.id.action_expand)
+                    .setIcon(getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_white_48dp
+                    : R.drawable.ic_unfold_more_white_48dp));
+        } else {
+            menu.findItem(R.id.action_expand).setVisible(false);
+        }
+
         if (pageNum == 2 && CalendulaApp.isPharmaModeEnabled(this)) {
             menu.findItem(R.id.action_calendar).setVisible(true);
         } else {
@@ -289,8 +318,23 @@ public class HomePagerActivity extends CalendulaActivity implements
             case R.id.action_calendar:
                 startActivity(new Intent(this, CalendarActivity.class));
                 return true;
-            case R.id.home:
-                drawerMgr.drawer().openDrawer();
+            case R.id.action_expand:
+                Log.d("Home", "ToogleExpand");
+                boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
+
+                appBarLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
+                    }
+                },250);
+
+                appBarLayout.setExpanded(expanded);
+                item.setIcon(getResources().getDrawable(
+                        (!expanded) ? R.drawable.ic_unfold_less_white_48dp
+                                : R.drawable.ic_unfold_more_white_48dp));
+
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -313,10 +357,12 @@ public class HomePagerActivity extends CalendulaActivity implements
         }else if(evt instanceof PersistenceEvents.ActiveUserChangeEvent){
             activePatient = ((PersistenceEvents.ActiveUserChangeEvent) evt).patient;
             updateTitle(mViewPager.getCurrentItem());
-        }else if(evt instanceof PersistenceEvents.UserCreateEvent){
+        } else if(evt instanceof PersistenceEvents.UserCreateEvent){
             Patient created = ((PersistenceEvents.UserCreateEvent) evt).patient;
             drawerMgr.onPatientCreated(created);
-
+        } else if(evt instanceof HomeProfileMgr.BackgroundUpdatedEvent){
+            //toolbarLayout.setContentScrimColor(homeProfileMgr.colorForCurrent(getApplicationContext()));
+            ((DailyAgendaFragment) getViewPagerFragment(0)).refresh();
         }
     }
 
@@ -403,7 +449,7 @@ public class HomePagerActivity extends CalendulaActivity implements
 
     Fragment getViewPagerFragment(int position) {
         return getSupportFragmentManager().findFragmentByTag(
-                FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
+                FragmentUtils.makeViewPagerFragmentName(R.id.container, position));
     }
 
 

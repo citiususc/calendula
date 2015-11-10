@@ -2,8 +2,9 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="45dp"
+    android:orientation="vertical"
+                android:background="#fff">
 
     <ImageView
         android:layout_width="fill_parent"
@@ -14,62 +15,17 @@
         android:background="#efefef" />
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    <TextView
+        android:id="@+id/hour_text"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="15dp"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center"
+        android:text="12"
+        android:textColor="#acacac"
+        android:textSize="16sp"
+        android:textStyle="normal" />
 
-        <RelativeLayout
-            android:id="@+id/top"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:orientation="vertical"
-            android:visibility="visible">
-
-            <Button
-                android:id="@+id/count_container"
-                android:layout_width="fill_parent"
-                android:layout_height="10dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="70dp"
-                android:layout_marginTop="2dp"
-                android:background="@null" />
-
-            <TextView
-                android:id="@+id/hour_text"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="15dp"
-                android:fontFamily="sans-serif-light"
-                android:gravity="center"
-                android:text="12"
-                android:textColor="@color/android_blue"
-                android:textSize="16sp"
-                android:textStyle="normal" />
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/bottom"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-
-            <LinearLayout
-                android:id="@+id/med_item_list"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:orientation="vertical">
-
-
-            </LinearLayout>
-
-
-        </RelativeLayout>
-
-    </LinearLayout>
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.fragments;
 
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -43,9 +48,9 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
 
 
 
-    boolean showPlaceholder = false;
     boolean expanded = true;
 
+    View emptyView;
     View zoomContainer;
     AgendaZoomHelper zoomHelper;
 
@@ -68,6 +73,17 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         View rootView = inflater.inflate(R.layout.fragment_daily_agenda, container, false);
         rv = (RecyclerView) rootView.findViewById(R.id.rv);
         inflater.inflate(R.layout.fragment_edit_profile, container, false);
+
+        emptyView = rootView.findViewById(R.id.empty_view_placeholder);
+        ImageView face = (ImageView) emptyView.findViewById(R.id.imageView_ok);
+
+        Drawable icon = new IconicsDrawable(getContext())
+                .icon(GoogleMaterial.Icon.gmd_alarm_check)
+                .colorRes(R.color.agenda_item_title)
+                .sizeDp(90)
+                .paddingDp(0);
+
+        face.setImageDrawable(icon);
 
         zoomContainer = rootView.findViewById(R.id.zoom_container);
         zoomHelper = new AgendaZoomHelper(zoomContainer, getActivity(),
@@ -141,7 +157,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
     }
 
     public List<DailyAgendaItemStub> buildItems() {
-        showPlaceholder = false;
+        boolean showPlaceholder = false;
         int now = DateTime.now().getHourOfDay();
         //String nextRoutineTime = getNextRoutineHour();
         ArrayList<DailyAgendaItemStub> items = new ArrayList<DailyAgendaItemStub>();
@@ -181,7 +197,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                         item.id = s.getId();
                         item.patient = s.patient();
                         item.isRoutine = false;
-                        item.title = med.name();
+                        item.title = s.toReadableString(getContext());
                         item.hour = t.getHourOfDay();
                         item.minute = t.getMinuteOfHour();
                         item.time = new LocalTime(item.hour, item.minute);
@@ -202,10 +218,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         }
 
         Log.d(getTag(), "Items: " + items.size());
-        if (items.size() == 0) {
-            showPlaceholder = true;
-            addEmptyPlaceholder(items);
-        }
+
 
         Collections.sort(items, dailyAgendaItemStubComparator);
 
@@ -220,6 +233,13 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         return items;
     }
 
+    public void showOrHideEmptyView(boolean show) {
+        if(show)
+            emptyView.setVisibility(View.VISIBLE);
+        else
+            emptyView.setVisibility(View.GONE);
+    }
+
     private void addEmptyPlaceholder(ArrayList<DailyAgendaItemStub> items) {
         DailyAgendaItemStub spacer = new DailyAgendaItemStub(null);
         spacer.isEmptyPlaceholder = true;
@@ -231,6 +251,27 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         expanded = !expanded;
         new LoadDailyAgendaTask().execute(null, null, null);
     }
+
+    public void expand() {
+        if(!expanded) {
+            expanded = true;
+            new LoadDailyAgendaTask().execute(null, null, null);
+        }
+    }
+
+    public void collapse() {
+        if(expanded) {
+            expanded = false;
+            new LoadDailyAgendaTask().execute(null, null, null);
+        }
+    }
+
+
+    public void refresh() {
+        rvAdapter.notifyDataSetChanged();
+    }
+
+
 
 
     void updatePrefs() {
@@ -265,10 +306,7 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                items.clear();
-                items.addAll(buildItems()); // allow user to change day
-                rvAdapter.notifyDataSetChanged();
-                //adapter.notifyDataSetChanged();
+                new LoadDailyAgendaTask().execute(null, null, null);
             }
         });
 
@@ -279,7 +317,8 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
 
         @Override
         protected Void doInBackground(Void... params) {
-            items = buildItems(); // allow user to change day
+            items.clear();
+            items.addAll(buildItems());
             return null;
         }
 
@@ -288,9 +327,11 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
             for(DailyAgendaItemStub i : items){
                 Log.d("Recycler", i.toString());
             }
-            rvAdapter = new DailyAgendaRecyclerAdapter(items);
-            rvAdapter.setListener(rvListener);
-            rv.setAdapter(rvAdapter);
+
+            boolean showPlaceholder = items.size() == 0;
+            showOrHideEmptyView(showPlaceholder);
+
+            rvAdapter.notifyDataSetChanged();
         }
     }
 

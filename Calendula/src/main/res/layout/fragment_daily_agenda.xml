@@ -5,23 +5,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:addStatesFromChildren="false"
-    android:background="@color/white">
+    android:background="#ffffff">
 
     <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        >
+        android:layout_height="fill_parent">
 
             <android.support.v7.widget.RecyclerView
-                android:background="#fff"
+                android:id="@+id/rv"
+                android:layout_gravity="fill_vertical"
+                android:background="#ffffff"
                 android:fillViewport="true"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:id="@+id/rv"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 />
 
     </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/empty_view_placeholder"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:visibility="gone">
+        <include layout="@layout/daily_view_empty_placeholder"/>
+    </FrameLayout>
+
 
     <FrameLayout
         android:id="@+id/zoom_container"
