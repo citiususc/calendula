@@ -1,31 +1,25 @@
 package es.usc.citius.servando.calendula.activities;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.LayoutAnimationController;
-import android.view.animation.TranslateAnimation;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,13 +60,17 @@ public class ConfirmActivity extends CalendulaActivity {
 
     DateTimeFormatter df = DateTimeFormat.forPattern("kk:mm");
 
-    ListView listView;
+    RecyclerView listView;
     ImageView avatar;
     TextView title;
+
+    ImageView avatarTitle;
+    TextView titleTitle;
+
     TextView hour;
     TextView minute;
 
-    ItemAdapter itemAdapter;
+    ConfirmItemAdapter itemAdapter;
 
     IconicsDrawable unchekedIcon;
     IconicsDrawable chekedIcon;
@@ -86,6 +84,10 @@ public class ConfirmActivity extends CalendulaActivity {
 
     int color;
     private String action;
+    private AppBarLayout appBarLayout;
+    CollapsingToolbarLayout toolbarLayout;
+
+    View toolbarTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,17 +99,23 @@ public class ConfirmActivity extends CalendulaActivity {
         //color = ScreenUtils.equivalentNoAlpha(color, 0.6f);
 
         setupStatusBar(Color.TRANSPARENT);
-        setupToolbar(patient.name(), Color.TRANSPARENT, Color.WHITE);
+        setupToolbar("", Color.TRANSPARENT, Color.WHITE);
         toolbar.setTitleTextColor(Color.WHITE);
         //findViewById(R.id.imageView5).setBackgroundColor(color);
         fab = (FloatingActionButton) findViewById(R.id.myFAB);
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (RecyclerView) findViewById(R.id.listView);
         avatar = (ImageView) findViewById(R.id.patient_avatar);
         title = (TextView) findViewById(R.id.routine_name);
+
+        avatarTitle = (ImageView) findViewById(R.id.patient_avatar_title);
+        titleTitle = (TextView) findViewById(R.id.routine_name_title);
+
         hour = (TextView) findViewById(R.id.routines_list_item_hour);
         minute = (TextView) findViewById(R.id.routines_list_item_minute);
-
+        toolbarTitle = findViewById(R.id.toolbar_title);
         avatar.setImageResource(AvatarMgr.res(patient.avatar()));
+        avatarTitle.setImageResource(AvatarMgr.res(patient.avatar()));
+        titleTitle.setText(patient.name());
         title.setText(isRoutine ? routine.name() : schedule.toReadableString(this));
 
         hour.setText(time.toString("kk:"));
@@ -115,14 +123,8 @@ public class ConfirmActivity extends CalendulaActivity {
 
         fab.setImageDrawable(new IconicsDrawable(this)
                 .icon(CommunityMaterial.Icon.cmd_check_all)
-                .color(Color.BLACK)
+                .color(Color.WHITE)
                 .sizeDp(24)
-                .paddingDp(0));
-
-        ((ImageView)findViewById(R.id.clock_icon)).setImageDrawable(new IconicsDrawable(this)
-                .icon(CommunityMaterial.Icon.cmd_clock)
-                .colorRes(R.color.agenda_item_title)
-                .sizeDp(65)
                 .paddingDp(0));
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -147,6 +149,20 @@ public class ConfirmActivity extends CalendulaActivity {
             }
         });
 
+        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        AppBarLayout.OnOffsetChangedListener mListener = new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if(toolbarLayout.getHeight() + verticalOffset < 2 * ViewCompat.getMinimumHeight(toolbarLayout)) {
+//                    toolbarTitle.animate().alpha(1);
+                } else {
+//                    toolbarTitle.animate().alpha(0);
+                }
+            }
+        };
+        appBarLayout.addOnOffsetChangedListener(mListener);
+
         setupListView();
         if("delay".equals(action)){
             showDelayDialog();
@@ -156,29 +172,12 @@ public class ConfirmActivity extends CalendulaActivity {
 
     private void setupListView() {
 
-        AnimationSet set = new AnimationSet(true);
-        Animation animation = new AlphaAnimation(0.0f, 1.0f);
-        animation.setDuration(200);
-        set.addAnimation(animation);
-
-        animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 50.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-                0.0f, Animation.RELATIVE_TO_SELF, 0.0f);
-        animation.setDuration(10);
-        set.addAnimation(animation);
-
-        final LayoutAnimationController controller = new LayoutAnimationController(set, 0.5f);
-
-        listView.setLayoutAnimation(controller);
-        itemAdapter = new ItemAdapter(this, R.layout.daily_view_intake_med, items);
+        loadItems();
+        itemAdapter = new ConfirmItemAdapter();
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        listView.setLayoutManager(llm);
         listView.setAdapter(itemAdapter);
-        listView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadItems();
-                controller.start();
-            }
-        }, 500);
+        listView.setItemAnimator(new DefaultItemAnimator());
     }
 
     private void processIntent() {
@@ -211,7 +210,6 @@ public class ConfirmActivity extends CalendulaActivity {
         }else{
             items.add(DB.dailyScheduleItems().findByScheduleAndTime(schedule,time));
         }
-        itemAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -220,17 +218,10 @@ public class ConfirmActivity extends CalendulaActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.confirm, menu);
 
-
         menu.findItem(R.id.action_delay).setIcon(new IconicsDrawable(this)
                 .icon(CommunityMaterial.Icon.cmd_history)
                 .color(Color.WHITE)
                 .sizeDp(24));
-
-//        menu.findItem(R.id.action_cancel).setIcon(new IconicsDrawable(this)
-//                .icon(CommunityMaterial.Icon.cmd_alarm_off)
-//                .color(Color.BLACK)
-//                .sizeDp(24));
-
         return true;
     }
 
@@ -245,13 +236,6 @@ public class ConfirmActivity extends CalendulaActivity {
             case R.id.action_delay:
                 showDelayDialog();
                 return true;
-//            case R.id.action_cancel:
-//                if (isRoutine) {
-//                    AlarmScheduler.instance().onCancelRoutineNotifications(routine, this);
-//                } else {
-//                    AlarmScheduler.instance().onCancelHourlyScheduleNotifications(schedule, time, this);
-//                }
-//                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -281,7 +265,7 @@ public class ConfirmActivity extends CalendulaActivity {
     }
 
 
-    private void onDailyAgendaItemCheck() {
+    protected void onDailyAgendaItemCheck() {
 
         int total = items.size();
         int checked = 0;
@@ -303,108 +287,6 @@ public class ConfirmActivity extends CalendulaActivity {
             } else {
                 AlarmScheduler.instance().onDelayHourlySchedule(schedule, time, this);
             }
-        }
-    }
-
-    private class ItemAdapter extends ArrayAdapter<DailyScheduleItem> {
-
-        LayoutInflater layoutInflater = getLayoutInflater();
-
-        public ItemAdapter(Context context, int layoutResourceId, List<DailyScheduleItem> items) {
-            super(context, layoutResourceId, items);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            final DailyScheduleItem i = items.get(position);
-
-            final ScheduleItem si = i.scheduleItem();
-            final Long sid = i.boundToSchedule() ?  i.schedule().getId() : si.schedule().getId();
-            final Schedule s = DB.schedules().findById(sid);
-            final Medicine m = s.medicine();
-            final Presentation p = m.presentation();
-
-
-            if(convertView == null){
-                convertView = layoutInflater.inflate(R.layout.confirm_activity_list_item, null);
-            }
-
-            final View cv = convertView;
-            final TextView med  = (TextView) convertView.findViewById(R.id.med_item_name);
-            final TextView dose = (TextView) convertView.findViewById(R.id.med_item_dose);
-            final ImageButton check = (ImageButton) convertView.findViewById(R.id.check_button);
-//            final ImageView icon = (ImageView) convertView.findViewById(R.id.imageView);
-            //final View ripple = convertView.findViewById(R.id.ripple);
-
-            med.setText(m.name());
-            dose.setText(getDisplayableDose(i.boundToSchedule() ?
-                    s.displayDose() :
-                    si.displayDose(), m));
-
-            updateCheckedState(convertView,i,s, si, m,p,getContext(), false);
-
-            check.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    boolean taken = i.takenToday();
-                    i.setTakenToday(!taken);
-                    i.save();
-                    updateCheckedState(cv, i, s, si, m, p, getContext(), true);
-                    onDailyAgendaItemCheck();
-                }
-            });
-
-            return convertView;
-        }
-    }
-
-
-    private void updateCheckedState(View convertView, DailyScheduleItem i, Schedule s, ScheduleItem si, Medicine m, Presentation p, Context ctx, boolean isUser){
-
-        final View cv = convertView;
-        final TextView med  = (TextView) convertView.findViewById(R.id.med_item_name);
-        final TextView dose = (TextView) convertView.findViewById(R.id.med_item_dose);
-        final ImageButton check = (ImageButton) convertView.findViewById(R.id.check_button);
-        final ImageView icon = (ImageView) convertView.findViewById(R.id.imageView);
-        //final View ripple = convertView.findViewById(R.id.ripple);
-        final int whiteAlpha = Color.parseColor("#aaffffff");
-
-        med.setText(m.name());
-        dose.setText(getDisplayableDose(i.boundToSchedule() ?
-                s.displayDose() :
-                si.displayDose(), m));
-
-        int color = Color.BLACK;
-        Drawable medDrawable = null;
-        Drawable checkDrawable = null;
-
-        if(i.takenToday()){
-            color = Color.parseColor("#81c784");
-            checkDrawable = getCheckedIcon(color);
-            //ripple.setVisibility(View.VISIBLE);
-            medDrawable = new IconicsDrawable(ctx)
-                    .icon(p.icon())
-                    .color(color)
-                    .sizeDp(36)
-                    .paddingDp(0);
-        }else{
-            //ripple.setVisibility(View.INVISIBLE);
-            checkDrawable = getUncheckedIcon(Color.parseColor("#11000000"));
-            medDrawable = new IconicsDrawable(ctx)
-                    .icon(p.icon())
-                    .color(Color.parseColor("#e57373"))
-                    .sizeDp(36)
-                    .paddingDp(0);
-        }
-
-//        med.setTextColor(color);
-//        dose.setTextColor(color);
-        check.setImageDrawable(checkDrawable);
-        icon.setImageDrawable(medDrawable);
-
-        if(isUser){
-            stateChanged = true;
         }
     }
 
@@ -435,42 +317,6 @@ public class ConfirmActivity extends CalendulaActivity {
     }
 
 
-    private void showRipple(int duration, View ripple) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-            ripple.setVisibility(View.INVISIBLE);
-            // get the center for the clipping circle
-            int cy = (ripple.getBottom()) / 2;
-            int cx = (ripple.getRight()) - cy;
-
-            // get the final radius for the clipping circle
-            int finalRadius = ripple.getWidth();
-
-            // create the animator for this view (the start radius is zero)
-            Animator anim = ViewAnimationUtils.createCircularReveal(ripple, cx, cy, 0, finalRadius);
-            // make the view visible and start the animation
-            ripple.setVisibility(View.VISIBLE);
-            anim.setDuration(duration).start();
-        }
-    }
-
-    private void hideRipple(int duration, final View ripple, AnimatorListenerAdapter l) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-            // get the center for the clipping circle
-
-            int cy = (ripple.getBottom()) / 2;
-            int cx = (ripple.getRight()) - cy;
-
-            // get the final radius for the clipping circle
-            int finalRadius = ripple.getWidth();
-            // create the animator for this view (the start radius is zero)
-            Animator anim = ViewAnimationUtils.createCircularReveal(ripple, cx, cy, finalRadius, 0);
-            // make the view visible and start the animation
-            anim.addListener(l);
-            anim.setDuration(duration).start();
-        }
-    }
 
     @Override
     protected void onDestroy() {
@@ -486,6 +332,93 @@ public class ConfirmActivity extends CalendulaActivity {
 
         public ConfirmStateCHangeEvent(int position) {
             this.position = position;
+        }
+    }
+
+
+    private class ConfirmItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+
+
+        public class ConfirmItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+            TextView med;
+            TextView dose;
+            ImageButton check;
+            ImageView icon;
+
+            DailyScheduleItem dailyScheduleItem;
+
+            public ConfirmItemViewHolder(View itemView) {
+                super(itemView);
+                med  = (TextView) itemView.findViewById(R.id.med_item_name);
+                dose = (TextView) itemView.findViewById(R.id.med_item_dose);
+                check = (ImageButton) itemView.findViewById(R.id.check_button);
+                icon = (ImageView) itemView.findViewById(R.id.imageView);
+                itemView.setOnClickListener(this);
+                check.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View view) {
+                boolean taken = dailyScheduleItem.takenToday();
+                dailyScheduleItem.setTakenToday(!taken);
+                dailyScheduleItem.save();
+                stateChanged = true;
+                onDailyAgendaItemCheck();
+                notifyItemChanged(getAdapterPosition());
+            }
+        }
+
+        ConfirmItemViewHolder h;
+        DailyScheduleItem i;
+        ScheduleItem si;
+        Long sid;
+        Schedule s;
+        Medicine m;
+        Presentation p;
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.confirm_activity_list_item, parent, false);
+            return new ConfirmItemViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+            h = (ConfirmItemViewHolder) holder;
+            i = items.get(position);
+            si = i.scheduleItem();
+            sid = i.boundToSchedule() ?  i.schedule().getId() : si.schedule().getId();
+            s = DB.schedules().findById(sid);
+            m = s.medicine();
+            p = m.presentation();
+
+            h.med.setText(m.name());
+            h.dose.setText(getDisplayableDose(i.boundToSchedule() ? s.displayDose() : si.displayDose(), m));
+
+            h.dailyScheduleItem = i;
+            updateCheckedStatus();
+        }
+
+        void updateCheckedStatus(){
+            Drawable medDrawable = new IconicsDrawable(ConfirmActivity.this)
+                    .icon(p.icon())
+                    .color(i.takenToday() ? Color.parseColor("#81c784") : Color.parseColor("#e57373") )
+                    .sizeDp(36)
+                    .paddingDp(0);
+
+            Drawable checkDrawable = i.takenToday() ?
+                    getCheckedIcon(Color.parseColor("#81c784"))
+                    : getUncheckedIcon(Color.parseColor("#11000000"));
+
+            h.check.setImageDrawable(checkDrawable);
+            h.icon.setImageDrawable(medDrawable);
+        }
+
+        @Override
+        public int getItemCount() {
+            return items.size();
         }
     }
 }
