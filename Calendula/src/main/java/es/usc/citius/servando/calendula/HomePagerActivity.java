@@ -33,6 +33,7 @@ import com.mikepenz.iconics.typeface.IIcon;
 import java.sql.SQLException;
 
 import es.usc.citius.servando.calendula.activities.CalendarActivity;
+import es.usc.citius.servando.calendula.activities.ConfirmActivity;
 import es.usc.citius.servando.calendula.activities.LeftDrawerMgr;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
@@ -361,8 +362,11 @@ public class HomePagerActivity extends CalendulaActivity implements
             Patient created = ((PersistenceEvents.UserCreateEvent) evt).patient;
             drawerMgr.onPatientCreated(created);
         } else if(evt instanceof HomeProfileMgr.BackgroundUpdatedEvent){
-            //toolbarLayout.setContentScrimColor(homeProfileMgr.colorForCurrent(getApplicationContext()));
             ((DailyAgendaFragment) getViewPagerFragment(0)).refresh();
+        } else if (evt instanceof ConfirmActivity.ConfirmStateCHangeEvent) {
+            int pos = ((ConfirmActivity.ConfirmStateCHangeEvent)evt).position;
+            //Toast.makeText(this, "Position: " + pos, Toast.LENGTH_SHORT).show();
+            ((DailyAgendaFragment) getViewPagerFragment(0)).refreshPosition(pos);
         }
     }
 

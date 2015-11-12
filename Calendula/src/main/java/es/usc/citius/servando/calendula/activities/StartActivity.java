@@ -80,11 +80,14 @@ public class StartActivity extends Activity {
         switch (action) {
             case ACTION_SHOW_REMINDERS:
                 Intent i = new Intent(getBaseContext(), HomeActivity.class);
+
                 i.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID,getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1));
-                i.putExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID,getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID, -1));
                 i.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID,getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1));
-                i.putExtra(CalendulaApp.INTENT_EXTRA_DELAY_SCHEDULE_ID,getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_SCHEDULE_ID, -1));
                 i.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, getIntent().getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME));
+
+                i.putExtra(CalendulaApp.INTENT_EXTRA_DELAY_SCHEDULE_ID,getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_SCHEDULE_ID, -1));
+                i.putExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID,getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID, -1));
+
                 ReminderNotification.cancel(StartActivity.this);
                 startActivity(i);
                 break;

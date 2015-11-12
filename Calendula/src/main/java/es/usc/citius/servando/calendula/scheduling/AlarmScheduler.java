@@ -17,6 +17,7 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.ConfirmActivity;
 import es.usc.citius.servando.calendula.activities.ReminderNotification;
 import es.usc.citius.servando.calendula.activities.StartActivity;
 import es.usc.citius.servando.calendula.database.DB;
@@ -300,7 +301,7 @@ public class AlarmScheduler {
             }
 
             if (notify) {
-                final Intent intent = new Intent(ctx, StartActivity.class);
+                final Intent intent = new Intent(ctx, ConfirmActivity.class);
                 intent.putExtra("action", StartActivity.ACTION_SHOW_REMINDERS);
                 intent.putExtra("routine_id", routine.getId());
 
@@ -342,7 +343,7 @@ public class AlarmScheduler {
         if (notify)
         {
 
-            final Intent intent = new Intent(ctx, StartActivity.class);
+            final Intent intent = new Intent(ctx, ConfirmActivity.class);
             intent.putExtra("action", StartActivity.ACTION_SHOW_REMINDERS);
             intent.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
             intent.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME,

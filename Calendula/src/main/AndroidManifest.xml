@@ -38,19 +38,16 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan" />
-
-
         <activity
             android:name=".HomePagerActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".activities.MedicinesActivity"
             android:label="@string/title_activity_medicines"
@@ -143,8 +140,10 @@
         </activity>
         <activity
             android:name=".activities.AboutActivity"
-            android:parentActivityName=".HomeActivity"
-            android:label="@string/title_activity_about" >
+            android:label="@string/title_activity_about"
+            android:parentActivityName=".HomeActivity" >
+        </activity>
+        <activity android:name=".activities.ConfirmActivity" >
         </activity>
     </application>
 

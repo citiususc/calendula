@@ -46,6 +46,7 @@
 
             <ImageView
                 android:id="@+id/patient_avatar"
+                android:transitionName="avatar_transition"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_centerVertical="true"
@@ -63,6 +64,7 @@
 
             <TextView
                 android:id="@+id/routines_list_item_name"
+                android:transitionName="title"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
                 android:layout_marginLeft="10dp"
@@ -80,6 +82,7 @@
 
             <LinearLayout
                 android:id="@+id/linearLayout"
+                android:transitionName="time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="false"
@@ -89,8 +92,8 @@
 
                 <ImageButton
                     android:id="@+id/imageButton2"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     android:layout_centerVertical="true"
                     android:layout_gravity="center_vertical"
                     android:background="@null"

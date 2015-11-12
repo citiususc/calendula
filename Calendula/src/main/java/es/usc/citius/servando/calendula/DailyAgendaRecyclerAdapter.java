@@ -31,7 +31,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
 
     public interface AgendaItemClickListener{
-        void onClick(View v, DailyAgendaItemStub item);
+        void onClick(View v, DailyAgendaItemStub item, int position);
     }
 
     private final int SPACER = 1;
@@ -107,7 +107,6 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
 
         holder.itemView.setTag(String.valueOf(item.hour));
-        setAnimation(holder.itemView, position);
     }
 
     @Override
@@ -207,7 +206,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             } else {
                 Log.d("Recycler", "Click row, listener is null? " + (listener == null));
                 if(listener != null){
-                    listener.onClick(view, stub);
+                    listener.onClick(view, stub, getAdapterPosition());
                 }
             }
         }
@@ -294,16 +293,6 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
-    private void setAnimation(View viewToAnimate, int position)
-    {
-//        // If the bound view wasn't previously displayed on screen, it's animated
-//        if (position > lastPosition)
-//        {
-//            Animation animation = AnimationUtils.loadAnimation(viewToAnimate.getContext(), android.R.anim.fade_in);
-//            viewToAnimate.startAnimation(animation);
-//            lastPosition = position;
-//        }
-    }
 
 
 }
