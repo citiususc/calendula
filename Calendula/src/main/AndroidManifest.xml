@@ -143,7 +143,8 @@
             android:label="@string/title_activity_about"
             android:parentActivityName=".HomeActivity" >
         </activity>
-        <activity android:name=".activities.ConfirmActivity" >
+        <activity android:name=".activities.ConfirmActivity"
+                  android:theme="@style/AppTheme" >
         </activity>
     </application>
 

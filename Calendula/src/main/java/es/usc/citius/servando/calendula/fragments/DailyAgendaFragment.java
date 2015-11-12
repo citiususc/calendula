@@ -33,9 +33,7 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.DailyAgendaRecyclerAdapter;
-import es.usc.citius.servando.calendula.HomeActivity;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.activities.AgendaZoomHelper;
 import es.usc.citius.servando.calendula.activities.ConfirmActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
@@ -48,7 +46,7 @@ import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 /**
  * Created by joseangel.pineiro on 11/15/13.
  */
-public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBackPressedListener {
+public class DailyAgendaFragment extends Fragment{
 
     private static final String TAG = DailyAgendaFragment.class.getName();
     DailyAgendaItemStubComparator dailyAgendaItemStubComparator =
@@ -60,8 +58,6 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
     boolean expanded = true;
 
     View emptyView;
-    View zoomContainer;
-    AgendaZoomHelper zoomHelper;
 
     RecyclerView rv;
     DailyAgendaRecyclerAdapter rvAdapter;
@@ -93,27 +89,6 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
                 .paddingDp(0);
 
         face.setImageDrawable(icon);
-
-        zoomContainer = rootView.findViewById(R.id.zoom_container);
-        zoomHelper = new AgendaZoomHelper(zoomContainer, getActivity(),
-                new AgendaZoomHelper.ZoomHelperListener() {
-                    @Override
-                    public void onChange() {
-                        items.clear();
-                        items.addAll(buildItems()); // allow user to change day
-                        rvAdapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onHide() {
-                        //updateBackground(DateTime.now());
-                    }
-
-                    @Override
-                    public void onShow(Routine r) {
-                        // updateBackground(r.time().toDateTimeToday());
-                    }
-                });
 
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rv.setLayoutManager(llm);
@@ -158,22 +133,6 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         }
     }
 
-    public void showReminder(Routine r) {
-        zoomHelper.remind(getActivity(), r);
-    }
-
-    public void showReminder(Schedule s, LocalTime t) {
-        zoomHelper.remind(getActivity(), s, t);
-    }
-
-    public void showDelayDialog(Routine r) {
-        zoomHelper.showDelayDialog(r);
-    }
-
-    public void showDelayDialog(Schedule s, LocalTime t) {
-        zoomHelper.showDelayDialog(s, t);
-    }
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -183,13 +142,8 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
     }
 
     public List<DailyAgendaItemStub> buildItems() {
-        boolean showPlaceholder = false;
         int now = DateTime.now().getHourOfDay();
-        //String nextRoutineTime = getNextRoutineHour();
         ArrayList<DailyAgendaItemStub> items = new ArrayList<DailyAgendaItemStub>();
-        //addSpacerTop(items);
-
-        ///////////////////////////////////////
 
         // get hourly schedules for today
         DateTime from = DateTime.now().withTimeAtStartOfDay();
@@ -384,14 +338,6 @@ public class DailyAgendaFragment extends Fragment implements HomeActivity.OnBack
         updatePrefs();
     }
 
-    @Override
-    public boolean doBack() {
-        if (zoomContainer.getVisibility() == View.VISIBLE) {
-            zoomHelper.hide();
-            return true;
-        }
-        return false;
-    }
 
     public boolean isExpanded() {
         return expanded;

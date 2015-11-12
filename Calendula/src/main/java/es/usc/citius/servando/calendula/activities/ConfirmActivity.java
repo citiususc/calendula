@@ -27,6 +27,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -52,7 +53,6 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
-import es.usc.citius.servando.calendula.util.Snack;
 
 public class ConfirmActivity extends CalendulaActivity {
 
@@ -85,6 +85,7 @@ public class ConfirmActivity extends CalendulaActivity {
 
 
     int color;
+    private String action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +96,7 @@ public class ConfirmActivity extends CalendulaActivity {
         color = Color.parseColor("#263238");
         //color = ScreenUtils.equivalentNoAlpha(color, 0.6f);
 
-        setupStatusBar(color);
+        setupStatusBar(Color.TRANSPARENT);
         setupToolbar(patient.name(), Color.TRANSPARENT, Color.WHITE);
         toolbar.setTitleTextColor(Color.WHITE);
         //findViewById(R.id.imageView5).setBackgroundColor(color);
@@ -127,17 +128,29 @@ public class ConfirmActivity extends CalendulaActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (DailyScheduleItem item : items){
+                for (DailyScheduleItem item : items) {
                     item.setTakenToday(true);
                     item.save();
                 }
                 itemAdapter.notifyDataSetChanged();
                 stateChanged = true;
+
+
+                String msg =ConfirmActivity.this.getString(R.string.all_meds_taken);
+                Toast.makeText(ConfirmActivity.this, msg, Toast.LENGTH_SHORT).show();
+                fab.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        supportFinishAfterTransition();
+                    }
+                }, 500);
             }
         });
 
         setupListView();
-
+        if("delay".equals(action)){
+            showDelayDialog();
+        }
 
     }
 
@@ -170,7 +183,8 @@ public class ConfirmActivity extends CalendulaActivity {
 
     private void processIntent() {
         Intent i = getIntent();
-        position = i.getIntExtra("position",-1);
+        action = i.getStringExtra("action");
+        position = i.getIntExtra("position", -1);
         Long id = i.getLongExtra("routine_id",-1);
         if( id != -1){
             isRoutine = true;
@@ -250,11 +264,16 @@ public class ConfirmActivity extends CalendulaActivity {
                 .setItems(R.array.delays_array, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         int minutes = values[which];
-                        if(isRoutine)
+                        if(isRoutine) {
                             AlarmScheduler.instance().onDelayRoutine(routine, ConfirmActivity.this, minutes);
-                        else
+                        }
+                        else{
                             AlarmScheduler.instance().onDelayHourlySchedule(schedule, time, ConfirmActivity.this, minutes);
-                            Snack.show(ConfirmActivity.this.getString(R.string.alarm_delayed_message, minutes),ConfirmActivity.this);
+                        }
+
+                        String msg =ConfirmActivity.this.getString(R.string.alarm_delayed_message, minutes);
+                        Toast.makeText(ConfirmActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        supportFinishAfterTransition();
 
                     }
                 });
@@ -331,7 +350,7 @@ public class ConfirmActivity extends CalendulaActivity {
                     boolean taken = i.takenToday();
                     i.setTakenToday(!taken);
                     i.save();
-                    updateCheckedState(cv,i,s, si, m,p,getContext(), true);
+                    updateCheckedState(cv, i, s, si, m, p, getContext(), true);
                     onDailyAgendaItemCheck();
                 }
             });

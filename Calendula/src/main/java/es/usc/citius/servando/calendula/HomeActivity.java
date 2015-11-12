@@ -279,7 +279,7 @@ public class HomeActivity extends CalendulaActivity
                     showPagerItem(0);
                     // TODO mDrawerLayout.closeDrawer(drawerView);
                     final Routine r = Routine.findById(delayRoutineId);
-                    ((DailyAgendaFragment) getViewPagerFragment(0)).showDelayDialog(r);
+                    //((DailyAgendaFragment) getViewPagerFragment(0)).showDelayDialog(r);
                     ReminderNotification.cancel(HomeActivity.this);
                     getIntent().removeExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID);
                 }
@@ -297,7 +297,7 @@ public class HomeActivity extends CalendulaActivity
                     // TODO mDrawerLayout.closeDrawer(drawerView);
                     final Schedule s = Schedule.findById(delayScheduleId);
                     LocalTime t = LocalTime.parse(scheduleTime, DateTimeFormat.forPattern("kk:mm"));
-                    ((DailyAgendaFragment) getViewPagerFragment(0)).showDelayDialog(s, t);
+                    //((DailyAgendaFragment) getViewPagerFragment(0)).showDelayDialog(s, t);
 
                     ReminderNotification.cancel(HomeActivity.this);
                     getIntent().removeExtra(CalendulaApp.INTENT_EXTRA_DELAY_SCHEDULE_ID);
@@ -403,7 +403,7 @@ public class HomeActivity extends CalendulaActivity
             public void run() {
                 final Routine r = Routine.findById(routineId);
                 showPagerItem(0);
-                ((DailyAgendaFragment) getViewPagerFragment(0)).showReminder(r);
+                //((DailyAgendaFragment) getViewPagerFragment(0)).showReminder(r);
             }
         }, 1000);
     }
@@ -414,7 +414,7 @@ public class HomeActivity extends CalendulaActivity
             public void run() {
                 final Schedule r = Schedule.findById(scheduleId);
                 showPagerItem(0);
-                ((DailyAgendaFragment) getViewPagerFragment(0)).showReminder(r, scheduleTime);
+                //((DailyAgendaFragment) getViewPagerFragment(0)).showReminder(r, scheduleTime);
             }
         }, 1000);
     }

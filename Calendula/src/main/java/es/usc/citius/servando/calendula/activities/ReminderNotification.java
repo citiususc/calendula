@@ -125,9 +125,9 @@ public class ReminderNotification {
         PendingIntent defaultIntent =
             PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        final Intent delay = new Intent(context, StartActivity.class);
-        delay.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, StartActivity.ACTION_SHOW_REMINDERS);
-        delay.putExtra(CalendulaApp.INTENT_EXTRA_DELAY_ROUTINE_ID, r.getId());
+        final Intent delay = new Intent(context, ConfirmActivity.class);
+        delay.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, "delay");
+        delay.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, r.getId());
 
         PendingIntent delayIntent =
             PendingIntent.getActivity(context, 1, delay, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -280,9 +280,9 @@ public class ReminderNotification {
         PendingIntent defaultIntent =
             PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        final Intent delay = new Intent(context, StartActivity.class);
-        delay.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, StartActivity.ACTION_SHOW_REMINDERS);
-        delay.putExtra(CalendulaApp.INTENT_EXTRA_DELAY_SCHEDULE_ID, schedule.getId());
+        final Intent delay = new Intent(context, ConfirmActivity.class);
+        delay.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, "delay");
+        delay.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
         delay.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, time.toString("kk:mm"));
 
         PendingIntent delayIntent =

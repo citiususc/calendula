@@ -6,15 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
-    android:paddingTop="@dimen/status_bar_height"
     tools:context="es.usc.citius.servando.calendula.activities.ConfirmActivity">
 
     <ImageView
         android:layout_width="fill_parent"
-        android:layout_height="130dp"
+        android:layout_height="170dp"
         android:id="@+id/imageView5"
-        android:layout_alignTop="@+id/toolbar"
         android:background="#37474f"/>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/imageView9"
+        android:layout_alignTop="@+id/imageView5"
+        android:layout_alignBottom="@+id/imageView5"
+        android:src="@drawable/clock"
+        android:scaleType="centerCrop"
+        android:alpha="0.1"/>
 
     <android.support.v7.widget.Toolbar
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -24,7 +32,7 @@
         android:title="Patients"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        />
+        android:layout_marginTop="@dimen/status_bar_height"/>
 
 
     <RelativeLayout
@@ -167,10 +175,9 @@
         android:textSize="20sp"
         android:visibility="visible"
         android:layout_below="@+id/toolbar"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="36dp"
         android:gravity="left"
         android:paddingLeft="26dp"/>
-
 
 
 </RelativeLayout>
