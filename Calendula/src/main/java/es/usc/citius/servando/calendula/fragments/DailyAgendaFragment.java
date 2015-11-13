@@ -55,12 +55,13 @@ public class DailyAgendaFragment extends Fragment{
 
 
 
-    boolean expanded = true;
+    //boolean expanded = true;
 
     View emptyView;
 
     RecyclerView rv;
     DailyAgendaRecyclerAdapter rvAdapter;
+    LinearLayoutManager llm;
     private DailyAgendaRecyclerAdapter.AgendaItemClickListener rvListener;
 
     @Override
@@ -90,7 +91,7 @@ public class DailyAgendaFragment extends Fragment{
 
         face.setImageDrawable(icon);
 
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        llm = new LinearLayoutManager(getContext());
         rv.setLayoutManager(llm);
         rvAdapter = new DailyAgendaRecyclerAdapter(items);
         rv.setAdapter(rvAdapter);
@@ -165,7 +166,7 @@ public class DailyAgendaFragment extends Fragment{
             final List<DateTime> times = s.rule().occurrencesBetween(from, to, s.startDateTime());
             if (times.size() > 0) {
                 for (DateTime t : times) {
-                    if (t.plusHours(1).isAfterNow() || expanded) {
+                    //if (t.plusHours(1).isAfterNow() ) { // || expanded
                         Log.d(TAG, "RFC dailyAgenda: " + t.toString("E dd MMM, kk:mm ZZZ"));
                         DailyAgendaItemStub item = new DailyAgendaItemStub(t.toLocalTime());
                         item.meds = new ArrayList<>();
@@ -192,7 +193,7 @@ public class DailyAgendaFragment extends Fragment{
                         item.minute = t.getMinuteOfHour();
                         item.time = new LocalTime(item.hour, item.minute);
                         items.add(item);
-                    }
+//                    }
                 }
             }
         }
@@ -201,9 +202,9 @@ public class DailyAgendaFragment extends Fragment{
         for (int i = 0; i < 24; i++) {
             List<DailyAgendaItemStub> hourItems = DailyAgendaItemStub.fromHour(i);
             for (DailyAgendaItemStub item : hourItems) {
-                if (item.hasEvents && i >= now || expanded) {
+                // if (item.hasEvents && i >= now || expanded) {
                     items.add(item);
-                }
+                // }
             }
         }
 
@@ -238,22 +239,7 @@ public class DailyAgendaFragment extends Fragment{
 
 
     public void toggleViewMode() {
-        expanded = !expanded;
-        new LoadDailyAgendaTask().execute(null, null, null);
-    }
-
-    public void expand() {
-        if(!expanded) {
-            expanded = true;
-            new LoadDailyAgendaTask().execute(null, null, null);
-        }
-    }
-
-    public void collapse() {
-        if(expanded) {
-            expanded = false;
-            new LoadDailyAgendaTask().execute(null, null, null);
-        }
+        rvAdapter.toggleCollapseMode();
     }
 
 
@@ -350,11 +336,10 @@ public class DailyAgendaFragment extends Fragment{
 
 
     public boolean isExpanded() {
-        return expanded;
+        return rvAdapter.isExpanded();
     }
 
     public void notifyDataChange() {
-
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -366,6 +351,7 @@ public class DailyAgendaFragment extends Fragment{
 
 
     public class LoadDailyAgendaTask extends AsyncTask<Void, Void, Void> {
+
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -382,7 +368,6 @@ public class DailyAgendaFragment extends Fragment{
 
             boolean showPlaceholder = items.size() == 0;
             showOrHideEmptyView(showPlaceholder);
-
             rvAdapter.notifyDataSetChanged();
         }
     }

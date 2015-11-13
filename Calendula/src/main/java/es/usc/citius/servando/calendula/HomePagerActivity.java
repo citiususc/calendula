@@ -139,20 +139,10 @@ public class HomePagerActivity extends CalendulaActivity implements
                     homeProfileMgr.onCollapse();
                     toolbarTitle.animate().alpha(1);
                 } else {
-
                     if(mViewPager.getCurrentItem()==0) {
                         toolbarTitle.animate().alpha(0);
                     }
-                    toolbarTitle.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            homeProfileMgr.onExpand();
-                        }
-                    }, 300);
-                }
-
-                if(toolbarLayout.getHeight() + verticalOffset <= ViewCompat.getMinimumHeight(toolbarLayout)+10) {
-                    //((DailyAgendaFragment) getViewPagerFragment(0)).expand();
+                    homeProfileMgr.onExpand();
                 }
             }
         };
@@ -322,20 +312,16 @@ public class HomePagerActivity extends CalendulaActivity implements
                 return true;
             case R.id.action_expand:
                 Log.d("Home", "ToogleExpand");
-                boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
-
+                final boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
+                ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
                 appBarLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
+                        appBarLayout.setExpanded(expanded);
                     }
-                },250);
-
-                appBarLayout.setExpanded(expanded);
-                item.setIcon(getResources().getDrawable(
-                        (!expanded) ? R.drawable.ic_unfold_less_white_48dp
+                },200);
+                item.setIcon(getResources().getDrawable((!expanded) ? R.drawable.ic_unfold_less_white_48dp
                                 : R.drawable.ic_unfold_more_white_48dp));
-
 
                 return true;
         }

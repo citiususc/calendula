@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mikepenz.iconics.IconicsDrawable;
@@ -22,12 +24,14 @@ import java.util.List;
 import es.usc.citius.servando.calendula.fragments.HomeProfileMgr;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
+import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 /**
  * Created by joseangel.pineiro on 11/6/15.
  */
 public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private boolean expanded = true;
 
 
     public interface AgendaItemClickListener{
@@ -124,12 +128,14 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public static class EmptyItemViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
+        RelativeLayout container;
         TextView hourText;
         DailyAgendaItemStub stub;
 
         EmptyItemViewHolder(View itemView) {
             super(itemView);
             hourText = (TextView) itemView.findViewById(R.id.hour_text);
+            container = (RelativeLayout) itemView.findViewById(R.id.container);
             itemView.setOnClickListener(this);
         }
 
@@ -197,32 +203,10 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
         @Override
         public void onClick(View view) {
-            if (view.getId() == arrow.getId()){
-                Log.d("Recycler", "Click bottom arrow");
-
-                if(stub.isExpanded) {
-                    collapse();
-                }else {
-                    expand();
-                }
-
-                stub.isExpanded = !stub.isExpanded;
-                notifyItemChanged(getAdapterPosition());
-            } else {
-                Log.d("Recycler", "Click row, listener is null? " + (listener == null));
-                if(listener != null){
-                    listener.onClick(view, stub, getAdapterPosition());
-                }
+            Log.d("Recycler", "Click row, listener is null? " + (listener == null));
+            if(listener != null){
+                listener.onClick(view, stub, getAdapterPosition());
             }
-        }
-
-
-        private void expand(){
-            arrow.startAnimation(rotateAnimUp);
-        }
-
-        private void collapse(){
-            arrow.startAnimation(rotateAnimDown);
         }
     }
 
@@ -233,8 +217,14 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     public void onBindEmptyItemViewHolder(EmptyItemViewHolder viewHolder, DailyAgendaItemStub item, int position) {
-        viewHolder.hourText.setText(item.time != null ? item.time.toString("kk:mm") : "--");
+
+        Resources r = viewHolder.container.getResources();
+
+                viewHolder.hourText.setText(item.time != null ? item.time.toString("kk:mm") : "--");
         viewHolder.stub = item;
+        ViewGroup.LayoutParams params = viewHolder.container.getLayoutParams();
+        params.height = expanded ? ScreenUtils.dpToPx(r, 45) : 0;
+        viewHolder.container.setLayoutParams(params);
 
     }
 
@@ -304,5 +294,21 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
 
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void toggleCollapseMode(){
+        expanded = !expanded;
+//        if(expanded){
+            for(int i= 0; i< items.size();i++){
+                if(!items.get(i).hasEvents){
+                    notifyItemChanged(i);
+                }
+            }
+//        }else {
+//            notifyDataSetChanged();
+//        }
+    }
 
 }

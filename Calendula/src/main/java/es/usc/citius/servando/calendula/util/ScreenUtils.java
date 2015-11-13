@@ -2,6 +2,7 @@ package es.usc.citius.servando.calendula.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -15,6 +16,7 @@ import android.os.Build;
 import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
@@ -197,5 +199,9 @@ public class ScreenUtils {
 
     public static int getStatusBarHeight(Context ctx) {
         return ctx.getResources().getDimensionPixelSize(R.dimen.status_bar_height);
+    }
+
+    public static int dpToPx(Resources r, float dp){
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
     }
 }
