@@ -342,14 +342,26 @@ public class HomePagerActivity extends CalendulaActivity implements
             ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
             ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
             ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
-        }else if(evt instanceof PersistenceEvents.ActiveUserChangeEvent){
+        }
+        else if(evt instanceof PersistenceEvents.ActiveUserChangeEvent){
             activePatient = ((PersistenceEvents.ActiveUserChangeEvent) evt).patient;
             updateTitle(mViewPager.getCurrentItem());
             toolbarLayout.setContentScrimColor(activePatient.color());
-        } else if(evt instanceof PersistenceEvents.UserCreateEvent){
+        }
+        else if(evt instanceof PersistenceEvents.UserUpdateEvent){
+            Patient p = ((PersistenceEvents.UserUpdateEvent) evt).patient;
+            ((DailyAgendaFragment) getViewPagerFragment(0)).onUserUpdate();
+            if(DB.patients().isActive(p, this)) {
+                activePatient = p;
+                updateTitle(mViewPager.getCurrentItem());
+                toolbarLayout.setContentScrimColor(activePatient.color());
+            }
+        }
+        else if(evt instanceof PersistenceEvents.UserCreateEvent){
             Patient created = ((PersistenceEvents.UserCreateEvent) evt).patient;
             drawerMgr.onPatientCreated(created);
-        } else if(evt instanceof HomeProfileMgr.BackgroundUpdatedEvent){
+        }
+        else if(evt instanceof HomeProfileMgr.BackgroundUpdatedEvent){
             ((DailyAgendaFragment) getViewPagerFragment(0)).refresh();
         } else if (evt instanceof ConfirmActivity.ConfirmStateCHangeEvent) {
             int pos = ((ConfirmActivity.ConfirmStateCHangeEvent)evt).position;

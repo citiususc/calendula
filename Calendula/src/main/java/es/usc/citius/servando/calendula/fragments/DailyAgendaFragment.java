@@ -349,6 +349,10 @@ public class DailyAgendaFragment extends Fragment{
 
     }
 
+    public void onUserUpdate() {
+        notifyDataChange();
+    }
+
 
     public class LoadDailyAgendaTask extends AsyncTask<Void, Void, Void> {
 

@@ -35,8 +35,13 @@ public class PatientDao extends GenericDao<Patient, Long> {
 
     @Override
     public void saveAndFireEvent(Patient p) {
+
+        Object event =  p.id() == null ? new PersistenceEvents.UserCreateEvent(p) : new PersistenceEvents.UserUpdateEvent(p);
         save(p);
-        CalendulaApp.eventBus().post(new PersistenceEvents.UserCreateEvent(p));
+        CalendulaApp.eventBus().post(event);
+
+
+
     }
 
     /// Mange active patient through preferences

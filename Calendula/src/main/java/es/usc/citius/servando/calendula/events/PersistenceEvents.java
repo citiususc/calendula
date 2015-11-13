@@ -39,6 +39,13 @@ public class PersistenceEvents {
         }
     }
 
+    public static class UserUpdateEvent {
+        public Patient patient;
+        public UserUpdateEvent(Patient patient) {
+            this.patient = patient;
+        }
+    }
+
     public static class ActiveUserChangeEvent {
         public Patient patient;
         public ActiveUserChangeEvent(Patient patient) {
