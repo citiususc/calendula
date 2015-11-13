@@ -4,6 +4,6 @@
         <color android:color="@color/android_orange_lighter"/>
     </item>
     <item>
-        <bitmap android:src="@drawable/drawertopbg" android:alpha="0.5"/>
+        <bitmap android:src="@drawable/drawertopbg" android:alpha="0.1"/>
     </item>
 </layer-list>

@@ -101,7 +101,7 @@ public class ConfirmActivity extends CalendulaActivity {
         setupStatusBar(Color.TRANSPARENT);
         setupToolbar("", Color.TRANSPARENT, Color.WHITE);
         toolbar.setTitleTextColor(Color.WHITE);
-        //findViewById(R.id.imageView5).setBackgroundColor(color);
+        findViewById(R.id.imageView5).setBackgroundColor(patient.color());
         fab = (FloatingActionButton) findViewById(R.id.myFAB);
         listView = (RecyclerView) findViewById(R.id.listView);
         avatar = (ImageView) findViewById(R.id.patient_avatar);
@@ -162,7 +162,7 @@ public class ConfirmActivity extends CalendulaActivity {
             }
         };
         appBarLayout.addOnOffsetChangedListener(mListener);
-
+        toolbarLayout.setContentScrimColor(patient.color());
         setupListView();
         if("delay".equals(action)){
             showDelayDialog();
@@ -404,7 +404,7 @@ public class ConfirmActivity extends CalendulaActivity {
         void updateCheckedStatus(){
             Drawable medDrawable = new IconicsDrawable(ConfirmActivity.this)
                     .icon(p.icon())
-                    .color(i.takenToday() ? Color.parseColor("#81c784") : Color.parseColor("#e57373") )
+                    .color(i.takenToday() ? Color.parseColor("#81c784") : Color.parseColor("#11000000"))
                     .sizeDp(36)
                     .paddingDp(0);
 

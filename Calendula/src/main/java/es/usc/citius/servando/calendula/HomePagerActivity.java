@@ -121,6 +121,7 @@ public class HomePagerActivity extends CalendulaActivity implements
         homeProfileMgr.init(userInfoFragment, this);
 
         activePatient = DB.patients().getActive(this);
+        toolbarLayout.setContentScrimColor(activePatient.color());
 
         // Setup fab
         addButton = (FloatingActionsMenu) findViewById(R.id.fab_menu);
@@ -358,6 +359,7 @@ public class HomePagerActivity extends CalendulaActivity implements
         }else if(evt instanceof PersistenceEvents.ActiveUserChangeEvent){
             activePatient = ((PersistenceEvents.ActiveUserChangeEvent) evt).patient;
             updateTitle(mViewPager.getCurrentItem());
+            toolbarLayout.setContentScrimColor(activePatient.color());
         } else if(evt instanceof PersistenceEvents.UserCreateEvent){
             Patient created = ((PersistenceEvents.UserCreateEvent) evt).patient;
             drawerMgr.onPatientCreated(created);

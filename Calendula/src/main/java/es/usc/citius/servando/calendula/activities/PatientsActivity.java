@@ -171,10 +171,10 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
             ImageView patientAvatarBg = (ImageView) view.findViewById(R.id.patient_avatar_bg);
             TextView patientName = (TextView) view.findViewById(R.id.patient_name);
             View activeIndicator = view.findViewById(R.id.active_indicator);
-            int[] color = AvatarMgr.colorsFor(getResources(), p.avatar());
+            int color = p.color();
 
             patientName.setText(p.name());
-            patientName.setBackgroundColor(color[0]);
+            patientName.setBackgroundColor(color);
             patientAvatar.setImageResource(AvatarMgr.res(p.avatar()));
 
             if (isActive) {
@@ -183,7 +183,7 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
                 activeIndicator.setVisibility(View.GONE);
             }
 
-            int colorAlpha = ScreenUtils.equivalentNoAlpha(color[0], 0.4f);
+            int colorAlpha = ScreenUtils.equivalentNoAlpha(color, 0.4f);
             patientAvatarBg.setBackgroundColor(colorAlpha);
             return view;
 

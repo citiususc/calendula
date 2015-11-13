@@ -120,14 +120,24 @@ public class DailyAgendaFragment extends Fragment{
             i.putExtra("schedule_time", new LocalTime(item.hour, item.minute).toString("kk:mm"));
         }
 
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    getActivity(),
-                    new Pair<>(view.findViewById(R.id.patient_avatar), "avatar_transition"),
-                    new Pair<>(view.findViewById(R.id.linearLayout), "time"),
-            new Pair<>(view.findViewById(R.id.routines_list_item_name), "title")
-            );
-            ActivityCompat.startActivity(getActivity(), i, activityOptions.toBundle());
+
+            View v1 = view.findViewById(R.id.patient_avatar);
+            View v2 = view.findViewById(R.id.linearLayout);
+            View v3 = view.findViewById(R.id.routines_list_item_name);
+
+            if(v1!=null && v2!=null && v3!=null) {
+                ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        getActivity(),
+                        new Pair<>(v1, "avatar_transition"),
+                        new Pair<>(v2, "time"),
+                        new Pair<>(v3, "title")
+                );
+                ActivityCompat.startActivity(getActivity(), i, activityOptions.toBundle());
+            }else{
+                startActivity(i);
+            }
         } else {
             startActivity(i);
         }

@@ -1,5 +1,7 @@
 package es.usc.citius.servando.calendula.persistence;
 
+import android.graphics.Color;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -15,6 +17,7 @@ public class Patient {
     public static final String COLUMN_NAME = "Name";
     public static final String COLUMN_DEFAULT = "Default";
     public static final String COLUMN_AVATAR = "Avatar";
+    public static final String COLUMN_COLOR = "Color";
 
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
@@ -29,6 +32,9 @@ public class Patient {
     @DatabaseField(columnName = COLUMN_AVATAR)
     private String avatar = AvatarMgr.DEFAULT_AVATAR;
 
+
+    @DatabaseField(columnName = COLUMN_COLOR)
+    private int color = Color.parseColor("#1976d2"); // material blue 700
 
     public Long id() {
         return id;
@@ -61,5 +67,13 @@ public class Patient {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    public int color(){
+        return color;
     }
 }

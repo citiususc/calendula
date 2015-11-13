@@ -18,6 +18,7 @@
                 android:fillViewport="true"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:clickable="true"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 />
 

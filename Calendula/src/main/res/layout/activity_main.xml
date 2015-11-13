@@ -71,6 +71,7 @@
                     app:tabTextAppearance="@style/AppTabLayoutTextAppearance"
                     app:tabSelectedTextColor="#ffffff"
                     app:tabTextColor="#77ffffff"
+                    android:layout_marginBottom="1px"
                     android:gravity="bottom"/>
 
 

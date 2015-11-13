@@ -4,27 +4,68 @@
     android:layout_height="fill_parent"
     android:background="#fff">
 
-    <LinearLayout
-        android:id="@+id/daily_view_content"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:divider="@null"
-        android:dividerPadding="0dp"
-        android:orientation="vertical"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:paddingBottom="5dp"
-        android:paddingLeft="5dp"
-        android:paddingTop="5dp"
-        android:paddingRight="5dp">
+    <!--<LinearLayout-->
+        <!--android:id="@+id/daily_view_content"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:divider="@null"-->
+        <!--android:dividerPadding="0dp"-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_marginLeft="15dp"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_marginRight="5dp"-->
+        <!--android:paddingBottom="5dp"-->
+        <!--android:paddingLeft="5dp"-->
+        <!--android:paddingTop="5dp"-->
+        <!--android:paddingRight="5dp">-->
 
 
-        <RelativeLayout
+    <RelativeLayout
+            android:id="@+id/bottom"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:visibility="visible"
+            android:layout_marginBottom="5dp"
+            android:layout_below="@+id/routine_list_item_container"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="0dp">
+
+            <LinearLayout
+                android:id="@+id/med_item_list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:orientation="vertical"
+                android:layout_marginBottom="10dp">
+
+                <include layout="@layout/daily_view_intake_med"></include>
+                <include layout="@layout/daily_view_intake_med"></include>
+                <include layout="@layout/daily_view_intake_med"></include>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/taken_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignBottom="@+id/imageView2"
+        android:layout_marginBottom="1px"
+        android:background="#aaffffff"
+        android:visibility="visible"/>
+
+    <RelativeLayout
             android:id="@+id/routine_list_item_container"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="2dp">
+            android:paddingTop="2dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="16dp">
 
             <ImageButton
                 android:id="@+id/count_container"
@@ -42,24 +83,6 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/arrow_down"
                 android:visibility="gone" />
-
-
-            <ImageView
-                android:id="@+id/patient_avatar"
-                android:transitionName="avatar_transition"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerVertical="true"
-                android:background="@null"
-                android:paddingBottom="5dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:paddingTop="5dp"
-                android:scaleType="fitCenter"
-                android:visibility="visible"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="6dp"/>
-
 
 
             <TextView
@@ -147,41 +170,45 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/bottom"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:visibility="visible"
-            android:layout_marginBottom="5dp">
-
-            <LinearLayout
-                android:id="@+id/med_item_list"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:orientation="vertical">
-
-                <include layout="@layout/daily_view_intake_med"></include>
-                <include layout="@layout/daily_view_intake_med"></include>
-                <include layout="@layout/daily_view_intake_med"></include>
-
-            </LinearLayout>
-
-        </RelativeLayout>
-
-        <ImageView
+    <ImageView
             android:id="@+id/imageView2"
             android:layout_width="fill_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
-            android:layout_below="@+id/daily_view_content"
+            android:layout_below="@+id/bottom"
             android:background="#ececec"
             android:visibility="visible"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            />
+            android:layout_marginTop="10dp"/>
 
-    </LinearLayout>
+
+
+    <ImageView
+        android:layout_width="10dp"
+        android:layout_height="match_parent"
+        android:id="@+id/patient_indicator_band"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignBottom="@+id/imageView2"
+        android:layout_marginBottom="1px"/>
+
+
+    <ImageView
+        android:id="@+id/patient_avatar"
+        android:transitionName="avatar_transition"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
+        android:scaleType="fitCenter"
+        android:visibility="visible"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="10dp"/>
 
 </RelativeLayout>

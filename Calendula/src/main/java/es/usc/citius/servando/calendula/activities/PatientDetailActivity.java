@@ -21,13 +21,14 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.materialize.Materialize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,6 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
 
     private Menu menu;
     private int avatarBackgroundColor;
-    Materialize mt;
 
     FloatingActionButton fab;
 
@@ -68,6 +68,8 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
     Drawable iconSwich;
 
     CheckBox addRoutinesCheckBox;
+    LinearLayout colorList;
+    HorizontalScrollView colorScroll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +77,6 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         setContentView(R.layout.activity_patient_detail);
         top = findViewById(R.id.top);
         bg = findViewById(R.id.bg);
-//        selectAvatarMsg = (TextView) findViewById(R.id.select_avatar_message);
         patientAvatar = (ImageView) findViewById(R.id.patient_avatar);
         patientAvatarBg = findViewById(R.id.patient_avatar_bg);
         gridContainer = (RelativeLayout) findViewById(R.id.grid_container);
@@ -83,8 +84,11 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         fab = (FloatingActionButton) findViewById(R.id.avatar_change);
         avatarGrid = (GridView) findViewById(R.id.grid);
         addRoutinesCheckBox = (CheckBox) findViewById(R.id.checkBox);
+        colorScroll = (HorizontalScrollView) findViewById(R.id.colorScroll);
+
         avatarGrid.setVisibility(View.VISIBLE);
         gridContainer.setVisibility(View.GONE);
+
 
 
         long patientId = getIntent().getLongExtra("patient_id", -1);
@@ -110,7 +114,63 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         setSwichFab();
         setupToolbar(patient.name(), Color.TRANSPARENT);
         setupAvatarList();
+        setupColorChooser();
         loadPatient();
+    }
+
+    private void setupColorChooser() {
+
+        colorList = (LinearLayout) findViewById(R.id.color_chooser);
+        colorList.removeAllViews();
+
+        for(final String hex : COLORS){
+            ImageView colorView = (ImageView) getLayoutInflater().inflate(R.layout.color_chooser_item, null);
+            final int color = Color.parseColor(hex);
+            colorView.setBackgroundColor(color);
+            colorView.setPadding(2, 2, 2, 2);
+            if(color == patient.color()) {
+                colorView.setImageDrawable(new IconicsDrawable(this)
+                        .icon(CommunityMaterial.Icon.cmd_checkbox_marked_circle)
+                        .paddingDp(30)
+                        .color(Color.WHITE)
+                        .sizeDp(80));
+            }else {
+                colorView.setImageDrawable(new IconicsDrawable(this)
+                        .icon(CommunityMaterial.Icon.cmd_checkbox_marked_circle)
+                        .paddingDp(30)
+                        .color(Color.TRANSPARENT)
+                        .sizeDp(80));
+            }
+            colorView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    patient.setColor(color);
+                    setupColorChooser();
+                    int x = (int) view.getX() + view.getWidth()/2 - colorScroll.getScrollX();
+                    updateAvatar(patient.avatar(), 1, 200, x);
+                    colorList.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            scrollToColor(color);
+                        }
+                    },300);
+                    //Toast.makeText(getBaseContext(), "Color: " + hex, Toast.LENGTH_SHORT).show();
+                }
+            });
+            colorList.addView(colorView);
+        }
+    }
+
+    private void scrollToColor(int color){
+        int index = 0;
+        for(int i = 0; i < COLORS.length; i++){
+            if(color == Color.parseColor(COLORS[i])){
+                index = i;
+                break;
+            }
+        }
+        int width = colorList.getChildAt(0).getWidth();
+        colorScroll.smoothScrollTo(width*index + width/2 - colorScroll.getWidth()/2 ,0);
     }
 
 
@@ -149,6 +209,12 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             // make the view visible and start the animation
             gridContainer.setVisibility(View.VISIBLE);
             anim.setDuration(duration).start();
+            gridContainer.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    scrollToColor(patient.color());
+                }
+            },duration);
         }
     }
 
@@ -179,20 +245,21 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
 
 
 
-    private void animateAvatarBg(int duration) {
+    private void animateAvatarBg(int duration, int x) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             patientAvatarBg.setVisibility(View.INVISIBLE);
             // get the center for the clipping circle
             int cx = (patientAvatarBg.getLeft() + patientAvatarBg.getRight()) / 2;
-            int cy = (patientAvatarBg.getTop() + patientAvatarBg.getBottom()) / 2;
+            int cy = patientAvatarBg.getBottom();
 
             // get the final radius for the clipping circle
             int finalRadius = Math.max(patientAvatarBg.getWidth(), patientAvatarBg.getHeight());
 
             // create the animator for this view (the start radius is zero)
-            Animator anim = ViewAnimationUtils.createCircularReveal(patientAvatarBg, cx, cy, 0, finalRadius);
+            Animator anim = ViewAnimationUtils.createCircularReveal(patientAvatarBg, x, cy, 0, finalRadius);
             // make the view visible and start the animation
             patientAvatarBg.setVisibility(View.VISIBLE);
+            anim.setInterpolator(new AccelerateInterpolator());
             anim.setDuration(duration).start();
         }
     }
@@ -224,24 +291,13 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
 
     private void loadPatient() {
         patientName.setText(patient.name());
-        updateAvatar(patient.avatar(), 400, 400);
-//        ScaleAnimation anim = new ScaleAnimation(0,1,0,1);
-//        anim.setFillBefore(true);
-//        anim.setFillAfter(true);
-//        anim.setFillEnabled(true);
-//        anim.setDuration(400);
-//        anim.setInterpolator(new OvershootInterpolator());
-//        fab.setVisibility(View.VISIBLE);
-//        fab.startAnimation(anim);
+        updateAvatar(patient.avatar(), 400, 400, patientAvatar.getWidth()/2);
     }
 
-    private void updateAvatar(String avatar, int delay, final int duration){
-        int[] color = AvatarMgr.colorsFor(getResources(), avatar);
+    private void updateAvatar(String avatar, int delay, final int duration, final int x){
         patientAvatar.setImageResource(AvatarMgr.res(avatar));
-
-        color1 = ScreenUtils.equivalentNoAlpha(color[0], 0.7f);
-        color2 = ScreenUtils.equivalentNoAlpha(color[0], 0.4f);
-
+        color1 = patient.color();
+        color2 = ScreenUtils.equivalentNoAlpha(color1, 0.7f);
         avatarBackgroundColor = color1;
         top.setBackgroundColor(color2);
         gridContainer.setBackgroundColor(getResources().getColor(R.color.dark_grey_home));
@@ -252,7 +308,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
                 @Override
                 public void run() {
                    patientAvatarBg.setBackgroundColor(avatarBackgroundColor);
-                   animateAvatarBg(duration);
+                   animateAvatarBg(duration, x);
                 }
             }, delay);
         }else{
@@ -305,7 +361,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String avatar = avatars.get(position);
         patient.setAvatar(avatar);
-        updateAvatar(avatar, 0, 0);
+        updateAvatar(avatar, 0, 0, patientAvatar.getWidth()/2);
         adapter.notifyDataSetChanged();
 
     }
@@ -355,6 +411,49 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             return view;
         }
     }
+
+
+    public static final String[] COLORS = new String[]{
+
+            "#1abc9c",
+            "#16a085",
+            "#f1c40f",
+            "#f39c12",
+            "#2ecc71",
+            "#27ae60",
+            "#e67e22",
+            "#d35400",
+            "#c0392b",
+            "#e74c3c",
+            "#2980b9",
+            "#3498db",
+            "#9b59b6",
+            "#8e44ad",
+            "#2c3e50",
+            "#34495e"
+
+
+//            "#f44336",
+//            "#e91e63",
+//            "#9c27b0",
+//            "#673ab7",
+//            "#3f51b5",
+//            "#1976d2",
+//            "#2196f3",
+//            "#03a9f4",
+//            "#00bcd4",
+//            "#009688",
+//            "#4caf50",
+//            "#8bc34a",
+//            "#cddc39",
+//            "#ffeb3b",
+//            "#ffc107",
+//            "#ff9800",
+//            "#ff5722",
+//            "#795548",
+//            "#9e9e9e",
+//            "#607d8b"
+    };
 
 
 }

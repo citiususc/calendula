@@ -109,6 +109,28 @@
         android:visibility="visible"
         android:layout_below="@+id/top">
 
+        <HorizontalScrollView
+            android:id="@+id/colorScroll"
+            android:scrollbars="none"
+            android:layout_width="fill_parent"
+            android:layout_height="80dp">
+            <LinearLayout
+                android:id="@+id/color_chooser"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="80dp">
+
+                <!--<include layout="@layout/color_chooser_item"/>-->
+                <!--<include layout="@layout/color_chooser_item"/>-->
+                <!--<include layout="@layout/color_chooser_item"/>-->
+                <!--<include layout="@layout/color_chooser_item"/>-->
+                <!--<include layout="@layout/color_chooser_item"/>-->
+                <!--<include layout="@layout/color_chooser_item"/>-->
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
 
         <GridView
             android:id="@+id/grid"
@@ -123,7 +145,8 @@
             android:paddingRight="20dp"
             android:paddingBottom="0dp"
             android:layout_alignParentTop="true"
-            android:visibility="gone"/>
+            android:visibility="visible"
+            android:layout_marginTop="80dp"/>
 
     </RelativeLayout>
 

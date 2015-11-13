@@ -8,8 +8,7 @@
         <item name="colorPrimary">@color/android_blue_dark</item>
         <item name="colorPrimaryDark">@color/transparent</item>
         <item name="android:statusBarColor">@color/android_blue_statusbar</item>
-
-
+        <item name="android:windowAllowReturnTransitionOverlap">false</item>
         <!--<item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
         <!--<item name="windowActionModeOverlay">true</item>-->
         <!-- The rest of your attributes -->

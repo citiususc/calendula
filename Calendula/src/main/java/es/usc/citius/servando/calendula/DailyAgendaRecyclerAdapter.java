@@ -148,6 +148,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         LinearLayout medList;
         ImageView itemTypeIcon;
         ImageView avatarIcon;
+        ImageView patientIndicatorBand;
 
         TextView title;
         TextView hour;
@@ -156,6 +157,8 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         View arrow;
         View top;
         View bottom;
+
+        View takenOverlay;
 
         RotateAnimation rotateAnimUp;
         RotateAnimation rotateAnimDown;
@@ -174,6 +177,8 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             this.arrow = itemView.findViewById(R.id.count_container);
             this.top = itemView.findViewById(R.id.routine_list_item_container);
             this.bottom = itemView.findViewById(R.id.bottom);
+            this.patientIndicatorBand = (ImageView) itemView.findViewById(R.id.patient_indicator_band);
+            this.takenOverlay = itemView.findViewById(R.id.taken_overlay);
 
             top.setOnClickListener(this);
             arrow.setOnClickListener(this);
@@ -247,12 +252,15 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
         if (item.patient != null) {
             viewHolder.avatarIcon.setImageResource(AvatarMgr.res(item.patient.avatar()));
+            viewHolder.patientIndicatorBand.setBackgroundColor(item.patient.color());
         }
 
         viewHolder.title.setText(item.title);
         viewHolder.hour.setText((item.hour > 9 ? item.hour : "0" + item.hour) + ":");
         viewHolder.minute.setText((item.minute > 9 ? item.minute : "0" + item.minute) + "");
-        addMeds(viewHolder, item);
+        boolean allTaken = addMeds(viewHolder, item);
+        viewHolder.takenOverlay.setVisibility(allTaken ? View.VISIBLE : View.GONE);
+
 
         if(item.isExpanded){
             viewHolder.bottom.setVisibility(View.VISIBLE);
@@ -262,9 +270,9 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     }
 
-    private void addMeds(NormalItemViewHolder viewHolder, DailyAgendaItemStub item) {
+    private boolean addMeds(NormalItemViewHolder viewHolder, DailyAgendaItemStub item) {
 
-        //HomeProfileMgr.colorForCurrent(viewHolder.medList.getContext());
+        boolean allTaken = true;
 
         viewHolder.medList.removeAllViews();
 
@@ -274,6 +282,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             if (element.taken) {
                 medNameView.findViewById(R.id.ic_done).setVisibility(View.VISIBLE);
             } else {
+                allTaken = false;
                 medNameView.findViewById(R.id.ic_done).setVisibility(View.INVISIBLE);
             }
             ((TextView) medNameView.findViewById(R.id.med_item_dose)).setText(
@@ -291,6 +300,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
             viewHolder.medList.addView(medNameView);
         }
+        return allTaken;
     }
 
 

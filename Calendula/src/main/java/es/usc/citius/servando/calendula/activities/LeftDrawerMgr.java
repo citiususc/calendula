@@ -293,10 +293,10 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
 
     public void updateHeaderBackground(Patient p){
         currentPatient = p;
-        int colors[] = AvatarMgr.colorsFor(home.getResources(), p.avatar());
+        //int colors[] = AvatarMgr.colorsFor(home.getResources(), p.avatar());
         LayerDrawable layers = (LayerDrawable) headerResult.getHeaderBackgroundView().getDrawable();
         ColorDrawable color = (ColorDrawable) layers.findDrawableByLayerId(R.id.color_layer);
-        color.setColor(ScreenUtils.equivalentNoAlpha(colors[0], 0.7f));
+        color.setColor(ScreenUtils.equivalentNoAlpha(p.color(), 1f));
     }
 
 
