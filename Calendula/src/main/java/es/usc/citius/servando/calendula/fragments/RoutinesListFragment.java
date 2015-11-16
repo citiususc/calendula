@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,8 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.List;
 
@@ -36,13 +41,23 @@ public class RoutinesListFragment extends Fragment {
     ArrayAdapter adapter;
     ListView listview;
 
+    Drawable ic;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_routines_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.routines_list);
         mRoutines = DB.routines().findAllForActivePatient(getContext());
+
+        ic = new IconicsDrawable(getContext())
+                .icon(CommunityMaterial.Icon.cmd_clock)
+                .colorRes(R.color.agenda_item_title)
+                .paddingDp(8)
+                .sizeDp(40);
+
         adapter = new RoutinesListAdapter(getActivity(), R.layout.routines_list_item, mRoutines);
         listview.setAdapter(adapter);
+
         return rootView;
     }
 
@@ -70,6 +85,11 @@ public class RoutinesListFragment extends Fragment {
         ((TextView) item.findViewById(R.id.routines_list_item_hour)).setText(strHour);
         ((TextView) item.findViewById(R.id.routines_list_item_minute)).setText(strMinute);
         ((TextView) item.findViewById(R.id.routines_list_item_name)).setText(routine.name());
+        ((ImageButton) item.findViewById(R.id.imageButton2)).setImageDrawable(ic);
+
+        int items = routine.scheduleItems().size();
+
+        ((TextView) item.findViewById(R.id.routines_list_item_subtitle)).setText((items > 0 ? (""+items) : "Sin ") + " pautas asociadas");
         View overlay = item.findViewById(R.id.routine_list_item_container);
         overlay.setTag(routine);
 

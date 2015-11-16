@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
 
     <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/routine_list_item_container"
         android:layout_width="fill_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/touchable_white">
 
         <ImageView
@@ -14,40 +12,62 @@
             android:layout_height="1px"
 
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginLeft="72dp"
             android:background="#efefef" />
 
-        <TextView
-            android:id="@+id/routines_list_item_name"
-            android:layout_width="wrap_content"
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_alarm_black_48dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="26dp"
-            android:fontFamily="sans-serif-light"
-            android:text="Breakfast"
-            android:textColor="#222"
-            android:textSize="20sp" />
+            android:orientation="vertical"
+            android:layout_margin="16dp"
+            android:layout_toRightOf="@+id/imageButton2">
+            <TextView
+                android:id="@+id/routines_list_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="sans-serif"
+                android:text="Breakfast"
+                android:textColor="#222"
+                android:textSize="18sp"
+                android:gravity="bottom"
+                />
+            <TextView
+                android:id="@+id/routines_list_item_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="sans-serif"
+                android:text="2 schedules bound"
+                android:textColor="@color/agenda_item_title"
+                android:textSize="14sp"
+                android:gravity="top"
+                android:paddingTop="2dp"
+                />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/routines_list_item_name"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="26dp">
-
-            <ImageButton
-                android:id="@+id/imageButton2"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center_vertical"
-                android:background="@null"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_alarm_black_48dp" />
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp">
 
             <TextView
                 android:id="@+id/routines_list_item_hour"
@@ -57,7 +77,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:text="08:"
-                android:textColor="@color/android_blue_dark"
+                android:textColor="@color/agenda_item_title"
                 android:textSize="20dp"
                 android:textStyle="bold" />
 
@@ -68,7 +88,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/routines_list_item_hour"
                 android:text="00"
-                android:textColor="@color/android_blue_dark"
+                android:textColor="@color/agenda_item_title"
                 android:textSize="20dp" />
 
             <TextView
@@ -77,12 +97,10 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/routines_list_item_minute"
                 android:text=" h"
-                android:textColor="@color/android_blue_dark"
-                android:textSize="20dp" />
+                android:textColor="@color/agenda_item_title"
+                android:textSize="20dp"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
     </RelativeLayout>
-
-
-</RelativeLayout>
