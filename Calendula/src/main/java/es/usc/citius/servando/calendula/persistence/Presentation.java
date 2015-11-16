@@ -93,7 +93,7 @@ public enum Presentation {
             case DROPS:
                 return PresentationsTypeface.Icon.ic_drops;
             case EFFERVESCENT:
-                return PresentationsTypeface.Icon.ic_drops;
+                return PresentationsTypeface.Icon.ic_effervescent;
             case INHALER:
                 return PresentationsTypeface.Icon.ic_inhaler;
             case INJECTIONS:
