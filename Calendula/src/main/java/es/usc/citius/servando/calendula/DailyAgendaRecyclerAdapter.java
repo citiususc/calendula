@@ -299,16 +299,14 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     public void toggleCollapseMode(){
+        Log.d("RVAdapter","toggleCollapseMode");
         expanded = !expanded;
-//        if(expanded){
-            for(int i= 0; i< items.size();i++){
-                if(!items.get(i).hasEvents){
+        for(int i= 0; i< items.size();i++){
+            if(!items.get(i).hasEvents){
                     notifyItemChanged(i);
                 }
-            }
-//        }else {
-//            notifyDataSetChanged();
-//        }
+        }
+        //notifyDataSetChanged();
     }
 
 }

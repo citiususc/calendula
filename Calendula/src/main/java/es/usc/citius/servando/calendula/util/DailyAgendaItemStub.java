@@ -141,4 +141,22 @@ public class DailyAgendaItemStub {
             return result;
         }
     }
+
+    public void copyFrom(DailyAgendaItemStub o){
+        isSpacer = o.isSpacer;
+        isEmptyPlaceholder = o.isEmptyPlaceholder;
+        isRoutine = o.isRoutine;
+        isNext = o.isNext;
+        hasEvents = o.hasEvents;
+        meds = o.meds;
+        title = o.title;
+        time = o.time;
+        id = o.id;
+        hour = o.hour;
+        minute = o.minute;
+        patient = o.patient;
+        isExpanded = o.isExpanded;
+    }
+
+
 }

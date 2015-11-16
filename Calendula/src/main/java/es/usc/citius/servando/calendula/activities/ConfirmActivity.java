@@ -322,15 +322,14 @@ public class ConfirmActivity extends CalendulaActivity {
     protected void onDestroy() {
 
         if(stateChanged && position != -1){
-            CalendulaApp.eventBus().post(new ConfirmStateCHangeEvent(position));
+            CalendulaApp.eventBus().post(new ConfirmStateChangeEvent(position));
         }
         super.onDestroy();
     }
 
-    public static class ConfirmStateCHangeEvent {
+    public static class ConfirmStateChangeEvent {
         public int position = -1;
-
-        public ConfirmStateCHangeEvent(int position) {
+        public ConfirmStateChangeEvent(int position) {
             this.position = position;
         }
     }

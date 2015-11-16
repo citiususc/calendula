@@ -92,6 +92,7 @@ public class HomePagerActivity extends CalendulaActivity implements
 
 
     private Patient activePatient;
+    private int pendingRefresh = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,6 +193,10 @@ public class HomePagerActivity extends CalendulaActivity implements
         super.onResume();
         Patient p = DB.patients().getActive(this);
         drawerMgr.onActivityResume(p);
+
+        if(pendingRefresh != -1){
+            //((DailyAgendaFragment) getViewPagerFragment(0)).refreshPosition(pendingRefresh);
+        }
     }
 
 
@@ -334,7 +339,7 @@ public class HomePagerActivity extends CalendulaActivity implements
 
     // Method called from the event bus
     @SuppressWarnings("unused")
-    public void onEvent(Object evt) {
+    public void onEvent(final Object evt) {
         if(evt instanceof  PersistenceEvents.ModelCreateOrUpdateEvent){
             PersistenceEvents.ModelCreateOrUpdateEvent event = (PersistenceEvents.ModelCreateOrUpdateEvent)evt;
             Log.d(TAG, "onEvent: " + event.clazz.getName());
@@ -363,10 +368,10 @@ public class HomePagerActivity extends CalendulaActivity implements
         }
         else if(evt instanceof HomeProfileMgr.BackgroundUpdatedEvent){
             ((DailyAgendaFragment) getViewPagerFragment(0)).refresh();
-        } else if (evt instanceof ConfirmActivity.ConfirmStateCHangeEvent) {
-            int pos = ((ConfirmActivity.ConfirmStateCHangeEvent)evt).position;
-            //Toast.makeText(this, "Position: " + pos, Toast.LENGTH_SHORT).show();
-            ((DailyAgendaFragment) getViewPagerFragment(0)).refreshPosition(pos);
+        }
+        else if (evt instanceof ConfirmActivity.ConfirmStateChangeEvent) {
+            pendingRefresh = ((ConfirmActivity.ConfirmStateChangeEvent) evt).position;
+            ((DailyAgendaFragment) getViewPagerFragment(0)).refreshPosition(pendingRefresh);
         }
     }
 

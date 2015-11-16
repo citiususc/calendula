@@ -100,7 +100,8 @@ public class DailyAgendaFragment extends Fragment{
         rvListener = new DailyAgendaRecyclerAdapter.AgendaItemClickListener() {
             @Override
             public void onClick(View v, DailyAgendaItemStub item, int position) {
-                showConfirmActivity(v,item, position);
+                Log.d(TAG, "Items ou showConfirm: " + items.size());
+                showConfirmActivity(v, item, position);
             }
         };
 
@@ -120,6 +121,8 @@ public class DailyAgendaFragment extends Fragment{
             i.putExtra("schedule_id", item.id);
             i.putExtra("schedule_time", new LocalTime(item.hour, item.minute).toString("kk:mm"));
         }
+
+        Log.d(TAG, "Position on show: " + position);
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -249,9 +252,13 @@ public class DailyAgendaFragment extends Fragment{
 
     public void refreshPosition(int position) {
 
-        DailyAgendaItemStub stub = items.get(position);
+        if(position < 0 && position >= items.size())
+            return;
 
+        Log.d(TAG, "Position to refresh: " + position);
+        DailyAgendaItemStub stub = items.get(position);
         DailyAgendaItemStub item;
+
         if(!stub.isRoutine){
             LocalTime t = stub.time;
             Schedule s = DB.schedules().findById(stub.id);
@@ -312,19 +319,17 @@ public class DailyAgendaFragment extends Fragment{
                 item.title = r.name();
                 item.hour = r.time().getHourOfDay();
                 item.minute = r.time().getMinuteOfHour();
-                items.add(item);
             }
         }
         items.remove(position);
         items.add(position, item);
+        //items.get(position).copyFrom(item);
         rvAdapter.notifyItemChanged(position);
     }
 
     void updatePrefs() {
-        SharedPreferences settings =
-                getActivity().getSharedPreferences(CalendulaApp.PREFERENCES_NAME, 0);
+        SharedPreferences settings = getActivity().getSharedPreferences(CalendulaApp.PREFERENCES_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
-
         editor.commit();
     }
 
