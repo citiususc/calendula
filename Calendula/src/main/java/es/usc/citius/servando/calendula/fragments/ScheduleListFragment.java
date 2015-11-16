@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.typeface.IIcon;
 
 import java.util.List;
 
@@ -60,6 +65,7 @@ public class ScheduleListFragment extends Fragment {
 
         View item = inflater.inflate(R.layout.schedules_list_item, null);
         ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
+        ImageView icon2 = (ImageView) item.findViewById(R.id.imageView);
 
         String timeStr = "";
         List<ScheduleItem> items = schedule.items();
@@ -71,8 +77,20 @@ public class ScheduleListFragment extends Fragment {
         }
 
 
-        icon.setImageDrawable(
-                getResources().getDrawable(schedule.medicine().presentation().getDrawable()));
+        icon2.setImageDrawable(new IconicsDrawable(getContext())
+                .icon(schedule.medicine().presentation().icon())
+                .color(Color.WHITE)
+                .paddingDp(8)
+                .sizeDp(40));
+
+        IIcon i = schedule.repeatsHourly() ? CommunityMaterial.Icon.cmd_history : CommunityMaterial.Icon.cmd_clock;
+
+        icon.setImageDrawable(new IconicsDrawable(getContext())
+                    .icon(i)
+                    .colorRes(R.color.agenda_item_title)
+                    .paddingDp(8)
+                    .sizeDp(40));
+
         ((TextView) item.findViewById(R.id.schedules_list_item_medname)).setText(
                 schedule.medicine().name());
         ((TextView) item.findViewById(R.id.schedules_list_item_times)).setText(timeStr);
