@@ -112,9 +112,9 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="10dp"
         fab:fab_icon="@drawable/ic_action_add"
-        fab:fab_colorNormal="@color/android_green"
+        fab:fab_colorNormal="#ececec"
         fab:fab_title="@string/schedule_type_routines_title"
-        fab:fab_colorPressed="@color/android_green_dark"
+        fab:fab_colorPressed="#e7e7e7"
         />
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
@@ -124,9 +124,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="false"
-        fab:fab_addButtonColorNormal="@color/android_green"
-        fab:fab_addButtonColorPressed="@color/android_green_dark"
-        fab:fab_addButtonPlusIconColor="@color/white"
+        fab:fab_addButtonColorNormal="#ececec"
+        fab:fab_addButtonColorPressed="#e7e7e7"
+        fab:fab_addButtonPlusIconColor="#263238"
         fab:fab_labelStyle="@style/menu_labels_style"
         fab:fab_labelsPosition="left"
         android:layout_alignParentBottom="true"

@@ -1,10 +1,13 @@
 package es.usc.citius.servando.calendula;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.View;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +18,8 @@ import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.ScanActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.fragments.ScheduleTypeFragment;
+import es.usc.citius.servando.calendula.persistence.Patient;
+import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 /**
  * Helper to manage the home screen floating action button behaviour
@@ -68,6 +73,12 @@ public class FabMenuMgr implements View.OnClickListener{
         }
 
         fab.setOnClickListener(this);
+        fab.setIconDrawable(new IconicsDrawable(activity)
+                .icon(GoogleMaterial.Icon.gmd_plus)
+                .paddingDp(5)
+                .sizeDp(24)
+                .color(Color.parseColor("#263238")));
+
         onViewPagerItemChange(0);
     }
 
@@ -75,8 +86,11 @@ public class FabMenuMgr implements View.OnClickListener{
 
         this.currentPage = currentPage;
 
-        fab.setColorNormalResId(getFabColor(currentPage));
-        fab.setColorPressedResId(getFabPressedColor(currentPage));
+        fab.setColorNormal(Color.parseColor("#ecf0f1"));
+        fab.setColorPressed(Color.parseColor("#e7e7e7"));
+
+//        fab.setColorNormalResId(getFabColor(currentPage));
+//        fab.setColorPressedResId(getFabPressedColor(currentPage));
 
         switch (currentPage){
 
@@ -150,7 +164,7 @@ public class FabMenuMgr implements View.OnClickListener{
     }
 
     private void launchActivity(Class<?> type){
-        activity.startActivity(new Intent(activity,type));
+        activity.startActivity(new Intent(activity, type));
         activity.overridePendingTransition(0, 0);
     }
 
@@ -193,6 +207,13 @@ public class FabMenuMgr implements View.OnClickListener{
                 return R.color.android_green_dark;
             default:
                 return R.color.android_blue_dark;
+        }
+    }
+
+    public void onPatientUpdate(Patient p){
+        for(FloatingActionButton f: scheduleActions){
+            f.setColorNormal(p.color());
+            f.setColorPressed(ScreenUtils.equivalentNoAlpha(p.color(), 0.7f));
         }
     }
 

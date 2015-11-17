@@ -127,11 +127,15 @@ public class HomePagerActivity extends CalendulaActivity implements
         activePatient = DB.patients().getActive(this);
         toolbarLayout.setContentScrimColor(activePatient.color());
 
+
         // Setup fab
         addButton = (FloatingActionsMenu) findViewById(R.id.fab_menu);
         fab = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.add_button);
         fabMgr = new FabMenuMgr(fab, addButton, drawerMgr, this);
         fabMgr.init();
+
+        fabMgr.onPatientUpdate(activePatient);
+
 
         // Setup the tabLayout
         setupTabLayout();
@@ -371,6 +375,7 @@ public class HomePagerActivity extends CalendulaActivity implements
             activePatient = ((PersistenceEvents.ActiveUserChangeEvent) evt).patient;
             updateTitle(mViewPager.getCurrentItem());
             toolbarLayout.setContentScrimColor(activePatient.color());
+            fabMgr.onPatientUpdate(activePatient);
         }
         else if(evt instanceof PersistenceEvents.UserUpdateEvent){
             Patient p = ((PersistenceEvents.UserUpdateEvent) evt).patient;
@@ -379,6 +384,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                 activePatient = p;
                 updateTitle(mViewPager.getCurrentItem());
                 toolbarLayout.setContentScrimColor(activePatient.color());
+                fabMgr.onPatientUpdate(activePatient);
             }
         }
         else if(evt instanceof PersistenceEvents.UserCreateEvent){
@@ -389,7 +395,6 @@ public class HomePagerActivity extends CalendulaActivity implements
             ((DailyAgendaFragment) getViewPagerFragment(0)).refresh();
         }
         else if (evt instanceof ConfirmActivity.ConfirmStateChangeEvent) {
-
             pendingRefresh = ((ConfirmActivity.ConfirmStateChangeEvent) evt).position;
             if(getViewPagerFragment(0) != null) {
                 ((DailyAgendaFragment) getViewPagerFragment(0)).refreshPosition(pendingRefresh);
