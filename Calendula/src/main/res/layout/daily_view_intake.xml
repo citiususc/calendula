@@ -4,20 +4,6 @@
     android:layout_height="fill_parent"
     android:background="#fff">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:id="@+id/take_now_available"
-        android:layout_alignParentRight="false"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignBottom="@+id/imageView2"
-        android:layout_marginBottom="1px"
-        android:alpha="0.1"
-        android:paddingRight="-250dp"
-        android:paddingTop="50dp"/>
-
     <RelativeLayout
             android:id="@+id/bottom"
             android:layout_width="fill_parent"
@@ -26,7 +12,6 @@
             android:visibility="visible"
             android:layout_marginBottom="5dp"
             android:layout_below="@+id/routine_list_item_container"
-            android:layout_marginLeft="16dp"
             android:layout_marginTop="0dp">
 
             <LinearLayout
@@ -35,7 +20,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:orientation="vertical"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="16dp">
 
                 <include layout="@layout/daily_view_intake_med"></include>
                 <include layout="@layout/daily_view_intake_med"></include>
@@ -43,7 +29,51 @@
 
             </LinearLayout>
 
+        <RelativeLayout
+            android:id="@+id/action_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/med_item_list"
+            android:gravity="right"
+            android:visibility="visible"
+            android:background="#f8f8f8">
+
+
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/check_all_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:src="@drawable/ic_done_black_48dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginBottom="0dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="Tómate tus medicinas ahora"
+                android:id="@+id/textView9"
+                android:gravity="center"
+                android:layout_marginRight="10dp"
+                android:textColor="#222"
+                android:textSize="15dp"
+                android:fontFamily="sans-serif-light"
+                android:layout_toLeftOf="@+id/check_all_button"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_alignParentTop="true"
+                android:background="#ececec"
+                android:visibility="visible"
+                android:layout_alignParentRight="true"/>
+
+
         </RelativeLayout>
+
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/taken_overlay"
@@ -165,6 +195,7 @@
                 android:layout_alignParentBottom="true"
                 android:background="#ececec"
                 android:visibility="gone"/>
+
 
         </RelativeLayout>
 

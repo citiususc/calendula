@@ -13,20 +13,33 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.fragments.HomeProfileMgr;
+import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
+import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Routine;
+import es.usc.citius.servando.calendula.persistence.Schedule;
+import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
+import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
@@ -176,7 +189,10 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         View bottom;
 
         View takenOverlay;
-        View takenNowHint;
+        //View takenNowHint;
+
+        View actionsView;
+        ImageButton checkAll;
 
         RotateAnimation rotateAnimUp;
         RotateAnimation rotateAnimDown;
@@ -197,11 +213,21 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             this.bottom = itemView.findViewById(R.id.bottom);
             this.patientIndicatorBand = (ImageView) itemView.findViewById(R.id.patient_indicator_band);
             this.takenOverlay = itemView.findViewById(R.id.taken_overlay);
-            this.takenNowHint = itemView.findViewById(R.id.take_now_available);
+
+            this.actionsView = itemView.findViewById(R.id.action_container);
+            this.checkAll = (ImageButton) itemView.findViewById(R.id.check_all_button);
+
+            this.checkAll.setImageDrawable(new IconicsDrawable(context)
+                            .colorRes(R.color.agenda_item_title)
+                            .icon(CommunityMaterial.Icon.cmd_check_all) //cmd_arrow_right_bold
+                            .paddingDp(0)
+                            .sizeDp(28)
+            );
 
             top.setOnClickListener(this);
             arrow.setOnClickListener(this);
             itemView.setOnClickListener(this);
+            checkAll.setOnClickListener(this);
 
             rotateAnimUp = new RotateAnimation(0, 180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
             rotateAnimUp.setInterpolator(new DecelerateInterpolator());
@@ -217,7 +243,28 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         @Override
         public void onClick(View view) {
             Log.d("Recycler", "Click row, listener is null? " + (listener == null));
-            if(listener != null){
+
+            if(view.getId() == R.id.check_all_button){
+
+                List<DailyScheduleItem> sitems = new ArrayList<>();
+                if(stub.isRoutine){
+                    List<ScheduleItem> rsi = ScheduleUtils.getRoutineScheduleItems(Routine.findById(stub.id), true);
+                    for(ScheduleItem si : rsi){
+                        sitems.add(DailyScheduleItem.findByScheduleItem(si));
+                    }
+                }else{
+
+                    Schedule s = Schedule.findById(stub.id);
+                    sitems.add(DB.dailyScheduleItems().findByScheduleAndTime(s,stub.time));
+                }
+
+                for (DailyScheduleItem item : sitems) {
+                    item.setTakenToday(true);
+                    item.save();
+                }
+                updateItem(getAdapterPosition(), context);
+
+            }else if(listener != null){
                 listener.onClick(view, stub, getAdapterPosition());
             }
         }
@@ -286,18 +333,18 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             viewHolder.title.setText(item.title);
             viewHolder.hour.setText((item.hour > 9 ? item.hour : "0" + item.hour) + ":");
             viewHolder.minute.setText((item.minute > 9 ? item.minute : "0" + item.minute) + "");
-            boolean allTaken = addMeds(viewHolder, item);
-            viewHolder.takenOverlay.setVisibility(allTaken ? View.VISIBLE : View.GONE);
 
+            boolean allTaken = addMeds(viewHolder, item);
 
             if (allTaken) {
-                viewHolder.takenNowHint.setVisibility(View.GONE);
+                viewHolder.takenOverlay.setVisibility(View.VISIBLE);
+                viewHolder.actionsView.setVisibility(View.GONE);
             } else {
+                viewHolder.takenOverlay.setVisibility(View.GONE);
                 if (available) {
-                    viewHolder.takenNowHint.setBackgroundColor(item.patient.color());
-                    viewHolder.takenNowHint.setVisibility(View.VISIBLE);
+                    viewHolder.actionsView.setVisibility(View.VISIBLE);
                 } else {
-                    viewHolder.takenNowHint.setVisibility(View.GONE);
+                    viewHolder.actionsView.setVisibility(View.GONE);
                 }
             }
         }
@@ -352,6 +399,78 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         for(int i= 0; i< items.size();i++){
             notifyItemChanged(i);
         }
+    }
+
+    private void updateItem(int position, Context context){
+        DailyAgendaItemStub stub = items.get(position);
+        DailyAgendaItemStub item;
+
+        if(!stub.isRoutine){
+            LocalTime t = stub.time;
+            Schedule s = DB.schedules().findById(stub.id);
+            item = new DailyAgendaItemStub(t);
+            item.meds = new ArrayList<>();
+            item.hasEvents = true;
+            int minute = t.getMinuteOfHour();
+            Medicine med = s.medicine();
+            DailyAgendaItemStub.DailyAgendaItemStubElement el = new DailyAgendaItemStub.DailyAgendaItemStubElement();
+            el.medName = med.name();
+            el.dose = s.dose();
+            el.displayDose = s.displayDose();
+            el.res = med.presentation().getDrawable();
+            el.presentation = med.presentation();
+            el.minute = minute < 10 ? "0" + minute : String.valueOf(minute);
+            el.taken = DB.dailyScheduleItems()
+                    .findByScheduleAndTime(s, t)
+                    .takenToday();
+            item.meds.add(el);
+            item.id = s.getId();
+            item.patient = s.patient();
+            item.isRoutine = false;
+            item.title = s.toReadableString(context);
+            item.hour = t.getHourOfDay();
+            item.minute = t.getMinuteOfHour();
+            item.time = new LocalTime(item.hour, item.minute);
+        }else{
+
+            LocalDate today = LocalDate.now();
+            Routine r = Routine.findById(stub.id);
+            List<ScheduleItem> doses = r.scheduleItems();
+
+            // create an ItemStub for the current hour
+            item = new DailyAgendaItemStub(r.time());
+            item.meds = new ArrayList<>();
+            for (ScheduleItem scheduleItem : doses) {
+                if (scheduleItem.schedule() != null && scheduleItem.schedule().enabledForDate(today)) {
+                    item.hasEvents = true;
+                    int minute = r.time().getMinuteOfHour();
+                    Medicine med = scheduleItem.schedule().medicine();
+                    DailyAgendaItemStub.DailyAgendaItemStubElement el = new DailyAgendaItemStub.DailyAgendaItemStubElement();
+                    el.medName = med.name();
+                    el.dose = scheduleItem.dose();
+                    el.displayDose = scheduleItem.displayDose();
+                    el.res = med.presentation().getDrawable();
+                    el.presentation = med.presentation();
+                    el.minute = minute < 10 ? "0" + minute : String.valueOf(minute);
+                    el.taken = DailyScheduleItem.findByScheduleItem(scheduleItem).takenToday();
+                    item.meds.add(el);
+                }
+            }
+            Collections.sort(item.meds);
+
+            if (!item.meds.isEmpty())
+            {
+                item.id = r.getId();
+                item.patient = r.patient();
+                item.title = r.name();
+                item.hour = r.time().getHourOfDay();
+                item.minute = r.time().getMinuteOfHour();
+            }
+        }
+        items.remove(position);
+        items.add(position, item);
+        //items.get(position).copyFrom(item);
+        notifyItemChanged(position);
     }
 
 }
