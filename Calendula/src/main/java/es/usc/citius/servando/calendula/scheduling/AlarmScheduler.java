@@ -19,7 +19,6 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ConfirmActivity;
 import es.usc.citius.servando.calendula.activities.ReminderNotification;
-import es.usc.citius.servando.calendula.activities.StartActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Routine;
@@ -302,7 +301,7 @@ public class AlarmScheduler {
 
             if (notify) {
                 final Intent intent = new Intent(ctx, ConfirmActivity.class);
-                intent.putExtra("action", StartActivity.ACTION_SHOW_REMINDERS);
+                //intent.putExtra("action", "show_remiders");
                 intent.putExtra("routine_id", routine.getId());
 
                 ReminderNotification.notify(ctx, ctx.getResources().getString(R.string.meds_time), routine, doses, intent);
@@ -344,13 +343,13 @@ public class AlarmScheduler {
         {
 
             final Intent intent = new Intent(ctx, ConfirmActivity.class);
-            intent.putExtra("action", StartActivity.ACTION_SHOW_REMINDERS);
+            //intent.putExtra("action", StartActivity.ACTION_SHOW_REMINDERS);
             intent.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
             intent.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME,
                 time.toString(SCHEDULE_TIME_FORMAT));
 
-            ReminderNotification.notifyHourly(ctx, ctx.getResources().getString(R.string.meds_time),
-                schedule, time.toLocalTime(), intent);
+            ReminderNotification.notify(ctx, ctx.getResources().getString(R.string.meds_time),
+                    schedule, time.toLocalTime(), intent);
 
             // Handle delay if needed
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -557,7 +556,7 @@ public class AlarmScheduler {
         return isWithinDefaultMargins(r.time().toDateTimeToday(), cxt);
     }
 
-    public boolean isWithinDefaultMargins(DateTime t, Context cxt) {
+    public static boolean isWithinDefaultMargins(DateTime t, Context cxt) {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(cxt);
         String delayMinutesStr = prefs.getString("alarm_reminder_window", "60");
