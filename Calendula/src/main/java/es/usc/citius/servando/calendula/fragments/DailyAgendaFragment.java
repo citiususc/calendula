@@ -22,6 +22,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
@@ -219,7 +220,14 @@ public class DailyAgendaFragment extends Fragment{
                     break;
                 }
             }
-            if(!exact) {
+
+            DateTime hourStart = new LocalTime(i,0).toDateTimeToday();
+            DateTime hourEnd = hourStart.plusHours(1);
+            Interval hour = new Interval(hourStart, hourEnd);
+
+
+
+            if(!exact || hour.contains(DateTime.now())) {
                 items.add(new DailyAgendaItemStub(new LocalTime(i, 0)));
             }
         }
@@ -354,7 +362,7 @@ public class DailyAgendaFragment extends Fragment{
         }
 
         if(position > 0)
-            llm.scrollToPositionWithOffset(position-1, 0);
+            llm.scrollToPositionWithOffset(position-1, 50);
     }
 
     void updatePrefs() {
@@ -399,6 +407,9 @@ public class DailyAgendaFragment extends Fragment{
                 return -1;
             } else if (b.isSpacer || b.time == null) {
                 return 1;
+            }
+            else if(a.time.compareTo(b.time) == 0){
+                return a.hasEvents ? -1 : 1;
             }
             return a.time.compareTo(b.time);
         }

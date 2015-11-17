@@ -21,12 +21,15 @@ public class CustomDigitalClock extends TextView {
 
     private final static String m12 = "kk:mm";
     private final static String m24 = "kk:mm";
+    private final static String m12sec = "kk:mm:ss";
+    private final static String m24sec = "kk:mm:ss";
     Calendar mCalendar;
     String mFormat;
     private FormatChangeObserver mFormatChangeObserver = new FormatChangeObserver();
     private Runnable mTicker;
     private Handler mHandler;
     private boolean mTickerStopped = false;
+    boolean showSeconds = false;
 
     public CustomDigitalClock(Context context) {
         super(context);
@@ -98,9 +101,9 @@ public class CustomDigitalClock extends TextView {
 
     private void setFormat() {
         if (get24HourMode()) {
-            mFormat = m24;
+            mFormat = showSeconds ? m24sec : m24;
         } else {
-            mFormat = m12;
+            mFormat = showSeconds ? m12sec: m12;
         }
     }
 
@@ -115,4 +118,8 @@ public class CustomDigitalClock extends TextView {
         }
     }
 
+    public void setShowSeconds(boolean showSeconds) {
+        this.showSeconds = showSeconds;
+        setFormat();
+    }
 }

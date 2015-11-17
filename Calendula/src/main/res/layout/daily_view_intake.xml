@@ -4,21 +4,19 @@
     android:layout_height="fill_parent"
     android:background="#fff">
 
-    <!--<LinearLayout-->
-        <!--android:id="@+id/daily_view_content"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:divider="@null"-->
-        <!--android:dividerPadding="0dp"-->
-        <!--android:orientation="vertical"-->
-        <!--android:layout_marginLeft="15dp"-->
-        <!--android:layout_marginTop="5dp"-->
-        <!--android:layout_marginRight="5dp"-->
-        <!--android:paddingBottom="5dp"-->
-        <!--android:paddingLeft="5dp"-->
-        <!--android:paddingTop="5dp"-->
-        <!--android:paddingRight="5dp">-->
-
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:id="@+id/take_now_available"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignBottom="@+id/imageView2"
+        android:layout_marginBottom="1px"
+        android:alpha="0.1"
+        android:paddingRight="-250dp"
+        android:paddingTop="50dp"/>
 
     <RelativeLayout
             android:id="@+id/bottom"
@@ -57,7 +55,7 @@
         android:layout_alignBottom="@+id/imageView2"
         android:layout_marginBottom="1px"
         android:background="#aaffffff"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
     <RelativeLayout
             android:id="@+id/routine_list_item_container"

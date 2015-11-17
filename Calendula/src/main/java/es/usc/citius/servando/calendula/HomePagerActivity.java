@@ -94,6 +94,9 @@ public class HomePagerActivity extends CalendulaActivity implements
     private Patient activePatient;
     private int pendingRefresh = -2;
 
+    Drawable icAgendaMore;
+    Drawable icAgendaLess;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,6 +161,17 @@ public class HomePagerActivity extends CalendulaActivity implements
                 ((DailyAgendaFragment) getViewPagerFragment(0)).scrollToNow();
             }
         }, 1000);
+
+        icAgendaLess = new IconicsDrawable(this)
+                .icon(CommunityMaterial.Icon.cmd_unfold_less)
+                .color(Color.WHITE)
+                .sizeDp(24);
+
+        icAgendaMore = new IconicsDrawable(this)
+                .icon(CommunityMaterial.Icon.cmd_unfold_more)
+                .color(Color.WHITE)
+                .sizeDp(24);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -292,7 +306,6 @@ public class HomePagerActivity extends CalendulaActivity implements
     }
 
 
-
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
@@ -301,9 +314,7 @@ public class HomePagerActivity extends CalendulaActivity implements
         if (pageNum == 0) {
             boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
             menu.findItem(R.id.action_expand).setVisible(true);
-            menu.findItem(R.id.action_expand)
-                    .setIcon(getResources().getDrawable(expanded ? R.drawable.ic_unfold_less_white_48dp
-                    : R.drawable.ic_unfold_more_white_48dp));
+            menu.findItem(R.id.action_expand).setIcon(!expanded ? icAgendaMore : icAgendaLess);
         } else {
             menu.findItem(R.id.action_expand).setVisible(false);
         }
@@ -313,8 +324,6 @@ public class HomePagerActivity extends CalendulaActivity implements
         } else {
             menu.findItem(R.id.action_calendar).setVisible(false);
         }
-
-
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -335,9 +344,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                         appBarLayout.setExpanded(expanded);
                     }
                 },200);
-                item.setIcon(getResources().getDrawable((!expanded) ? R.drawable.ic_unfold_less_white_48dp
-                                : R.drawable.ic_unfold_more_white_48dp));
-
+                item.setIcon(expanded ? icAgendaMore : icAgendaLess);
                 return true;
         }
         return super.onOptionsItemSelected(item);

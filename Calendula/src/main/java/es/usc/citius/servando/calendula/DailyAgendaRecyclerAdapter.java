@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -19,19 +20,24 @@ import android.widget.TextView;
 
 import com.mikepenz.iconics.IconicsDrawable;
 
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+
 import java.util.List;
 
 import es.usc.citius.servando.calendula.fragments.HomeProfileMgr;
+import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
+import es.usc.citius.servando.calendula.util.view.CustomDigitalClock;
 
 /**
  * Created by joseangel.pineiro on 11/6/15.
  */
 public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private boolean expanded = true;
+    private boolean expanded = false;
 
 
     public interface AgendaItemClickListener{
@@ -131,12 +137,17 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         RelativeLayout container;
         TextView hourText;
         DailyAgendaItemStub stub;
+        FrameLayout clcokContainer;
+        View currentHourLine;
 
         EmptyItemViewHolder(View itemView) {
             super(itemView);
             hourText = (TextView) itemView.findViewById(R.id.hour_text);
             container = (RelativeLayout) itemView.findViewById(R.id.container);
+            clcokContainer = (FrameLayout) itemView.findViewById(R.id.clock_container);
+            currentHourLine = itemView.findViewById(R.id.current_hour_line);
             itemView.setOnClickListener(this);
+
         }
 
         @Override
@@ -165,6 +176,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         View bottom;
 
         View takenOverlay;
+        View takenNowHint;
 
         RotateAnimation rotateAnimUp;
         RotateAnimation rotateAnimDown;
@@ -185,6 +197,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             this.bottom = itemView.findViewById(R.id.bottom);
             this.patientIndicatorBand = (ImageView) itemView.findViewById(R.id.patient_indicator_band);
             this.takenOverlay = itemView.findViewById(R.id.taken_overlay);
+            this.takenNowHint = itemView.findViewById(R.id.take_now_available);
 
             top.setOnClickListener(this);
             arrow.setOnClickListener(this);
@@ -219,44 +232,79 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindEmptyItemViewHolder(EmptyItemViewHolder viewHolder, DailyAgendaItemStub item, int position) {
 
         Resources r = viewHolder.container.getResources();
-
-                viewHolder.hourText.setText(item.time != null ? item.time.toString("kk:mm") : "--");
         viewHolder.stub = item;
+
+        DateTime hourStart = viewHolder.stub.time.toDateTimeToday().withMinuteOfHour(0);
+        DateTime hourEnd = hourStart.plusHours(1);
+        Interval hour = new Interval(hourStart, hourEnd);
+        boolean isCurrentHour = hour.contains(DateTime.now());
+
+        if(isCurrentHour && expanded) {
+            Context ctx = viewHolder.container.getContext();
+            int layout = R.layout.empty_intake_current_time;
+            CustomDigitalClock c = (CustomDigitalClock) LayoutInflater.from(ctx).inflate(layout, null);
+            c.setShowSeconds(true);
+            viewHolder.clcokContainer.addView(c);
+            viewHolder.hourText.setVisibility(View.GONE);
+            viewHolder.currentHourLine.setVisibility(View.VISIBLE);
+        } else if(expanded){
+            viewHolder.clcokContainer.removeAllViews();
+            viewHolder.hourText.setVisibility(View.VISIBLE);
+            viewHolder.currentHourLine.setVisibility(View.GONE);
+            viewHolder.hourText.setText(item.time != null ? item.time.toString("kk:mm") : "--");
+        } else{
+            viewHolder.clcokContainer.removeAllViews();
+        }
+
         ViewGroup.LayoutParams params = viewHolder.container.getLayoutParams();
         params.height = expanded ? ScreenUtils.dpToPx(r, 45) : 0;
         viewHolder.container.setLayoutParams(params);
-
     }
 
     public void onBindNormalItemViewHolder(NormalItemViewHolder viewHolder, DailyAgendaItemStub item, int i) {
 
         Log.d("Recycler", "OnBindNormalItem" + i );
-
         viewHolder.stub = item;
 
-        if (!item.isRoutine) {
-            viewHolder.itemTypeIcon.setImageResource(R.drawable.ic_history_black_48dp);
-        }else{
-            viewHolder.itemTypeIcon.setImageResource(R.drawable.ic_alarm_black_48dp);
+        DateTime t = viewHolder.stub.time.toDateTimeToday();
+        boolean available = AlarmScheduler.isWithinDefaultMargins(t,viewHolder.context);
+        boolean displayable = available || expanded || t.isAfterNow();
+
+        if(displayable) {
+
+            if (!item.isRoutine) {
+                viewHolder.itemTypeIcon.setImageResource(R.drawable.ic_history_black_48dp);
+            } else {
+                viewHolder.itemTypeIcon.setImageResource(R.drawable.ic_alarm_black_48dp);
+            }
+
+            if (item.patient != null) {
+                viewHolder.avatarIcon.setImageResource(AvatarMgr.res(item.patient.avatar()));
+                viewHolder.patientIndicatorBand.setBackgroundColor(item.patient.color());
+            }
+
+            viewHolder.title.setText(item.title);
+            viewHolder.hour.setText((item.hour > 9 ? item.hour : "0" + item.hour) + ":");
+            viewHolder.minute.setText((item.minute > 9 ? item.minute : "0" + item.minute) + "");
+            boolean allTaken = addMeds(viewHolder, item);
+            viewHolder.takenOverlay.setVisibility(allTaken ? View.VISIBLE : View.GONE);
+
+
+            if (allTaken) {
+                viewHolder.takenNowHint.setVisibility(View.GONE);
+            } else {
+                if (available) {
+                    viewHolder.takenNowHint.setBackgroundColor(item.patient.color());
+                    viewHolder.takenNowHint.setVisibility(View.VISIBLE);
+                } else {
+                    viewHolder.takenNowHint.setVisibility(View.GONE);
+                }
+            }
         }
 
-        if (item.patient != null) {
-            viewHolder.avatarIcon.setImageResource(AvatarMgr.res(item.patient.avatar()));
-            viewHolder.patientIndicatorBand.setBackgroundColor(item.patient.color());
-        }
-
-        viewHolder.title.setText(item.title);
-        viewHolder.hour.setText((item.hour > 9 ? item.hour : "0" + item.hour) + ":");
-        viewHolder.minute.setText((item.minute > 9 ? item.minute : "0" + item.minute) + "");
-        boolean allTaken = addMeds(viewHolder, item);
-        viewHolder.takenOverlay.setVisibility(allTaken ? View.VISIBLE : View.GONE);
-
-
-        if(item.isExpanded){
-            viewHolder.bottom.setVisibility(View.VISIBLE);
-        }else{
-            viewHolder.bottom.setVisibility(View.GONE);
-        }
+        ViewGroup.LayoutParams params = viewHolder.itemView.getLayoutParams();
+        params.height = displayable ? ViewGroup.LayoutParams.WRAP_CONTENT : 0;
+        viewHolder.itemView.setLayoutParams(params);
 
     }
 
@@ -302,9 +350,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         Log.d("RVAdapter","toggleCollapseMode");
         expanded = !expanded;
         for(int i= 0; i< items.size();i++){
-            if(!items.get(i).hasEvents){
-                    notifyItemChanged(i);
-                }
+            notifyItemChanged(i);
         }
     }
 
