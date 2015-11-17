@@ -206,9 +206,21 @@ public class DailyAgendaFragment extends Fragment{
         for (int i = 0; i < 24; i++) {
             List<DailyAgendaItemStub> hourItems = DailyAgendaItemStub.fromHour(i);
             for (DailyAgendaItemStub item : hourItems) {
-                // if (item.hasEvents && i >= now || expanded) {
-                    items.add(item);
-                // }
+                items.add(item);
+            }
+        }
+
+        // add empty hours if there is not an item with the same hour
+        for (int i = 0; i < 24; i++) {
+            boolean exact = false;
+            for (DailyAgendaItemStub item : items) {
+                if(item.hour == i && item.minute == 0){
+                    exact = true;
+                    break;
+                }
+            }
+            if(!exact) {
+                items.add(new DailyAgendaItemStub(new LocalTime(i, 0)));
             }
         }
 
@@ -325,6 +337,24 @@ public class DailyAgendaFragment extends Fragment{
         items.add(position, item);
         //items.get(position).copyFrom(item);
         rvAdapter.notifyItemChanged(position);
+    }
+
+
+    public void scrollToNow(){
+        scrollTo(LocalTime.now());
+    }
+
+    public void scrollTo(LocalTime time){
+        int position = 0;
+        for(DailyAgendaItemStub stub : items){
+            if(stub.time != null && stub.time.isAfter(time)){
+                break;
+            }
+            position++;
+        }
+
+        if(position > 0)
+            llm.scrollToPositionWithOffset(position-1, 0);
     }
 
     void updatePrefs() {

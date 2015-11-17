@@ -152,7 +152,12 @@ public class HomePagerActivity extends CalendulaActivity implements
         // configure tutorial
         this.tutorial = new AppTutorial();
         this.tutorial.init(this);
-
+        appBarLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ((DailyAgendaFragment) getViewPagerFragment(0)).scrollToNow();
+            }
+        }, 1000);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -161,6 +166,10 @@ public class HomePagerActivity extends CalendulaActivity implements
         }, 1500);
    }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+    }
 
     private void setupTabLayout(){
 

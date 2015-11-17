@@ -91,14 +91,8 @@ public class DailyAgendaItemStub {
                         item.minute = r.time().getMinuteOfHour();
                         items.add(item);
                     }
-                } else
-                {
-                    items.add(new DailyAgendaItemStub(new LocalTime(hour, 0)));
                 }
             }
-        } else
-        {
-            items.add(new DailyAgendaItemStub(new LocalTime(hour, 0)));
         }
 
         return items;
