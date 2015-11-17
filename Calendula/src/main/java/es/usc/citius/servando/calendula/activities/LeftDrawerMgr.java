@@ -126,7 +126,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                                 .withIdentifier(ROUTINES),
                         new PrimaryDrawerItem()
                                 .withName(R.string.title_activity_medicines)
-                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_hospital, R.color.black).alpha(110))
+                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_pill, R.color.black).alpha(110))
                                 .withIdentifier(MEDICINES),
                         new PrimaryDrawerItem()
                                 .withName(R.string.title_activity_schedules)
@@ -134,7 +134,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                                 .withIdentifier(SCHEDULES),
                         new PrimaryDrawerItem()
                                 .withName("Farmacias")
-                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_my_location, R.color.black).alpha(38))
+                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_map_marker_multiple, R.color.black).alpha(38))
                                 .withEnabled(false)
                                 .withIdentifier(PHARMACIES),
                         new PrimaryDrawerItem()
