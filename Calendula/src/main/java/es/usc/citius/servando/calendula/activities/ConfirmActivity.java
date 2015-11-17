@@ -164,9 +164,11 @@ public class ConfirmActivity extends CalendulaActivity {
         appBarLayout.addOnOffsetChangedListener(mListener);
         toolbarLayout.setContentScrimColor(patient.color());
         setupListView();
+
         if("delay".equals(action)){
             showDelayDialog();
         }
+
 
     }
 
@@ -197,7 +199,6 @@ public class ConfirmActivity extends CalendulaActivity {
             time = LocalTime.parse(timeStr, df);
             schedule = Schedule.findById(id);
             patient = schedule.patient();
-
         }
     }
 

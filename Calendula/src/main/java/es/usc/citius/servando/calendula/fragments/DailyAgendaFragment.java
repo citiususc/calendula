@@ -3,7 +3,6 @@ package es.usc.citius.servando.calendula.fragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -104,11 +103,14 @@ public class DailyAgendaFragment extends Fragment{
                 showConfirmActivity(v, item, position);
             }
         };
-
         rvAdapter.setListener(rvListener);
-        new LoadDailyAgendaTask().execute(null, null, null);
         return rootView;
+    }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        notifyDataChange();
     }
 
     private void showConfirmActivity(View view, DailyAgendaItemStub item, int position) {
@@ -169,34 +171,33 @@ public class DailyAgendaFragment extends Fragment{
             final List<DateTime> times = s.rule().occurrencesBetween(from, to, s.startDateTime());
             if (times.size() > 0) {
                 for (DateTime t : times) {
-                    //if (t.plusHours(1).isAfterNow() ) { // || expanded
-                        Log.d(TAG, "RFC dailyAgenda: " + t.toString("E dd MMM, kk:mm ZZZ"));
-                        DailyAgendaItemStub item = new DailyAgendaItemStub(t.toLocalTime());
-                        item.meds = new ArrayList<>();
-                        item.hasEvents = true;
-                        int minute = t.getMinuteOfHour();
-                        Medicine med = s.medicine();
-                        DailyAgendaItemStub.DailyAgendaItemStubElement el =
-                                new DailyAgendaItemStub.DailyAgendaItemStubElement();
-                        el.medName = med.name();
-                        el.dose = s.dose();
-                        el.displayDose = s.displayDose();
-                        el.res = med.presentation().getDrawable();
-                        el.presentation = med.presentation();
-                        el.minute = minute < 10 ? "0" + minute : String.valueOf(minute);
-                        el.taken = DB.dailyScheduleItems()
-                                .findByScheduleAndTime(s, t.toLocalTime())
-                                .takenToday();
-                        item.meds.add(el);
-                        item.id = s.getId();
-                        item.patient = s.patient();
-                        item.isRoutine = false;
-                        item.title = s.toReadableString(getContext());
-                        item.hour = t.getHourOfDay();
-                        item.minute = t.getMinuteOfHour();
-                        item.time = new LocalTime(item.hour, item.minute);
-                        items.add(item);
-//                    }
+
+                    Log.d(TAG, "RFC dailyAgenda: " + t.toString("E dd MMM, kk:mm ZZZ"));
+                    DailyAgendaItemStub item = new DailyAgendaItemStub(t.toLocalTime());
+                    item.meds = new ArrayList<>();
+                    item.hasEvents = true;
+                    int minute = t.getMinuteOfHour();
+                    Medicine med = s.medicine();
+                    DailyAgendaItemStub.DailyAgendaItemStubElement el =
+                            new DailyAgendaItemStub.DailyAgendaItemStubElement();
+                    el.medName = med.name();
+                    el.dose = s.dose();
+                    el.displayDose = s.displayDose();
+                    el.res = med.presentation().getDrawable();
+                    el.presentation = med.presentation();
+                    el.minute = minute < 10 ? "0" + minute : String.valueOf(minute);
+                    el.taken = DB.dailyScheduleItems()
+                            .findByScheduleAndTime(s, t.toLocalTime())
+                            .takenToday();
+                    item.meds.add(el);
+                    item.id = s.getId();
+                    item.patient = s.patient();
+                    item.isRoutine = false;
+                    item.title = s.toReadableString(getContext());
+                    item.hour = t.getHourOfDay();
+                    item.minute = t.getMinuteOfHour();
+                    item.time = new LocalTime(item.hour, item.minute);
+                    items.add(item);
                 }
             }
         }
@@ -234,12 +235,6 @@ public class DailyAgendaFragment extends Fragment{
             emptyView.setVisibility(View.GONE);
     }
 
-    private void addEmptyPlaceholder(ArrayList<DailyAgendaItemStub> items) {
-        DailyAgendaItemStub spacer = new DailyAgendaItemStub(null);
-        spacer.isEmptyPlaceholder = true;
-        items.add(spacer);
-    }
-
 
     public void toggleViewMode() {
         rvAdapter.toggleCollapseMode();
@@ -251,6 +246,11 @@ public class DailyAgendaFragment extends Fragment{
     }
 
     public void refreshPosition(int position) {
+
+        if(position == -1){
+            notifyDataChange();
+            return;
+        }
 
         if(position < 0 && position >= items.size())
             return;
@@ -345,40 +345,19 @@ public class DailyAgendaFragment extends Fragment{
     }
 
     public void notifyDataChange() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                new LoadDailyAgendaTask().execute(null, null, null);
-            }
-        });
-
+        try {
+            items.clear();
+            items.addAll(buildItems());
+            rvAdapter.notifyDataSetChanged();
+            // show empty list view if there are no items
+            showOrHideEmptyView(items.size() == 0);
+        }catch (Exception e){
+            Log.e(TAG, "Error onPostExecute", e);
+        }
     }
 
     public void onUserUpdate() {
         notifyDataChange();
-    }
-
-
-    public class LoadDailyAgendaTask extends AsyncTask<Void, Void, Void> {
-
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            items.clear();
-            items.addAll(buildItems());
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(final Void result) {
-            for(DailyAgendaItemStub i : items){
-                Log.d("Recycler", i.toString());
-            }
-
-            boolean showPlaceholder = items.size() == 0;
-            showOrHideEmptyView(showPlaceholder);
-            rvAdapter.notifyDataSetChanged();
-        }
     }
 
     private class DailyAgendaItemStubComparator implements Comparator<DailyAgendaItemStub> {

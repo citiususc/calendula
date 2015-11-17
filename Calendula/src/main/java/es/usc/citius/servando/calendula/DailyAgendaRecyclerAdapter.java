@@ -306,7 +306,6 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                     notifyItemChanged(i);
                 }
         }
-        //notifyDataSetChanged();
     }
 
 }

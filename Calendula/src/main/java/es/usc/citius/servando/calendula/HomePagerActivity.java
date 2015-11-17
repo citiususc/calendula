@@ -92,7 +92,7 @@ public class HomePagerActivity extends CalendulaActivity implements
 
 
     private Patient activePatient;
-    private int pendingRefresh = -1;
+    private int pendingRefresh = -2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,8 +194,9 @@ public class HomePagerActivity extends CalendulaActivity implements
         Patient p = DB.patients().getActive(this);
         drawerMgr.onActivityResume(p);
 
-        if(pendingRefresh != -1){
-            //((DailyAgendaFragment) getViewPagerFragment(0)).refreshPosition(pendingRefresh);
+        if(pendingRefresh != -2){
+            ((DailyAgendaFragment) getViewPagerFragment(0)).refreshPosition(pendingRefresh);
+            pendingRefresh = -2;
         }
     }
 
@@ -343,10 +344,12 @@ public class HomePagerActivity extends CalendulaActivity implements
         if(evt instanceof  PersistenceEvents.ModelCreateOrUpdateEvent){
             PersistenceEvents.ModelCreateOrUpdateEvent event = (PersistenceEvents.ModelCreateOrUpdateEvent)evt;
             Log.d(TAG, "onEvent: " + event.clazz.getName());
-            ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
             ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
             ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
             ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
+
+            ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
+
         }
         else if(evt instanceof PersistenceEvents.ActiveUserChangeEvent){
             activePatient = ((PersistenceEvents.ActiveUserChangeEvent) evt).patient;
@@ -370,8 +373,11 @@ public class HomePagerActivity extends CalendulaActivity implements
             ((DailyAgendaFragment) getViewPagerFragment(0)).refresh();
         }
         else if (evt instanceof ConfirmActivity.ConfirmStateChangeEvent) {
+
             pendingRefresh = ((ConfirmActivity.ConfirmStateChangeEvent) evt).position;
-            ((DailyAgendaFragment) getViewPagerFragment(0)).refreshPosition(pendingRefresh);
+            if(getViewPagerFragment(0) != null) {
+                ((DailyAgendaFragment) getViewPagerFragment(0)).refreshPosition(pendingRefresh);
+            }
         }
     }
 
