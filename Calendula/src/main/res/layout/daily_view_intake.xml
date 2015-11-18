@@ -36,7 +36,10 @@
             android:layout_below="@+id/med_item_list"
             android:gravity="right"
             android:visibility="visible"
-            android:background="#f8f8f8">
+            android:layout_marginLeft="26dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/agenda_item_take_all_now_bg">
 
 
             <ImageButton
@@ -57,10 +60,11 @@
                 android:id="@+id/textView9"
                 android:gravity="center"
                 android:layout_marginRight="10dp"
-                android:textColor="#222"
+                android:textColor="#fff"
                 android:textSize="15dp"
                 android:fontFamily="sans-serif-light"
-                android:layout_toLeftOf="@+id/check_all_button"/>
+                android:layout_centerHorizontal="true"
+                android:textStyle="bold"/>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -93,7 +97,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="2dp"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="16dp">
+            android:layout_marginLeft="26dp">
 
             <ImageButton
                 android:id="@+id/count_container"
@@ -137,7 +141,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="false"
-                android:layout_marginLeft="6dp"
                 android:layout_marginTop="5dp"
                 android:layout_centerVertical="true">
 

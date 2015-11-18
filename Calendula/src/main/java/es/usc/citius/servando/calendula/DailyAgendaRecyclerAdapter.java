@@ -218,12 +218,13 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             this.checkAll = (ImageButton) itemView.findViewById(R.id.check_all_button);
 
             this.checkAll.setImageDrawable(new IconicsDrawable(context)
-                            .colorRes(R.color.agenda_item_title)
+                            .colorRes(R.color.white) //agenda_item_title
                             .icon(CommunityMaterial.Icon.cmd_check_all) //cmd_arrow_right_bold
                             .paddingDp(0)
                             .sizeDp(28)
             );
 
+            actionsView.setOnClickListener(this);
             top.setOnClickListener(this);
             arrow.setOnClickListener(this);
             itemView.setOnClickListener(this);
@@ -244,21 +245,20 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         public void onClick(View view) {
             Log.d("Recycler", "Click row, listener is null? " + (listener == null));
 
-            if(view.getId() == R.id.check_all_button){
+            if(view.getId() == R.id.check_all_button || view.getId() == R.id.action_container){
 
-                List<DailyScheduleItem> sitems = new ArrayList<>();
+                List<DailyScheduleItem> dailyScheduleItems = new ArrayList<>();
                 if(stub.isRoutine){
                     List<ScheduleItem> rsi = ScheduleUtils.getRoutineScheduleItems(Routine.findById(stub.id), true);
                     for(ScheduleItem si : rsi){
-                        sitems.add(DailyScheduleItem.findByScheduleItem(si));
+                        dailyScheduleItems.add(DailyScheduleItem.findByScheduleItem(si));
                     }
                 }else{
-
                     Schedule s = Schedule.findById(stub.id);
-                    sitems.add(DB.dailyScheduleItems().findByScheduleAndTime(s,stub.time));
+                    dailyScheduleItems.add(DB.dailyScheduleItems().findByScheduleAndTime(s, stub.time));
                 }
 
-                for (DailyScheduleItem item : sitems) {
+                for (DailyScheduleItem item : dailyScheduleItems) {
                     item.setTakenToday(true);
                     item.save();
                 }
