@@ -57,6 +57,7 @@ public class ReminderNotification {
         PendingIntent delayIntent;
         NotificationCompat.InboxStyle style;
         Uri ringtone;
+        long when;
 
         String tag;
     }
@@ -80,6 +81,7 @@ public class ReminderNotification {
 
         NotificationOptions options = new NotificationOptions();
         options.style = style;
+        options.when = r.time().toDateTimeToday().getMillis();
         options.tag = NOTIFICATION_ROUTINE_TAG;
         options.notificationNumber =  doses.size();
         options.picture = getLargeIcon(context.getResources(), r.patient());
@@ -106,6 +108,7 @@ public class ReminderNotification {
 
         NotificationOptions options = new NotificationOptions();
         options.style = style;
+        options.when = time.toDateTimeToday().getMillis();
         options.tag = NOTIFICATION_SCHEDULE_TAG;
         options.notificationNumber = 1;
         options.picture = getLargeIcon(context.getResources(), schedule.patient());
@@ -168,7 +171,7 @@ public class ReminderNotification {
                 .setTicker(options.ticker)
                         // Show a number. This is useful when stacking notifications of a single type.
                 .setNumber(options.notificationNumber)
-                        //.setWhen(...)
+                .setWhen(options.when)
                         // Set the pending intent to be initiated when the user touches the notification.
                 .setContentIntent(options.defaultIntent)
                         //.setOngoing(true)
