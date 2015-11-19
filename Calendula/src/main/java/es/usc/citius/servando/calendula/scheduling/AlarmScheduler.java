@@ -564,8 +564,7 @@ public class AlarmScheduler {
 
         DateTime now = DateTime.now();
         DateTime routineTime = t;
-        boolean result =
-                routineTime.isBefore(now) && routineTime.plusMillis((int) window * 60 * 1000)
+        boolean result = routineTime.isBefore(now) && routineTime.plusMillis((int) window * 60 * 1000)
                         .isAfter(now);
         Log.d(TAG, "isWithinDefaultMargins: " + result);
         return result;

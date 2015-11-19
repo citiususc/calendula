@@ -76,7 +76,10 @@ public class CustomDigitalClock extends TextView {
                 //
                 // String text = Html.fromHtml("<b>" + hour + "</b>:" + min).toString();
                 // setText(text);
-                setText(DateFormat.format(mFormat, mCalendar));
+                if(showSeconds)
+                    setText("Ahora - " + DateFormat.format(mFormat, mCalendar));
+                else
+                    setText(DateFormat.format(mFormat, mCalendar));
                 invalidate();
                 long now = SystemClock.uptimeMillis();
                 long next = now + (1000 - now % 1000);

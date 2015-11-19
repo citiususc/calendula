@@ -147,6 +147,13 @@ public class Schedule {
         return rrule.occurrencesBetween(today, today.plusDays(1), startDateTime());
     }
 
+    public List<DateTime> hourlyItemsAt(DateTime d)
+    {
+        DateTime date = d.withTimeAtStartOfDay();
+        // get schedule occurrences for the current day
+        return rrule.occurrencesBetween(date, date.plusDays(1), startDateTime());
+    }
+
     public Medicine medicine()
     {
         return medicine;

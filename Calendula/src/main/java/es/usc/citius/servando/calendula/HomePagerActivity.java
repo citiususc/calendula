@@ -14,7 +14,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -61,14 +60,7 @@ public class HomePagerActivity extends CalendulaActivity implements
         ScheduleListFragment.OnScheduleSelectedListener {
 
     private static final String TAG = "HomePagerActivity";
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
+
     private HomePageAdapter mSectionsPagerAdapter;
 
     /**
@@ -96,6 +88,8 @@ public class HomePagerActivity extends CalendulaActivity implements
 
     Drawable icAgendaMore;
     Drawable icAgendaLess;
+
+    boolean appBarLayoutExpanded = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +140,9 @@ public class HomePagerActivity extends CalendulaActivity implements
                 if(toolbarLayout.getHeight() + verticalOffset < 2 * ViewCompat.getMinimumHeight(toolbarLayout)) {
                     homeProfileMgr.onCollapse();
                     toolbarTitle.animate().alpha(1);
+                    appBarLayoutExpanded = false;
                 } else {
+                    appBarLayoutExpanded = true;
                     if(mViewPager.getCurrentItem()==0) {
                         toolbarTitle.animate().alpha(0);
                     }
@@ -339,15 +335,20 @@ public class HomePagerActivity extends CalendulaActivity implements
                 startActivity(new Intent(this, CalendarActivity.class));
                 return true;
             case R.id.action_expand:
-                Log.d("Home", "ToogleExpand");
+
                 final boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
-                ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
-                appBarLayout.postDelayed(new Runnable() {
+                appBarLayout.setExpanded(expanded);
+
+
+                boolean delay = appBarLayoutExpanded && !expanded || !appBarLayoutExpanded && expanded;
+
+                new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        appBarLayout.setExpanded(expanded);
+                        ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
                     }
-                },200);
+                }, delay ? 500 : 0);
+
                 item.setIcon(expanded ? icAgendaMore : icAgendaLess);
                 return true;
         }

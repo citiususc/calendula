@@ -176,7 +176,7 @@ public class ReminderNotification {
                 .setContentIntent(options.defaultIntent)
                         //.setOngoing(true)
                         // add delay button
-                .addAction(R.drawable.ic_history_white_24dp, res.getString(R.string.notification_delay), options. delayIntent)
+                .addAction(R.drawable.ic_history_white_24dp, res.getString(R.string.notification_delay), options.delayIntent)
                 .addAction(R.drawable.ic_alarm_off_white_24dp, res.getString(R.string.notification_cancel_now), options.cancelIntent)
                         // Show an expanded list of items on devices running Android 4.1
                         // or later.
@@ -213,8 +213,8 @@ public class ReminderNotification {
         for (ScheduleItem scheduleItem : doses)
         {
             //TODO: Use DecimalFormat
-            // DecimalFormat df = new DecimalFormat("#");
-            //String dfDose = df.format(scheduleItem.dose());
+            // DecimalFormat timeFormatter = new DecimalFormat("#");
+            //String dfDose = timeFormatter.format(scheduleItem.dose());
 
             final SpannableStringBuilder SpItem = new SpannableStringBuilder();
             final Medicine med = scheduleItem.schedule().medicine();

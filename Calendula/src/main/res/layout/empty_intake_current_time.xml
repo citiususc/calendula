@@ -8,7 +8,7 @@
     android:layout_alignParentRight="false"
     android:fontFamily="sans-serif"
     android:gravity="center"
-    android:textColor="@color/agenda_item_title"
-    android:textSize="18sp"
+    android:textColor="#ccffffff"
+    android:textSize="15sp"
     android:textStyle="bold"
     />

@@ -4,9 +4,11 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
@@ -34,6 +36,10 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
 
     public DailyScheduleItem findByScheduleItem(ScheduleItem i) {
         return findOneBy(DailyScheduleItem.COLUMN_SCHEDULE_ITEM, i.getId());
+    }
+
+    public List<DailyScheduleItem> findAllByScheduleItem(ScheduleItem i) {
+        return findBy(DailyScheduleItem.COLUMN_SCHEDULE_ITEM, i.getId());
     }
 
     public void removeAll() {
@@ -68,6 +74,47 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
                     w.eq(DailyScheduleItem.COLUMN_TIME, time));
             qb.setWhere(w);
             return qb.queryForFirst();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding model", e);
+        }
+    }
+
+
+    public DailyScheduleItem findByScheduleItemAndDate(ScheduleItem item, LocalDate date) {
+        try {
+            QueryBuilder<DailyScheduleItem, Long> qb = dao.queryBuilder();
+            Where w = qb.where();
+            w.and(w.eq(DailyScheduleItem.COLUMN_SCHEDULE_ITEM, item),
+                    w.eq(DailyScheduleItem.COLUMN_DATE, date));
+            qb.setWhere(w);
+            return qb.queryForFirst();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding model", e);
+        }
+    }
+
+    public DailyScheduleItem findBy(Schedule schedule, LocalDate date, LocalTime time) {
+        try {
+            QueryBuilder<DailyScheduleItem, Long> qb = dao.queryBuilder();
+            Where w = qb.where();
+            w.and(w.eq(DailyScheduleItem.COLUMN_SCHEDULE, schedule),
+                    w.eq(DailyScheduleItem.COLUMN_TIME, time),
+                    w.eq(DailyScheduleItem.COLUMN_DATE, date));
+            qb.setWhere(w);
+            return qb.queryForFirst();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding model", e);
+        }
+    }
+
+
+    public List<DailyScheduleItem> findBySchedule(Schedule schedule) {
+        try {
+            QueryBuilder<DailyScheduleItem, Long> qb = dao.queryBuilder();
+            Where w = qb.where();
+            w.eq(DailyScheduleItem.COLUMN_SCHEDULE, schedule);
+            qb.setWhere(w);
+            return qb.query();
         } catch (SQLException e) {
             throw new RuntimeException("Error finding model", e);
         }

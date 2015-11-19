@@ -9,10 +9,10 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -45,49 +46,46 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
-import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 
 public class ConfirmActivity extends CalendulaActivity {
 
 
     boolean isRoutine;
+    boolean stateChanged = false;
+    int position = -1;
+    int color;
+
     Patient patient;
     Routine routine;
     Schedule schedule;
     LocalTime time;
-    List<DailyScheduleItem> items = new ArrayList<>();
-
-    DateTimeFormatter df = DateTimeFormat.forPattern("kk:mm");
+    LocalDate date;
 
     RecyclerView listView;
     ImageView avatar;
     TextView title;
-
     ImageView avatarTitle;
     TextView titleTitle;
-
     TextView hour;
     TextView minute;
 
-    ConfirmItemAdapter itemAdapter;
-
-    IconicsDrawable unchekedIcon;
-    IconicsDrawable chekedIcon;
+    IconicsDrawable uncheckedIcon;
+    IconicsDrawable checkedIcon;
 
     FloatingActionButton fab;
 
-    boolean stateChanged = false;
-    int position = -1;
-
-
-
-    int color;
-    private String action;
-    private AppBarLayout appBarLayout;
+    String action;
+    AppBarLayout appBarLayout;
+    ConfirmItemAdapter itemAdapter;
     CollapsingToolbarLayout toolbarLayout;
 
     View toolbarTitle;
+
+    List<DailyScheduleItem> items = new ArrayList<>();
+
+    DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("kk:mm");
+    DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/uncheckedIcon");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +94,6 @@ public class ConfirmActivity extends CalendulaActivity {
         processIntent();
         color = AvatarMgr.colorsFor(getResources(), patient.avatar())[0];
         color = Color.parseColor("#263238");
-        //color = ScreenUtils.equivalentNoAlpha(color, 0.6f);
 
         setupStatusBar(Color.TRANSPARENT);
         setupToolbar("", Color.TRANSPARENT, Color.WHITE);
@@ -137,7 +134,6 @@ public class ConfirmActivity extends CalendulaActivity {
                 itemAdapter.notifyDataSetChanged();
                 stateChanged = true;
 
-
                 String msg =ConfirmActivity.this.getString(R.string.all_meds_taken);
                 Toast.makeText(ConfirmActivity.this, msg, Toast.LENGTH_SHORT).show();
                 fab.postDelayed(new Runnable() {
@@ -151,25 +147,12 @@ public class ConfirmActivity extends CalendulaActivity {
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        AppBarLayout.OnOffsetChangedListener mListener = new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if(toolbarLayout.getHeight() + verticalOffset < 2 * ViewCompat.getMinimumHeight(toolbarLayout)) {
-//                    toolbarTitle.animate().alpha(1);
-                } else {
-//                    toolbarTitle.animate().alpha(0);
-                }
-            }
-        };
-        appBarLayout.addOnOffsetChangedListener(mListener);
         toolbarLayout.setContentScrimColor(patient.color());
         setupListView();
 
         if("delay".equals(action)){
             showDelayDialog();
         }
-
-
     }
 
     private void setupListView() {
@@ -184,38 +167,51 @@ public class ConfirmActivity extends CalendulaActivity {
 
     private void processIntent() {
         Intent i = getIntent();
+        Long routineId = i.getLongExtra("routine_id", -1);
+        Long scheduleId = i.getLongExtra("schedule_id", -1);
+        String dateStr = i.getStringExtra("date");
+        String timeStr = i.getStringExtra("schedule_time");
+
         action = i.getStringExtra("action");
         position = i.getIntExtra("position", -1);
-        Long id = i.getLongExtra("routine_id",-1);
-        if( id != -1){
+
+        // If date is not present, is a notification // TODO: add date to notification intents
+        date = dateStr!=null ? LocalDate.parse(dateStr, dateFormatter) : LocalDate.now();
+
+        Log.d("Confirm", timeStr + ", " + dateStr + ", " + routineId + ", " + scheduleId + ", " + date);
+
+        if( routineId != -1){
             isRoutine = true;
-            routine = Routine.findById(id);
+            routine = Routine.findById(routineId);
             time = routine.time();
             patient = routine.patient();
-
         }else{
-            id = i.getLongExtra("schedule_id", -1);
-            String timeStr = i.getStringExtra("schedule_time");
-            time = LocalTime.parse(timeStr, df);
-            schedule = Schedule.findById(id);
+            time = LocalTime.parse(timeStr, timeFormatter);
+            schedule = Schedule.findById(scheduleId);
             patient = schedule.patient();
         }
     }
 
     private void loadItems(){
         if(isRoutine){
-            List<ScheduleItem> rsi = ScheduleUtils.getRoutineScheduleItems(routine, true);
+            List<ScheduleItem> rsi = routine.scheduleItems();
+            Log.d("Confirm", rsi.size() + " items");
             for(ScheduleItem si : rsi){
-                items.add(DailyScheduleItem.findByScheduleItem(si));
+                DailyScheduleItem item = DB.dailyScheduleItems().findByScheduleItemAndDate(si, date);
+                if(item != null)
+                    items.add(item);
             }
         }else{
-            items.add(DB.dailyScheduleItems().findByScheduleAndTime(schedule,time));
+            items.add(DB.dailyScheduleItems().findBy(schedule, date, time));
+        }
+
+        for(DailyScheduleItem i : items){
+            Log.d("Confirm", i != null ? i.toString() : "Null");
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.confirm, menu);
 
@@ -293,23 +289,23 @@ public class ConfirmActivity extends CalendulaActivity {
 
 
     private Drawable getCheckedIcon(int color) {
-        if(chekedIcon == null) {
-            chekedIcon = new IconicsDrawable(this, CommunityMaterial.Icon.cmd_checkbox_marked_circle_outline) //cmd_checkbox_marked_outline
+        if(checkedIcon == null) {
+            checkedIcon = new IconicsDrawable(this, CommunityMaterial.Icon.cmd_checkbox_marked_circle_outline) //cmd_checkbox_marked_outline
                     .sizeDp(30)
                     .paddingDp(0)
                     .color(color);
         }
-        return chekedIcon;
+        return checkedIcon;
     }
 
     private Drawable getUncheckedIcon(int color) {
-        if (unchekedIcon == null) {
-            unchekedIcon = new IconicsDrawable(this, CommunityMaterial.Icon.cmd_checkbox_blank_circle_outline) //cmd_checkbox_blank_outline
+        if (uncheckedIcon == null) {
+            uncheckedIcon = new IconicsDrawable(this, CommunityMaterial.Icon.cmd_checkbox_blank_circle_outline) //cmd_checkbox_blank_outline
                     .sizeDp(30)
                     .paddingDp(0)
                     .color(color);
         }
-        return unchekedIcon;
+        return uncheckedIcon;
     }
 
     public String getDisplayableDose(String dose, Medicine m) {

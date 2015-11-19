@@ -154,6 +154,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                     TableUtils.createTable(connectionSource, HomogeneousGroup.class);
                     TableUtils.createTable(connectionSource, PickupInfo.class);
                 case 9:
+                    getDailyScheduleItemsDao().executeRaw("ALTER TABLE DailyScheduleItems ADD COLUMN Date TEXT;");
                     TableUtils.createTable(connectionSource, Patient.class);
                     migrateToMultiPatient();
             }

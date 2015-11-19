@@ -1,7 +1,6 @@
 package es.usc.citius.servando.calendula.fragments;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,9 +28,10 @@ import org.joda.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.DailyAgendaRecyclerAdapter;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ConfirmActivity;
@@ -42,69 +42,40 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
+import es.usc.citius.servando.calendula.util.DailyAgendaItemStub.DailyAgendaItemStubElement;
 
 /**
- * Created by joseangel.pineiro on 11/15/13.
+ * Daily agenda fragment
  */
 public class DailyAgendaFragment extends Fragment{
 
-    private static final String TAG = DailyAgendaFragment.class.getName();
-    DailyAgendaItemStubComparator dailyAgendaItemStubComparator =
-            new DailyAgendaItemStubComparator();
-    List<DailyAgendaItemStub> items = new ArrayList<>();
-
-
-
-    //boolean expanded = true;
+    final String TAG = "DailyAgendaFragment";
 
     View emptyView;
 
+    LinearLayoutManager llm;
+
     RecyclerView rv;
     DailyAgendaRecyclerAdapter rvAdapter;
-    LinearLayoutManager llm;
-    private DailyAgendaRecyclerAdapter.AgendaItemClickListener rvListener;
+    DailyAgendaRecyclerAdapter.EventListener rvListener;
+
+    List<DailyAgendaItemStub> items = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         items = new ArrayList<>();
-
-
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_daily_agenda, container, false);
         rv = (RecyclerView) rootView.findViewById(R.id.rv);
-        inflater.inflate(R.layout.fragment_edit_profile, container, false);
-
         emptyView = rootView.findViewById(R.id.empty_view_placeholder);
-        ImageView face = (ImageView) emptyView.findViewById(R.id.imageView_ok);
 
-        Drawable icon = new IconicsDrawable(getContext())
-                .icon(GoogleMaterial.Icon.gmd_alarm_check)
-                .colorRes(R.color.agenda_item_title)
-                .sizeDp(90)
-                .paddingDp(0);
-
-        face.setImageDrawable(icon);
-
-        llm = new LinearLayoutManager(getContext());
-        rv.setLayoutManager(llm);
-        rvAdapter = new DailyAgendaRecyclerAdapter(items);
-        rv.setAdapter(rvAdapter);
-        rv.setItemAnimator(new DefaultItemAnimator());
-
-        rvListener = new DailyAgendaRecyclerAdapter.AgendaItemClickListener() {
-            @Override
-            public void onClick(View v, DailyAgendaItemStub item, int position) {
-                Log.d(TAG, "Items ou showConfirm: " + items.size());
-                showConfirmActivity(v, item, position);
-            }
-        };
-        rvAdapter.setListener(rvListener);
+        setupRecyclerView();
+        setupEmptyView();
         return rootView;
     }
 
@@ -112,21 +83,61 @@ public class DailyAgendaFragment extends Fragment{
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         notifyDataChange();
+
     }
+
+    private void setupRecyclerView() {
+        llm = new LinearLayoutManager(getContext());
+        rv.setLayoutManager(llm);
+        rvAdapter = new DailyAgendaRecyclerAdapter(items, rv, llm, getActivity());
+        rv.setAdapter(rvAdapter);
+        rv.setItemAnimator(new DefaultItemAnimator());
+
+        rvListener = new DailyAgendaRecyclerAdapter.EventListener() {
+
+            @Override
+            public void onItemClick(View v, DailyAgendaItemStub item, int position) {
+                showConfirmActivity(v, item, position);
+            }
+
+            @Override
+            public void onAfterToggleCollapse(boolean expanded, boolean somethingVisible) {
+                if(expanded) {
+                    showOrHideEmptyView(false);
+                } else if(!expanded && somethingVisible){
+                    showOrHideEmptyView(false);
+                }else{
+                    showOrHideEmptyView(true);
+                }
+            }
+        };
+
+        rvAdapter.setListener(rvListener);
+    }
+
+
+    private void setupEmptyView() {
+        Drawable icon = new IconicsDrawable(getContext())
+                .icon(GoogleMaterial.Icon.gmd_alarm_check)
+                .colorRes(R.color.agenda_item_title)
+                .sizeDp(90)
+                .paddingDp(0);
+        ((ImageView) emptyView.findViewById(R.id.imageView_ok)).setImageDrawable(icon);
+    }
+
 
     private void showConfirmActivity(View view, DailyAgendaItemStub item, int position) {
 
         Intent i = new Intent(getContext(), ConfirmActivity.class);
         i.putExtra("position", position);
+        i.putExtra("date", item.date.toString("dd/MM/YYYY"));
+
         if(item.isRoutine) {
             i.putExtra("routine_id", item.id);
         }else{
             i.putExtra("schedule_id", item.id);
-            i.putExtra("schedule_time", new LocalTime(item.hour, item.minute).toString("kk:mm"));
+            i.putExtra("schedule_time", item.time.toString("kk:mm"));
         }
-
-        Log.d(TAG, "Position on show: " + position);
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
@@ -150,111 +161,167 @@ public class DailyAgendaFragment extends Fragment{
         }
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            Log.d(getTag(), "Visible to user");
+    public List<DailyAgendaItemStub> buildItems() {
+
+        List<DailyAgendaItemStub> stubs = new ArrayList<>();
+
+        final List<DailyScheduleItem> daily = DB.dailyScheduleItems().findAll();
+
+        DateTime max = DateTime.now().withTimeAtStartOfDay();
+
+        // create stubs for hourly schedule items
+        for(DailyScheduleItem dailyScheduleItem : daily){
+            if(dailyScheduleItem.boundToSchedule())
+            {
+                Schedule schedule = dailyScheduleItem.schedule();
+                Medicine medicine = schedule.medicine();
+                LocalTime time = dailyScheduleItem.time();
+                LocalDate date = dailyScheduleItem.date();
+
+                // create a stub for this item
+                DailyAgendaItemStub stub = new DailyAgendaItemStub(date,time);
+                stub.isRoutine = false;
+                stub.meds = new ArrayList<>();
+                stub.hasEvents = true;
+                stub.id = schedule.getId();
+                stub.patient = schedule.patient();
+                stub.isRoutine = false;
+                stub.title = schedule.toReadableString(getContext());
+                stub.time = time;
+
+                // create a element for the schedule item
+                DailyAgendaItemStubElement el = new DailyAgendaItemStubElement();
+                el.medName = medicine.name();
+                el.dose = schedule.dose();
+                el.displayDose = schedule.displayDose();
+                el.res = medicine.presentation().getDrawable();
+                el.presentation = medicine.presentation();
+                el.minute = time.toString("mm");
+                el.taken = dailyScheduleItem.takenToday();
+                stub.meds.add(el);
+                stubs.add(stub);
+
+                DateTime candidate = stub.date.toDateTime(stub.time);
+                if(candidate.isAfter(max)){
+                    max = candidate;
+                }
+            }
         }
+
+        final Map<LocalDate, Map<Routine, DailyAgendaItemStub>> dateStubs = new HashMap<>();
+        // create stubs for routine items
+        for (Routine  routine: DB.routines().findAll()) {
+            for (ScheduleItem  scheduleItem : routine.scheduleItems()) {
+                // get item from daily agenda if exists
+                List<DailyScheduleItem> dailyScheduleItems = DB.dailyScheduleItems().findAllByScheduleItem(scheduleItem);
+
+                for (DailyScheduleItem dailyScheduleItem : dailyScheduleItems) {
+                    // break if not, this means is not enabled for today
+                    if (dailyScheduleItem == null) {
+                        break;
+                    }
+
+                    LocalDate date = dailyScheduleItem.date();
+
+                    if (!dateStubs.containsKey(date)) {
+                        dateStubs.put(date, new HashMap<Routine, DailyAgendaItemStub>());
+                    }
+
+                    Map<Routine, DailyAgendaItemStub> routineStubs = dateStubs.get(date);
+
+                    DailyAgendaItemStub stub;
+
+                    LocalTime time = routine.time();
+
+                    if (!routineStubs.containsKey(routine)) {
+                        // create a new stub and add it to the list
+                        stub = new DailyAgendaItemStub(date, routine.time());
+                        stub.isRoutine = true;
+                        stub.id = routine.getId();
+                        stub.patient = routine.patient();
+                        stub.title = routine.name();
+                        stub.time = time;
+                        stub.meds = new ArrayList<>();
+                        stub.hasEvents = true;
+                        routineStubs.put(routine, stub);
+
+                        DateTime candidate = stub.date.toDateTime(stub.time);
+                        if (candidate.isAfter(max)) {
+                            max = candidate;
+                        }
+
+                    } else {
+                        stub = routineStubs.get(date);
+                    }
+
+                    Schedule schedule = scheduleItem.schedule();
+                    Medicine medicine = schedule.medicine();
+
+                    DailyAgendaItemStubElement el = new DailyAgendaItemStubElement();
+                    // add element properties
+                    el.medName = medicine.name();
+                    el.dose = scheduleItem.dose();
+                    el.scheduleItemId = scheduleItem.getId();
+                    el.displayDose = scheduleItem.displayDose();
+                    el.res = medicine.presentation().getDrawable();
+                    el.presentation = medicine.presentation();
+                    el.minute = time.toString("mm");
+                    el.taken = dailyScheduleItem.takenToday();
+                    stub.meds.add(el);
+                }
+            }
+        }
+
+        for(LocalDate date : dateStubs.keySet()){
+            Map<Routine, DailyAgendaItemStub> routineStubs = dateStubs.get(date);
+            for(Routine r : routineStubs.keySet()){
+                stubs.add(routineStubs.get(r));
+            }
+        }
+
+        addEmptyHours(stubs, DateTime.now(), max);
+        Collections.sort(stubs, DailyAgendaItemStubComparator.instance);
+
+        return stubs;
     }
 
-    public List<DailyAgendaItemStub> buildItems() {
-        int now = DateTime.now().getHourOfDay();
-        ArrayList<DailyAgendaItemStub> items = new ArrayList<DailyAgendaItemStub>();
 
-        // get hourly schedules for today
-        DateTime from = DateTime.now().withTimeAtStartOfDay();
-        DateTime to = from.plusDays(1);
+    public void addEmptyHours(List<DailyAgendaItemStub> stubs, DateTime min, DateTime max){
 
-        final List<Schedule> hourly = DB.schedules().findHourly();
-        Log.d(TAG, "Hourly schedules: " + hourly.size());
-        for (Schedule s : hourly) {
-            final List<DateTime> times = s.rule().occurrencesBetween(from, to, s.startDateTime());
-            if (times.size() > 0) {
-                for (DateTime t : times) {
-
-                    Log.d(TAG, "RFC dailyAgenda: " + t.toString("E dd MMM, kk:mm ZZZ"));
-                    DailyAgendaItemStub item = new DailyAgendaItemStub(t.toLocalTime());
-                    item.meds = new ArrayList<>();
-                    item.hasEvents = true;
-                    int minute = t.getMinuteOfHour();
-                    Medicine med = s.medicine();
-                    DailyAgendaItemStub.DailyAgendaItemStubElement el =
-                            new DailyAgendaItemStub.DailyAgendaItemStubElement();
-                    el.medName = med.name();
-                    el.dose = s.dose();
-                    el.displayDose = s.displayDose();
-                    el.res = med.presentation().getDrawable();
-                    el.presentation = med.presentation();
-                    el.minute = minute < 10 ? "0" + minute : String.valueOf(minute);
-                    el.taken = DB.dailyScheduleItems()
-                            .findByScheduleAndTime(s, t.toLocalTime())
-                            .takenToday();
-                    item.meds.add(el);
-                    item.id = s.getId();
-                    item.patient = s.patient();
-                    item.isRoutine = false;
-                    item.title = s.toReadableString(getContext());
-                    item.hour = t.getHourOfDay();
-                    item.minute = t.getMinuteOfHour();
-                    item.time = new LocalTime(item.hour, item.minute);
-                    items.add(item);
-                }
-            }
-        }
-
-
-        for (int i = 0; i < 24; i++) {
-            List<DailyAgendaItemStub> hourItems = DailyAgendaItemStub.fromHour(i);
-            for (DailyAgendaItemStub item : hourItems) {
-                items.add(item);
-            }
-        }
+        min = min.withTimeAtStartOfDay();
+        max = max.withTimeAtStartOfDay().plusDays(1); // end of day
 
         // add empty hours if there is not an item with the same hour
-        for (int i = 0; i < 24; i++) {
+        for(DateTime start = min; start.isBefore(max); start = start.plusHours(1)){
+
             boolean exact = false;
             for (DailyAgendaItemStub item : items) {
-                if(item.hour == i && item.minute == 0){
-                    exact = true;
-                    break;
+                if(start.equals(item.dateTime())){
+                    exact = true; break;
                 }
             }
 
-            DateTime hourStart = new LocalTime(i,0).toDateTimeToday();
-            DateTime hourEnd = hourStart.plusHours(1);
-            Interval hour = new Interval(hourStart, hourEnd);
-
-
-
+            Interval hour = new Interval(start, start.plusHours(1));
             if(!exact || hour.contains(DateTime.now())) {
-                items.add(new DailyAgendaItemStub(new LocalTime(i, 0)));
+                stubs.add(new DailyAgendaItemStub(start.toLocalDate(), start.toLocalTime()));
+            }
+
+            if(start.getHourOfDay() == 0){
+                DailyAgendaItemStub spacer = new DailyAgendaItemStub(start.toLocalDate(), start.toLocalTime());
+                spacer.isSpacer = true;
+                stubs.add(spacer);
             }
         }
-
-        Log.d(getTag(), "Items: " + items.size());
-
-
-        Collections.sort(items, dailyAgendaItemStubComparator);
-
-        for (DailyAgendaItemStub i : items) {
-            if (i.hasEvents && i.time != null && i.time.toDateTimeToday().isAfterNow()) {
-                Log.d(TAG, "isNext: " + i.time.toString("kk:mm"));
-                i.isNext = true;
-                break;
-            }
-        }
-
-        return items;
     }
 
     public void showOrHideEmptyView(boolean show) {
-        if(show)
+        if(show) {
             emptyView.setVisibility(View.VISIBLE);
-        else
+        }
+        else {
             emptyView.setVisibility(View.GONE);
+        }
     }
-
 
     public void toggleViewMode() {
         rvAdapter.toggleCollapseMode();
@@ -270,81 +337,9 @@ public class DailyAgendaFragment extends Fragment{
         if(position == -1){
             notifyDataChange();
             return;
+        }else if(position >= 0 && position < items.size()) {
+            rvAdapter.updatePosition(position);
         }
-
-        if(position < 0 && position >= items.size())
-            return;
-
-        Log.d(TAG, "Position to refresh: " + position);
-        DailyAgendaItemStub stub = items.get(position);
-        DailyAgendaItemStub item;
-
-        if(!stub.isRoutine){
-            LocalTime t = stub.time;
-            Schedule s = DB.schedules().findById(stub.id);
-            item = new DailyAgendaItemStub(t);
-            item.meds = new ArrayList<>();
-            item.hasEvents = true;
-            int minute = t.getMinuteOfHour();
-            Medicine med = s.medicine();
-            DailyAgendaItemStub.DailyAgendaItemStubElement el = new DailyAgendaItemStub.DailyAgendaItemStubElement();
-            el.medName = med.name();
-            el.dose = s.dose();
-            el.displayDose = s.displayDose();
-            el.res = med.presentation().getDrawable();
-            el.presentation = med.presentation();
-            el.minute = minute < 10 ? "0" + minute : String.valueOf(minute);
-            el.taken = DB.dailyScheduleItems()
-                    .findByScheduleAndTime(s, t)
-                    .takenToday();
-            item.meds.add(el);
-            item.id = s.getId();
-            item.patient = s.patient();
-            item.isRoutine = false;
-            item.title = s.toReadableString(getContext());
-            item.hour = t.getHourOfDay();
-            item.minute = t.getMinuteOfHour();
-            item.time = new LocalTime(item.hour, item.minute);
-        }else{
-
-            LocalDate today = LocalDate.now();
-            Routine r = Routine.findById(stub.id);
-            List<ScheduleItem> doses = r.scheduleItems();
-
-            // create an ItemStub for the current hour
-            item = new DailyAgendaItemStub(r.time());
-            item.meds = new ArrayList<>();
-            for (ScheduleItem scheduleItem : doses) {
-                if (scheduleItem.schedule() != null && scheduleItem.schedule().enabledForDate(today)) {
-                    item.hasEvents = true;
-                    int minute = r.time().getMinuteOfHour();
-                    Medicine med = scheduleItem.schedule().medicine();
-                    DailyAgendaItemStub.DailyAgendaItemStubElement el = new DailyAgendaItemStub.DailyAgendaItemStubElement();
-                    el.medName = med.name();
-                    el.dose = scheduleItem.dose();
-                    el.displayDose = scheduleItem.displayDose();
-                    el.res = med.presentation().getDrawable();
-                    el.presentation = med.presentation();
-                    el.minute = minute < 10 ? "0" + minute : String.valueOf(minute);
-                    el.taken = DailyScheduleItem.findByScheduleItem(scheduleItem).takenToday();
-                    item.meds.add(el);
-                }
-            }
-            Collections.sort(item.meds);
-
-            if (!item.meds.isEmpty())
-            {
-                item.id = r.getId();
-                item.patient = r.patient();
-                item.title = r.name();
-                item.hour = r.time().getHourOfDay();
-                item.minute = r.time().getMinuteOfHour();
-            }
-        }
-        items.remove(position);
-        items.add(position, item);
-        //items.get(position).copyFrom(item);
-        rvAdapter.notifyItemChanged(position);
     }
 
 
@@ -365,18 +360,6 @@ public class DailyAgendaFragment extends Fragment{
             llm.scrollToPositionWithOffset(position-1, 50);
     }
 
-    void updatePrefs() {
-        SharedPreferences settings = getActivity().getSharedPreferences(CalendulaApp.PREFERENCES_NAME, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.commit();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        updatePrefs();
-    }
-
 
     public boolean isExpanded() {
         return rvAdapter.isExpanded();
@@ -384,11 +367,18 @@ public class DailyAgendaFragment extends Fragment{
 
     public void notifyDataChange() {
         try {
+            Log.d(TAG, "AgendaView NotifyDataChange");
             items.clear();
             items.addAll(buildItems());
+            Log.d(TAG, "Items after rebuild " + items.size());
             rvAdapter.notifyDataSetChanged();
             // show empty list view if there are no items
-            showOrHideEmptyView(items.size() == 0);
+            rv.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    showOrHideEmptyView(!rvAdapter.isShowingSomething());
+                }
+            }, 100);
         }catch (Exception e){
             Log.e(TAG, "Error onPostExecute", e);
         }
@@ -398,20 +388,26 @@ public class DailyAgendaFragment extends Fragment{
         notifyDataChange();
     }
 
-    private class DailyAgendaItemStubComparator implements Comparator<DailyAgendaItemStub> {
+    private static class DailyAgendaItemStubComparator implements Comparator<DailyAgendaItemStub> {
+
+        static final DailyAgendaItemStubComparator instance = new DailyAgendaItemStubComparator();
+
+        private DailyAgendaItemStubComparator(){};
 
         @Override
         public int compare(DailyAgendaItemStub a, DailyAgendaItemStub b) {
 
-            if (a.isSpacer || a.time == null) {
+            DateTime aT = a.date.toDateTime(a.time);
+            DateTime bT = b.date.toDateTime(b.time);
+
+            if(aT.compareTo(bT) == 0 && a.isSpacer) {
                 return -1;
-            } else if (b.isSpacer || b.time == null) {
+            } else if(aT.compareTo(bT) == 0 && b.isSpacer){
                 return 1;
-            }
-            else if(a.time.compareTo(b.time) == 0){
+            }else if(aT.compareTo(bT) == 0){
                 return a.hasEvents ? -1 : 1;
             }
-            return a.time.compareTo(b.time);
+            return aT.compareTo(bT);
         }
     }
 }

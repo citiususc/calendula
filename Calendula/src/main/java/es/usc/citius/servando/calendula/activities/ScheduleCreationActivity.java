@@ -45,6 +45,7 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
+import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 import es.usc.citius.servando.calendula.util.Snack;
@@ -163,19 +164,12 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                             item.save();
                             Log.d(TAG, "Saving item..." + item.getId());
                             // add to daily schedule
-                            DailyScheduleItem dsi = new DailyScheduleItem(item);
-                            dsi.save();
-                            Log.d(TAG, "Saving daily schedule item..." + dsi.getId() + ", " + dsi.scheduleItem().getId());
+                            DailyAgenda.instance().addItem(item, false);
                         }
                     } else {
                         for (DateTime time : s.hourlyItemsToday()) {
                             LocalTime timeToday = time.toLocalTime();
-                            DailyScheduleItem dsi = new DailyScheduleItem(s, timeToday);
-                            dsi.save();
-                            Log.d(TAG, "Saving daily schedule item..."
-                                    + dsi.getId()
-                                    + " timeToday: "
-                                    + timeToday.toString("kk:mm"));
+                            DailyAgenda.instance().addItem(s, timeToday);
                         }
                     }
                     // save and fire event
@@ -230,22 +224,13 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                             item.setSchedule(s);
                             item.save();
                             // add to daily schedule
-                            DailyScheduleItem dsi = new DailyScheduleItem(item);
-                            if (routinesTaken.contains(item.routine().getId())) {
-                                dsi.setTakenToday(true);
-                            }
-                            dsi.save();
+                            DailyAgenda.instance().addItem(item,routinesTaken.contains(item.routine().getId()));
                         }
                     } else {
                         DB.dailyScheduleItems().removeAllFrom(s);
                         for (DateTime time : s.hourlyItemsToday()) {
                             LocalTime timeToday = time.toLocalTime();
-                            DailyScheduleItem dsi = new DailyScheduleItem(s, timeToday);
-                            dsi.save();
-                            Log.d(TAG, "Saving daily schedule item..."
-                                    + dsi.getId()
-                                    + " timeToday: "
-                                    + timeToday.toString("kk:mm"));
+                            DailyAgenda.instance().addItem(s, timeToday);
                         }
                     }
 

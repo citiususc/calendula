@@ -40,21 +40,5 @@
         android:textStyle="normal" />
 
 
-    <FrameLayout
-        android:id="@+id/clock_container"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
-
-
-    </FrameLayout>
-
-
-
 
 </RelativeLayout>

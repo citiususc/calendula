@@ -11,10 +11,10 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-            <android.support.v7.widget.RecyclerView
+
+        <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv"
                 android:layout_gravity="fill_vertical"
-                android:background="#ffffff"
                 android:fillViewport="true"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -27,8 +27,8 @@
     <FrameLayout
         android:id="@+id/empty_view_placeholder"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#ffffff"
+        android:layout_height="fill_parent"
+        android:background="#eeffffff"
         android:visibility="gone">
         <include layout="@layout/daily_view_empty_placeholder"/>
     </FrameLayout>

@@ -3,11 +3,13 @@ package es.usc.citius.servando.calendula.persistence;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.util.List;
 
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalDatePersister;
 import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimePersister;
 
 /**
@@ -22,6 +24,7 @@ public class DailyScheduleItem {
     public static final String COLUMN_TAKEN_TODAY = "TakenToday";
     public static final String COLUMN_TIME_TAKEN = "TimeTaken";
     public static final String COLUMN_TIME = "Time";
+    public static final String COLUMN_DATE = "Date";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
@@ -41,16 +44,21 @@ public class DailyScheduleItem {
     @DatabaseField(columnName = COLUMN_TIME, persisterClass = LocalTimePersister.class)
     private LocalTime time;
 
+    @DatabaseField(columnName = COLUMN_DATE, persisterClass = LocalDatePersister.class)
+    private LocalDate date;
+
     public DailyScheduleItem() {
     }
 
     public DailyScheduleItem(ScheduleItem scheduleItem) {
         this.scheduleItem = scheduleItem;
+        this.date = LocalDate.now();
     }
 
     public DailyScheduleItem(Schedule schedule, LocalTime time) {
         this.schedule = schedule;
         this.time = time;
+        this.date = LocalDate.now();
     }
 
     public Long getId() {
@@ -109,11 +117,19 @@ public class DailyScheduleItem {
         }
     }
 
+    public LocalDate date() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
     @Override
     public String toString() {
         return "DailyScheduleItem{" +
-                " med=" + scheduleItem.schedule().medicine().name() +
-                " dose=" + scheduleItem.dose() +
+                " time=" + (time != null ? time.toString("kk:mm") : "Null") +
+                " date=" + (date != null ? date.toString("dd/MM") : "Null") +
                 ", takenToday=" + takenToday +
                 ", timeTaken=" + timeTaken +
                 '}';
@@ -135,7 +151,5 @@ public class DailyScheduleItem {
     public void save() {
         DB.dailyScheduleItems().save(this);
     }
-
-
 }
 
