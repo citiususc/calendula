@@ -431,12 +431,18 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         Log.d("RVAdapter","toggleCollapseMode");
         expanded = !expanded;
 
+        boolean willSHowSomething = isShowingSomething();
+
         if(listener != null){
-            listener.onAfterToggleCollapse(expanded, isShowingSomething());
+            listener.onBeforeToggleCollapse(expanded, willSHowSomething);
         }
 
         for (int i = 0; i < items.size(); i++) {
             notifyItemChanged(i);
+        }
+
+        if(listener != null){
+            listener.onAfterToggleCollapse(expanded, willSHowSomething);
         }
     }
 
@@ -486,6 +492,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public interface EventListener {
         void onItemClick(View v, DailyAgendaItemStub item, int position);
+        void onBeforeToggleCollapse(boolean expanded, boolean somethingVisible);
         void onAfterToggleCollapse(boolean expanded, boolean somethingVisible);
     }
 

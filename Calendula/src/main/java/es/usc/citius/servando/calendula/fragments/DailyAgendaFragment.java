@@ -95,13 +95,19 @@ public class DailyAgendaFragment extends Fragment{
 
         rvListener = new DailyAgendaRecyclerAdapter.EventListener() {
 
+            DateTime firstTime = null;
+
             @Override
             public void onItemClick(View v, DailyAgendaItemStub item, int position) {
                 showConfirmActivity(v, item, position);
             }
 
             @Override
-            public void onAfterToggleCollapse(boolean expanded, boolean somethingVisible) {
+            public void onBeforeToggleCollapse(boolean expanded, boolean somethingVisible) {
+
+                int firstPosition = llm.findFirstVisibleItemPosition();
+                firstTime = firstPosition < items.size() ? items.get(firstPosition).dateTime() : null;
+
                 if(expanded) {
                     showOrHideEmptyView(false);
                 } else if(!expanded && somethingVisible){
@@ -110,6 +116,16 @@ public class DailyAgendaFragment extends Fragment{
                     showOrHideEmptyView(true);
                 }
             }
+
+            @Override
+            public void onAfterToggleCollapse(boolean expanded, boolean somethingVisible) {
+
+                if(expanded && firstTime != null){
+                    scrollTo(firstTime);
+                }
+                firstTime = null;
+            }
+
         };
 
         rvAdapter.setListener(rvListener);
@@ -348,15 +364,10 @@ public class DailyAgendaFragment extends Fragment{
         }
     }
 
-
-    public void scrollToNow(){
-        scrollTo(LocalTime.now());
-    }
-
-    public void scrollTo(LocalTime time){
+    public void scrollTo(DateTime time){
         int position = 0;
         for(DailyAgendaItemStub stub : items){
-            if(stub.time != null && stub.time.isAfter(time)){
+            if( stub.dateTime().isAfter(time)){
                 break;
             }
             position++;
@@ -398,7 +409,7 @@ public class DailyAgendaFragment extends Fragment{
 
         static final DailyAgendaItemStubComparator instance = new DailyAgendaItemStubComparator();
 
-        private DailyAgendaItemStubComparator(){};
+        private DailyAgendaItemStubComparator(){}
 
         @Override
         public int compare(DailyAgendaItemStub a, DailyAgendaItemStub b) {
