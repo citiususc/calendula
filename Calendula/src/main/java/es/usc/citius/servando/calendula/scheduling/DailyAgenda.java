@@ -14,6 +14,7 @@ import org.joda.time.LocalTime;
 import java.sql.SQLException;
 import java.util.concurrent.Callable;
 
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Routine;
@@ -50,10 +51,13 @@ public class DailyAgenda {
                     @Override
                     public Object call() throws Exception {
                         if(!force) {
+                            LocalDate yesterday = now.minusDays(1).toLocalDate();
+                            LocalDate tomorrow = now.plusDays(1).toLocalDate();
+
                             // delete items older than yesterday
-                            DB.dailyScheduleItems().removeOlderThan(now.minusDays(1).toLocalDate());
+                            DB.dailyScheduleItems().removeOlderThan(yesterday);
                             // delete items beyond tomorrow (only possible when changing date)
-                            DB.dailyScheduleItems().removeBeyond(now.plusDays(1).toLocalDate());
+                            DB.dailyScheduleItems().removeBeyond(tomorrow);
                         }else{
                             DB.dailyScheduleItems().removeAll();
                         }
@@ -77,6 +81,7 @@ public class DailyAgenda {
             }
             // Update alarms
             AlarmScheduler.instance().updateAllAlarms(ctx);
+            CalendulaApp.eventBus().post(new AgendaUpdatedEvent());
         } else {
             Log.d(TAG, "No need to update daily schedule (" + DailyScheduleItem.findAll().size() + " items found for today)");
         }
@@ -167,5 +172,8 @@ public class DailyAgenda {
 
     public static final DailyAgenda instance() {
         return instance;
+    }
+
+    public class AgendaUpdatedEvent {
     }
 }
