@@ -85,7 +85,7 @@ public class ConfirmActivity extends CalendulaActivity {
     List<DailyScheduleItem> items = new ArrayList<>();
 
     DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("kk:mm");
-    DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/uncheckedIcon");
+    DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/YYYY");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -246,16 +246,15 @@ public class ConfirmActivity extends CalendulaActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         int minutes = values[which];
                         if(isRoutine) {
-                            AlarmScheduler.instance().onDelayRoutine(routine, ConfirmActivity.this, minutes);
+                            AlarmScheduler.instance().onDelayRoutine(routine, date, ConfirmActivity.this, minutes);
                         }
                         else{
-                            AlarmScheduler.instance().onDelayHourlySchedule(schedule, time, ConfirmActivity.this, minutes);
+                            AlarmScheduler.instance().onDelayHourlySchedule(schedule, time, date, ConfirmActivity.this, minutes);
                         }
 
                         String msg =ConfirmActivity.this.getString(R.string.alarm_delayed_message, minutes);
                         Toast.makeText(ConfirmActivity.this, msg, Toast.LENGTH_SHORT).show();
                         supportFinishAfterTransition();
-
                     }
                 });
         builder.create().show();
@@ -274,15 +273,15 @@ public class ConfirmActivity extends CalendulaActivity {
 
         if (checked == total) {
             if (isRoutine) {
-                AlarmScheduler.instance().onCancelRoutineNotifications(routine, this);
+                AlarmScheduler.instance().cancelStatusBarNotification(routine, date, this);
             } else {
-                AlarmScheduler.instance().onCancelHourlyScheduleNotifications(schedule, time, this);
+                AlarmScheduler.instance().cancelStatusBarNotification(schedule, time, date, this);
             }
         } else {
             if (isRoutine) {
-                AlarmScheduler.instance().onDelayRoutine(routine, this);
+                AlarmScheduler.instance().onDelayRoutine(routine, date, this);
             } else {
-                AlarmScheduler.instance().onDelayHourlySchedule(schedule, time, this);
+                AlarmScheduler.instance().onDelayHourlySchedule(schedule, time, date, this);
             }
         }
     }
