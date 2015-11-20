@@ -3,7 +3,6 @@ package es.usc.citius.servando.calendula;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
@@ -15,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,7 +40,6 @@ import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub.DailyAgendaItemStubElement;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
-import es.usc.citius.servando.calendula.util.view.CustomDigitalClock;
 import es.usc.citius.servando.calendula.util.view.ParallaxImageView;
 
 /**
@@ -146,7 +143,6 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         TextView day;
         ImageView dayBg;
         View container;
-        FrameLayout clcokContainer;
         ParallaxImageView parallax;
 
         SpacerItemViewHolder(View itemView) {
@@ -154,7 +150,6 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             day = (TextView) itemView.findViewById(R.id.day_text);
             dayBg = (ImageView) itemView.findViewById(R.id.day_bg);
             container = itemView.findViewById(R.id.container);
-            clcokContainer = (FrameLayout) itemView.findViewById(R.id.clock_container);
             parallax = (ParallaxImageView) itemView.findViewById(R.id.parallax_bg);
 
             ViewGroup.LayoutParams layoutParams = parallax.getLayoutParams();
@@ -265,38 +260,30 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public void onBindViewSpacerItemViewHolder(SpacerItemViewHolder holder, DailyAgendaItemStub item, int position) {
 
-        int heigth = 0;
-
         if (expanded) {
             int color = DB.patients().getActive(holder.itemView.getContext()).color();
-            //String day = item.date.toString(DateTimeFormat.forPattern("EEEE dd"));
-            holder.dayBg.setBackgroundColor(color);
 
-
-            boolean isCurrentHour = item.isCurrentHour;
-
-            if(!isCurrentHour){
-                holder.clcokContainer.removeAllViews();
-                holder.clcokContainer.setVisibility(View.GONE);
-                holder.day.setVisibility(View.VISIBLE);
-                holder.day.setText(item.date.equals(LocalDate.now()) ? "Hoy" : "Mañana"); // TODO: get from strings
-                heigth = 80;
-            } else {
-                holder.day.setVisibility(View.GONE);
-                holder.clcokContainer.setVisibility(View.VISIBLE);
-                Context ctx = holder.container.getContext();
-                int layout = R.layout.empty_intake_current_time;
-                CustomDigitalClock c = (CustomDigitalClock) LayoutInflater.from(ctx).inflate(layout, null);
-                c.setShowSeconds(true);
-                holder.clcokContainer.addView(c);
-                heigth = 30;
+            // TODO: get from strings
+            String title;
+            if(item.date.equals(LocalDate.now())){
+                title = "Hoy";
+            }else if(item.date.equals(LocalDate.now().minusDays(1))){
+                title = "Ayer";
+            }else if(item.date.equals(LocalDate.now().plusDays(1))){
+                title = "Mañana";
+            }else{
+                title = item.date.toString("EEEE dd");
             }
+
+            holder.dayBg.setBackgroundColor(color);
+            holder.day.setVisibility(View.VISIBLE);
+            holder.day.setText(title);
             holder.parallax.updateParallax();
         }
 
         holder.itemView.setVisibility(expanded ? View.VISIBLE : View.GONE);
         ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
-        int newHeight = expanded ? ScreenUtils.dpToPx(holder.itemView.getResources(), heigth) : 0;
+        int newHeight = expanded ? ScreenUtils.dpToPx(holder.itemView.getResources(), 80) : 0;
 
         if(params.height != newHeight){
             params.height = newHeight;
@@ -305,10 +292,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     public void onBindEmptyItemViewHolder(EmptyItemViewHolder viewHolder, DailyAgendaItemStub item, int position) {
-
-        Resources r = viewHolder.container.getResources();
         viewHolder.stub = item;
-
 
         if(expanded){
             LocalDate d = viewHolder.stub.date;
@@ -318,12 +302,14 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 viewHolder.hourText.setText(item.dateTime().toString("kk:mm"));
             }
         }
-
         viewHolder.itemView.setVisibility(expanded ? View.VISIBLE : View.GONE);
 
         ViewGroup.LayoutParams params = viewHolder.container.getLayoutParams();
-        params.height = expanded ? emptyItemHeight : 0;
-        viewHolder.container.setLayoutParams(params);
+        int newHeight = expanded ? emptyItemHeight : 0;
+        if(params.height != newHeight) {
+            params.height = newHeight;
+            viewHolder.container.setLayoutParams(params);
+        }
     }
 
     boolean isAvailable(DailyAgendaItemStub stub){
@@ -374,9 +360,13 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
 
         viewHolder.itemView.setVisibility(item.displayable ? View.VISIBLE : View.GONE);
+
         ViewGroup.LayoutParams params = viewHolder.itemView.getLayoutParams();
-        params.height = item.displayable ? ViewGroup.LayoutParams.WRAP_CONTENT : 0;
-        viewHolder.itemView.setLayoutParams(params);
+        int newHeight = item.displayable ? ViewGroup.LayoutParams.WRAP_CONTENT : 0;
+        if(params.height != newHeight) {
+            params.height = newHeight;
+            viewHolder.itemView.setLayoutParams(params);
+        }
     }
 
     private boolean addMeds(NormalItemViewHolder viewHolder, DailyAgendaItemStub item) {
@@ -487,7 +477,6 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         for (int i = start; i < end; i++) {
             RecyclerView.ViewHolder h = rv.findViewHolderForAdapterPosition(i);
             if(h instanceof SpacerItemViewHolder){
-                Log.d(TAG, "Spacer found at position " + i);
                 ((SpacerItemViewHolder)h).parallax.updateParallax();
             }
         }
