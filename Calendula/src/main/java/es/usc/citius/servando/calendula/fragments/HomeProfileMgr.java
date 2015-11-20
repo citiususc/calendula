@@ -168,6 +168,10 @@ public class HomeProfileMgr {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String displayName = preferences.getString("display_name", "Calendula");
         profileUsername.setText(displayName);
+        updateDate();
+    }
+
+    public void updateDate() {
         DateTime dt = DateTime.now();
         String dayStr = dt.dayOfMonth().getAsShortText();
         String monthStr = dt.monthOfYear().getAsShortText().toUpperCase();
