@@ -91,6 +91,7 @@ public class ConfirmActivity extends CalendulaActivity {
     DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/YYYY");
 
     boolean isToday;
+    boolean isCheckable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,8 @@ public class ConfirmActivity extends CalendulaActivity {
         processIntent();
 
         isToday = LocalDate.now().equals(date);
+
+        isCheckable = isToday || AlarmScheduler.isWithinDefaultMargins(date.toDateTime(time), this);
 
         color = AvatarMgr.colorsFor(getResources(), patient.avatar())[0];
         color = Color.parseColor("#263238");
@@ -123,13 +126,13 @@ public class ConfirmActivity extends CalendulaActivity {
         avatarTitle.setImageResource(AvatarMgr.res(patient.avatar()));
         titleTitle.setText(patient.name());
         title.setText((isRoutine ? routine.name() : schedule.toReadableString(this)));
-        takeMadsMessage.setText( isToday ? getString(R.string.agenda_zoom_meds_time) : "Medicinas para el " + date.toString("EEEE dd") );
+        takeMadsMessage.setText( isToday ? getString(R.string.agenda_zoom_meds_time) : "Medicinas del " + date.toString("EEEE dd") );
 
         hour.setText(time.toString("kk:"));
         minute.setText(time.toString("mm"));
 
         fab.setImageDrawable(new IconicsDrawable(this)
-                .icon( isToday ? CommunityMaterial.Icon.cmd_check_all :  CommunityMaterial.Icon.cmd_calendar_clock)
+                .icon( isCheckable ? CommunityMaterial.Icon.cmd_check_all :  CommunityMaterial.Icon.cmd_calendar_clock)
                 .color(Color.WHITE)
                 .sizeDp(24)
                 .paddingDp(0));
@@ -138,7 +141,7 @@ public class ConfirmActivity extends CalendulaActivity {
             @Override
             public void onClick(View view) {
 
-                if(!isToday){
+                if(!isCheckable){
                     onCheckNotToday();
                     return;
                 }
@@ -234,7 +237,7 @@ public class ConfirmActivity extends CalendulaActivity {
 
         MenuItem item = menu.findItem(R.id.action_delay);
 
-        if(!isToday){
+        if(!isCheckable){
             item.setVisible(false);
         }else{
             item.setIcon(new IconicsDrawable(this)
@@ -380,7 +383,7 @@ public class ConfirmActivity extends CalendulaActivity {
             @Override
             public void onClick(View view) {
 
-                if(!isToday){
+                if(!isCheckable){
                     onCheckNotToday();
                     return;
                 }
