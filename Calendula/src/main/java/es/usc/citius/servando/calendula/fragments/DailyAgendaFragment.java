@@ -251,7 +251,7 @@ public class DailyAgendaFragment extends Fragment{
                         }
 
                     } else {
-                        stub = routineStubs.get(date);
+                        stub = routineStubs.get(routine);
                     }
 
                     Schedule schedule = scheduleItem.schedule();
