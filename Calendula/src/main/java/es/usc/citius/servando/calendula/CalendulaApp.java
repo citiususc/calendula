@@ -28,6 +28,7 @@ import es.usc.citius.servando.calendula.database.PatientDao;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
+import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.PresentationsTypeface;
 
@@ -140,11 +141,11 @@ public class CalendulaApp extends Application {
         // intent our receiver will receive
         Intent intent = new Intent(this, AlarmReceiver.class);
         AlarmIntentParams params = AlarmIntentParams.forDailyUpdate();
-        intent.putExtra("alarm_params", params);
-        PendingIntent routinePendingIntent = PendingIntent.getBroadcast(this, params.hashCode(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        intent.putExtra(AlarmScheduler.EXTRA_PARAMS, params);
+        PendingIntent dailyAlarm = PendingIntent.getBroadcast(this, params.hashCode(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, new LocalTime(0, 0).toDateTimeToday().getMillis(), AlarmManager.INTERVAL_DAY, routinePendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, new LocalTime(0, 0).toDateTimeToday().getMillis(), AlarmManager.INTERVAL_DAY, dailyAlarm);
         }
     }
 
