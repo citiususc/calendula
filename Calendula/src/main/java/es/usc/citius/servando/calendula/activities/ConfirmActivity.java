@@ -317,7 +317,7 @@ public class ConfirmActivity extends CalendulaActivity {
     @Override
     protected void onDestroy() {
 
-        if(stateChanged && position != -1){
+        if(stateChanged){
             CalendulaApp.eventBus().post(new ConfirmStateChangeEvent(position));
         }
         super.onDestroy();
