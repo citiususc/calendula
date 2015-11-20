@@ -47,6 +47,7 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
+import es.usc.citius.servando.calendula.util.Snack;
 
 public class ConfirmActivity extends CalendulaActivity {
 
@@ -70,6 +71,8 @@ public class ConfirmActivity extends CalendulaActivity {
     TextView hour;
     TextView minute;
 
+    TextView takeMadsMessage;
+
     IconicsDrawable uncheckedIcon;
     IconicsDrawable checkedIcon;
 
@@ -87,11 +90,16 @@ public class ConfirmActivity extends CalendulaActivity {
     DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("kk:mm");
     DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/YYYY");
 
+    boolean isToday;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm);
         processIntent();
+
+        isToday = LocalDate.now().equals(date);
+
         color = AvatarMgr.colorsFor(getResources(), patient.avatar())[0];
         color = Color.parseColor("#263238");
 
@@ -103,6 +111,7 @@ public class ConfirmActivity extends CalendulaActivity {
         listView = (RecyclerView) findViewById(R.id.listView);
         avatar = (ImageView) findViewById(R.id.patient_avatar);
         title = (TextView) findViewById(R.id.routine_name);
+        takeMadsMessage = (TextView) findViewById(R.id.textView3);
 
         avatarTitle = (ImageView) findViewById(R.id.patient_avatar_title);
         titleTitle = (TextView) findViewById(R.id.routine_name_title);
@@ -113,13 +122,14 @@ public class ConfirmActivity extends CalendulaActivity {
         avatar.setImageResource(AvatarMgr.res(patient.avatar()));
         avatarTitle.setImageResource(AvatarMgr.res(patient.avatar()));
         titleTitle.setText(patient.name());
-        title.setText(isRoutine ? routine.name() : schedule.toReadableString(this));
+        title.setText((isRoutine ? routine.name() : schedule.toReadableString(this)));
+        takeMadsMessage.setText( isToday ? getString(R.string.agenda_zoom_meds_time) : "Medicinas para el " + date.toString("EEEE dd") );
 
         hour.setText(time.toString("kk:"));
         minute.setText(time.toString("mm"));
 
         fab.setImageDrawable(new IconicsDrawable(this)
-                .icon(CommunityMaterial.Icon.cmd_check_all)
+                .icon( isToday ? CommunityMaterial.Icon.cmd_check_all :  CommunityMaterial.Icon.cmd_calendar_clock)
                 .color(Color.WHITE)
                 .sizeDp(24)
                 .paddingDp(0));
@@ -127,6 +137,12 @@ public class ConfirmActivity extends CalendulaActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if(!isToday){
+                    onCheckNotToday();
+                    return;
+                }
+
                 for (DailyScheduleItem item : items) {
                     item.setTakenToday(true);
                     item.save();
@@ -134,7 +150,7 @@ public class ConfirmActivity extends CalendulaActivity {
                 itemAdapter.notifyDataSetChanged();
                 stateChanged = true;
 
-                String msg =ConfirmActivity.this.getString(R.string.all_meds_taken);
+                String msg = ConfirmActivity.this.getString(R.string.all_meds_taken);
                 Toast.makeText(ConfirmActivity.this, msg, Toast.LENGTH_SHORT).show();
                 fab.postDelayed(new Runnable() {
                     @Override
@@ -144,6 +160,7 @@ public class ConfirmActivity extends CalendulaActivity {
                 }, 500);
             }
         });
+
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -215,10 +232,17 @@ public class ConfirmActivity extends CalendulaActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.confirm, menu);
 
-        menu.findItem(R.id.action_delay).setIcon(new IconicsDrawable(this)
-                .icon(CommunityMaterial.Icon.cmd_history)
-                .color(Color.WHITE)
-                .sizeDp(24));
+        MenuItem item = menu.findItem(R.id.action_delay);
+
+        if(!isToday){
+            item.setVisible(false);
+        }else{
+            item.setIcon(new IconicsDrawable(this)
+                    .icon(CommunityMaterial.Icon.cmd_history)
+                    .color(Color.WHITE)
+                    .sizeDp(24));
+        }
+
         return true;
     }
 
@@ -355,6 +379,12 @@ public class ConfirmActivity extends CalendulaActivity {
 
             @Override
             public void onClick(View view) {
+
+                if(!isToday){
+                    onCheckNotToday();
+                    return;
+                }
+
                 boolean taken = dailyScheduleItem.takenToday();
                 dailyScheduleItem.setTakenToday(!taken);
                 dailyScheduleItem.save();
@@ -415,5 +445,9 @@ public class ConfirmActivity extends CalendulaActivity {
         public int getItemCount() {
             return items.size();
         }
+    }
+
+    private void onCheckNotToday() {
+        Snack.show("Esta pauta no esta disponible hoy!", this);
     }
 }
