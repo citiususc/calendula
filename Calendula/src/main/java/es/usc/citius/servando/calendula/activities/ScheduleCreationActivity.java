@@ -206,6 +206,14 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                     List<Long> routinesTaken = new ArrayList<Long>();
 
                     if (!s.repeatsHourly()) {
+                        // remove days if changed
+                        boolean[] days = s.days();
+                        for (DailyScheduleItem dsi : DB.dailyScheduleItems().findBySchedule(s)) {
+                            if(days[dsi.date().getDayOfWeek()-1]){
+                                DB.dailyScheduleItems().remove(dsi);
+                            }
+                        }
+
                         for (ScheduleItem item : s.items()) {
                             DailyScheduleItem d = DailyScheduleItem.findByScheduleItem(item);
                             // if taken today, add to the list
