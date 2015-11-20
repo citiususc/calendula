@@ -26,6 +26,7 @@ import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.database.PatientDao;
 import es.usc.citius.servando.calendula.persistence.Patient;
+import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.PresentationsTypeface;
@@ -87,8 +88,6 @@ public class CalendulaApp extends Application {
 
         // initialize SQLite engine
         initializeDatabase();
-        // create default patient
-        createDefaultPatient(this);
 
         DefaultDataGenerator.fillDBWithDummyData(getApplicationContext());
         // initialize daily agenda
@@ -101,42 +100,6 @@ public class CalendulaApp extends Application {
         Iconics.init(getApplicationContext());
         //register custom fonts like this (or also provide a font definition file)
         Iconics.registerFont(new PresentationsTypeface());
-    }
-
-    private void createDefaultPatient(Context ctx) {
-//        try {
-//            if(DB.patients().countOf() <= 0){
-//                // Create default
-//                Patient p = new Patient();
-//                p.setName("Usuario"); // R.string.default_patient_name
-//                p.setDefault(true);
-//                DB.patients().save(p);
-//                SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(ctx);
-//                prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT,p.id()).commit();
-//            }
-//
-//            // For testing purposes
-//            if(DB.patients().countOf() <= 1){
-//
-//                // Create default
-//                Patient p = new Patient();
-//                p.setName("Angel"); // R.string.default_patient_name
-//                p.setAvatar(AvatarMgr.AVATAR_5);
-//                DB.patients().save(p);
-//
-//                p = new Patient();
-//                p.setName("Avó"); // R.string.default_patient_name
-//                p.setAvatar(AvatarMgr.AVATAR_2);
-//                DB.patients().save(p);
-//
-//                p = new Patient();
-//                p.setName("Mamá"); // R.string.default_patient_name
-//                p.setAvatar(AvatarMgr.AVATAR_7);
-//                DB.patients().save(p);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public static boolean isPharmaModeEnabled(Context ctx){
@@ -176,16 +139,11 @@ public class CalendulaApp extends Application {
     public void setupUpdateDailyAgendaAlarm() {
         // intent our receiver will receive
         Intent intent = new Intent(this, AlarmReceiver.class);
-        // indicate thar is for a routine
-        intent.putExtra(INTENT_EXTRA_ACTION, ACTION_DAILY_ALARM);
-        // create pending intent
-        int intent_id = 1234567890;
-        PendingIntent routinePendingIntent = PendingIntent.getBroadcast(this, intent_id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        // Get the AlarmManager service
+        AlarmIntentParams params = AlarmIntentParams.forDailyUpdate();
+        intent.putExtra("alarm_params", params);
+        PendingIntent routinePendingIntent = PendingIntent.getBroadcast(this, params.hashCode(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        // set the routine alarm, with repetition every day
         if (alarmManager != null) {
-            // set a repeating alarm every day at 00:00
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, new LocalTime(0, 0).toDateTimeToday().getMillis(), AlarmManager.INTERVAL_DAY, routinePendingIntent);
         }
     }

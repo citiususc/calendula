@@ -80,6 +80,12 @@ public class AlarmIntentParams implements Parcelable {
         return params;
     }
 
+    public static AlarmIntentParams forDailyUpdate() {
+        AlarmIntentParams params = new AlarmIntentParams();
+        params.action = CalendulaApp.ACTION_DAILY_ALARM;
+        return params;
+    }
+
     public LocalDate date() {
         return DateTimeFormat.forPattern(DATE_FORMAT).parseLocalDate(date);
     }

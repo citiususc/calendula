@@ -30,15 +30,16 @@ public class DailyAgenda {
     private static final String PREFERENCES_NAME = "DailyAgendaPreferences";
     private static final String PREF_LAST_DATE = "LastDate";
 
-    private static final int SHOWN_DAYS = 2;
+    private static final int NEXT_DAYS_TO_SHOW = 1; // show tomorrow
 
-    public void setupForToday(Context ctx, boolean force) {
+    public void setupForToday(Context ctx, final boolean force) {
 
         final SharedPreferences settings = ctx.getSharedPreferences(PREFERENCES_NAME, 0);
+        final Long lastDate = settings.getLong(PREF_LAST_DATE, 0);
         final DateTime now = DateTime.now();
-        Long lastDate = settings.getLong(PREF_LAST_DATE, 0);
 
         Log.d(TAG, "Setup daily agenda. Last updated: " + new DateTime(lastDate).toString("dd/MM - kk:mm"));
+
         Interval today = new Interval(now.withTimeAtStartOfDay(), now.withTimeAtStartOfDay().plusDays(1));
 
         // we need to update daily agenda
@@ -48,26 +49,34 @@ public class DailyAgenda {
                 TransactionManager.callInTransaction(DB.helper().getConnectionSource(), new Callable<Object>() {
                     @Override
                     public Object call() throws Exception {
-                        // delete old items
-                        DB.dailyScheduleItems().removeAll();
+                        if(!force) {
+                            // delete items older than yesterday
+                            DB.dailyScheduleItems().removeOlderThan(now.minusDays(1).toLocalDate());
+                            // delete items beyond tomorrow (only possible when changing date)
+                            DB.dailyScheduleItems().removeBeyond(now.plusDays(1).toLocalDate());
+                        }else{
+                            DB.dailyScheduleItems().removeAll();
+                        }
                         // and add new ones
                         createDailySchedule(now);
                         // Save last date to prefs
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putLong(PREF_LAST_DATE, now.getMillis());
                         editor.commit();
-                        // End transaction
-
                         return null;
                     }
                 });
-
             } catch (SQLException e) {
-                Log.e(TAG, "Error setting up daily agenda", e);
+                if(!force){
+                    Log.e(TAG, "Error setting up daily agenda. Retrying with force = true", e);
+                    // setup with force, destroy current daily agenda but continues working
+                    setupForToday(ctx,true);
+                }else{
+                    Log.e(TAG, "Error setting up daily agenda", e);
+                }
             }
             // Update alarms
             AlarmScheduler.instance().updateAllAlarms(ctx);
-
         } else {
             Log.d(TAG, "No need to update daily schedule (" + DailyScheduleItem.findAll().size() + " items found for today)");
         }
@@ -109,12 +118,17 @@ public class DailyAgenda {
 
     public void createDailySchedule(DateTime d) {
 
-        for(int i = 0; i < SHOWN_DAYS; i++, d=d.plusDays(1)){
+        boolean todayCreated = DB.dailyScheduleItems().isDatePresent(d.toLocalDate());
+
+        if(!todayCreated){
             createScheduleForDate(d.toLocalDate());
         }
 
-        for(DailyScheduleItem s : DB.dailyScheduleItems().findAll()){
-            Log.d(TAG, s.toString());
+        for(int i = 1; i <= NEXT_DAYS_TO_SHOW; i++){
+            LocalDate date = d.plusDays(i).toLocalDate();
+            if(!DB.dailyScheduleItems().isDatePresent(date)) {
+                createScheduleForDate(date);
+            }
         }
     }
 
@@ -124,7 +138,7 @@ public class DailyAgenda {
         dsi.setTakenToday(taken);
         dsi.save();
 
-        for(int i = 1;  i < SHOWN_DAYS; i++){
+        for(int i = 1;  i <= NEXT_DAYS_TO_SHOW; i++){
             dsi = new DailyScheduleItem(item);
             dsi.setDate(LocalDate.now().plusDays(i));
             dsi.setTakenToday(taken);
@@ -137,7 +151,7 @@ public class DailyAgenda {
         DailyScheduleItem dsi = new DailyScheduleItem(s, time);
         dsi.save();
 
-        for(int i = 1;  i < SHOWN_DAYS; i++){
+        for(int i = 1;  i <= NEXT_DAYS_TO_SHOW; i++){
             dsi = new DailyScheduleItem(s, time);
             dsi.setDate(LocalDate.now().plusDays(i));
             dsi.save();

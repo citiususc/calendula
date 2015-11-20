@@ -160,12 +160,12 @@ public class HomePagerActivity extends CalendulaActivity implements
         // configure tutorial
         this.tutorial = new AppTutorial();
         this.tutorial.init(this);
-        appBarLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ((DailyAgendaFragment) getViewPagerFragment(0)).scrollToNow();
-            }
-        }, 1000);
+//        appBarLayout.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                ((DailyAgendaFragment) getViewPagerFragment(0)).scrollToNow();
+//            }
+//        }, 1000);
 
         icAgendaLess = new IconicsDrawable(this)
                 .icon(CommunityMaterial.Icon.cmd_unfold_less)

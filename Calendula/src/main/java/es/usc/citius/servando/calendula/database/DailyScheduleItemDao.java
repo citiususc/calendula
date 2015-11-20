@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.database;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
@@ -66,6 +67,26 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
         });
     }
 
+    public int removeOlderThan(LocalDate date) {
+        try {
+            DeleteBuilder<DailyScheduleItem, Long> qb = dao.deleteBuilder();
+            qb.setWhere(qb.where().lt(DailyScheduleItem.COLUMN_DATE, date));
+            return qb.delete();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding model", e);
+        }
+    }
+
+    public int removeBeyond(LocalDate date) {
+        try {
+            DeleteBuilder<DailyScheduleItem, Long> qb = dao.deleteBuilder();
+            qb.setWhere(qb.where().gt(DailyScheduleItem.COLUMN_DATE, date));
+            return qb.delete();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding model", e);
+        }
+    }
+
     public DailyScheduleItem findByScheduleAndTime(Schedule schedule, LocalTime time) {
         try {
             QueryBuilder<DailyScheduleItem, Long> qb = dao.queryBuilder();
@@ -118,5 +139,16 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
         } catch (SQLException e) {
             throw new RuntimeException("Error finding model", e);
         }
+    }
+
+    public boolean isDatePresent(LocalDate date) {
+        try {
+            QueryBuilder<DailyScheduleItem, Long> qb = dao.queryBuilder();
+            qb.setWhere(qb.where().eq(DailyScheduleItem.COLUMN_DATE, date));
+            return qb.countOf() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding model", e);
+        }
+
     }
 }

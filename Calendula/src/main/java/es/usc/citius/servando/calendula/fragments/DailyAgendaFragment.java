@@ -168,6 +168,7 @@ public class DailyAgendaFragment extends Fragment{
         final List<DailyScheduleItem> daily = DB.dailyScheduleItems().findAll();
 
         DateTime max = DateTime.now().withTimeAtStartOfDay();
+        DateTime min = DateTime.now().withTimeAtStartOfDay();
 
         // create stubs for hourly schedule items
         for(DailyScheduleItem dailyScheduleItem : daily){
@@ -205,6 +206,10 @@ public class DailyAgendaFragment extends Fragment{
                 if(candidate.isAfter(max)){
                     max = candidate;
                 }
+                if(candidate.isBefore(min)){
+                    min = candidate;
+                }
+
             }
         }
 
@@ -249,6 +254,9 @@ public class DailyAgendaFragment extends Fragment{
                         if (candidate.isAfter(max)) {
                             max = candidate;
                         }
+                        if(candidate.isBefore(min)){
+                            min = candidate;
+                        }
 
                     } else {
                         stub = routineStubs.get(routine);
@@ -279,17 +287,16 @@ public class DailyAgendaFragment extends Fragment{
             }
         }
 
-        addEmptyHours(stubs, DateTime.now(), max);
+        addEmptyHours(stubs, DateTime.now().minusDays(1), max);
         Collections.sort(stubs, DailyAgendaItemStubComparator.instance);
 
         return stubs;
     }
 
-
     public void addEmptyHours(List<DailyAgendaItemStub> stubs, DateTime min, DateTime max){
 
         min = min.withTimeAtStartOfDay();
-        max = max.withTimeAtStartOfDay().plusDays(1); // end of day
+        max = max.withTimeAtStartOfDay().plusDays(1); // end of the day
 
         // add empty hours if there is not an item with the same hour
         for(DateTime start = min; start.isBefore(max); start = start.plusHours(1)){
@@ -333,7 +340,6 @@ public class DailyAgendaFragment extends Fragment{
     }
 
     public void refreshPosition(int position) {
-
         if(position == -1){
             notifyDataChange();
             return;
