@@ -146,6 +146,13 @@
         <activity android:name=".activities.ConfirmActivity"
                   android:theme="@style/AppTheme" >
         </activity>
+
+
+        <service
+            android:name=".scheduling.AlarmIntentService"
+            android:label="AlarmIntentService">
+        </service>
+
     </application>
 
 </manifest>
