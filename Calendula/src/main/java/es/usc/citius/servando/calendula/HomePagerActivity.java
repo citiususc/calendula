@@ -51,6 +51,7 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
+import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 import es.usc.citius.servando.calendula.util.AppTutorial;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
@@ -95,6 +96,7 @@ public class HomePagerActivity extends CalendulaActivity implements
 
     boolean active = false;
     private Queue<Object> pendingEvents = new LinkedList<>();
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +106,7 @@ public class HomePagerActivity extends CalendulaActivity implements
         initializeDrawer(savedInstanceState);
         setupStatusBar(Color.TRANSPARENT);
         subscribeToEvents();
+        handler = new Handler();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -506,37 +509,46 @@ public class HomePagerActivity extends CalendulaActivity implements
     @SuppressWarnings("unused")
     public void onEvent(final Object evt) {
         if(active) {
-            if (evt instanceof PersistenceEvents.ModelCreateOrUpdateEvent) {
-                PersistenceEvents.ModelCreateOrUpdateEvent event = (PersistenceEvents.ModelCreateOrUpdateEvent) evt;
-                Log.d(TAG, "onEvent: " + event.clazz.getName());
-                ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
-                ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
-                ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
-                ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
-            } else if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
-                activePatient = ((PersistenceEvents.ActiveUserChangeEvent) evt).patient;
-                updateTitle(mViewPager.getCurrentItem());
-                toolbarLayout.setContentScrimColor(activePatient.color());
-                fabMgr.onPatientUpdate(activePatient);
-            } else if (evt instanceof PersistenceEvents.UserUpdateEvent) {
-                Patient p = ((PersistenceEvents.UserUpdateEvent) evt).patient;
-                ((DailyAgendaFragment) getViewPagerFragment(0)).onUserUpdate();
-                if (DB.patients().isActive(p, this)) {
-                    activePatient = p;
-                    updateTitle(mViewPager.getCurrentItem());
-                    toolbarLayout.setContentScrimColor(activePatient.color());
-                    fabMgr.onPatientUpdate(activePatient);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (evt instanceof PersistenceEvents.ModelCreateOrUpdateEvent) {
+                        PersistenceEvents.ModelCreateOrUpdateEvent event = (PersistenceEvents.ModelCreateOrUpdateEvent) evt;
+                        Log.d(TAG, "onEvent: " + event.clazz.getName());
+                        ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
+                        ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
+                        ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
+                        ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
+                    } else if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
+                        activePatient = ((PersistenceEvents.ActiveUserChangeEvent) evt).patient;
+                        updateTitle(mViewPager.getCurrentItem());
+                        toolbarLayout.setContentScrimColor(activePatient.color());
+                        fabMgr.onPatientUpdate(activePatient);
+                    } else if (evt instanceof PersistenceEvents.UserUpdateEvent) {
+                        Patient p = ((PersistenceEvents.UserUpdateEvent) evt).patient;
+                        ((DailyAgendaFragment) getViewPagerFragment(0)).onUserUpdate();
+                        if (DB.patients().isActive(p, HomePagerActivity.this)) {
+                            activePatient = p;
+                            updateTitle(mViewPager.getCurrentItem());
+                            toolbarLayout.setContentScrimColor(activePatient.color());
+                            fabMgr.onPatientUpdate(activePatient);
+                        }
+                    } else if (evt instanceof PersistenceEvents.UserCreateEvent) {
+                        Patient created = ((PersistenceEvents.UserCreateEvent) evt).patient;
+                        drawerMgr.onPatientCreated(created);
+                    } else if (evt instanceof HomeProfileMgr.BackgroundUpdatedEvent) {
+                        ((DailyAgendaFragment) getViewPagerFragment(0)).refresh();
+                    } else if (evt instanceof ConfirmActivity.ConfirmStateChangeEvent) {
+                        pendingRefresh = ((ConfirmActivity.ConfirmStateChangeEvent) evt).position;
+                        ((DailyAgendaFragment) getViewPagerFragment(0)).refreshPosition(pendingRefresh);
+                    } else if (evt instanceof DailyAgenda.AgendaUpdatedEvent) {
+                        ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
+                        homeProfileMgr.updateDate();
+                    }
                 }
-            } else if (evt instanceof PersistenceEvents.UserCreateEvent) {
-                Patient created = ((PersistenceEvents.UserCreateEvent) evt).patient;
-                drawerMgr.onPatientCreated(created);
-            } else if (evt instanceof HomeProfileMgr.BackgroundUpdatedEvent) {
-                ((DailyAgendaFragment) getViewPagerFragment(0)).refresh();
-            } else if (evt instanceof ConfirmActivity.ConfirmStateChangeEvent) {
-                pendingRefresh = ((ConfirmActivity.ConfirmStateChangeEvent) evt).position;
-                ((DailyAgendaFragment) getViewPagerFragment(0)).refreshPosition(pendingRefresh);
-            }
-        }else{
+            });
+        } else {
             pendingEvents.add(evt);
         }
     }
