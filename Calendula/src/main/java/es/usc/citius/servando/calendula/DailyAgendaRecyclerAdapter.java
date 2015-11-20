@@ -239,11 +239,13 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 if(stub.isRoutine){
                     List<ScheduleItem> rsi = ScheduleUtils.getRoutineScheduleItems(Routine.findById(stub.id), true);
                     for(ScheduleItem si : rsi){
-                        dailyScheduleItems.add(DailyScheduleItem.findByScheduleItem(si));
+                        DailyScheduleItem dsi = DB.dailyScheduleItems().findByScheduleItemAndDate(si, stub.date);
+                        if(dsi!=null)
+                            dailyScheduleItems.add(dsi);
                     }
                 }else{
                     Schedule s = Schedule.findById(stub.id);
-                    dailyScheduleItems.add(DB.dailyScheduleItems().findByScheduleAndTime(s, stub.time));
+                    dailyScheduleItems.add(DB.dailyScheduleItems().findBy(s, stub.date, stub.time));
                 }
 
                 for (DailyScheduleItem item : dailyScheduleItems) {
