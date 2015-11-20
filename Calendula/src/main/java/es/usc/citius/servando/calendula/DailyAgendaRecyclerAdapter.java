@@ -35,7 +35,6 @@ import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
-import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub.DailyAgendaItemStubElement;
@@ -237,7 +236,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
                 List<DailyScheduleItem> dailyScheduleItems = new ArrayList<>();
                 if(stub.isRoutine){
-                    List<ScheduleItem> rsi = ScheduleUtils.getRoutineScheduleItems(Routine.findById(stub.id), true);
+                    List<ScheduleItem> rsi = Routine.findById(stub.id).scheduleItems();
                     for(ScheduleItem si : rsi){
                         DailyScheduleItem dsi = DB.dailyScheduleItems().findByScheduleItemAndDate(si, stub.date);
                         if(dsi!=null)
