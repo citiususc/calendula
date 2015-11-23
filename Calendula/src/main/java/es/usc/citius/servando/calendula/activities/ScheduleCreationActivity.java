@@ -77,6 +77,7 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
     long mScheduleId;
     PagerSlidingTabStrip tabs;
     MenuItem removeItem;
+    MenuItem scanned;
     Toolbar toolbar;
 
     boolean autoStepDone = false;
@@ -360,6 +361,17 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
         getMenuInflater().inflate(R.menu.schedules, menu);
         removeItem = menu.findItem(R.id.action_remove);
         removeItem.setVisible(mScheduleId != -1 ? true : false);
+
+        scanned = menu.findItem(R.id.action_read_from_qr);
+
+        if(mSchedule != null && mSchedule.medicine() != null && (mSchedule.medicine().cn() != null || mSchedule.medicine().homogeneousGroup() != null)){
+            Log.d(TAG, "Creating menu. Scanned: " + mSchedule.scanned() + " mSchedule: " + mSchedule.toString());
+            scanned.setVisible(true);
+            scanned.setChecked(mSchedule.scanned());
+        }else{
+            scanned.setVisible(false);
+        }
+
         return true;
     }
 
@@ -369,9 +381,21 @@ public class ScheduleCreationActivity extends ActionBarActivity implements ViewP
             case R.id.action_remove:
                 showDeleteConfirmationDialog(mSchedule);
                 return true;
-//            case R.id.action_done:
-//                saveSchedule();
-//                return true;
+            case R.id.action_read_from_qr:
+                if(mSchedule != null) {
+
+                    if(scanned.isChecked()){
+                        mSchedule.setScanned(false);
+                        scanned.setChecked(false);
+                    }else{
+                        mSchedule.setScanned(true);
+                        scanned.setChecked(true);
+                    }
+
+                    Log.d(TAG, "Update scanned status to " + mSchedule.scanned());
+
+                }
+                return true;
             default:
                 finish();
                 return true;

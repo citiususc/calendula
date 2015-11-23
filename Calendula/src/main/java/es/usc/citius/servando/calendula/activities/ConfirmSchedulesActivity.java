@@ -301,7 +301,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                                         }
 
                                         Schedule s = c.getSchedule();
-                                        Schedule prev = DB.schedules().findOneBy(Schedule.COLUMN_MEDICINE, m);
+                                        Schedule prev = DB.schedules().findScannedByMedicine(m);
                                         if (prev != null) {
                                             Log.d("PRESCRIPTION", "Found previous schedule for med " + m.getId());
                                             updateSchedule(prev, s, c.getScheduleItems());
@@ -397,6 +397,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
 
     public void updateSchedule(final Schedule s, final Schedule current, List<ScheduleItem> items) {
 
+        s.setScanned(true);
         s.setType(current.type());
         s.setDays(current.days());
         s.setDose(current.dose());

@@ -647,7 +647,7 @@ public class ScheduleImportFragment extends Fragment
 
         setScheduleStart(schedule.start());
 
-        if (schedule.end() == null && hasEnd && daysToEnd > 0) {
+        if (schedule.end() == null && isNew && hasEnd && daysToEnd > 0) {
             LocalDate end = schedule.start().plusDays(daysToEnd);
             setScheduleEnd(end);
         } else {
@@ -760,7 +760,10 @@ public class ScheduleImportFragment extends Fragment
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (schedule.type() != Schedule.SCHEDULE_TYPE_HOURLY) {
-            scheduleSpinner.setSelection(timesPerDay > 0 ? timesPerDay - 1 : 0);
+            if(isNew)
+                scheduleSpinner.setSelection(timesPerDay > 0 ? timesPerDay - 1 : 0);
+            else
+                scheduleSpinner.setSelection(schedule.items().size() - 1);
             //checkSelectedDays(view, schedule!=null ? schedule.days() : Schedule.allWeekDays());
         }
     }

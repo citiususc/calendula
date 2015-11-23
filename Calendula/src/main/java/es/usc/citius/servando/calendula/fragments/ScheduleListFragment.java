@@ -158,14 +158,13 @@ public class ScheduleListFragment extends Fragment {
             timeStr = ScheduleUtils.getTimesStr(24 / schedule.rule().interval(), getActivity());
         }
 
+        Log.d(TAG, "Schedule " + schedule.medicine().name() + " is scanned: " + schedule.scanned());
+        String auto = schedule.scanned() ? " ↻" : "";
 
-        icon.setImageDrawable(
-                getResources().getDrawable(schedule.medicine().presentation().getDrawable()));
-        ((TextView) item.findViewById(R.id.schedules_list_item_medname)).setText(
-                schedule.medicine().name());
+        icon.setImageDrawable(getResources().getDrawable(schedule.medicine().presentation().getDrawable()));
+        ((TextView) item.findViewById(R.id.schedules_list_item_medname)).setText(schedule.medicine().name() + auto);
         ((TextView) item.findViewById(R.id.schedules_list_item_times)).setText(timeStr);
-        ((TextView) item.findViewById(R.id.schedules_list_item_days)).setText(
-                schedule.toReadableString(getActivity()));
+        ((TextView) item.findViewById(R.id.schedules_list_item_days)).setText(schedule.toReadableString(getActivity()));
 
         View overlay = item.findViewById(R.id.schedules_list_item_container);
         overlay.setTag(schedule);
@@ -241,7 +240,7 @@ public class ScheduleListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            mSchedules = Schedule.findAll();
+            //mSchedules = Schedule.findAll();
 
             Log.d(TAG, "Schedules after reload: " + mSchedules.size());
             return null;
@@ -251,9 +250,7 @@ public class ScheduleListFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             adapter.clear();
-            for (Schedule s : mSchedules) {
-                adapter.add(s);
-            }
+            adapter.addAll(Schedule.findAll());
             adapter.notifyDataSetChanged();
         }
     }

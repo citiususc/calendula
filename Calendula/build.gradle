@@ -38,7 +38,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 24
-        versionName "2.4-SNAPSHOT"
+        versionName "2.3.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 

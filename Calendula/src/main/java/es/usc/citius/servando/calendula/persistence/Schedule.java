@@ -203,7 +203,9 @@ public class Schedule {
         if (type == SCHEDULE_TYPE_CYCLE) {
             return cycleEnabledForDate(date);
         } else {
-            return rrule.hasOccurrencesAt(date, start);
+            DateTime dt = date.toDateTimeAtStartOfDay();
+            List<DateTime> occurrences = rrule.occurrencesBetween(dt, dt.plusDays(1), startDateTime());
+            return occurrences.size() > 0;
         }
     }
 

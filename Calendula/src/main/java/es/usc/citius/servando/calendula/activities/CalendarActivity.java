@@ -342,9 +342,7 @@ public class CalendarActivity extends ActionBarActivity {
             LocalDate first = LocalDate.now(); // compute first
             LocalDate now = LocalDate.now().minusDays(9);
 
-            if(now.getDayOfWeek() == DateTimeConstants.SATURDAY){
-                now = now.plusDays(2);
-            }else if(now.getDayOfWeek() == DateTimeConstants.SUNDAY){
+            if(now.getDayOfWeek() == DateTimeConstants.SUNDAY){
                 now = now.plusDays(1);
             }
 
