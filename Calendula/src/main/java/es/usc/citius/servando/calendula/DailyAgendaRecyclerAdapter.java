@@ -1,5 +1,7 @@
 package es.usc.citius.servando.calendula;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -251,7 +253,15 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                     item.setTakenToday(true);
                     item.save();
                 }
-                updateItem(getAdapterPosition());
+
+                actionsView.animate().alpha(0).scaleX(0.5f).scaleY(0.5f).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        updateItem(getAdapterPosition());
+                    }
+                });
+
+
 
             }else if(listener != null){
                 listener.onItemClick(view, stub, getAdapterPosition());
@@ -353,6 +363,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             } else {
                 viewHolder.takenOverlay.setVisibility(View.GONE);
                 if (isAvailable(item)) {
+                    viewHolder.actionsView.animate().alpha(1).scaleX(1f).scaleY(1f).setStartDelay(500);
                     viewHolder.actionsView.setVisibility(View.VISIBLE);
                 } else {
                     viewHolder.actionsView.setVisibility(View.GONE);
