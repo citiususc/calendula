@@ -185,9 +185,18 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         rUpdateBuilder.updateColumnValue(Routine.COLUMN_PATIENT,p.id());
         rUpdateBuilder.update();
 
+        // Assign all schedules to the default patient
         UpdateBuilder<Schedule,Long> sUpdateBuilder = getSchedulesDao().updateBuilder();
         sUpdateBuilder.updateColumnValue(Schedule.COLUMN_PATIENT,p.id());
         sUpdateBuilder.update();
+
+        // Assign all medicines to the default patient
+        UpdateBuilder<Medicine,Long> mUpdateBuilder = getMedicinesDao().updateBuilder();
+        mUpdateBuilder.updateColumnValue(Medicine.COLUMN_PATIENT,p.id());
+        mUpdateBuilder.update();
+
+        // TODO: Update daily schedule
+        // DailyAgenda.instance().setupForToday(this, true);
 
 
     }
