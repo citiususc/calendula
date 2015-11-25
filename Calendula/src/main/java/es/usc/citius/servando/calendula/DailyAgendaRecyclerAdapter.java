@@ -330,7 +330,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
      boolean isDisplayable(DailyAgendaItemStub stub){
          DateTime t = stub.dateTime();
          DateTime midnight = DateTime.now().withTimeAtStartOfDay().plusDays(1);
-         return (isAvailable(stub) || expanded || (t.isAfterNow() && t.isBefore(midnight)));
+         return stub.hasEvents && (isAvailable(stub) || expanded || (t.isAfterNow() && t.isBefore(midnight)));
      }
 
     public void onBindNormalItemViewHolder(NormalItemViewHolder viewHolder, DailyAgendaItemStub item, int i) {
@@ -426,15 +426,20 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public boolean isShowingSomething(){
 
+        Log.d(TAG, "isShowingSomething, expanded: " + expanded);
+
         if(expanded && items.size() > 0)
             return true;
 
+        boolean result = false;
         for(DailyAgendaItemStub item : items){
-            if(isDisplayable(item))
-                return true;
+            if(isDisplayable(item)) {
+                Log.d(TAG, "Item is displayable: " + item.toString());
+                result = true;
+            }
         }
 
-        return false;
+        return result;
     }
 
     public void toggleCollapseMode(){

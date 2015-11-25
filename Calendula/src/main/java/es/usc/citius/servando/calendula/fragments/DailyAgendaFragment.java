@@ -106,7 +106,9 @@ public class DailyAgendaFragment extends Fragment{
             public void onBeforeToggleCollapse(boolean expanded, boolean somethingVisible) {
 
                 int firstPosition = llm.findFirstVisibleItemPosition();
-                firstTime = firstPosition < items.size() ? items.get(firstPosition).dateTime() : null;
+                firstTime = firstPosition >= 0 && firstPosition < items.size() ? items.get(firstPosition).dateTime() : null;
+
+                Log.d(TAG, "OnBeforeCollapse, somethingVisible is " + somethingVisible);
 
                 if(expanded) {
                     showOrHideEmptyView(false);
@@ -340,9 +342,17 @@ public class DailyAgendaFragment extends Fragment{
     public void showOrHideEmptyView(boolean show) {
         if(show) {
             emptyView.setVisibility(View.VISIBLE);
+            //emptyView.animate().alpha(1);
         }
         else {
             emptyView.setVisibility(View.GONE);
+//            emptyView.animate().alpha(0).setListener(new AnimatorListenerAdapter() {
+//                @Override
+//                public void onAnimationEnd(Animator animation) {
+//
+//                }
+//            });
+
         }
     }
 
