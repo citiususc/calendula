@@ -185,7 +185,7 @@ public class ReminderNotification {
                 .setPriority(Notification.PRIORITY_DEFAULT)
                 .setVibrate(new long[] { 1000, 200, 500, 200, 100, 200, 1000 }).setSound(options.ringtone)
                         // Automatically dismiss the notification when it is touched.
-                .setAutoCancel(false);
+                .setAutoCancel(true);
 
 
         if(options.insistent){
