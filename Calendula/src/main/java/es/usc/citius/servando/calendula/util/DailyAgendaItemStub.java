@@ -68,7 +68,7 @@ public class DailyAgendaItemStub {
                 ", count=" + (meds != null ? meds.size() : 0) +
                 ", title='" + title + '\'' +
                 ", time=" + time.toString("kk:mm") +
-                ", date=" + date.toString("DD/MM") +
+                ", date=" + date.toString("dd/MM") +
                 '}';
     }
 
