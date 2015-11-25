@@ -1,10 +1,13 @@
 package es.usc.citius.servando.calendula.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -17,7 +20,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,10 +55,13 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
+import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
+import es.usc.citius.servando.calendula.util.view.ArcTranslateAnimation;
 
 public class ConfirmActivity extends CalendulaActivity {
 
+    private static final String TAG = "ConfirmActivity";
 
     boolean isRoutine;
     boolean stateChanged = false;
@@ -93,6 +104,9 @@ public class ConfirmActivity extends CalendulaActivity {
     boolean isToday;
     boolean isCheckable;
 
+    View chekAllOverlay;
+    ImageView checkAllImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +129,8 @@ public class ConfirmActivity extends CalendulaActivity {
         avatar = (ImageView) findViewById(R.id.patient_avatar);
         title = (TextView) findViewById(R.id.routine_name);
         takeMadsMessage = (TextView) findViewById(R.id.textView3);
+        chekAllOverlay = findViewById(R.id.check_overlay);
+        checkAllImage =(ImageView) findViewById(R.id.check_all_image);
 
         avatarTitle = (ImageView) findViewById(R.id.patient_avatar_title);
         titleTitle = (TextView) findViewById(R.id.routine_name_title);
@@ -132,9 +148,16 @@ public class ConfirmActivity extends CalendulaActivity {
         minute.setText(time.toString("mm"));
 
         fab.setImageDrawable(new IconicsDrawable(this)
-                .icon( isCheckable ? CommunityMaterial.Icon.cmd_check_all :  CommunityMaterial.Icon.cmd_calendar_clock)
+                .icon(isCheckable ? CommunityMaterial.Icon.cmd_check_all : CommunityMaterial.Icon.cmd_calendar_clock)
                 .color(Color.WHITE)
                 .sizeDp(24)
+                .paddingDp(0));
+
+
+        checkAllImage.setImageDrawable(new IconicsDrawable(this)
+                .icon(CommunityMaterial.Icon.cmd_check_all)
+                .color(Color.WHITE)
+                .sizeDp(100)
                 .paddingDp(0));
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -146,21 +169,29 @@ public class ConfirmActivity extends CalendulaActivity {
                     return;
                 }
 
+                boolean somethingChecked = false;
                 for (DailyScheduleItem item : items) {
-                    item.setTakenToday(true);
-                    item.save();
-                }
-                itemAdapter.notifyDataSetChanged();
-                stateChanged = true;
-
-                String msg = ConfirmActivity.this.getString(R.string.all_meds_taken);
-                Toast.makeText(ConfirmActivity.this, msg, Toast.LENGTH_SHORT).show();
-                fab.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        supportFinishAfterTransition();
+                    if(!item.takenToday()) {
+                        item.setTakenToday(true);
+                        item.save();
+                        somethingChecked = true;
                     }
-                }, 500);
+                }
+
+                if(somethingChecked) {
+                    itemAdapter.notifyDataSetChanged();
+                    stateChanged = true;
+                    fab.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            animateAllChecked();
+                        }
+                    }, 100);
+                }else{
+                    supportFinishAfterTransition();
+                }
+
+
             }
         });
 
@@ -174,6 +205,100 @@ public class ConfirmActivity extends CalendulaActivity {
             showDelayDialog();
         }
     }
+
+    private void animateAllChecked() {
+
+        int width = appBarLayout.getWidth();
+        int middle = width / 2;
+        int fabCentered = middle - fab.getWidth()/2;
+        int translationX = (int)fab.getX() - fabCentered;
+        int translationY = ScreenUtils.dpToPx(getResources(), 150);
+
+        final int rippleX = middle;
+        final int rippleY = (int) (fab.getY()+fab.getHeight()/2) - translationY;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            Animation arcAnimation = new ArcTranslateAnimation(0, -translationX , 0, -translationY);
+            arcAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    showRippleByApi(rippleX, rippleY);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
+
+            arcAnimation.setInterpolator(new DecelerateInterpolator());
+            arcAnimation.setDuration(200);
+            arcAnimation.setFillAfter(true);
+            fab.startAnimation(arcAnimation);
+
+        }else {
+            ViewPropertyAnimator animator = fab.animate().translationX(-translationX).setDuration(300);
+            animator.setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    showRippleByApi(rippleX,rippleY);
+                }
+            });
+            animator.start();
+        }
+    }
+
+    void moveArrowsDown(int duration){
+        checkAllImage.animate()
+                .translationY(ScreenUtils.dpToPx(getResources(), 150f))
+                .setDuration(duration)
+                .setInterpolator(new OvershootInterpolator())
+                .start();
+    }
+
+    void showRippleByApi(int x , int y){
+
+        int duration = 500;
+        int arrowDuration = 400;
+
+        chekAllOverlay.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        },duration+300);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            showRipple(x, y, duration);
+        } else {
+            chekAllOverlay.setVisibility(View.VISIBLE);
+            chekAllOverlay.animate().alpha(1).setDuration(duration).start();
+        }
+        moveArrowsDown(arrowDuration);
+    }
+
+
+    private void showRipple(int x , int y, int duration){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            Log.d(TAG, "Ripple x,y [" + x + ", " + y + "]");
+            chekAllOverlay.setVisibility(View.INVISIBLE);
+            // get the final radius for the clipping circle
+            int finalRadius = (int) Math.hypot(chekAllOverlay.getWidth(), chekAllOverlay.getHeight());
+            // create the animator for this view (the start radius is zero)
+            Animator anim = ViewAnimationUtils.createCircularReveal(chekAllOverlay, x, y, fab.getWidth() / 2, finalRadius);
+            anim.setInterpolator(new DecelerateInterpolator());
+            // make the view visible and start the animation
+            chekAllOverlay.setVisibility(View.VISIBLE);
+            anim.setDuration(duration).start();
+        }
+    }
+
+
 
     private void setupListView() {
 
@@ -288,7 +413,7 @@ public class ConfirmActivity extends CalendulaActivity {
     }
 
 
-    protected void onDailyAgendaItemCheck() {
+    protected void onDailyAgendaItemCheck(final ImageButton v) {
 
         int total = items.size();
         int checked = 0;
@@ -304,6 +429,17 @@ public class ConfirmActivity extends CalendulaActivity {
             } else {
                 AlarmScheduler.instance().cancelStatusBarNotification(schedule, time, date, this);
             }
+
+//            v.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    int[] xy = new int[2];
+//                    v.getLocationOnScreen(xy);
+//                    showRippleByApi(xy[0]+v.getWidth()/2, xy[1]+v.getHeight()/2);
+//                }
+//            },200);
+
+
         } else {
             if (isRoutine) {
                 AlarmScheduler.instance().onDelayRoutine(routine, date, this);
@@ -392,7 +528,7 @@ public class ConfirmActivity extends CalendulaActivity {
                 dailyScheduleItem.setTakenToday(!taken);
                 dailyScheduleItem.save();
                 stateChanged = true;
-                onDailyAgendaItemCheck();
+                onDailyAgendaItemCheck(check);
                 notifyItemChanged(getAdapterPosition());
             }
         }
