@@ -78,5 +78,10 @@
                 android:visibility="visible"/>
         </FrameLayout>
 
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/lock_icon"/>
+
     </RelativeLayout>
 </android.support.v7.widget.CardView>

@@ -28,6 +28,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.HomePagerActivity;
@@ -85,6 +86,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                 .withIdentifier(PATIENT_ADD));
 
         for(Patient p : DB.patients().findAll()){
+            Log.d("LeftDrawer", "Adding patient to drawer: " + p.name());
             profiles.add(new ProfileDrawerItem()
                     .withIdentifier(p.id().intValue())
                     .withName(p.name())
@@ -310,13 +312,40 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
     }
 
     public void onActivityResume(Patient p) {
-        if(!p.equals(currentPatient) || header().getActiveProfile().getIcon().getIconRes() != AvatarMgr.res(p.avatar())){
+
+        currentPatient = p;
+
+        List<Patient> patients = DB.patients().findAll();
+        ArrayList<IProfile> profiles = headerResult.getProfiles();
+        ArrayList<IProfile> toRemove = new ArrayList<>();
+        if (patients.size() != profiles.size()) {
+            for (IProfile pr : profiles) {
+                Long id = Long.valueOf(pr.getIdentifier());
+                boolean remove = true;
+                for (Patient pat : patients) {
+                    if (pat.id().equals(id)) {
+                        remove = false;
+                        break;
+                    }
+                }
+                if(remove){
+                    toRemove.add(pr);
+                }
+            }
+            for (IProfile pr : toRemove) {
+                headerResult.removeProfile(pr);
+            }
+        }
+
+        headerResult.setActiveProfile(p.id().intValue(), false);
+
+        if(p != null && !p.equals(currentPatient) || header().getActiveProfile().getIcon().getIconRes() != AvatarMgr.res(p.avatar())){
             headerResult.setActiveProfile(p.id().intValue(), false);
             IProfile profile = headerResult.getActiveProfile();
             profile.withIcon(AvatarMgr.res(p.avatar()));
             headerResult.updateProfile(profile);
-            updateHeaderBackground(p);
         }
+        updateHeaderBackground(p);
     }
 
     public void onPatientCreated(Patient p) {

@@ -5,15 +5,14 @@
                 android:layout_height="fill_parent"
                 tools:context="es.usc.citius.servando.calendula.activities.PatientDetailActivity"
                 android:id="@+id/bg"
-                android:background="#fff"
-                android:paddingTop="@dimen/status_bar_height">
+                android:background="#fff">
 
 
 
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="200dp"
+        android:layout_height="260dp"
         android:id="@+id/top"
         android:transitionName="background"
         android:background="@color/android_blue_dark">
@@ -34,7 +33,7 @@
             android:scaleType="fitCenter"
             android:padding="0dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="60dp"
             android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
@@ -49,6 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:title="Patients"
+        android:layout_marginTop="@dimen/status_bar_height"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         />
@@ -82,7 +82,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Añadir rutinas por defecto"
+        android:text="Crear rutinas por defecto"
         android:id="@+id/checkBox"
         android:layout_below="@+id/patient_name"
         android:layout_alignLeft="@+id/patient_name"

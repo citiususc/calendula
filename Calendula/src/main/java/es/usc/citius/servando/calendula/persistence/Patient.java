@@ -27,7 +27,7 @@ public class Patient {
     private String name;
 
     @DatabaseField(columnName = COLUMN_DEFAULT)
-    private boolean isDefault;
+    private boolean isDefault = false;
 
     @DatabaseField(columnName = COLUMN_AVATAR)
     private String avatar = AvatarMgr.DEFAULT_AVATAR;
@@ -75,5 +75,16 @@ public class Patient {
 
     public int color(){
         return color;
+    }
+
+    @Override
+    public String toString() {
+        return "Patient{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", isDefault=" + isDefault +
+                ", avatar='" + avatar + '\'' +
+                ", color=" + color +
+                '}';
     }
 }

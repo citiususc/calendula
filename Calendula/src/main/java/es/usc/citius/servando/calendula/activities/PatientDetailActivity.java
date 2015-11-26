@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaActivity;
+import es.usc.citius.servando.calendula.DefaultDataGenerator;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Patient;
@@ -113,6 +114,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
 
         setSwichFab();
         setupToolbar(patient.name(), Color.TRANSPARENT);
+        setupStatusBar(Color.TRANSPARENT);
         setupAvatarList();
         setupColorChooser();
         loadPatient();
@@ -147,7 +149,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
                     patient.setColor(color);
                     setupColorChooser();
                     int x = (int) view.getX() + view.getWidth()/2 - colorScroll.getScrollX();
-                    updateAvatar(patient.avatar(), 1, 200, x);
+                    updateAvatar(patient.avatar(), 1, 400, x);
                     colorList.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -189,7 +191,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
 
     @Override
     public void onBackPressed() {
-        ScreenUtils.setStatusBarColor(this, color2);
+        //ScreenUtils.setStatusBarColor(this, color2);
         patientAvatarBg.setVisibility(View.INVISIBLE);
         super.onBackPressed();
     }
@@ -245,7 +247,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
 
 
 
-    private void animateAvatarBg(int duration, int x) {
+    private void animateAvatarBg(int duration, int x, Animator.AnimatorListener cb) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             patientAvatarBg.setVisibility(View.INVISIBLE);
             // get the center for the clipping circle
@@ -253,14 +255,18 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             int cy = patientAvatarBg.getBottom();
 
             // get the final radius for the clipping circle
-            int finalRadius = Math.max(patientAvatarBg.getWidth(), patientAvatarBg.getHeight());
+            int finalRadius = (int)Math.hypot(patientAvatarBg.getWidth(), patientAvatarBg.getHeight());
 
             // create the animator for this view (the start radius is zero)
-            Animator anim = ViewAnimationUtils.createCircularReveal(patientAvatarBg, x, cy, 0, finalRadius);
+            Animator anim = ViewAnimationUtils.createCircularReveal(patientAvatarBg, x, cy, ScreenUtils.dpToPx(getResources(), 100f), finalRadius);
             // make the view visible and start the animation
             patientAvatarBg.setVisibility(View.VISIBLE);
-            anim.setInterpolator(new AccelerateInterpolator());
-            anim.setDuration(duration).start();
+            anim.setInterpolator(new DecelerateInterpolator());
+            anim.setDuration(duration);
+            if(cb!=null){
+                anim.addListener(cb);
+            }
+            anim.start();
         }
     }
 
@@ -291,6 +297,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
 
     private void loadPatient() {
         patientName.setText(patient.name());
+        top.setBackgroundColor(patient.color());
         updateAvatar(patient.avatar(), 400, 400, patientAvatar.getWidth()/2);
     }
 
@@ -299,16 +306,20 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         color1 = patient.color();
         color2 = ScreenUtils.equivalentNoAlpha(color1, 0.7f);
         avatarBackgroundColor = color1;
-        top.setBackgroundColor(color2);
         gridContainer.setBackgroundColor(getResources().getColor(R.color.dark_grey_home));
-        ScreenUtils.setStatusBarColor(this, avatarBackgroundColor);
+        //ScreenUtils.setStatusBarColor(this, avatarBackgroundColor);
 
         if(delay > 0) {
             patientAvatarBg.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                    patientAvatarBg.setBackgroundColor(avatarBackgroundColor);
-                   animateAvatarBg(duration, x);
+                   animateAvatarBg(duration, x, new AnimatorListenerAdapter() {
+                       @Override
+                       public void onAnimationEnd(Animator animation) {
+                           top.setBackgroundColor(avatarBackgroundColor);
+                       }
+                   });
                 }
             }, delay);
         }else{
@@ -332,7 +343,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                ScreenUtils.setStatusBarColor(this, color2);
+                //ScreenUtils.setStatusBarColor(this, color2);
                 patientAvatarBg.setVisibility(View.INVISIBLE);
                 supportFinishAfterTransition();
                 return true;
@@ -347,9 +358,12 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
 
                 if(!TextUtils.isEmpty(patient.name())){
                     DB.patients().saveAndFireEvent(patient);
+                    if(addRoutinesCheckBox.isChecked()){
+                        DefaultDataGenerator.generateDefaultRoutines(patient, this);
+                    }
                     supportFinishAfterTransition();
                 }else{
-                    Snack.show("Indique un nombre, por favor.",this);
+                    Snack.show("Indique un nombre, por favor.", this);
                 }
                 return true;
         }
