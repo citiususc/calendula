@@ -22,7 +22,6 @@
 
         <TextView
             android:id="@+id/day_mo"
-            style="@style/schedule_day_selected"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="2dp"
@@ -34,7 +33,6 @@
 
         <TextView
             android:id="@+id/day_tu"
-            style="@style/schedule_day_selected"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="2dp"
@@ -46,7 +44,6 @@
 
         <TextView
             android:id="@+id/day_we"
-            style="@style/schedule_day_selected"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="2dp"
@@ -58,7 +55,6 @@
 
         <TextView
             android:id="@+id/day_th"
-            style="@style/schedule_day_selected"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="2dp"
@@ -70,7 +66,6 @@
 
         <TextView
             android:id="@+id/day_fr"
-            style="@style/schedule_day_selected"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="2dp"
@@ -82,7 +77,6 @@
 
         <TextView
             android:id="@+id/day_sa"
-            style="@style/schedule_day_selected"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="2dp"
@@ -94,7 +88,6 @@
 
         <TextView
             android:id="@+id/day_su"
-            style="@style/schedule_day_selected"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="2dp"

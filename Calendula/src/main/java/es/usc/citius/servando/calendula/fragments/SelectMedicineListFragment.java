@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.mikepenz.iconics.IconicsDrawable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -22,6 +24,7 @@ import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 
 /**
@@ -36,12 +39,13 @@ public class SelectMedicineListFragment extends Fragment {
     long selectedId = -1;
 
     ScheduleCreationActivity mActivity;
+    int pColor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_select_medicine_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.medicines_list);
-
+        pColor = DB.patients().getActive(getActivity()).color();
         Medicine med = ScheduleHelper.instance().getSelectedMed();
         if (med != null)
             selectedId = med.getId();
@@ -69,7 +73,7 @@ public class SelectMedicineListFragment extends Fragment {
         ((TextView) item.findViewById(R.id.medicines_list_item_name)).setText(medicine.name());
 
         ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
-        icon.setImageDrawable(getResources().getDrawable(medicine.presentation().getDrawable()));
+        icon.setImageDrawable(iconFor(medicine.presentation()));
 
         View overlay = item.findViewById(R.id.medicines_list_item_container);
         overlay.setTag(medicine);
@@ -97,6 +101,14 @@ public class SelectMedicineListFragment extends Fragment {
         };
         overlay.setOnClickListener(clickListener);
         return item;
+    }
+
+    IconicsDrawable iconFor(Presentation p){
+        return new IconicsDrawable(getContext())
+                .icon(Presentation.iconFor(p))
+                .colorRes(R.color.agenda_item_title)
+                .paddingDp(5)
+                .sizeDp(55);
     }
 
     @Override

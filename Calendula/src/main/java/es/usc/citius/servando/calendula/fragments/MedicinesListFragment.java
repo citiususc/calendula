@@ -115,7 +115,7 @@ public class MedicinesListFragment extends Fragment {
         ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
         icon.setImageDrawable(new IconicsDrawable(getContext())
                 .icon(medicine.presentation().icon())
-                //.color(Color.WHITE)
+                        //.color(Color.WHITE)
                 .colorRes(R.color.agenda_item_title)
                 .paddingDp(8)
                 .sizeDp(40));
@@ -132,30 +132,35 @@ public class MedicinesListFragment extends Fragment {
 
         String cn = medicine.cn();
         final Prescription p = cn != null ? Prescription.findByCn(medicine.cn()) : null;
+        boolean boundToPrescription = p != null;
         boolean hasProspect = (p != null && p.hasProspect);
 
-        if (hasProspect) {
-            ((ImageView)item.findViewById(R.id.imageView)).setImageDrawable(
-                    new IconicsDrawable(getContext())
-                            .icon(CommunityMaterial.Icon.cmd_file_document)
-                            .colorRes(R.color.agenda_item_title)
-                            .paddingDp(10)
-                            .sizeDp(40)
-            );
-            item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onClickProspect(medicine, p);
-                }
-            });
+        if (!boundToPrescription) {
+            item.findViewById(R.id.imageView).setVisibility(View.GONE);
         } else {
-            item.findViewById(R.id.imageView).setAlpha(0.1f);
-            item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Snack.show(R.string.download_prospect_not_available_message, getActivity());
-                }
-            });
+            IconicsDrawable ic = new IconicsDrawable(getContext())
+                    .icon(CommunityMaterial.Icon.cmd_file_document)
+                    .colorRes(R.color.agenda_item_title)
+                    .paddingDp(10)
+                    .sizeDp(40);
+            ((ImageView) item.findViewById(R.id.imageView)).setImageDrawable(ic);
+
+            if (hasProspect) {
+                item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onClickProspect(medicine, p);
+                    }
+                });
+            } else {
+                item.findViewById(R.id.imageView).setAlpha(0.2f);
+                item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Snack.show(R.string.download_prospect_not_available_message, getActivity());
+                    }
+                });
+            }
         }
 
         if (p != null && p.affectsDriving) {
@@ -164,7 +169,7 @@ public class MedicinesListFragment extends Fragment {
                     .color(Color.parseColor("#f39c12"))
                     .paddingDp(10)
                     .sizeDp(40);
-            ((ImageView)item.findViewById(R.id.drive_icon)).setImageDrawable(icDriv);
+            ((ImageView) item.findViewById(R.id.drive_icon)).setImageDrawable(icDriv);
             item.findViewById(R.id.drive_icon).setVisibility(View.VISIBLE);
             item.findViewById(R.id.drive_icon).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -221,29 +226,29 @@ public class MedicinesListFragment extends Fragment {
 
                 if (p.isProspectDownloaded(getActivity())) {
                     openProspect(p);
-                }else {
+                } else {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     boolean downloadProspectMessageShown = prefs.getBoolean("prospect_download_message_shown", false);
 //                    if (downloadProspectMessageShown) {
 //                        downloadProspect(p);
 //                    } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle(getString(R.string.download_prospect_title));
-                        builder.setMessage(getString(R.string.download_prospect_message, p.shortName()))
-                                .setCancelable(true)
-                                .setPositiveButton(getString(R.string.download_prospect_continue), new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        downloadProspect(p);
-                                    }
-                                })
-                                .setNegativeButton(getString(R.string.download_prospect_cancel), new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-                        AlertDialog alert = builder.create();
-                        alert.show();
-                        prefs.edit().putBoolean("prospect_download_message_shown", true).commit();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(getString(R.string.download_prospect_title));
+                    builder.setMessage(getString(R.string.download_prospect_message, p.shortName()))
+                            .setCancelable(true)
+                            .setPositiveButton(getString(R.string.download_prospect_continue), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    downloadProspect(p);
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.download_prospect_cancel), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                    prefs.edit().putBoolean("prospect_download_message_shown", true).commit();
 //                    }
                 }
 
@@ -400,7 +405,7 @@ public class MedicinesListFragment extends Fragment {
     // Method called from the event bus
     @SuppressWarnings("unused")
     public void onEvent(Object evt) {
-        if(evt instanceof PersistenceEvents.ActiveUserChangeEvent){
+        if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
             notifyDataChange();
         }
     }

@@ -1,6 +1,8 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,7 +27,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.melnykov.fab.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,15 +73,19 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     FloatingActionButton addButton;
     ListView searchList;
     ArrayAdapter<Prescription> adapter;
+    int color;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicines);
-        setupToolbar(null, getResources().getColor(R.color.android_blue_darker));
-        setupStatusBar(getResources().getColor(R.color.android_blue_darker));
+        color = DB.patients().getActive(this).color();
+        setupToolbar(null, color);
+        setupStatusBar(color);
 
         processIntent();
+
+        TextView title = ((TextView) findViewById(R.id.textView2));
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         searchView = findViewById(R.id.search_view);
@@ -131,6 +138,9 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                 ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).setPrescription(p);
             }
         });
+
+        title.setBackgroundColor(color);
+        searchView.setBackgroundColor(color);
 
         hideSearchView();
     }
@@ -295,9 +305,20 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                 ((TextView) item.findViewById(R.id.text2)).setText(p.dose);
                 ((TextView) item.findViewById(R.id.text3)).setText(p.content);
                 ((TextView) item.findViewById(R.id.text4)).setText(Strings.toCamelCase(p.name, " "));
+
+                ((TextView) item.findViewById(R.id.text1)).setTextColor(Color.parseColor("#222222"));
+                ((TextView) item.findViewById(R.id.text4)).setTextColor(color);
+
                 Presentation pres = p.expectedPresentation();
                 if (pres != null) {
-                    ((ImageView) item.findViewById(R.id.presentation_image)).setImageResource(pres.getDrawable());
+
+                    Drawable ic = new IconicsDrawable(getContext())
+                            .icon(Presentation.iconFor(p.expectedPresentation()))
+                            .colorRes(R.color.agenda_item_title)
+                            .paddingDp(10)
+                            .sizeDp(72);
+
+                    ((ImageView) item.findViewById(R.id.presentation_image)).setImageDrawable(ic);
                 } else {
                     ((ImageView) item.findViewById(R.id.presentation_image)).setImageDrawable(null);
                 }

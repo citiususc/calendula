@@ -43,8 +43,9 @@ public class RoutinesActivity extends CalendulaActivity implements RoutineCreate
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routines);
-        setupToolbar(null, getResources().getColor(R.color.android_blue_darker));
-        setupStatusBar(getResources().getColor(R.color.android_blue_darker));
+        int color = DB.patients().getActive(this).color();
+        setupToolbar(null, color);
+        setupStatusBar(color);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -52,9 +53,9 @@ public class RoutinesActivity extends CalendulaActivity implements RoutineCreate
 
         processIntent();
 
-        ((TextView) findViewById(R.id.textView2)).setText(getString(mRoutineId != -1 ?
-                R.string.title_edit_routine_activity
-                : R.string.create_routine_button_text));
+        TextView title = ((TextView) findViewById(R.id.textView2));
+        title.setBackgroundColor(color);
+        title.setText(getString(mRoutineId != -1 ?R.string.title_edit_routine_activity: R.string.create_routine_button_text));
 
         findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
             @Override

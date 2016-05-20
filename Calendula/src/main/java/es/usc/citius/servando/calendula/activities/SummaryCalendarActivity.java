@@ -1,8 +1,11 @@
 package es.usc.citius.servando.calendula.activities;
 
-import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.google.ical.values.DateValue;
 import com.squareup.timessquare.CalendarCellDecorator;
@@ -17,27 +20,43 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 
-public class SummaryCalendarActivity extends Activity {
+public class SummaryCalendarActivity extends CalendulaActivity {
 
     public static final String START_DATE_FORMAT = "dd-MM-yyyy";
     DateTimeFormatter fmt = DateTimeFormat.forPattern(START_DATE_FORMAT);
     CalendarPickerView calendar;
+    int color;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        color = DB.patients().getActive(this).color();
         setContentView(R.layout.activity_summary_calendar);
-        updateStatusBarColor();
+        int color = DB.patients().getActive(this).color();
+        setupToolbar(getString(R.string.title_activity_calendar),color);
+        setupStatusBar(color);
         setupCalendar();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            default:
+                finish();
+                return true;
+        }
     }
 
     private void setupCalendar() {
 
         calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
+        calendar.setVerticalScrollBarEnabled(false);
 
         RepetitionRule r;
         String rule = getIntent().getStringExtra("rule");
@@ -62,7 +81,7 @@ public class SummaryCalendarActivity extends Activity {
             Date start = date != null ? from.toDate() : null;
             Date end = v != null ? new LocalDate(v.year(), v.month(), v.day()).toDate() : null;
 
-            decorators.add(new HighlightDecorator(hdates, start, end));
+            decorators.add(new HighlightDecorator(hdates, start, end, color));
             calendar.setDecorators(decorators);
         } else if (activeDays > 0 && restDays > 0) {
 
@@ -81,7 +100,7 @@ public class SummaryCalendarActivity extends Activity {
             //DateValue v = r.iCalRule().getUntil();
             //Date start = date != null ? from.toDate() : null;
             //Date end = v != null ? new LocalDate(v.year(), v.month(), v.day()).toDate() : null;
-            decorators.add(new HighlightDecorator(hdates, from.toDate(), to.toDate()));
+            decorators.add(new HighlightDecorator(hdates, from.toDate(), to.toDate(),color));
             calendar.setDecorators(decorators);
         }
 
@@ -102,12 +121,15 @@ public class SummaryCalendarActivity extends Activity {
         List<Date> days;
         Date start;
         Date end;
+        int color;
 
-        public HighlightDecorator(List<Date> days, Date start, Date end) {
+        public HighlightDecorator(List<Date> days, Date start, Date end, int color) {
+            this.color = color;
             this.days = days;
             this.start = start;
             this.end = end;
         }
+
 
         @Override
         public void decorate(final CalendarCellView cellView, Date date) {
@@ -117,6 +139,11 @@ public class SummaryCalendarActivity extends Activity {
             if (highlight && cellView.isCurrentMonth()) {
                 cellView.setBackgroundResource(R.drawable.summary_calendar_day_hightlighted);
                 cellView.setTextAppearance(cellView.getContext(), R.style.calendar_day_highlighted);
+                StateListDrawable sld = (StateListDrawable) cellView.getBackground();
+                GradientDrawable shape = (GradientDrawable) sld.getCurrent();
+                shape.setColor(Color.parseColor("#dadada"));
+
+
             } else if (!cellView.isEnabled()) {
                 cellView.setBackgroundResource(R.color.white);
                 cellView.setTextAppearance(cellView.getContext(), R.style.calendar_day_disabled);

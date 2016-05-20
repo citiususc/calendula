@@ -2,6 +2,7 @@ package es.usc.citius.servando.calendula.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -48,6 +49,7 @@ import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
+import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 
 //import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
@@ -77,18 +79,25 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
     Toolbar toolbar;
 
     boolean autoStepDone = false;
+    int pColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedules);
-        setupToolbar(null, getResources().getColor(R.color.android_blue_darker));
-        setupStatusBar(getResources().getColor(R.color.android_blue_darker));
+
+        pColor = DB.patients().getActive(this).color();
+        setupToolbar(null, pColor);
+        setupStatusBar(pColor);
         subscribeToEvents();
         processIntent();
 
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        ((TextView) findViewById(R.id.textView2)).setText(getString(mScheduleId != -1 ? R.string.title_edit_schedule_activity : R.string.title_create_schedule_activity));
+
+        TextView title = ((TextView) findViewById(R.id.textView2));
+        title.setBackgroundColor(pColor);
+        title.setText(getString(mScheduleId != -1 ? R.string.title_edit_schedule_activity : R.string.title_create_schedule_activity));
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -103,15 +112,17 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
         tabs.setDividerPadding(3);
         tabs.setDividerColor(getResources().getColor(R.color.white_50));
         tabs.setDividerColor(getResources().getColor(R.color.transparent));
-        tabs.setIndicatorHeight(getResources().getDimensionPixelSize(R.dimen.tab_indicator_height));
-        tabs.setIndicatorColor(getResources().getColor(R.color.android_blue));
-        tabs.setTextColor(getResources().getColor(R.color.android_blue));
-        tabs.setUnderlineColor(getResources().getColor(R.color.android_blue_light));
+        tabs.setIndicatorHeight(ScreenUtils.dpToPx(getResources(),4));
+        tabs.setIndicatorColor(ScreenUtils.equivalentNoAlpha(pColor, 0.8f));
+        tabs.setTextColor(Color.parseColor("#222222"));
+        tabs.setUnderlineColor(ScreenUtils.equivalentNoAlpha(pColor, 0.5f));
         tabs.setViewPager(mViewPager);
 
         if (mSchedule != null) {
             mViewPager.setCurrentItem(1);
         }
+
+
 
         findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
             @Override

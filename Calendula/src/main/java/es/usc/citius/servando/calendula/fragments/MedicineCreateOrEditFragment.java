@@ -27,6 +27,8 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mikepenz.iconics.IconicsDrawable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +63,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
     boolean enableSearch = false;
     long mMedicineId;
     String cn;
+    int pColor;
 
     private static ArrayList<View> getViewsByTag(ViewGroup root, String tag) {
         ArrayList<View> views = new ArrayList<View>();
@@ -103,6 +106,11 @@ public class MedicineCreateOrEditFragment extends Fragment {
                 cn = p.cn;
             }
         });
+
+        pColor = DB.patients().getActive(getActivity()).color();
+
+        mDescriptionTv.setTextColor(pColor);
+        mPresentationTv.setTextColor(pColor);
 
         enableSearch = prefs.getBoolean("enable_prescriptions_db", false);
 
@@ -237,8 +245,53 @@ public class MedicineCreateOrEditFragment extends Fragment {
             }
         };
         for (View v : getViewsByTag((ViewGroup) rootView, "med_type")) {
-            v.setOnClickListener(listener);
+            ImageView iv = (ImageView) v;
+            iv.setOnClickListener(listener);
+            switch (v.getId()) {
+
+                case R.id.med_presentation_2:
+                    iv.setImageDrawable(iconFor(Presentation.CAPSULES));
+                    break;
+                case R.id.med_presentation_3:
+                    iv.setImageDrawable(iconFor(Presentation.EFFERVESCENT));
+                    break;
+                case R.id.med_presentation_4:
+                    iv.setImageDrawable(iconFor(Presentation.PILLS));
+                    Log.d(getTag(), "Pill");
+                    break;
+                case R.id.med_presentation_5:
+                    iv.setImageDrawable(iconFor(Presentation.SYRUP));
+                    break;
+                case R.id.med_presentation_6:
+                    iv.setImageDrawable(iconFor(Presentation.DROPS));
+                    break;
+                case R.id.med_presentation_7:
+                    iv.setImageDrawable(iconFor(Presentation.SPRAY));
+                    break;
+                case R.id.med_presentation_8:
+                    iv.setImageDrawable(iconFor(Presentation.INHALER));
+                    break;
+                case R.id.med_presentation_9:
+                    iv.setImageDrawable(iconFor(Presentation.INJECTIONS));
+                    break;
+                case R.id.med_presentation_10:
+                    iv.setImageDrawable(iconFor(Presentation.POMADE));
+                    break;
+                case R.id.med_presentation_11:
+                    iv.setImageDrawable(iconFor(Presentation.PATCHES));
+                    break;
+            }
+
         }
+    }
+
+    IconicsDrawable iconFor(Presentation p){
+        return new IconicsDrawable(getContext())
+                .icon(Presentation.iconFor(p))
+                //.color(pColor)
+                .colorRes(R.color.agenda_item_title)
+                .paddingDp(5)
+                .sizeDp(80);
     }
 
     void onClickMedicine(int viewId, View rootView) {

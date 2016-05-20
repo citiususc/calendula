@@ -43,12 +43,18 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
     int hour;
     int minute;
 
+    int pColor;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_or_edit_routine, container, false);
+
+        pColor = DB.patients().getActive(getActivity()).color();
+
         mNameTextView = (TextView) rootView.findViewById(R.id.routine_edit_name);
         timeButton = (Button) rootView.findViewById(R.id.button2);
 
+        timeButton.setTextColor(pColor);
 
         long routineId = -1;
 

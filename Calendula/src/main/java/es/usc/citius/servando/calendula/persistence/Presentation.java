@@ -86,8 +86,12 @@ public enum Presentation {
     }
 
     public IIcon icon(){
+        return iconFor(this);
+    }
 
-        switch (this){
+    public static IIcon iconFor(Presentation p){
+
+        switch (p){
             case CAPSULES:
                 return PresentationsTypeface.Icon.ic_capsule;
             case DROPS:
@@ -110,7 +114,6 @@ public enum Presentation {
                 return PresentationsTypeface.Icon.ic_pill;
             default:
                 return CommunityMaterial.Icon.cmd_help_circle;
-
 
         }
 
