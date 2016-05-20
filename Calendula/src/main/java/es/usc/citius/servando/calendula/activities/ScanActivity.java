@@ -20,6 +20,7 @@ import java.util.zip.GZIPInputStream;
 
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.database.DB;
 
 public class ScanActivity extends CalendulaActivity {
 
@@ -29,8 +30,10 @@ public class ScanActivity extends CalendulaActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        int color = DB.patients().getActive(this).color();
         setContentView(R.layout.activity_scan);
-        setupStatusBar(getResources().getColor(R.color.android_blue_darker));
+        setupStatusBar(color);
+        findViewById(R.id.container).setBackgroundColor(color);
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +65,8 @@ public class ScanActivity extends CalendulaActivity {
         }
         return arr;
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

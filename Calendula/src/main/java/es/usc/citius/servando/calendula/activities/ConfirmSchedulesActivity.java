@@ -1,26 +1,24 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.app.ProgressDialog;
-import android.graphics.drawable.InsetDrawable;
+import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.j256.ormlite.misc.TransactionManager;
-import com.melnykov.fab.FloatingActionButton;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -33,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.qrWrappers.PickupWrapper;
@@ -46,6 +45,7 @@ import es.usc.citius.servando.calendula.fragments.ScheduleImportFragment;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
@@ -54,13 +54,13 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
+import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
 
-public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener {
+public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewPager.OnPageChangeListener {
 
     private static final String TAG = "ConfirmSchedules.class";
-    Toolbar toolbar;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -93,18 +93,29 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
 
     DateTimeFormatter df = DateTimeFormat.forPattern("yyMMdd");
     private String qrData;
+    private Patient patient;
+    int color;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_confirm_schedules);
+        patient = DB.patients().getActive(this);
+        color = patient.color();
+        int dark = ScreenUtils.equivalentNoAlpha(color, Color.BLACK, 0.85f);
+
+        findViewById(R.id.activity_layout).setBackgroundColor(dark);
+        setupToolbar(null, color);
+        setupStatusBar(color);
 
         title = (TextView) findViewById(R.id.textView);
         medName = (TextView) findViewById(R.id.textView2);
         fab = (FloatingActionButton) findViewById(R.id.add_button);
         scheduleTypeSelector = findViewById(R.id.schedule_type_selector);
         readingQrBox = findViewById(R.id.reading_qr_box);
+
+        medName.setBackgroundColor(color);
+        scheduleTypeSelector.setBackgroundColor(dark);
 
         routinesItem = (ImageButton) findViewById(R.id.schedule_type_routines);
         hourlyItem = (ImageButton) findViewById(R.id.schedule_type_hourly);
@@ -121,15 +132,6 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
         hourlyItem.setOnClickListener(l);
         cycleItem.setOnClickListener(l);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 15, 15, 15, 15));
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_dark));
-        }
-        toolbar.setTitle("");
         qrData = getIntent().getStringExtra("qr_data");
         try {
             new ProcessQRTask().execute(qrData);
@@ -138,11 +140,6 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
             Toast.makeText(this,"Error inesperado actualizando!", Toast.LENGTH_LONG).show();
             finish();
         }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_darker));
-        }
-
     }
 
     private List<PrescriptionWrapper> filterValidPrescriptions(PrescriptionListWrapper prescriptionListWrapper) {
@@ -201,6 +198,15 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
     private void showScheduleTypeSelector() {
         if (scheduleTypeSelector.getVisibility() != View.VISIBLE) {
             scheduleTypeSelector.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            default:
+                finish();
+                return true;
         }
     }
 
@@ -364,6 +370,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
 
         // save schedule
         s.setMedicine(m);
+        s.setPatient(patient);
         s.setScanned(true);
         s.save();
         Log.d(TAG, "Saving schedule..." + s.toString());

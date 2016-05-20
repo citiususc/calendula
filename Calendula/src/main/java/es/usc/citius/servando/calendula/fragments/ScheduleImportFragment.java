@@ -333,10 +333,6 @@ public class ScheduleImportFragment extends Fragment
         (rootView.findViewById(R.id.imageView)).setBackgroundColor(color);
         (rootView.findViewById(R.id.imageView1)).setBackgroundColor(color);
 
-        StateListDrawable sld = (StateListDrawable) rootView.findViewById(R.id.text_container).getBackground();
-        GradientDrawable shape = (GradientDrawable) sld.getCurrent();
-        shape.setColor(Color.parseColor("#ececec"));
-
         hourlyIntervalEditText.setTextColor(color);
         hourlyIntervalFrom.setTextColor(color);
         hourlyIntervalRepeatDose.setTextColor(color);
@@ -835,7 +831,7 @@ public class ScheduleImportFragment extends Fragment
                 break;
             }
         }
-        addTimetableEntries(timesPerDay, Routine.findAll());
+        addTimetableEntries(timesPerDay, DB.routines().findAllForActivePatient(getActivity()));
     }
 
     void setupDaySelectionListeners(final View rootView) {
@@ -1006,7 +1002,7 @@ public class ScheduleImportFragment extends Fragment
 
     String[] getUpdatedRoutineNames() {
 
-        List<Routine> routines = Routine.findAll();
+        List<Routine> routines = DB.routines().findAllForActivePatient(getActivity());
 
         int j = 0;
         String[] routineNames = new String[routines.size() + 1];
