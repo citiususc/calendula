@@ -3,6 +3,8 @@ package es.usc.citius.servando.calendula.database;
 import android.content.Context;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -80,6 +82,34 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
             fireEvent();
         }
 
+    }
+
+    public Medicine findByGroupAndPatient(Long group, Patient p) {
+        try
+        {
+            QueryBuilder<Medicine, Long> qb = dao.queryBuilder();
+            Where w = qb.where();
+            w.and(w.eq(Medicine.COLUMN_HG, group),w.eq(Medicine.COLUMN_PATIENT, p));
+            qb.setWhere(w);
+            return qb.queryForFirst();
+        } catch (SQLException e)
+        {
+            throw new RuntimeException("Error finding med", e);
+        }
+    }
+
+    public Medicine findByCnAndPatient(String cn, Patient p) {
+        try
+        {
+            QueryBuilder<Medicine, Long> qb = dao.queryBuilder();
+            Where w = qb.where();
+            w.and(w.eq(Medicine.COLUMN_CN, cn),w.eq(Medicine.COLUMN_PATIENT, p));
+            qb.setWhere(w);
+            return qb.queryForFirst();
+        } catch (SQLException e)
+        {
+            throw new RuntimeException("Error finding med", e);
+        }
     }
 
 }

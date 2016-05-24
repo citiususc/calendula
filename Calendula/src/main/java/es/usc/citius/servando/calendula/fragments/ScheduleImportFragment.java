@@ -786,6 +786,7 @@ public class ScheduleImportFragment extends Fragment
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (schedule.type() != Schedule.SCHEDULE_TYPE_HOURLY) {
+            Log.d(TAG, "SCHEDULE_TYPE: " + schedule.type());
             scheduleSpinner.setSelection(timesPerDay > 0 ? timesPerDay - 1 : 0);
             //checkSelectedDays(view, schedule!=null ? schedule.days() : Schedule.allWeekDays());
         }
@@ -1437,7 +1438,7 @@ public class ScheduleImportFragment extends Fragment
 
         int interval = pw.s.p;
 
-        if (pw.s.d == 0.0 || pw.s.d >= 2.0) {
+        if (pw.s.d == 0.0) { // || pw.s.d >= 2.0
             // dose is zero
             Log.d(TAG, "Item dose is ambiguous");
             changes.add("• " + getString(R.string.scan_dose_zero_msg));

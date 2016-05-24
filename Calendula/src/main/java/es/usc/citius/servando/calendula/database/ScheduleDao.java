@@ -72,10 +72,8 @@ public class ScheduleDao extends GenericDao<Schedule, Long> {
     public void deleteCascade(final Schedule s, boolean fireEvent) {
         DB.transaction(new Callable<Object>() {
             @Override
-            public Object call() throws Exception
-            {
-                for (ScheduleItem i : s.items())
-                {
+            public Object call() throws Exception {
+                for (ScheduleItem i : s.items()) {
                     i.deleteCascade();
                 }
                 DB.dailyScheduleItems().removeAllFrom(s);
@@ -106,6 +104,20 @@ public class ScheduleDao extends GenericDao<Schedule, Long> {
         } catch (SQLException e)
         {
             throw new RuntimeException("Error finding scanned schedule", e);
+        }
+    }
+
+    public Schedule findByMedicineAndPatient(Medicine m, Patient p) {
+        try
+        {
+            QueryBuilder<Schedule, Long> qb = dao.queryBuilder();
+            Where w = qb.where();
+            w.and(w.eq(Schedule.COLUMN_MEDICINE, m),w.eq(Schedule.COLUMN_PATIENT, p));
+            qb.setWhere(w);
+            return qb.queryForFirst();
+        } catch (SQLException e)
+        {
+            throw new RuntimeException("Error finding schedule", e);
         }
     }
 }

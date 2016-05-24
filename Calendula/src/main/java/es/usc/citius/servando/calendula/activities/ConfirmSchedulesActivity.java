@@ -286,19 +286,21 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                                         String cn = w.cn;
                                         Medicine m = null;
                                         if (cn != null) {
-                                            m = DB.medicines().findOneBy(Medicine.COLUMN_CN, cn);
+                                            m = DB.medicines().findByCnAndPatient(cn,patient);
                                             if (m == null) {
                                                 Log.d("PRESCRIPTION", "Saving medicine!");
                                                 m = Medicine.fromPrescription(Prescription.findByCn(cn));
+                                                m.setPatient(patient);
                                                 m.save();
                                             }
                                         } else if (w.isGroup) {
-                                            m = DB.medicines().findOneBy(Medicine.COLUMN_HG, w.group.getId());
+                                            m = DB.medicines().findByGroupAndPatient(w.group.getId(),patient);
                                             if (m == null) {
                                                 m = new Medicine(Strings.firstPart(w.group.name));
                                                 m.setHomogeneousGroup(w.group.getId());
                                                 Presentation pres = Presentation.expected(w.group.name, w.group.name);
                                                 m.setPresentation(pres != null ? pres : Presentation.PILLS);
+                                                m.setPatient(patient);
                                                 m.save();
                                             }
                                         } else {
@@ -306,7 +308,8 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                                         }
 
                                         Schedule s = c.getSchedule();
-                                        Schedule prev = DB.schedules().findOneBy(Schedule.COLUMN_MEDICINE, m);
+                                        Schedule prev = DB.schedules().findByMedicineAndPatient(m, patient);
+                                        // TODO: find by med and patient
                                         if (prev != null) {
                                             Log.d("PRESCRIPTION", "Found previous schedule for med " + m.getId());
                                             updateSchedule(prev, s, c.getScheduleItems());
@@ -540,6 +543,8 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
 
         @Override
         public Fragment getItem(int position) {
+
+            Log.d("ScanQR", "Position: " + position);
 
             if (position == 0) {
                 return ScheduleConfirmationStartFragment.newInstance();

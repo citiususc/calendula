@@ -78,7 +78,6 @@ public class ScanActivity extends CalendulaActivity {
         if (result != null && requestCode == IntentIntegrator.REQUEST_CODE && data !=null) {
 
             byte[] dataBytes = data.getByteArrayExtra("SCAN_RESULT_BYTE_SEGMENTS_0");
-            byte[] dataBytes2 = data.getByteArrayExtra("SCAN_RESULT_BYTE_SEGMENTS_1");
 
             if (result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
@@ -88,7 +87,6 @@ public class ScanActivity extends CalendulaActivity {
                 String content = result.getContents();
 
                 Log.d("ScanActivity", "SCAN_RESULT_BYTE_SEGMENTS_0 : " + Arrays.toString(byteArrayToHex(dataBytes)));
-                Log.d("ScanActivity", "SCAN_RESULT_BYTE_SEGMENTS_1: " + Arrays.toString(byteArrayToHex(dataBytes2)));
                 Log.d("ScanActivity", "CONTENTS: " + Arrays.toString(byteArrayToHex(content.getBytes())));
 
                 // first, decode base64 QR content
