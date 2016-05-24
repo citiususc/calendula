@@ -57,6 +57,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
     public static final int ABOUT = 10;
 
     public static final int PATIENT_ADD = 11;
+    public static final int CALENDAR = 12;
 
 
     private AccountHeader headerResult = null;
@@ -167,11 +168,11 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                 .withSavedInstance(savedInstanceState)
                 .build();
 
-                Patient p = DB.patients().getActive(home);
-                headerResult.setActiveProfile(p.id().intValue(),false);
-                updateHeaderBackground(p);
+        Patient p = DB.patients().getActive(home);
+        headerResult.setActiveProfile(p.id().intValue(),false);
+        updateHeaderBackground(p);
 
-                onPharmacyModeChanged(isPharmaEnabled);
+        onPharmacyModeChanged(isPharmaEnabled);
 
     }
 
@@ -192,6 +193,10 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                 break;
             case SCHEDULES:
                 home.showPagerItem(3,false);
+                break;
+            case CALENDAR:
+                launchActivity(new Intent(home, CalendarActivity.class));
+                drawer.setSelection(HOME, false);
                 break;
             case HELP:
                 home.showTutorial();
@@ -216,6 +221,14 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
         return true;
     }
 
+    private void addCalendarItem() {
+        drawer.addItemAtPosition(new PrimaryDrawerItem()
+                        .withName("Dispensación")
+                        .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_calendar_check, R.color.black).alpha(110))
+                        .withEnabled(true)
+                        .withIdentifier(CALENDAR), 7);
+    }
+
     @Override
     public boolean onItemLongClick(View view, int i, IDrawerItem iDrawerItem) {
         int identifier = iDrawerItem.getIdentifier();
@@ -230,12 +243,14 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
         PrimaryDrawerItem item = (PrimaryDrawerItem) drawer.getDrawerItem(PHARMACIES);
         BadgeStyle bs = new BadgeStyle();
         if(enabled){
+            addCalendarItem();
             Drawable bg = new IconicsDrawable(home)
                     .icon(GoogleMaterial.Icon.gmd_check)
                     .color(home.getResources().getColor(R.color.dark_grey_text))
                     .sizeDp(18);
             bs.withBadgeBackground(bg);
         }else{
+            drawer.removeItem(CALENDAR);
             bs.withBadgeBackground(new ColorDrawable(Color.TRANSPARENT));
         }
         item.withBadgeStyle(bs);

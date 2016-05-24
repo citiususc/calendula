@@ -34,5 +34,13 @@
         android:fontFamily="sans-serif-light"
         android:textColor="#888" />
 
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/avatar"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_centerVertical="true"/>
+
 </RelativeLayout>
 

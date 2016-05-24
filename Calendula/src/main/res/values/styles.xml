@@ -273,5 +273,32 @@
         <item name="android:textColor">#ffffff</item>
     </style>
 
+    <style name="white_spinner_item" parent="Widget.AppCompat.Light.Spinner.DropDown.ActionBar">
+        <item name="android:background">?android:selectableItemBackground</item>
+        <item name="android:dropDownSelector">?android:selectableItemBackground</item>
+        <item name="android:divider">@null</item>
+    </style>
+
+    <!--<style >-->
+        <!--<item name="android:textColor">@color/white</item>-->
+        <!--<item name="android:textStyle">bold</item>-->
+        <!--<item name="android:textSize">15dp</item>-->
+        <!--<item name="android:height">@dimen/normal_button_height</item>-->
+        <!--<item name="android:background">@color/transparent</item>-->
+    <!--</style>-->
+
+
+    <!-- Calendar -->
+
+    <style name="CaldroidDefaultNoGrid" parent="CaldroidDefault">
+        <item name="styleCaldroidGridView">@style/CaldroidDefaultDarkGridView</item>
+    </style>
+
+    <style name="CaldroidDefaultDarkGridView" parent="CaldroidDefaultGridView">
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+
+
 
 </resources>

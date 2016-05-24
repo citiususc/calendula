@@ -3,25 +3,34 @@ package es.usc.citius.servando.calendula.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.NestedScrollView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.roomorama.caldroid.CaldroidFragment;
+import com.roomorama.caldroid.CaldroidListener;
 import com.squareup.timessquare.CalendarCellDecorator;
 import com.squareup.timessquare.CalendarCellView;
-import com.squareup.timessquare.CalendarPickerView;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
@@ -41,15 +50,19 @@ import java.util.Map;
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.scheduling.PickupReminderMgr;
+import es.usc.citius.servando.calendula.util.AvatarMgr;
+import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 public class CalendarActivity extends CalendulaActivity {
 
     public static final int ACTION_SHOW_REMINDERS = 1;
 
     View bottomSheet;
-    CalendarPickerView calendar;
+    //CalendarPickerView calendar;
     DateTime from;
     DateTime to;
 
@@ -62,27 +75,216 @@ public class CalendarActivity extends CalendulaActivity {
     private List<PickupInfo> pickupInfos;
     private List<LocalDate> bestDays;
 
+    TextView title;
+
+    AppBarLayout appBarLayout;
+    CollapsingToolbarLayout toolbarLayout;
+
+    TextView subtitle;
+    ImageView avatar;
+
+    Patient patient;
+    Patient selectedPatient;
+
+    int selectedPatientIdx = 0;
+    long selectedPatientId;
+    List<Patient> pats;
+    CaldroidFragment caldroidFragment;
+    View topBg;
+
+    NestedScrollView nestedScrollView;
+    View titleCollapsedContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
-        setupToolbar(getString(R.string.title_activity_calendar), getResources().getColor(R.color.android_green_dark));
-        setupStatusBar(getResources().getColor(R.color.android_green_dark));
+
+        pats = DB.patients().findAll();
+        patient = DB.patients().getActive(this);
+
+        setupStatusBar(Color.TRANSPARENT);
+        setupToolbar("", Color.TRANSPARENT, Color.WHITE);
+        toolbar.setTitleTextColor(Color.WHITE);
+
+        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        titleCollapsedContainer = findViewById(R.id.collapsed_title_container);
+
+        topBg = findViewById(R.id.imageView5);
+        subtitle = (TextView) findViewById(R.id.routine_name);
+        title = (TextView) findViewById(R.id.routine_name_title);
+        avatar = (ImageView) findViewById(R.id.patient_avatar_title);
+        nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
+        //title.setText("Dispensación");
+
         df = getString(R.string.pickup_date_format);
         from = DateTime.now().minusMonths(3);
         to = DateTime.now().plusMonths(3);
         bottomSheet = findViewById(R.id.pickup_list_container);
         bottomSheet.setVisibility(View.INVISIBLE);
-        setupCalendar();
-        new Handler().postDelayed(new Runnable() {
+
+
+//        AppBarLayout.OnOffsetChangedListener mListener = new AppBarLayout.OnOffsetChangedListener() {
+//            @Override
+//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//                if(toolbarLayout.getHeight() + verticalOffset < 2 * ViewCompat.getMinimumHeight(toolbarLayout)) {
+//                    // not expanded
+//                    Log.d("CalendarActivity", "Not expanded");
+//                } else {
+//                    // expanded
+//                    Log.d("CalendarActivity", "Expanded");
+//                }
+//            }
+//        };
+//        appBarLayout.addOnOffsetChangedListener(mListener);
+
+
+        //setupCalendar();
+        setupPatientSpinner();
+        //setupNewCalendar();
+        onPatientUpdate();
+        findViewById(R.id.close_pickup_list).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                calendar.scrollToDate(LocalDate.now().toDate());
+            public void onClick(View v) {
+                hideBottomSheet();
             }
-        }, 500);
+        });
         checkIntent();
     }
+
+    private void setupPatientSpinner() {
+        String[] names = new String[pats.size()+1];
+
+        names[0] = "Todos";
+        for(int i= 0; i < pats.size(); i++){
+            names[i+1]=pats.get(i).name();
+        }
+
+        ArrayAdapter<String> adapter=new ArrayAdapter<>(this,R.layout.toolbar_spinner_item,names);
+        adapter.setDropDownViewResource(R.layout.toolbar_spinner_item);
+        Spinner spinner = (Spinner)findViewById(R.id.toolbar_spinner);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedPatientIdx = i;
+                onPatientUpdate();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+    }
+
+    private void onPatientUpdate() {
+        if(selectedPatientIdx == 0){
+            topBg.setBackgroundColor(getResources().getColor(R.color.dark_grey_home));
+            avatar.setImageDrawable(
+                    new IconicsDrawable(CalendarActivity.this)
+                            .icon(CommunityMaterial.Icon.cmd_account_multiple)
+                            .color(Color.WHITE)
+                            .paddingDp(6)
+                            .sizeDp(48));
+        }else{
+            int pIndex = selectedPatientIdx-1;
+            selectedPatient = pats.get(pIndex);
+            topBg.setBackgroundColor(selectedPatient.color());
+
+            selectedPatientId = selectedPatient.id();
+            avatar.setImageResource(AvatarMgr.res(selectedPatient.avatar()));
+        }
+
+        setupNewCalendar();
+        updatePickups();
+        updateSelectedDates(caldroidFragment);
+    }
+
+    void setupNewCalendar(){
+        caldroidFragment = new CaldroidFragment();
+        Bundle args = new Bundle();
+        args.putInt(CaldroidFragment.MONTH, 3);
+        args.putInt(CaldroidFragment.YEAR, 2015);
+        args.putBoolean(CaldroidFragment.SHOW_NAVIGATION_ARROWS, false);
+        args.putInt(CaldroidFragment.THEME_RESOURCE, R.style.CaldroidDefaultNoGrid);
+
+        caldroidFragment.setArguments(args);
+        FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+        t.replace(R.id.calendar, caldroidFragment);
+        t.commit();
+
+        final CaldroidListener listener = new CaldroidListener() {
+
+            @Override
+            public void onSelectDate(Date date, View view) {
+                LocalDate d = LocalDate.fromDateFields(date);
+                onDaySelected(d);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        nestedScrollView.smoothScrollBy(0, bottomSheet.getHeight());
+                    }
+                }, 100);
+            }
+
+            @Override
+            public void onChangeMonth(int month, int year) {
+                DateTime date = DateTime.now().withYear(year).withMonthOfYear(month);
+                subtitle.setText(date.toString("MMMM YYYY").toUpperCase());
+            }
+
+            @Override
+            public void onLongClickDate(Date date, View view) {
+
+            }
+
+            @Override
+            public void onCaldroidViewCreated() {
+                caldroidFragment.getView().findViewById(R.id.calendar_title_view).setVisibility(View.GONE);
+                caldroidFragment.getMonthTitleTextView().setVisibility(View.GONE);
+            }
+
+        };
+
+        caldroidFragment.setCaldroidListener(listener);
+
+
+    }
+
+    private void updateSelectedDates(CaldroidFragment caldroidFragment) {
+
+        Map<Long, ColorDrawable[]> colors = new HashMap<>();
+
+        caldroidFragment.getBackgroundForDateTimeMap().clear();
+
+
+        for(PickupInfo pk : pickupInfos) {
+
+            Medicine m = DB.medicines().findById(pk.medicine().getId());
+            Patient p = DB.patients().findById(m.patient().id());
+
+            if(selectedPatientIdx==0 || p.id() == selectedPatientId) {
+
+                if (!colors.containsKey(p.id())) {
+                    colors.put(p.id(), new ColorDrawable[]{
+                            new ColorDrawable(ScreenUtils.equivalentNoAlpha(p.color(), 0.8f)),
+                            new ColorDrawable(ScreenUtils.equivalentNoAlpha(p.color(), 0.1f))
+                    });
+                }
+                ColorDrawable[] pColors = colors.get(p.id());
+                caldroidFragment.setBackgroundDrawableForDate(pk.taken() ? pColors[1] : pColors[0], pk.from().toDate());
+                caldroidFragment.setTextColorForDate(R.color.white, pk.from().toDate());
+            }
+        }
+
+        caldroidFragment.refreshView();
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -90,23 +292,23 @@ public class CalendarActivity extends CalendulaActivity {
         super.onDestroy();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.calendar, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_best_day:
-                onBestDaySelected();
-                return true;
-            default:
-                return false;
-        }
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.calendar, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.action_best_day:
+//                onBestDaySelected();
+//                return true;
+//            default:
+//                return false;
+//        }
+//    }
 
     private void onBestDaySelected() {
 
@@ -240,29 +442,6 @@ public class CalendarActivity extends CalendulaActivity {
         }
     }
 
-    private void setupCalendar() {
-
-        calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
-
-        updateDecorators();
-
-        calendar.setCellClickInterceptor(new CalendarPickerView.CellClickInterceptor() {
-            @Override
-            public boolean onCellClicked(Date date) {
-                LocalDate d = LocalDate.fromDateFields(date);
-                return onDaySelected(d);
-            }
-        });
-
-        findViewById(R.id.close_pickup_list).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideBottomSheet();
-            }
-        });
-
-    }
-
     private void updatePickups(){
         pickupInfos = DB.pickups().findAll();
         Collections.sort(pickupInfos, pickupComparator);
@@ -294,10 +473,10 @@ public class CalendarActivity extends CalendulaActivity {
             decorators.add(new BestDayCellDecorator(bestDays));
         }
 
-        calendar.setDecorators(decorators);
-        calendar.init(from.toDate(), to.toDate())
-                .setShortWeekdays(getResources().getStringArray(R.array.calendar_weekday_names));
-        calendar.invalidateViews();
+//        calendar.setDecorators(decorators);
+//        calendar.init(from.toDate(), to.toDate())
+//                .setShortWeekdays(getResources().getStringArray(R.array.calendar_weekday_names));
+//        calendar.invalidateViews();
     }
 
     public List<PickupInfo> urgentMeds(List<PickupInfo> pickupList){
@@ -417,8 +596,7 @@ public class CalendarActivity extends CalendulaActivity {
         final List<PickupInfo> from = DB.pickups().findByFrom(date, true);
         if(!from.isEmpty()) {
 
-            ((TextView) bottomSheet.findViewById(R.id.bottom_sheet_title)).setText(getResources().getString(R.string.title_pickups_bottom_sheet, date.toString(df)));
-            calendar.invalidateViews();
+            TextView title = ((TextView) bottomSheet.findViewById(R.id.bottom_sheet_title));
 
             LayoutInflater i = getLayoutInflater();
             LinearLayout list = (LinearLayout) findViewById(R.id.pickup_list);
@@ -427,63 +605,58 @@ public class CalendarActivity extends CalendulaActivity {
 
             for (final PickupInfo p : from) {
 
-                View v = i.inflate(R.layout.calendar_pickup_list_item, null);
-                TextView tv1 = ((TextView) v.findViewById(R.id.textView));
-                TextView tv2 = ((TextView) v.findViewById(R.id.textView2));
-                String interval = getResources().getString(R.string.pickup_interval, p.to().toString(df));
+                Medicine m = DB.medicines().findById(p.medicine().getId());
+                Patient pat = DB.patients().findById(m.patient().id());
 
-                if (p.taken()) {
-                    interval += " ✔";
-                    tv1.setAlpha(0.5f);
-                } else {
-                    tv1.setAlpha(1f);
-                    tv2.setAlpha(1f);
-                }
+                if(selectedPatientIdx==0 || pat.id() == selectedPatientId) {
 
-                tv1.setText(p.medicine().name());
-                tv2.setText(interval);
+                    View v = i.inflate(R.layout.calendar_pickup_list_item, null);
+                    TextView tv1 = ((TextView) v.findViewById(R.id.textView));
+                    TextView tv2 = ((TextView) v.findViewById(R.id.textView2));
+                    ImageView avatar = ((ImageView) v.findViewById(R.id.avatar));
+                    String interval = getResources().getString(R.string.pickup_interval, p.to().toString(df));
 
-                tv1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        p.taken(!p.taken());
-                        DB.pickups().save(p);
-                        calendar.invalidate();
-                        setupCalendar();
-                        showPickupsInfo(date);
+                    if (p.taken()) {
+                        interval += " ✔";
+                        tv1.setAlpha(0.5f);
+                    } else {
+                        tv1.setAlpha(1f);
+                        tv2.setAlpha(1f);
                     }
-                });
-                list.addView(v);
+
+                    tv1.setText(p.medicine().name());
+                    tv2.setText(interval);
+                    avatar.setImageResource(AvatarMgr.res(pat.avatar()));
+
+                    tv1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            p.taken(!p.taken());
+                            DB.pickups().save(p);
+                            showPickupsInfo(date);
+                        }
+                    });
+                    list.addView(v);
+                }
             }
+
+            int total = list.getChildCount();
+            title.setText(total + " " + getResources().getString(R.string.title_pickups_bottom_sheet, date.toString(df)));
+            appBarLayout.setExpanded(false, true);
             return true;
         }
         return false;
     }
 
     public void showBottomSheet() {
-        if (bottomSheet.getVisibility() != View.VISIBLE)
-            bottomSheet.startAnimation(AnimationUtils.loadAnimation(this, R.anim.abc_slide_in_bottom));
         bottomSheet.setVisibility(View.VISIBLE);
     }
 
     public void hideBottomSheet() {
-
-        Animation anim = AnimationUtils.loadAnimation(this, R.anim.abc_slide_out_bottom);
-        anim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                bottomSheet.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        bottomSheet.startAnimation(anim);
+        LinearLayout list = (LinearLayout) findViewById(R.id.pickup_list);
+        list.removeAllViews();
+        appBarLayout.setExpanded(true, true);
+        bottomSheet.setVisibility(View.GONE);
     }
 
     @Override
