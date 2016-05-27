@@ -4,6 +4,13 @@
       tools:context="es.usc.citius.servando.calendula.activities.PatientDetailActivity">
 
       <item
+          android:id="@+id/action_link_qr"
+          android:title="Vincular"
+          android:icon="@drawable/ic_qrcode_white_48dp"
+          android:orderInCategory="100"
+          app:showAsAction="always" />
+
+      <item
       android:id="@+id/action_done"
       android:title="@string/action_remove"
       android:icon="@drawable/ic_done_white_36dp"

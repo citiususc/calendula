@@ -26,6 +26,9 @@ public class ScanActivity extends CalendulaActivity {
 
 
     TextView textView;
+    String afterScanPkg;
+    String afterScanCls;
+    Long patientId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,10 @@ public class ScanActivity extends CalendulaActivity {
                 doScan();
             }
         });
+
+        afterScanPkg = getIntent().getStringExtra("after_scan_pkg");
+        afterScanCls = getIntent().getStringExtra("after_scan_cls");
+        patientId = getIntent().getLongExtra("patient_id",-1);
     }
 
     @Override
@@ -119,9 +126,11 @@ public class ScanActivity extends CalendulaActivity {
                     }
                 }
 
-                Intent intent = new Intent(getApplicationContext(), ConfirmSchedulesActivity.class);
+                Intent intent = new Intent();
+                intent.setClassName(afterScanPkg, afterScanCls);
                 Bundle b = new Bundle();
                 b.putString("qr_data", content);
+                b.putLong("patient_id", patientId);
                 intent.putExtras(b);
                 startActivity(intent);
                 finish();

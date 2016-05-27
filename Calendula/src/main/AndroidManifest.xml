@@ -134,6 +134,7 @@
         <activity
             android:name=".activities.PatientDetailActivity"
             android:label="@string/title_activity_patient_detail"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -2,12 +2,18 @@ package es.usc.citius.servando.calendula.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +24,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -27,8 +34,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.nispok.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +80,12 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
     CheckBox addRoutinesCheckBox;
     LinearLayout colorList;
     HorizontalScrollView colorScroll;
+    Button linkButton;
+
+    boolean linked = false;
+    String token = null;
+    long patientId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,17 +101,42 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         avatarGrid = (GridView) findViewById(R.id.grid);
         addRoutinesCheckBox = (CheckBox) findViewById(R.id.checkBox);
         colorScroll = (HorizontalScrollView) findViewById(R.id.colorScroll);
+        linkButton = (Button) findViewById(R.id.linkButton);
 
         avatarGrid.setVisibility(View.VISIBLE);
         gridContainer.setVisibility(View.GONE);
 
+        patientId = getIntent().getLongExtra("patient_id", -1);
 
+        lookForQrData(getIntent());
 
-        long patientId = getIntent().getLongExtra("patient_id", -1);
         if(patientId!=-1){
             patient = DB.patients().findById(patientId);
             addRoutinesCheckBox.setVisibility(View.GONE);
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            token = prefs.getString("remote_token" + patientId, null);
+            if(token != null){
+                linkButton.setVisibility(View.VISIBLE);
+                linkButton.setText("Desvincular");
+                this.menu.getItem(0).setVisible(false);
+            }else{
+                linkButton.setVisibility(View.GONE);
+            }
+
+//            linkButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if(token == null) {
+//                        startScanActivity();
+//                    }else{
+//                        showUnlinkPatientDialog();
+//                    }
+//                }
+//            });
+
         }else{
+            linkButton.setVisibility(View.GONE);
             patient = new Patient();
         }
 
@@ -118,6 +158,49 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         setupAvatarList();
         setupColorChooser();
         loadPatient();
+    }
+
+    void lookForQrData(Intent i){
+        String qrData = i.getStringExtra("qr_data");
+        if(qrData!=null){
+            PatientLinkWrapper p = new Gson().fromJson(qrData, PatientLinkWrapper.class);
+            Snack.show("Usuario vinculado correctamente!", this, Snackbar.SnackbarDuration.LENGTH_LONG);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(PatientDetailActivity.this);
+            prefs.edit().putString("remote_token" + patientId, p.token).commit();
+            Log.d("PatDetail", p.toString());
+        }
+    }
+
+    private void showUnlinkPatientDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Si desvinculas este usuario se interrumpirá el seguimiento. Estás seguro de que deseas continuar?")
+                .setCancelable(true)
+                .setTitle("Ten cuidado")
+                .setPositiveButton("Si, desvincular", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        token = null;
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(PatientDetailActivity.this);
+                        prefs.edit().remove("remote_token" + patientId).commit();
+                        linkButton.setText("Vincular");
+                    }
+                })
+                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void startScanActivity(){
+        Intent i = new Intent(this, ScanActivity.class);
+        i.putExtra("after_scan_pkg", getPackageName());
+        i.putExtra("after_scan_cls", PatientDetailActivity.class.getName());
+        i.putExtra("patient_id", patientId);
+        this.startActivity(i);
+        this.overridePendingTransition(0, 0);
+        finish();
     }
 
     private void setupColorChooser() {
@@ -366,6 +449,15 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
                     Snack.show("Indique un nombre, por favor.", this);
                 }
                 return true;
+
+            case R.id.action_link_qr:
+                if(token == null) {
+                    startScanActivity();
+                }else{
+                    showUnlinkPatientDialog();
+                }
+                return true;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -423,6 +515,21 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
                 v.setBackgroundResource(R.color.transparent);
             }
             return view;
+        }
+    }
+
+    public class PatientLinkWrapper{
+        public String name;
+        public String id;
+        public String token;
+
+        @Override
+        public String toString() {
+            return "PatientLinkWrapper{" +
+                    "name='" + name + '\'' +
+                    ", id='" + id + '\'' +
+                    ", token='" + token + '\'' +
+                    '}';
         }
     }
 

@@ -36,6 +36,18 @@
             android:layout_marginTop="60dp"
             android:layout_centerHorizontal="true"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vincular"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:id="@+id/linkButton"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="#fff"/>
+
     </RelativeLayout>
 
 

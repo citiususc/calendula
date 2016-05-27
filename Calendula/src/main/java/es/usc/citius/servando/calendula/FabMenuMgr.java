@@ -178,6 +178,8 @@ public class FabMenuMgr implements View.OnClickListener{
 
     private void startScanActivity(){
         Intent i = new Intent(activity, ScanActivity.class);
+        i.putExtra("after_scan_pkg", activity.getPackageName());
+        i.putExtra("after_scan_cls", ScheduleCreationActivity.class.getName());
         activity.startActivity(i);
         activity.overridePendingTransition(0, 0);
         fabMenu.collapse();
