@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
@@ -109,6 +110,18 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
                     w.eq(DailyScheduleItem.COLUMN_DATE, date));
             qb.setWhere(w);
             return qb.queryForFirst();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding model", e);
+        }
+    }
+
+    public List<DailyScheduleItem> findByPatientAndDate(Patient p, LocalDate date) {
+        try {
+            QueryBuilder<DailyScheduleItem, Long> qb = dao.queryBuilder();
+            Where w = qb.where();
+            w.eq(DailyScheduleItem.COLUMN_DATE, date);
+            qb.setWhere(w);
+            return qb.query();
         } catch (SQLException e) {
             throw new RuntimeException("Error finding model", e);
         }

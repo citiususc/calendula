@@ -183,4 +183,9 @@ public class CalendulaApp extends Application {
     }
 
 
+    public static String activePatientAuth(Context ctx) {
+        Long id = DB.patients().getActive(ctx).id();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return prefs.getString("remote_token" + id, null);
+    }
 }

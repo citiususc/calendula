@@ -17,6 +17,7 @@ import java.util.concurrent.Callable;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
@@ -100,6 +101,7 @@ public class DailyAgenda {
                 if(s.schedule().enabledForDate(date)){
                     // create a dailyScheduleItem and save it
                     DailyScheduleItem dsi = new DailyScheduleItem(s);
+                    dsi.setPatient(s.schedule().patient());
                     dsi.setDate(date);
                     dsi.save();
                     items++;
@@ -114,6 +116,7 @@ public class DailyAgenda {
             {
                 LocalTime timeToday = time.toLocalTime();
                 DailyScheduleItem dsi = new DailyScheduleItem(s, timeToday);
+                dsi.setPatient(s.patient());
                 dsi.setDate(date);
                 dsi.save();
             }
@@ -137,9 +140,10 @@ public class DailyAgenda {
         }
     }
 
-    public void addItem(ScheduleItem item, boolean taken){
+    public void addItem(Patient p, ScheduleItem item, boolean taken){
         // add to daily schedule
         DailyScheduleItem dsi = new DailyScheduleItem(item);
+        dsi.setPatient(p);
         dsi.setTakenToday(taken);
         dsi.save();
 
@@ -147,17 +151,19 @@ public class DailyAgenda {
             dsi = new DailyScheduleItem(item);
             dsi.setDate(LocalDate.now().plusDays(i));
             dsi.setTakenToday(taken);
+            dsi.setPatient(p);
             dsi.save();
         }
     }
 
-    public void addItem(Schedule s, LocalTime time){
+    public void addItem(Patient p, Schedule s, LocalTime time){
         // add to daily schedule
         DailyScheduleItem dsi = new DailyScheduleItem(s, time);
+        dsi.setPatient(p);
         dsi.save();
-
         for(int i = 1;  i <= NEXT_DAYS_TO_SHOW; i++){
             dsi = new DailyScheduleItem(s, time);
+            dsi.setPatient(p);
             dsi.setDate(LocalDate.now().plusDays(i));
             dsi.save();
         }

@@ -119,21 +119,19 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             if(token != null){
                 linkButton.setVisibility(View.VISIBLE);
                 linkButton.setText("Desvincular");
-                this.menu.getItem(0).setVisible(false);
+
+                linkButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showUnlinkPatientDialog();
+                    }
+                });
+
             }else{
                 linkButton.setVisibility(View.GONE);
             }
 
-//            linkButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if(token == null) {
-//                        startScanActivity();
-//                    }else{
-//                        showUnlinkPatientDialog();
-//                    }
-//                }
-//            });
+
 
         }else{
             linkButton.setVisibility(View.GONE);
@@ -417,6 +415,11 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_patient_detail, menu);
         this.menu = menu;
+
+        if(token != null){
+            this.menu.getItem(0).setVisible(false);
+        }
+
         return true;
     }
 

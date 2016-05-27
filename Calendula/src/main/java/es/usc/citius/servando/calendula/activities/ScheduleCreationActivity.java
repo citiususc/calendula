@@ -43,6 +43,7 @@ import es.usc.citius.servando.calendula.fragments.ScheduleTimetableFragment;
 import es.usc.citius.servando.calendula.fragments.SelectMedicineListFragment;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
@@ -163,8 +164,9 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                 @Override
                 public Object call() throws Exception {
                     // save schedule
+                    final Patient patient = DB.patients().getActive(getBaseContext());
                     s.setMedicine(ScheduleHelper.instance().getSelectedMed());
-                    s.setPatient(DB.patients().getActive(getBaseContext()));
+                    s.setPatient(patient);
                     s.save();
 
                     Log.d(TAG, "Saving schedule..." + s.toString());
@@ -175,12 +177,12 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                             item.save();
                             Log.d(TAG, "Saving item..." + item.getId());
                             // add to daily schedule
-                            DailyAgenda.instance().addItem(item, false);
+                            DailyAgenda.instance().addItem(patient, item, false);
                         }
                     } else {
                         for (DateTime time : s.hourlyItemsToday()) {
                             LocalTime timeToday = time.toLocalTime();
-                            DailyAgenda.instance().addItem(s, timeToday);
+                            DailyAgenda.instance().addItem(patient, s, timeToday);
                         }
                     }
                     // save and fire event
@@ -212,7 +214,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                     // save schedule
 
                     s.setMedicine(ScheduleHelper.instance().getSelectedMed());
-
+                    final Patient patient = s.patient();
 
                     List<Long> routinesTaken = new ArrayList<Long>();
 
@@ -243,13 +245,13 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                             item.setSchedule(s);
                             item.save();
                             // add to daily schedule
-                            DailyAgenda.instance().addItem(item,routinesTaken.contains(item.routine().getId()));
+                            DailyAgenda.instance().addItem(patient, item,routinesTaken.contains(item.routine().getId()));
                         }
                     } else {
                         DB.dailyScheduleItems().removeAllFrom(s);
                         for (DateTime time : s.hourlyItemsToday()) {
                             LocalTime timeToday = time.toLocalTime();
-                            DailyAgenda.instance().addItem(s, timeToday);
+                            DailyAgenda.instance().addItem(patient, s, timeToday);
                         }
                     }
 

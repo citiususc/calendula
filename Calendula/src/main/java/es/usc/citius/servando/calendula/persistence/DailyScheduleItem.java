@@ -25,6 +25,7 @@ public class DailyScheduleItem {
     public static final String COLUMN_TIME_TAKEN = "TimeTaken";
     public static final String COLUMN_TIME = "Time";
     public static final String COLUMN_DATE = "Date";
+    public static final String COLUMN_PATIENT = "Patient";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
@@ -46,6 +47,9 @@ public class DailyScheduleItem {
 
     @DatabaseField(columnName = COLUMN_DATE, persisterClass = LocalDatePersister.class)
     private LocalDate date;
+
+    @DatabaseField(columnName = COLUMN_PATIENT, foreign = true, foreignAutoRefresh = true)
+    private Patient patient;
 
     public DailyScheduleItem() {
     }
@@ -128,10 +132,13 @@ public class DailyScheduleItem {
     @Override
     public String toString() {
         return "DailyScheduleItem{" +
-                " time=" + (time != null ? time.toString("kk:mm") : "Null") +
-                " date=" + (date != null ? date.toString("dd/MM") : "Null") +
+                "id=" + id +
+                ", scheduleItem=" + (scheduleItem != null ? scheduleItem.getId() : "null") +
+                ", schedule=" + (schedule != null ? schedule.getId() : "null") +
                 ", takenToday=" + takenToday +
                 ", timeTaken=" + timeTaken +
+                ", time=" + time +
+                ", date=" + date +
                 '}';
     }
 
@@ -150,6 +157,14 @@ public class DailyScheduleItem {
 
     public void save() {
         DB.dailyScheduleItems().save(this);
+    }
+
+    public Patient patient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 }
 

@@ -384,12 +384,12 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                 item.save();
                 Log.d(TAG, "Saving item..." + item.getId());
                 // add to daily schedule
-                DailyAgenda.instance().addItem(item, false);
+                DailyAgenda.instance().addItem(patient, item, false);
             }
         } else {
             for (DateTime time : s.hourlyItemsToday()) {
                 LocalTime timeToday = time.toLocalTime();
-                DailyAgenda.instance().addItem(s, timeToday);
+                DailyAgenda.instance().addItem(patient, s, timeToday);
             }
         }
         // save and fire event
@@ -428,6 +428,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                 item.save();
                 // add to daily schedule
                 DailyScheduleItem dsi = new DailyScheduleItem(item);
+                dsi.setPatient(patient);
                 if (routinesTaken.contains(item.routine().getId())) {
                     dsi.setTakenToday(true);
                 }
@@ -438,6 +439,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
             for (DateTime time : s.hourlyItemsToday()) {
                 LocalTime timeToday = time.toLocalTime();
                 DailyScheduleItem dsi = new DailyScheduleItem(s, timeToday);
+                dsi.setPatient(patient);
                 dsi.save();
                 Log.d(TAG, "Saving daily schedule item..."
                         + dsi.getId()
