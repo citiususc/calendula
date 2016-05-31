@@ -36,3 +36,5 @@ Calendula/Calendula.iml
 libraries/*.iml
 *~
 *.swp
+
+Calendula/google-services.json
