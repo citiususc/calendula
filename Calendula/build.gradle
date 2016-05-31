@@ -2,9 +2,6 @@ buildscript {
     repositories {
         mavenCentral()
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.0'
-    }
 }
 apply plugin: 'com.android.application'
 apply plugin: 'idea'
@@ -74,7 +71,7 @@ android {
                     output.outputFile.name.replace(".apk", "-${variant.versionName}.apk"))
         }
     }
-
+    compileOptions.incremental = false
 }
 
 dependencies {
@@ -152,3 +149,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
 
 }
+
+apply plugin: 'com.google.gms.google-services'
