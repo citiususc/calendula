@@ -74,7 +74,7 @@ public class ScheduleDao extends GenericDao<Schedule, Long> {
             @Override
             public Object call() throws Exception {
                 for (ScheduleItem i : s.items()) {
-                    i.deleteCascade();
+                    DB.scheduleItems().deleteCascade(i);
                 }
                 DB.dailyScheduleItems().removeAllFrom(s);
                 DB.schedules().remove(s);
