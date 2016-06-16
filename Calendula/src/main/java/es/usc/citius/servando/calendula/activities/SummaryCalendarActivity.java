@@ -12,13 +12,16 @@ import com.squareup.timessquare.CalendarCellDecorator;
 import com.squareup.timessquare.CalendarCellView;
 import com.squareup.timessquare.CalendarPickerView;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
@@ -70,9 +73,9 @@ public class SummaryCalendarActivity extends CalendulaActivity {
 
         if (rule != null) {
             r = new RepetitionRule(rule);
-            List<LocalDate> dates = r.occurrencesBetween(from, to, from);
-            List<Date> hdates = new ArrayList<>();
-            for (LocalDate d : dates)
+            List<DateTime> dates = r.occurrencesBetween(from.toDateTimeAtStartOfDay(), to.toDateTimeAtStartOfDay(), from.toDateTimeAtStartOfDay());
+            Set<Date> hdates = new HashSet<>();
+            for (DateTime d : dates)
                 hdates.add(d.toDate());
 
             List<CalendarCellDecorator> decorators = new ArrayList<>();
@@ -81,7 +84,7 @@ public class SummaryCalendarActivity extends CalendulaActivity {
             Date start = date != null ? from.toDate() : null;
             Date end = v != null ? new LocalDate(v.year(), v.month(), v.day()).toDate() : null;
 
-            decorators.add(new HighlightDecorator(hdates, start, end, color));
+            decorators.add(new HighlightDecorator(new ArrayList<>(hdates), start, end, color));
             calendar.setDecorators(decorators);
         } else if (activeDays > 0 && restDays > 0) {
 

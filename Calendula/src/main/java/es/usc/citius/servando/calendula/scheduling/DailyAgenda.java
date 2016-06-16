@@ -142,30 +142,42 @@ public class DailyAgenda {
 
     public void addItem(Patient p, ScheduleItem item, boolean taken){
         // add to daily schedule
-        DailyScheduleItem dsi = new DailyScheduleItem(item);
-        dsi.setPatient(p);
-        dsi.setTakenToday(taken);
-        dsi.save();
+        DailyScheduleItem dsi;
+        if(item.schedule().enabledForDate(LocalDate.now())) {
+            dsi = new DailyScheduleItem(item);
+            dsi.setPatient(p);
+            dsi.setTakenToday(taken);
+            dsi.save();
+        }
 
         for(int i = 1;  i <= NEXT_DAYS_TO_SHOW; i++){
-            dsi = new DailyScheduleItem(item);
-            dsi.setDate(LocalDate.now().plusDays(i));
-            dsi.setTakenToday(taken);
-            dsi.setPatient(p);
-            dsi.save();
+            LocalDate date = LocalDate.now().plusDays(i);
+            if(item.schedule().enabledForDate(date)) {
+                dsi = new DailyScheduleItem(item);
+                dsi.setDate(LocalDate.now().plusDays(i));
+                dsi.setTakenToday(taken);
+                dsi.setPatient(p);
+                dsi.save();
+            }
         }
     }
 
     public void addItem(Patient p, Schedule s, LocalTime time){
         // add to daily schedule
-        DailyScheduleItem dsi = new DailyScheduleItem(s, time);
-        dsi.setPatient(p);
-        dsi.save();
-        for(int i = 1;  i <= NEXT_DAYS_TO_SHOW; i++){
+        DailyScheduleItem dsi;
+        if(s.enabledForDate(LocalDate.now())) {
             dsi = new DailyScheduleItem(s, time);
             dsi.setPatient(p);
-            dsi.setDate(LocalDate.now().plusDays(i));
             dsi.save();
+        }
+        for(int i = 1;  i <= NEXT_DAYS_TO_SHOW; i++){
+            LocalDate date = LocalDate.now().plusDays(i);
+            if(s.enabledForDate(date)) {
+                dsi = new DailyScheduleItem(s, time);
+                dsi.setPatient(p);
+                dsi.setDate(date);
+                dsi.save();
+            }
         }
     }
 

@@ -230,7 +230,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                         for (ScheduleItem item : s.items()) {
                             DailyScheduleItem d = DailyScheduleItem.findByScheduleItem(item);
                             // if taken today, add to the list
-                            if (d.takenToday()) {
+                            if (d!=null && d.takenToday()) {
                                 routinesTaken.add(item.routine().getId());
                             }
                             item.deleteCascade();
