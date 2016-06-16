@@ -175,6 +175,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         getRoutinesDao().executeRaw("ALTER TABLE Routines ADD COLUMN Patient INTEGER;");
         getRoutinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN Patient INTEGER;");
         getRoutinesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Patient INTEGER;");
+        getRoutinesDao().executeRaw("ALTER TABLE DailyScheduleItems ADD COLUMN Patient INTEGER;");
 
         Patient p = createDefaultPatient();
         // SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences();
@@ -195,10 +196,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         mUpdateBuilder.updateColumnValue(Medicine.COLUMN_PATIENT,p.id());
         mUpdateBuilder.update();
 
-        // TODO: Update daily schedule
-        // DailyAgenda.instance().setupForToday(this, true);
-
-
+        // Assign all medicines to the default patient
+        UpdateBuilder<DailyScheduleItem,Long> siUpdateBuilder = getDailyScheduleItemsDao().updateBuilder();
+        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_PATIENT,p.id());
+        siUpdateBuilder.update();
     }
 
     /**
