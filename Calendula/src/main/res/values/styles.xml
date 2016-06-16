@@ -28,6 +28,24 @@
     </style>
 
 
+    <!-- just defines top layer "Animation" -->
+    <style name="Animation" />
+
+    <!-- the animations must have been defined in your "anim" folder, of course -->
+    <style name="Animation.Splash" parent="android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_bottom</item>
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_from_bottom</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_in_from_bottom</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_from_bottom</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_in_from_bottom</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Splash</item>
+    </style>
+
+
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
         <item name="color">@android:color/white</item>

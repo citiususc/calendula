@@ -41,7 +41,7 @@
 
 
     <!-- Other colors -->
-    <color name="splash_background">#151515</color>
+    <color name="splash_background">#ffb74d</color>
     <color name="white">#FFFFFF</color>
     <color name="dark_grey_home">#272727</color>
     <color name="dark_grey_home_statusbar">#151515</color>
