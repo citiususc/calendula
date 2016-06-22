@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 
 /**
@@ -84,6 +85,24 @@ public class PickupInfoDao extends GenericDao<PickupInfo, Long> {
         } catch (SQLException e)
         {
             throw new RuntimeException("Error finding scanned schedule", e);
+        }
+    }
+
+    public List<PickupInfo> findByPatient(Patient p) {
+        try{
+
+            QueryBuilder<Medicine, Long> mqb = DB.medicines().queryBuilder();
+            mqb.where().eq(Medicine.COLUMN_PATIENT, p);
+
+            QueryBuilder<PickupInfo, Long> qb = dao.queryBuilder();
+            qb.leftJoin(mqb);
+
+
+            return qb.query();
+
+        } catch (SQLException e)
+        {
+            throw new RuntimeException("Error finding scanned pickups", e);
         }
     }
 

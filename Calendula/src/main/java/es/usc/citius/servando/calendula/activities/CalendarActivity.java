@@ -2,20 +2,21 @@ package es.usc.citius.servando.calendula.activities;
 
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.NestedScrollView;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,9 +29,8 @@ import android.widget.Toast;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.roomorama.caldroid.CaldroidFragment;
+import com.roomorama.caldroid.CaldroidGridAdapter;
 import com.roomorama.caldroid.CaldroidListener;
-import com.squareup.timessquare.CalendarCellDecorator;
-import com.squareup.timessquare.CalendarCellView;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
@@ -40,7 +40,6 @@ import org.joda.time.LocalDate;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -55,43 +54,39 @@ import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.scheduling.PickupReminderMgr;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
-import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 public class CalendarActivity extends CalendulaActivity {
 
     public static final int ACTION_SHOW_REMINDERS = 1;
 
-    View bottomSheet;
-    //CalendarPickerView calendar;
+    private static PickupInfo.PickupComparator pickupComparator = new PickupInfo.PickupComparator();
+    private static DateFormat dtf2 = new SimpleDateFormat("dd/MMM");
+    static List<PickupInfo> pickupInfos = new ArrayList<>();
+    List<LocalDate> bestDays;
+    Pair<LocalDate, String> bestDay;
+
     DateTime from;
     DateTime to;
-
     String df;
-
-    private static DateFormat dtf2 = new SimpleDateFormat("dd/MMM");
-    private static PickupInfo.PickupComparator pickupComparator = new PickupInfo.PickupComparator();
-
-    private static Date selectedDate = null;
-    private List<PickupInfo> pickupInfos;
-    private List<LocalDate> bestDays;
-
-    TextView title;
-
-    AppBarLayout appBarLayout;
-    CollapsingToolbarLayout toolbarLayout;
-
-    TextView subtitle;
-    ImageView avatar;
-
     Patient patient;
     Patient selectedPatient;
-
     int selectedPatientIdx = 0;
     long selectedPatientId;
     List<Patient> pats;
+    Date selectedDate = null;
+
+
+    static Map<LocalDate, List<PickupInfo>> pickupsMap = new HashMap<>();
+
+
+    View bottomSheet;
+    TextView title;
+    AppBarLayout appBarLayout;
+    CollapsingToolbarLayout toolbarLayout;
+    TextView subtitle;
+    ImageView avatar;
     CaldroidFragment caldroidFragment;
     View topBg;
-
     NestedScrollView nestedScrollView;
     View titleCollapsedContainer;
 
@@ -116,7 +111,6 @@ public class CalendarActivity extends CalendulaActivity {
         title = (TextView) findViewById(R.id.routine_name_title);
         avatar = (ImageView) findViewById(R.id.patient_avatar_title);
         nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
-        //title.setText("Dispensación");
 
         df = getString(R.string.pickup_date_format);
         from = DateTime.now().minusMonths(3);
@@ -124,25 +118,7 @@ public class CalendarActivity extends CalendulaActivity {
         bottomSheet = findViewById(R.id.pickup_list_container);
         bottomSheet.setVisibility(View.INVISIBLE);
 
-
-//        AppBarLayout.OnOffsetChangedListener mListener = new AppBarLayout.OnOffsetChangedListener() {
-//            @Override
-//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-//                if(toolbarLayout.getHeight() + verticalOffset < 2 * ViewCompat.getMinimumHeight(toolbarLayout)) {
-//                    // not expanded
-//                    Log.d("CalendarActivity", "Not expanded");
-//                } else {
-//                    // expanded
-//                    Log.d("CalendarActivity", "Expanded");
-//                }
-//            }
-//        };
-//        appBarLayout.addOnOffsetChangedListener(mListener);
-
-
-        //setupCalendar();
         setupPatientSpinner();
-        //setupNewCalendar();
         onPatientUpdate();
         findViewById(R.id.close_pickup_list).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,16 +130,16 @@ public class CalendarActivity extends CalendulaActivity {
     }
 
     private void setupPatientSpinner() {
-        String[] names = new String[pats.size()+1];
+        String[] names = new String[pats.size() + 1];
 
         names[0] = "Todos";
-        for(int i= 0; i < pats.size(); i++){
-            names[i+1]=pats.get(i).name();
+        for (int i = 0; i < pats.size(); i++) {
+            names[i + 1] = pats.get(i).name();
         }
 
-        ArrayAdapter<String> adapter=new ArrayAdapter<>(this,R.layout.toolbar_spinner_item,names);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.toolbar_spinner_item, names);
         adapter.setDropDownViewResource(R.layout.toolbar_spinner_item);
-        Spinner spinner = (Spinner)findViewById(R.id.toolbar_spinner);
+        Spinner spinner = (Spinner) findViewById(R.id.toolbar_spinner);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -182,7 +158,7 @@ public class CalendarActivity extends CalendulaActivity {
     }
 
     private void onPatientUpdate() {
-        if(selectedPatientIdx == 0){
+        if (selectedPatientIdx == 0) {
             topBg.setBackgroundColor(getResources().getColor(R.color.dark_grey_home));
             avatar.setImageDrawable(
                     new IconicsDrawable(CalendarActivity.this)
@@ -190,8 +166,8 @@ public class CalendarActivity extends CalendulaActivity {
                             .color(Color.WHITE)
                             .paddingDp(6)
                             .sizeDp(48));
-        }else{
-            int pIndex = selectedPatientIdx-1;
+        } else {
+            int pIndex = selectedPatientIdx - 1;
             selectedPatient = pats.get(pIndex);
             topBg.setBackgroundColor(selectedPatient.color());
 
@@ -199,19 +175,16 @@ public class CalendarActivity extends CalendulaActivity {
             avatar.setImageResource(AvatarMgr.res(selectedPatient.avatar()));
         }
 
-        setupNewCalendar();
-        updatePickups();
-        updateSelectedDates(caldroidFragment);
+        new UpdatePickupsTask().execute();
     }
 
-    void setupNewCalendar(){
-        caldroidFragment = new CaldroidFragment();
+    void setupNewCalendar() {
+        caldroidFragment = new CaldroidSampleCustomFragment();
         Bundle args = new Bundle();
         args.putInt(CaldroidFragment.MONTH, 3);
         args.putInt(CaldroidFragment.YEAR, 2015);
         args.putBoolean(CaldroidFragment.SHOW_NAVIGATION_ARROWS, false);
         args.putInt(CaldroidFragment.THEME_RESOURCE, R.style.CaldroidDefaultNoGrid);
-
         caldroidFragment.setArguments(args);
         FragmentTransaction t = getSupportFragmentManager().beginTransaction();
         t.replace(R.id.calendar, caldroidFragment);
@@ -223,13 +196,27 @@ public class CalendarActivity extends CalendulaActivity {
             public void onSelectDate(Date date, View view) {
                 LocalDate d = LocalDate.fromDateFields(date);
                 onDaySelected(d);
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        nestedScrollView.smoothScrollBy(0, bottomSheet.getHeight());
-                    }
-                }, 100);
+                if (bestDay.first != null && bestDay.first.equals(d)) {
+                    //Toast.makeText(CalendarActivity.this, "Best day!", Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CalendarActivity.this);
+                    builder.setTitle(R.string.best_date_recommendation_title)
+                            .setPositiveButton(getString(R.string.driving_warning_gotit), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+//        if(allowReminder) {
+//            builder.setNeutralButton(getString(R.string.best_date_reminder), new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.dismiss();
+//                    onActivateReminder(best);
+//                }
+//            });
+//        }
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.setMessage(bestDay.second);
+                    alertDialog.show();
+                }
             }
 
             @Override
@@ -252,34 +239,11 @@ public class CalendarActivity extends CalendulaActivity {
         };
 
         caldroidFragment.setCaldroidListener(listener);
+        bestDay = onBestDaySelected();
 
-
-    }
-
-    private void updateSelectedDates(CaldroidFragment caldroidFragment) {
-
-        Map<Long, ColorDrawable[]> colors = new HashMap<>();
-
-        caldroidFragment.getBackgroundForDateTimeMap().clear();
-
-
-        for(PickupInfo pk : pickupInfos) {
-
-            Medicine m = DB.medicines().findById(pk.medicine().getId());
-            Patient p = DB.patients().findById(m.patient().id());
-
-            if(selectedPatientIdx==0 || p.id() == selectedPatientId) {
-
-                if (!colors.containsKey(p.id())) {
-                    colors.put(p.id(), new ColorDrawable[]{
-                            new ColorDrawable(ScreenUtils.equivalentNoAlpha(p.color(), 0.8f)),
-                            new ColorDrawable(ScreenUtils.equivalentNoAlpha(p.color(), 0.1f))
-                    });
-                }
-                ColorDrawable[] pColors = colors.get(p.id());
-                caldroidFragment.setBackgroundDrawableForDate(pk.taken() ? pColors[1] : pColors[0], pk.from().toDate());
-                caldroidFragment.setTextColorForDate(R.color.white, pk.from().toDate());
-            }
+        if (bestDay.first != null) {
+            //Toast.makeText(CalendarActivity.this, "Best day: " + bestDay.first.toString("dd/MM/YY"), Toast.LENGTH_SHORT).show();
+            caldroidFragment.setBackgroundDrawableForDate(new ColorDrawable(getResources().getColor(R.color.android_green_light)), bestDay.first.toDate());
         }
 
         caldroidFragment.refreshView();
@@ -292,31 +256,38 @@ public class CalendarActivity extends CalendulaActivity {
         super.onDestroy();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.calendar, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_best_day:
-//                onBestDaySelected();
-//                return true;
-//            default:
-//                return false;
-//        }
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.calendar, menu);
 
-    private void onBestDaySelected() {
+        IconicsDrawable icon = new IconicsDrawable(this, CommunityMaterial.Icon.cmd_information_outline)
+                .sizeDp(48)
+                .paddingDp(6)
+                .color(Color.WHITE);
+
+        menu.getItem(0).setIcon(icon);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_best_day:
+                onBestDaySelected();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private Pair<LocalDate, String> onBestDaySelected() {
 
         final List<PickupInfo> urgent = urgentMeds(pickupInfos);
         final LocalDate best = bestDays.isEmpty() ? null : bestDays.get(0);
-        final List<PickupInfo> next = best==null ? new ArrayList<PickupInfo>() : medsCanTakeAt(best);
+        final List<PickupInfo> next = best == null ? new ArrayList<PickupInfo>() : medsCanTakeAt(best);
 
-        String msg = null;
+        String msg = "No hai medicinas que recoger";
         LocalDate today = LocalDate.now();
 
         Log.d("Calendar", "Urgent: " + urgent.size());
@@ -325,14 +296,14 @@ public class CalendarActivity extends CalendulaActivity {
         boolean allowReminder = false;
 
         // there are not urgent meds, but there are others to pickup
-        if(urgent.isEmpty() && best!=null){
+        if (urgent.isEmpty() && best != null) {
 
             allowReminder = true;
 
             Log.d("Calendar", "there are not urgent meds, but there are others to pickup");
-            if(next.size() > 1){
+            if (next.size() > 1) {
                 msg = getString(R.string.best_single_day_messge, best.toString(getString(R.string.best_date_format)), next.size()) + "\n\n";
-            }else{
+            } else {
                 msg = getString(R.string.best_single_day_messge_one_med, best.toString(getString(R.string.best_date_format))) + "\n\n";
             }
             msg = addPcikupList(msg, next);
@@ -340,16 +311,16 @@ public class CalendarActivity extends CalendulaActivity {
 
         // there are urgent meds
         Log.d("Calendar", "there are urgent meds");
-        if(!urgent.isEmpty()){
+        if (!urgent.isEmpty()) {
             // and others
             Log.d("Calendar", "and others");
-            if(best!=null){
+            if (best != null) {
 
-                String bestStr = best.equals(LocalDate.now().plusDays(1))? getString(R.string.calendar_date_tomorrow) : best.toString(getString(R.string.best_date_format));
+                String bestStr = best.equals(LocalDate.now().plusDays(1)) ? getString(R.string.calendar_date_tomorrow) : best.toString(getString(R.string.best_date_format));
 
                 // and the others date is near
                 Log.d("Calendar", "and the others date is near");
-                if(today.plusDays(3).isAfter(best)){
+                if (today.plusDays(3).isAfter(best)) {
                     List<PickupInfo> all = new ArrayList<>();
                     all.addAll(urgent);
                     all.addAll(next);
@@ -357,49 +328,30 @@ public class CalendarActivity extends CalendulaActivity {
                     msg = addPcikupList(msg, all);
                 }
                 // and the others date is not near
-                else{
+                else {
 
                     allowReminder = true;
 
                     Log.d("Calendar", "and the others date is not near");
                     msg = addPcikupList(getString(R.string.pending_meds_msg) + "\n\n", urgent);
-                    msg +="\n";
-                    if(next.size() > 1){
+                    msg += "\n";
+                    if (next.size() > 1) {
                         Log.d("Calendar", " size > 1");
-                        msg += getString(R.string.best_single_day_messge_after_pending,bestStr, next.size()) + "\n\n";
-                    }else{
+                        msg += getString(R.string.best_single_day_messge_after_pending, bestStr, next.size()) + "\n\n";
+                    } else {
                         Log.d("Calendar", " size <= 1");
                         msg += getString(R.string.best_single_day_messge_after_pending_one_med, bestStr) + "\n\n";
                     }
                     msg = addPcikupList(msg, next);
                 }
-            }else{
+            } else {
                 Log.d("Calendar", " there are only urgent meds");
                 // there are only urgent meds
                 msg = addPcikupList(getString(R.string.pending_meds_msg) + "\n\n", urgent);
             }
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.best_date_recommendation_title)
-                        .setPositiveButton(getString(R.string.driving_warning_gotit), new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-        if(allowReminder) {
-            builder.setNeutralButton(getString(R.string.best_date_reminder), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    onActivateReminder(best);
-                }
-            });
-        }
-
-        AlertDialog alertDialog = builder.create();
-
-        alertDialog.setMessage(msg);
-        alertDialog.show();
+        return new Pair<>(best, msg);
     }
 
     private void onActivateReminder(final LocalDate best) {
@@ -418,7 +370,7 @@ public class CalendarActivity extends CalendulaActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 PickupReminderMgr.instance().setCheckPickupsAlarm(CalendarActivity.this, best.minusDays(which + 1));
-                                Toast.makeText(CalendarActivity.this,"Recordatorio activado!",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CalendarActivity.this, "Recordatorio activado!", Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             }
                         }
@@ -427,8 +379,8 @@ public class CalendarActivity extends CalendulaActivity {
         alertDialog.show();
     }
 
-    public String addPcikupList(String msg, List<PickupInfo> pks){
-        for (PickupInfo p : pks){
+    public String addPcikupList(String msg, List<PickupInfo> pks) {
+        for (PickupInfo p : pks) {
             msg += "    • " + p.medicine().name() + " (" + dtf2.format(p.from().toDate()) + " - " + dtf2.format(p.to().toDate()) + ")\n";
         }
         return msg;
@@ -438,54 +390,31 @@ public class CalendarActivity extends CalendulaActivity {
 
         int action = getIntent().getIntExtra("action", -1);
         if (action == ACTION_SHOW_REMINDERS) {
-               onBestDaySelected();
+            onBestDaySelected();
         }
     }
 
-    private void updatePickups(){
-        pickupInfos = DB.pickups().findAll();
+    private void updatePickups() {
+        pickupInfos = selectedPatientIdx == 0 ? DB.pickups().findAll() : DB.pickups().findByPatient(selectedPatient);
         Collections.sort(pickupInfos, pickupComparator);
         bestDays = bestDays(pickupInfos);
-    }
-
-    private void updateDecorators(){
-
-        updatePickups();
-
-        final Map<Date, List<PickupInfo>> pickups = new HashMap<>();
-        Interval interval = new Interval(from, to);
-
-        for (PickupInfo p : pickupInfos) {
-            LocalDate d = p.from();
-            if (d != null && interval.contains(d.toDateTimeAtStartOfDay())) {
-                Date date = d.toDateTimeAtStartOfDay().toDate();
-                if (!pickups.containsKey(date)) {
-                    pickups.put(date, new ArrayList<PickupInfo>());
-                }
-                pickups.get(date).add(p);
+        pickupsMap.clear();
+        for (PickupInfo pk : pickupInfos) {
+            if (!pickupsMap.containsKey(pk.from())) {
+                pickupsMap.put(pk.from(), new ArrayList<PickupInfo>());
             }
-        }
 
-        List<CalendarCellDecorator> decorators = new ArrayList<>();
-        decorators.add(new PickupCellDecorator(pickups));
-        if(!bestDays.isEmpty()){
-            bestDays = Arrays.asList(bestDays.get(0));
-            decorators.add(new BestDayCellDecorator(bestDays));
+            pickupsMap.get(pk.from()).add(pk);
         }
-
-//        calendar.setDecorators(decorators);
-//        calendar.init(from.toDate(), to.toDate())
-//                .setShortWeekdays(getResources().getStringArray(R.array.calendar_weekday_names));
-//        calendar.invalidateViews();
     }
 
-    public List<PickupInfo> urgentMeds(List<PickupInfo> pickupList){
+    public List<PickupInfo> urgentMeds(List<PickupInfo> pickupList) {
 
         List<PickupInfo> urgent = new ArrayList<>();
-        Collections.sort(pickupList,pickupComparator);
+        Collections.sort(pickupList, pickupComparator);
         LocalDate now = LocalDate.now();
-        for (PickupInfo p : pickupList){
-            if(!p.taken() && p.from().plusDays(9).isBefore(now)) {
+        for (PickupInfo p : pickupList) {
+            if (!p.taken() && p.from().plusDays(9).isBefore(now) && p.to().isAfter(now)) {
                 Log.d("Urgent", p.medicine().name() + ", " + p.from().toString(df) + ", " + p.to().toString(df) + ", " + p.taken());
                 urgent.add(p);
             }
@@ -494,24 +423,24 @@ public class CalendarActivity extends CalendulaActivity {
     }
 
 
-    public List<LocalDate> bestDays(List<PickupInfo> pickupList){
+    public List<LocalDate> bestDays(List<PickupInfo> pickupList) {
         List<LocalDate> bestDays = new ArrayList<>();
         int bestCount = 0;
-        if(pickupList.size() > 0) {
-            Collections.sort(pickupList,pickupComparator);
+        if (pickupList.size() > 0) {
+            Collections.sort(pickupList, pickupComparator);
 
             LocalDate today = LocalDate.now();
             LocalDate first = LocalDate.now(); // compute first
             LocalDate now = LocalDate.now().minusDays(9);
 
-            if(now.getDayOfWeek() == DateTimeConstants.SATURDAY){
+            if (now.getDayOfWeek() == DateTimeConstants.SATURDAY) {
                 now = now.plusDays(2);
-            }else if(now.getDayOfWeek() == DateTimeConstants.SUNDAY){
+            } else if (now.getDayOfWeek() == DateTimeConstants.SUNDAY) {
                 now = now.plusDays(1);
             }
 
-            for(PickupInfo p : pickupList){
-                if(p.from().isAfter(now) && !p.taken()){
+            for (PickupInfo p : pickupList) {
+                if (p.from().isAfter(now) && !p.taken()) {
                     first = p.from();
                     break;
                 }
@@ -520,95 +449,78 @@ public class CalendarActivity extends CalendulaActivity {
             Log.d("Calendar", "BestDayCandidate - First: " + first.toString("dd/MM/yy"));
 
             List<Long> medIds = new ArrayList<>();
-            for(int i = 0; i < 10; i++){
+            for (int i = 0; i < 10; i++) {
                 LocalDate d = first.plusDays(i);
                 int count = 0;
-                if((d.isAfter(today) && d.getDayOfWeek() < DateTimeConstants.SATURDAY) || (d.isBefore(today) &&  d.getDayOfWeek() < DateTimeConstants.FRIDAY)) {
+                if ((d.isAfter(today) && d.getDayOfWeek() < DateTimeConstants.SATURDAY) || (d.isBefore(today) && d.getDayOfWeek() < DateTimeConstants.FRIDAY)) {
                     for (PickupInfo p : pickupList) {
                         DateTime iStart = p.from().toDateTimeAtStartOfDay();
                         DateTime iEnd = p.from().plusDays(9).toDateTimeAtStartOfDay();
-
                         Interval interval = new Interval(iStart, iEnd);
-                        if (interval.contains(d.toDateTimeAtStartOfDay()) && !p.taken()) {
-                            if(!medIds.contains(p.medicine().getId())) {
+                        if (!p.taken() && interval.contains(d.toDateTimeAtStartOfDay())) {
+                            if (!medIds.contains(p.medicine().getId())) {
                                 count++;
                                 medIds.add(p.medicine().getId());
                             }
                         }
-                        /*else if (!p.taken() && iEnd.isBeforeNow() && p.to().toDateTimeAtStartOfDay().isAfterNow()) {
-                            if(!medIds.contains(p.medicine().getId())) {
-                                count++;
-                                medIds.add(p.medicine().getId());
-                            }
-                        }*/
                     }
                 }
 
                 Log.d("Calendar", "BestDayCandidate: " + d.toString("dd/MM/yy") + ": " + count + " meds");
 
-                if(count > bestCount){
+                if (count > bestCount) {
                     bestCount = count;
                     bestDays.clear();
                     bestDays.add(d.toDateTimeAtStartOfDay().isAfterNow() ? d : LocalDate.now().plusDays(1));
-                }else if(count == bestCount){
+                } else if (count == bestCount) {
                     bestDays.add(d);
                 }
                 medIds.clear();
             }
-
         }
-        return  bestDays;
+        return bestDays;
     }
 
-    private List<PickupInfo> medsCanTakeAt(LocalDate d){
+    private List<PickupInfo> medsCanTakeAt(LocalDate d) {
         List<PickupInfo> all = pickupInfos;
-        Collections.sort(all,pickupComparator);
+        Collections.sort(all, pickupComparator);
         List<PickupInfo> canTake = new ArrayList<>();
         List<Long> medIds = new ArrayList<>();
 
         for (PickupInfo p : all) {
             DateTime iStart = p.from().toDateTimeAtStartOfDay();
             DateTime iEnd = p.from().plusDays(9).toDateTimeAtStartOfDay();
-            Interval interval = new Interval(iStart,iEnd);
-            if(!p.taken() && interval.contains(d.toDateTimeAtStartOfDay())){
-                if(!medIds.contains(p.medicine().getId())) {
+            Interval interval = new Interval(iStart, iEnd);
+            if (!p.taken() && interval.contains(d.toDateTimeAtStartOfDay())) {
+                if (!medIds.contains(p.medicine().getId())) {
                     canTake.add(p);
                     medIds.add(p.medicine().getId());
                 }
             }
-            /*else if (!p.taken() && iEnd.isBeforeNow() && p.to().toDateTimeAtStartOfDay().isAfterNow()){
-                if(!medIds.contains(p.medicine().getId())) {
-                    canTake.add(p);
-                    medIds.add(p.medicine().getId());
-                }
-            }*/
         }
-        return  canTake;
+        return canTake;
     }
 
     private boolean onDaySelected(LocalDate date) {
-
         selectedDate = date.toDateTimeAtStartOfDay().toDate();
         return showPickupsInfo(date);
     }
 
     private boolean showPickupsInfo(final LocalDate date) {
         final List<PickupInfo> from = DB.pickups().findByFrom(date, true);
-        if(!from.isEmpty()) {
+        if (!from.isEmpty()) {
 
             TextView title = ((TextView) bottomSheet.findViewById(R.id.bottom_sheet_title));
 
             LayoutInflater i = getLayoutInflater();
             LinearLayout list = (LinearLayout) findViewById(R.id.pickup_list);
             list.removeAllViews();
-            showBottomSheet();
-
             for (final PickupInfo p : from) {
 
                 Medicine m = DB.medicines().findById(p.medicine().getId());
                 Patient pat = DB.patients().findById(m.patient().id());
 
-                if(selectedPatientIdx==0 || pat.id() == selectedPatientId) {
+                if (selectedPatientIdx == 0 || pat.id() == selectedPatientId) {
 
                     View v = i.inflate(R.layout.calendar_pickup_list_item, null);
                     TextView tv1 = ((TextView) v.findViewById(R.id.textView));
@@ -639,7 +551,8 @@ public class CalendarActivity extends CalendulaActivity {
                     list.addView(v);
                 }
             }
-
+            nestedScrollView.scrollBy(0, bottomSheet.getHeight());
+            showBottomSheet();
             int total = list.getChildCount();
             title.setText(total + " " + getResources().getString(R.string.title_pickups_bottom_sheet, date.toString(df)));
             appBarLayout.setExpanded(false, true);
@@ -656,7 +569,7 @@ public class CalendarActivity extends CalendulaActivity {
         LinearLayout list = (LinearLayout) findViewById(R.id.pickup_list);
         list.removeAllViews();
         appBarLayout.setExpanded(true, true);
-        bottomSheet.setVisibility(View.GONE);
+        bottomSheet.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -668,74 +581,42 @@ public class CalendarActivity extends CalendulaActivity {
         }
     }
 
-    private static class PickupCellDecorator implements CalendarCellDecorator {
 
-
-        Map<Date, List<PickupInfo>> pickups;
-
-        public PickupCellDecorator(Map<Date, List<PickupInfo>> pickups) {
-            this.pickups = pickups;
-        }
-
+    public static class CaldroidSampleCustomFragment extends CaldroidFragment {
         @Override
-        public void decorate(final CalendarCellView cellView, Date date) {
-
-            boolean isCurrent = cellView.isCurrentMonth();
-
-            cellView.setAlpha(1f);
-
-            if (pickups != null && isCurrent && pickups.containsKey(date)) {
-                List<PickupInfo> pickupInfos = pickups.get(date);
-                String dateString = Integer.toString(date.getDate());
-                SpannableString string = new SpannableString(dateString); // "\n" + count
-                string.setSpan(new RelativeSizeSpan(0.8f), 0, dateString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                cellView.setText(string);
-                boolean selected = date.equals(selectedDate);
-                cellView.setBackgroundResource(selected ? R.drawable.calendar_day_circle : R.drawable.green_cross);
-                cellView.setTextAppearance(cellView.getContext(), R.style.calendar_day_highlighted);
-
-                boolean allTaken = true;
-                for (PickupInfo pki : pickupInfos) {
-                    if (!pki.taken()) {
-                        allTaken = false;
-                    }
-                }
-
-                if (allTaken) {
-                    cellView.setAlpha(0.3f);
-                }
-
-            } else if (!cellView.isEnabled()) {
-                cellView.setBackgroundResource(R.color.white);
-                cellView.setTextAppearance(cellView.getContext(), R.style.calendar_day_disabled);
-            } else if (date.equals(LocalDate.now().toDateTimeAtStartOfDay().toDate())) {
-                cellView.setBackgroundResource(R.drawable.calendar_today_selector);
-                cellView.setTextAppearance(cellView.getContext(), R.style.calendar_day_today);
-            } else {
-                cellView.setBackgroundResource(R.color.white);
-                cellView.setTextAppearance(cellView.getContext(), R.style.calendar_day);
-            }
-
+        public CaldroidGridAdapter getNewDatesGridAdapter(int month, int year) {
+            return new CaldroidSampleCustomAdapter(getActivity(), month, year, getCaldroidData(), extraData, pickupsMap);
         }
-
     }
 
-    private static class BestDayCellDecorator implements CalendarCellDecorator {
 
-        private final List<LocalDate> bestDates;
+    public class UpdatePickupsTask extends AsyncTask<Void, Void, Void> {
 
-        public BestDayCellDecorator(List<LocalDate> dates){
-            this.bestDates = dates;
+
+        ProgressDialog dialog;
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            updatePickups();
+            return null;
         }
 
         @Override
-        public void decorate(CalendarCellView calendarCellView, Date date) {
-            for(LocalDate bestDate: bestDates){
-                if(date.equals(bestDate.toDate())){
-                    String dateString = Integer.toString(date.getDate());
-                    calendarCellView.setText(dateString + " ✔"); // ★
-                }
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(CalendarActivity.this);
+            dialog.setIndeterminate(true);
+            dialog.setMessage("Actualizando calendario...");
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (dialog.isShowing()) {
+                dialog.dismiss();
             }
+            setupNewCalendar();
         }
     }
 

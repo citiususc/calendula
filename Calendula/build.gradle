@@ -32,7 +32,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 23
         versionCode 24
         versionName "2.4-SNAPSHOT"
@@ -105,6 +105,7 @@ dependencies {
     // calendar view
     compile 'com.squareup:android-times-square:1.6.4@aar'
     compile 'com.roomorama:caldroid:3.0.1'
+    compile 'com.github.sundeepk:compact-calendar-view:1.8.4'
 
     // Tab strip
     //compile 'com.ogaclejapan.smarttablayout:library:1.1.0@aar'
