@@ -181,8 +181,8 @@ public class CalendarActivity extends CalendulaActivity {
     void setupNewCalendar() {
         caldroidFragment = new CaldroidSampleCustomFragment();
         Bundle args = new Bundle();
-        args.putInt(CaldroidFragment.MONTH, 3);
-        args.putInt(CaldroidFragment.YEAR, 2015);
+        args.putInt(CaldroidFragment.MONTH, 7);
+        args.putInt(CaldroidFragment.YEAR, 2016);
         args.putBoolean(CaldroidFragment.SHOW_NAVIGATION_ARROWS, false);
         args.putInt(CaldroidFragment.THEME_RESOURCE, R.style.CaldroidDefaultNoGrid);
         caldroidFragment.setArguments(args);
@@ -351,6 +351,8 @@ public class CalendarActivity extends CalendulaActivity {
             }
         }
 
+        Log.d("BEST_DAY", msg);
+
         return new Pair<>(best, msg);
     }
 
@@ -414,7 +416,8 @@ public class CalendarActivity extends CalendulaActivity {
         Collections.sort(pickupList, pickupComparator);
         LocalDate now = LocalDate.now();
         for (PickupInfo p : pickupList) {
-            if (!p.taken() && p.from().plusDays(9).isBefore(now) && p.to().isAfter(now)) {
+            Log.d("IsUrgent", p.medicine().name() + ", " + p.from().toString(df) + ", " + p.to().toString(df) + ", " + p.taken());
+            if (!p.taken() && p.from().plusDays(7).isBefore(now) && p.to().isAfter(now)) {
                 Log.d("Urgent", p.medicine().name() + ", " + p.from().toString(df) + ", " + p.to().toString(df) + ", " + p.taken());
                 urgent.add(p);
             }
@@ -431,14 +434,13 @@ public class CalendarActivity extends CalendulaActivity {
 
             LocalDate today = LocalDate.now();
             LocalDate first = LocalDate.now(); // compute first
-            LocalDate now = LocalDate.now().minusDays(9);
+            LocalDate now = LocalDate.now().minusDays(10);
 
-            if (now.getDayOfWeek() == DateTimeConstants.SATURDAY) {
-                now = now.plusDays(2);
-            } else if (now.getDayOfWeek() == DateTimeConstants.SUNDAY) {
+            if (now.getDayOfWeek() == DateTimeConstants.SUNDAY) {
                 now = now.plusDays(1);
             }
 
+            // look for the first date we can take meds within the 10 days margin
             for (PickupInfo p : pickupList) {
                 if (p.from().isAfter(now) && !p.taken()) {
                     first = p.from();
@@ -447,8 +449,8 @@ public class CalendarActivity extends CalendulaActivity {
             }
 
             Log.d("Calendar", "BestDayCandidate - First: " + first.toString("dd/MM/yy"));
-
             List<Long> medIds = new ArrayList<>();
+
             for (int i = 0; i < 10; i++) {
                 LocalDate d = first.plusDays(i);
                 int count = 0;

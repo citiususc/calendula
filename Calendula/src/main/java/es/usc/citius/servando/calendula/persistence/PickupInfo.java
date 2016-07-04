@@ -89,6 +89,8 @@ public class PickupInfo {
 
     public static class PickupComparator implements Comparator<PickupInfo> {
 
+        public static PickupComparator instance = new PickupComparator();
+
         @Override
         public int compare(PickupInfo a, PickupInfo b) {
             LocalDate fromA = a.from();
