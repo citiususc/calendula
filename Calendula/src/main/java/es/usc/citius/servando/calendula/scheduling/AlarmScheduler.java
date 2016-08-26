@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -143,8 +144,21 @@ public class AlarmScheduler {
         {
             Log.d(TAG, " Time: " + time.getMillis() + ", " + ((time.getMillis() - DateTime.now()
                 .getMillis()) / 1000 / 60) + " min]");
-            alarmManager.set(AlarmManager.RTC_WAKEUP, time.getMillis(),
-                hourlySchedulePendingIntent);
+
+            if (Build.VERSION.SDK_INT >= 23)
+            {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time.getMillis(),
+                        hourlySchedulePendingIntent);
+            } else if (Build.VERSION.SDK_INT >= 19 )
+            {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, time.getMillis(),
+                        hourlySchedulePendingIntent);
+            } else
+            {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, time.getMillis(),
+                        hourlySchedulePendingIntent);
+            }
+
         }
     }
 
@@ -178,7 +192,16 @@ public class AlarmScheduler {
             AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
             // set the routine alarm, with repetition every day
             if (alarmManager != null) {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, DateTime.now().getMillis() + millis, routinePendingIntent);
+                if (Build.VERSION.SDK_INT >= 23)
+                {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, DateTime.now().getMillis() + millis, routinePendingIntent);
+                } else if (Build.VERSION.SDK_INT >= 19 )
+                {
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, DateTime.now().getMillis() + millis, routinePendingIntent);
+                } else
+                {
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, DateTime.now().getMillis() + millis, routinePendingIntent);
+                }
                 Log.d(TAG, "Alarm delayed " + millis + " millis");
             }
         }
@@ -198,8 +221,16 @@ public class AlarmScheduler {
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         // set the routine alarm, with repetition every day
         if (alarmManager != null) {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, DateTime.now().getMillis() + millis,
-                    routinePendingIntent);
+            if (Build.VERSION.SDK_INT >= 23)
+            {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, DateTime.now().getMillis() + millis, routinePendingIntent);
+            } else if (Build.VERSION.SDK_INT >= 19 )
+            {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, DateTime.now().getMillis() + millis, routinePendingIntent);
+            } else
+            {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, DateTime.now().getMillis() + millis, routinePendingIntent);
+            }
             Log.d(TAG, "Alarm delayed " + millis + " millis");
         }
     }
