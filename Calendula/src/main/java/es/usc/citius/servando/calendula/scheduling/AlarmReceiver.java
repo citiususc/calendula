@@ -1,11 +1,15 @@
 package es.usc.citius.servando.calendula.scheduling;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.persistence.Routine;
 
 /**
  * This class receives our routine alarms
@@ -25,6 +29,31 @@ public class AlarmReceiver extends BroadcastReceiver {
                 return;
             }
 
+            long repeatMillisec = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_REPEAT_MILLISEC, -1);
+            long routineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
+
+            if (repeatMillisec != -1 && routineId != -1) {
+
+                PendingIntent routinePendingIntent = AlarmScheduler.alarmPendingIntent(context, Routine.findById(routineId), repeatMillisec);
+
+                // Get the AlarmManager service
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                // set the routine alarm, with repetition every day
+                if (alarmManager != null) {
+                    // alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, routine.time().toDateTimeToday().getMillis(), AlarmManager.INTERVAL_DAY, routinePendingIntent);
+                    if (Build.VERSION.SDK_INT >= 23) {
+                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, repeatMillisec, routinePendingIntent);
+                    } else if (Build.VERSION.SDK_INT >= 19) {
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, repeatMillisec, routinePendingIntent);
+                    } else {
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, repeatMillisec, routinePendingIntent);
+                    }
+
+                    Log.d(TAG, "Alarm rescheduled to " + repeatMillisec + " millis");
+                }
+
+            }
+            
             // get action type
             int action = intent.getIntExtra(CalendulaApp.INTENT_EXTRA_ACTION, -1);
             Log.d(TAG, "Alarm received (Action : " + action + ")");
