@@ -47,11 +47,10 @@ public class AlarmScheduler {
         // pass the routine id (hash code)
         //Log.d(TAG, "Put extra " + CalendulaApp.INTENT_EXTRA_ROUTINE_ID + ": " + routine.getId());
         intent.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, routine.getId());
-
-
-        // store interval for which to reschedule alarm on receive
-        intent.putExtra(CalendulaApp.INTENT_EXTRA_REPEAT_MILLISEC, intervalMillisec);
-
+        if (intervalMillisec != 0) {
+            // store interval for which to reschedule alarm on receive
+            intent.putExtra(CalendulaApp.INTENT_EXTRA_REPEAT_MILLISEC, intervalMillisec);
+        }
         // create pending intent
         int intent_id = routine.getId().hashCode();
         return PendingIntent.getBroadcast(ctx, intent_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
