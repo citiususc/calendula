@@ -373,7 +373,7 @@
     <string name="title_activity_calendar">Calendario</string>
     <string name="title_pickups_bottom_sheet">Recogidas el %1$s</string>
     <string name="pickup_interval">Hasta el %1$s</string>
-    <string name="pickup_date_format">dd \'de\' MMMM</string>
+    <string name="pickup_date_format">dd/MM</string>
     <string name="pref_title_pickup_notification">Notificaciones de recogida de medicamentos</string>
     <string name="title_activity_confirm_schedules">Confirmar pautas</string>
 

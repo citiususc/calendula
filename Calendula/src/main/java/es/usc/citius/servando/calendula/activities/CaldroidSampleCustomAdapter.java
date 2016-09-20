@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,26 +18,29 @@ import com.roomorama.caldroid.CaldroidGridAdapter;
 
 import org.joda.time.LocalDate;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
+import es.usc.citius.servando.calendula.util.PickupUtils;
 import hirondelle.date4j.DateTime;
 
 public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
 
-    private Map<LocalDate, List<PickupInfo>> pickups;
+    private static final String notTakenSymbol = "●";
+    private static final String takenSymbol = "✔";
+    private static final String lostSymbol = "✘";
+
+    private PickupUtils pkUtils;
 
     public CaldroidSampleCustomAdapter(Context context, int month, int year,
                                        Map<String, Object> caldroidData,
-                                       Map<String, Object> extraData, Map<LocalDate, List<PickupInfo>> pickups) {
+                                       Map<String, Object> extraData, PickupUtils pkUtils) {
         super(context, month, year, caldroidData, extraData);
-        this.pickups = pickups;
+        this.pkUtils = pkUtils;
     }
 
 
@@ -117,34 +121,33 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
 
         tv1.setText("" + dateTime.getDay());
 
-        List<PickupInfo> pk = pickups.get(new LocalDate(dateTime.getMilliseconds(TimeZone.getDefault())));
+        List<PickupInfo> pk = pkUtils.pickupsMap().get(new LocalDate(dateTime.getMilliseconds(TimeZone.getDefault())));
 
-
-        String notTakenSymbol = "●";
-        String takenSymbol = "✔";
-        String lostSymbol = "✘";
-        LocalDate today = LocalDate.now();
         if(pk!=null && pk.size() > 0){
-            String text = "";
+            LocalDate today = LocalDate.now();
+
+            HashMap<Integer, String> colors = new HashMap<>();
             for(int i = 0; i < pk.size(); i++){
                 PickupInfo pki = pk.get(i);
-                if(pki.taken()){
-                    text += takenSymbol;
-                }else{
-                    text += pki.to().isAfter(today) ? notTakenSymbol : lostSymbol;
+                Integer color = pkUtils.getPatient(pki).color();
+                if(!colors.containsKey(color)) {
+                    colors.put(color, pki.taken() ? takenSymbol : notTakenSymbol);
+                }else if (!pki.taken()) {
+                    colors.put(color, pki.to().isAfter(today) ? notTakenSymbol : lostSymbol);
                 }
             }
-            //String text = new String(new char[pk.size()]).replace("\0", symbol);
+
+            String text = "";
+            for(Integer c: colors.keySet()){
+                text+= colors.get(c);
+            }
+
             Spannable span = new SpannableString(text);
-            for(int i = 0; i < pk.size(); i++){
-                PickupInfo pki = pk.get(i);
-                Medicine m = DB.medicines().findById(pki.medicine().getId());
-                Patient p = DB.patients().findById(m.patient().id());
-                int color = p.color();
-//                if(pki.taken()){
-//                    color = ScreenUtils.equivalentNoAlpha(color,0.5f);
-//                }
+            int i = 0;
+            for(int color : colors.keySet()){
                 span.setSpan(new ForegroundColorSpan(color), i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                span.setSpan(new RelativeSizeSpan(1.2f), i, i+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                i++;
             }
             tv2.setText(span);
         }else{
@@ -153,9 +156,7 @@ public class CaldroidSampleCustomAdapter extends CaldroidGridAdapter {
 
         // Somehow after setBackgroundResource, the padding collapse.
         // This is to recover the padding
-        cellView.setPadding(leftPadding, topPadding, rightPadding,
-                bottomPadding);
-
+        cellView.setPadding(leftPadding, topPadding, rightPadding, bottomPadding);
         // Set custom color if required
         setCustomResources(dateTime, cellView, tv1);
 
