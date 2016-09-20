@@ -154,7 +154,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                     TableUtils.createTable(connectionSource, HomogeneousGroup.class);
                     TableUtils.createTable(connectionSource, PickupInfo.class);
                 case 9:
-                    getDailyScheduleItemsDao().executeRaw("ALTER TABLE DailyScheduleItems ADD COLUMN Date TEXT;");
                     TableUtils.createTable(connectionSource, Patient.class);
                     migrateToMultiPatient();
             }
@@ -176,6 +175,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         getRoutinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN Patient INTEGER;");
         getRoutinesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Patient INTEGER;");
         getRoutinesDao().executeRaw("ALTER TABLE DailyScheduleItems ADD COLUMN Patient INTEGER;");
+        getRoutinesDao().executeRaw("ALTER TABLE DailyScheduleItems ADD COLUMN Date TEXT;");
 
         Patient p = createDefaultPatient();
         // SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences();
@@ -196,10 +196,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         mUpdateBuilder.updateColumnValue(Medicine.COLUMN_PATIENT,p.id());
         mUpdateBuilder.update();
 
-        // Assign all medicines to the default patient
+        // Assign all DailyScheduleItems to the default patient, for today
         UpdateBuilder<DailyScheduleItem,Long> siUpdateBuilder = getDailyScheduleItemsDao().updateBuilder();
         siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_PATIENT,p.id());
+        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_DATE,LocalDate.now());
         siUpdateBuilder.update();
+
     }
 
     /**
