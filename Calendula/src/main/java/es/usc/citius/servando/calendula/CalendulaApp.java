@@ -82,15 +82,20 @@ public class CalendulaApp extends Application {
         CalendulaApp.isOpen = isOpen;
     }
 
+    SharedPreferences prefs;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
+        prefs =  PreferenceManager.getDefaultSharedPreferences(this);
         // initialize SQLite engine
         initializeDatabase();
 
-        DefaultDataGenerator.fillDBWithDummyData(getApplicationContext());
+        if(!prefs.getBoolean("DEFAULT_DATA_INSERTED", false)){
+            DefaultDataGenerator.fillDBWithDummyData(getApplicationContext());
+            prefs.edit().putBoolean("DEFAULT_DATA_INSERTED", true).commit();
+        }
+
         // initialize daily agenda
         DailyAgenda.instance().setupForToday(this, false);
         // setup alarm for daily agenda update
@@ -121,7 +126,6 @@ public class CalendulaApp extends Application {
         DB.init(this);
         try{
             if(DB.patients().countOf() == 1) {
-                SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(this);
                 Patient p = DB.patients().getDefault();
                 prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).commit();
             }
