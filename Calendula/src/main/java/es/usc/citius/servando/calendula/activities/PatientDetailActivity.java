@@ -416,9 +416,9 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         getMenuInflater().inflate(R.menu.menu_patient_detail, menu);
         this.menu = menu;
 
-        if(token != null){
-            this.menu.getItem(0).setVisible(false);
-        }
+        //if(token != null){
+        this.menu.getItem(0).setVisible(false);
+        //}
 
         return true;
     }
