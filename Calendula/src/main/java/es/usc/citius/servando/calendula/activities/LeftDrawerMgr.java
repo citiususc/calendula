@@ -23,7 +23,6 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
@@ -155,9 +154,9 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                                 .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_settings, R.color.black).alpha(110))
                                 .withIdentifier(SETTINGS),
                         new DividerDrawerItem(),
-                        new SecondaryDrawerItem()
-                                .withName("Open Source")
-                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_github_circle, R.color.black).alpha(110))
+                        new PrimaryDrawerItem()
+                                .withName("About")
+                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_information, R.color.black).alpha(110))
                                 .withIdentifier(ABOUT)
                 )
                 .withOnDrawerItemClickListener(this)
@@ -199,7 +198,8 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                 drawer.setSelection(HOME, false);
                 break;
             case HELP:
-                home.showTutorial();
+                //home.showTutorial();
+                launchActivity(new Intent(home, MaterialIntroActivity.class));
                 drawer.setSelection(HOME, false);
                 break;
             case PATIENTS:

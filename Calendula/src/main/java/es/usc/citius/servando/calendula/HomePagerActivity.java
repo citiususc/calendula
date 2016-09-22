@@ -36,9 +36,11 @@ import java.util.Queue;
 import es.usc.citius.servando.calendula.activities.CalendarActivity;
 import es.usc.citius.servando.calendula.activities.ConfirmActivity;
 import es.usc.citius.servando.calendula.activities.LeftDrawerMgr;
+import es.usc.citius.servando.calendula.activities.MaterialIntroActivity;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
+import es.usc.citius.servando.calendula.activities.SchedulesHelpActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
@@ -53,7 +55,6 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
-import es.usc.citius.servando.calendula.util.AppTutorial;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 
@@ -76,7 +77,6 @@ public class HomePagerActivity extends CalendulaActivity implements
     HomeProfileMgr homeProfileMgr;
     View userInfoFragment;
 
-    private AppTutorial tutorial;
     private LeftDrawerMgr drawerMgr;
 
     private FloatingActionButton fab;
@@ -84,6 +84,9 @@ public class HomePagerActivity extends CalendulaActivity implements
     FabMenuMgr fabMgr;
 
     TextView toolbarTitle;
+
+    MenuItem expandItem;
+    MenuItem helpItem;
 
 
     private Patient activePatient;
@@ -160,16 +163,6 @@ public class HomePagerActivity extends CalendulaActivity implements
         };
         appBarLayout.addOnOffsetChangedListener(mListener);
 
-        // configure tutorial
-        this.tutorial = new AppTutorial();
-        this.tutorial.init(this);
-//        appBarLayout.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                ((DailyAgendaFragment) getViewPagerFragment(0)).scrollToNow();
-//            }
-//        }, 1000);
-
         icAgendaLess = new IconicsDrawable(this)
                 .icon(CommunityMaterial.Icon.cmd_unfold_less)
                 .color(Color.WHITE)
@@ -186,6 +179,17 @@ public class HomePagerActivity extends CalendulaActivity implements
                 updateAempsIfNeeded();
             }
         }, 1500);
+
+
+        SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if(!prefs.getBoolean("PREFERENCE_INTRO_SHOWN", false)) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    launchActivity(new Intent(HomePagerActivity.this, MaterialIntroActivity.class));
+                }
+            }, 1500);
+        }
    }
 
     @Override
@@ -255,6 +259,13 @@ public class HomePagerActivity extends CalendulaActivity implements
                 } else {
                     appBarLayout.setExpanded(false);
                 }
+
+                if(expandItem!=null){
+                    expandItem.setVisible(position == 0);
+                }
+                if(helpItem!=null){
+                    helpItem.setVisible(position == 3);
+                }
             }
 
             @Override
@@ -317,9 +328,11 @@ public class HomePagerActivity extends CalendulaActivity implements
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
+        expandItem = menu.findItem(R.id.action_expand);
+        helpItem = menu.findItem(R.id.action_schedules_help);
+        helpItem.setVisible(false);
         return true;
     }
-
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -366,20 +379,11 @@ public class HomePagerActivity extends CalendulaActivity implements
 
                 item.setIcon(expanded ? icAgendaMore : icAgendaLess);
                 return true;
+            case R.id.action_schedules_help:
+                launchActivity(new Intent(this, SchedulesHelpActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
-
-    public AppTutorial getTutorial() {
-        return tutorial;
-    }
-
-    public void showTutorial() {
-        showPagerItem(0);
-        getTutorial().reset(this);
-        getTutorial().show(AppTutorial.WELCOME, AppTutorial.HOME_INFO, this);
-    }
-
 
     public void enableOrDisablePharmacyMode(){
         SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -463,6 +467,17 @@ public class HomePagerActivity extends CalendulaActivity implements
     private void launchActivity(Intent i) {
         startActivity(i);
         this.overridePendingTransition(0, 0);
+    }
+
+    public void launchActivityDelayed(final Class<?> activityClazz, int delay) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(HomePagerActivity.this, activityClazz));
+                overridePendingTransition(0, 0);
+            }
+        }, delay);
+
     }
 
 

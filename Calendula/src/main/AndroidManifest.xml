@@ -26,6 +26,13 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         tools:replace="icon, label" >
+
+        <activity android:name=".activities.MaterialIntroActivity"
+                  android:theme="@style/Theme.Intro"/>
+
+        <activity android:name=".activities.SchedulesHelpActivity"
+                  android:theme="@style/Theme.Intro"/>
+
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name"

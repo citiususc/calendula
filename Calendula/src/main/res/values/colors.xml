@@ -113,4 +113,23 @@
     <color name="material_drawer_selected_text">@color/dark_grey_text</color>
     <color name="material_drawer_header_selection_text">#FFF</color>
 
+
+    <!-- Intro colors -->
+    <color name="intro_slide_1_dark">#2980b9</color>
+    <color name="intro_slide_1_light">#3498db</color>
+    <color name="intro_slide_2_dark">#27ae60</color>
+    <color name="intro_slide_2_light">#2ecc71</color>
+    <color name="intro_slide_3_dark">#d35400</color>
+    <color name="intro_slide_3_light">#e67e22</color>
+    <color name="intro_slide_4_dark">#311B92</color>
+    <color name="intro_slide_4_light">#673AB7</color>
+    <color name="intro_slide_5_dark">#c0392b</color>
+    <color name="intro_slide_5_light">#e74c3c</color>
+    <color name="intro_slide_6_dark">#8e44ad</color>
+    <color name="intro_slide_6_light">#9b59b6</color>
+
+    <color name="schedule_help_background">#3498db</color>
+    <color name="schedule_help_background_dark">#2980b9</color>
+
+
 </resources>

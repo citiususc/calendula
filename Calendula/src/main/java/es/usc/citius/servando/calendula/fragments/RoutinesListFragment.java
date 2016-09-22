@@ -47,6 +47,10 @@ public class RoutinesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_routines_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.routines_list);
+
+        View empty = rootView.findViewById(android.R.id.empty);
+        listview.setEmptyView(empty);
+
         mRoutines = DB.routines().findAllForActivePatient(getContext());
 
         ic = new IconicsDrawable(getContext())

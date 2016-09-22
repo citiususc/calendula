@@ -27,6 +27,13 @@
         android:orderInCategory="100"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/action_schedules_help"
+        android:icon="@drawable/ic_help_white_48dp"
+        android:orderInCategory="100"
+        android:title="Help"
+        app:showAsAction="always" />
+
     <!--<item-->
         <!--android:id="@+id/action_scan"-->
         <!--android:title="Scan QR"-->

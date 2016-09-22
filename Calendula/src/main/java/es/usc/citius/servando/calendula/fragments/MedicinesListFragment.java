@@ -57,6 +57,8 @@ public class MedicinesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_medicines_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.medicines_list);
+        View empty = rootView.findViewById(android.R.id.empty);
+        listview.setEmptyView(empty);
         mMedicines = DB.medicines().findAllForActivePatient(getContext());
         adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
         listview.setAdapter(adapter);

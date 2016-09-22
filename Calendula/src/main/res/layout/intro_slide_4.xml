@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/imageView10"
+        android:src="@drawable/ic_intro_schedules"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/intro_schedules_title"
+        android:id="@+id/textView11"
+        android:layout_marginTop="30dp"
+        android:textColor="#fff"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/intro_schedules_text"
+        android:id="@+id/textView10"
+        android:padding="20dp"
+        android:alpha="0.9"
+        android:textAlignment="center"
+        android:textColor="#fff"/>
+
+</LinearLayout>

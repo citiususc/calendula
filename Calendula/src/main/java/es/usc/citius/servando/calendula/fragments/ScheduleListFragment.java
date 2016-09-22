@@ -50,6 +50,10 @@ public class ScheduleListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_schedule_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.schedule_list);
+
+        View empty = rootView.findViewById(android.R.id.empty);
+        listview.setEmptyView(empty);
+
         mSchedules = DB.schedules().findAllForActivePatient(getContext());
         adapter = new ScheduleListAdapter(getActivity(), R.layout.schedules_list_item, mSchedules);
         listview.setAdapter(adapter);
