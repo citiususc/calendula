@@ -1,6 +1,10 @@
 package es.usc.citius.servando.calendula.database;
 
+import android.content.Context;
+
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -9,6 +13,7 @@ import java.util.concurrent.Callable;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 
@@ -28,6 +33,25 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
             return dbHelper.getMedicinesDao();
         } catch (SQLException e) {
             throw new RuntimeException("Error creating medicines dao", e);
+        }
+    }
+
+    public List<Medicine> findAllForActivePatient(Context ctx) {
+        return findAll(DB.patients().getActive(ctx));
+    }
+
+    public List<Medicine> findAll(Patient p) {
+        return findAll(p.id());
+    }
+
+
+    public List<Medicine> findAll(Long patientId) {
+        try {
+            return dao.queryBuilder()
+                    .where().eq(Medicine.COLUMN_PATIENT, patientId)
+                    .query();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding models", e);
         }
     }
 
@@ -58,6 +82,34 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
             fireEvent();
         }
 
+    }
+
+    public Medicine findByGroupAndPatient(Long group, Patient p) {
+        try
+        {
+            QueryBuilder<Medicine, Long> qb = dao.queryBuilder();
+            Where w = qb.where();
+            w.and(w.eq(Medicine.COLUMN_HG, group),w.eq(Medicine.COLUMN_PATIENT, p));
+            qb.setWhere(w);
+            return qb.queryForFirst();
+        } catch (SQLException e)
+        {
+            throw new RuntimeException("Error finding med", e);
+        }
+    }
+
+    public Medicine findByCnAndPatient(String cn, Patient p) {
+        try
+        {
+            QueryBuilder<Medicine, Long> qb = dao.queryBuilder();
+            Where w = qb.where();
+            w.and(w.eq(Medicine.COLUMN_CN, cn),w.eq(Medicine.COLUMN_PATIENT, p));
+            qb.setWhere(w);
+            return qb.queryForFirst();
+        } catch (SQLException e)
+        {
+            throw new RuntimeException("Error finding med", e);
+        }
     }
 
 }

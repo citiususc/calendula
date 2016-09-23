@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<es.usc.citius.servando.calendula.util.view.CustomDigitalClock
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/emptyHourClock"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:layout_alignParentEnd="false"
+    android:layout_alignParentRight="false"
+    android:fontFamily="sans-serif"
+    android:gravity="center"
+    android:textColor="#ccffffff"
+    android:textSize="15sp"
+    android:textStyle="bold"
+    />

@@ -1,5 +1,6 @@
 package es.usc.citius.servando.calendula.database;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
@@ -13,6 +14,7 @@ import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
@@ -36,6 +38,7 @@ public class RoutineDao extends GenericDao<Routine, Long> {
         }
     }
 
+
     @Override
     public void fireEvent() {
         CalendulaApp.eventBus().post(PersistenceEvents.ROUTINE_EVENT);
@@ -45,6 +48,27 @@ public class RoutineDao extends GenericDao<Routine, Long> {
     public List<Routine> findAll() {
         try {
             return dao.queryBuilder().orderBy(Routine.COLUMN_TIME,true).query();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding models", e);
+        }
+    }
+
+
+    public List<Routine> findAllForActivePatient(Context ctx) {
+        return findAll(DB.patients().getActive(ctx));
+    }
+
+    public List<Routine> findAll(Patient p) {
+        return findAll(p.id());
+    }
+
+
+    public List<Routine> findAll(Long patientId) {
+        try {
+            return dao.queryBuilder()
+                    .orderBy(Routine.COLUMN_TIME, true)
+                    .where().eq(Routine.COLUMN_PATIENT, patientId)
+                    .query();
         } catch (SQLException e) {
             throw new RuntimeException("Error finding models", e);
         }

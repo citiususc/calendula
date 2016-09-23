@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="#44000000"/>
+    <size
+        android:width="35dp"
+        android:height="35dp" />
+</shape>
+
+
+    <!--<shape xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:innerRadiusRatio="3"--><!--android:shape="ring"--><!--android:thickness="5dp"--><!--android:useLevel="false" >-->
+
+    <!--<solid android:color="@color/med_presentation_circle_bg" />-->
+
+    <!--<size--><!--android:height="90dp"--><!--android:width="90dp" />-->
+
+    <!--</shape>-->

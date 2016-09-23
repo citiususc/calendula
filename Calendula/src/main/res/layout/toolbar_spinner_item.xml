@@ -3,9 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="18sp"
+    android:textSize="20sp"
     android:gravity="left"
-    android:background="@color/android_blue_darker"
+    android:background="@color/transparent"
     android:textColor="#FFFFFF"
-    android:padding="6dip"
+    android:textStyle="bold"
+    android:padding="8dip"
     />

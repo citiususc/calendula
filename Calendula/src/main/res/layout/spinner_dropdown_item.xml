@@ -10,5 +10,5 @@
     android:paddingTop="15dp"
     android:singleLine="true"
     android:textAlignment="inherit"
-    android:textColor="@color/android_blue_dark"
+    android:textColor="@color/agenda_item_title"
     android:textSize="22dp" />

@@ -20,12 +20,17 @@ public class PopulatePrescriptionDBService {
     public static final String DB_VERSION_KEY = "AEMPS_DB_VERSION";
     public static final String TAG = "PopulateDBService.class";
 
+    public static boolean isDbOutdated(Context ctx){
+        final int manifestVersion = getAempDbVersionFromManifest(ctx);
+        final int currentVersion = getAempDbVersionFromPreferences(ctx);
+        return (currentVersion < manifestVersion) || Prescription.empty();
+    }
+
     public void updateIfNeeded(Context ctx) {
 
         final int manifestVersion = getAempDbVersionFromManifest(ctx);
         final int currentVersion = getAempDbVersionFromPreferences(ctx);
         boolean needUpdate = (currentVersion < manifestVersion) || Prescription.empty();
-
 
         if (needUpdate) {
             Log.d(TAG, "Updating prescriptions database...");
@@ -36,12 +41,12 @@ public class PopulatePrescriptionDBService {
         }
     }
 
-    public int getAempDbVersionFromPreferences(Context ctx) {
+    public static int getAempDbVersionFromPreferences(Context ctx) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         return prefs.getInt(DB_VERSION_KEY, -1);
     }
 
-    public int getAempDbVersionFromManifest(Context ctx) {
+    public static int getAempDbVersionFromManifest(Context ctx) {
         int databaseVersion = 0;
         try {
             ApplicationInfo ai = ctx.getPackageManager().getApplicationInfo(ctx.getPackageName(), PackageManager.GET_META_DATA);

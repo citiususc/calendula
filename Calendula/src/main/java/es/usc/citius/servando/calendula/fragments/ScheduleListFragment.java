@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,17 +17,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.typeface.IIcon;
 
 import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.activities.ScanActivity;
-import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.events.PharmaModeChangeEvent;
+import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
@@ -44,99 +43,21 @@ public class ScheduleListFragment extends Fragment {
     ArrayAdapter adapter;
     ListView listview;
 
-    FloatingActionsMenu fabMenu;
-    FloatingActionButton actionD;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_schedule_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.schedule_list);
-        mSchedules = Schedule.findAll();
+
+        View empty = rootView.findViewById(android.R.id.empty);
+        listview.setEmptyView(empty);
+
+        mSchedules = DB.schedules().findAllForActivePatient(getContext());
         adapter = new ScheduleListAdapter(getActivity(), R.layout.schedules_list_item, mSchedules);
         listview.setAdapter(adapter);
-        CalendulaApp.eventBus().register(this);
-
-        setupFabMenu(rootView);
-
         return rootView;
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && fabMenu != null) {
-            fabMenu.collapse();
-        }
-    }
-
-    // Method called from the event bus
-    @SuppressWarnings("unused")
-    public void onEvent(PharmaModeChangeEvent event) {
-
-        if (actionD != null && event.enabled) {
-            actionD.setVisibility(View.VISIBLE);
-        } else if (actionD != null) {
-            actionD.setVisibility(View.GONE);
-        }
-
-    }
-
-    private void setupFabMenu(View rootView) {
-        fabMenu = (FloatingActionsMenu) rootView.findViewById(R.id.fab_menu);
-
-        final FloatingActionButton actionA =
-                (FloatingActionButton) rootView.findViewById(R.id.action_a);
-        final FloatingActionButton actionB =
-                (FloatingActionButton) rootView.findViewById(R.id.action_b);
-        final FloatingActionButton actionC =
-                (FloatingActionButton) rootView.findViewById(R.id.action_c);
-
-        actionD = (FloatingActionButton) rootView.findViewById(R.id.action_d);
-
-        if(! CalendulaApp.isPharmaModeEnabled(getActivity())) {
-            actionD.setVisibility(View.GONE);
-        }
-
-        View.OnClickListener onClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int scheduleType = -1;
-                Log.d(TAG, "Click " + v.getId());
-                switch (v.getId()) {
-                    case R.id.action_a:
-                        scheduleType = ScheduleTypeFragment.TYPE_ROUTINES;
-                        break;
-                    case R.id.action_b:
-                        scheduleType = ScheduleTypeFragment.TYPE_HOURLY;
-                        break;
-                    case R.id.action_c:
-                        scheduleType = ScheduleTypeFragment.TYPE_PERIOD;
-                        break;
-                    case R.id.action_d:
-                        Intent i = new Intent(getActivity(), ScanActivity.class);
-                        launchActivity(i);
-                        fabMenu.collapse();
-                        return;
-                }
-
-                Intent i = new Intent(getActivity(), ScheduleCreationActivity.class);
-                i.putExtra("scheduleType", scheduleType);
-                launchActivity(i);
-                fabMenu.collapse();
-
-            }
-        };
-
-        actionA.setOnClickListener(onClickListener);
-        actionB.setOnClickListener(onClickListener);
-        actionC.setOnClickListener(onClickListener);
-        actionD.setOnClickListener(onClickListener);
-    }
-
-    private void launchActivity(Intent i) {
-        startActivity(i);
-        getActivity().overridePendingTransition(0, 0);
     }
 
     public void notifyDataChange() {
@@ -148,6 +69,7 @@ public class ScheduleListFragment extends Fragment {
 
         View item = inflater.inflate(R.layout.schedules_list_item, null);
         ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
+        ImageView icon2 = (ImageView) item.findViewById(R.id.imageView);
 
         String timeStr = "";
         List<ScheduleItem> items = schedule.items();
@@ -161,10 +83,25 @@ public class ScheduleListFragment extends Fragment {
         Log.d(TAG, "Schedule " + schedule.medicine().name() + " is scanned: " + schedule.scanned());
         String auto = schedule.scanned() ? " ↻" : "";
 
-        icon.setImageDrawable(getResources().getDrawable(schedule.medicine().presentation().getDrawable()));
-        ((TextView) item.findViewById(R.id.schedules_list_item_medname)).setText(schedule.medicine().name() + auto);
+        icon2.setImageDrawable(new IconicsDrawable(getContext())
+                .icon(schedule.medicine().presentation().icon())
+                .color(Color.WHITE)
+                .paddingDp(8)
+                .sizeDp(40));
+
+        IIcon i = schedule.repeatsHourly() ? CommunityMaterial.Icon.cmd_history : CommunityMaterial.Icon.cmd_clock;
+
+        icon.setImageDrawable(new IconicsDrawable(getContext())
+                    .icon(i)
+                    .colorRes(R.color.agenda_item_title)
+                    .paddingDp(8)
+                    .sizeDp(40));
+
+        ((TextView) item.findViewById(R.id.schedules_list_item_medname)).setText(
+                schedule.medicine().name() + auto);
         ((TextView) item.findViewById(R.id.schedules_list_item_times)).setText(timeStr);
-        ((TextView) item.findViewById(R.id.schedules_list_item_days)).setText(schedule.toReadableString(getActivity()));
+        ((TextView) item.findViewById(R.id.schedules_list_item_days)).setText(
+                schedule.toReadableString(getActivity()));
 
         View overlay = item.findViewById(R.id.schedules_list_item_container);
         overlay.setTag(schedule);
@@ -240,7 +177,7 @@ public class ScheduleListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            //mSchedules = Schedule.findAll();
+            mSchedules = DB.schedules().findAllForActivePatient(getContext());
 
             Log.d(TAG, "Schedules after reload: " + mSchedules.size());
             return null;
@@ -250,7 +187,9 @@ public class ScheduleListFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             adapter.clear();
-            adapter.addAll(Schedule.findAll());
+            for (Schedule s : mSchedules) {
+                adapter.add(s);
+            }
             adapter.notifyDataSetChanged();
         }
     }
@@ -265,6 +204,26 @@ public class ScheduleListFragment extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
             return createScheduleListItem(layoutInflater, mSchedules.get(position));
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        CalendulaApp.eventBus().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        CalendulaApp.eventBus().unregister(this);
+        super.onStop();
+    }
+
+    // Method called from the event bus
+    @SuppressWarnings("unused")
+    public void onEvent(Object evt) {
+        if(evt instanceof PersistenceEvents.ActiveUserChangeEvent){
+            notifyDataChange();
         }
     }
 }

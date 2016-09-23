@@ -42,8 +42,10 @@ public class ScheduleItemDao extends GenericDao<ScheduleItem, Long> {
         DB.transaction(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
-                DailyScheduleItem item = DailyScheduleItem.findByScheduleItem(s);
-                DB.dailyScheduleItems().remove(item);
+                List<DailyScheduleItem> items = DB.dailyScheduleItems().findAllByScheduleItem(s);
+                for(DailyScheduleItem item : items) {
+                    DB.dailyScheduleItems().remove(item);
+                }
                 DB.scheduleItems().remove(s);
                 return null;
             }

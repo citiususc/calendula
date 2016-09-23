@@ -1,0 +1,83 @@
+package es.usc.citius.servando.calendula.util;
+
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v7.graphics.Palette;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import es.usc.citius.servando.calendula.R;
+
+/**
+ * Created by joseangel.pineiro on 10/26/15.
+ */
+public class AvatarMgr {
+
+    public static final String DEFAULT_AVATAR = "avatar_default";
+    public static final String AVATAR_1 = "avatar_1";
+    public static final String AVATAR_2 = "avatar_2";
+    public static final String AVATAR_3 = "avatar_3";
+    public static final String AVATAR_4 = "avatar_4";
+    public static final String AVATAR_5 = "avatar_5";
+    public static final String AVATAR_6 = "avatar_6";
+    public static final String AVATAR_7 = "avatar_7";
+    public static final String AVATAR_8 = "avatar_8";
+    public static final String AVATAR_9 = "avatar_9";
+    public static final String AVATAR_10 = "avatar_10";
+    public static final String AVATAR_11 = "avatar_11";
+    public static final String AVATAR_12 = "avatar_12";
+
+    public static final Map<String, Integer> avatars;
+
+    static {
+        Map<String, Integer> map = new HashMap<>();
+        map.put(AVATAR_1, R.drawable.avatar1);
+        map.put(AVATAR_2, R.drawable.avatar2);
+        map.put(AVATAR_3, R.drawable.avatar3);
+        map.put(AVATAR_4, R.drawable.avatar4);
+        map.put(AVATAR_5, R.drawable.avatar5);
+        map.put(AVATAR_6, R.drawable.avatar6);
+        map.put(AVATAR_7, R.drawable.avatar7);
+        map.put(AVATAR_8, R.drawable.avatar8);
+        map.put(AVATAR_9, R.drawable.avatar9);
+        map.put(AVATAR_10, R.drawable.avatar10);
+        map.put(AVATAR_11, R.drawable.avatar11);
+        map.put(AVATAR_12, R.drawable.avatar12);
+        map.put(DEFAULT_AVATAR, R.drawable.avatar_default);
+
+        avatars = Collections.unmodifiableMap(map);
+    }
+
+    private static HashMap<String, int[]> cache = new HashMap<>();
+
+    public static int[] colorsFor(Resources res, String avatar){
+
+        int[] colors = new int[]{
+                R.color.android_blue,
+                R.color.android_blue_light};
+
+        if(!cache.containsKey(avatar) && avatars.containsKey(avatar)) {
+            Bitmap bm = BitmapFactory.decodeResource(res, avatars.get(avatar));
+            if(bm != null) {
+                Palette p = Palette.generate(bm);
+                colors = new int[]{
+                        p.getVibrantColor(R.color.android_blue),
+                        p.getLightVibrantColor(R.color.android_blue_light)
+                };
+            }
+            cache.put(avatar, colors);
+        }
+        return cache.get(avatar);
+    }
+
+    public static int res(String avatar){
+        if(avatars.containsKey(avatar)){
+            return avatars.get(avatar);
+        }
+        return avatars.get(DEFAULT_AVATAR);
+    }
+
+}

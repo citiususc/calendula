@@ -13,80 +13,89 @@
             android:layout_width="fill_parent"
             android:layout_height="1px"
 
-            android:layout_alignParentBottom="false"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="72dp"
             android:background="#efefef"
-            android:layout_below="@+id/schedules_list_item_times"/>
+            />
 
         <ImageButton
             android:id="@+id/imageButton"
-            android:layout_width="30dp"
-            android:layout_height="70dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="false"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="26dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
             android:background="@null"
             android:scaleType="fitStart"
             android:src="@drawable/ic_presentation_2" />
 
-        <TextView
-            android:id="@+id/schedules_list_item_medname"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/imageButton"
-            android:layout_marginLeft="26dp"
-            android:layout_toEndOf="@+id/imageButton"
+            android:orientation="vertical"
             android:layout_toRightOf="@+id/imageButton"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center_vertical"
-            android:text="Atrovent"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#222"
-            android:textSize="20sp" />
+            android:layout_margin="16dp">
 
-        <TextView
-            android:id="@+id/schedules_list_item_times"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_alignLeft="@+id/schedules_list_item_days"
-            android:layout_alignStart="@+id/schedules_list_item_days"
-            android:layout_below="@+id/schedules_list_item_days"
-            android:layout_marginTop="3dp"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="top"
-            android:text="Three times a day"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/android_blue" />
+            <TextView
+                android:id="@+id/schedules_list_item_medname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/imageButton"
+                android:layout_marginLeft="26dp"
+                android:layout_toEndOf="@+id/imageButton"
+                android:layout_toRightOf="@+id/imageButton"
+                android:gravity="center_vertical"
+                android:text="Atrovent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#222"
+                android:textSize="18sp"
+                android:layout_margin="0dp"/>
 
-        <TextView
-            android:id="@+id/schedules_list_item_days"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/schedules_list_item_medname"
-            android:layout_below="@+id/schedules_list_item_medname"
-            android:layout_marginTop="0dp"
-            android:fontFamily="sans-serif-light"
-            android:text="Every day"
-            android:textColor="#3a3a3a"
-            android:textSize="14dp" />
+            <TextView
+                android:id="@+id/schedules_list_item_times"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/schedules_list_item_days"
+                android:layout_alignStart="@+id/schedules_list_item_days"
+                android:layout_below="@+id/schedules_list_item_days"
+                android:gravity="top"
+                android:text="Three times a day"
+                android:textColor="#222"
+                android:layout_margin="0dp"
+                android:paddingTop="2dp"
+                android:textSize="15dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/schedules_list_item_days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/schedules_list_item_medname"
+                android:layout_below="@+id/schedules_list_item_medname"
+                android:layout_marginTop="0dp"
+                android:text="Every day"
+                android:textColor="@color/agenda_item_title"
+                android:textSize="15dp"
+                android:layout_margin="0dp"
+                android:paddingTop="2dp"/>
+
+        </LinearLayout>
+
+
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="30dp"
-            android:layout_height="80dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="23dp"
-            android:alpha="0.9"
-            android:src="@drawable/ic_edit_black_48dp" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:visibility="visible"
+            android:background="@drawable/circle_white"
+            />
 
     </RelativeLayout>
 

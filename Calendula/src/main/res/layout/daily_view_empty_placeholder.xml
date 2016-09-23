@@ -1,91 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="fill_parent"
-    android:background="#000"
-    android:orientation="vertical">
-    <!--android:background="@color/android_blue_dark"-->
-
-    <RelativeLayout
-        android:id="@+id/top"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#fff"
-        android:orientation="vertical"
-        android:visibility="visible">
-
-        <RelativeLayout
-            android:id="@+id/hide_if_empty"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:background="#fff">
-
-            <Button
-                android:id="@+id/count_container"
+<RelativeLayout android:id="@+id/top"
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:background="@null"
-                android:visibility="gone" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
 
-        </RelativeLayout>
+    <ImageView
+        android:id="@+id/imageView_ok"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/alldone"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"/>
 
-        <ImageView
-            android:id="@+id/imageView_ok"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/textView3"
-            android:layout_centerHorizontal="true"
-            android:alpha="0.3"
-            android:paddingLeft="80dp"
-            android:paddingRight="60dp"
-            android:src="@drawable/alldone" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentStart="false"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:background="#aaececec"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center"
-            android:paddingBottom="15dp"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
-            android:paddingTop="15dp"
-            android:text="@string/home_no_pending_meds_message"
-            android:textAllCaps="false"
-            android:textColor="#222"
-            android:textSize="18sp"
-            android:visibility="visible" />
-
-        <ImageView
-            android:id="@+id/tabs_shadow"
-            android:layout_width="fill_parent"
-            android:layout_height="5dp"
-            android:layout_below="@+id/textView3"
-            android:alpha="0.7"
-            android:scaleType="fitXY"
-            android:src="@drawable/daily_view_list_item_tab_shadow_top" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/bottom"
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:visibility="gone">
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center"
+        android:paddingBottom="15dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingTop="15dp"
+        android:text="@string/home_no_pending_meds_message"
+        android:textAllCaps="false"
+        android:textColor="@color/agenda_item_title"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        android:layout_below="@+id/imageView_ok"
+        android:layout_marginTop="10dp"/>
 
+</RelativeLayout>
 
-    </RelativeLayout>
-
-
-</LinearLayout>

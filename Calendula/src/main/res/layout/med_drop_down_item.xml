@@ -16,7 +16,6 @@
             android:id="@+id/text1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
             android:ellipsize="marquee"
             android:fontFamily="sans-serif"
             android:gravity="center_vertical"
@@ -26,7 +25,8 @@
             android:singleLine="true"
             android:text="Medicine name"
             android:textColor="@color/android_blue_darker"
-            android:textSize="22dp" />
+            android:textSize="20dp"
+            android:layout_marginTop="5dp"/>
 
         <TextView
             android:id="@+id/text2"
@@ -37,7 +37,7 @@
             android:fontFamily="sans-serif"
             android:gravity="center_vertical"
             android:paddingBottom="2dp"
-            android:paddingTop="2dp"
+            android:paddingTop="0dp"
             android:singleLine="true"
             android:text="100 microgramos"
             android:textColor="#000"
@@ -80,9 +80,10 @@
     <ImageView
         android:id="@+id/presentation_image"
         android:layout_width="72dp"
-        android:layout_height="55dp"
+        android:layout_height="72dp"
         android:padding="10dp"
-        android:scaleType="fitCenter" />
+        android:scaleType="fitCenter"
+        android:layout_marginTop="5dp"/>
 
 
 </RelativeLayout>

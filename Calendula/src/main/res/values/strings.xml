@@ -393,6 +393,32 @@
 
     <string name="create_schedule_select_med_before_dose">Please, select a med first</string>
     <string name="updating_prescriptions_db_msg">The medicines database is being updated. It will take only a few seconds</string>
+    <string name="title_activity_patients">PatientsActivity</string>
+    <string name="title_activity_patient_detail">PatientDetailActivity</string>
+    <string name="title_activity_about">AboutActivity</string>
+
+
+    <string name="schedule_type_help_title">
+        You are about to create a schedule, choose the one that best suits your needs!
+    </string>
+
+    <string name="schedule_type_routines_help">
+        This kind of schedule lets you bind intakes to your routines, such as: \"Every day at breakfast and dinner, excluding sundays\", or \"Every 3 days, with lunch.\"
+    </string>
+
+    <string name="schedule_type_hourly_help">
+        Hourly schedules are intended to those intakes that repeat by a certain period, such as: \"Every 8 hours\".\n\nSet the time of the first intake and go on.
+    </string>
+
+    <string name="schedule_type_intervalrest_help">
+        Birth control pills and other meds are taken for a while, and then there\'s a rest. This kind of schedule allows you to specify both periods and simplify those intakes.
+    </string>
+
+    <string name="routines_list_empty_text">There are no routines yet.\n\nRoutines are times when you need to take meds, like breakfast or dinner. You can reuse it for creating schedules faster.</string>
+    <string name="medicines_list_empty_text">There are no meds yet.\n\nAdd your meds to the kit, and you will have easy access to leaflets and warnings.</string>
+    <string name="schedules_list_empty_text">There are no schedules yet.\n\nAdd your schedules here and let we just notify you! </string>
+
+
 
 
 </resources>

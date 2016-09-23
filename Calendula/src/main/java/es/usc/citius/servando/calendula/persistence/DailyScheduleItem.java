@@ -3,11 +3,13 @@ package es.usc.citius.servando.calendula.persistence;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.util.List;
 
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalDatePersister;
 import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimePersister;
 
 /**
@@ -22,6 +24,8 @@ public class DailyScheduleItem {
     public static final String COLUMN_TAKEN_TODAY = "TakenToday";
     public static final String COLUMN_TIME_TAKEN = "TimeTaken";
     public static final String COLUMN_TIME = "Time";
+    public static final String COLUMN_DATE = "Date";
+    public static final String COLUMN_PATIENT = "Patient";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
@@ -41,16 +45,24 @@ public class DailyScheduleItem {
     @DatabaseField(columnName = COLUMN_TIME, persisterClass = LocalTimePersister.class)
     private LocalTime time;
 
+    @DatabaseField(columnName = COLUMN_DATE, persisterClass = LocalDatePersister.class)
+    private LocalDate date;
+
+    @DatabaseField(columnName = COLUMN_PATIENT, foreign = true, foreignAutoRefresh = true)
+    private Patient patient;
+
     public DailyScheduleItem() {
     }
 
     public DailyScheduleItem(ScheduleItem scheduleItem) {
         this.scheduleItem = scheduleItem;
+        this.date = LocalDate.now();
     }
 
     public DailyScheduleItem(Schedule schedule, LocalTime time) {
         this.schedule = schedule;
         this.time = time;
+        this.date = LocalDate.now();
     }
 
     public Long getId() {
@@ -109,13 +121,24 @@ public class DailyScheduleItem {
         }
     }
 
+    public LocalDate date() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
     @Override
     public String toString() {
         return "DailyScheduleItem{" +
-                " med=" + scheduleItem.schedule().medicine().name() +
-                " dose=" + scheduleItem.dose() +
+                "id=" + id +
+                ", scheduleItem=" + (scheduleItem != null ? scheduleItem.getId() : "null") +
+                ", schedule=" + (schedule != null ? schedule.getId() : "null") +
                 ", takenToday=" + takenToday +
                 ", timeTaken=" + timeTaken +
+                ", time=" + time +
+                ", date=" + date +
                 '}';
     }
 
@@ -136,6 +159,12 @@ public class DailyScheduleItem {
         DB.dailyScheduleItems().save(this);
     }
 
+    public Patient patient() {
+        return patient;
+    }
 
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
 }
 

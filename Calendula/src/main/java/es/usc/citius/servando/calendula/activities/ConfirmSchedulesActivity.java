@@ -1,26 +1,24 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.app.ProgressDialog;
-import android.graphics.drawable.InsetDrawable;
+import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.j256.ormlite.misc.TransactionManager;
-import com.melnykov.fab.FloatingActionButton;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -33,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.qrWrappers.PickupWrapper;
@@ -46,20 +45,22 @@ import es.usc.citius.servando.calendula.fragments.ScheduleImportFragment;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
+import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
+import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
 
-public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewPager.OnPageChangeListener {
+public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewPager.OnPageChangeListener {
 
     private static final String TAG = "ConfirmSchedules.class";
-    Toolbar toolbar;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -92,24 +93,29 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
 
     DateTimeFormatter df = DateTimeFormat.forPattern("yyMMdd");
     private String qrData;
+    private Patient patient;
+    int color;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*if (Build.VERSION.SDK_INT < 16) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        } else {
-            View decorView = getWindow().getDecorView();
-            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-            decorView.setSystemUiVisibility(uiOptions);
-        }*/
         setContentView(R.layout.activity_confirm_schedules);
+        patient = DB.patients().getActive(this);
+        color = patient.color();
+        int dark = ScreenUtils.equivalentNoAlpha(color, Color.BLACK, 0.85f);
+
+        findViewById(R.id.activity_layout).setBackgroundColor(dark);
+        setupToolbar(null, color);
+        setupStatusBar(color);
 
         title = (TextView) findViewById(R.id.textView);
         medName = (TextView) findViewById(R.id.textView2);
         fab = (FloatingActionButton) findViewById(R.id.add_button);
         scheduleTypeSelector = findViewById(R.id.schedule_type_selector);
         readingQrBox = findViewById(R.id.reading_qr_box);
+
+        medName.setBackgroundColor(color);
+        scheduleTypeSelector.setBackgroundColor(dark);
 
         routinesItem = (ImageButton) findViewById(R.id.schedule_type_routines);
         hourlyItem = (ImageButton) findViewById(R.id.schedule_type_hourly);
@@ -126,15 +132,6 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
         hourlyItem.setOnClickListener(l);
         cycleItem.setOnClickListener(l);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 15, 15, 15, 15));
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_dark));
-        }
-        toolbar.setTitle("");
         qrData = getIntent().getStringExtra("qr_data");
         try {
             new ProcessQRTask().execute(qrData);
@@ -143,7 +140,6 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
             Toast.makeText(this,"Error inesperado actualizando!", Toast.LENGTH_LONG).show();
             finish();
         }
-
     }
 
     private List<PrescriptionWrapper> filterValidPrescriptions(PrescriptionListWrapper prescriptionListWrapper) {
@@ -202,6 +198,15 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
     private void showScheduleTypeSelector() {
         if (scheduleTypeSelector.getVisibility() != View.VISIBLE) {
             scheduleTypeSelector.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            default:
+                finish();
+                return true;
         }
     }
 
@@ -281,19 +286,21 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                                         String cn = w.cn;
                                         Medicine m = null;
                                         if (cn != null) {
-                                            m = DB.medicines().findOneBy(Medicine.COLUMN_CN, cn);
+                                            m = DB.medicines().findByCnAndPatient(cn,patient);
                                             if (m == null) {
                                                 Log.d("PRESCRIPTION", "Saving medicine!");
                                                 m = Medicine.fromPrescription(Prescription.findByCn(cn));
+                                                m.setPatient(patient);
                                                 m.save();
                                             }
                                         } else if (w.isGroup) {
-                                            m = DB.medicines().findOneBy(Medicine.COLUMN_HG, w.group.getId());
+                                            m = DB.medicines().findByGroupAndPatient(w.group.getId(),patient);
                                             if (m == null) {
                                                 m = new Medicine(Strings.firstPart(w.group.name));
                                                 m.setHomogeneousGroup(w.group.getId());
                                                 Presentation pres = Presentation.expected(w.group.name, w.group.name);
                                                 m.setPresentation(pres != null ? pres : Presentation.PILLS);
+                                                m.setPatient(patient);
                                                 m.save();
                                             }
                                         } else {
@@ -301,7 +308,8 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                                         }
 
                                         Schedule s = c.getSchedule();
-                                        Schedule prev = DB.schedules().findScannedByMedicine(m);
+                                        Schedule prev = DB.schedules().findByMedicineAndPatient(m, patient);
+                                        // TODO: find by med and patient
                                         if (prev != null) {
                                             Log.d("PRESCRIPTION", "Found previous schedule for med " + m.getId());
                                             updateSchedule(prev, s, c.getScheduleItems());
@@ -320,8 +328,8 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
 
                                             for (PickupWrapper pkw : w.pk) {
                                                 PickupInfo pickupInfo = new PickupInfo();
-                                                pickupInfo.setTo(df.parseLocalDate(pkw.t));
-                                                pickupInfo.setFrom(df.parseLocalDate(pkw.f));
+                                                pickupInfo.setTo(df.parseLocalDate(pkw.t).plusMonths(19));
+                                                pickupInfo.setFrom(df.parseLocalDate(pkw.f).plusMonths(19));
                                                 pickupInfo.taken(pkw.tk == 1 ? true : false);
                                                 pickupInfo.setMedicine(m);
                                                 DB.pickups().save(pickupInfo);
@@ -365,6 +373,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
 
         // save schedule
         s.setMedicine(m);
+        s.setPatient(patient);
         s.setScanned(true);
         s.save();
         Log.d(TAG, "Saving schedule..." + s.toString());
@@ -375,19 +384,12 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                 item.save();
                 Log.d(TAG, "Saving item..." + item.getId());
                 // add to daily schedule
-                DailyScheduleItem dsi = new DailyScheduleItem(item);
-                dsi.save();
-                Log.d(TAG, "Saving daily schedule item..." + dsi.getId() + ", " + dsi.scheduleItem().getId());
+                DailyAgenda.instance().addItem(patient, item, false);
             }
         } else {
             for (DateTime time : s.hourlyItemsToday()) {
                 LocalTime timeToday = time.toLocalTime();
-                DailyScheduleItem dsi = new DailyScheduleItem(s, timeToday);
-                dsi.save();
-                Log.d(TAG, "Saving daily schedule item..."
-                        + dsi.getId()
-                        + " timeToday: "
-                        + timeToday.toString("kk:mm"));
+                DailyAgenda.instance().addItem(patient, s, timeToday);
             }
         }
         // save and fire event
@@ -397,7 +399,6 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
 
     public void updateSchedule(final Schedule s, final Schedule current, List<ScheduleItem> items) {
 
-        s.setScanned(true);
         s.setType(current.type());
         s.setDays(current.days());
         s.setDose(current.dose());
@@ -412,7 +413,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
             for (ScheduleItem item : s.items()) {
                 DailyScheduleItem d = DailyScheduleItem.findByScheduleItem(item);
                 // if taken today, add to the list
-                if (d.takenToday()) {
+                if (d!=null && d.takenToday()) {
                     routinesTaken.add(item.routine().getId());
                 }
                 item.deleteCascade();
@@ -427,6 +428,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
                 item.save();
                 // add to daily schedule
                 DailyScheduleItem dsi = new DailyScheduleItem(item);
+                dsi.setPatient(patient);
                 if (routinesTaken.contains(item.routine().getId())) {
                     dsi.setTakenToday(true);
                 }
@@ -437,6 +439,7 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
             for (DateTime time : s.hourlyItemsToday()) {
                 LocalTime timeToday = time.toLocalTime();
                 DailyScheduleItem dsi = new DailyScheduleItem(s, timeToday);
+                dsi.setPatient(patient);
                 dsi.save();
                 Log.d(TAG, "Saving daily schedule item..."
                         + dsi.getId()
@@ -542,6 +545,8 @@ public class ConfirmSchedulesActivity extends ActionBarActivity implements ViewP
 
         @Override
         public Fragment getItem(int position) {
+
+            Log.d("ScanQR", "Position: " + position);
 
             if (position == 0) {
                 return ScheduleConfirmationStartFragment.newInstance();

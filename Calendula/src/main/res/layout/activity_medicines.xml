@@ -2,7 +2,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+                android:paddingTop="@dimen/status_bar_height">
 
     <es.usc.citius.servando.calendula.util.view.NonSwipeableViewPager xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/pager"
@@ -16,7 +17,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@color/android_blue_darker"
+        android:background="@color/dark_grey_home"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
@@ -36,7 +37,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/toolbar"
-        android:background="@color/android_blue_darker"
+        android:background="@color/dark_grey_home"
         android:gravity="top"
         android:paddingLeft="72dp"
         android:paddingTop="10dp"
@@ -44,7 +45,22 @@
         android:textColor="#fff"
         android:textSize="24sp" />
 
-    <com.melnykov.fab.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
+    <!--<com.melnykov.fab.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/add_button"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_gravity="bottom|right"-->
+        <!--android:layout_marginRight="38dp"-->
+        <!--android:layout_marginTop="83dp"-->
+        <!--android:src="@drawable/ic_done_white_36dp"-->
+       <!--fab:fab_colorNormal="#efefef"-->
+       <!--fab:fab_colorPressed="#b7b7b7"-->
+       <!--fab:fab_colorRipple="#b1b1b1" />-->
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -52,11 +68,11 @@
         android:layout_alignParentRight="true"
         android:layout_gravity="bottom|right"
         android:layout_marginRight="38dp"
-        android:layout_marginTop="83dp"
-        android:src="@drawable/ic_done_white_36dp"
-        fab:fab_colorNormal="@color/android_pink_dark"
-        fab:fab_colorPressed="@color/android_pink"
-        fab:fab_colorRipple="@color/android_pink_light" />
+        android:layout_marginTop="78dp"
+        fab:fab_icon="@drawable/ic_done_black_48dp"
+        fab:fab_colorNormal="#efefef"
+        fab:fab_colorPressed="#b7b7b7"
+        />
 
     <TextView
         android:id="@+id/textView"
@@ -113,7 +129,7 @@
             android:id="@+id/imageView"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:padding="10dp"
+            android:padding="15dp"
             android:src="@drawable/ic_search_white_48dp" />
 
         <ImageView

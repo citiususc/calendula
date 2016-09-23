@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/color_layer">
+        <color android:color="@color/android_orange_lighter"/>
+    </item>
+    <item>
+        <bitmap android:src="@drawable/drawertopbg" android:alpha="0.1"/>
+    </item>
+</layer-list>

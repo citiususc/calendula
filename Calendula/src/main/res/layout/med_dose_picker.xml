@@ -66,9 +66,8 @@
             android:layout_height="70dp"
             android:layout_gravity="center"
             android:layout_margin="5dp"
-            android:textColor="@color/android_blue_darker"
+            android:textColor="#222"
             android:textSize="20sp"
-            ppv:ppvStrokeColor="@color/android_blue"
             ppv:ppvStrokeWidth="1dp" />
 
         <TextView
@@ -87,9 +86,8 @@
             android:layout_height="70dp"
             android:layout_gravity="center"
             android:layout_margin="5dp"
-            android:textColor="@color/android_blue_darker"
+            android:textColor="#222"
             android:textSize="20sp"
-            ppv:ppvStrokeColor="@color/android_blue"
             ppv:ppvStrokeWidth="1dp" />
 
     </LinearLayout>

@@ -5,9 +5,17 @@
     <!--android:title="@string/action_settings"-->
     <!--android:orderInCategory="100"-->
     <!--app:showAsAction="never" />-->
+
+    <!--<item-->
+        <!--android:id="@+id/action_empty"-->
+        <!--android:icon="@drawable/abc_ic_clear_mtrl_alpha"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:title="Show empty"-->
+        <!--app:showAsAction="always" />-->
+
     <item
         android:id="@+id/action_expand"
-        android:icon="@drawable/ic_list"
+        android:icon="@drawable/ic_unfold_less_white_48dp"
         android:orderInCategory="100"
         android:title="Expand"
         app:showAsAction="always" />
@@ -17,6 +25,13 @@
         android:title="Show pickups"
         android:icon="@drawable/ic_event_white_48dp"
         android:orderInCategory="100"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_schedules_help"
+        android:icon="@drawable/ic_help_white_48dp"
+        android:orderInCategory="100"
+        android:title="Help"
         app:showAsAction="always" />
 
     <!--<item-->

@@ -13,6 +13,7 @@
         android:layout_marginTop="20dp"
         android:textSize="20dp"
         android:textColor="@color/android_blue"
+        android:visibility="invisible"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:gravity="center" />
@@ -28,6 +29,7 @@
         android:gravity="center"
         android:text="@string/medicine_unselected"
         android:textColor="@color/android_blue_dark"
+        android:visibility="invisible"
         android:textSize="18dp" />
 
     <ImageView
@@ -37,6 +39,7 @@
         android:layout_below="@id/summaryTitle"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
+        android:visibility="invisible"
         android:src="@drawable/ic_presentation_2" />
 
     <TextView
@@ -60,6 +63,7 @@
         android:text="Three times a day"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/android_blue"
+        android:visibility="invisible"
         android:textSize="18dp" />
 
     <Button

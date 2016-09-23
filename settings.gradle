@@ -1,1 +1,3 @@
-include ':Calendula', ':libraries:ExpandableListview', ':libraries:BetterPickersLib'
+include ':Calendula'
+//':libraries:BetterPickersLib'
+// ':libraries:ExpandableListview',

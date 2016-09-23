@@ -21,7 +21,6 @@ public class ScheduleConfirmationStartFragment extends Fragment {
     public static ScheduleConfirmationStartFragment newInstance() {
         ScheduleConfirmationStartFragment fragment = new ScheduleConfirmationStartFragment();
         Bundle args = new Bundle();
-        //args.putSerializable(ARG_PRESCRIPTION, pw);
         fragment.setArguments(args);
         return fragment;
     }

@@ -1,24 +1,18 @@
 package es.usc.citius.servando.calendula.persistence;
 
-import android.util.Log;
 
 import com.google.ical.compat.jodatime.DateTimeIterator;
 import com.google.ical.compat.jodatime.DateTimeIteratorFactory;
-import com.google.ical.compat.jodatime.LocalDateIterator;
 import com.google.ical.values.Frequency;
 import com.google.ical.values.RRule;
 import com.google.ical.values.Weekday;
 import com.google.ical.values.WeekdayNum;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.google.ical.compat.jodatime.LocalDateIteratorFactory.createLocalDateIterator;
 
 /**
  * Created by joseangel.pineiro on 4/16/15.
@@ -53,7 +47,7 @@ public class RepetitionRule {
                 DateValue v = new DateTimeValueImpl(1,0,0,0,0,0);
                 rrule.setUntil(v);
             }*/
-            Log.d("RRule", "Creating repetition rule: " + rrule.toIcal());
+            //Log.d("RRule", "Creating repetition rule: " + rrule.toIcal());
         } catch (ParseException p) {
             throw new RuntimeException("Error parsing RRule", p);
         }
@@ -107,78 +101,14 @@ public class RepetitionRule {
         return this.days;
     }
 
-//    public boolean hasOccurrencesAt(LocalDate date, LocalDate scheduleStart) {
-//        try {
-//
-//            LocalDate start = date.minusDays(1);
-//            LocalDate end = date.plusDays(1);
-//
-//            LocalDate iterateFrom = scheduleStart;
-//            // to allow first occurrence at current hour, advance to the hour before it
-//            LocalDate firstOccurrence = (start.isAfter(scheduleStart) ? start : scheduleStart).minusDays(1);
-//
-//            LocalDateIterator it = createLocalDateIterator(rrule.toIcal(), iterateFrom, true);
-//            it.advanceTo(firstOccurrence);
-//            while (it.hasNext()) {
-//                if (it.next().isBefore(end)) {
-//                    Log.d("Schedule", "------  There are ocurrences in range");
-//                    return true;
-//                } else {
-//                    break;
-//                }
-//            }
-//            Log.d("Schedule", "------  No dates in range");
-//            return false;
-//        } catch (ParseException e) {
-//            throw new RuntimeException("Error parsing ical", e);
-//        }
-//    }
-
-    public List<LocalDate> occurrencesBetween(LocalDate start, LocalDate to, LocalDate scheduleStart) {
-        try {
-            LocalDate iterateFrom = scheduleStart;
-            // to allow first occurrence at current hour, advance to the hour before it
-            LocalDate firstOccurrence = (start.isAfter(scheduleStart) ? start : scheduleStart).minusDays(1);
-
-            Log.d("Schedule", "------  Start: " + firstOccurrence.toString("dd/MM/YY - kk:mm"));
-            Log.d("Schedule", "------  End: " + to.toString("dd/MM/YY - kk:mm"));
-
-            List<LocalDate> occurrences = new ArrayList<>();
-            LocalDateIterator it = createLocalDateIterator(rrule.toIcal(), iterateFrom, DateTimeZone.UTC, true);
-            it.advanceTo(firstOccurrence);
-            while (it.hasNext()) {
-                LocalDate n = it.next();
-                if (n.isBefore(to)) {
-                    occurrences.add(n);
-                    Log.d("Schedule", "          New occurrence: " + n.toString("dd/MM/YY"));
-                } else {
-                    break;
-                }
-            }
-            Log.d("Schedule", "------  No dates in range");
-            return occurrences;
-        } catch (ParseException e) {
-            throw new RuntimeException("Error parsing ical", e);
-        }
-    }
 
     public List<DateTime> occurrencesBetween(DateTime start, DateTime to, DateTime scheduleStart) {
         try {
-
             // start iterating from a date before today, to avoid having the passed time
             // as the first occurrence
             DateTime iterateFrom = scheduleStart;//(start.isAfter(s.startDateTime()) ? start : s.startDateTime()).minusHours(s.rule().interval());
             // to allow first occurrence at current hour, advance to the hour before it
             DateTime firstOccurrence = (start.isAfter(scheduleStart) ? start : scheduleStart).minusMinutes(1);
-            // start at previous day and then advance
-            // to prevent start date be returned on the recurrences list
-            //DateTime from = start.minusDays(1);
-//            Log.d("Schedule", "-------------------------------------------------------------------");
-//            Log.d("Schedule", " Start: " + start.toString("dd/MM/YY - kk:mm ZZZ"));
-//            Log.d("Schedule", " ScheduleStart: " + scheduleStart.toString("dd/MM/YY - kk:mm ZZZ"));
-//            Log.d("Schedule", " IterateFrom: " + iterateFrom.toString("dd/MM/YY - kk:mm ZZZ"));
-//            Log.d("Schedule", " FirstOccurrence: " + firstOccurrence.toString("dd/MM/YY - kk:mm ZZZ"));
-//            Log.d("Schedule", "-------------------------------------------------------------------");
 
             List<DateTime> occurrences = new ArrayList<>();
             DateTimeIterator it = DateTimeIteratorFactory.createDateTimeIterator(rrule.toIcal(), iterateFrom, iterateFrom.getZone(), true);
@@ -189,7 +119,6 @@ public class RepetitionRule {
                 DateTime n = it.next().withZone(iterateFrom.getZone());
                 if (n.isBefore(to)) {
                     occurrences.add(n);
-//                    Log.d("Schedule", "New occurrence: " + n.toString("dd/MM/YY - kk:mm ZZZ"));
                 } else {
                     break;
                 }

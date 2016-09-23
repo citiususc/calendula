@@ -26,6 +26,7 @@ public class Medicine implements Comparable<Medicine> {
     public static final String COLUMN_PRESENTATION = "Presentation";
     public static final String COLUMN_CN = "cn";
     public static final String COLUMN_HG = "hg";
+    public static final String COLUMN_PATIENT = "Patient";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
@@ -41,6 +42,9 @@ public class Medicine implements Comparable<Medicine> {
 
     @DatabaseField(columnName = COLUMN_HG)
     private Long homogeneousGroup;
+
+    @DatabaseField(columnName = COLUMN_PATIENT, foreign = true, foreignAutoRefresh = true)
+    private Patient patient;
 
     public Medicine() {
     }
@@ -96,6 +100,14 @@ public class Medicine implements Comparable<Medicine> {
 
     public Collection<PickupInfo> pickups() {
         return DB.pickups().findByMedicine(this);
+    }
+
+    public Patient patient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     @Override

@@ -27,6 +27,8 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mikepenz.iconics.IconicsDrawable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,7 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
@@ -54,14 +57,13 @@ public class MedicineCreateOrEditFragment extends Fragment {
     TextView mPresentationTv;
     TextView mDescriptionTv;
     ImageView searchButton;
-    //    Button mConfirmButton;
     Presentation selectedPresentation;
     HorizontalScrollView presentationScroll;
 
-    boolean showcaseShown = false;
     boolean enableSearch = false;
     long mMedicineId;
     String cn;
+    int pColor;
 
     private static ArrayList<View> getViewsByTag(ViewGroup root, String tag) {
         ArrayList<View> views = new ArrayList<View>();
@@ -84,8 +86,6 @@ public class MedicineCreateOrEditFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_or_edit_medicine, container, false);
-        //final String[] names = Medicine.findAllMedicineNames();
-        //ArrayAdapter<Prescription> adapter = new AutoCompleteAdapter(getActivity(), R.layout.med_drop_down_item);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -93,7 +93,6 @@ public class MedicineCreateOrEditFragment extends Fragment {
         mPresentationTv = (TextView) rootView.findViewById(R.id.textView3);
         mDescriptionTv = (TextView) rootView.findViewById(R.id.medicine_edit_description);
         searchButton = (ImageView) rootView.findViewById(R.id.search_button);
-        //mNameTextView.setAdapter(adapter);
         mNameTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
@@ -105,10 +104,13 @@ public class MedicineCreateOrEditFragment extends Fragment {
 
                 // save referenced prescription to med
                 cn = p.cn;
-
-                // selectPresentation(mMedicine != null ? mMedicine.presentation() : null);
             }
         });
+
+        pColor = DB.patients().getActive(getActivity()).color();
+
+        mDescriptionTv.setTextColor(pColor);
+        mPresentationTv.setTextColor(pColor);
 
         enableSearch = prefs.getBoolean("enable_prescriptions_db", false);
 
@@ -119,18 +121,6 @@ public class MedicineCreateOrEditFragment extends Fragment {
         }
 
         presentationScroll = (HorizontalScrollView) rootView.findViewById(R.id.med_presentation_scroll);
-//        mConfirmButton = (Button) rootView.findViewById(R.id.medicine_button_ok);
-//        if (showConfirmButton) {
-//            mConfirmButton.setText(getString(mMedicine == null ? R.string.create_medicine_button_text : R.string.edit_medicine_button_text));
-//            mConfirmButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    onEdit();
-//                }
-//            });
-//        } else {
-//            mConfirmButton.setVisibility(View.GONE);
-//        }
 
         Log.d(getTag(), "Arguments:  " + (getArguments() != null) + ", savedState: " + (savedInstanceState != null));
         if (getArguments() != null) {
@@ -144,7 +134,6 @@ public class MedicineCreateOrEditFragment extends Fragment {
 
         if (mMedicineId != -1) {
             mMedicine = Medicine.findById(mMedicineId);
-//            mConfirmButton.setText(getString(R.string.edit_routine_button_text));
         }
 
         setupMedPresentationChooser(rootView);
@@ -249,17 +238,60 @@ public class MedicineCreateOrEditFragment extends Fragment {
     }
 
     void setupMedPresentationChooser(final View rootView) {
-
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onClickMedicine(view.getId(), rootView);
             }
         };
-
         for (View v : getViewsByTag((ViewGroup) rootView, "med_type")) {
-            v.setOnClickListener(listener);
+            ImageView iv = (ImageView) v;
+            iv.setOnClickListener(listener);
+            switch (v.getId()) {
+
+                case R.id.med_presentation_2:
+                    iv.setImageDrawable(iconFor(Presentation.CAPSULES));
+                    break;
+                case R.id.med_presentation_3:
+                    iv.setImageDrawable(iconFor(Presentation.EFFERVESCENT));
+                    break;
+                case R.id.med_presentation_4:
+                    iv.setImageDrawable(iconFor(Presentation.PILLS));
+                    Log.d(getTag(), "Pill");
+                    break;
+                case R.id.med_presentation_5:
+                    iv.setImageDrawable(iconFor(Presentation.SYRUP));
+                    break;
+                case R.id.med_presentation_6:
+                    iv.setImageDrawable(iconFor(Presentation.DROPS));
+                    break;
+                case R.id.med_presentation_7:
+                    iv.setImageDrawable(iconFor(Presentation.SPRAY));
+                    break;
+                case R.id.med_presentation_8:
+                    iv.setImageDrawable(iconFor(Presentation.INHALER));
+                    break;
+                case R.id.med_presentation_9:
+                    iv.setImageDrawable(iconFor(Presentation.INJECTIONS));
+                    break;
+                case R.id.med_presentation_10:
+                    iv.setImageDrawable(iconFor(Presentation.POMADE));
+                    break;
+                case R.id.med_presentation_11:
+                    iv.setImageDrawable(iconFor(Presentation.PATCHES));
+                    break;
+            }
+
         }
+    }
+
+    IconicsDrawable iconFor(Presentation p){
+        return new IconicsDrawable(getContext())
+                .icon(Presentation.iconFor(p))
+                //.color(pColor)
+                .colorRes(R.color.agenda_item_title)
+                .paddingDp(5)
+                .sizeDp(80);
     }
 
     void onClickMedicine(int viewId, View rootView) {
@@ -422,30 +454,14 @@ public class MedicineCreateOrEditFragment extends Fragment {
                 if (mPrescription != null && mPrescription.shortName().toLowerCase().equals(m.name().toLowerCase())) {
                     m.setCn(mPrescription.cn);
                 }
-
                 m.setPresentation(selectedPresentation != null ? selectedPresentation : Presentation.UNKNOWN);
+                m.setPatient(DB.patients().getActive(getContext()));
                 if (mMedicineEditCallback != null) {
                     mMedicineEditCallback.onMedicineCreated(m);
                 }
             }
         } else {
             Snack.show(R.string.medicine_no_name_error_message, getActivity());
-//            mNameTextView.setError(getString(R.string.medicine_no_name_error_message));
-//            mNameTextView.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-//                    mNameTextView.setError(null);
-//                    mNameTextView.removeTextChangedListener(this);
-//                }
-//
-//                @Override
-//                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable editable) {
-//                }
-//            });
         }
     }
 
@@ -462,32 +478,6 @@ public class MedicineCreateOrEditFragment extends Fragment {
         if (activity instanceof ScheduleCreationActivity) {
             this.showConfirmButton = false;
         }
-    }
-
-
-    public Medicine getMedicineFromView() {
-
-        if (validate()) {
-            String name = mNameTextView.getText().toString();
-            // look for it in the med store
-            if (mMedicine == null) {
-                mMedicine = Medicine.findByName(name);
-                Log.d(getTag(), "Looking for " + name + " in med store returned " + (mMedicine == null ? "null" : "a valid med"));
-            }
-            // if it wasn't on the store, create a new med
-            if (mMedicine == null) {
-                Log.d(getTag(), " Creating medicine " + name);
-                mMedicine = new Medicine(name);
-            }
-            // in both cases, update the med presentation if any selected
-            if (selectedPresentation != null) {
-                mMedicine.setPresentation(selectedPresentation);
-            } else if (mMedicine.presentation() == null) {
-                mMedicine.setPresentation(Presentation.PILLS);// TODO change to unknown
-            }
-        }
-        // TODO: Set other properties
-        return mMedicine;
     }
 
 

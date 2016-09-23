@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.events;
 
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 
@@ -12,6 +13,7 @@ public class PersistenceEvents {
     public static ModelCreateOrUpdateEvent ROUTINE_EVENT = new ModelCreateOrUpdateEvent(Routine.class);
     public static ModelCreateOrUpdateEvent MEDICINE_EVENT = new ModelCreateOrUpdateEvent(Medicine.class);
     public static ModelCreateOrUpdateEvent SCHEDULE_EVENT = new ModelCreateOrUpdateEvent(Schedule.class);
+
 
     public static class ModelCreateOrUpdateEvent {
         public Class<?> clazz;
@@ -29,6 +31,28 @@ public class PersistenceEvents {
             this.id = id;
         }
     }
+
+    public static class UserCreateEvent {
+        public Patient patient;
+        public UserCreateEvent(Patient patient) {
+            this.patient = patient;
+        }
+    }
+
+    public static class UserUpdateEvent {
+        public Patient patient;
+        public UserUpdateEvent(Patient patient) {
+            this.patient = patient;
+        }
+    }
+
+    public static class ActiveUserChangeEvent {
+        public Patient patient;
+        public ActiveUserChangeEvent(Patient patient) {
+            this.patient = patient;
+        }
+    }
+
 
 
 }

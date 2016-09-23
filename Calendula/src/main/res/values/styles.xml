@@ -2,7 +2,7 @@
 <resources>
 
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="AppTheme" parent="MaterialDrawerTheme.Light.TranslucentStatus">
         <!-- Set AppCompat’s actionBarStyle -->
         <!--<item name="actionBarStyle">@style/MyActionBar</item>-->
         <item name="windowActionBar">false</item>
@@ -15,7 +15,7 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <!-- dialog theme stuff -->
         <item name="android:dialogTheme">@style/AppTheme.DialogTheme</item>
-
+        <item name="siv_insetForeground">#01ffffff</item>
     </style>
 
     <!-- Styles for pop-up dialogs -->
@@ -25,6 +25,24 @@
         <item name="colorPrimaryDark">@color/android_blue_dark</item>
         <item name="colorAccent">@color/android_blue_darker</item>
 
+    </style>
+
+
+    <!-- just defines top layer "Animation" -->
+    <style name="Animation" />
+
+    <!-- the animations must have been defined in your "anim" folder, of course -->
+    <style name="Animation.Splash" parent="android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_bottom</item>
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_from_bottom</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_in_from_bottom</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_from_bottom</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_in_from_bottom</item>
+    </style>
+
+    <style name="SplashTheme" parent="MaterialDrawerTheme.Light.TranslucentStatus">
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Splash</item>
     </style>
 
 
@@ -258,5 +276,47 @@
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textSize">9sp</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="ToolbarTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="white_spinner_item" parent="Widget.AppCompat.Light.Spinner.DropDown.ActionBar">
+        <item name="android:background">?android:selectableItemBackground</item>
+        <item name="android:dropDownSelector">?android:selectableItemBackground</item>
+        <item name="android:divider">@null</item>
+    </style>
+
+    <!--<style >-->
+        <!--<item name="android:textColor">@color/white</item>-->
+        <!--<item name="android:textStyle">bold</item>-->
+        <!--<item name="android:textSize">15dp</item>-->
+        <!--<item name="android:height">@dimen/normal_button_height</item>-->
+        <!--<item name="android:background">@color/transparent</item>-->
+    <!--</style>-->
+
+
+    <!-- Calendar -->
+
+    <style name="CaldroidDefaultNoGrid" parent="CaldroidDefault">
+        <item name="styleCaldroidGridView">@style/CaldroidDefaultDarkGridView</item>
+    </style>
+
+    <style name="CaldroidDefaultDarkGridView" parent="CaldroidDefaultGridView">
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+
+
 
 </resources>

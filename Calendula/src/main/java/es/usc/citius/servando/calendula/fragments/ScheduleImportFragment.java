@@ -3,6 +3,10 @@ package es.usc.citius.servando.calendula.fragments;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -126,7 +130,6 @@ public class ScheduleImportFragment extends Fragment
     View boxDuration;
     LinearLayout changeList;
     Button continueButton;
-    ;
 
     View boxScheduleChangedMsg;
     View newScheduleBox;
@@ -146,6 +149,8 @@ public class ScheduleImportFragment extends Fragment
     private boolean hasEnd;
     private int daysToEnd;
 
+    int color;
+
     public static ScheduleImportFragment newInstance(PrescriptionWrapper pw) {
         ScheduleImportFragment fragment = new ScheduleImportFragment();
         Bundle args = new Bundle();
@@ -158,7 +163,7 @@ public class ScheduleImportFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        color = DB.patients().getActive(getActivity()).color();
         PrescriptionWrapper.Holder h = (PrescriptionWrapper.Holder) getArguments().getSerializable(ARG_PRESCRIPTION);
         prescriptionWrapper = PrescriptionWrapper.from(h);
 
@@ -293,6 +298,8 @@ public class ScheduleImportFragment extends Fragment
 
         continueButton = (Button) rootView.findViewById(R.id.button3);
 
+
+
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -313,7 +320,26 @@ public class ScheduleImportFragment extends Fragment
 
         setupNewMessage();
 
+        updateColors(rootView);
+
         return rootView;
+    }
+    private void updateColors(View rootView) {
+
+        int color = DB.patients().getActive(getActivity()).color();
+
+        ((TextView)rootView.findViewById(R.id.textView3)).setTextColor(color);
+        ((TextView)rootView.findViewById(R.id.textView2)).setTextColor(color);
+        (rootView.findViewById(R.id.imageView)).setBackgroundColor(color);
+        (rootView.findViewById(R.id.imageView1)).setBackgroundColor(color);
+
+        hourlyIntervalEditText.setTextColor(color);
+        hourlyIntervalFrom.setTextColor(color);
+        hourlyIntervalRepeatDose.setTextColor(color);
+        buttonScheduleStart.setTextColor(color);
+        buttonScheduleEnd.setTextColor(color);
+        periodValue.setTextColor(color);
+        periodRest.setTextColor(color);
     }
 
     private void setupNewMessage() {
@@ -808,7 +834,7 @@ public class ScheduleImportFragment extends Fragment
                 break;
             }
         }
-        addTimetableEntries(timesPerDay, Routine.findAll());
+        addTimetableEntries(timesPerDay, DB.routines().findAllForActivePatient(getActivity()));
     }
 
     void setupDaySelectionListeners(final View rootView) {
@@ -979,7 +1005,7 @@ public class ScheduleImportFragment extends Fragment
 
     String[] getUpdatedRoutineNames() {
 
-        List<Routine> routines = Routine.findAll();
+        List<Routine> routines = DB.routines().findAllForActivePatient(getActivity());
 
         int j = 0;
         String[] routineNames = new String[routines.size() + 1];
@@ -995,6 +1021,7 @@ public class ScheduleImportFragment extends Fragment
     View buildTimetableEntry(ScheduleItem r, String[] routineNames, boolean enableDelete) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View entry = inflater.inflate(R.layout.schedule_timetable_entry, null);
+
         updateEntryTime(r.routine(), entry);
         setupScheduleEntrySpinners(entry, r, routineNames);
 
@@ -1117,8 +1144,13 @@ public class ScheduleImportFragment extends Fragment
             minuteText = "--";
         }
 
-        ((TextView) entry.findViewById(R.id.hour_text)).setText(hourText);
-        ((TextView) entry.findViewById(R.id.minute_text)).setText(minuteText);
+
+        TextView h =((TextView) entry.findViewById(R.id.hour_text));
+        TextView m = ((TextView) entry.findViewById(R.id.minute_text));
+        h.setText(hourText);
+        m.setText(minuteText);
+        h.setTextColor(color);
+        m.setTextColor(color);
     }
 
     void showAddNewRoutineDialog(final View entryView) {
@@ -1252,50 +1284,31 @@ public class ScheduleImportFragment extends Fragment
 
     void checkSelectedDays(View rootView, boolean[] days) {
 
-//        Log.d(TAG, "Checking selected days: " + Arrays.toString(days));
-//
-//        try{
-//            throw new RuntimeException("NO PROBLEM: " + Arrays.toString(days));
-//        }catch (Exception e){
-//            Log.e(TAG, "Trace: ", e);
-//        }
-
+        Log.d(TAG, "Checking selected days: " + Arrays.toString(days));
         schedule.setDays(days);
-        ((TextView) rootView.findViewById(R.id.day_mo)).setTextAppearance(getActivity(),
-                days[0] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
-        rootView.findViewById(R.id.day_mo)
-                .setBackgroundResource(
-                        days[0] ? R.drawable.dayselector_circle : R.drawable.dayselector_circle_unselected);
 
-        ((TextView) rootView.findViewById(R.id.day_tu)).setTextAppearance(getActivity(),
-                days[1] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
-        (rootView.findViewById(R.id.day_tu)).setBackgroundResource(
-                days[1] ? R.drawable.dayselector_circle : R.drawable.dayselector_circle_unselected);
+        TextView mo = ((TextView) rootView.findViewById(R.id.day_mo));
+        TextView tu = ((TextView) rootView.findViewById(R.id.day_tu));
+        TextView we = ((TextView) rootView.findViewById(R.id.day_we));
+        TextView th = ((TextView) rootView.findViewById(R.id.day_th));
+        TextView fr = ((TextView) rootView.findViewById(R.id.day_fr));
+        TextView sa = ((TextView) rootView.findViewById(R.id.day_sa));
+        TextView su = ((TextView) rootView.findViewById(R.id.day_su));
 
-        ((TextView) rootView.findViewById(R.id.day_we)).setTextAppearance(getActivity(),
-                days[2] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
-        (rootView.findViewById(R.id.day_we)).setBackgroundResource(
-                days[2] ? R.drawable.dayselector_circle : R.drawable.dayselector_circle_unselected);
+        TextView [] daysTvs = new TextView[]{mo, tu, we, th, fr, sa, su};
 
-        ((TextView) rootView.findViewById(R.id.day_th)).setTextAppearance(getActivity(),
-                days[3] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
-        (rootView.findViewById(R.id.day_th)).setBackgroundResource(
-                days[3] ? R.drawable.dayselector_circle : R.drawable.dayselector_circle_unselected);
+        for(int i = 0; i < daysTvs.length; i++){
+            boolean isSelected = days[i];
 
-        ((TextView) rootView.findViewById(R.id.day_fr)).setTextAppearance(getActivity(),
-                days[4] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
-        (rootView.findViewById(R.id.day_fr)).setBackgroundResource(
-                days[4] ? R.drawable.dayselector_circle : R.drawable.dayselector_circle_unselected);
+            StateListDrawable sld = (StateListDrawable) daysTvs[i].getBackground();
+            GradientDrawable shape = (GradientDrawable) sld.getCurrent();
+            shape.setColor(isSelected ? color : Color.WHITE);
 
-        ((TextView) rootView.findViewById(R.id.day_sa)).setTextAppearance(getActivity(),
-                days[5] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
-        (rootView.findViewById(R.id.day_sa)).setBackgroundResource(
-                days[5] ? R.drawable.dayselector_circle : R.drawable.dayselector_circle_unselected);
+            daysTvs[i].setTextColor(isSelected ? Color.WHITE : color);
+            daysTvs[i].setTypeface(null, isSelected ? Typeface.BOLD : Typeface.NORMAL);
 
-        ((TextView) rootView.findViewById(R.id.day_su)).setTextAppearance(getActivity(),
-                days[6] ? R.style.schedule_day_selected : R.style.schedule_day_unselected);
-        (rootView.findViewById(R.id.day_su)).setBackgroundResource(
-                days[6] ? R.drawable.dayselector_circle : R.drawable.dayselector_circle_unselected);
+
+        }
     }
 
     @Override
@@ -1427,7 +1440,7 @@ public class ScheduleImportFragment extends Fragment
 
         int interval = pw.s.p;
 
-        if (pw.s.d == 0.0 || pw.s.d >= 2.0) {
+        if (pw.s.d == 0.0) { // || pw.s.d >= 2.0
             // dose is zero
             Log.d(TAG, "Item dose is ambiguous");
             changes.add("• " + getString(R.string.scan_dose_zero_msg));

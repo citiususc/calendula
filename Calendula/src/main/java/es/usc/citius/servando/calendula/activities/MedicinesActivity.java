@@ -1,15 +1,13 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.content.Context;
-import android.graphics.drawable.InsetDrawable;
-import android.os.Build;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -29,11 +27,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.melnykov.fab.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
@@ -46,7 +46,7 @@ import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
 
-public class MedicinesActivity extends ActionBarActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
+public class MedicinesActivity extends CalendulaActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -66,7 +66,6 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
     ViewPager mViewPager;
 
     Long mMedicineId;
-    Toolbar toolbar;
     MenuItem removeItem;
     View searchView;
     EditText searchEditText;
@@ -74,37 +73,28 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
     FloatingActionButton addButton;
     ListView searchList;
     ArrayAdapter<Prescription> adapter;
+    int color;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicines);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
-        }
+        color = DB.patients().getActive(this).color();
+        setupToolbar(null, color);
+        setupStatusBar(color);
 
         processIntent();
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+
+        TextView title = ((TextView) findViewById(R.id.textView2));
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         searchView = findViewById(R.id.search_view);
         closeSearchButton = findViewById(R.id.close_search_button);
         addButton = (FloatingActionButton) findViewById(R.id.add_button);
         searchEditText = (EditText) findViewById(R.id.search_edit_text);
         searchList = (ListView) findViewById(R.id.search_list);
-
-        toolbar.setNavigationIcon(
-            new InsetDrawable(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp), 10,
-                10, 10, 10));
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        boolean create = getIntent().getBooleanExtra("create", false);
-
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,9 +139,10 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
             }
         });
 
+        title.setBackgroundColor(color);
+        searchView.setBackgroundColor(color);
+
         hideSearchView();
-
-
     }
 
 
@@ -176,9 +167,6 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
             case R.id.action_remove:
                 ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).showDeleteConfirmationDialog(Medicine.findById(mMedicineId));
                 return true;
-//            case R.id.action_search:
-//                showSearchView();
-//                return true;
             default:
                 finish();
                 return true;
@@ -317,9 +305,20 @@ public class MedicinesActivity extends ActionBarActivity implements MedicineCrea
                 ((TextView) item.findViewById(R.id.text2)).setText(p.dose);
                 ((TextView) item.findViewById(R.id.text3)).setText(p.content);
                 ((TextView) item.findViewById(R.id.text4)).setText(Strings.toCamelCase(p.name, " "));
+
+                ((TextView) item.findViewById(R.id.text1)).setTextColor(Color.parseColor("#222222"));
+                ((TextView) item.findViewById(R.id.text4)).setTextColor(color);
+
                 Presentation pres = p.expectedPresentation();
                 if (pres != null) {
-                    ((ImageView) item.findViewById(R.id.presentation_image)).setImageResource(pres.getDrawable());
+
+                    Drawable ic = new IconicsDrawable(getContext())
+                            .icon(Presentation.iconFor(p.expectedPresentation()))
+                            .colorRes(R.color.agenda_item_title)
+                            .paddingDp(10)
+                            .sizeDp(72);
+
+                    ((ImageView) item.findViewById(R.id.presentation_image)).setImageDrawable(ic);
                 } else {
                     ((ImageView) item.findViewById(R.id.presentation_image)).setImageDrawable(null);
                 }

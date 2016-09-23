@@ -2,9 +2,6 @@ buildscript {
     repositories {
         mavenCentral()
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.0'
-    }
 }
 apply plugin: 'com.android.library'
 
@@ -14,7 +11,7 @@ repositories {
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.0.2"
+    buildToolsVersion "24.0.1"
     lintOptions {
         abortOnError false
         checkReleaseBuilds false

@@ -22,7 +22,7 @@
         android:layout_centerHorizontal="true"
         android:padding="30dp"
         android:gravity="center"
-        android:textColor="#222"
+        android:textColor="#666"
         android:text="@string/scan_review_text" />
 
     <Button
@@ -49,6 +49,6 @@
         android:gravity="center"
         android:layout_marginTop="20dp"
         android:textStyle="bold"
-        android:textColor="@color/android_blue_dark" />
+        android:textColor="#222" />
 
 </RelativeLayout>

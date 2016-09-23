@@ -16,7 +16,7 @@
     <!-- action_bar_height + tabs_height -->
     <dimen name="fragment_tabs_margin_top">112dp</dimen>
 
-    <dimen name="header_height">220dp</dimen>
+    <dimen name="header_height">260dp</dimen>
     <dimen name="header_height_empty">320dp</dimen>
     <dimen name="routine_label_from_schedule_creation">23sp</dimen>
 
