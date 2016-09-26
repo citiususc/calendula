@@ -406,5 +406,25 @@
     <string name="create_schedule_select_med_before_dose">Por favor, selecciona un medicamento primero</string>
     <string name="updating_prescriptions_db_msg">La base de datos de medicamentos está siendo actualizada. Estará lista en muy pocos segundos</string>
 
+    <string name="schedule_type_help_title">
+        Estás a punto de crear una pauta, selecciona la que mejor se ajuste a tus necesidades!
+    </string>
+
+    <string name="schedule_type_routines_help">
+        Este tipo de pauta te permite vincular tus tomas con rutinas, por ejemplo: \"Todos los días con desayuno y cena, excepto los domingos\", o \"Cada 3 días, con la comida.\"
+    </string>
+
+    <string name="schedule_type_hourly_help">
+        Las pautas de intervalo horario están pensadas para esas tomas que se repiten cada cierto número de horas: \"Cada 8 horas\".\n\nEstablece la hora de la primera toma, y listo!.
+    </string>
+
+    <string name="schedule_type_intervalrest_help">
+        Algunos anticonceptivos y otros medicamentos deben tomarse durante un tiempo, y luego hay un descanso. Estas pautas te permiten especificar ambos períodos y simplificar este tipo de tomas.
+    </string>
+
+    <string name="routines_list_empty_text">Aún no se han añadido rutinas.\n\nLas rutinas son horas del día en las que habitualmente tomas medicamentos, como el desayuno o la cena. Puedes reutilizarlas para crear pautas más rápido.</string>
+    <string name="medicines_list_empty_text">Aún no se han añadido medicamentos.\n\nAñade tus medicamentos al botiquín, y tendrás fácil acceso a sus prospectos y avisos.</string>
+    <string name="schedules_list_empty_text">Aún no se han añadido pautas.\n\nAñade aquí tus pautas y permite que te avisemos! </string>
+
 </resources>
 
