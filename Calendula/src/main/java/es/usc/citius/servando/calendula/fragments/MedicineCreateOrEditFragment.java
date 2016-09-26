@@ -230,6 +230,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
     public boolean validate() {
         if (mNameTextView.getText() != null && mNameTextView.getText().length() > 0) {
             if (selectedPresentation == null) {
+                hideKeyboard();
                 Snack.show(R.string.medicine_no_presentation_error_message, getActivity());
                 return false;
             }
