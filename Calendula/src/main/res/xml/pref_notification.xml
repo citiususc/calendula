@@ -43,7 +43,7 @@
         android:title="@string/pref_title_sync_frequency" />
 
     <ListPreference
-        android:defaultValue="60"
+        android:defaultValue="125"
         android:dependency="alarm_repeat_enabled"
         android:entries="@array/pref_alarm_reminder_window_titles"
         android:entryValues="@array/pref_alarm_reminder_window_values"
