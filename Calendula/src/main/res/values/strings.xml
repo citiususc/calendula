@@ -349,9 +349,9 @@
     <string name="schedule_help_type">First, select a schedule type</string>
     <string name="schedule_help_no_type_selected">Please, select a schedule type to keep on creating the schedule</string>
 
-    <string name="schedule_type_routines_title">Vinculada a rutinas</string>
-    <string name="schedule_type_hourly_title">Intervalo horario</string>
-    <string name="schedule_type_period_title">Período + descanso</string>
+    <string name="schedule_type_routines_title">Routine schedule</string>
+    <string name="schedule_type_hourly_title">Dosing interval</string>
+    <string name="schedule_type_period_title">Period + rest</string>
     <string name="schedule_type_common_periods">Common cycles</string>
     <string name="schedule_type_from_qr">Desde QR</string>
 
@@ -361,9 +361,9 @@
         <item>@string/schedule_type_period_title</item>
     </string-array>
 
-    <string name="schedule_type_routines_description">Ex: Cada 3 días, con desayuno comida y cena</string>
-    <string name="schedule_type_hourly_description">Ex: Cada 8 horas</string>
-    <string name="schedule_type_period_description">Ex: 21 días + 7 de descanso</string>
+    <string name="schedule_type_routines_description">Ex: Every 3 days, at breakfast, lunch and dinner</string>
+    <string name="schedule_type_hourly_description">Ex: Each 8 hours</string>
+    <string name="schedule_type_period_description">Ex: 21 days + 7 days of rest</string>
 
     <string-array name="schedule_cycles">
         <item>21 + 7</item>
