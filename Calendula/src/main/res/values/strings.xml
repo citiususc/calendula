@@ -30,8 +30,8 @@
     <string name="home_menu_routines">ROUTINES</string>
     <string name="home_menu_medicines">MEDICINES</string>
     <string name="home_menu_schedules">SCHEDULES</string>
-    <string name="home_menu_pharmacies">PHARMACIES</string>
-    <string name="home_menu_plantrip">PLAN TRIP</string>
+    <string name="home_menu_pharmacies">Pharmacies</string>
+    <string name="home_menu_plantrip">Plan trip</string>
     <string name="action_bar_title_today">Today</string>
     <string name="action_bar_title_home">Home</string>
     <string name="medicine">medicine</string>
@@ -49,6 +49,7 @@
     <string name="drawer_services_option">Tools</string>
     <string name="drawer_help_option">Tour</string>
     <string name="drawer_settings_option">Settings</string>
+    <string name="drawer_about_option">About</string>
 
     <string-array name="home_drawer_actions">
         <item>@string/drawer_top_option</item>
@@ -411,7 +412,7 @@
 
     <string name="create_schedule_select_med_before_dose">Please, select a med first</string>
     <string name="updating_prescriptions_db_msg">The medicines database is being updated. It will take only a few seconds</string>
-    <string name="title_activity_patients">PatientsActivity</string>
+    <string name="title_activity_patients">Patients</string>
     <string name="title_activity_patient_detail">PatientDetailActivity</string>
     <string name="title_activity_about">AboutActivity</string>
 

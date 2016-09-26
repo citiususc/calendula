@@ -30,8 +30,8 @@
     <string name="home_menu_routines">RUTINAS</string>
     <string name="home_menu_medicines">MEDICINAS</string>
     <string name="home_menu_schedules">PAUTAS</string>
-    <string name="home_menu_pharmacies">FARMACIAS</string>
-    <string name="home_menu_plantrip">PLAN DE VIAJE</string>
+    <string name="home_menu_pharmacies">Farmacias</string>
+    <string name="home_menu_plantrip">Plan de viaje</string>
     <string name="action_bar_title_today">Hoy</string>
     <string name="action_bar_title_home">Inicio</string>
     <string name="medicine">medicina</string>
@@ -49,6 +49,7 @@
     <string name="drawer_services_option">Herramientas</string>
     <string name="drawer_help_option">Recorrido</string>
     <string name="drawer_settings_option">Ajustes</string>
+    <string name="drawer_about_option">Acerca de</string>
 
     <string-array name="home_drawer_actions">
         <item>@string/drawer_top_option</item>
@@ -439,6 +440,8 @@
                             <br/><br/>
                             Para este desarrollo hacemos uso de algunas librerías y utilidades de código abierto, que mostramos a continuacion:
     "]]></string>
+
+    <string name="title_activity_patients">Pacientes</string>
 
 </resources>
 

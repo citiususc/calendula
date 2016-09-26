@@ -136,7 +136,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                                 .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_home, R.color.black).alpha(110))
                                 .withIdentifier(HOME),
                         new PrimaryDrawerItem()
-                                .withName("Pacientes")
+                                .withName(R.string.title_activity_patients)
                                 .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_account_multiple, R.color.black).alpha(110))
                                 .withIdentifier(PATIENTS),
                         new DividerDrawerItem(),
@@ -153,27 +153,27 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                                 .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_calendar, R.color.black).alpha(110))
                                 .withIdentifier(SCHEDULES),
                         new PrimaryDrawerItem()
-                                .withName("Farmacias")
+                                .withName(R.string.home_menu_pharmacies)
                                 .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_map_marker_multiple, R.color.black).alpha(38))
                                 .withEnabled(false)
                                 .withIdentifier(PHARMACIES),
                         new PrimaryDrawerItem()
-                                .withName("Plan de viaje")
+                                .withName(R.string.home_menu_plantrip)
                                 .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_airplanemode_active, R.color.black).alpha(38))
                                 .withEnabled(false)
                                 .withIdentifier(TRAVELPLAN),
                         new DividerDrawerItem(),
                         new PrimaryDrawerItem()
-                                .withName("Recorrido")
+                                .withName(R.string.drawer_help_option)
                                 .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_pin_assistant,R.color.black).alpha(130))
                                 .withIdentifier(HELP),
                         new PrimaryDrawerItem()
-                                .withName("Ajustes")
+                                .withName(R.string.drawer_settings_option)
                                 .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_settings, R.color.black).alpha(110))
                                 .withIdentifier(SETTINGS),
                         new DividerDrawerItem(),
                         new PrimaryDrawerItem()
-                                .withName("About")
+                                .withName(R.string.drawer_about_option)
                                 .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_information, R.color.black).alpha(110))
                                 .withIdentifier(ABOUT)
                 )
