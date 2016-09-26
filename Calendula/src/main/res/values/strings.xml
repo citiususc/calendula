@@ -436,8 +436,16 @@
     <string name="medicines_list_empty_text">There are no meds yet.\n\nAdd your meds to the kit, and you will have easy access to leaflets and warnings.</string>
     <string name="schedules_list_empty_text">There are no schedules yet.\n\nAdd your schedules here and let we just notify you! </string>
 
-
-
-
+    <string name="about_description"><![CDATA[<br/><br/>Calendula is developed by the Research Centre for Information Technologies
+                           of the USC (<a href=\'http://citius.usc.es\'>CITIUS</a>)
+                            <br/><br/>Visit our web site for more info:
+                            <br/> <a href=\'http://citius.usc.es/calendula\'>citius.usc.es/calendula </a>
+                            <br/><br/>Calendula is an open source project. You can contribute with ideas or suggestions
+                            through our Github page or by sending an e-mail to us:
+                            <br/><a href=\'https://github.com/citiususc/calendula\'>https://github.com/citiususc/calendula </a>
+                            <br/><a href=\'mailto:citius.calendula@usc.es\'>citius.calendula@usc.es</a>
+                            <br/><br/>
+                            For this development, we use several open source libraries that are shown below:
+    "]]></string>
 </resources>
 

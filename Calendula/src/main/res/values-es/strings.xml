@@ -426,5 +426,19 @@
     <string name="medicines_list_empty_text">Aún no se han añadido medicamentos.\n\nAñade tus medicamentos al botiquín, y tendrás fácil acceso a sus prospectos y avisos.</string>
     <string name="schedules_list_empty_text">Aún no se han añadido pautas.\n\nAñade aquí tus pautas y permite que te avisemos! </string>
 
+
+    <string name="about_description">
+        <![CDATA[<br/><br/>Calendula está desarrollada por el Centro de Investigación en Tecnologías de la Información
+                            de la USC (<a href=\'http://citius.usc.es\'>CITIUS</a>)
+                            <br/><br/>Visita nuestra web para obtener más información:
+                            <br/> <a href=\'http://citius.usc.es/calendula\'>citius.usc.es/calendula </a>
+                            <br/><br/>Calendula es un proyecto de código abierto. Puedes contribuir con tus ideas y sugerencias
+                            a través de nuestra página en Github o enviando un mensaje de correo electrónico:
+                            <br/><a href=\'https://github.com/citiususc/calendula\'>https://github.com/citiususc/calendula </a>
+                            <br/><a href=\'mailto:citius.calendula@usc.es\'>citius.calendula@usc.es</a>
+                            <br/><br/>
+                            Para este desarrollo hacemos uso de algunas librerías y utilidades de código abierto, que mostramos a continuacion:
+    "]]></string>
+
 </resources>
 
