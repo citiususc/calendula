@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.0'
+        classpath 'com.android.tools.build:gradle:2.1.3'
     }
 }
 apply plugin: 'com.android.application'
@@ -32,13 +32,13 @@ def getDate() {
 }
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 23
+    buildToolsVersion "24.0.2"
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 21
-        versionCode 24
-        versionName "2.3.8"
+        targetSdkVersion 23
+        versionCode 25
+        versionName "2.3.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 

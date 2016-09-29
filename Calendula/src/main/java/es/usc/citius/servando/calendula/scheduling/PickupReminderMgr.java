@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 import org.joda.time.DateTime;
@@ -45,7 +46,16 @@ public class PickupReminderMgr {
         // Get the AlarmManager service
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, d.getMillis(), calendarReminderPendingIntent);
+            if (Build.VERSION.SDK_INT >= 23)
+            {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, d.getMillis(), calendarReminderPendingIntent);
+            } else if (Build.VERSION.SDK_INT >= 19 )
+            {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, d.getMillis(), calendarReminderPendingIntent);
+            } else
+            {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, d.getMillis(), calendarReminderPendingIntent);
+            }
             Log.d(TAG, "Pickup check alarm scheduled!");
         }
     }
