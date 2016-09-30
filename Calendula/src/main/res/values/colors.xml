@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2016 CITIUS - USC
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <resources>
 
     <!-- Android palette -->
@@ -8,9 +26,9 @@
     <color name="android_green">#99CC00</color>
     <color name="android_green_dark">#669900</color>
     <color name="android_green_light">#55669900</color>
-  <color name="android_green_light_noalpha">#efB8DB57</color>
+    <color name="android_green_light_noalpha">#efB8DB57</color>
 
-  <color name="android_orange">#FFBB33</color>
+    <color name="android_orange">#FFBB33</color>
     <color name="android_orange_dark">#FF8800</color>
     <color name="android_orange_light">#55FFBB33</color>
     <color name="android_orange_lighter">#22FFBB33</color>
@@ -22,7 +40,7 @@
     <color name="android_blue_dark">#0099CC</color>
     <color name="android_blue_darker">#0077aa</color>
     <!--<color name="android_blue_statusbar">#004F71</color>-->
-    <color name="android_blue_statusbar">@color/android_blue_darker</color>
+    <color name="android_blue_statusbar">#004565</color>
     <color name="android_blue_light">#5533B5E5</color>
     <color name="white_80">#EEFFFFFF</color>
     <color name="white_50">#55FFFFFF</color>
@@ -30,19 +48,21 @@
     <color name="black_20">#22000000</color>
     <color name="black_40">#44000000</color>
     <color name="black_80">#88000000</color>
+    <color name="black">#ff000000</color>
     <color name="list_item_shadow">#112c2c2c</color>
     <color name="transparent">#00000000</color>
     <color name="android_orange_darker">#884411</color>
-    <color name="list_item_active">#aaececec</color>
+    <color name="list_item_active">#88ececec</color>
     <color name="list_item_inactive">#33ececec</color>
     <color name="daily_view_bg_color">#aaefefef</color>
     <color name="daily_view_content_bg_color">#fff</color>
 
 
     <!-- Other colors -->
-    <color name="splash_background">#151515</color>
+    <color name="splash_background">#ffb74d</color>
     <color name="white">#FFFFFF</color>
     <color name="dark_grey_home">#272727</color>
+    <color name="dark_grey_home_statusbar">#151515</color>
     <color name="grey">#484848</color>
     <color name="toolbar_dark_background">#0077aa</color>
     <color name="green_hour_expanded_left">#2299CC00</color>
@@ -52,6 +72,11 @@
     <color name="drawerbg_default">#272727</color>
     <color name="drawerbg">#3c3c3c</color>
 
+    <color name="fab_light_normal">#efefef</color>
+    <color name="fab_light_pressed">#b7b7b7</color>
+    <color name="fab_dark_normal">#272727</color>
+    <color name="fab_dark_pressed">#373737</color>
+
     <!-- List items -->
     <color name="list_item_selector_normal">#00111111</color>
     <color name="drawer_item_disabled">#22222222</color>
@@ -60,6 +85,9 @@
     <color name="dark_grey_text">#5e5e5e</color>
     <color name="light_grey">#55ABABAB</color>
     <color name="light_grey_pressed">#99989898</color>
+    <color name="agenda_item_title">#66000000</color>
+
+
     <!-- #ececec -->
     <!--<color name="actionbar_background_color">#161616</color>-->
     <color name="med_presentation_circle_bg">#aaefefef</color>
@@ -82,5 +110,44 @@
     <color name="calendar_text_selected">#ffffffff</color>
     <color name="calendar_text_unselectable">#22778088</color>
     <!-- /CALENDAR -->
+
+    <!-- Material DEFAULT colors -->
+    <color name="material_drawer_primary">@color/dark_grey_text</color>
+    <color name="material_drawer_primary_dark">@color/transparent</color>
+    <color name="material_drawer_primary_light">#BBDEFB</color>
+    <color name="material_drawer_accent">#FF4081</color>
+
+    <!-- OVERWRITE THESE COLORS FOR A LIGHT THEME -->
+     <!--MaterialDrawer DEFAULT colors-->
+    <color name="material_drawer_background">#F9F9F9</color>
+     <!--Material DEFAULT text / items colors-->
+    <color name="material_drawer_primary_text">#DE000000</color>
+    <color name="material_drawer_primary_icon">#8A000000</color>
+    <color name="material_drawer_secondary_text">#8A000000</color>
+    <color name="material_drawer_hint_text">#42000000</color>
+    <color name="material_drawer_divider">#1F222222</color>
+     <!--Material DEFAULT drawer colors-->
+    <color name="material_drawer_selected">#ececec</color>
+    <color name="material_drawer_selected_text">@color/dark_grey_text</color>
+    <color name="material_drawer_header_selection_text">#FFF</color>
+
+
+    <!-- Intro colors -->
+    <color name="intro_slide_1_dark">#2980b9</color>
+    <color name="intro_slide_1_light">#3498db</color>
+    <color name="intro_slide_2_dark">#27ae60</color>
+    <color name="intro_slide_2_light">#2ecc71</color>
+    <color name="intro_slide_3_dark">#d35400</color>
+    <color name="intro_slide_3_light">#e67e22</color>
+    <color name="intro_slide_4_dark">#311B92</color>
+    <color name="intro_slide_4_light">#673AB7</color>
+    <color name="intro_slide_5_dark">#c0392b</color>
+    <color name="intro_slide_5_light">#e74c3c</color>
+    <color name="intro_slide_6_dark">#8e44ad</color>
+    <color name="intro_slide_6_light">#9b59b6</color>
+
+    <color name="schedule_help_background">#3498db</color>
+    <color name="schedule_help_background_dark">#2980b9</color>
+
 
 </resources>

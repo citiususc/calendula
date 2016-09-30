@@ -1,3 +1,21 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.usc.citius.servando.calendula.services;
 
 import android.content.Context;
@@ -20,12 +38,17 @@ public class PopulatePrescriptionDBService {
     public static final String DB_VERSION_KEY = "AEMPS_DB_VERSION";
     public static final String TAG = "PopulateDBService.class";
 
+    public static boolean isDbOutdated(Context ctx){
+        final int manifestVersion = getAempDbVersionFromManifest(ctx);
+        final int currentVersion = getAempDbVersionFromPreferences(ctx);
+        return (currentVersion < manifestVersion) || Prescription.empty();
+    }
+
     public void updateIfNeeded(Context ctx) {
 
         final int manifestVersion = getAempDbVersionFromManifest(ctx);
         final int currentVersion = getAempDbVersionFromPreferences(ctx);
         boolean needUpdate = (currentVersion < manifestVersion) || Prescription.empty();
-
 
         if (needUpdate) {
             Log.d(TAG, "Updating prescriptions database...");
@@ -36,12 +59,12 @@ public class PopulatePrescriptionDBService {
         }
     }
 
-    public int getAempDbVersionFromPreferences(Context ctx) {
+    public static int getAempDbVersionFromPreferences(Context ctx) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         return prefs.getInt(DB_VERSION_KEY, -1);
     }
 
-    public int getAempDbVersionFromManifest(Context ctx) {
+    public static int getAempDbVersionFromManifest(Context ctx) {
         int databaseVersion = 0;
         try {
             ApplicationInfo ai = ctx.getPackageManager().getApplicationInfo(ctx.getPackageName(), PackageManager.GET_META_DATA);

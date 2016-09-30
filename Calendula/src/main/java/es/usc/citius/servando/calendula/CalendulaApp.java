@@ -1,3 +1,21 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.usc.citius.servando.calendula;
 
 import android.app.AlarmManager;
@@ -9,6 +27,8 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.mikepenz.iconics.Iconics;
 
 import org.joda.time.LocalTime;
 
@@ -22,8 +42,13 @@ import java.util.Locale;
 
 import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.database.PatientDao;
+import es.usc.citius.servando.calendula.persistence.Patient;
+import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
+import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
+import es.usc.citius.servando.calendula.util.PresentationsTypeface;
 
 /**
  * Created by castrelo on 4/10/14.
@@ -31,6 +56,8 @@ import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 public class CalendulaApp extends Application {
 
     public static boolean disableReceivers = false;
+
+    private static boolean isOpen;
 
     public static final String PHARMACY_MODE_ENABLED = "PHARMACY_MODE_ENABLED";
 
@@ -65,21 +92,38 @@ public class CalendulaApp extends Application {
     
     private static EventBus eventBus = EventBus.getDefault();
 
+    public static boolean isOpen() {
+        return isOpen;
+    }
+
+    public static void open(boolean isOpen) {
+        CalendulaApp.isOpen = isOpen;
+    }
+
+    SharedPreferences prefs;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
+        prefs =  PreferenceManager.getDefaultSharedPreferences(this);
         // initialize SQLite engine
         initializeDatabase();
 
-        DefaultDataGenerator.fillDBWithDummyData(getApplicationContext());
+        if(!prefs.getBoolean("DEFAULT_DATA_INSERTED", false)){
+            DefaultDataGenerator.fillDBWithDummyData(getApplicationContext());
+            prefs.edit().putBoolean("DEFAULT_DATA_INSERTED", true).commit();
+        }
+
         // initialize daily agenda
-        DailyAgenda.instance().setupForToday(this,false);
+        DailyAgenda.instance().setupForToday(this, false);
         // setup alarm for daily agenda update
         setupUpdateDailyAgendaAlarm();
         //exportDatabase(this, DB_NAME, new File(Environment.getExternalStorageDirectory() + File.separator + DB_NAME));
         //forceLocale(Locale.GERMAN);
+        //only required if you add a custom or generic font on your own
+        Iconics.init(getApplicationContext());
+        //register custom fonts like this (or also provide a font definition file)
+        Iconics.registerFont(new PresentationsTypeface());
     }
 
     public static boolean isPharmaModeEnabled(Context ctx){
@@ -98,6 +142,15 @@ public class CalendulaApp extends Application {
 
     public void initializeDatabase() {
         DB.init(this);
+        try{
+            if(DB.patients().countOf() == 1) {
+                Patient p = DB.patients().getDefault();
+                prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).commit();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -109,17 +162,12 @@ public class CalendulaApp extends Application {
     public void setupUpdateDailyAgendaAlarm() {
         // intent our receiver will receive
         Intent intent = new Intent(this, AlarmReceiver.class);
-        // indicate thar is for a routine
-        intent.putExtra(INTENT_EXTRA_ACTION, ACTION_DAILY_ALARM);
-        // create pending intent
-        int intent_id = 1234567890;
-        PendingIntent routinePendingIntent = PendingIntent.getBroadcast(this, intent_id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        // Get the AlarmManager service
+        AlarmIntentParams params = AlarmIntentParams.forDailyUpdate();
+        intent.putExtra(AlarmScheduler.EXTRA_PARAMS, params);
+        PendingIntent dailyAlarm = PendingIntent.getBroadcast(this, params.hashCode(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        // set the routine alarm, with repetition every day
         if (alarmManager != null) {
-            // set a repeating alarm every day at 00:00
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, new LocalTime(0, 0).toDateTimeToday().getMillis(), AlarmManager.INTERVAL_DAY, routinePendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, new LocalTime(0, 0).toDateTimeToday().getMillis(), AlarmManager.INTERVAL_DAY, dailyAlarm);
         }
     }
 
@@ -157,4 +205,9 @@ public class CalendulaApp extends Application {
     }
 
 
+    public static String activePatientAuth(Context ctx) {
+        Long id = DB.patients().getActive(ctx).id();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return prefs.getString("remote_token" + id, null);
+    }
 }

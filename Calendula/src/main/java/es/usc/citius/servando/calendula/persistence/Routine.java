@@ -1,3 +1,21 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.usc.citius.servando.calendula.persistence;
 
 import com.j256.ormlite.field.DatabaseField;
@@ -19,6 +37,7 @@ public class Routine {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_TIME = "Time";
     public static final String COLUMN_NAME = "Name";
+    public static final String COLUMN_PATIENT = "Patient";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
@@ -29,10 +48,19 @@ public class Routine {
     @DatabaseField(columnName = COLUMN_NAME)
     private String name;
 
+    @DatabaseField(columnName = COLUMN_PATIENT, foreign = true, foreignAutoRefresh = true)
+    private Patient patient;
+
     public Routine() {
     }
 
     public Routine(LocalTime time, String name) {
+        this.time = time;
+        this.name = name;
+    }
+
+    public Routine(Patient p, LocalTime time, String name) {
+        this.patient = p;
         this.time = time;
         this.name = name;
     }
@@ -69,6 +97,14 @@ public class Routine {
         this.time = time;
     }
 
+    public Patient patient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
     // *************************************
     // DB queries
     // *************************************
@@ -92,6 +128,7 @@ public class Routine {
     public List<ScheduleItem> scheduleItems() {
         return DB.scheduleItems().findByRoutine(this);
     }
+
 
 
 }

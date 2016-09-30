@@ -1,3 +1,21 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.usc.citius.servando.calendula.util.view;
 
 import android.content.Context;
@@ -21,12 +39,15 @@ public class CustomDigitalClock extends TextView {
 
     private final static String m12 = "kk:mm";
     private final static String m24 = "kk:mm";
+    private final static String m12sec = "kk:mm:ss";
+    private final static String m24sec = "kk:mm:ss";
     Calendar mCalendar;
     String mFormat;
     private FormatChangeObserver mFormatChangeObserver = new FormatChangeObserver();
     private Runnable mTicker;
     private Handler mHandler;
     private boolean mTickerStopped = false;
+    boolean showSeconds = false;
 
     public CustomDigitalClock(Context context) {
         super(context);
@@ -73,7 +94,10 @@ public class CustomDigitalClock extends TextView {
                 //
                 // String text = Html.fromHtml("<b>" + hour + "</b>:" + min).toString();
                 // setText(text);
-                setText(DateFormat.format(mFormat, mCalendar));
+                if(showSeconds)
+                    setText("Ahora - " + DateFormat.format(mFormat, mCalendar));
+                else
+                    setText(DateFormat.format(mFormat, mCalendar));
                 invalidate();
                 long now = SystemClock.uptimeMillis();
                 long next = now + (1000 - now % 1000);
@@ -98,9 +122,9 @@ public class CustomDigitalClock extends TextView {
 
     private void setFormat() {
         if (get24HourMode()) {
-            mFormat = m24;
+            mFormat = showSeconds ? m24sec : m24;
         } else {
-            mFormat = m12;
+            mFormat = showSeconds ? m12sec: m12;
         }
     }
 
@@ -115,4 +139,8 @@ public class CustomDigitalClock extends TextView {
         }
     }
 
+    public void setShowSeconds(boolean showSeconds) {
+        this.showSeconds = showSeconds;
+        setFormat();
+    }
 }

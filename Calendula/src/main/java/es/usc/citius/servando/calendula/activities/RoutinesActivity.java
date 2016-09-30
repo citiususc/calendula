@@ -1,19 +1,35 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.usc.citius.servando.calendula.activities;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
@@ -22,7 +38,7 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 
-public class RoutinesActivity extends ActionBarActivity implements RoutineCreateOrEditFragment.OnRoutineEditListener {
+public class RoutinesActivity extends CalendulaActivity implements RoutineCreateOrEditFragment.OnRoutineEditListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -41,36 +57,30 @@ public class RoutinesActivity extends ActionBarActivity implements RoutineCreate
 
     long mRoutineId;
 
-    Toolbar toolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routines);
-        processIntent();
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back_white_48dp));
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        //toolbar.setTitle(getString(R.string.title_activity_routines));
+        int color = DB.patients().getActive(this).color();
+        setupToolbar(null, color);
+        setupStatusBar(color);
 
-        ((TextView) findViewById(R.id.textView2)).setText(getString(mRoutineId != -1 ? R.string.title_edit_routine_activity : R.string.create_routine_button_text));
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
-        }
+
+        processIntent();
+
+        TextView title = ((TextView) findViewById(R.id.textView2));
+        title.setBackgroundColor(color);
+        title.setText(getString(mRoutineId != -1 ?R.string.title_edit_routine_activity: R.string.create_routine_button_text));
+
         findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((RoutineCreateOrEditFragment) getViewPagerFragment(0)).onEdit();
             }
         });
-
     }
 
 
@@ -93,14 +103,10 @@ public class RoutinesActivity extends ActionBarActivity implements RoutineCreate
             case R.id.action_remove:
                 ((RoutineCreateOrEditFragment) getViewPagerFragment(0)).showDeleteConfirmationDialog(Routine.findById(mRoutineId));
                 return true;
-//            case R.id.action_done:
-//                ((RoutineCreateOrEditFragment) getViewPagerFragment(0)).onEdit();
-//                return true;
             default:
                 finish();
                 return true;
         }
-        //return super.onOptionsItemSelected(item);
     }
 
     @Override

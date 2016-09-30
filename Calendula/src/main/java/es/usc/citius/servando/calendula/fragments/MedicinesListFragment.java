@@ -1,3 +1,21 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.usc.citius.servando.calendula.fragments;
 
 import android.app.Activity;
@@ -9,6 +27,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,11 +44,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
+
 import java.io.File;
 import java.util.List;
 
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.util.Snack;
@@ -50,7 +75,9 @@ public class MedicinesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_medicines_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.medicines_list);
-        mMedicines = DB.medicines().findAll();
+        View empty = rootView.findViewById(android.R.id.empty);
+        listview.setEmptyView(empty);
+        mMedicines = DB.medicines().findAllForActivePatient(getContext());
         adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
         listview.setAdapter(adapter);
 
@@ -83,7 +110,7 @@ public class MedicinesListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            mMedicines = DB.medicines().findAll();
+            mMedicines = DB.medicines().findAllForActivePatient(getContext());
 
             return null;
         }
@@ -106,7 +133,12 @@ public class MedicinesListFragment extends Fragment {
         ((TextView) item.findViewById(R.id.medicines_list_item_name)).setText(medicine.name());
 
         ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
-        icon.setImageDrawable(getResources().getDrawable(medicine.presentation().getDrawable()));
+        icon.setImageDrawable(new IconicsDrawable(getContext())
+                .icon(medicine.presentation().icon())
+                        //.color(Color.WHITE)
+                .colorRes(R.color.agenda_item_title)
+                .paddingDp(8)
+                .sizeDp(40));
 
         View overlay = item.findViewById(R.id.medicines_list_item_container);
         overlay.setTag(medicine);
@@ -120,38 +152,44 @@ public class MedicinesListFragment extends Fragment {
 
         String cn = medicine.cn();
         final Prescription p = cn != null ? Prescription.findByCn(medicine.cn()) : null;
+        boolean boundToPrescription = p != null;
         boolean hasProspect = (p != null && p.hasProspect);
 
-        if (hasProspect) {
-//            if (p.isProspectDownloaded(getActivity())) {
-//                item.findViewById(R.id.download_indicator).setVisibility(View.GONE);
-//                item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        openProspect(p);
-//                    }
-//                });
-//            } else {
-                item.findViewById(R.id.download_indicator).setVisibility(View.GONE);
+        if (!boundToPrescription) {
+            item.findViewById(R.id.imageView).setVisibility(View.GONE);
+        } else {
+            IconicsDrawable ic = new IconicsDrawable(getContext())
+                    .icon(CommunityMaterial.Icon.cmd_file_document)
+                    .colorRes(R.color.agenda_item_title)
+                    .paddingDp(10)
+                    .sizeDp(40);
+            ((ImageView) item.findViewById(R.id.imageView)).setImageDrawable(ic);
+
+            if (hasProspect) {
                 item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         onClickProspect(medicine, p);
                     }
                 });
-//            }
-        } else {
-            item.findViewById(R.id.imageView).setAlpha(0.1f);
-            item.findViewById(R.id.download_indicator).setVisibility(View.GONE);
-            item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Snack.show(R.string.download_prospect_not_available_message, getActivity());
-                }
-            });
+            } else {
+                item.findViewById(R.id.imageView).setAlpha(0.2f);
+                item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Snack.show(R.string.download_prospect_not_available_message, getActivity());
+                    }
+                });
+            }
         }
 
         if (p != null && p.affectsDriving) {
+            Drawable icDriv = new IconicsDrawable(getContext())
+                    .icon(CommunityMaterial.Icon.cmd_comment_alert)
+                    .color(Color.parseColor("#f39c12"))
+                    .paddingDp(10)
+                    .sizeDp(40);
+            ((ImageView) item.findViewById(R.id.drive_icon)).setImageDrawable(icDriv);
             item.findViewById(R.id.drive_icon).setVisibility(View.VISIBLE);
             item.findViewById(R.id.drive_icon).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -208,29 +246,29 @@ public class MedicinesListFragment extends Fragment {
 
                 if (p.isProspectDownloaded(getActivity())) {
                     openProspect(p);
-                }else {
+                } else {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     boolean downloadProspectMessageShown = prefs.getBoolean("prospect_download_message_shown", false);
 //                    if (downloadProspectMessageShown) {
 //                        downloadProspect(p);
 //                    } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle(getString(R.string.download_prospect_title));
-                        builder.setMessage(getString(R.string.download_prospect_message, p.shortName()))
-                                .setCancelable(true)
-                                .setPositiveButton(getString(R.string.download_prospect_continue), new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        downloadProspect(p);
-                                    }
-                                })
-                                .setNegativeButton(getString(R.string.download_prospect_cancel), new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-                        AlertDialog alert = builder.create();
-                        alert.show();
-                        prefs.edit().putBoolean("prospect_download_message_shown", true).commit();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(getString(R.string.download_prospect_title));
+                    builder.setMessage(getString(R.string.download_prospect_message, p.shortName()))
+                            .setCancelable(true)
+                            .setPositiveButton(getString(R.string.download_prospect_continue), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    downloadProspect(p);
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.download_prospect_cancel), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                    prefs.edit().putBoolean("prospect_download_message_shown", true).commit();
 //                    }
                 }
 
@@ -370,5 +408,26 @@ public class MedicinesListFragment extends Fragment {
 
         }
     };
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        CalendulaApp.eventBus().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        CalendulaApp.eventBus().unregister(this);
+        super.onStop();
+    }
+
+    // Method called from the event bus
+    @SuppressWarnings("unused")
+    public void onEvent(Object evt) {
+        if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
+            notifyDataChange();
+        }
+    }
 
 }

@@ -1,11 +1,28 @@
+<!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2016 CITIUS - USC
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/android_blue_darker">
+                android:background="#fcfcfc"
+    >
 
     <ListView
-        android:layout_marginTop="@dimen/fragment_tabs_margin_top"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:divider="#E0EAEF"
@@ -14,60 +31,36 @@
         android:dividerHeight="0dp"
         android:id="@+id/schedule_list" />
 
-  <com.getbase.floatingactionbutton.FloatingActionsMenu
-      android:id="@+id/fab_menu"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
-      android:layout_alignParentEnd="false"
-      fab:fab_addButtonColorNormal="@color/android_green"
-      fab:fab_addButtonColorPressed="@color/android_green_dark"
-      fab:fab_addButtonPlusIconColor="@color/white"
-      fab:fab_labelStyle="@style/menu_labels_style"
-      fab:fab_labelsPosition="left"
-      android:layout_alignParentBottom="true"
-      android:layout_margin="10dp"
-      >
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:id="@android:id/empty"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:gravity="center_horizontal"
+                  android:layout_marginTop="50dp">
 
-      <com.getbase.floatingactionbutton.FloatingActionButton
-        android:id="@+id/action_a"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        fab:fab_icon="@drawable/ic_alarm_white_48dp"
-        fab:fab_colorNormal="@color/android_green_light_noalpha"
-        fab:fab_title="@string/schedule_type_routines_title"
-        fab:fab_colorPressed="@color/android_green"
-        />
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/imageView10"
+            android:src="@drawable/ic_intro_schedules"
+            android:alpha="0.3"/>
 
-    <com.getbase.floatingactionbutton.FloatingActionButton
-        android:id="@+id/action_b"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        fab:fab_icon="@drawable/ic_history_white_48dp"
-        fab:fab_colorNormal="@color/android_green_light_noalpha"
-        fab:fab_title="@string/schedule_type_hourly_title"
-        fab:fab_colorPressed="@color/android_green"
-        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/schedules_list_empty_text"
+            android:id="@+id/textView10"
+            android:padding="30dp"
+            android:alpha="0.9"
+            android:textAlignment="center"
+            android:textColor="#aaa"
+            android:textSize="16dp"
+            android:gravity="center_horizontal"/>
 
-    <com.getbase.floatingactionbutton.FloatingActionButton
-        android:id="@+id/action_c"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        fab:fab_icon="@drawable/ic_autorenew_white_48dp"
-        fab:fab_colorNormal="@color/android_green_light_noalpha"
-        fab:fab_title="@string/schedule_type_period_title"
-        fab:fab_colorPressed="@color/android_green"
-        />
+    </LinearLayout>
 
-      <com.getbase.floatingactionbutton.FloatingActionButton
-          android:id="@+id/action_d"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          fab:fab_icon="@drawable/ic_qrcode_white_48dp"
-          fab:fab_colorNormal="@color/android_green_light_noalpha"
-          fab:fab_title="@string/schedule_type_from_qr"
-          fab:fab_colorPressed="@color/android_green"
-          />
-  </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
 
 </RelativeLayout>

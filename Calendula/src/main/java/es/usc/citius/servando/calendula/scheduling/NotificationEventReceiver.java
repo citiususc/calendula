@@ -1,13 +1,30 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.usc.citius.servando.calendula.scheduling;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 
@@ -26,88 +43,73 @@ public class NotificationEventReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        {
-            long routineId;
-            long scheduleId;
-            String scheduleTime;
-            // get action type
-            int action = intent.getIntExtra(CalendulaApp.INTENT_EXTRA_ACTION, -1);
 
-            Log.d(TAG, "Notification event received - Action : " + action);
+        long routineId;
+        long scheduleId;
+        String scheduleTime;
+        LocalDate date;
 
-            switch (action) {
+        int action = intent.getIntExtra(CalendulaApp.INTENT_EXTRA_ACTION, -1);
 
-                case CalendulaApp.ACTION_DELAY_ROUTINE:
-                    routineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
-                    if (routineId != -1) {
+        Log.d(TAG, "Notification event received - Action : " + action);
 
-                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                        String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
-                        long delay = Long.parseLong(delayMinutesStr);
-                        if (delay < 0) {
-                            delay = 15;
-                        }
-                        AlarmScheduler.instance().onDelayRoutine(routineId, context, (int) delay);
-                        Toast.makeText(context, context.getString(R.string.reminder_delayed_message), Toast.LENGTH_SHORT).show();
-
-                    }
-                    break;
-
-                case CalendulaApp.ACTION_CANCEL_ROUTINE:
-                    routineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
-                    if (routineId != -1) {
-                        AlarmScheduler.instance().onCancelRoutineNotifications(Routine.findById(routineId), context);
-                        Toast.makeText(context, context.getString(R.string.reminder_cancelled_message), Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-
-                case CalendulaApp.ACTION_DELAY_HOURLY_SCHEDULE:
-                    scheduleId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1);
-                    scheduleTime = intent.getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME);
-                    if (scheduleId != -1 && scheduleTime != null)
-                    {
-                        SharedPreferences prefs =
-                            PreferenceManager.getDefaultSharedPreferences(context);
-                        String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
-                        long delay = Long.parseLong(delayMinutesStr);
-                        if (delay < 0)
-                        {
-                            delay = 15;
-                        }
-                        Schedule s = Schedule.findById(scheduleId);
-                        LocalTime t =
-                            DateTimeFormat.forPattern("kk:mm").parseLocalTime(scheduleTime);
-                        AlarmScheduler.instance().onDelayHourlySchedule(s, t, context, (int) delay);
-                        Toast.makeText(context,
-                            context.getString(R.string.reminder_delayed_message),
-                            Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-
-                case CalendulaApp.ACTION_CANCEL_HOURLY_SCHEDULE:
-                    scheduleId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1);
-                    scheduleTime = intent.getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME);
-                    if (scheduleId != -1 && scheduleTime != null)
-                    {
-                        LocalTime t =
-                            DateTimeFormat.forPattern("kk:mm").parseLocalTime(scheduleTime);
-                        AlarmScheduler.instance()
-                            .onCancelHourlyScheduleNotifications(Schedule.findById(scheduleId), t,
-                                context);
-                        Toast.makeText(context,
-                            context.getString(R.string.reminder_cancelled_message),
-                            Toast.LENGTH_SHORT).show();
-                    } else
-                    {
-                        Log.d(TAG, "Invalid parameters: " + scheduleTime + ", " + scheduleId);
-                    }
-                    break;
-
-                default:
-                    Log.d(TAG, "Request not handled " + intent.toString());
-                    break;
-            }
+        String dateStr = intent.getStringExtra("date");
+        if (dateStr != null) {
+            date = DateTimeFormat.forPattern(AlarmIntentParams.DATE_FORMAT).parseLocalDate(dateStr);
+        } else {
+            Log.w(TAG, "Date not supplied, assuming today.");
+            date = LocalDate.now();
         }
+
+        switch (action) {
+
+            case CalendulaApp.ACTION_CANCEL_ROUTINE:
+                routineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
+                if (routineId != -1) {
+                    AlarmScheduler.instance().cancelStatusBarNotification(Routine.findById(routineId), date, context);
+                    Toast.makeText(context, context.getString(R.string.reminder_cancelled_message), Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case CalendulaApp.ACTION_CANCEL_HOURLY_SCHEDULE:
+                scheduleId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1);
+                scheduleTime = intent.getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME);
+                if (scheduleId != -1 && scheduleTime != null) {
+                    LocalTime t = DateTimeFormat.forPattern("kk:mm").parseLocalTime(scheduleTime);
+                    AlarmScheduler.instance().cancelStatusBarNotification(Schedule.findById(scheduleId), t, date, context);
+                    Toast.makeText(context,context.getString(R.string.reminder_cancelled_message),Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            default:
+                Log.d(TAG, "Request not handled " + intent.toString());
+                break;
+        }
+
     }
 
 }
+
+
+//case CalendulaApp.ACTION_DELAY_HOURLY_SCHEDULE:
+//        scheduleId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1);
+//        scheduleTime = intent.getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME);
+//        if (scheduleId != -1 && scheduleTime != null)
+//        {
+//        SharedPreferences prefs =
+//        PreferenceManager.getDefaultSharedPreferences(context);
+//        String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
+//        long delay = Long.parseLong(delayMinutesStr);
+//        if (delay < 0)
+//        {
+//        delay = 15;
+//        }
+//        Schedule s = Schedule.findById(scheduleId);
+//        LocalTime t =
+//        DateTimeFormat.forPattern("kk:mm").parseLocalTime(scheduleTime);
+//        AlarmScheduler.instance().onDelayHourlySchedule(s, t, date, context, (int) delay);
+//        Toast.makeText(context,
+//        context.getString(R.string.reminder_delayed_message),
+//        Toast.LENGTH_SHORT).show();
+//        }
+//        break;

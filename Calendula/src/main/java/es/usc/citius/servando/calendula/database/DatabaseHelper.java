@@ -1,3 +1,21 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.usc.citius.servando.calendula.database;
 
 
@@ -8,6 +26,7 @@ import android.util.Log;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.misc.TransactionManager;
+import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -20,6 +39,7 @@ import java.util.concurrent.Callable;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
@@ -45,13 +65,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Prescription.class,
             // v8
             HomogeneousGroup.class,
-            PickupInfo.class
+            PickupInfo.class,
+            // v9
+            Patient.class
     };
 
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
 
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
@@ -69,6 +91,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<HomogeneousGroup, Long> homogeneousGroupsDao = null;
     // the DAO object we use to access the pcikupInfo table
     private Dao<PickupInfo, Long> pickupInfoDao = null;
+    // the DAO object we use to access the patients table
+    private Dao<Patient, Long> patientDao = null;
+
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -88,10 +113,21 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 TableUtils.createTable(connectionSource, c);
             }
 
+            createDefaultPatient();
+
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
             throw new RuntimeException(e);
         }
+    }
+
+    private Patient createDefaultPatient() throws SQLException{
+        // Create a default patient
+        Patient p = new Patient();
+        p.setName("Usuario");
+        p.setDefault(true);
+        getPatientDao().create(p);
+        return p;
     }
 
     /**
@@ -135,6 +171,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                     // Create HomogeneousGroup and PickupInfo tables
                     TableUtils.createTable(connectionSource, HomogeneousGroup.class);
                     TableUtils.createTable(connectionSource, PickupInfo.class);
+                case 9:
+                    TableUtils.createTable(connectionSource, Patient.class);
+                    migrateToMultiPatient();
             }
 
 
@@ -142,6 +181,45 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.e(DatabaseHelper.class.getName(), "Can't upgrade databases", e);
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Method that migrate models to multi-user
+     */
+    private void migrateToMultiPatient() throws SQLException{
+
+        // add patient column to routines, schedules and medicines
+        getRoutinesDao().executeRaw("ALTER TABLE Routines ADD COLUMN Patient INTEGER;");
+        getRoutinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN Patient INTEGER;");
+        getRoutinesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Patient INTEGER;");
+        getRoutinesDao().executeRaw("ALTER TABLE DailyScheduleItems ADD COLUMN Patient INTEGER;");
+        getRoutinesDao().executeRaw("ALTER TABLE DailyScheduleItems ADD COLUMN Date TEXT;");
+
+        Patient p = createDefaultPatient();
+        // SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences();
+        // prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).commit();
+
+        // Assign all routines to the default patient
+        UpdateBuilder<Routine,Long> rUpdateBuilder = getRoutinesDao().updateBuilder();
+        rUpdateBuilder.updateColumnValue(Routine.COLUMN_PATIENT,p.id());
+        rUpdateBuilder.update();
+
+        // Assign all schedules to the default patient
+        UpdateBuilder<Schedule,Long> sUpdateBuilder = getSchedulesDao().updateBuilder();
+        sUpdateBuilder.updateColumnValue(Schedule.COLUMN_PATIENT,p.id());
+        sUpdateBuilder.update();
+
+        // Assign all medicines to the default patient
+        UpdateBuilder<Medicine,Long> mUpdateBuilder = getMedicinesDao().updateBuilder();
+        mUpdateBuilder.updateColumnValue(Medicine.COLUMN_PATIENT,p.id());
+        mUpdateBuilder.update();
+
+        // Assign all DailyScheduleItems to the default patient, for today
+        UpdateBuilder<DailyScheduleItem,Long> siUpdateBuilder = getDailyScheduleItemsDao().updateBuilder();
+        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_PATIENT,p.id());
+        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_DATE,LocalDate.now());
+        siUpdateBuilder.update();
+
     }
 
     /**
@@ -277,6 +355,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             pickupInfoDao = getDao(PickupInfo.class);
         }
         return pickupInfoDao;
+    }
+
+    /**
+     * Returns the Database Access Object (DAO) for our User class. It will create it or just give the cached
+     * value.
+     */
+    public Dao<Patient, Long> getPatientDao() throws SQLException {
+        if (patientDao == null) {
+            patientDao = getDao(Patient.class);
+        }
+        return patientDao;
     }
 
     @Override

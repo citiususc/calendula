@@ -1,9 +1,25 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.usc.citius.servando.calendula.activities;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -20,19 +36,25 @@ import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.zip.GZIPInputStream;
 
+import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.database.DB;
 
-public class ScanActivity extends ActionBarActivity {
+public class ScanActivity extends CalendulaActivity {
 
 
     TextView textView;
+    String afterScanPkg;
+    String afterScanCls;
+    Long patientId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        int color = DB.patients().getActive(this).color();
         setContentView(R.layout.activity_scan);
-
-        Log.d("ScanActivity", "onCreate");
+        setupStatusBar(color);
+        findViewById(R.id.container).setBackgroundColor(color);
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,9 +62,9 @@ public class ScanActivity extends ActionBarActivity {
             }
         });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
-        }
+        afterScanPkg = getIntent().getStringExtra("after_scan_pkg");
+        afterScanCls = getIntent().getStringExtra("after_scan_cls");
+        patientId = getIntent().getLongExtra("patient_id",-1);
     }
 
     @Override
@@ -69,6 +91,8 @@ public class ScanActivity extends ActionBarActivity {
         return arr;
     }
 
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -79,7 +103,6 @@ public class ScanActivity extends ActionBarActivity {
         if (result != null && requestCode == IntentIntegrator.REQUEST_CODE && data !=null) {
 
             byte[] dataBytes = data.getByteArrayExtra("SCAN_RESULT_BYTE_SEGMENTS_0");
-            byte[] dataBytes2 = data.getByteArrayExtra("SCAN_RESULT_BYTE_SEGMENTS_1");
 
             if (result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
@@ -89,7 +112,6 @@ public class ScanActivity extends ActionBarActivity {
                 String content = result.getContents();
 
                 Log.d("ScanActivity", "SCAN_RESULT_BYTE_SEGMENTS_0 : " + Arrays.toString(byteArrayToHex(dataBytes)));
-                Log.d("ScanActivity", "SCAN_RESULT_BYTE_SEGMENTS_1: " + Arrays.toString(byteArrayToHex(dataBytes2)));
                 Log.d("ScanActivity", "CONTENTS: " + Arrays.toString(byteArrayToHex(content.getBytes())));
 
                 // first, decode base64 QR content
@@ -122,9 +144,11 @@ public class ScanActivity extends ActionBarActivity {
                     }
                 }
 
-                Intent intent = new Intent(getApplicationContext(), ConfirmSchedulesActivity.class);
+                Intent intent = new Intent();
+                intent.setClassName(afterScanPkg, afterScanCls);
                 Bundle b = new Bundle();
                 b.putString("qr_data", content);
+                b.putLong("patient_id", patientId);
                 intent.putExtras(b);
                 startActivity(intent);
                 finish();

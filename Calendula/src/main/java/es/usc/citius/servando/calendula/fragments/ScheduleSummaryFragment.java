@@ -1,3 +1,21 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.usc.citius.servando.calendula.fragments;
 
 import android.content.Intent;
@@ -11,12 +29,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mikepenz.iconics.IconicsDrawable;
+
 import org.joda.time.LocalDate;
 
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.SummaryCalendarActivity;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Schedule;
@@ -52,7 +73,16 @@ public class ScheduleSummaryFragment extends Fragment {
         }
     }
 
+    IconicsDrawable iconFor(Presentation p){
+        return new IconicsDrawable(getContext())
+                .icon(Presentation.iconFor(p))
+                .colorRes(R.color.agenda_item_title)
+                .sizeDp(60);
+    }
+
     public void updateSummary() {
+
+        int color = DB.patients().getActive(getActivity()).color();
 
         Log.d(TAG, "updateSummary ScheduleSUmmaryFragment");
         View rootView = getView();
@@ -61,21 +91,19 @@ public class ScheduleSummaryFragment extends Fragment {
         Schedule s = ScheduleHelper.instance().getSchedule();
         List<ScheduleItem> items = ScheduleHelper.instance().getScheduleItems();
 
+        final TextView summaryTitle= (TextView) rootView.findViewById(R.id.summaryTitle);
         final TextView medNameTv = (TextView) rootView.findViewById(R.id.sched_summary_medname);
         final TextView medDaysTv = (TextView) rootView.findViewById(R.id.sched_summary_medi_days);
         final TextView medDailyFreqTv = (TextView) rootView.findViewById(R.id.sched_summary_medi_dailyfreq);
         final ImageView medIconImage = (ImageView) rootView.findViewById(R.id.sched_summary_medicon);
         final Button showCalendarButton = (Button) rootView.findViewById(R.id.button_show_calendar);
 
-        //String medName = med != null ? med.name() : "Unselected";
-        int medIcon = med != null ? med.presentation().getDrawable() : Presentation.PILLS.getDrawable();
-
         if (med != null) {
             medNameTv.setText(med.name());
         }
 
         medDaysTv.setText(s.toReadableString(getActivity()));
-        medIconImage.setImageDrawable(getResources().getDrawable(medIcon));
+        medIconImage.setImageDrawable(iconFor(med != null ? med.presentation() : Presentation.PILLS));
 
         if (s.type() != Schedule.SCHEDULE_TYPE_HOURLY) {
             String freq =
@@ -110,6 +138,14 @@ public class ScheduleSummaryFragment extends Fragment {
                 startActivity(i);
             }
         });
+
+        summaryTitle.setTextColor(color);
+        medNameTv.setTextColor(color);
+        medDailyFreqTv.setTextColor(color);
+        summaryTitle.setVisibility(View.VISIBLE);
+        medNameTv.setVisibility(View.VISIBLE);
+        medDailyFreqTv.setVisibility(View.VISIBLE);
+        medIconImage.setVisibility(View.VISIBLE);
 
 
     }

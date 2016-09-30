@@ -1,3 +1,21 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.usc.citius.servando.calendula.fragments;
 
 
@@ -43,12 +61,18 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
     int hour;
     int minute;
 
+    int pColor;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_or_edit_routine, container, false);
+
+        pColor = DB.patients().getActive(getActivity()).color();
+
         mNameTextView = (TextView) rootView.findViewById(R.id.routine_edit_name);
         timeButton = (Button) rootView.findViewById(R.id.button2);
 
+        timeButton.setTextColor(pColor);
 
         long routineId = -1;
 
@@ -65,7 +89,6 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
             setRoutine(mRoutine);
             hour = mRoutine.time().getHourOfDay();
             minute = mRoutine.time().getMinuteOfHour();
-//            mConfirmButton.setText(getString(R.string.edit_routine_button_text));
         } else {
             DateTime now = DateTime.now();
             hour = now.getHourOfDay();
@@ -125,17 +148,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
         mRoutine = r;
         mNameTextView.setText(mRoutine.name());
         updateTime();
-//        mConfirmButton.setText(getString(R.string.edit_routine_button_text));
-
     }
-
-//    prievate void clear() {
-//        mRoutine = null;
-//        mNameTextView.setText("");
-//        mTimePicker.setCurrentHour(12);
-//        mTimePicker.setCurrentMinute(00);
-//        mConfirmButton.setText(getString(R.string.create_routine_button_text));
-//    }
 
 
     void updateTime() {
@@ -162,31 +175,15 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
             // if creating
             else {
                 mRoutine = new Routine(new LocalTime(hour, minute), name);
+                mRoutine.setPatient(DB.patients().getActive(getContext()));
                 Log.d(getTag(), "Routine created");
                 DB.routines().saveAndFireEvent(mRoutine);
-                //mRoutine.save();
                 if (mRoutineEditCallback != null) {
                     mRoutineEditCallback.onRoutineCreated(mRoutine);
                 }
             }
         } else {
             Snack.show(R.string.medicine_no_name_error_message, getActivity());
-//            mNameTextView.setError("Please, type a name");
-//            mNameTextView.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-//                    mNameTextView.setError(null);
-//                    mNameTextView.removeTextChangedListener(this);
-//                }
-//
-//                @Override
-//                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable editable) {
-//                }
-//            });
         }
     }
 
@@ -198,9 +195,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
 
         if (r.scheduleItems().size() > 0) {
             message = String.format(getString(R.string.remove_routine_message_long), r.name());
-            //message = "The routine " + r.name() + " has associated schedules that will be lost if you delete it. Do you want to remove it anyway?";
         } else {
-            //message = "Remove " + r.name() + " routine?";
             message = String.format(getString(R.string.remove_routine_message_short), r.name());
         }
 

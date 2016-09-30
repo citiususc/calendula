@@ -1,9 +1,24 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 buildscript {
     repositories {
         mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.0'
     }
 }
 apply plugin: 'com.android.application'
@@ -16,6 +31,7 @@ repositories {
     jcenter()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     maven { url "http://dl.bintray.com/journeyapps/maven" }
+    maven { url 'https://jitpack.io' }
 }
 
 idea {
@@ -25,6 +41,12 @@ idea {
     }
 }
 
+// read keystore for app signing
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+
 def getDate() {
     def date = new Date()
     def formattedDate = date.format('yyyyMMddHHmmss')
@@ -32,19 +54,29 @@ def getDate() {
 }
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 21
-        versionCode 24
-        versionName "2.3.8"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 25
+        versionName "2.4-beta.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     packagingOptions {
         exclude 'LICENSE.txt'
     }
+
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
 
     lintOptions {
         abortOnError false
@@ -53,16 +85,16 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),                   \
-                              'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.release
         }
         debug {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),                   \
-                              'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
         }
         beta {
             minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             versionNameSuffix "-beta" + "-build" + getDate()
         }
     }
@@ -74,24 +106,24 @@ android {
                     output.outputFile.name.replace(".apk", "-${variant.versionName}.apk"))
         }
     }
-
+    compileOptions.incremental = false
 }
 
 dependencies {
 
     compile 'com.google.code.gson:gson'
-    compile project(':libraries:ExpandableListview')
     compile 'com.nispok:snackbar:2.9.0'
     compile 'com.doomonafireball.betterpickers:library:1.5.5'
     compile 'com.github.filippudak.progresspieview:library:1.0.+'
     compile 'com.github.amlcurran.showcaseview:library:5.0.0'
 
     // support
-    compile 'com.android.support:appcompat-v7:21.0.3'
-    compile 'com.android.support:cardview-v7:21.0.3'
-    compile 'com.android.support:recyclerview-v7:21.0.3'
-    compile 'com.android.support:palette-v7:21.0.3'
-    compile 'com.android.support:support-v4:21.0.3'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:cardview-v7:24.2.1'
+    compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile 'com.android.support:palette-v7:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:design:24.2.1'
 
     // round image view
     compile 'com.makeramen:roundedimageview:1.5.0'
@@ -105,7 +137,9 @@ dependencies {
     compile 'com.melnykov:floatingactionbutton:1.1.0'
 
     // calendar view
-    compile 'com.squareup:android-times-square:1.6.1@aar'
+    compile 'com.squareup:android-times-square:1.6.4@aar'
+    compile 'com.roomorama:caldroid:3.0.1'
+    compile 'com.github.sundeepk:compact-calendar-view:1.8.4'
 
     // Tab strip
     //compile 'com.ogaclejapan.smarttablayout:library:1.1.0@aar'
@@ -132,4 +166,24 @@ dependencies {
 
     // google rfc 2445
     compile files('libs/rfc2445.jar')
+
+    compile('com.mikepenz:materialdrawer:4.4.1@aar') {
+        transitive = true
+    }
+    compile 'com.mikepenz:iconics-core:2.1.0@aar'
+    compile 'com.mikepenz:google-material-typeface:2.1.2.1@aar'
+    compile 'com.mikepenz:community-material-typeface:1.2.65.1@aar'
+    compile('com.mikepenz:materialize:0.2.7@aar') {
+        transitive = true
+    }
+    compile('com.mikepenz:aboutlibraries:5.2.5@aar') {
+        transitive = true
+    }
+
+    //
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.heinrichreimersoftware:material-intro:1.5.8'
+
 }
+
+apply plugin: 'com.google.gms.google-services'

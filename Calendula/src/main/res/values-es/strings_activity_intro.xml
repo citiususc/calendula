@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2016 CITIUS - USC
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="intro_title">Bienvenido a Calendula!</string>
+    <string name="intro_description">Tomar correctamente tu medicación no tiene por qué ser fácil, pero ahora al menos no será tan difícil
+        \n\nPor favor, echa un vistazo a lo que tenemos para ti!</string>
+
+    <string name="intro_routines_title">Rutinas</string>
+    <string name="intro_routines_text">
+        Una rutina es un momento del día en que habitualmente debes tomar algún medicamento.
+        \n\n¿Tomas varios medicamentos con el desayuno? Define una rutina para esa hora y Calendula
+        agrupará todas tus tomas en un único aviso.
+    </string>
+
+    <string name="intro_meds_title">Botiquín</string>
+    <string name="intro_meds_text">
+       Manten el control de todos tus fármacos usando el botiquín, y accede de forma
+        fácil a sus prospectos en la Agencia Española de Medicamentos y Productos Sanitarios.
+    </string>
+
+    <string name="intro_schedules_title">Pautas</string>
+    <string name="intro_schedules_text">
+        Define tu calendario de tomas usando nuestro editor de pautas. Puedes vincular tus tomas con tus rutinas,
+        definir pautas que se repiten diariamente o semanalmente y mucho más!
+    </string>
+
+    <string name="intro_reminders_title">Recordatorios</string>
+    <string name="intro_reminders_text">
+        Calendula te recordará todas tus tomas. Acuérdate de confirmar, o te seguiremos avisando!
+        \n\nPersonaliza tus alarmas en el menú de opciones.
+    </string>
+
+    <string name="intro_multipat_title">Varios pacientes!</string>
+    <string name="intro_multipat_text">
+        Calendula te permite gestionar la medicación de varios pacientes, con su propio botiquín, rutinas y pautas.
+        \n\nVerás todas sus tomas en la pantalla de inicio.
+    </string>
+
+
+</resources>
+

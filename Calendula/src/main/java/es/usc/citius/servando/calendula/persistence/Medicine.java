@@ -1,3 +1,21 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.usc.citius.servando.calendula.persistence;
 
 
@@ -26,6 +44,7 @@ public class Medicine implements Comparable<Medicine> {
     public static final String COLUMN_PRESENTATION = "Presentation";
     public static final String COLUMN_CN = "cn";
     public static final String COLUMN_HG = "hg";
+    public static final String COLUMN_PATIENT = "Patient";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
@@ -41,6 +60,9 @@ public class Medicine implements Comparable<Medicine> {
 
     @DatabaseField(columnName = COLUMN_HG)
     private Long homogeneousGroup;
+
+    @DatabaseField(columnName = COLUMN_PATIENT, foreign = true, foreignAutoRefresh = true)
+    private Patient patient;
 
     public Medicine() {
     }
@@ -96,6 +118,14 @@ public class Medicine implements Comparable<Medicine> {
 
     public Collection<PickupInfo> pickups() {
         return DB.pickups().findByMedicine(this);
+    }
+
+    public Patient patient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     @Override

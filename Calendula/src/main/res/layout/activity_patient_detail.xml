@@ -1,0 +1,208 @@
+<!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2016 CITIUS - USC
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                tools:context="es.usc.citius.servando.calendula.activities.PatientDetailActivity"
+                android:id="@+id/bg"
+                android:background="#fff">
+
+
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="260dp"
+        android:id="@+id/top"
+        android:transitionName="background"
+        android:background="@color/android_blue_dark">
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/patient_avatar_bg"
+            >
+        </View>
+
+        <ImageView
+            android:id="@+id/patient_avatar"
+            android:transitionName="transition"
+            android:layout_width="140dp"
+            android:src="@drawable/avatar_default"
+            android:layout_height="140dp"
+            android:scaleType="fitCenter"
+            android:padding="0dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="60dp"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vincular"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:id="@+id/linkButton"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="#fff"/>
+
+    </RelativeLayout>
+
+
+
+
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:title="Patients"
+        android:layout_marginTop="@dimen/status_bar_height"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        />
+
+
+    <EditText
+        android:id="@+id/patient_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="72dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="24dp"
+        android:imeOptions="actionDone"
+        android:layout_below="@+id/textView2"
+        android:textColor="@color/dark_grey_home"
+        android:textSize="22dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_below="@+id/top"
+        android:layout_marginLeft="72dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center_vertical"
+        android:text="Name"
+        android:textColor="@color/dark_grey_text"
+        android:textSize="20sp" />
+
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Crear rutinas por defecto"
+        android:id="@+id/checkBox"
+        android:layout_below="@+id/patient_name"
+        android:layout_alignLeft="@+id/patient_name"
+        android:layout_marginTop="36dp"
+        android:elegantTextHeight="false"
+        android:textColor="@color/dark_grey_text"
+        android:textSize="16sp"/>
+
+    <com.mikepenz.iconics.view.IconicsImageView
+        app:iiv_color="@color/dark_grey_home"
+        app:iiv_icon="cmd-account"
+        app:iiv_padding="3dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/top"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="30dp"/>
+
+
+    <RelativeLayout
+        android:id="@+id/grid_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="visible"
+        android:layout_below="@+id/top">
+
+        <HorizontalScrollView
+            android:id="@+id/colorScroll"
+            android:scrollbars="none"
+            android:layout_width="fill_parent"
+            android:layout_height="80dp">
+            <LinearLayout
+                android:id="@+id/color_chooser"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="80dp">
+
+                <!--<include layout="@layout/color_chooser_item"/>-->
+                <!--<include layout="@layout/color_chooser_item"/>-->
+                <!--<include layout="@layout/color_chooser_item"/>-->
+                <!--<include layout="@layout/color_chooser_item"/>-->
+                <!--<include layout="@layout/color_chooser_item"/>-->
+                <!--<include layout="@layout/color_chooser_item"/>-->
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+
+        <GridView
+            android:id="@+id/grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:horizontalSpacing="20dp"
+            android:numColumns="3"
+            android:verticalSpacing="0dp"
+            android:scrollbars="none"
+            android:paddingLeft="20dp"
+            android:paddingTop="0dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="0dp"
+            android:layout_alignParentTop="true"
+            android:visibility="visible"
+            android:layout_marginTop="80dp"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="10dp"
+        android:background="@drawable/presentation_box_shadow_top"
+        android:alpha="0.4"
+        android:layout_below="@+id/top"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/avatar_change"
+        android:transitionName="fab"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="-35dp"
+        android:layout_marginRight="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/top"
+        fab:fab_icon="@drawable/ic_autorenew_white_48dp"
+        fab:fab_colorNormal="#efefef"
+        fab:fab_colorPressed="#b7b7b7"
+        />
+
+</RelativeLayout>

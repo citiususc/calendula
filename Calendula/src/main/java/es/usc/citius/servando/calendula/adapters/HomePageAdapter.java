@@ -1,3 +1,21 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.usc.citius.servando.calendula.adapters;
 
 import android.app.Activity;
@@ -11,7 +29,7 @@ import es.usc.citius.servando.calendula.fragments.DailyAgendaFragment;
 import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
 import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
-import es.usc.citius.servando.calendula.util.Screen;
+import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 /**
  * Created by joseangel.pineiro on 11/15/13.
@@ -24,7 +42,7 @@ public class HomePageAdapter extends FragmentPagerAdapter {
     public HomePageAdapter(FragmentManager fm, Context ctx, Activity activity) {
         super(fm);
         // obtain the window width in dp to use later
-        dpWidth = Screen.getDpSize(activity).x;
+        dpWidth = ScreenUtils.getDpSize(activity).x;
 
         titles = new String[]{
                 ctx.getString(R.string.title_home),
@@ -57,6 +75,6 @@ public class HomePageAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return titles[position];
+        return "";//titles[position];
     }
 }

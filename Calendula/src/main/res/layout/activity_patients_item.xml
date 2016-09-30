@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2016 CITIUS - USC
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<android.support.v7.widget.CardView
+    android:id="@+id/card_view_friend"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="0dp"
+    card_view:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        >
+
+        <RelativeLayout
+            android:id="@+id/patient_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/patient_avatar_bg"
+                android:layout_width="fill_parent"
+                android:layout_height="130dp"
+                android:background="@color/android_blue"
+                android:transitionName="background"
+                />
+
+            <ImageView
+                android:id="@+id/patient_avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="25dp"
+                android:padding="0dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/avatar_default"
+                android:transitionName="transition"/>
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/patient_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/patient_item"
+            android:layout_gravity="bottom"
+            android:background="@color/android_blue"
+            android:editable="false"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="8dp"
+            android:text="Patient name"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textColor="@android:color/white"
+            android:transitionName="patient_name"
+            />
+
+        <FrameLayout
+            android:id="@+id/active_indicator"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/triangle_corner">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/ic_beenhere_white_48dp"
+                android:visibility="visible"/>
+        </FrameLayout>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/lock_icon"/>
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

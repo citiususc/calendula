@@ -1,161 +1,93 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.usc.citius.servando.calendula.util;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
-import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Presentation;
-import es.usc.citius.servando.calendula.persistence.Routine;
-import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
 /**
- * Created by joseangel.pineiro on 11/15/13.
+ * Stub for daily agenda view
  */
 public class DailyAgendaItemStub {
 
-    public static final String TAG = DailyAgendaItemStub.class.getName();
-    public boolean isSpacer = false;
-    public boolean isEmptyPlaceholder = false;
-    public boolean isRoutine = true;
-    public boolean isNext = false;
-    //public int hour;
-    public boolean hasEvents;
+    public static final String TAG = "DailyAgendaItemStub";
+
     public List<DailyAgendaItemStubElement> meds;
-    public int primaryColor = -1;
-    public int secondaryColor = -1;
-    public boolean hasColors = false;
-    //public String time = "";
+
     public String title = "";
     public LocalTime time;
+    public LocalDate date;
     public Long id = -1l;
-    public int hour;
-    public int minute;
+    public Patient patient;
 
-    public DailyAgendaItemStub(LocalTime time)
-    {
+    public boolean isSpacer = false;
+    public boolean isRoutine = true;
+    public boolean hasEvents = false;
+    public boolean displayable = false;
+    public boolean isCurrentHour = false;
+
+    public DailyAgendaItemStub(LocalDate date, LocalTime time) {
+        this.date = date;
         this.time = time;
     }
 
-    public static List<DailyAgendaItemStub> fromHour(int hour)
-    {
-        
-        //int today = DateTime.now().getDayOfWeek();
-        LocalDate today = LocalDate.now();
-
-        List<Routine> routines = Routine.findInHour(hour);
-        List<DailyAgendaItemStub> items = new ArrayList<DailyAgendaItemStub>(routines.size());
-
-        if (!routines.isEmpty())
-        {
-
-            for (Routine r : routines) {
-                // Find doses off all routines in this hour
-                List<ScheduleItem> doses = r.scheduleItems();
-
-                if (doses.size() > 0)
-                {
-
-                    // create an ItemStub for the current hour
-                    DailyAgendaItemStub item = new DailyAgendaItemStub(r.time());
-
-                    item.meds = new ArrayList<>();
-
-                    for (ScheduleItem scheduleItem : doses) {
-                        if (scheduleItem.schedule() != null && scheduleItem.schedule()
-                                .enabledForDate(today)) {
-                            item.hasEvents = true;
-                            int minute = r.time().getMinuteOfHour();
-                            Medicine med = scheduleItem.schedule().medicine();
-                            DailyAgendaItemStubElement el = new DailyAgendaItemStubElement();
-                            el.medName = med.name();
-                            el.dose = scheduleItem.dose();
-                            el.displayDose = scheduleItem.displayDose();
-                            el.res = med.presentation().getDrawable();
-                            el.presentation = med.presentation();
-                            el.minute = minute < 10 ? "0" + minute : String.valueOf(minute);
-                            el.taken = DailyScheduleItem.findByScheduleItem(scheduleItem).takenToday();
-                            item.meds.add(el);
-                        }
-                    }
-                    Collections.sort(item.meds);
-
-                    if (!item.meds.isEmpty())
-                    {
-                        item.id = r.getId();
-                        item.title = r.name();
-                        item.hour = r.time().getHourOfDay();
-                        item.minute = r.time().getMinuteOfHour();
-                        items.add(item);
-                    }
-                } else
-                {
-                    items.add(new DailyAgendaItemStub(new LocalTime(hour, 0)));
-                }
-            }
-        } else
-        {
-            items.add(new DailyAgendaItemStub(new LocalTime(hour, 0)));
-        }
-
-        // create an ItemStub for the current hour
-        //        DailyAgendaItemStub item = new DailyAgendaItemStub(hour);
-        //        // find routines in this our
-        //
-        //        // Find doses off all routines in this hour
-        //        List<ScheduleItem> doses = new ArrayList<ScheduleItem>();
-        //
-        //        for (Routine routine : routines) {
-        //            doses.addAll(routine.scheduleItems());
-        //        }
-        //
-        //        if (doses.size() > 0) {
-        //            item.hasEvents = true;
-        //            item.meds = new ArrayList<DailyAgendaItemStubElement>();
-        //            for (ScheduleItem scheduleItem : doses) {
-        //
-        //                int minute = scheduleItem.routine().time().getMinuteOfHour();
-        //
-        //                Medicine med = scheduleItem.schedule().medicine();
-        //                DailyAgendaItemStubElement el = new DailyAgendaItemStubElement();
-        //                el.medName = med.name();
-        //                el.dose = (int) scheduleItem.dose();
-        //                el.res = med.presentation().getDrawable();
-        //                el.presentation = med.presentation();
-        //                el.minute = minute < 10 ? "0" + minute : String.valueOf(minute);
-        //                el.taken = DailyScheduleItem.findByScheduleItem(scheduleItem).takenToday();
-        //                item.meds.add(el);
-        //            }
-        //            Collections.sort(item.meds);
-        //        }
-        //        Log.d(TAG, "Schedules in hour: " + doses.size());
-        return items;
+    public DateTime dateTime() {
+        return date.toDateTime(time);
     }
 
-    public static class DailyAgendaItemStubElement
-            implements Comparable<DailyAgendaItemStubElement> {
+    public static class DailyAgendaItemStubElement  implements Comparable<DailyAgendaItemStubElement> {
+
+        public int res;
+        public double dose;
+        public boolean taken;
 
         public String medName;
         public String minute;
         public String displayDose;
-        public double dose;
-
-        public boolean taken;
+        public Long scheduleItemId = -1l;
         public Presentation presentation;
-        public int res;
 
         @Override
-        public int compareTo(DailyAgendaItemStubElement other)
-        {
+        public int compareTo(DailyAgendaItemStubElement other) {
             int result = minute.compareTo(other.minute);
             if (result == 0) result = taken ? 0 : 1;
             if (result == 0) result = medName.compareTo(other.medName);
-
             return result;
         }
     }
+
+    @Override
+    public String toString() {
+        return "DailyAgendaItemStub{" +
+                ", isRoutine=" + isRoutine +
+                ", hasEvents=" + hasEvents +
+                ", count=" + (meds != null ? meds.size() : 0) +
+                ", title='" + title + '\'' +
+                ", time=" + time.toString("kk:mm") +
+                ", date=" + date.toString("dd/MM") +
+                '}';
+    }
+
 }

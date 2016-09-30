@@ -1,3 +1,21 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.usc.citius.servando.calendula.scheduling;
 
 import android.content.BroadcastReceiver;
@@ -14,79 +32,60 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     public static final String TAG = "AlarmReceiver.class";
 
-
     @Override
     public void onReceive(Context context, Intent intent)
     {
+
+        if (CalendulaApp.disableReceivers) { return; }
+
+        AlarmIntentParams params = intent.getParcelableExtra(AlarmScheduler.EXTRA_PARAMS);
+
+        if(params == null)
         {
-            Log.d(TAG, "onReceive");
-            if (CalendulaApp.disableReceivers)
-            {
-                return;
-            }
-
-            // get action type
-            int action = intent.getIntExtra(CalendulaApp.INTENT_EXTRA_ACTION, -1);
-            Log.d(TAG, "Alarm received (Action : " + action + ")");
-
-            switch (action)
-            {
-                case CalendulaApp.ACTION_ROUTINE_TIME:
-                    Log.d(TAG, "Action ACTION_ROUTINE_TIME");
-                    onRoutineAlarmReceived(context, intent);
-                    break;
-                case CalendulaApp.ACTION_ROUTINE_DELAYED_TIME:
-                    Log.d(TAG, "Action ACTION_ROUTINE_DELAYED_TIME");
-                    onRoutineAlarmReceived(context, intent);
-                    break;
-                case CalendulaApp.ACTION_HOURLY_SCHEDULE_TIME:
-                    Log.d(TAG, "Action ACTION_HOURLY_SCHEDULE_TIME");
-                    onHourlyScheduleAlarmReceived(context, intent);
-                    break;
-                case CalendulaApp.ACTION_HOURLY_SCHEDULE_DELAYED_TIME:
-                    Log.d(TAG, "Action ACTION_HOURLY_SCHEDULE_DELAYED_TIME");
-                    onHourlyScheduleAlarmReceived(context, intent);
-                    break;
-                case CalendulaApp.ACTION_DAILY_ALARM:
-                    Log.d(TAG, "Action ACTION_DAILY_ALARM");
-                    onDailyAgendaAlarmReceived(context, intent);
-                    break;
-                default:
-                    Log.w(TAG, "Unknown action");
-                    break;
-            }
-           /* // routine time or routine delayed reminder
-            if ((action == CalendulaApp.ACTION_ROUTINE_TIME) || (action == CalendulaApp.ACTION_ROUTINE_DELAYED_TIME)) {
-                onRoutineAlarmReceived(context,intent);
-            } else if ((action == CalendulaApp.ACTION_HOURLY_SCHEDULE_TIME) || (action == CalendulaApp.ACTION_HOURLY_SCHEDULE_DELAYED_TIME)) {
-                onHourlyScheduleAlarmReceived(context,intent);
-            } else if (action == CalendulaApp.ACTION_DAILY_ALARM) {
-                onDailyAgendaAlarmReceived();
-            }*/
+            Log.w(TAG, "No extra params supplied");
+            return;
+        }else{
+            Log.d(TAG, "Received alarm: " + params.action);
         }
-    }
 
-    public void onRoutineAlarmReceived(Context context, Intent intent)
-    {
-        // get the routine hash code from the intent
-        Long routineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
-        Log.d(TAG, "Routine id: " + routineId);
-        AlarmScheduler.instance().onAlarmReceived(routineId, context.getApplicationContext());
-    }
 
-    public void onHourlyScheduleAlarmReceived(Context context, Intent intent)
-    {
-        // get the schedule id from the intent
-        Long scheduleId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1);
-        String scheduleTime = intent.getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME);
-        Log.d(TAG, "Hourly schedule id: " + scheduleId);
-        AlarmScheduler.instance()
-            .onHourlyAlarmReceived(scheduleId, scheduleTime, context.getApplicationContext());
-    }
 
-    public void onDailyAgendaAlarmReceived(Context context, Intent intent)
-    {
-        Log.d(TAG, "Received update daily agenda event");
-        DailyAgenda.instance().setupForToday(context.getApplicationContext(), false);
+        Intent serviceIntent = new Intent(context, AlarmIntentService.class);
+        serviceIntent.putExtra(AlarmScheduler.EXTRA_PARAMS, params);
+        context.startService(serviceIntent);
     }
 }
+
+
+//
+//        Log.d(TAG, "Alarm received: " + params.toString());
+//
+//        try {
+//            params.date();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return;
+//        }
+//
+//        switch (params.action)
+//        {
+//            case CalendulaApp.ACTION_ROUTINE_TIME:
+//            case CalendulaApp.ACTION_ROUTINE_DELAYED_TIME:
+//                AlarmScheduler.instance().onAlarmReceived(params, context);
+//                break;
+//
+//            case CalendulaApp.ACTION_HOURLY_SCHEDULE_TIME:
+//            case CalendulaApp.ACTION_HOURLY_SCHEDULE_DELAYED_TIME:
+//                AlarmScheduler.instance().onHourlyAlarmReceived(params, context);
+//                break;
+//
+//            case CalendulaApp.ACTION_DAILY_ALARM:
+//                Log.d(TAG, "Received daily alarm");
+//                DailyAgenda.instance().setupForToday(context.getApplicationContext(), false);
+//                break;
+//
+//            default:
+//                Log.w(TAG, "Unknown action received");
+//                break;
+//        }
+

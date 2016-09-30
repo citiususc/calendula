@@ -1,83 +1,117 @@
+<!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2016 CITIUS - USC
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/action_bar_height"
     android:background="@color/white"
     tools:context="es.usc.citius.servando.calendula.activities.ReminderActivity">
 
-    <LinearLayout
-        android:id="@+id/prof_container"
+    <RelativeLayout
+        android:id="@+id/zoom_avatar_container"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <!--<es.usc.citius.servando.calendula.util.view.CustomDigitalClock-->
-        <!--android:id="@+id/clock"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:textColor="@color/android_blue_dark"-->
-        <!--android:textSize="40dp"-->
-        <!--android:gravity="center" />-->
-
-        <TextView
-            android:id="@+id/clock"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:text="12:45"
-            android:textColor="@color/android_blue_dark"
-            android:textSize="30sp" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:id="@+id/zoom_patient_avatar"
+            android:src="@drawable/avatar1"
+            android:layout_marginTop="10dp"
+            />
 
         <TextView
             android:id="@+id/routine_name"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/prof_container"
+            android:layout_below="@+id/clock"
             android:layout_centerInParent="true"
             android:fontFamily="sans-serif-light"
             android:gravity="center"
             android:text="Lunch"
             android:textColor="@color/android_blue_dark"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"/>
 
         <TextView
-            android:id="@+id/meds_time_view"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/prof_container"
-            android:layout_centerInParent="true"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="center"
-            android:text="@string/agenda_zoom_meds_time"
+            android:id="@+id/zoom_patient_name"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:text="Ángel"
             android:textColor="#444"
-            android:textSize="20dp" />
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp"
+            android:textSize="22dp"
             android:layout_marginTop="10dp"
-            android:background="#efefef" />
+            android:gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentRight="true"
+            android:fontFamily="sans-serif-condensed"/>
+
+        <TextView
+            android:id="@+id/clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="12:45"
+            android:textColor="@color/android_blue_dark"
+            android:textSize="30sp"
+            android:paddingRight="0dp"
+            android:layout_marginTop="20dp"
+            />
+
+    </RelativeLayout>
 
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/meds_time_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/zoom_avatar_container"
+        android:layout_centerInParent="true"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        android:text="@string/agenda_zoom_meds_time"
+        android:textColor="#444"
+        android:textSize="20dp"
+        />
 
+    <ImageView
+        android:id="@+id/spacer"
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#efefef"
+        android:layout_below="@+id/meds_time_view"/>
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/prof_container"
+        android:layout_below="@+id/spacer"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/delays_spinner"
         android:layout_toRightOf="@+id/delays_spinner"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:layout_above="@+id/delay_button">
 
         <LinearLayout
             android:id="@+id/reminder_list"
@@ -115,7 +149,7 @@
     <ImageButton
         android:id="@+id/button"
         android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_height="65dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
@@ -124,21 +158,23 @@
         android:scaleType="fitCenter"
         android:src="@drawable/ic_arrow_back_black_48dp"
         android:text="Close"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        android:visibility="gone"/>
 
     <ImageButton
         android:id="@+id/delay_button"
         android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_height="55dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentTop="false"
         android:background="@drawable/simple_highlight_click_selector"
         android:padding="7dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_history_black_48dp"
         android:text="Delay"
         android:textSize="15sp"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

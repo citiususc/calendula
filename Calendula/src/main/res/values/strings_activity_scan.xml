@@ -1,3 +1,21 @@
+<!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2016 CITIUS - USC
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <resources>
 
     <string name="scan_review_prescriptions_start">Start</string>
@@ -24,7 +42,7 @@
     <string name="best_days_messge">Acude a la farmacia uno de los siguientes días y así podrás recoger %1$s medicamentos a la vez:</string>
     <string name="best_single_day_messge">Acude a la farmacia %1$s y así podrás recoger %2$s medicamentos a la vez:</string>
     <string name="best_single_day_messge_one_med">Acude a la farmacia %1$s para recoger:</string>
-    <string name="best_single_day_messge_after_pending">Después, podrías acudir de nuevo %1$s y así recoger %2$s medicamentos a la vez:</string>
+    <string name="best_single_day_messge_after_pending">Después, podrías acudir de nuevo el %1$s y así recoger %2$s medicamentos a la vez:</string>
     <string name="best_single_day_messge_after_pending_one_med">Después, podrías acudir de nuevo %1$s y recoger:</string>
     <string name="pending_meds_msg">Hay medicación en la farmacia pendiente de retirar. Por favor, acude en cuanto sea posible:</string>
     <string name="calendar_date_tomorrow">mañana</string>

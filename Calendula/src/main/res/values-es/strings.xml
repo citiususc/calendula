@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2016 CITIUS - USC
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <resources>
 
     <string name="app_name">Calendula</string>
@@ -12,8 +30,8 @@
     <string name="home_menu_routines">RUTINAS</string>
     <string name="home_menu_medicines">MEDICINAS</string>
     <string name="home_menu_schedules">PAUTAS</string>
-    <string name="home_menu_pharmacies">FARMACIAS</string>
-    <string name="home_menu_plantrip">PLAN DE VIAJE</string>
+    <string name="home_menu_pharmacies">Farmacias</string>
+    <string name="home_menu_plantrip">Plan de viaje</string>
     <string name="action_bar_title_today">Hoy</string>
     <string name="action_bar_title_home">Inicio</string>
     <string name="medicine">medicina</string>
@@ -31,6 +49,7 @@
     <string name="drawer_services_option">Herramientas</string>
     <string name="drawer_help_option">Recorrido</string>
     <string name="drawer_settings_option">Ajustes</string>
+    <string name="drawer_about_option">Acerca de</string>
 
     <string-array name="home_drawer_actions">
         <item>@string/drawer_top_option</item>
@@ -373,7 +392,7 @@
     <string name="title_activity_calendar">Calendario</string>
     <string name="title_pickups_bottom_sheet">Recogidas el %1$s</string>
     <string name="pickup_interval">Hasta el %1$s</string>
-    <string name="pickup_date_format">dd \'de\' MMMM</string>
+    <string name="pickup_date_format">dd/MM</string>
     <string name="pref_title_pickup_notification">Notificaciones de recogida de medicamentos</string>
     <string name="title_activity_confirm_schedules">Confirmar pautas</string>
 
@@ -387,6 +406,42 @@
 
     <string name="create_schedule_select_med_before_dose">Por favor, selecciona un medicamento primero</string>
     <string name="updating_prescriptions_db_msg">La base de datos de medicamentos está siendo actualizada. Estará lista en muy pocos segundos</string>
+
+    <string name="schedule_type_help_title">
+        Estás a punto de crear una pauta, selecciona la que mejor se ajuste a tus necesidades!
+    </string>
+
+    <string name="schedule_type_routines_help">
+        Este tipo de pauta te permite vincular tus tomas con rutinas, por ejemplo: \"Todos los días con desayuno y cena, excepto los domingos\", o \"Cada 3 días, con la comida.\"
+    </string>
+
+    <string name="schedule_type_hourly_help">
+        Las pautas de intervalo horario están pensadas para esas tomas que se repiten cada cierto número de horas: \"Cada 8 horas\".\n\nEstablece la hora de la primera toma, y listo!.
+    </string>
+
+    <string name="schedule_type_intervalrest_help">
+        Algunos anticonceptivos y otros medicamentos deben tomarse durante un tiempo, y luego hay un descanso. Estas pautas te permiten especificar ambos períodos y simplificar este tipo de tomas.
+    </string>
+
+    <string name="routines_list_empty_text">Aún no se han añadido rutinas.\n\nLas rutinas son horas del día en las que habitualmente tomas medicamentos, como el desayuno o la cena. Puedes reutilizarlas para crear pautas más rápido.</string>
+    <string name="medicines_list_empty_text">Aún no se han añadido medicamentos.\n\nAñade tus medicamentos al botiquín, y tendrás fácil acceso a sus prospectos y avisos.</string>
+    <string name="schedules_list_empty_text">Aún no se han añadido pautas.\n\nAñade aquí tus pautas y permite que te avisemos! </string>
+
+
+    <string name="about_description">
+        <![CDATA[<br/><br/>Calendula está desarrollada por el Centro de Investigación en Tecnologías de la Información
+                            de la USC (<a href=\'http://citius.usc.es\'>CITIUS</a>)
+                            <br/><br/>Visita nuestra web para obtener más información:
+                            <br/> <a href=\'http://citius.usc.es/calendula\'>citius.usc.es/calendula </a>
+                            <br/><br/>Calendula es un proyecto de código abierto. Puedes contribuir con tus ideas y sugerencias
+                            a través de nuestra página en Github o enviando un mensaje de correo electrónico:
+                            <br/><a href=\'https://github.com/citiususc/calendula\'>https://github.com/citiususc/calendula </a>
+                            <br/><a href=\'mailto:citius.calendula@usc.es\'>citius.calendula@usc.es</a>
+                            <br/><br/>
+                            Para este desarrollo hacemos uso de algunas librerías y utilidades de código abierto, que mostramos a continuacion:
+    "]]></string>
+
+    <string name="title_activity_patients">Pacientes</string>
 
 </resources>
 

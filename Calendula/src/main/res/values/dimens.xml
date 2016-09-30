@@ -1,3 +1,21 @@
+<!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2016 CITIUS - USC
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
@@ -16,7 +34,7 @@
     <!-- action_bar_height + tabs_height -->
     <dimen name="fragment_tabs_margin_top">112dp</dimen>
 
-    <dimen name="header_height">220dp</dimen>
+    <dimen name="header_height">260dp</dimen>
     <dimen name="header_height_empty">320dp</dimen>
     <dimen name="routine_label_from_schedule_creation">23sp</dimen>
 
