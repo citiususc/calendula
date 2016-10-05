@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Random;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.HomePagerActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
@@ -369,4 +370,44 @@ public class ReminderNotification {
             nm.cancel(id);
         }
     }
+
+
+    private static Notification buildLostNotification(Context context, String text){
+
+        Intent intent = new Intent(context, HomePagerActivity.class);
+        PendingIntent defaultIntent = PendingIntent.getActivity(context, random.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+
+                // Set appropriate defaults for the notification light, sound, and vibration.
+                .setDefaults(Notification.DEFAULT_ALL)
+                // Set required fields, including the small icon, the notification title, and text.
+                .setSmallIcon(R.drawable.ic_alarm_off_white_24dp)
+                .setContentTitle("Alarma perdida")
+                .setContentText(text)
+                // Set ticker text (preview) information for this notification.
+                .setTicker("Alarma perdida")
+                .setWhen(DateTime.now().getMillis())
+                // Set the pending intent to be initiated when the user touches the notification.
+                .setContentIntent(defaultIntent)
+                //.setLights(0x00ff0000, 500, 1000)
+                .setPriority(Notification.PRIORITY_DEFAULT)
+                .setVibrate(new long[] { 1000, 200, 500, 200, 100, 200, 1000 })
+                // Automatically dismiss the notification when it is touched.
+                .setAutoCancel(true);
+
+        Notification n = builder.build();
+        n.defaults = 0;
+        n.ledARGB = 0x00ffa500;
+        n.ledOnMS = 1000;
+        n.ledOffMS = 2000;
+        return n;
+    }
+
+    public static void lost(String text, Context ctx) {
+        Notification notification = buildLostNotification(ctx, text);
+        final NotificationManager nm = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.notify(1234567890, notification);
+    }
+
 }

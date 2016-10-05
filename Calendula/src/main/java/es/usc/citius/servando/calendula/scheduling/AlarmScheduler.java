@@ -23,6 +23,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -62,17 +63,17 @@ public class AlarmScheduler {
         return instance;
     }
 
-    public static PendingIntent pendingIntent(Context ctx, Routine routine, LocalDate date, boolean delayed){
+    public static PendingIntent pendingIntent(Context ctx, Routine routine, LocalDate date, boolean delayed, int actionType){
         Intent intent = new Intent(ctx, AlarmReceiver.class);
-        AlarmIntentParams params = AlarmIntentParams.forRoutine(routine.getId(), date, delayed);
-        intent.putExtra(EXTRA_PARAMS, params);
+        AlarmIntentParams params = AlarmIntentParams.forRoutine(routine.getId(), date, delayed, actionType);
+        intent.putExtra(AlarmScheduler.EXTRA_PARAMS, AlarmScheduler.alarmParams(params));
         return PendingIntent.getBroadcast(ctx, params.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    public static PendingIntent pendingIntent(Context ctx, Schedule schedule, LocalTime time, LocalDate date, boolean delayed){
+    public static PendingIntent pendingIntent(Context ctx, Schedule schedule, LocalTime time, LocalDate date, boolean delayed, int actionType){
         Intent intent = new Intent(ctx, AlarmReceiver.class);
-        AlarmIntentParams params = AlarmIntentParams.forSchedule(schedule.getId(), time, date, delayed);
-        intent.putExtra(EXTRA_PARAMS, params);
+        AlarmIntentParams params = AlarmIntentParams.forSchedule(schedule.getId(), time, date, delayed,actionType);
+        intent.putExtra(AlarmScheduler.EXTRA_PARAMS, AlarmScheduler.alarmParams(params));
         return PendingIntent.getBroadcast(ctx, params.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
@@ -87,7 +88,7 @@ public class AlarmScheduler {
      */
     private void setFirstAlarm(Routine routine, LocalDate date, Context ctx) {
         long timestamp = date.toDateTime(routine.time()).getMillis();
-        PendingIntent routinePendingIntent = pendingIntent(ctx, routine, date, false);
+        PendingIntent routinePendingIntent = pendingIntent(ctx, routine, date, false, AlarmIntentParams.AUTO);
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timestamp, AlarmManager.INTERVAL_DAY, routinePendingIntent);
@@ -99,7 +100,7 @@ public class AlarmScheduler {
      */
     private void setFirstAlarm(Schedule schedule, LocalTime time, LocalDate date, Context ctx) {
         DateTime dateTime = date.toDateTime(time);
-        PendingIntent routinePendingIntent = pendingIntent(ctx, schedule, time, date, false);
+        PendingIntent routinePendingIntent = pendingIntent(ctx, schedule, time, date, false,AlarmIntentParams.AUTO);
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, dateTime.getMillis(), AlarmManager.INTERVAL_DAY, routinePendingIntent);
@@ -107,7 +108,7 @@ public class AlarmScheduler {
     }
 
     private void setRepeatAlarm(Routine routine, AlarmIntentParams firstParams, Context ctx, long delayMillis) {
-        PendingIntent routinePendingIntent = pendingIntent(ctx, routine, firstParams.date(), true);
+        PendingIntent routinePendingIntent = pendingIntent(ctx, routine, firstParams.date(), true, firstParams.actionType);
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             alarmManager.set(AlarmManager.RTC_WAKEUP, DateTime.now().getMillis() + delayMillis, routinePendingIntent);
@@ -115,7 +116,7 @@ public class AlarmScheduler {
     }
 
     private void setRepeatAlarm(Schedule schedule, AlarmIntentParams firstParams, Context ctx, long delayMillis) {
-        PendingIntent routinePendingIntent = pendingIntent(ctx, schedule, firstParams.scheduleTime(), firstParams.date(), true);
+        PendingIntent routinePendingIntent = pendingIntent(ctx, schedule, firstParams.scheduleTime(), firstParams.date(), true, firstParams.actionType);
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             alarmManager.set(AlarmManager.RTC_WAKEUP, DateTime.now().getMillis() + delayMillis, routinePendingIntent);
@@ -124,27 +125,29 @@ public class AlarmScheduler {
 
     private void cancelAlarm(Routine routine, LocalDate date, Context ctx)
     {
-        PendingIntent routinePendingIntent = pendingIntent(ctx, routine, date, false);
+        PendingIntent routinePendingIntent = pendingIntent(ctx, routine, date, false, AlarmIntentParams.AUTO);
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             alarmManager.cancel(routinePendingIntent);
         }
     }
 
-    private void cancelDelayedAlarm(Routine routine, LocalDate date, Context ctx) {
+    private void cancelDelayedAlarm(Routine routine, LocalDate date, Context ctx, int actionType) {
 
-        // when cancelling reminder, update time taken to now, but don't set as taken
 
-        for (ScheduleItem scheduleItem : routine.scheduleItems()) {
-            DailyScheduleItem ds = DailyScheduleItem.findByScheduleItem(scheduleItem);
-            ds.setTimeTaken(LocalTime.now());
-            ds.save();
-            Log.d(TAG, "Set time taken to " + ds.scheduleItem().schedule().medicine().name());
+        if (actionType == AlarmIntentParams.USER){
+            // when cancelling reminder, update time taken to now, but don't set as taken
+            for (ScheduleItem scheduleItem : routine.scheduleItems()) {
+                DailyScheduleItem ds = DailyScheduleItem.findByScheduleItem(scheduleItem);
+                ds.setTimeTaken(LocalTime.now());
+                ds.save();
+                Log.d(TAG, "Set time taken to " + ds.scheduleItem().schedule().medicine().name());
 
+            }
         }
-
+        // cancel alarm
         // get delay routine pending intent
-        PendingIntent routinePendingIntent = pendingIntent(ctx, routine, date, true);
+        PendingIntent routinePendingIntent = pendingIntent(ctx, routine, date, true, actionType);
         // Get the AlarmManager service
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
@@ -152,15 +155,18 @@ public class AlarmScheduler {
         }
     }
 
-    private void cancelHourlyDelayedAlarm(Schedule s, LocalTime t, LocalDate date, Context ctx) {
+    private void cancelHourlyDelayedAlarm(Schedule s, LocalTime t, LocalDate date, Context ctx, int actionType) {
 
         DailyScheduleItem ds = DB.dailyScheduleItems().findByScheduleAndTime(s, t);
         if(ds!=null) {
-            ds.setTimeTaken(LocalTime.now());
-            ds.save();
+
+            if(actionType == AlarmIntentParams.USER) {
+                ds.setTimeTaken(LocalTime.now());
+                ds.save();
+            }
 
             // get hourly delay pending intent
-            PendingIntent pendingIntent = pendingIntent(ctx, s, t, date, true);
+            PendingIntent pendingIntent = pendingIntent(ctx, s, t, date, true,actionType);
             // Get the AlarmManager service
             AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
             if (alarmManager != null) {
@@ -208,9 +214,11 @@ public class AlarmScheduler {
                 intent.putExtra("routine_id", routine.getId());
                 intent.putExtra("date", firstParams.date);
                 ReminderNotification.notify(ctx, ctx.getResources().getString(R.string.meds_time), routine, doses, intent);
+                Log.d(TAG, "Show notification");
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
                 boolean repeatAlarms = prefs.getBoolean("alarm_repeat_enabled", false);
                 if (repeatAlarms) {
+                    firstParams.actionType = AlarmIntentParams.AUTO;
                     setRepeatAlarm(routine, firstParams, ctx, getAlarmRepeatFreq(ctx)*60*1000);
                 }
             }
@@ -237,21 +245,28 @@ public class AlarmScheduler {
 
             String title = ctx.getResources().getString(R.string.meds_time);
             ReminderNotification.notify(ctx, title, schedule, firstParams.scheduleTime(), intent);
-
             // Handle delay if needed
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
             boolean repeatAlarms = prefs.getBoolean("alarm_repeat_enabled", false);
             if (repeatAlarms)
             {
+                firstParams.actionType = AlarmIntentParams.AUTO;
                 setRepeatAlarm(schedule, firstParams, ctx, getAlarmRepeatFreq(ctx) * 60 * 1000);
             }
         }
     }
 
-    private void onRoutineLost(Routine routine) {
+    private void onRoutineLost(Routine routine, Context ctx) {
         // get the schedule items for the current routine, excluding already taken
-        List<ScheduleItem> doses = ScheduleUtils.getRoutineScheduleItems(routine, false);
-        Log.d(TAG, doses + " deses lost today!"); // TODO: handle this
+        List<ScheduleItem> doseList = ScheduleUtils.getRoutineScheduleItems(routine, true);
+        int doses = doseList.size();
+        ReminderNotification.cancel(ctx,ReminderNotification.routineNotificationId(routine.getId().intValue()));
+        ReminderNotification.lost(doses + " " + ctx.getString(R.string.medicine) + (doses>1?"s":"") + " (" + routine.name() + ")", ctx);
+    }
+
+    private void onHourlyScheduleLost(Schedule schedule, Context ctx) {
+        ReminderNotification.cancel(ctx,ReminderNotification.scheduleNotificationId(schedule.getId().intValue()));
+        ReminderNotification.lost(schedule.medicine().name() + ", " + schedule.toReadableString(ctx), ctx);
     }
 
     public void onAlarmReceived(AlarmIntentParams params, Context ctx) {
@@ -259,10 +274,11 @@ public class AlarmScheduler {
         Routine routine = Routine.findById(params.routineId);
         if (routine != null) {
             Log.d(TAG, "onAlarmReceived: " + routine.getId() + ", " + routine.name());
-            if (isWithinDefaultMargins(routine, params.date(), ctx)) {
+            if (params.actionType == AlarmIntentParams.USER || isWithinDefaultMargins(routine, params.date(), ctx)) {
+                Log.d(TAG, "Alarm received, is user action: " + (params.actionType == AlarmIntentParams.USER));
                 onRoutineTime(routine, params, ctx);
             } else {
-                onRoutineLost(routine);
+                onRoutineLost(routine,ctx);
             }
         }
     }
@@ -271,8 +287,13 @@ public class AlarmScheduler {
         Schedule schedule = Schedule.findById(params.scheduleId);
         if (schedule != null){
             DateTime time = params.dateTime();
-            if (isWithinDefaultMargins(time, ctx)){
+            if (params.actionType == AlarmIntentParams.USER || isWithinDefaultMargins(time, ctx)){
+
+                Log.d(TAG, "Alarm received, is user action: " + (params.actionType == AlarmIntentParams.USER));
+
                 onHourlyScheduleTime(schedule, params, ctx);
+            } else {
+                onHourlyScheduleLost(schedule,ctx);
             }
         }
     }
@@ -293,18 +314,16 @@ public class AlarmScheduler {
         }
     }
 
-    public void onDelayHourlySchedule(Schedule s, LocalTime t, LocalDate date, Context ctx, long delayMinutes) {
-        if (isWithinDefaultMargins(date.toDateTime(t), ctx)) {
-            setRepeatAlarm(s, AlarmIntentParams.forSchedule(s.getId(), t, date, true), ctx, delayMinutes * 60 * 1000);
-            ReminderNotification.cancel(ctx,ReminderNotification.scheduleNotificationId(s.getId().intValue()));
-        }
+    public void onUserDelayHourlySchedule(Schedule s, LocalTime t, LocalDate date, Context ctx, long delayMinutes) {
+        setRepeatAlarm(s, AlarmIntentParams.forSchedule(s.getId(), t, date, true, AlarmIntentParams.USER), ctx, delayMinutes * 60 * 1000);
+        cancelHourlyDelayedAlarm(s, t, date, ctx, AlarmIntentParams.AUTO);
+        ReminderNotification.cancel(ctx,ReminderNotification.scheduleNotificationId(s.getId().intValue()));
     }
 
-    public void onDelayRoutine(Routine r, LocalDate date, Context ctx, int delayMinutes) {
-        if (isWithinDefaultMargins(r, date, ctx)) {
-            setRepeatAlarm(r, AlarmIntentParams.forRoutine(r.getId(), date, true),ctx, delayMinutes*60*1000);
-            ReminderNotification.cancel(ctx,ReminderNotification.routineNotificationId(r.getId().intValue()));
-        }
+    public void onUserDelayRoutine(Routine r, LocalDate date, Context ctx, int delayMinutes) {
+        setRepeatAlarm(r, AlarmIntentParams.forRoutine(r.getId(), date, true, AlarmIntentParams.USER),ctx, delayMinutes*60*1000);
+        cancelDelayedAlarm(r, date, ctx, AlarmIntentParams.AUTO);
+        ReminderNotification.cancel(ctx,ReminderNotification.routineNotificationId(r.getId().intValue()));
     }
 
     public void updateAllAlarms(Context ctx) {
@@ -335,14 +354,13 @@ public class AlarmScheduler {
 
     public void cancelStatusBarNotification(Routine r, LocalDate date, Context ctx) {
         Log.d(TAG, "cancelStatusBarNotification: " + r.getId() + ", " + r.name());
-        cancelDelayedAlarm(r, date, ctx);
-
+        cancelDelayedAlarm(r, date, ctx, AlarmIntentParams.USER);
         ReminderNotification.cancel(ctx,ReminderNotification.routineNotificationId(r.getId().intValue()) );
     }
 
     public void cancelStatusBarNotification(Schedule r, LocalTime t, LocalDate date, Context ctx) {
         Log.d(TAG, "cancelStatusBarNotification: " + r.getId());
-        cancelHourlyDelayedAlarm(r, t, date, ctx);
+        cancelHourlyDelayedAlarm(r, t, date, ctx, AlarmIntentParams.USER);
         ReminderNotification.cancel(ctx, ReminderNotification.scheduleNotificationId(r.getId().intValue()));
     }
 
@@ -364,6 +382,27 @@ public class AlarmScheduler {
         Log.d(TAG, "onDeleteRoutine: " + r.getId() + ", " + r.name());
         cancelAlarm(r,LocalDate.now(), ctx);
     }
+
+
+    public static Bundle alarmParams(AlarmIntentParams parcelable){
+        Bundle b = new Bundle();
+        b.putParcelable(EXTRA_PARAMS,parcelable);
+        return b;
+    }
+
+    public static AlarmIntentParams getAlarmParams(Intent intent){
+        // try to get the bundle
+        Bundle bundleExtra = intent.getBundleExtra(EXTRA_PARAMS);
+        if(bundleExtra!=null){
+            return bundleExtra.getParcelable(EXTRA_PARAMS);
+        }else{
+            // try to get the parcelable from the intent
+            return intent.getParcelableExtra(EXTRA_PARAMS);
+        }
+    }
+
+
+
 
 
 

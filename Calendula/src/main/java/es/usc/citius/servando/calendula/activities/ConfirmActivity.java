@@ -416,10 +416,10 @@ public class ConfirmActivity extends CalendulaActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         int minutes = values[which];
                         if(isRoutine) {
-                            AlarmScheduler.instance().onDelayRoutine(routine, date, ConfirmActivity.this, minutes);
+                            AlarmScheduler.instance().onUserDelayRoutine(routine, date, ConfirmActivity.this, minutes);
                         }
                         else{
-                            AlarmScheduler.instance().onDelayHourlySchedule(schedule, time, date, ConfirmActivity.this, minutes);
+                            AlarmScheduler.instance().onUserDelayHourlySchedule(schedule, time, date, ConfirmActivity.this, minutes);
                         }
 
                         String msg =ConfirmActivity.this.getString(R.string.alarm_delayed_message, minutes);

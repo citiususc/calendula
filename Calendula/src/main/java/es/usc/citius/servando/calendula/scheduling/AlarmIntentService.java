@@ -42,7 +42,7 @@ public class AlarmIntentService extends WakeIntentService {
         Log.d(TAG, "Service started");
 
         // get intent params with alarm info
-        AlarmIntentParams params = intent.getParcelableExtra(AlarmScheduler.EXTRA_PARAMS);
+        AlarmIntentParams params = AlarmScheduler.getAlarmParams(intent);
 
         if(params == null)
         {

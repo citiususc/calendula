@@ -163,7 +163,7 @@ public class CalendulaApp extends Application {
         // intent our receiver will receive
         Intent intent = new Intent(this, AlarmReceiver.class);
         AlarmIntentParams params = AlarmIntentParams.forDailyUpdate();
-        intent.putExtra(AlarmScheduler.EXTRA_PARAMS, params);
+        intent.putExtra(AlarmScheduler.EXTRA_PARAMS, AlarmScheduler.alarmParams(params));
         PendingIntent dailyAlarm = PendingIntent.getBroadcast(this, params.hashCode(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
