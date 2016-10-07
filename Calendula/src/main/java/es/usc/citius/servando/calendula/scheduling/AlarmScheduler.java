@@ -23,6 +23,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -66,14 +67,14 @@ public class AlarmScheduler {
     public static PendingIntent pendingIntent(Context ctx, Routine routine, LocalDate date, boolean delayed, int actionType){
         Intent intent = new Intent(ctx, AlarmReceiver.class);
         AlarmIntentParams params = AlarmIntentParams.forRoutine(routine.getId(), date, delayed, actionType);
-        intent.putExtra(AlarmScheduler.EXTRA_PARAMS, AlarmScheduler.alarmParams(params));
+        setAlarmParams(intent, params);
         return PendingIntent.getBroadcast(ctx, params.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public static PendingIntent pendingIntent(Context ctx, Schedule schedule, LocalTime time, LocalDate date, boolean delayed, int actionType){
         Intent intent = new Intent(ctx, AlarmReceiver.class);
         AlarmIntentParams params = AlarmIntentParams.forSchedule(schedule.getId(), time, date, delayed,actionType);
-        intent.putExtra(AlarmScheduler.EXTRA_PARAMS, AlarmScheduler.alarmParams(params));
+        setAlarmParams(intent, params);
         return PendingIntent.getBroadcast(ctx, params.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
@@ -89,10 +90,7 @@ public class AlarmScheduler {
     private void setFirstAlarm(Routine routine, LocalDate date, Context ctx) {
         long timestamp = date.toDateTime(routine.time()).getMillis();
         PendingIntent routinePendingIntent = pendingIntent(ctx, routine, date, false, AlarmIntentParams.AUTO);
-        AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timestamp, AlarmManager.INTERVAL_DAY, routinePendingIntent);
-        }
+        setExactAlarm(ctx,timestamp,routinePendingIntent);
     }
 
     /**
@@ -101,25 +99,30 @@ public class AlarmScheduler {
     private void setFirstAlarm(Schedule schedule, LocalTime time, LocalDate date, Context ctx) {
         DateTime dateTime = date.toDateTime(time);
         PendingIntent routinePendingIntent = pendingIntent(ctx, schedule, time, date, false,AlarmIntentParams.AUTO);
-        AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, dateTime.getMillis(), AlarmManager.INTERVAL_DAY, routinePendingIntent);
-        }
+        setExactAlarm(ctx,dateTime.getMillis(),routinePendingIntent);
     }
 
     private void setRepeatAlarm(Routine routine, AlarmIntentParams firstParams, Context ctx, long delayMillis) {
         PendingIntent routinePendingIntent = pendingIntent(ctx, routine, firstParams.date(), true, firstParams.actionType);
-        AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, DateTime.now().getMillis() + delayMillis, routinePendingIntent);
-        }
+        setExactAlarm(ctx,DateTime.now().getMillis() + delayMillis,routinePendingIntent);
     }
 
     private void setRepeatAlarm(Schedule schedule, AlarmIntentParams firstParams, Context ctx, long delayMillis) {
-        PendingIntent routinePendingIntent = pendingIntent(ctx, schedule, firstParams.scheduleTime(), firstParams.date(), true, firstParams.actionType);
+        PendingIntent schedulePendingIntent = pendingIntent(ctx, schedule, firstParams.scheduleTime(), firstParams.date(), true, firstParams.actionType);
+        setExactAlarm(ctx,DateTime.now().getMillis() + delayMillis,schedulePendingIntent);
+    }
+
+    private void setExactAlarm(Context ctx, long millis, PendingIntent pendingIntent){
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, DateTime.now().getMillis() + delayMillis, routinePendingIntent);
+        if (Build.VERSION.SDK_INT >= 23)
+        {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
+        } else if (Build.VERSION.SDK_INT >= 19 )
+        {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
+        } else
+        {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
         }
     }
 
@@ -178,14 +181,16 @@ public class AlarmScheduler {
     private void setAlarmsIfNeeded(Schedule schedule, LocalDate date, Context ctx) {
         if (!schedule.repeatsHourly()) {
             for (ScheduleItem scheduleItem : schedule.items()) {
-                if (scheduleItem.routine() != null) {
+                if (scheduleItem.routine() != null && canBeScheduled(scheduleItem.routine().time().toDateTimeToday(),ctx)){
                     setFirstAlarm(scheduleItem.routine(), date, ctx);
                 }
             }
         } else {
             List<DateTime> times = schedule.hourlyItemsAt(date.toDateTimeAtStartOfDay());
             for (DateTime time : times) {
-                setFirstAlarm(schedule, time.toLocalTime(), date, ctx);
+                if(canBeScheduled(time,ctx)) {
+                    setFirstAlarm(schedule, time.toLocalTime(), date, ctx);
+                }
             }
         }
     }
@@ -348,6 +353,18 @@ public class AlarmScheduler {
         return t.isBefore(now) && t.plusMillis((int) window * 60 * 1000).isAfter(now);
     }
 
+    /*
+     * Whether an alarm for a specific time can be scheduled or not based on
+     * the alarm time and the alarm reminder window defined by the user. Alarm time plus
+     * alarm window must be in the future to allow alarm scheduling
+     */
+    public static boolean canBeScheduled(DateTime t, Context cxt) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(cxt);
+        String delayMinutesStr = prefs.getString("alarm_reminder_window", "60");
+        int window = (int)Long.parseLong(delayMinutesStr);
+        return t.plusMinutes(window).isAfterNow();
+    }
+
     //
     // Methods to cancel status bar notifications and related alarms
     //
@@ -384,10 +401,10 @@ public class AlarmScheduler {
     }
 
 
-    public static Bundle alarmParams(AlarmIntentParams parcelable){
+    public static void setAlarmParams(Intent intent, AlarmIntentParams parcelable){
         Bundle b = new Bundle();
         b.putParcelable(EXTRA_PARAMS,parcelable);
-        return b;
+        intent.putExtra(EXTRA_PARAMS,b);
     }
 
     public static AlarmIntentParams getAlarmParams(Intent intent){

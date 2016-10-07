@@ -49,7 +49,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
 
         Intent serviceIntent = new Intent(context, AlarmIntentService.class);
-        serviceIntent.putExtra(AlarmScheduler.EXTRA_PARAMS, AlarmScheduler.alarmParams(params));
+        AlarmScheduler.setAlarmParams(serviceIntent,params);
         context.startService(serviceIntent);
     }
 }
