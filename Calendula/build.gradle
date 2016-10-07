@@ -95,7 +95,7 @@ android {
         beta {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
-            versionNameSuffix "-beta" + "-build" + getDate()
+            versionNameSuffix "-build" + getDate()
         }
     }
     productFlavors {}
