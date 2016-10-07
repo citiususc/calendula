@@ -94,6 +94,7 @@
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="meds_time">Remember to take your meds</string>
+    <string name="meds_time_lost">Alarm lost</string>
     <string name="title_select_dose_dialog">Introduce a dose</string>
     <string name="doses_and_times">Times and doses</string>
     <string name="schedule_repeat_days">Repeat</string>

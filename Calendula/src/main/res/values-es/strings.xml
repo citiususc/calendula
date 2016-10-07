@@ -92,6 +92,7 @@
     <string name="cancel">Cancelar</string>
     <string name="confirm">Confirmar</string>
     <string name="meds_time">Recuerda tomar tus medicinas</string>
+    <string name="meds_time_lost">Alarma perdida</string>
 
     <!-- Schedule creation -->
     <string name="summary_title">Revisa y confirma</string>

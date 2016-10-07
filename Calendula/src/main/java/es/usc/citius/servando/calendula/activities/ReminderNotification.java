@@ -43,7 +43,6 @@ import java.util.List;
 import java.util.Random;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
-import es.usc.citius.servando.calendula.HomePagerActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
@@ -70,9 +69,11 @@ public class ReminderNotification {
     private static class NotificationOptions{
         int notificationNumber;
         boolean insistent;
+        boolean lost = false;
         String title;
         String text;
         String ticker;
+        String tag;
         Bitmap picture;
         PendingIntent defaultIntent;
         PendingIntent cancelIntent;
@@ -81,7 +82,6 @@ public class ReminderNotification {
         Uri ringtone;
         long when;
 
-        String tag;
     }
 
     public static int routineNotificationId(int routineId){
@@ -92,7 +92,7 @@ public class ReminderNotification {
         return ("schedule_notification_"+schedule).hashCode();
     }
 
-    public static void notify(final Context context, final String title, Routine r, List<ScheduleItem> doses, Intent intent)
+    public static void notify(final Context context, final String title, Routine r, List<ScheduleItem> doses, Intent intent, boolean lost)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean notifications = prefs.getBoolean("alarm_notifications", true);
@@ -104,12 +104,13 @@ public class ReminderNotification {
 
         NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
         style.setBigContentTitle(title);
-        styleForRoutine(context, style, r, doses);
-        Pair<Intent, Intent> intents = getIntentsForRoutine(context, r);
+        styleForRoutine(context, style, r, doses, lost);
+        Pair<Intent, Intent> intents = lost ? null : getIntentsForRoutine(context, r);
 
 
         NotificationOptions options = new NotificationOptions();
         options.style = style;
+        options.lost = lost;
         options.when = r.time().toDateTimeToday().getMillis();
         options.tag = NOTIFICATION_ROUTINE_TAG;
         options.notificationNumber =  doses.size();
@@ -120,7 +121,7 @@ public class ReminderNotification {
     }
 
 
-    public static void notify(final Context context, final String title, Schedule schedule, LocalTime time, Intent intent)
+    public static void notify(final Context context, final String title, Schedule schedule, LocalTime time, Intent intent, boolean lost)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean notifications = prefs.getBoolean("alarm_notifications", true);
@@ -133,11 +134,12 @@ public class ReminderNotification {
 
         NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
         style.setBigContentTitle(title);
-        styleForSchedule(context, style, schedule);
-        Pair<Intent, Intent> intents = getIntentsForSchedule(context, schedule, time);
+        styleForSchedule(context, style, schedule, lost);
+        Pair<Intent, Intent> intents = lost ? null : getIntentsForSchedule(context, schedule, time);
 
         NotificationOptions options = new NotificationOptions();
         options.style = style;
+        options.lost = lost;
         options.when = time.toDateTimeToday().getMillis();
         options.tag = NOTIFICATION_SCHEDULE_TAG;
         options.notificationNumber = 1;
@@ -163,16 +165,24 @@ public class ReminderNotification {
         boolean insistentNotifications = prefs.getBoolean("alarm_insistent", false);
         // prepare notification intents
         PendingIntent defaultIntent = PendingIntent.getActivity(context, random.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent delayIntent = PendingIntent.getActivity(context, random.nextInt(), actionIntents.first, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent cancelIntent = PendingIntent.getBroadcast(context, random.nextInt(), actionIntents.second, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent delayIntent = null;
+        PendingIntent cancelIntent = null;
 
-        options.picture = options.picture != null ? options.picture : BitmapFactory.decodeResource(res, R.drawable.ic_pill_48dp);
+        if(!options.lost) {
+            delayIntent = PendingIntent.getActivity(context, random.nextInt(), actionIntents.first, PendingIntent.FLAG_UPDATE_CURRENT);
+            cancelIntent = PendingIntent.getBroadcast(context, random.nextInt(), actionIntents.second, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+
+        int ic = options.lost ? R.drawable.ic_pill_small_lost : R.drawable.ic_pill_small;
+        options.picture = options.picture != null ? options.picture : BitmapFactory.decodeResource(res, ic);
         options.insistent = insistentNotifications;
         options.title = title;
         options.ticker = title;
         options.defaultIntent = defaultIntent;
-        options.cancelIntent = cancelIntent;
-        options.delayIntent = delayIntent;
+        if(!options.lost) {
+            options.cancelIntent = cancelIntent;
+            options.delayIntent = delayIntent;
+        }
         options.ringtone = getRingtoneUri(prefs, insistentNotifications);
 
         Notification n = buildNotification(context, options);
@@ -189,7 +199,7 @@ public class ReminderNotification {
                 // Set appropriate defaults for the notification light, sound, and vibration.
                 .setDefaults(Notification.DEFAULT_ALL)
                         // Set required fields, including the small icon, the notification title, and text.
-                .setSmallIcon(R.drawable.ic_pill_small)
+                .setSmallIcon(options.lost ? R.drawable.ic_pill_small_lost : R.drawable.ic_pill_small)
                 .setContentTitle(options.title)
                 .setContentText(options.text)
                 .setPriority(options.insistent ? NotificationCompat.PRIORITY_MAX : NotificationCompat.PRIORITY_DEFAULT)
@@ -203,10 +213,6 @@ public class ReminderNotification {
                 .setWhen(options.when)
                         // Set the pending intent to be initiated when the user touches the notification.
                 .setContentIntent(options.defaultIntent)
-                        //.setOngoing(true)
-                        // add delay button
-                .addAction(R.drawable.ic_history_white_24dp, res.getString(R.string.notification_delay), options.delayIntent)
-                .addAction(R.drawable.ic_alarm_off_white_24dp, res.getString(R.string.notification_cancel_now), options.cancelIntent)
                         // Show an expanded list of items on devices running Android 4.1
                         // or later.
                 .setStyle(options.style)
@@ -216,6 +222,11 @@ public class ReminderNotification {
                         // Automatically dismiss the notification when it is touched.
                 .setAutoCancel(true);
 
+        if (!options.lost) {
+            // add delay button and cancel button
+            builder.addAction(R.drawable.ic_history_white_24dp, res.getString(R.string.notification_delay), options.delayIntent)
+                   .addAction(R.drawable.ic_alarm_off_white_24dp, res.getString(R.string.notification_cancel_now), options.cancelIntent);
+        }
 
         if(options.insistent){
             builder.setFullScreenIntent(options.defaultIntent, true);
@@ -227,7 +238,7 @@ public class ReminderNotification {
         n.ledOnMS = 1000;
         n.ledOffMS = 2000;
 
-        if (options.insistent)
+        if (!options.lost && options.insistent)
         {
             n.flags |= Notification.FLAG_INSISTENT;
         }
@@ -235,7 +246,7 @@ public class ReminderNotification {
         return n;
     }
 
-    private static void styleForRoutine(Context ctx, NotificationCompat.InboxStyle style, Routine r, List<ScheduleItem> doses){
+    private static void styleForRoutine(Context ctx, NotificationCompat.InboxStyle style, Routine r, List<ScheduleItem> doses, boolean lost){
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
 
@@ -254,18 +265,18 @@ public class ReminderNotification {
         String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
         int delayMinutes = (int) Long.parseLong(delayMinutesStr);
 
-        if (delayMinutes > 0)
+        if (delayMinutes > 0 && !lost)
         {
             String repeatTime = DateTime.now().plusMinutes(delayMinutes).toString("HH:mm");
             style.setSummaryText(ctx.getResources().getString(R.string.notification_repeat_message, repeatTime));
         } else
         {
-            style.setSummaryText(doses.size() + " meds to take at " + r.name());
+            style.setSummaryText(doses.size() + " " + ctx.getString(R.string.medicine) + (doses.size()>1?"s, ":", ") + r.name());
         }
 
     }
 
-    private static void styleForSchedule(Context context, NotificationCompat.InboxStyle style, Schedule schedule) {
+    private static void styleForSchedule(Context context, NotificationCompat.InboxStyle style, Schedule schedule, boolean lost) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         final Medicine med = schedule.medicine();
@@ -277,7 +288,7 @@ public class ReminderNotification {
         String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
         int delayMinutes = (int) Long.parseLong(delayMinutesStr);
 
-        if (delayMinutes > 0)
+        if (delayMinutes > 0 && !lost)
         {
             String repeatTime = DateTime.now().plusMinutes((int) delayMinutes).toString("kk:mm");
             style.setSummaryText(context.getString(R.string.notification_repeat_message, repeatTime));
@@ -353,7 +364,7 @@ public class ReminderNotification {
 
     /**
      * Cancels any notifications of this type previously shown using
-     * {@link #notify(Context, String, Routine, java.util.List, android.content.Intent)}.
+     * {@link #notify(Context, String, Routine, java.util.List, android.content.Intent, boolean)}.
      */
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     public static void cancel(final Context context, int id)
@@ -369,45 +380,6 @@ public class ReminderNotification {
             nm.cancel(id);
             nm.cancel(id);
         }
-    }
-
-
-    private static Notification buildLostNotification(Context context, String text){
-
-        Intent intent = new Intent(context, HomePagerActivity.class);
-        PendingIntent defaultIntent = PendingIntent.getActivity(context, random.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-
-                // Set appropriate defaults for the notification light, sound, and vibration.
-                .setDefaults(Notification.DEFAULT_ALL)
-                // Set required fields, including the small icon, the notification title, and text.
-                .setSmallIcon(R.drawable.ic_alarm_off_white_24dp)
-                .setContentTitle("Alarma perdida")
-                .setContentText(text)
-                // Set ticker text (preview) information for this notification.
-                .setTicker("Alarma perdida")
-                .setWhen(DateTime.now().getMillis())
-                // Set the pending intent to be initiated when the user touches the notification.
-                .setContentIntent(defaultIntent)
-                //.setLights(0x00ff0000, 500, 1000)
-                .setPriority(Notification.PRIORITY_DEFAULT)
-                .setVibrate(new long[] { 1000, 200, 500, 200, 100, 200, 1000 })
-                // Automatically dismiss the notification when it is touched.
-                .setAutoCancel(true);
-
-        Notification n = builder.build();
-        n.defaults = 0;
-        n.ledARGB = 0x00ffa500;
-        n.ledOnMS = 1000;
-        n.ledOffMS = 2000;
-        return n;
-    }
-
-    public static void lost(String text, Context ctx) {
-        Notification notification = buildLostNotification(ctx, text);
-        final NotificationManager nm = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.notify(1234567890, notification);
     }
 
 }

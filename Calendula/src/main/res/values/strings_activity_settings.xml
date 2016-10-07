@@ -65,8 +65,8 @@
 
     <string-array name="pref_alarm_reminder_window_values">
         <item>30</item>
-        <item>65</item>
-        <item>125</item>
+        <item>60</item>
+        <item>120</item>
     </string-array>
 
 

@@ -218,7 +218,7 @@ public class AlarmScheduler {
                 final Intent intent = new Intent(ctx, ConfirmActivity.class);
                 intent.putExtra("routine_id", routine.getId());
                 intent.putExtra("date", firstParams.date);
-                ReminderNotification.notify(ctx, ctx.getResources().getString(R.string.meds_time), routine, doses, intent);
+                ReminderNotification.notify(ctx, ctx.getResources().getString(R.string.meds_time), routine, doses, intent, false);
                 Log.d(TAG, "Show notification");
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
                 boolean repeatAlarms = prefs.getBoolean("alarm_repeat_enabled", false);
@@ -249,7 +249,7 @@ public class AlarmScheduler {
             intent.putExtra("date", firstParams.date);
 
             String title = ctx.getResources().getString(R.string.meds_time);
-            ReminderNotification.notify(ctx, title, schedule, firstParams.scheduleTime(), intent);
+            ReminderNotification.notify(ctx, title, schedule, firstParams.scheduleTime(), intent, false);
             // Handle delay if needed
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
             boolean repeatAlarms = prefs.getBoolean("alarm_repeat_enabled", false);
@@ -261,17 +261,28 @@ public class AlarmScheduler {
         }
     }
 
-    private void onRoutineLost(Routine routine, Context ctx) {
+    private void onRoutineLost(Routine routine, AlarmIntentParams params, Context ctx) {
         // get the schedule items for the current routine, excluding already taken
-        List<ScheduleItem> doseList = ScheduleUtils.getRoutineScheduleItems(routine, true);
-        int doses = doseList.size();
+        List<ScheduleItem> doses = ScheduleUtils.getRoutineScheduleItems(routine, true);
         ReminderNotification.cancel(ctx,ReminderNotification.routineNotificationId(routine.getId().intValue()));
-        ReminderNotification.lost(doses + " " + ctx.getString(R.string.medicine) + (doses>1?"s":"") + " (" + routine.name() + ")", ctx);
+
+        // show routine lost notification
+        final Intent intent = new Intent(ctx, ConfirmActivity.class);
+        intent.putExtra("routine_id", routine.getId());
+        intent.putExtra("date", params.date);
+        String title = ctx.getResources().getString(R.string.meds_time_lost);
+        ReminderNotification.notify(ctx, title, routine, doses, intent, true);
     }
 
-    private void onHourlyScheduleLost(Schedule schedule, Context ctx) {
+    private void onHourlyScheduleLost(Schedule schedule, AlarmIntentParams params, Context ctx) {
         ReminderNotification.cancel(ctx,ReminderNotification.scheduleNotificationId(schedule.getId().intValue()));
-        ReminderNotification.lost(schedule.medicine().name() + ", " + schedule.toReadableString(ctx), ctx);
+        // show schedule lost notification
+        final Intent intent = new Intent(ctx, ConfirmActivity.class);
+        intent.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
+        intent.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, params.scheduleTime);
+        intent.putExtra("date", params.date);
+        String title = ctx.getResources().getString(R.string.meds_time_lost);
+        ReminderNotification.notify(ctx, title, schedule, params.scheduleTime(), intent, true);
     }
 
     public void onAlarmReceived(AlarmIntentParams params, Context ctx) {
@@ -283,7 +294,8 @@ public class AlarmScheduler {
                 Log.d(TAG, "Alarm received, is user action: " + (params.actionType == AlarmIntentParams.USER));
                 onRoutineTime(routine, params, ctx);
             } else {
-                onRoutineLost(routine,ctx);
+                Log.d(TAG, "Routine lost");
+                onRoutineLost(routine,params,ctx);
             }
         }
     }
@@ -298,7 +310,8 @@ public class AlarmScheduler {
 
                 onHourlyScheduleTime(schedule, params, ctx);
             } else {
-                onHourlyScheduleLost(schedule,ctx);
+                Log.d(TAG, "Schedule lest");
+                onHourlyScheduleLost(schedule, params, ctx);
             }
         }
     }
