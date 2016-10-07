@@ -114,15 +114,14 @@ public class AlarmScheduler {
 
     private void setExactAlarm(Context ctx, long millis, PendingIntent pendingIntent){
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-        if (Build.VERSION.SDK_INT >= 23)
-        {
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
-        } else if (Build.VERSION.SDK_INT >= 19 )
-        {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
-        } else
-        {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
+        if (alarmManager != null) {
+            if (Build.VERSION.SDK_INT >= 23) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
+            } else if (Build.VERSION.SDK_INT >= 19) {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
+            } else {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
+            }
         }
     }
 
