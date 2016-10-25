@@ -183,7 +183,4 @@ dependencies {
     //
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.heinrichreimersoftware:material-intro:1.5.8'
-
 }
-
-apply plugin: 'com.google.gms.google-services'

@@ -21,7 +21,7 @@
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:background="@color/transparent"
-                android:layout_height="70dp"
+                android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
     >
 
@@ -29,7 +29,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="50dp"
-        android:layout_height="fill_parent"
+        android:layout_height="60dp"
         android:layout_marginLeft="16dp"
         android:cropToPadding="false"
         android:scaleType="fitCenter"
@@ -70,6 +70,20 @@
         android:gravity="top"
         android:alpha="0.7"/>
 
+    <TextView
+        android:id="@+id/med_item_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:textColor="#555"
+        android:textSize="13dp"
+        android:layout_alignLeft="@+id/med_item_dose"
+        android:layout_below="@+id/med_item_dose"
+        android:gravity="top"
+        android:alpha="0.7"
+        android:layout_marginTop="3dp"
+        android:text="Not taken yet"/>
+
     <ImageButton
         android:id="@+id/check_button"
         android:src="@drawable/ic_done_black_48dp"
@@ -89,8 +103,8 @@
         android:id="@+id/imageView3"
         android:layout_alignParentBottom="false"
         android:background="#ececec"
-        android:layout_alignLeft="@+id/med_item_name"
+        android:layout_alignLeft="@+id/med_item_status"
         android:layout_marginTop="16dp"
-        android:layout_below="@+id/med_item_dose"/>
+        android:layout_below="@+id/med_item_status"/>
 
 </RelativeLayout>

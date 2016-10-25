@@ -23,16 +23,21 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -52,6 +57,8 @@ import android.widget.Toast;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
@@ -71,8 +78,10 @@ import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
+import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.view.ArcTranslateAnimation;
@@ -99,6 +108,7 @@ public class ConfirmActivity extends CalendulaActivity {
     TextView titleTitle;
     TextView hour;
     TextView minute;
+    TextView friendlyTime;
 
     TextView takeMadsMessage;
 
@@ -120,10 +130,15 @@ public class ConfirmActivity extends CalendulaActivity {
     DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/YYYY");
 
     boolean isToday;
-    boolean isCheckable;
+    boolean isInWindow;
+    boolean isDistant;
 
     View chekAllOverlay;
     ImageView checkAllImage;
+
+    String relativeTime = "";
+
+    public static final int DEFAULT_CHECK_MARGIN = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,8 +147,12 @@ public class ConfirmActivity extends CalendulaActivity {
         processIntent();
 
         isToday = LocalDate.now().equals(date);
+        isInWindow = AlarmScheduler.isWithinDefaultMargins(date.toDateTime(time), this);
 
-        isCheckable = isToday || AlarmScheduler.isWithinDefaultMargins(date.toDateTime(time), this);
+        DateTime dt = date.toDateTime(time);
+        DateTime now = DateTime.now();
+        Pair<DateTime, DateTime> interval = getCheckMarginInterval(dt);
+        isDistant = !new Interval(interval.first,interval.second).contains(now);
 
         color = AvatarMgr.colorsFor(getResources(), patient.avatar())[0];
         color = Color.parseColor("#263238");
@@ -153,6 +172,7 @@ public class ConfirmActivity extends CalendulaActivity {
         avatarTitle = (ImageView) findViewById(R.id.patient_avatar_title);
         titleTitle = (TextView) findViewById(R.id.routine_name_title);
 
+        friendlyTime = (TextView) findViewById(R.id.user_friendly_time);
         hour = (TextView) findViewById(R.id.routines_list_item_hour);
         minute = (TextView) findViewById(R.id.routines_list_item_minute);
         toolbarTitle = findViewById(R.id.toolbar_title);
@@ -160,13 +180,21 @@ public class ConfirmActivity extends CalendulaActivity {
         avatarTitle.setImageResource(AvatarMgr.res(patient.avatar()));
         titleTitle.setText(patient.name());
         title.setText((isRoutine ? routine.name() : schedule.toReadableString(this)));
-        takeMadsMessage.setText( isToday ? getString(R.string.agenda_zoom_meds_time) : "Medicinas del " + date.toString("EEEE dd") );
+        takeMadsMessage.setText( isInWindow ? getString(R.string.agenda_zoom_meds_time) : getString(R.string.meds_from) + " " + date.toString("EEEE dd") );
+
+
+        relativeTime = DateUtils.getRelativeTimeSpanString(dt.getMillis(), now.getMillis(),5*DateUtils.MINUTE_IN_MILLIS, DateUtils.FORMAT_ABBREV_ALL).toString();
 
         hour.setText(time.toString("kk:"));
         minute.setText(time.toString("mm"));
+        friendlyTime.setText(relativeTime.substring(0,1).toUpperCase()+ relativeTime.substring(1));
+
+        if(isDistant){
+            fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.android_orange_dark)));
+        }
 
         fab.setImageDrawable(new IconicsDrawable(this)
-                .icon(isCheckable ? CommunityMaterial.Icon.cmd_check_all : CommunityMaterial.Icon.cmd_calendar_clock)
+                .icon(CommunityMaterial.Icon.cmd_check_all)
                 .color(Color.WHITE)
                 .sizeDp(24)
                 .paddingDp(0));
@@ -182,34 +210,26 @@ public class ConfirmActivity extends CalendulaActivity {
             @Override
             public void onClick(View view) {
 
-                if(!isCheckable){
-                    onCheckNotToday();
-                    return;
-                }
-
-                boolean somethingChecked = false;
+                boolean somethingToCheck = false;
                 for (DailyScheduleItem item : items) {
-                    if(!item.takenToday()) {
-                        item.setTakenToday(true);
-                        item.save();
-                        somethingChecked = true;
+                    if (!item.takenToday()) {
+                        somethingToCheck = true;
+                        break;
                     }
                 }
-
-                if(somethingChecked) {
-                    itemAdapter.notifyDataSetChanged();
-                    stateChanged = true;
-                    fab.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            animateAllChecked();
-                        }
-                    }, 100);
+                if(somethingToCheck) {
+                    if (isDistant) {
+                        showEnsureConfirmDialog(new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                onClickFab();
+                            }
+                        }, false);
+                    } else {
+                        onClickFab();
+                    }
                 }else{
-                    supportFinishAfterTransition();
+                    Snack.show(getResources().getString(R.string.all_meds_taken), ConfirmActivity.this);
                 }
-
-
             }
         });
 
@@ -220,7 +240,54 @@ public class ConfirmActivity extends CalendulaActivity {
         setupListView();
 
         if("delay".equals(action)){
+            if(isRoutine && routine!=null) {
+                ReminderNotification.cancel(this, ReminderNotification.routineNotificationId(routine.getId().intValue()));
+            } else if(schedule !=null){
+                ReminderNotification.cancel(this, ReminderNotification.scheduleNotificationId(schedule.getId().intValue()));
+            }
             showDelayDialog();
+
+        }
+    }
+
+    /*
+     * Returns the intake margin interval
+     */
+    public Pair<DateTime,DateTime> getCheckMarginInterval(DateTime intakeTime){
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String checkMarginStr = prefs.getString("check_window_margin", ""+DEFAULT_CHECK_MARGIN);
+        int checkMargin = Integer.parseInt(checkMarginStr);
+
+        DateTime start = intakeTime.minusMinutes(30);
+        DateTime end = intakeTime.plusHours(checkMargin);
+        return new Pair<>(start,end);
+
+    }
+
+    void onClickFab(){
+        boolean somethingChecked = false;
+        for (DailyScheduleItem item : items) {
+            if(!item.takenToday()) {
+                item.setTakenToday(true);
+                item.save();
+                somethingChecked = true;
+            }
+
+        }
+
+        if(somethingChecked) {
+            itemAdapter.notifyDataSetChanged();
+            stateChanged = true;
+            fab.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    animateAllChecked();
+                }
+            }, 100);
+            onAllChecked();
+        }else{
+            supportFinishAfterTransition();
         }
     }
 
@@ -316,7 +383,11 @@ public class ConfirmActivity extends CalendulaActivity {
         }
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Toast.makeText(this, "Is distant: " + isDistant + " (" + date.toDateTime(time).toString("dd/MM/YYYY, kk:mm")+")", Toast.LENGTH_LONG).show();
+    }
 
     private void setupListView() {
 
@@ -334,6 +405,10 @@ public class ConfirmActivity extends CalendulaActivity {
         Long scheduleId = i.getLongExtra("schedule_id", -1);
         String dateStr = i.getStringExtra("date");
         String timeStr = i.getStringExtra("schedule_time");
+
+        String actionType = i.getIntExtra("actionType", AlarmIntentParams.AUTO) == AlarmIntentParams.USER? "user" : "auto";
+
+
 
         action = i.getStringExtra("action");
         position = i.getIntExtra("position", -1);
@@ -380,7 +455,7 @@ public class ConfirmActivity extends CalendulaActivity {
 
         MenuItem item = menu.findItem(R.id.action_delay);
 
-        if(!isCheckable){
+        if(!isInWindow){
             item.setVisible(false);
         }else{
             item.setIcon(new IconicsDrawable(this)
@@ -432,7 +507,6 @@ public class ConfirmActivity extends CalendulaActivity {
 
 
     protected void onDailyAgendaItemCheck(final ImageButton v) {
-
         int total = items.size();
         int checked = 0;
 
@@ -442,28 +516,22 @@ public class ConfirmActivity extends CalendulaActivity {
         }
 
         if (checked == total) {
-            if (isRoutine) {
-                AlarmScheduler.instance().cancelStatusBarNotification(routine, date, this);
-            } else {
-                AlarmScheduler.instance().cancelStatusBarNotification(schedule, time, date, this);
-            }
-
-//            v.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    int[] xy = new int[2];
-//                    v.getLocationOnScreen(xy);
-//                    showRippleByApi(xy[0]+v.getWidth()/2, xy[1]+v.getHeight()/2);
-//                }
-//            },200);
-
-
+            onAllChecked();
         } else {
             if (isRoutine) {
-                AlarmScheduler.instance().onDelayRoutine(routine, date, this);
+                AlarmScheduler.instance().onDelayRoutine(routine, date, ConfirmActivity.this);
             } else {
-                AlarmScheduler.instance().onDelayHourlySchedule(schedule, time, date, this);
+                AlarmScheduler.instance().onDelayHourlySchedule(schedule, time, date, ConfirmActivity.this);
             }
+        }
+    }
+
+
+    private void onAllChecked(){
+        if (isRoutine) {
+            AlarmScheduler.instance().onIntakeCompleted(routine, date, this);
+        } else {
+            AlarmScheduler.instance().onIntakeCompleted(schedule, time, date, this);
         }
     }
 
@@ -519,6 +587,7 @@ public class ConfirmActivity extends CalendulaActivity {
 
             TextView med;
             TextView dose;
+            TextView status;
             ImageButton check;
             ImageView icon;
 
@@ -528,6 +597,7 @@ public class ConfirmActivity extends CalendulaActivity {
                 super(itemView);
                 med  = (TextView) itemView.findViewById(R.id.med_item_name);
                 dose = (TextView) itemView.findViewById(R.id.med_item_dose);
+                status = (TextView) itemView.findViewById(R.id.med_item_status);
                 check = (ImageButton) itemView.findViewById(R.id.check_button);
                 icon = (ImageView) itemView.findViewById(R.id.imageView);
                 itemView.setOnClickListener(this);
@@ -536,18 +606,28 @@ public class ConfirmActivity extends CalendulaActivity {
 
             @Override
             public void onClick(View view) {
+                final boolean taken = dailyScheduleItem.takenToday();
+                if(isDistant){
+                    showEnsureConfirmDialog(new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dailyScheduleItem.setTakenToday(!taken);
+                            dailyScheduleItem.save();
+                            stateChanged = true;
+                            onDailyAgendaItemCheck(check);
+                            notifyItemChanged(getAdapterPosition());
+                        }
+                    }, taken);
+                }else{
 
-                if(!isCheckable){
-                    onCheckNotToday();
-                    return;
+                    dailyScheduleItem.setTakenToday(!taken);
+                    dailyScheduleItem.save();
+                    stateChanged = true;
+                    onDailyAgendaItemCheck(check);
+                    notifyItemChanged(getAdapterPosition());
                 }
 
-                boolean taken = dailyScheduleItem.takenToday();
-                dailyScheduleItem.setTakenToday(!taken);
-                dailyScheduleItem.save();
-                stateChanged = true;
-                onDailyAgendaItemCheck(check);
-                notifyItemChanged(getAdapterPosition());
+
             }
         }
 
@@ -576,9 +656,14 @@ public class ConfirmActivity extends CalendulaActivity {
             m = s.medicine();
             p = m.presentation();
 
+            String status = getString(R.string.med_not_taken);
+            if(i.timeTaken() != null){
+                status = (i.takenToday() ? getString(R.string.med_taken_at) : getString(R.string.med_cancelled_at)) +  " " + i.timeTaken().toString("kk:mm") + "h";
+            }
+
             h.med.setText(m.name());
             h.dose.setText(getDisplayableDose(i.boundToSchedule() ? s.displayDose() : si.displayDose(), m));
-
+            h.status.setText(status);
             h.dailyScheduleItem = i;
             updateCheckedStatus();
         }
@@ -604,7 +689,40 @@ public class ConfirmActivity extends CalendulaActivity {
         }
     }
 
-    private void onCheckNotToday() {
-        Snack.show("Esta pauta no esta disponible hoy!", this);
+    public void showEnsureConfirmDialog(final DialogInterface.OnClickListener listener, boolean uncheck) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        DateTime t = date.toDateTime(time);
+
+        String title = t.isAfterNow() ? getString(R.string.intake_not_available) :
+                getString(R.string.meds_from) + " " + date.toString("EEEE dd") + " " +  getString(R.string.at_time_connector) + " " + time.toString(timeFormatter);
+
+        String msg = t.isAfterNow() ? getString(R.string.confirm_future_intake_warning,relativeTime)
+                : uncheck ? getString(R.string.unconfirm_past_intake_warning, relativeTime)
+                : getString(R.string.confirm_past_intake_warning);
+
+
+
+        builder.setMessage(msg)
+                .setCancelable(true)
+                .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_history,R.color.black, 36))
+                .setTitle(title);
+
+        if(t.isAfterNow()){
+            builder.setNegativeButton(getString(R.string.tutorial_understood), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            });
+        }else{
+            builder.setPositiveButton(uncheck ? getString(R.string.meds_unconfirm_ok) : getString(R.string.meds_confirm_ok), listener)
+                    .setNegativeButton(uncheck ? getString(R.string.meds_unconfirm_cancel) : getString(R.string.meds_confirm_cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+        }
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

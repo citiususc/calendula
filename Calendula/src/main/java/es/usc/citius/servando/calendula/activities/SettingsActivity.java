@@ -222,6 +222,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         bindPreferenceSummaryToValue(findPreference("alarm_repeat_frequency"));
         bindPreferenceSummaryToValue(findPreference("alarm_reminder_window"));
         bindPreferenceSummaryToValue(findPreference("pref_notification_tone"));
+        //bindPreferenceSummaryToValue(findPreference("check_window_margin"));
 
         findPreference("enable_prescriptions_db").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override

@@ -443,6 +443,19 @@
     "]]></string>
 
     <string name="title_activity_patients">Pacientes</string>
+    <string name="intake_not_available">Toma no disponible</string>
+    <string name="confirm_future_intake_warning">Esta toma estará disponible %1$s, te avisaremos en ese momento!</string>
+    <string name="confirm_past_intake_warning">Han pasado varias horas desde esta toma, ¿has tomado tu medicación y deseas confirmarla ahora?</string>
+    <string name="meds_from">Medicinas del</string>
+    <string name="at_time_connector">a las</string>
+    <string name="med_taken_at">Confirmado a las</string>
+    <string name="med_cancelled_at">Cancelado a las</string>
+    <string name="med_not_taken">Sin tomar</string>
+    <string name="meds_confirm_ok">Si, la he tomado</string>
+    <string name="meds_confirm_cancel">No</string>
+    <string name="meds_unconfirm_ok">No</string>
+    <string name="meds_unconfirm_cancel">Si, la he tomado</string>
+    <string name="unconfirm_past_intake_warning">Has confirmado esta toma %1$s, has tomado la medicación?</string>
 
 </resources>
 

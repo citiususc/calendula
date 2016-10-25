@@ -18,6 +18,8 @@
 
 <resources>
 
+    <string name="pref_check_window_margin">Margen de confirmación</string>
+
     <string-array name="pref_alarm_repeat_titles">
         <item>Cada 5 min</item>
         <item>Cada 15 min</item>
