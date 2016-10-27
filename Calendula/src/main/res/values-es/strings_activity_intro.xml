@@ -18,9 +18,9 @@
   -->
 
 <resources>
-    <string name="intro_title">Bienvenido a Calendula!</string>
+    <string name="intro_title">¡Bienvenido a Calendula!</string>
     <string name="intro_description">Tomar correctamente tu medicación no tiene por qué ser fácil, pero ahora al menos no será tan difícil
-        \n\nPor favor, echa un vistazo a lo que tenemos para ti!</string>
+        \n\nPor favor, ¡echa un vistazo a lo que tenemos para ti!</string>
 
     <string name="intro_routines_title">Rutinas</string>
     <string name="intro_routines_text">
@@ -31,19 +31,19 @@
 
     <string name="intro_meds_title">Botiquín</string>
     <string name="intro_meds_text">
-       Manten el control de todos tus fármacos usando el botiquín, y accede de forma
+       Mantén el control de todos tus fármacos usando el botiquín, y accede de forma
         fácil a sus prospectos en la Agencia Española de Medicamentos y Productos Sanitarios.
     </string>
 
     <string name="intro_schedules_title">Pautas</string>
     <string name="intro_schedules_text">
         Define tu calendario de tomas usando nuestro editor de pautas. Puedes vincular tus tomas con tus rutinas,
-        definir pautas que se repiten diariamente o semanalmente y mucho más!
+        definir pautas que se repiten diariamente o semanalmente, ¡y mucho más!
     </string>
 
     <string name="intro_reminders_title">Recordatorios</string>
     <string name="intro_reminders_text">
-        Calendula te recordará todas tus tomas. Acuérdate de confirmar, o te seguiremos avisando!
+        Calendula te recordará todas tus tomas. Acuérdate de confirmar, ¡o te seguiremos avisando!
         \n\nPersonaliza tus alarmas en el menú de opciones.
     </string>
 
@@ -55,4 +55,3 @@
 
 
 </resources>
-
