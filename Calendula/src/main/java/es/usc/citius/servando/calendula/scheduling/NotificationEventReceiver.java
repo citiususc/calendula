@@ -81,6 +81,24 @@ public class NotificationEventReceiver extends BroadcastReceiver {
                 }
                 break;
 
+            case CalendulaApp.ACTION_CONFIRM_ALL_ROUTINE:
+                routineId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
+                if (routineId != -1) {
+                    AlarmScheduler.instance().onIntakeConfirmAll(Routine.findById(routineId), date, context);
+                    Toast.makeText(context, context.getString(R.string.all_meds_taken), Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case CalendulaApp.ACTION_CONFIRM_ALL_SCHEDULE:
+                scheduleId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1);
+                scheduleTime = intent.getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME);
+                if (scheduleId != -1 && scheduleTime != null) {
+                    LocalTime t = DateTimeFormat.forPattern("kk:mm").parseLocalTime(scheduleTime);
+                    AlarmScheduler.instance().onIntakeConfirmAll(Schedule.findById(scheduleId), t, date, context);
+                    Toast.makeText(context,context.getString(R.string.all_meds_taken),Toast.LENGTH_SHORT).show();
+                }
+                break;
+
             default:
                 Log.d(TAG, "Request not handled " + intent.toString());
                 break;

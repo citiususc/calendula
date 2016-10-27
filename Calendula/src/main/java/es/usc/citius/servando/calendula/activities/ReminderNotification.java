@@ -78,6 +78,7 @@ public class ReminderNotification {
         PendingIntent defaultIntent;
         PendingIntent cancelIntent;
         PendingIntent delayIntent;
+        PendingIntent confirmAllIntent;
         NotificationCompat.InboxStyle style;
         Uri ringtone;
         long when;
@@ -107,6 +108,10 @@ public class ReminderNotification {
         styleForRoutine(context, style, r, doses, lost);
         Pair<Intent, Intent> intents = lost ? null : getIntentsForRoutine(context, r);
 
+        final Intent confirmAll = new Intent(context, NotificationEventReceiver.class);
+        confirmAll.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_CONFIRM_ALL_ROUTINE);
+        confirmAll.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, r.getId());
+
 
         NotificationOptions options = new NotificationOptions();
         options.style = style;
@@ -117,7 +122,7 @@ public class ReminderNotification {
         options.picture = getLargeIcon(context.getResources(), r.patient());
         options.text = r.name() + " (" + doses.size() + " " + context.getString(R.string.home_menu_medicines).toLowerCase() + ")";
 
-        notify(context, routineNotificationId(r.getId().intValue()) ,title,intents,intent, options);
+        notify(context, routineNotificationId(r.getId().intValue()) ,title,intents,confirmAll, intent, options);
     }
 
 
@@ -137,6 +142,11 @@ public class ReminderNotification {
         styleForSchedule(context, style, schedule, lost);
         Pair<Intent, Intent> intents = lost ? null : getIntentsForSchedule(context, schedule, time);
 
+        final Intent confirmAll = new Intent(context, NotificationEventReceiver.class);
+        confirmAll.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_CONFIRM_ALL_SCHEDULE);
+        confirmAll.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
+        confirmAll.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, time.toString("kk:mm"));
+
         NotificationOptions options = new NotificationOptions();
         options.style = style;
         options.lost = lost;
@@ -145,11 +155,11 @@ public class ReminderNotification {
         options.notificationNumber = 1;
         options.picture = getLargeIcon(context.getResources(), schedule.patient());
         options.text = schedule.medicine().name() + " (" + schedule.toReadableString(context) + ")";
-        notify(context, scheduleNotificationId(schedule.getId().intValue()), title, intents, intent, options);
+        notify(context, scheduleNotificationId(schedule.getId().intValue()), title, intents,confirmAll, intent, options);
     }
 
     private static void notify(final Context context, int id, final String title,
-                               Pair<Intent, Intent> actionIntents, Intent intent,
+                               Pair<Intent, Intent> actionIntents, Intent confirmIntent, Intent intent,
                                NotificationOptions options){
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -167,10 +177,12 @@ public class ReminderNotification {
         PendingIntent defaultIntent = PendingIntent.getActivity(context, random.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent delayIntent = null;
         PendingIntent cancelIntent = null;
+        PendingIntent confirmAllIntent = null;
 
         if(!options.lost) {
             delayIntent = PendingIntent.getActivity(context, random.nextInt(), actionIntents.first, PendingIntent.FLAG_UPDATE_CURRENT);
             cancelIntent = PendingIntent.getBroadcast(context, random.nextInt(), actionIntents.second, PendingIntent.FLAG_UPDATE_CURRENT);
+            confirmAllIntent = PendingIntent.getBroadcast(context, random.nextInt(), confirmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
         int ic = options.lost ? R.drawable.ic_pill_small_lost : R.drawable.ic_pill_small;
@@ -182,6 +194,7 @@ public class ReminderNotification {
         if(!options.lost) {
             options.cancelIntent = cancelIntent;
             options.delayIntent = delayIntent;
+            options.confirmAllIntent = confirmAllIntent;
         }
         options.ringtone = getRingtoneUri(prefs, insistentNotifications);
 
@@ -226,6 +239,21 @@ public class ReminderNotification {
             // add delay button and cancel button
             builder.addAction(R.drawable.ic_history_white_24dp, res.getString(R.string.notification_delay), options.delayIntent)
                    .addAction(R.drawable.ic_alarm_off_white_24dp, res.getString(R.string.notification_cancel_now), options.cancelIntent);
+
+            builder.extend((new NotificationCompat.WearableExtender()
+                    .addAction(new NotificationCompat.Action.Builder(
+                            R.drawable.ic_done_white_36dp,
+                            res.getString(R.string.done),
+                            options.confirmAllIntent).build())
+                    .addAction(new NotificationCompat.Action.Builder(
+                            R.drawable.ic_history_white_24dp,
+                            res.getString(R.string.notification_delay),
+                            options.delayIntent).build())
+                    .addAction(new NotificationCompat.Action.Builder(
+                            R.drawable.ic_alarm_off_white_24dp,
+                            res.getString(R.string.notification_cancel_now),
+                            options.cancelIntent).build()
+                            )));
         }
 
         if(options.insistent){

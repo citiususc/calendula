@@ -387,6 +387,38 @@ public class AlarmScheduler {
         onIntakeCompleted(s,t,date,ctx);
     }
 
+    public void onIntakeConfirmAll(Routine r, LocalDate date, Context ctx) {
+        // cancel notification
+        ReminderNotification.cancel(ctx,ReminderNotification.routineNotificationId(r.getId().intValue()));
+        // set time taken
+        for (ScheduleItem scheduleItem : r.scheduleItems()) {
+            DailyScheduleItem ds = DB.dailyScheduleItems().findByScheduleItemAndDate(scheduleItem,date);
+            if(ds != null) {
+                Log.d(TAG, "Confirming schedule item");
+                ds.setTimeTaken(LocalTime.now());
+                ds.setTakenToday(true);
+                ds.save();
+            }
+        }
+        // cancel alarms
+        onIntakeCompleted(r,date,ctx);
+    }
+
+    public void onIntakeConfirmAll(Schedule s, LocalTime t, LocalDate date, Context ctx) {
+        // cancel notification
+        ReminderNotification.cancel(ctx,ReminderNotification.routineNotificationId(s.getId().intValue()));
+        // set time taken
+        DailyScheduleItem ds = DB.dailyScheduleItems().findBy(s,date,t);
+        if(ds!=null) {
+            Log.d(TAG, "Confirming schedule item");
+            ds.setTakenToday(true);
+            ds.setTimeTaken(LocalTime.now());
+            ds.save();
+        }
+        // cancell all alarms
+        onIntakeCompleted(s,t,date,ctx);
+    }
+
     public void onIntakeCompleted(Routine r, LocalDate date, Context ctx){
         // cancel all delay alarms
         cancelDelayedAlarm(r, date, ctx, AlarmIntentParams.USER);
