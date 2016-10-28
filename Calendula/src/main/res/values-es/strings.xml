@@ -443,10 +443,12 @@
 
     <string name="title_activity_patients">Pacientes</string>
 
-    <string name="webview_activity_message_error">Se produjo un error al cargar la página</string>
+    <string name="message_generic_pageloaderror">Se produjo un error al cargar la página</string>
     <string name="prospect_webview_title">Vista de prospecto</string>
     <string name="title_generic_loading">Cargando</string>
     <string name="message_generic_pleasewait">Por favor, espera unos segundos...</string>
+    <string name="message_prospect_load_error">Ocurrió un error al cargar el prospecto</string>
+    <string name="message_prospect_loading">El prospecto estará listo enseguida...</string>
 
 </resources>
 

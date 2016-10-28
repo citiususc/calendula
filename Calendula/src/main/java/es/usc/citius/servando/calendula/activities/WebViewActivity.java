@@ -20,6 +20,8 @@ public class WebViewActivity extends CalendulaActivity {
 
     public static final String PARAM_URL = "webview_param_url";
     public static final String PARAM_TITLE = "webview_param_title";
+    public static final String PARAM_LOADING_MESSAGE = "webview_param_loading_message";
+    public static final String PARAM_ERROR_MESSAGE = "webview_param_error";
 
     private static final String TAG = "WebViewActivity";
 
@@ -48,7 +50,10 @@ public class WebViewActivity extends CalendulaActivity {
         Log.d(TAG, "Opening URL:" + url);
         webView.loadUrl(url);
 
-        final ProgressDialog progressBar = ProgressDialog.show(this, getString(R.string.title_generic_loading), getString(R.string.message_generic_pleasewait));
+        String message = getIntent().getStringExtra(PARAM_LOADING_MESSAGE);
+        if (message == null) message = getString(R.string.message_generic_pleasewait);
+
+        final ProgressDialog progressBar = ProgressDialog.show(this, getString(R.string.title_generic_loading), message);
         progressBar.setCancelable(true);
         progressBar.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
@@ -92,7 +97,9 @@ public class WebViewActivity extends CalendulaActivity {
     }
 
     private void showErrorToast() {
-        Toast.makeText(this, R.string.webview_activity_message_error, Toast.LENGTH_SHORT).show();
+        String error = getIntent().getStringExtra(PARAM_ERROR_MESSAGE);
+        if (error == null) error = getString(R.string.message_generic_pageloaderror);
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
     }
 
 }

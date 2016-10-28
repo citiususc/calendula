@@ -233,7 +233,9 @@ public class MedicinesListFragment extends Fragment {
         final String url = PROSPECT_URL.replaceAll("#ID#", p.pid);
         Intent i = new Intent(getActivity(), WebViewActivity.class);
         i.putExtra(WebViewActivity.PARAM_URL, url);
-        i.putExtra(WebViewActivity.PARAM_TITLE,getString(R.string.prospect_webview_title));
+        i.putExtra(WebViewActivity.PARAM_TITLE, getString(R.string.prospect_webview_title));
+        i.putExtra(WebViewActivity.PARAM_LOADING_MESSAGE, getString(R.string.message_prospect_loading));
+        i.putExtra(WebViewActivity.PARAM_ERROR_MESSAGE, getString(R.string.message_prospect_load_error));
         getActivity().startActivity(i);
     }
 
@@ -242,7 +244,7 @@ public class MedicinesListFragment extends Fragment {
         builder.setMessage(getString(R.string.driving_warning))
                 .setTitle(getString(R.string.driving_warning_title))
                 .setIcon(getResources().getDrawable(R.drawable.ic_warning_amber_48dp));
-        if(p.hasProspect) {
+        if (p.hasProspect) {
             builder.setPositiveButton(getString(R.string.driving_warning_show_prospect), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

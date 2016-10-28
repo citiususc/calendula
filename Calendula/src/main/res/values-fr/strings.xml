@@ -389,10 +389,12 @@
 
     <string name="all_meds_taken">Tous les médicaments pris!</string>
 
-    <string name="webview_activity_message_error">There was an error loading the page</string>
+    <string name="message_generic_pageloaderror">There was an error loading the page</string>
     <string name="prospect_webview_title">Prospect view</string>
     <string name="title_generic_loading">Loading</string>
     <string name="message_generic_pleasewait">Please wait for a few seconds...</string>
+    <string name="message_prospect_loading">The leaflet will be ready soon...</string>
+    <string name="message_prospect_load_error">An error happened while loading the leaflet</string>
 
 
 </resources>
