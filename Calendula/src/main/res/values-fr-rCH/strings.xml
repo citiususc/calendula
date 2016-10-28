@@ -390,5 +390,11 @@
     <string name="patches">Emplâtre</string>
     <string name="patches_units">emplâtre</string>
 
+
+    <string name="webview_activity_message_error">There was an error loading the page</string>
+    <string name="prospect_webview_title">Prospect view</string>
+    <string name="title_generic_loading">Loading</string>
+    <string name="message_generic_pleasewait">Please wait for a few seconds...</string>
+
 </resources>
 

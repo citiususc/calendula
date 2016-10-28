@@ -390,5 +390,10 @@
     <string name="patches_units">parche</string>
 
     <string name="create_schedule_select_med_before_dose">Por favor, selecciona un medicamento primeiro</string>
+
+    <string name="webview_activity_message_error">Houbo un erro ao cargar a páxina</string>
+    <string name="prospect_webview_title">Vista de prospecto</string>
+    <string name="message_generic_pleasewait">Por favor, espere uns segundos...</string>
+    <string name="title_generic_loading">Cargando</string>
 </resources>
 

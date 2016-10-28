@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2016 CITIUS - USC
   ~
@@ -177,6 +176,10 @@
             android:label="AlarmIntentService">
         </service>
 
+        <activity
+            android:name=".activities.WebViewActivity"
+            android:label="@string/title_activity_webview"
+            android:parentActivityName=".HomePagerActivity"></activity>
     </application>
 
 </manifest>

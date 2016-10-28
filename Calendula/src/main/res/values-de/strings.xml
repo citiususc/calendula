@@ -393,6 +393,11 @@
 
     <string name="all_meds_taken">Alle Medikamente eingenommen!</string>
 
+    <string name="webview_activity_message_error">There was an error loading the page</string>
+    <string name="prospect_webview_title">Prospect view</string>
+    <string name="title_generic_loading">Loading</string>
+    <string name="message_generic_pleasewait">Please wait for a few seconds...</string>
+
 
 </resources>
 
