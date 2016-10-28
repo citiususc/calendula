@@ -68,6 +68,13 @@ public class WebViewActivity extends CalendulaActivity {
                     }
 
                     @Override
+                    public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                        Log.e(TAG, "Received error when trying to load page");
+                        showErrorToast();
+                        finish();
+                    }
+
+                    @Override
                     public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
                         Log.e(TAG, "Received HTTP Error when trying to load page");
                         showErrorToast();
