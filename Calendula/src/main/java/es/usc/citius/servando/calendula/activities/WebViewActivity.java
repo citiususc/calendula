@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,6 +49,13 @@ public class WebViewActivity extends CalendulaActivity {
         webView.loadUrl(url);
 
         final ProgressDialog progressBar = ProgressDialog.show(this, getString(R.string.title_generic_loading), getString(R.string.message_generic_pleasewait));
+        progressBar.setCancelable(true);
+        progressBar.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                finish();
+            }
+        });
 
         webView.setWebViewClient(
                 new WebViewClient() {
