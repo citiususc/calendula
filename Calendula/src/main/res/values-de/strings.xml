@@ -76,7 +76,7 @@
     <string name="routine_time">Zeit</string>
     <string name="edit_routine_button_text">Änderungen speichern</string>
     <string name="create_routine_button_text">Routine erstellen</string>
-    <string name="create_new_routine">Neue Routine erstellen...</string>
+    <string name="create_new_routine">Neue Routine erstellen…</string>
     <string name="add_routine_button">ROUTINE HINZUFÜGEN </string>
     <string name="medicine_name">Medikamentenname</string>
     <string name="medicine_description">Medikamentenbeschreibung</string>
@@ -273,7 +273,7 @@
 </item>
     </string-array>
 
-    <string name="search_med_hint">Suche...</string>
+    <string name="search_med_hint">Suche…</string>
     <string name="download_prospect_message">%1$s Beipackzettel wird jetzt heruntergeladen. Einmal heruntergeladen ist er auch ohne Internetverbindung verfügbar.</string>
     <string name="download_prospect_title">Beipackzettel herunterladen</string>
     <string name="download_prospect_not_available_message">Kein Beipackzettel für dieses Medikament verfügbar.</string>
@@ -282,7 +282,7 @@
     <string name="search_no_results_found">Keine Medikamente gefunden</string>
     <string name="pref_header_prescriptions">Medikamentensuche</string>
     <string name="pref_enable_prescriptions_db">Assistent aktivieren</string>
-    <string name="medicine_edit_name_hint">Hier schreiben...</string>
+    <string name="medicine_edit_name_hint">Hier schreiben…</string>
 
     <string name="enable_prescriptions_progress_message">Informationen über Medikamente werden erstellt. Dies nimmt wenige Sekunden in Anspruch.</string>
     <string name="enable_prescriptions_dialog_message">Sie können einfach Medikamente hinzufügen und Beipackzettel ansehen durch Aktivierung des Suchassistenten. Sie können die Aktivierung auch später über das Menu vornehmen.</string>
@@ -396,8 +396,8 @@
     <string name="message_generic_pageloaderror">There was an error loading the page</string>
     <string name="prospect_webview_title">Prospect view</string>
     <string name="title_generic_loading">Loading</string>
-    <string name="message_generic_pleasewait">Please wait for a few seconds...</string>
-    <string name="message_prospect_loading">The leaflet will be ready soon...</string>
+    <string name="message_generic_pleasewait">Please wait for a few seconds…</string>
+    <string name="message_prospect_loading">The leaflet will be ready soon…</string>
     <string name="message_prospect_load_error">An error happened while loading the leaflet</string>
 
 

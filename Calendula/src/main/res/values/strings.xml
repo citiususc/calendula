@@ -76,7 +76,7 @@
     <string name="routine_time">Time</string>
     <string name="edit_routine_button_text">Save changes</string>
     <string name="create_routine_button_text">Create routine</string>
-    <string name="create_new_routine">Create new routine...</string>
+    <string name="create_new_routine">Create new routine…</string>
     <string name="add_routine_button">ADD ROUTINE </string>
     <string name="medicine_name">Med name</string>
     <string name="medicine_description">Med description</string>
@@ -272,7 +272,7 @@
         <item>Feeling very good</item>
     </string-array>
 
-    <string name="search_med_hint">Search...</string>
+    <string name="search_med_hint">Search…</string>
     <string name="download_prospect_message">%1$s leaflet will be downloaded now. Once downloaded it will be available for reference even if you are not connected to internet.</string>
     <string name="download_prospect_title">Download leaflet</string>
     <string name="download_prospect_not_available_message">Sorry, there is no leaflet available for this medicine.</string>
@@ -281,7 +281,7 @@
     <string name="search_no_results_found">No meds found</string>
     <string name="pref_header_prescriptions">Medicine search</string>
     <string name="pref_enable_prescriptions_db">Enable assistant</string>
-    <string name="medicine_edit_name_hint">Write here...</string>
+    <string name="medicine_edit_name_hint">Write here…</string>
 
     <string name="enable_prescriptions_progress_messgae">Setting up med information. It will take only a few seconds</string>
     <string name="enable_prescriptions_dialog_message">You can easily add medicines and view leaflets by enabling search assistant. If you prefer not to do it, you can activate it later from the settings menu.</string>
@@ -451,9 +451,9 @@
     <string name="message_generic_pageloaderror">There was an error loading the page</string>
     <string name="prospect_webview_title">Prospect view</string>
     <string name="title_activity_webview" translatable="false">WebViewActivity</string>
-    <string name="message_generic_pleasewait">Please wait for a few seconds...</string>
+    <string name="message_generic_pleasewait">Please wait for a few seconds…</string>
     <string name="title_generic_loading">Loading</string>
-    <string name="message_prospect_loading">The leaflet will be ready soon...</string>
+    <string name="message_prospect_loading">The leaflet will be ready soon…</string>
     <string name="message_prospect_load_error">An error happened while loading the leaflet</string>
 
 

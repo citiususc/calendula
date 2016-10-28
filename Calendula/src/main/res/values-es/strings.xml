@@ -76,7 +76,7 @@
     <string name="routine_time">Hora</string>
     <string name="edit_routine_button_text">Guardar cambios</string>
     <string name="create_routine_button_text">Crear rutina</string>
-    <string name="create_new_routine">Crear nueva rutina...</string>
+    <string name="create_new_routine">Crear nueva rutina…</string>
     <string name="add_routine_button">AÑADIR RUTINA</string>
     <string name="medicine_name">Nombre</string>
     <string name="medicine_presentation">Presentación</string>
@@ -264,7 +264,7 @@
     <string name="tutorial_homeinfo_title">Explora!</string>
     <string name="tutorial_homeinfo_text">A través del menú puedes acceder a las diferentes opciones de Caléndula. También puedes llegar a las opciones más comunes deslizando a la derecha!</string>
     <string name="tutorial_routine_title">Potencia los buenos hábitos</string>
-    <string name="tutorial_routine_text">Las rutinas te permiten asociar la toma de medicamentos con tus actividades diarias. Para que sea más fácil, añade aquí las horas a las que debes tomar algún medicamento (desayuno, comida,...)</string>
+    <string name="tutorial_routine_text">Las rutinas te permiten asociar la toma de medicamentos con tus actividades diarias. Para que sea más fácil, añade aquí las horas a las que debes tomar algún medicamento (desayuno, comida,…)</string>
     <string name="tutorial_meds_title">Administra tus medicinas</string>
     <string name="tutorial_meds_text">Busca tus medicamentos y añádelos al botiquín. Así los tendrás siempre bajo control y podrás consultar sus prospectos ante cualquier duda!</string>
     <string name="tutorial_schedule_title">Define tus pautas!</string>
@@ -287,11 +287,11 @@
         <item>Me siento muy bien</item>
     </string-array>
 
-    <string name="search_med_hint">Buscar...</string>
+    <string name="search_med_hint">Buscar…</string>
     <string name="search_no_results_found">No se encontraron medicamentos</string>
     <string name="pref_header_prescriptions">Búsqueda de medicamentos</string>
     <string name="pref_enable_prescriptions_db">Habilitar asistente</string>
-    <string name="medicine_edit_name_hint">Escribe aquí...</string>
+    <string name="medicine_edit_name_hint">Escribe aquí…</string>
 
     <string name="download_prospect_message">A continuación se descargará el prospecto de %1$s. Una vez descargado podrás consultarlo aunque no estés conectado a internet.</string>
     <string name="download_prospect_title">Descargar prospecto</string>
@@ -299,7 +299,7 @@
     <string name="download_prospect_continue">Descargar</string>
     <string name="download_prospect_cancel">Cancelar</string>
 
-    <string name="enable_prescriptions_progress_messgae">Preparando información de medicamentos... Estará listo en muy pocos segundos</string>
+    <string name="enable_prescriptions_progress_messgae">Preparando información de medicamentos… Estará listo en muy pocos segundos</string>
     <string name="enable_prescriptions_dialog_message">Puedes añadir medicinas más facilmente y consultar sus prospectos si activas el asistente de búsqueda. Si prefieres no hacerlo podrás activarlo más adelante desde el menú de ajustes.</string>
     <string name="enable_prescriptions_dialog_title">Asistente de búsqueda</string>
     <string name="enable_prescriptions_finish_message">Listo! Ya puedes comenzar a buscar</string>
@@ -446,9 +446,9 @@
     <string name="message_generic_pageloaderror">Se produjo un error al cargar la página</string>
     <string name="prospect_webview_title">Vista de prospecto</string>
     <string name="title_generic_loading">Cargando</string>
-    <string name="message_generic_pleasewait">Por favor, espera unos segundos...</string>
+    <string name="message_generic_pleasewait">Por favor, espera unos segundos…</string>
     <string name="message_prospect_load_error">Ocurrió un error al cargar el prospecto</string>
-    <string name="message_prospect_loading">El prospecto estará listo enseguida...</string>
+    <string name="message_prospect_loading">El prospecto estará listo enseguida…</string>
 
 </resources>
 
