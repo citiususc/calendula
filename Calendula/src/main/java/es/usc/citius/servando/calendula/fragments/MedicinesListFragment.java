@@ -237,6 +237,8 @@ public class MedicinesListFragment extends Fragment {
         request.setErrorMessage(getString(R.string.message_prospect_load_error));
         request.setLoadingMessage(getString(R.string.message_prospect_loading));
         request.setTitle(getString(R.string.title_prospect_webview));
+        request.setCacheType(WebViewActivity.WebViewRequest.CacheType.DOWNLOAD_CACHE);
+        request.setJavaScriptEnabled(true);
         i.putExtra(WebViewActivity.PARAM_WEBVIEW_REQUEST, request);
         getActivity().startActivity(i);
     }

@@ -38,6 +38,7 @@ import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
+import es.usc.citius.servando.calendula.persistence.HtmlCacheEntry;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
@@ -67,13 +68,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             HomogeneousGroup.class,
             PickupInfo.class,
             // v9
-            Patient.class
+            Patient.class,
+            // v10
+            HtmlCacheEntry.class
     };
 
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
@@ -174,6 +177,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 case 9:
                     TableUtils.createTable(connectionSource, Patient.class);
                     migrateToMultiPatient();
+                case 10:
+                    TableUtils.createTable(connectionSource, HtmlCacheEntry.class);
             }
 
 

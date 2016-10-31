@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Base64;
 import android.util.Log;
+import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -18,11 +20,15 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.io.InputStream;
 
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.util.HtmlCacheManager;
 
 public class WebViewActivity extends CalendulaActivity {
 
@@ -31,11 +37,21 @@ public class WebViewActivity extends CalendulaActivity {
      */
     public static final String PARAM_WEBVIEW_REQUEST = "webview_param_request";
 
+    /**
+     * Max cache size for AppCache
+     */
     private static final Integer CACHE_MAX_SIZE = 8388608; //8mb
+
+    private static final Integer LEAFLET_CACHE_TTL_MILLIS = 259200000;
 
     private static final String TAG = "WebViewActivity";
 
     private WebView webView;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +79,9 @@ public class WebViewActivity extends CalendulaActivity {
 
         }
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private void setupWebView(final WebViewRequest request) {
@@ -74,8 +93,8 @@ public class WebViewActivity extends CalendulaActivity {
         }
 
 
-        final String requestUrl = request.getUrl();
-        Log.d(TAG, "Opening URL: " + requestUrl);
+        final String originalUrl = request.getUrl();
+        Log.d(TAG, "Opening URL: " + originalUrl);
 
         //setup progressDialog
         String loadingMessage = request.getLoadingMessage();
@@ -97,9 +116,19 @@ public class WebViewActivity extends CalendulaActivity {
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDisplayZoomControls(false);
 
-        //enable cache if requested
-        if (request.isCacheEnabled())
-            enableCache();
+        //enable AppCache if requested
+        if (request.getCacheType().equals(WebViewRequest.CacheType.APP_CACHE))
+            enableAppCache();
+
+        //enable download cache if requested
+        String cachedData = null;
+        if (request.getCacheType().equals(WebViewRequest.CacheType.DOWNLOAD_CACHE)) {
+            if (!isCached()) {
+                webView.addJavascriptInterface(new SimpleJSCacheInterface(this), "HtmlCache");
+            } else {
+                cachedData = HtmlCacheManager.getInstance().get(originalUrl);
+            }
+        }
 
         final String customCssSheet = request.getCustomCss();
 
@@ -109,7 +138,7 @@ public class WebViewActivity extends CalendulaActivity {
                     @Override
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
                         //use webview only for the requested URL or suburls, unless external links are enabled
-                        if (url.contains(requestUrl) || request.isExternalLinksEnabled()) {
+                        if (url.contains(originalUrl) || request.isExternalLinksEnabled()) {
                             return super.shouldOverrideUrlLoading(view, url);
                         } else {
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
@@ -129,6 +158,14 @@ public class WebViewActivity extends CalendulaActivity {
                         if (progressDialog.isShowing()) {
                             progressDialog.dismiss();
                         }
+                        if (request.cacheType.equals(WebViewRequest.CacheType.DOWNLOAD_CACHE) && !isCached())
+                        {
+                            webView.getSettings().setJavaScriptEnabled(true);
+                            webView.loadUrl("javascript:window.HtmlCache.writeToCache" +
+                                    "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
+                            webView.getSettings().setJavaScriptEnabled(request.isJavaScriptEnabled());
+                        }
+
                     }
 
                     @Override
@@ -153,7 +190,19 @@ public class WebViewActivity extends CalendulaActivity {
                     }
                 });
 
-        webView.loadUrl(requestUrl);
+        if (cachedData != null){
+            Log.d(TAG, "setupWebView: Loading page from cache");
+            webView.loadData(cachedData, "text/html; charset=UTF-8", null);
+        }
+        else {
+            Log.d(TAG, "setupWebView: Loading page from URL");
+            webView.loadUrl(originalUrl);
+        }
+    }
+
+    private boolean isCached() {
+        WebViewRequest request = getIntent().getParcelableExtra(PARAM_WEBVIEW_REQUEST);
+        return HtmlCacheManager.getInstance().isCached(request.getUrl());
     }
 
     private void injectCSS(final String file) {
@@ -178,7 +227,7 @@ public class WebViewActivity extends CalendulaActivity {
         }
     }
 
-    private void enableCache() {
+    private void enableAppCache() {
         Log.d(TAG, "Enabling cache with max size " + CACHE_MAX_SIZE + " bytes");
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setAppCacheMaxSize(CACHE_MAX_SIZE);
@@ -219,24 +268,29 @@ public class WebViewActivity extends CalendulaActivity {
         private String errorMessage = null;
         private boolean javaScriptEnabled = false;
         private boolean externalLinksEnabled = false;
-        private boolean cacheEnabled = false;
+        private CacheType cacheType = CacheType.NO_CACHE;
         private String customCss = null;
 
+        public enum CacheType {
+            NO_CACHE,
+            APP_CACHE,
+            DOWNLOAD_CACHE
+        }
 
         public WebViewRequest(String url) {
             this.url = url;
         }
 
-        public WebViewRequest(String url, String title, String loadingMessage, String errorMessage, boolean javaScriptEnabled, boolean externalLinksEnabled, String customCss) {
+        public WebViewRequest(String url, String title, String loadingMessage, String errorMessage, boolean javaScriptEnabled, boolean externalLinksEnabled, CacheType cacheType, String customCss) {
             this.url = url;
             this.title = title;
             this.loadingMessage = loadingMessage;
             this.errorMessage = errorMessage;
             this.javaScriptEnabled = javaScriptEnabled;
             this.externalLinksEnabled = externalLinksEnabled;
+            this.cacheType = cacheType;
             this.customCss = customCss;
         }
-
 
         protected WebViewRequest(Parcel in) {
             url = in.readString();
@@ -245,9 +299,10 @@ public class WebViewActivity extends CalendulaActivity {
             errorMessage = in.readString();
             javaScriptEnabled = in.readByte() != 0;
             externalLinksEnabled = in.readByte() != 0;
-            cacheEnabled = in.readByte() != 0;
+            cacheType = CacheType.valueOf(in.readString());
             customCss = in.readString();
         }
+
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
@@ -257,7 +312,7 @@ public class WebViewActivity extends CalendulaActivity {
             dest.writeString(errorMessage);
             dest.writeByte((byte) (javaScriptEnabled ? 1 : 0));
             dest.writeByte((byte) (externalLinksEnabled ? 1 : 0));
-            dest.writeByte((byte) (cacheEnabled ? 1 : 0));
+            dest.writeString(cacheType.toString());
             dest.writeString(customCss);
         }
 
@@ -362,19 +417,36 @@ public class WebViewActivity extends CalendulaActivity {
             this.externalLinksEnabled = externalLinksEnabled;
         }
 
-        public boolean isCacheEnabled() {
-            return cacheEnabled;
+        public CacheType getCacheType() {
+            return cacheType;
         }
 
         /**
-         * Enable or disable HTML5 App Cache. Default value is <code>false</code>.
+         * Set cache type for the webview:
+         * - <code>NO_CACHE</code>: deactivate caching. Default value.
+         * - <code>APP_CACHE</code>: HTML5 App Cache
+         * - <code>DOWNLOAD_CACHE</code>: Cache full HTML document in database. Warning! Locally linked resources will be lost.
          *
-         * @param cacheEnabled
+         * @param cacheType
          */
-        public void setCacheEnabled(boolean cacheEnabled) {
-            this.cacheEnabled = cacheEnabled;
+        public void setCacheType(CacheType cacheType) {
+            this.cacheType = cacheType;
         }
     }
 
 
+    private class SimpleJSCacheInterface {
+        private Context ctx;
+
+        SimpleJSCacheInterface(Context ctx) {
+            this.ctx = ctx;
+        }
+
+        @JavascriptInterface
+        public void writeToCache(String html) {
+            WebViewRequest request = getIntent().getParcelableExtra(PARAM_WEBVIEW_REQUEST);
+            Log.d(TAG, "writeToCache: writing url "+ request.getUrl());
+            HtmlCacheManager.getInstance().put(request.getUrl(), html, LEAFLET_CACHE_TTL_MILLIS);
+        }
+    }
 }
