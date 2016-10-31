@@ -2,6 +2,8 @@ package es.usc.citius.servando.calendula.activities;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -70,8 +72,8 @@ public class WebViewActivity extends CalendulaActivity {
         }
 
 
-        String url = request.getUrl();
-        Log.d(TAG, "Opening URL:" + url);
+        final String requestUrl = request.getUrl();
+        Log.d(TAG, "Opening URL:" + requestUrl);
 
         //setup progressDialog
         String loadingMessage = request.getLoadingMessage();
@@ -87,13 +89,28 @@ public class WebViewActivity extends CalendulaActivity {
         });
 
         //misc webView settings
+        //set single column layout
         webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        //enable pinch to zoom
+        webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setDisplayZoomControls(false);
 
 
         final String customCssSheet = request.getCustomCss();
 
         webView.setWebViewClient(
                 new WebViewClient() {
+
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                        //use webview only for the requested URL or suburls, unless external links are enabled
+                        if (url.contains(requestUrl) || request.isExternalLinksEnabled()) {
+                            return super.shouldOverrideUrlLoading(view, url);
+                        } else {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                            return true;
+                        }
+                    }
 
                     @Override
                     public void onPageFinished(WebView view, String url) {
@@ -131,7 +148,7 @@ public class WebViewActivity extends CalendulaActivity {
                     }
                 });
 
-        webView.loadUrl(url);
+        webView.loadUrl(requestUrl);
     }
 
     private void injectCSS(final String file) {
@@ -176,6 +193,7 @@ public class WebViewActivity extends CalendulaActivity {
         private String loadingMessage = null;
         private String errorMessage = null;
         private boolean javaScriptEnabled = false;
+        private boolean externalLinksEnabled = false;
         private String customCss = null;
 
 
@@ -183,14 +201,53 @@ public class WebViewActivity extends CalendulaActivity {
             this.url = url;
         }
 
-        public WebViewRequest(String url, String title, String loadingMessage, String errorMessage, boolean javaScriptEnabled, String customCss) {
+        public WebViewRequest(String url, String title, String loadingMessage, String errorMessage, boolean javaScriptEnabled, boolean externalLinksEnabled, String customCss) {
             this.url = url;
             this.title = title;
             this.loadingMessage = loadingMessage;
             this.errorMessage = errorMessage;
             this.javaScriptEnabled = javaScriptEnabled;
+            this.externalLinksEnabled = externalLinksEnabled;
             this.customCss = customCss;
         }
+
+        protected WebViewRequest(Parcel in) {
+            url = in.readString();
+            title = in.readString();
+            loadingMessage = in.readString();
+            errorMessage = in.readString();
+            javaScriptEnabled = in.readByte() != 0;
+            externalLinksEnabled = in.readByte() != 0;
+            customCss = in.readString();
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(url);
+            dest.writeString(title);
+            dest.writeString(loadingMessage);
+            dest.writeString(errorMessage);
+            dest.writeByte((byte) (javaScriptEnabled ? 1 : 0));
+            dest.writeByte((byte) (externalLinksEnabled ? 1 : 0));
+            dest.writeString(customCss);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        public static final Creator<WebViewRequest> CREATOR = new Creator<WebViewRequest>() {
+            @Override
+            public WebViewRequest createFromParcel(Parcel in) {
+                return new WebViewRequest(in);
+            }
+
+            @Override
+            public WebViewRequest[] newArray(int size) {
+                return new WebViewRequest[size];
+            }
+        };
 
         public String getUrl() {
             return url;
@@ -254,76 +311,34 @@ public class WebViewActivity extends CalendulaActivity {
 
         /**
          * Set a custom CSS sheet to be injected into the page. If <code>null</code>, no CSS will be loaded.
-         * Injecting the CSS <b>requires JavaScript</b> and will override setJavaScriptEnabled.
+         * Injecting the CSS <b>requires JavaScript</b> and will override setJavaScriptEnabled during the injection.
+         *
          * @param filename
          */
         public void setCustomCss(String filename) {
             this.customCss = filename;
         }
 
-        protected WebViewRequest(Parcel in) {
-            url = in.readString();
-            title = in.readString();
-            loadingMessage = in.readString();
-            errorMessage = in.readString();
-            javaScriptEnabled = in.readByte() != 0;
-            customCss = in.readString();
+        public boolean isExternalLinksEnabled() {
+            return externalLinksEnabled;
         }
 
-        public static final Creator<WebViewRequest> CREATOR = new Creator<WebViewRequest>() {
-            @Override
-            public WebViewRequest createFromParcel(Parcel in) {
-                return new WebViewRequest(in);
-            }
-
-            @Override
-            public WebViewRequest[] newArray(int size) {
-                return new WebViewRequest[size];
-            }
-        };
-
-        @Override
-        public int describeContents() {
-            return 0;
+        /**
+         * Set if external links should be opened in the webview (<code>true</code>) or should launch an action intent (<code>false</code>).
+         * Default value is <code>false</code>.
+         * @param externalLinksEnabled
+         */
+        public void setExternalLinksEnabled(boolean externalLinksEnabled) {
+            this.externalLinksEnabled = externalLinksEnabled;
         }
+    }
 
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(url);
-            dest.writeString(title);
-            dest.writeString(loadingMessage);
-            dest.writeString(errorMessage);
-            dest.writeByte((byte) (javaScriptEnabled ? 1 : 0));
-            dest.writeString(customCss);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            WebViewRequest that = (WebViewRequest) o;
-
-            if (javaScriptEnabled != that.javaScriptEnabled) return false;
-            if (url != null ? !url.equals(that.url) : that.url != null) return false;
-            if (title != null ? !title.equals(that.title) : that.title != null) return false;
-            if (loadingMessage != null ? !loadingMessage.equals(that.loadingMessage) : that.loadingMessage != null)
-                return false;
-            if (errorMessage != null ? !errorMessage.equals(that.errorMessage) : that.errorMessage != null)
-                return false;
-            return customCss != null ? customCss.equals(that.customCss) : that.customCss == null;
-
-        }
-
-        @Override
-        public int hashCode() {
-            int result = url != null ? url.hashCode() : 0;
-            result = 31 * result + (title != null ? title.hashCode() : 0);
-            result = 31 * result + (loadingMessage != null ? loadingMessage.hashCode() : 0);
-            result = 31 * result + (errorMessage != null ? errorMessage.hashCode() : 0);
-            result = 31 * result + (javaScriptEnabled ? 1 : 0);
-            result = 31 * result + (customCss != null ? customCss.hashCode() : 0);
-            return result;
-        }
+    @Override
+    public void onBackPressed() {
+        //link navigation
+        if (webView.canGoBack())
+            webView.goBack();
+        else
+            finish();
     }
 }

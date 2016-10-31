@@ -179,7 +179,8 @@
         <activity
             android:name=".activities.WebViewActivity"
             android:label="@string/title_activity_webview"
-            android:parentActivityName=".HomePagerActivity"></activity>
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".HomePagerActivity" />
     </application>
 
 </manifest>
