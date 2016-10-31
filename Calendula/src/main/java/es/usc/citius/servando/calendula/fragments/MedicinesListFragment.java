@@ -232,11 +232,12 @@ public class MedicinesListFragment extends Fragment {
     public void openProspect(Prescription p) {
         final String url = PROSPECT_URL.replaceAll("#ID#", p.pid);
         Intent i = new Intent(getActivity(), WebViewActivity.class);
-        i.putExtra(WebViewActivity.PARAM_URL, url);
-        i.putExtra(WebViewActivity.PARAM_TITLE, getString(R.string.prospect_webview_title));
-        i.putExtra(WebViewActivity.PARAM_LOADING_MESSAGE, getString(R.string.message_prospect_loading));
-        i.putExtra(WebViewActivity.PARAM_ERROR_MESSAGE, getString(R.string.message_prospect_load_error));
-        i.putExtra(WebViewActivity.PARAM_CUSTOM_CSS_SHEET, "prospectView.css");
+        WebViewActivity.WebViewRequest request = new WebViewActivity.WebViewRequest(url);
+        request.setCustomCss("prospectView.css");
+        request.setErrorMessage(getString(R.string.message_prospect_load_error));
+        request.setLoadingMessage(getString(R.string.message_prospect_loading));
+        request.setTitle(getString(R.string.title_prospect_webview));
+        i.putExtra(WebViewActivity.PARAM_WEBVIEW_REQUEST, request);
         getActivity().startActivity(i);
     }
 

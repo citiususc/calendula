@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.net.http.SslError;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Base64;
 import android.util.Log;
 import android.webkit.SslErrorHandler;
@@ -22,11 +24,10 @@ import es.usc.citius.servando.calendula.database.DB;
 
 public class WebViewActivity extends CalendulaActivity {
 
-    public static final String PARAM_URL = "webview_param_url";
-    public static final String PARAM_TITLE = "webview_param_title";
-    public static final String PARAM_LOADING_MESSAGE = "webview_param_loading_message";
-    public static final String PARAM_ERROR_MESSAGE = "webview_param_error";
-    public static final String PARAM_CUSTOM_CSS_SHEET = "webview_param_error";
+    /**
+     * Request bean for WebViewActivity. Must be provided and must contain at least a URL.
+     */
+    public static final String PARAM_WEBVIEW_REQUEST = "webview_param_request";
 
     private static final String TAG = "WebViewActivity";
 
@@ -36,50 +37,75 @@ public class WebViewActivity extends CalendulaActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
 
-        webView = (WebView) findViewById(R.id.webView1);
-        webView.getSettings().setJavaScriptEnabled(true);
 
-        int color = DB.patients().getActive(this).color();
-
-        String title = getIntent().getStringExtra(PARAM_TITLE);
-        setupToolbar(title, color);
-
-
-        setupStatusBar(color);
-
-        String url = getIntent().getStringExtra(PARAM_URL);
-        if (url == null) {
-            Log.e(TAG, "onCreate: URL not provided in intent");
+        //check for request and URL  and finish if not present
+        WebViewRequest request = getIntent().getParcelableExtra(PARAM_WEBVIEW_REQUEST);
+        if (request == null || request.getUrl() == null) {
+            Log.e(TAG, "onCreate: No WebViewRequest provided in intent!");
+            showErrorToast();
             finish();
+        } else {
+
+            webView = (WebView) findViewById(R.id.webView1);
+
+            //setup toolbar and statusbar
+            int color = DB.patients().getActive(this).color();
+            String title = request.getTitle();
+            setupToolbar(title, color);
+            setupStatusBar(color);
+
+            //setup the webView
+            setupWebView(request);
+
         }
+
+    }
+
+    private void setupWebView(final WebViewRequest request) {
+
+        //enable JavaScript if it is explicitly enabled or custom css sheet must be injected
+        if (request.isJavaScriptEnabled() || request.getCustomCss() != null) {
+            Log.d(TAG, "Enabling JavaScript!");
+            webView.getSettings().setJavaScriptEnabled(true);
+        }
+
+
+        String url = request.getUrl();
         Log.d(TAG, "Opening URL:" + url);
 
-        String message = getIntent().getStringExtra(PARAM_LOADING_MESSAGE);
-        if (message == null) message = getString(R.string.message_generic_pleasewait);
-
-        final ProgressDialog progressBar = ProgressDialog.show(this, getString(R.string.title_generic_loading), message);
-        progressBar.setCancelable(true);
-        progressBar.setOnCancelListener(new DialogInterface.OnCancelListener() {
+        //setup progressDialog
+        String loadingMessage = request.getLoadingMessage();
+        if (loadingMessage == null) loadingMessage = getString(R.string.message_generic_pleasewait);
+        final ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.title_generic_loading), loadingMessage);
+        progressDialog.setCancelable(true);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
                 finish();
             }
         });
 
-        final String customCssSheet = getIntent().getStringExtra(PARAM_CUSTOM_CSS_SHEET);
-
+        //misc webView settings
         webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        webView.getSettings().setLoadWithOverviewMode(true);
-        //webView.getSettings().setUseWideViewPort(true);
+
+
+        final String customCssSheet = request.getCustomCss();
+
         webView.setWebViewClient(
                 new WebViewClient() {
 
+                    @Override
                     public void onPageFinished(WebView view, String url) {
-                        if (customCssSheet != null)
+                        if (customCssSheet != null) {
                             injectCSS(customCssSheet);
+
+                            //if JavaScript is not enabled explicitly, turn it off after CSS injection
+                            webView.getSettings().setJavaScriptEnabled(request.isJavaScriptEnabled());
+                        }
                         Log.d(TAG, "Finished loading URL: " + url);
-                        if (progressBar.isShowing()) {
-                            progressBar.dismiss();
+                        if (progressDialog.isShowing()) {
+                            progressDialog.dismiss();
                         }
                     }
 
@@ -104,8 +130,8 @@ public class WebViewActivity extends CalendulaActivity {
                         finish();
                     }
                 });
-        webView.loadUrl(url);
 
+        webView.loadUrl(url);
     }
 
     private void injectCSS(final String file) {
@@ -131,9 +157,173 @@ public class WebViewActivity extends CalendulaActivity {
     }
 
     private void showErrorToast() {
-        String error = getIntent().getStringExtra(PARAM_ERROR_MESSAGE);
+
+        final WebViewRequest request = getIntent().getParcelableExtra(PARAM_WEBVIEW_REQUEST);
+        String error = request.getErrorMessage();
+
         if (error == null) error = getString(R.string.message_generic_pageloaderror);
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Encapsulates a request for a {@link WebViewActivity}.
+     * <p>
+     */
+    public static class WebViewRequest implements Parcelable {
+
+        private final String url;
+        private String title = null;
+        private String loadingMessage = null;
+        private String errorMessage = null;
+        private boolean javaScriptEnabled = false;
+        private String customCss = null;
+
+
+        public WebViewRequest(String url) {
+            this.url = url;
+        }
+
+        public WebViewRequest(String url, String title, String loadingMessage, String errorMessage, boolean javaScriptEnabled, String customCss) {
+            this.url = url;
+            this.title = title;
+            this.loadingMessage = loadingMessage;
+            this.errorMessage = errorMessage;
+            this.javaScriptEnabled = javaScriptEnabled;
+            this.customCss = customCss;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        /**
+         * Set the title for the webview title bar. Can be <code>null</code>, no title will be displayed if so.
+         *
+         * @param title the title
+         */
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getLoadingMessage() {
+            return loadingMessage;
+        }
+
+        /**
+         * Set a custom loading message. A default message will be used if <code>null</code>.
+         *
+         * @param loadingMessage the message
+         */
+        public void setLoadingMessage(String loadingMessage) {
+            this.loadingMessage = loadingMessage;
+        }
+
+        public String getErrorMessage() {
+            return errorMessage;
+        }
+
+        /**
+         * Set a custom error message in case the page can't be loaded. A default message will be used if <code>null</code>.
+         *
+         * @param errorMessage the message
+         */
+        public void setErrorMessage(String errorMessage) {
+            this.errorMessage = errorMessage;
+        }
+
+        public boolean isJavaScriptEnabled() {
+            return javaScriptEnabled;
+        }
+
+        /**
+         * Enable/disable JavaScript for the webpage. Default is <code>false</code>.
+         *
+         * @param javaScriptEnabled
+         */
+        public void setJavaScriptEnabled(boolean javaScriptEnabled) {
+            this.javaScriptEnabled = javaScriptEnabled;
+        }
+
+        public String getCustomCss() {
+            return customCss;
+        }
+
+        /**
+         * Set a custom CSS sheet to be injected into the page. If <code>null</code>, no CSS will be loaded.
+         * Injecting the CSS <b>requires JavaScript</b> and will override setJavaScriptEnabled.
+         * @param filename
+         */
+        public void setCustomCss(String filename) {
+            this.customCss = filename;
+        }
+
+        protected WebViewRequest(Parcel in) {
+            url = in.readString();
+            title = in.readString();
+            loadingMessage = in.readString();
+            errorMessage = in.readString();
+            javaScriptEnabled = in.readByte() != 0;
+            customCss = in.readString();
+        }
+
+        public static final Creator<WebViewRequest> CREATOR = new Creator<WebViewRequest>() {
+            @Override
+            public WebViewRequest createFromParcel(Parcel in) {
+                return new WebViewRequest(in);
+            }
+
+            @Override
+            public WebViewRequest[] newArray(int size) {
+                return new WebViewRequest[size];
+            }
+        };
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(url);
+            dest.writeString(title);
+            dest.writeString(loadingMessage);
+            dest.writeString(errorMessage);
+            dest.writeByte((byte) (javaScriptEnabled ? 1 : 0));
+            dest.writeString(customCss);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            WebViewRequest that = (WebViewRequest) o;
+
+            if (javaScriptEnabled != that.javaScriptEnabled) return false;
+            if (url != null ? !url.equals(that.url) : that.url != null) return false;
+            if (title != null ? !title.equals(that.title) : that.title != null) return false;
+            if (loadingMessage != null ? !loadingMessage.equals(that.loadingMessage) : that.loadingMessage != null)
+                return false;
+            if (errorMessage != null ? !errorMessage.equals(that.errorMessage) : that.errorMessage != null)
+                return false;
+            return customCss != null ? customCss.equals(that.customCss) : that.customCss == null;
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = url != null ? url.hashCode() : 0;
+            result = 31 * result + (title != null ? title.hashCode() : 0);
+            result = 31 * result + (loadingMessage != null ? loadingMessage.hashCode() : 0);
+            result = 31 * result + (errorMessage != null ? errorMessage.hashCode() : 0);
+            result = 31 * result + (javaScriptEnabled ? 1 : 0);
+            result = 31 * result + (customCss != null ? customCss.hashCode() : 0);
+            return result;
+        }
+    }
 }
