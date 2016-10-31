@@ -236,6 +236,7 @@ public class MedicinesListFragment extends Fragment {
         i.putExtra(WebViewActivity.PARAM_TITLE, getString(R.string.prospect_webview_title));
         i.putExtra(WebViewActivity.PARAM_LOADING_MESSAGE, getString(R.string.message_prospect_loading));
         i.putExtra(WebViewActivity.PARAM_ERROR_MESSAGE, getString(R.string.message_prospect_load_error));
+        i.putExtra(WebViewActivity.PARAM_CUSTOM_CSS_SHEET, "prospectView.css");
         getActivity().startActivity(i);
     }
 

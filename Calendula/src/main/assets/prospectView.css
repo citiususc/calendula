@@ -1,0 +1,17 @@
+body, nav, .navbar-header {
+    width:auto;
+    max-width:device-width;
+}
+
+.navbar-header{
+    overflow:hidden;
+}
+
+.navbar-fixed-bottom{
+    height:0;
+    visibility:hidden;
+}
+
+#toc li>a{
+    color:blue;
+}
