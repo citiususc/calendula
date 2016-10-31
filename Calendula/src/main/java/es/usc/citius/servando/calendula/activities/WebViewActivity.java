@@ -31,6 +31,8 @@ public class WebViewActivity extends CalendulaActivity {
      */
     public static final String PARAM_WEBVIEW_REQUEST = "webview_param_request";
 
+    private static final Integer CACHE_MAX_SIZE = 8388608; //8mb
+
     private static final String TAG = "WebViewActivity";
 
     private WebView webView;
@@ -73,7 +75,7 @@ public class WebViewActivity extends CalendulaActivity {
 
 
         final String requestUrl = request.getUrl();
-        Log.d(TAG, "Opening URL:" + requestUrl);
+        Log.d(TAG, "Opening URL: " + requestUrl);
 
         //setup progressDialog
         String loadingMessage = request.getLoadingMessage();
@@ -95,6 +97,9 @@ public class WebViewActivity extends CalendulaActivity {
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDisplayZoomControls(false);
 
+        //enable cache if requested
+        if (request.isCacheEnabled())
+            enableCache();
 
         final String customCssSheet = request.getCustomCss();
 
@@ -173,6 +178,16 @@ public class WebViewActivity extends CalendulaActivity {
         }
     }
 
+    private void enableCache() {
+        Log.d(TAG, "Enabling cache with max size " + CACHE_MAX_SIZE + " bytes");
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setAppCacheMaxSize(CACHE_MAX_SIZE);
+        webView.getSettings().setAppCachePath("/data/data/" + getPackageName() + "/cache");
+        webView.getSettings().setAllowFileAccess(true);
+        webView.getSettings().setAppCacheEnabled(true);
+        webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+    }
+
     private void showErrorToast() {
 
         final WebViewRequest request = getIntent().getParcelableExtra(PARAM_WEBVIEW_REQUEST);
@@ -181,6 +196,16 @@ public class WebViewActivity extends CalendulaActivity {
         if (error == null) error = getString(R.string.message_generic_pageloaderror);
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onBackPressed() {
+        //link navigation
+        if (webView.canGoBack())
+            webView.goBack();
+        else
+            finish();
+    }
+
 
     /**
      * Encapsulates a request for a {@link WebViewActivity}.
@@ -194,6 +219,7 @@ public class WebViewActivity extends CalendulaActivity {
         private String errorMessage = null;
         private boolean javaScriptEnabled = false;
         private boolean externalLinksEnabled = false;
+        private boolean cacheEnabled = false;
         private String customCss = null;
 
 
@@ -211,6 +237,7 @@ public class WebViewActivity extends CalendulaActivity {
             this.customCss = customCss;
         }
 
+
         protected WebViewRequest(Parcel in) {
             url = in.readString();
             title = in.readString();
@@ -218,6 +245,7 @@ public class WebViewActivity extends CalendulaActivity {
             errorMessage = in.readString();
             javaScriptEnabled = in.readByte() != 0;
             externalLinksEnabled = in.readByte() != 0;
+            cacheEnabled = in.readByte() != 0;
             customCss = in.readString();
         }
 
@@ -229,6 +257,7 @@ public class WebViewActivity extends CalendulaActivity {
             dest.writeString(errorMessage);
             dest.writeByte((byte) (javaScriptEnabled ? 1 : 0));
             dest.writeByte((byte) (externalLinksEnabled ? 1 : 0));
+            dest.writeByte((byte) (cacheEnabled ? 1 : 0));
             dest.writeString(customCss);
         }
 
@@ -326,19 +355,26 @@ public class WebViewActivity extends CalendulaActivity {
         /**
          * Set if external links should be opened in the webview (<code>true</code>) or should launch an action intent (<code>false</code>).
          * Default value is <code>false</code>.
+         *
          * @param externalLinksEnabled
          */
         public void setExternalLinksEnabled(boolean externalLinksEnabled) {
             this.externalLinksEnabled = externalLinksEnabled;
         }
+
+        public boolean isCacheEnabled() {
+            return cacheEnabled;
+        }
+
+        /**
+         * Enable or disable HTML5 App Cache. Default value is <code>false</code>.
+         *
+         * @param cacheEnabled
+         */
+        public void setCacheEnabled(boolean cacheEnabled) {
+            this.cacheEnabled = cacheEnabled;
+        }
     }
 
-    @Override
-    public void onBackPressed() {
-        //link navigation
-        if (webView.canGoBack())
-            webView.goBack();
-        else
-            finish();
-    }
+
 }
