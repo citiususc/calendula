@@ -23,11 +23,14 @@ import android.widget.Toast;
 
 
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.util.HtmlCacheManager;
+import es.usc.citius.servando.calendula.util.Strings;
 
 public class WebViewActivity extends CalendulaActivity {
 
@@ -45,10 +48,15 @@ public class WebViewActivity extends CalendulaActivity {
 
     private static final String TAG = "WebViewActivity";
 
+    private static final String HTTP_ERROR_REGEXP = "^.*?(404|403|500|[nN]ot [fF]ound).*$";
+
     private WebView webView;
 
     // switch to disable JavaScript in API<17
     private boolean isJavaScriptInsecure = false;
+
+    // switch to disable caching
+    private boolean errorDisableCache = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +98,7 @@ public class WebViewActivity extends CalendulaActivity {
             if (!isJavaScriptInsecure) {
                 Log.d(TAG, "Enabling JavaScript!");
                 webView.getSettings().setJavaScriptEnabled(true);
-            }else{
+            } else {
                 Log.w(TAG, "Javascript cannot be enabled with API version < 17 due to security reasons, disabling.");
             }
         }
@@ -149,8 +157,16 @@ public class WebViewActivity extends CalendulaActivity {
                         }
                     }
 
+
                     @Override
                     public void onPageFinished(WebView view, String url) {
+
+                        if (view.getTitle().matches(HTTP_ERROR_REGEXP)) {
+                            Log.e(TAG, "Received HTTP error, page title is: " + view.getTitle());
+                            showErrorToast();
+                            finish();
+                        }
+
                         if (customCssSheet != null) {
                             injectCSS(customCssSheet);
 
@@ -161,7 +177,7 @@ public class WebViewActivity extends CalendulaActivity {
                         if (progressDialog.isShowing()) {
                             progressDialog.dismiss();
                         }
-                        if (!isJavaScriptInsecure && request.cacheType.equals(WebViewRequest.CacheType.DOWNLOAD_CACHE) && !isCached()) {
+                        if (!isJavaScriptInsecure && !errorDisableCache && request.cacheType.equals(WebViewRequest.CacheType.DOWNLOAD_CACHE) && !isCached()) {
                             webView.getSettings().setJavaScriptEnabled(true);
                             webView.loadUrl("javascript:window.HtmlCache.writeToCache" +
                                     "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
@@ -240,6 +256,7 @@ public class WebViewActivity extends CalendulaActivity {
 
     private void showErrorToast() {
 
+        errorDisableCache = false;
         final WebViewRequest request = getIntent().getParcelableExtra(PARAM_WEBVIEW_REQUEST);
         String error = request.getErrorMessage();
 
