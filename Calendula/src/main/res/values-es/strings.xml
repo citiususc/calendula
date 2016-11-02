@@ -92,6 +92,7 @@
     <string name="cancel">Cancelar</string>
     <string name="confirm">Confirmar</string>
     <string name="meds_time">Recuerda tomar tus medicinas</string>
+    <string name="meds_time_lost">Alarma perdida</string>
 
     <!-- Schedule creation -->
     <string name="summary_title">Revisa y confirma</string>
@@ -232,20 +233,20 @@
     <string name="schedule_day_selector_su">DO</string>
     <string name="doses_and_times">Horarios y dosis</string>
     <string name="schedule_repeat_days">Repetir</string>
-    <string name="agenda_zoom_meds_time">Tómate tus medicinas!</string>
+    <string name="agenda_zoom_meds_time">¡Tómate tus medicinas!</string>
     <string name="create_schedule_incomplete_items">Selecciona rutinas para todas tus tomas</string>
     <string name="create_schedule_incomplete_doses">Las dosis deben ser mayores que cero</string>
     <string name="create_schedule_unselected_med">Selecciona una medicina para poder crear una pauta</string>
     <string name="home_no_pending_meds_message">No hay medicinas pendientes para el resto del día</string>
-    <string name="work_in_progress">Esta funcionalidad estará disponible en futuras versiones. Gracias!</string>
-    <string name="medicine_created_message">Medicina añadida al botiquín!</string>
-    <string name="medicine_deleted_message">Medicina eliminada!</string>
-    <string name="medicine_edited_message">Medicina actualizada!</string>
-    <string name="routine_created_message">Rutina creada!</string>
-    <string name="routine_deleted_message">Rutina eliminada!</string>
-    <string name="routine_edited_message">Rutina actualizada!</string>
-    <string name="schedule_created_message">Pauta creada!</string>
-    <string name="schedule_no_day_specified_message">Debes indicar al menos un día!</string>
+    <string name="work_in_progress">Esta funcionalidad estará disponible en futuras versiones. ¡Gracias!</string>
+    <string name="medicine_created_message">¡Medicina añadida al botiquín!</string>
+    <string name="medicine_deleted_message">¡Medicina eliminada!</string>
+    <string name="medicine_edited_message">¡Medicina actualizada!</string>
+    <string name="routine_created_message">¡Rutina creada!</string>
+    <string name="routine_deleted_message">¡Rutina eliminada!</string>
+    <string name="routine_edited_message">¡Rutina actualizada!</string>
+    <string name="schedule_created_message">¡Pauta creada!</string>
+    <string name="schedule_no_day_specified_message">¡Debes indicar al menos un día!</string>
     <string name="reminder_delayed_message">Recordatorio pospuesto</string>
     <string name="reminder_cancelled_message">Recordatorio cancelado</string>
     <string name="remove_routine_message_long">La rutina %1$s tiene pautas asociadas que se perderán al eliminarla. Deseas eliminarla de todas formas?</string>
@@ -259,19 +260,19 @@
     <string name="medicine_unselected">Aún sin seleccionar</string>
 
     <!--App Tutorial-->
-    <string name="tutorial_welcome_title">Bienvenido a Calendula!</string>la t
+    <string name="tutorial_welcome_title">¡Bienvenido a Calendula!</string>
     <string name="tutorial_welcome_text">Calendula te ayudará a controlar tu medicación de forma sencilla. En esta pantalla podrás ver tus medicamentos pendientes para hoy.</string>
-    <string name="tutorial_homeinfo_title">Explora!</string>
-    <string name="tutorial_homeinfo_text">A través del menú puedes acceder a las diferentes opciones de Caléndula. También puedes llegar a las opciones más comunes deslizando a la derecha!</string>
+    <string name="tutorial_homeinfo_title">¡Explora!</string>
+    <string name="tutorial_homeinfo_text">A través del menú puedes acceder a las diferentes opciones de Caléndula. ¡También puedes llegar a las opciones más comunes deslizando a la derecha!</string>
     <string name="tutorial_routine_title">Potencia los buenos hábitos</string>
     <string name="tutorial_routine_text">Las rutinas te permiten asociar la toma de medicamentos con tus actividades diarias. Para que sea más fácil, añade aquí las horas a las que debes tomar algún medicamento (desayuno, comida,…)</string>
     <string name="tutorial_meds_title">Administra tus medicinas</string>
-    <string name="tutorial_meds_text">Busca tus medicamentos y añádelos al botiquín. Así los tendrás siempre bajo control y podrás consultar sus prospectos ante cualquier duda!</string>
-    <string name="tutorial_schedule_title">Define tus pautas!</string>
-    <string name="tutorial_schedule_text">Las pautas nos permiten avisarte cuando es hora de tomar tus medicinas. Añade su dosis y horarios y no vuelvas a olvidarte nunca!</string>
+    <string name="tutorial_meds_text">Busca tus medicamentos y añádelos al botiquín. ¡Así los tendrás siempre bajo control y podrás consultar sus prospectos ante cualquier duda!</string>
+    <string name="tutorial_schedule_title">¡Define tus pautas!</string>
+    <string name="tutorial_schedule_text">Las pautas nos permiten avisarte cuando es hora de tomar tus medicinas. ¡Añade su dosis y horarios y no vuelvas a olvidarte nunca!</string>
     <string name="tutorial_next">Continuar</string>
     <string name="tutorial_understood">Entendido</string>
-    <string name="tutorial_notifications_title">Confirma!</string>
+    <string name="tutorial_notifications_title">¡Confirma!</string>
     <string name="tutorial_notifications_text">Toma tus medicamentos y confirma que lo has hecho. Si no lo haces te seguiremos avisando. Recuerda que puedes cambiar la configuración de notificaciones en el menú de ajustes.</string>
     <string name="notification_repeat_message">La alarma se repetirá a las %1$s</string>
     <string name="notification_cancel_now">Cancelar ahora</string>
@@ -302,10 +303,10 @@
     <string name="enable_prescriptions_progress_messgae">Preparando información de medicamentos… Estará listo en muy pocos segundos</string>
     <string name="enable_prescriptions_dialog_message">Puedes añadir medicinas más facilmente y consultar sus prospectos si activas el asistente de búsqueda. Si prefieres no hacerlo podrás activarlo más adelante desde el menú de ajustes.</string>
     <string name="enable_prescriptions_dialog_title">Asistente de búsqueda</string>
-    <string name="enable_prescriptions_finish_message">Listo! Ya puedes comenzar a buscar</string>
+    <string name="enable_prescriptions_finish_message">¡Listo! Ya puedes comenzar a buscar</string>
     <string name="enable_prescriptions_dialog_yes">Activar (Recomendado)</string>
     <string name="enable_prescriptions_dialog_no">Cancelar</string>
-    <string name="prescriptions_download_complete">Prospecto disponible!</string>
+    <string name="prescriptions_download_complete">¡Prospecto disponible!</string>
 
     <string name="driving_warning">El uso de este medicamento podría tener efectos sobre tu capacidad para conducir. \n\nPor favor, lee detenidamente las instrucciones de uso o consulta a tu farmacéutico antes de ponerte al volante.\n\nMuchas gracias.</string>
     <string name="driving_warning_title">Ten prudencia</string>
@@ -402,13 +403,13 @@
     <string name="duration">Duración</string>
 
 
-    <string name="all_meds_taken">Has tomado todas tus medicinas!</string>
+    <string name="all_meds_taken">¡Has tomado todas tus medicinas!</string>
 
     <string name="create_schedule_select_med_before_dose">Por favor, selecciona un medicamento primero</string>
     <string name="updating_prescriptions_db_msg">La base de datos de medicamentos está siendo actualizada. Estará lista en muy pocos segundos</string>
 
     <string name="schedule_type_help_title">
-        Estás a punto de crear una pauta, selecciona la que mejor se ajuste a tus necesidades!
+        Estás a punto de crear una pauta, ¡selecciona la que mejor se ajuste a tus necesidades!
     </string>
 
     <string name="schedule_type_routines_help">
@@ -416,7 +417,7 @@
     </string>
 
     <string name="schedule_type_hourly_help">
-        Las pautas de intervalo horario están pensadas para esas tomas que se repiten cada cierto número de horas: \"Cada 8 horas\".\n\nEstablece la hora de la primera toma, y listo!.
+        Las pautas de intervalo horario están pensadas para esas tomas que se repiten cada cierto número de horas: \"Cada 8 horas\".\n\nEstablece la hora de la primera toma, ¡y listo!.
     </string>
 
     <string name="schedule_type_intervalrest_help">
@@ -425,7 +426,7 @@
 
     <string name="routines_list_empty_text">Aún no se han añadido rutinas.\n\nLas rutinas son horas del día en las que habitualmente tomas medicamentos, como el desayuno o la cena. Puedes reutilizarlas para crear pautas más rápido.</string>
     <string name="medicines_list_empty_text">Aún no se han añadido medicamentos.\n\nAñade tus medicamentos al botiquín, y tendrás fácil acceso a sus prospectos y avisos.</string>
-    <string name="schedules_list_empty_text">Aún no se han añadido pautas.\n\nAñade aquí tus pautas y permite que te avisemos! </string>
+    <string name="schedules_list_empty_text">Aún no se han añadido pautas.\n\n¡Añade aquí tus pautas y permite que te avisemos! </string>
 
 
     <string name="about_description">
@@ -442,6 +443,19 @@
     "]]></string>
 
     <string name="title_activity_patients">Pacientes</string>
+    <string name="intake_not_available">Toma no disponible</string>
+    <string name="confirm_future_intake_warning">Esta toma estará disponible %1$s, te avisaremos en ese momento!</string>
+    <string name="confirm_past_intake_warning">Han pasado varias horas desde esta toma, ¿has tomado tu medicación y deseas confirmarla ahora?</string>
+    <string name="meds_from">Medicinas del</string>
+    <string name="at_time_connector">a las</string>
+    <string name="med_taken_at">Confirmado a las</string>
+    <string name="med_cancelled_at">Cancelado a las</string>
+    <string name="med_not_taken">Sin tomar</string>
+    <string name="meds_confirm_ok">Si, la he tomado</string>
+    <string name="meds_confirm_cancel">No</string>
+    <string name="meds_unconfirm_ok">No</string>
+    <string name="meds_unconfirm_cancel">Si, la he tomado</string>
+    <string name="unconfirm_past_intake_warning">Has confirmado esta toma %1$s, has tomado la medicación?</string>
 
     <string name="message_generic_pageloaderror">Se produjo un error al cargar la página</string>
     <string name="title_prospect_webview">Vista de prospecto</string>
@@ -451,4 +465,3 @@
     <string name="message_prospect_loading">El prospecto estará listo enseguida…</string>
 
 </resources>
-

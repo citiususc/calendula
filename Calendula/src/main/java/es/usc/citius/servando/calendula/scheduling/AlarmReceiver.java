@@ -38,7 +38,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         if (CalendulaApp.disableReceivers) { return; }
 
-        AlarmIntentParams params = intent.getParcelableExtra(AlarmScheduler.EXTRA_PARAMS);
+        AlarmIntentParams params = AlarmScheduler.getAlarmParams(intent);
 
         if(params == null)
         {
@@ -48,44 +48,8 @@ public class AlarmReceiver extends BroadcastReceiver {
             Log.d(TAG, "Received alarm: " + params.action);
         }
 
-
-
         Intent serviceIntent = new Intent(context, AlarmIntentService.class);
-        serviceIntent.putExtra(AlarmScheduler.EXTRA_PARAMS, params);
+        AlarmScheduler.setAlarmParams(serviceIntent,params);
         context.startService(serviceIntent);
     }
 }
-
-
-//
-//        Log.d(TAG, "Alarm received: " + params.toString());
-//
-//        try {
-//            params.date();
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return;
-//        }
-//
-//        switch (params.action)
-//        {
-//            case CalendulaApp.ACTION_ROUTINE_TIME:
-//            case CalendulaApp.ACTION_ROUTINE_DELAYED_TIME:
-//                AlarmScheduler.instance().onAlarmReceived(params, context);
-//                break;
-//
-//            case CalendulaApp.ACTION_HOURLY_SCHEDULE_TIME:
-//            case CalendulaApp.ACTION_HOURLY_SCHEDULE_DELAYED_TIME:
-//                AlarmScheduler.instance().onHourlyAlarmReceived(params, context);
-//                break;
-//
-//            case CalendulaApp.ACTION_DAILY_ALARM:
-//                Log.d(TAG, "Received daily alarm");
-//                DailyAgenda.instance().setupForToday(context.getApplicationContext(), false);
-//                break;
-//
-//            default:
-//                Log.w(TAG, "Unknown action received");
-//                break;
-//        }
-

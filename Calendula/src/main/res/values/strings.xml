@@ -93,6 +93,7 @@
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="meds_time">Remember to take your meds</string>
+    <string name="meds_time_lost">Alarm lost</string>
     <string name="title_select_dose_dialog">Introduce a dose</string>
     <string name="doses_and_times">Times and doses</string>
     <string name="schedule_repeat_days">Repeat</string>
@@ -455,6 +456,24 @@
     <string name="title_generic_loading">Loading</string>
     <string name="message_prospect_loading">The leaflet will be ready soon…</string>
     <string name="message_prospect_load_error">An error happened while loading the leaflet</string>
+
+
+    <string name="intake_not_available">Intake not available</string>
+    <string name="confirm_future_intake_warning">This intake will be available %1$s. We will notify you in that moment!</string>
+    <string name="confirm_past_intake_warning">It\'s been several hours since this intake, did you take your medication and want to confirm now?</string>
+    <string name="meds_from">Meds of</string>
+    <string name="at_time_connector">at</string>
+    <string name="med_taken_at">Confirmed at</string>
+    <string name="med_cancelled_at">Cancelled at</string>
+    <string name="med_not_taken">Not taken</string>
+
+    <string name="meds_confirm_ok">Yes, I took it</string>
+    <string name="meds_confirm_cancel">No</string>
+
+
+    <string name="meds_unconfirm_ok">No</string>
+    <string name="meds_unconfirm_cancel">Yes, I took it</string>
+    <string name="unconfirm_past_intake_warning">You confirmed this intake %1$s, did you take it?</string>
 
 
 </resources>

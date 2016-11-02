@@ -43,7 +43,7 @@
         android:title="@string/pref_title_sync_frequency" />
 
     <ListPreference
-        android:defaultValue="125"
+        android:defaultValue="120"
         android:dependency="alarm_repeat_enabled"
         android:entries="@array/pref_alarm_reminder_window_titles"
         android:entryValues="@array/pref_alarm_reminder_window_values"
@@ -51,6 +51,15 @@
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:title="@string/pref_title_reminder_window" />
+
+    <!--<ListPreference-->
+        <!--android:defaultValue="3"-->
+        <!--android:entries="@array/pref_check_window_margin_titles"-->
+        <!--android:entryValues="@array/pref_check_window_margin_values"-->
+        <!--android:key="check_window_margin"-->
+        <!--android:negativeButtonText="@null"-->
+        <!--android:positiveButtonText="@null"-->
+        <!--android:title="@string/pref_check_window_margin" />-->
 
     <CheckBoxPreference
         android:defaultValue="false"

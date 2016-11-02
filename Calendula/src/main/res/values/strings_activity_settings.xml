@@ -37,6 +37,7 @@
     <string name="pref_title_repeat_alarms">Repeat alarms</string>
     <string name="pref_title_sync_frequency">Repeat every</string>
     <string name="pref_title_reminder_window">Dismiss alarms after</string>
+    <string name="pref_check_window_margin">Confirmation time margin</string>
 
     <string name="pref_notification_tone">Ringtone</string>
     <string name="pref_notification_tone_sum">Default</string>
@@ -65,8 +66,26 @@
 
     <string-array name="pref_alarm_reminder_window_values">
         <item>30</item>
-        <item>65</item>
-        <item>125</item>
+        <item>60</item>
+        <item>120</item>
+    </string-array>
+
+    <string-array name="pref_check_window_margin_titles">
+        <item>2h</item>
+        <item>3h</item>
+        <item>5h</item>
+        <item>8h</item>
+        <item>12h</item>
+        <item>24h</item>
+    </string-array>
+
+    <string-array name="pref_check_window_margin_values">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>8</item>
+        <item>12</item>
+        <item>24</item>
     </string-array>
 
 
