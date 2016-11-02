@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -46,10 +47,18 @@ public class WebViewActivity extends CalendulaActivity {
 
     private WebView webView;
 
+    // switch to disable JavaScript in API<17
+    private boolean isJavaScriptInsecure = false;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
 
+
+        //check api version to see if we can use JavaScript
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            isJavaScriptInsecure = true;
+        }
 
         //check for request and URL  and finish if not present
         WebViewRequest request = getIntent().getParcelableExtra(PARAM_WEBVIEW_REQUEST);
@@ -78,8 +87,12 @@ public class WebViewActivity extends CalendulaActivity {
 
         //enable JavaScript if it is explicitly enabled or custom css sheet must be injected
         if (request.isJavaScriptEnabled() || request.getCustomCss() != null) {
-            Log.d(TAG, "Enabling JavaScript!");
-            webView.getSettings().setJavaScriptEnabled(true);
+            if (!isJavaScriptInsecure) {
+                Log.d(TAG, "Enabling JavaScript!");
+                webView.getSettings().setJavaScriptEnabled(true);
+            }else{
+                Log.w(TAG, "Javascript cannot be enabled with API version < 17 due to security reasons, disabling.");
+            }
         }
 
 
@@ -112,7 +125,7 @@ public class WebViewActivity extends CalendulaActivity {
 
         //enable download cache if requested
         String cachedData = null;
-        if (request.getCacheType().equals(WebViewRequest.CacheType.DOWNLOAD_CACHE)) {
+        if (!isJavaScriptInsecure && request.getCacheType().equals(WebViewRequest.CacheType.DOWNLOAD_CACHE)) {
             if (!isCached()) {
                 webView.addJavascriptInterface(new SimpleJSCacheInterface(this), "HtmlCache");
             } else {
@@ -120,7 +133,7 @@ public class WebViewActivity extends CalendulaActivity {
             }
         }
 
-        final String customCssSheet = request.getCustomCss();
+        final String customCssSheet = isJavaScriptInsecure ? null : request.getCustomCss();
 
         webView.setWebViewClient(
                 new WebViewClient() {
@@ -148,8 +161,7 @@ public class WebViewActivity extends CalendulaActivity {
                         if (progressDialog.isShowing()) {
                             progressDialog.dismiss();
                         }
-                        if (request.cacheType.equals(WebViewRequest.CacheType.DOWNLOAD_CACHE) && !isCached())
-                        {
+                        if (!isJavaScriptInsecure && request.cacheType.equals(WebViewRequest.CacheType.DOWNLOAD_CACHE) && !isCached()) {
                             webView.getSettings().setJavaScriptEnabled(true);
                             webView.loadUrl("javascript:window.HtmlCache.writeToCache" +
                                     "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
@@ -180,11 +192,10 @@ public class WebViewActivity extends CalendulaActivity {
                     }
                 });
 
-        if (cachedData != null){
+        if (cachedData != null) {
             Log.d(TAG, "setupWebView: Loading page from cache");
             webView.loadData(cachedData, "text/html; charset=UTF-8", null);
-        }
-        else {
+        } else {
             Log.d(TAG, "setupWebView: Loading page from URL");
             webView.loadUrl(originalUrl);
         }
@@ -435,7 +446,7 @@ public class WebViewActivity extends CalendulaActivity {
         @JavascriptInterface
         public void writeToCache(String html) {
             WebViewRequest request = getIntent().getParcelableExtra(PARAM_WEBVIEW_REQUEST);
-            Log.d(TAG, "writeToCache: writing url "+ request.getUrl());
+            Log.d(TAG, "writeToCache: writing url " + request.getUrl());
             HtmlCacheManager.getInstance().put(request.getUrl(), html, LEAFLET_CACHE_TTL_MILLIS);
         }
     }
