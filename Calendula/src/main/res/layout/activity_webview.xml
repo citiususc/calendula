@@ -19,7 +19,17 @@
 
     <WebView
         android:id="@+id/webView1"
-        android:layout_below="@id/toolbar"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"></WebView>
+        android:layout_height="fill_parent"
+        android:layout_below="@id/toolbar" />
+
+    <ImageView
+        android:id="@+id/tabs_shadow"
+        android:layout_width="fill_parent"
+        android:layout_height="5dp"
+        android:layout_below="@+id/toolbar"
+        android:alpha="0.7"
+        android:scaleType="fitXY"
+        android:src="@drawable/daily_view_list_item_tab_shadow_top" />
+
 </RelativeLayout>
