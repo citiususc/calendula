@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
@@ -12,6 +13,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
@@ -21,16 +24,15 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import java.io.InputStream;
-import java.util.HashSet;
-import java.util.Set;
 
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.util.HtmlCacheManager;
-import es.usc.citius.servando.calendula.util.Strings;
 
 public class WebViewActivity extends CalendulaActivity {
 
@@ -52,6 +54,8 @@ public class WebViewActivity extends CalendulaActivity {
 
     private WebView webView;
 
+    private String url;
+
     // switch to disable JavaScript in API<17
     private boolean isJavaScriptInsecure = false;
 
@@ -70,7 +74,7 @@ public class WebViewActivity extends CalendulaActivity {
 
         //check for request and URL  and finish if not present
         WebViewRequest request = getIntent().getParcelableExtra(PARAM_WEBVIEW_REQUEST);
-        if (request == null || request.getUrl() == null) {
+        if (request == null || (url=request.getUrl()) == null) {
             Log.e(TAG, "onCreate: No WebViewRequest provided in intent!");
             showErrorToast();
             finish();
@@ -104,7 +108,7 @@ public class WebViewActivity extends CalendulaActivity {
         }
 
 
-        final String originalUrl = request.getUrl();
+        final String originalUrl = url;
         Log.d(TAG, "Opening URL: " + originalUrl);
 
         //setup progressDialog
@@ -218,8 +222,7 @@ public class WebViewActivity extends CalendulaActivity {
     }
 
     private boolean isCached() {
-        WebViewRequest request = getIntent().getParcelableExtra(PARAM_WEBVIEW_REQUEST);
-        return HtmlCacheManager.getInstance().isCached(request.getUrl());
+        return HtmlCacheManager.getInstance().isCached(url);
     }
 
     private void injectCSS(final String file) {
@@ -271,6 +274,46 @@ public class WebViewActivity extends CalendulaActivity {
             webView.goBack();
         else
             finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_webview, menu);
+
+        IconicsDrawable icon = new IconicsDrawable(this, CommunityMaterial.Icon.cmd_share_variant)
+                .sizeDp(48)
+                .paddingDp(6)
+                .color(Color.WHITE);
+
+        menu.getItem(0).setIcon(icon);
+
+        IconicsDrawable icon2 = new IconicsDrawable(this, CommunityMaterial.Icon.cmd_web)
+                .sizeDp(48)
+                .paddingDp(6)
+                .color(Color.WHITE);
+
+        menu.getItem(1).setIcon(icon2);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_share_link:
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.putExtra(Intent.EXTRA_TEXT,
+                        url);
+                i.putExtra(Intent.EXTRA_SUBJECT, webView.getTitle());
+                i.setType("text/plain");
+                startActivity(Intent.createChooser(i,getString(R.string.title_share_link)));
+                return true;
+            default:
+                Intent i1=new Intent(Intent.ACTION_VIEW,Uri.parse(url));
+                startActivity(i1);
+                return false;
+        }
     }
 
 
@@ -462,9 +505,8 @@ public class WebViewActivity extends CalendulaActivity {
 
         @JavascriptInterface
         public void writeToCache(String html) {
-            WebViewRequest request = getIntent().getParcelableExtra(PARAM_WEBVIEW_REQUEST);
-            Log.d(TAG, "writeToCache: writing url " + request.getUrl());
-            HtmlCacheManager.getInstance().put(request.getUrl(), html, LEAFLET_CACHE_TTL_MILLIS);
+            Log.d(TAG, "writeToCache: writing url " + url);
+            HtmlCacheManager.getInstance().put(url, html, LEAFLET_CACHE_TTL_MILLIS);
         }
     }
 }

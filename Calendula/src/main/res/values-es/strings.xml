@@ -463,5 +463,6 @@
     <string name="message_generic_pleasewait">Por favor, espera unos segundos…</string>
     <string name="message_prospect_load_error">Ocurrió un error al cargar el prospecto</string>
     <string name="message_prospect_loading">El prospecto estará listo enseguida…</string>
+    <string name="action_share_link">Share with</string>
 
 </resources>
