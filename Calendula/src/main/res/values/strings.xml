@@ -474,9 +474,11 @@
     <string name="meds_unconfirm_ok">No</string>
     <string name="meds_unconfirm_cancel">Yes, I took it</string>
     <string name="unconfirm_past_intake_warning">You confirmed this intake %1$s, did you take it?</string>
+
     <string name="action_share_link">Share with</string>
     <string name="action_open_with_browser">Open with browser</string>
-    <string name="title_share_link">Share with...</string>
+    <string name="title_share_link">Share with…</string>
+    <string name="title_about">About</string>
 
 
 </resources>
