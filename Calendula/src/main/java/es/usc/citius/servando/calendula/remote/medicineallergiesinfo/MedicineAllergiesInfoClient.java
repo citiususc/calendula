@@ -5,9 +5,9 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.List;
 
+import es.usc.citius.servando.calendula.remote.RemoteConfig;
 import es.usc.citius.servando.calendula.remote.RemoteServiceCreator;
 import es.usc.citius.servando.calendula.remote.medicineallergiesinfo.datamodel.AllergiesInfo;
-import es.usc.citius.servando.calendula.util.Settings;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -17,7 +17,6 @@ import retrofit2.Response;
 
 public class MedicineAllergiesInfoClient {
 
-    public static final String baseUrl = Settings.instance().get("API_LOCATION");
 
     private static MedicineAllergiesInfoService service = null;
 
@@ -29,7 +28,7 @@ public class MedicineAllergiesInfoClient {
     private static MedicineAllergiesInfoService getService() {
         if (service == null) {
             Log.d(TAG, "getService: Instantiating new service");
-            service = RemoteServiceCreator.createService(MedicineAllergiesInfoService.class, baseUrl);
+            service = RemoteServiceCreator.createService(MedicineAllergiesInfoService.class, RemoteConfig.BASE_URL);
         }
         return service;
     }
@@ -44,7 +43,7 @@ public class MedicineAllergiesInfoClient {
      */
     public static AllergiesInfo getPrescriptionAllergiesInfo(int id) throws IOException, IllegalStateException {
 
-        if (baseUrl == null) {
+        if (RemoteConfig.BASE_URL == null) {
             throw new IllegalStateException("Base URL is not set. Cannot call API.");
         }
 
@@ -52,7 +51,7 @@ public class MedicineAllergiesInfoClient {
         MedicineAllergiesInfoService service = getService();
 
         Log.d(TAG, "getPrescriptionAllergiesInfo: querying service with: " + query);
-        Log.d(TAG, "getPrescriptionAllergiesInfo: base URL is: " + baseUrl);
+        Log.d(TAG, "getPrescriptionAllergiesInfo: base URL is: " + RemoteConfig.BASE_URL);
 
         Call<List<AllergiesInfo>> allergiesInfo = service.getAllergiesInfo(query);
         Response<List<AllergiesInfo>> response = allergiesInfo.execute();
