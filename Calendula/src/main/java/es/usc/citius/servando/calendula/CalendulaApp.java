@@ -49,6 +49,7 @@ import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.PresentationsTypeface;
+import es.usc.citius.servando.calendula.util.Settings;
 
 /**
  * Created by castrelo on 4/10/14.
@@ -89,7 +90,9 @@ public class CalendulaApp extends Application {
     // REQUEST CODES
     public static final int RQ_SHOW_ROUTINE = 1;
     public static final int RQ_DELAY_ROUTINE = 2;
-    
+
+    private final static String TAG="CalendulaApp";
+
     private static EventBus eventBus = EventBus.getDefault();
 
     public static boolean isOpen() {
@@ -124,6 +127,13 @@ public class CalendulaApp extends Application {
         Iconics.init(getApplicationContext());
         //register custom fonts like this (or also provide a font definition file)
         Iconics.registerFont(new PresentationsTypeface());
+
+        //load settings
+        try {
+            Settings.instance().load(getApplicationContext());
+        } catch (Exception e) {
+            Log.w(TAG, "onCreate: An exception happened when loading settings file");
+        }
     }
 
     public static boolean isPharmaModeEnabled(Context ctx){
