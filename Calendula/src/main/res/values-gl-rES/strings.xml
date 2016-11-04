@@ -401,5 +401,7 @@
     <string name="action_open_with_browser">Abrir no navegador</string>
     <string name="title_share_link">Compartir con…</string>
     <string name="title_about">Acerca de</string>
+    <string name="home_menu_allergies">Alerxias</string>
+    <string name="title_activity_allergies">Alerxias</string>
 </resources>
 

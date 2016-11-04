@@ -41,6 +41,7 @@ import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.HtmlCacheEntry;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
+import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
@@ -70,13 +71,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             // v9
             Patient.class,
             // v10
-            HtmlCacheEntry.class
+            HtmlCacheEntry.class,
+            // v11
+            PatientAllergen.class
     };
 
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
 
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
@@ -179,6 +182,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                     migrateToMultiPatient();
                 case 10:
                     TableUtils.createTable(connectionSource, HtmlCacheEntry.class);
+                case 11:
+                    TableUtils.createTable(connectionSource, PatientAllergen.class);
             }
 
 

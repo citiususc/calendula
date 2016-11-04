@@ -14,13 +14,12 @@
   ~
   ~    You should have received a copy of the GNU General Public License
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="es.usc.citius.servando.calendula"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -42,14 +41,13 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        tools:replace="icon, label" >
-
-        <activity android:name=".activities.MaterialIntroActivity"
-                  android:theme="@style/Theme.Intro"/>
-
-        <activity android:name=".activities.SchedulesHelpActivity"
-                  android:theme="@style/Theme.Intro"/>
-
+        tools:replace="icon, label">
+        <activity
+            android:name=".activities.MaterialIntroActivity"
+            android:theme="@style/Theme.Intro" />
+        <activity
+            android:name=".activities.SchedulesHelpActivity"
+            android:theme="@style/Theme.Intro" />
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name"
@@ -65,13 +63,14 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".HomePagerActivity"
-            android:screenOrientation="portrait"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme" >
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".activities.MedicinesActivity"
@@ -90,6 +89,7 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -106,7 +106,7 @@
         <receiver android:name=".scheduling.AlarmReceiver" />
         <receiver android:name=".scheduling.PickupAlarmReceiver" />
         <receiver android:name=".scheduling.NotificationEventReceiver" />
-        <receiver android:name=".scheduling.BootReceiver" >
+        <receiver android:name=".scheduling.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
@@ -130,7 +130,7 @@
         <activity
             android:name=".activities.UpdateFromFileActivity"
             android:configChanges="orientation|screenSize"
-            android:label="Calendula" >
+            android:label="Calendula">
             <intent-filter>
                 <data android:mimeType="text/plain" />
 
@@ -147,7 +147,7 @@
             android:name=".activities.PatientsActivity"
             android:label="@string/title_activity_patients"
             android:parentActivityName=".HomeActivity"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="es.usc.citius.servando.calendula.HomeActivity" />
@@ -156,7 +156,7 @@
             android:name=".activities.PatientDetailActivity"
             android:label="@string/title_activity_patient_detail"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="es.usc.citius.servando.calendula.activities.PatientsActivity" />
@@ -164,23 +164,25 @@
         <activity
             android:name=".activities.AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName=".HomeActivity" >
-        </activity>
-        <activity android:name=".activities.ConfirmActivity"
-                  android:theme="@style/AppTheme" >
-        </activity>
-
+            android:parentActivityName=".HomeActivity"></activity>
+        <activity
+            android:name=".activities.ConfirmActivity"
+            android:theme="@style/AppTheme"></activity>
 
         <service
             android:name=".scheduling.AlarmIntentService"
-            android:label="AlarmIntentService">
-        </service>
+            android:label="AlarmIntentService"></service>
 
         <activity
             android:name=".activities.WebViewActivity"
-            android:label="@string/title_activity_webview"
             android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_webview"
             android:parentActivityName=".HomePagerActivity" />
+
+        <activity
+            android:name=".activities.AllergiesActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_allergies" />
     </application>
 
 </manifest>

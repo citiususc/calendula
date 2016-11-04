@@ -59,6 +59,8 @@ public class DB {
     private static PickupInfoDao Pickups;
     // Patients DAO
     private static PatientDao Patients;
+    //Allergens DAO
+    private static PatientAllergenDao PatientAllergens;
 
     /**
      * Initialize database and DAOs
@@ -81,6 +83,7 @@ public class DB {
             Groups = new HomogeneousGroupDao(db);
             Pickups = new PickupInfoDao(db);
             Patients = new PatientDao(db);
+            PatientAllergens = new PatientAllergenDao(db);
             Log.v(TAG, "DB initialized " + DB.DB_NAME);
         }
 
@@ -144,6 +147,8 @@ public class DB {
     public static PatientDao patients() {
         return Patients;
     }
+
+    public static PatientAllergenDao allergens(){ return PatientAllergens; }
 
     public static void dropAndCreateDatabase() {
         db.dropAndCreateAllTables();

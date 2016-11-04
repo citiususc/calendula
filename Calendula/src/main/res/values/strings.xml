@@ -479,6 +479,12 @@
     <string name="action_open_with_browser">Open with browser</string>
     <string name="title_share_link">Share with…</string>
     <string name="title_about">About</string>
+    <string name="home_menu_allergies">Allergies</string>
+    <string name="title_activity_allergies">Allergies</string>
+    <string name="title_add_allergies">Add an allergy</string>
+    <string name="message_allergy_add_success">Your allergy preferences have been updated.</string>
+    <string name="message_allergy_add_failure">There was an error while trying to save your allergy preferences.</string>
+    <string name="remove_allergy_message_short">Remove allergy %1$s?</string>
 
 
 </resources>
