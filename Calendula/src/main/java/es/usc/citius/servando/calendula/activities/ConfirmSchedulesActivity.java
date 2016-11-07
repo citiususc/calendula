@@ -346,8 +346,8 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
 
                                             for (PickupWrapper pkw : w.pk) {
                                                 PickupInfo pickupInfo = new PickupInfo();
-                                                pickupInfo.setTo(df.parseLocalDate(pkw.t).plusMonths(19));
-                                                pickupInfo.setFrom(df.parseLocalDate(pkw.f).plusMonths(19));
+                                                pickupInfo.setTo(df.parseLocalDate(pkw.t));//.plusMonths(19));
+                                                pickupInfo.setFrom(df.parseLocalDate(pkw.f));//.plusMonths(19));
                                                 pickupInfo.taken(pkw.tk == 1 ? true : false);
                                                 pickupInfo.setMedicine(m);
                                                 DB.pickups().save(pickupInfo);
