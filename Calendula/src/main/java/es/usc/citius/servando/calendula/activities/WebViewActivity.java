@@ -15,6 +15,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
@@ -32,7 +33,9 @@ import java.io.InputStream;
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.util.HtmlCacheManager;
+import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 public class WebViewActivity extends CalendulaActivity {
 
@@ -50,7 +53,7 @@ public class WebViewActivity extends CalendulaActivity {
 
     private static final String TAG = "WebViewActivity";
 
-    private static final String HTTP_ERROR_REGEXP = "^.*?(404|403|500|[nN]ot [fF]ound).*$";
+    private static final String HTTP_ERROR_REGEXP = "^.*?(404|403|[nN]ot [fF]ound).*$";
 
     private WebView webView;
 
@@ -128,8 +131,10 @@ public class WebViewActivity extends CalendulaActivity {
         //set single column layout
         webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         //enable pinch to zoom
+        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDisplayZoomControls(false);
+        webView.getSettings().setEnableSmoothTransition(true);
 
         //enable AppCache if requested
         if (request.getCacheType().equals(WebViewRequest.CacheType.APP_CACHE))
@@ -232,8 +237,19 @@ public class WebViewActivity extends CalendulaActivity {
             byte[] buffer = new byte[inputStream.available()];
             inputStream.read(buffer);
             inputStream.close();
+
+            // get a reference to the active patient
+            Patient p = DB.patients().getActive(this);
+            // get patient color in hex format
+            String hexColor = String.format("#%06X", (0xFFFFFF & p.color()));
+            // get screen width
+            float x = ScreenUtils.getDpSize(this).x;
+            // replace screen width placeholders
+            String css = new String(buffer).replaceAll("###SCREEN_WIDTH###", (int)(x*0.9)+"px");
+            // replace patient color placeholders
+            css = css.replaceAll("###PATIENT_COLOR###", hexColor);
             //encode CSS string in base64
-            String encoded = Base64.encodeToString(buffer, Base64.NO_WRAP);
+            String encoded = Base64.encodeToString(css.getBytes(), Base64.NO_WRAP);
             //inject CSS into the webpage <head> element
             webView.loadUrl("javascript:(function() {" +
                     "var parent = document.getElementsByTagName('head').item(0);" +

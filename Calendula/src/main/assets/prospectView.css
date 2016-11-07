@@ -1,19 +1,75 @@
-body, nav, .navbar-header, img {
-    width:auto;
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+* {
+ font-size: 100%;
+ font-family: 'Roboto', sans-serif !important;
+ color: #333;
+}
+
+body, nav, .navbar-header, img, table {
+    width:auto !important;
     max-width:device-width;
 }
 
-.navbar-header{
-    overflow:hidden;
+body{
+    margin:0;padding:0;
+}
+
+.navbar-fixed-top{
+    height: auto;
+    position: inherit !important;
+}
+
+.navbar-brand{
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
 }
 
 .navbar-fixed-bottom{
-    height:0;
-    visibility:hidden;
+    display: none !important;
+}
+
+.container#content {
+	padding-top: 0px !important;
 }
 
 #toc li>a{
-    color:blue;
+    color: #1565c0 !important;
+    padding: 2px !important;
+}
+
+#toc{
+    margin: 0px 0px 15px 0px;
+    padding: 20px;
+    background: #f3f3f3;
+}
+
+ul{
+    padding: 0 !important;
+    list-style-type: square;
+}
+
+ol{
+    padding: 0 !important;
+}
+
+ol > li > span:empty {
+    display: none;
+}
+
+ul > li, ol > li{
+    padding: 0 !important;
+    margin: 10px 0px 0px 0px;
+}
+
+img{
+    max-width: ###SCREEN_WIDTH### !important;
+    height: auto;
+}
+
+h1,h2,h3{
+    color: ###PATIENT_COLOR### !important;
 }
 
 /************* IMPORTED FROM screen.css  ******************/
