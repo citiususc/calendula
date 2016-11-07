@@ -46,6 +46,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
@@ -61,6 +62,7 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
+import es.usc.citius.servando.calendula.util.ProspectUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
 
@@ -318,7 +320,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                 item = inflater.inflate(R.layout.med_drop_down_item, null);
             }
             if (mData.size() > position) {
-                Prescription p = mData.get(position);
+                final Prescription p = mData.get(position);
                 ((TextView) item.findViewById(R.id.text1)).setText(p.shortName() + (p.generic ? " (G)" : ""));
                 ((TextView) item.findViewById(R.id.text2)).setText(p.dose);
                 ((TextView) item.findViewById(R.id.text3)).setText(p.content);
@@ -326,6 +328,21 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
                 ((TextView) item.findViewById(R.id.text1)).setTextColor(Color.parseColor("#222222"));
                 ((TextView) item.findViewById(R.id.text4)).setTextColor(color);
+                ImageView prospectIcon = ((ImageView) item.findViewById(R.id.prospect_icon));
+
+                Drawable icProspect = new IconicsDrawable(getContext())
+                        .icon(CommunityMaterial.Icon.cmd_file_document)
+                        .colorRes(R.color.agenda_item_title)
+                        .paddingDp(10)
+                        .sizeDp(40);
+
+                prospectIcon.setImageDrawable(icProspect);
+                prospectIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ProspectUtils.openProspect(p, MedicinesActivity.this);
+                    }
+                });
 
                 Presentation pres = p.expectedPresentation();
                 if (pres != null) {
@@ -387,6 +404,5 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             return myFilter;
         }
     }
-
 
 }

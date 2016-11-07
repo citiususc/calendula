@@ -75,7 +75,7 @@
     <string name="routine_time">Heure</string>
     <string name="edit_routine_button_text">Sauvegarder les changements</string>
     <string name="create_routine_button_text">Créer une routine</string>
-    <string name="create_new_routine">Créer une nouvelle routine...</string>
+    <string name="create_new_routine">Créer une nouvelle routine…</string>
     <string name="add_routine_button">AJOUTER LA ROUTINE</string>
     <string name="medicine_name">Nom</string>
     <string name="medicine_presentation">Forme</string>
@@ -284,11 +284,11 @@
         <item>Très bien</item>
     </string-array>
 
-    <string name="search_med_hint">Chercher...</string>
+    <string name="search_med_hint">Chercher…</string>
     <string name="search_no_results_found">Aucun médicament n\'a été trouvé</string>
     <string name="pref_header_prescriptions">Recherche de médicaments</string>
     <string name="pref_enable_prescriptions_db">Activer l\'assistant</string>
-    <string name="medicine_edit_name_hint">Écrivez ici...</string>
+    <string name="medicine_edit_name_hint">Écrivez ici…</string>
 
     <string name="download_prospect_message">La notice de %1$s va se télécharger maintenant. Une fois le téléchargement terminé, vous pourrez la consulter même lorsque vous n\'êtes pas connecté à internet.</string>
     <string name="download_prospect_title">Télécharger la notice</string>
@@ -389,6 +389,16 @@
     <string name="all_meds_taken">Tous les médicaments pris!</string>
     <string name="patches">Emplâtre</string>
     <string name="patches_units">emplâtre</string>
+
+
+    <string name="message_generic_pageloaderror">There was an error loading the page</string>
+    <string name="title_prospect_webview">Prospect view</string>
+    <string name="title_activity_webview" translatable="false">WebViewActivity</string>
+    <string name="message_generic_pleasewait">Please wait for a few seconds…</string>
+    <string name="title_generic_loading">Loading</string>
+    <string name="message_prospect_loading">The leaflet will be ready soon…</string>
+    <string name="message_prospect_connection_error">The leaflet could not be loaded</string>
+    <string name="message_prospect_not_found_error">Sorry, but it there is no leaflet available for this med</string>
 
 </resources>
 

@@ -33,7 +33,7 @@ public class AboutActivity extends CalendulaActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-        setupToolbar("About", getResources().getColor(R.color.dark_grey_home));
+        setupToolbar(getString(R.string.title_about), getResources().getColor(R.color.dark_grey_home));
         setupStatusBar(getResources().getColor(R.color.dark_grey_home));
 
         if (savedInstanceState == null) {
