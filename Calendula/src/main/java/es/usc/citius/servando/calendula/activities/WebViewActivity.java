@@ -29,13 +29,13 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.util.HtmlCacheManager;
-import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 public class WebViewActivity extends CalendulaActivity {
 
@@ -177,7 +177,7 @@ public class WebViewActivity extends CalendulaActivity {
                         }
 
                         if (customCssSheet != null) {
-                            injectCSS(customCssSheet);
+                            injectCSS(customCssSheet, request.getCustomCssOverrides());
 
                             //if JavaScript is not enabled explicitly, turn it off after CSS injection
                             webView.getSettings().setJavaScriptEnabled(request.isJavaScriptEnabled());
@@ -230,26 +230,23 @@ public class WebViewActivity extends CalendulaActivity {
         return HtmlCacheManager.getInstance().isCached(url);
     }
 
-    private void injectCSS(final String file) {
+    private void injectCSS(final String file, Map<String, String> overrides) {
         try {
             // read CSS from file
             InputStream inputStream = getAssets().open(file);
             byte[] buffer = new byte[inputStream.available()];
             inputStream.read(buffer);
             inputStream.close();
-
-            // get a reference to the active patient
-            Patient p = DB.patients().getActive(this);
-            // get patient color in hex format
-            String hexColor = String.format("#%06X", (0xFFFFFF & p.color()));
-            // get screen width
-            float x = ScreenUtils.getDpSize(this).x;
-            // replace screen width placeholders
-            String css = new String(buffer).replaceAll("###SCREEN_WIDTH###", (int)(x*0.9)+"px");
-            // replace patient color placeholders
-            css = css.replaceAll("###PATIENT_COLOR###", hexColor);
+            // perform css replacements if any
+            if(overrides != null && overrides.size() > 0){
+                String css = new String(buffer);
+                for(Map.Entry<String,String> entry : overrides.entrySet()){
+                    css = css.replaceAll(entry.getKey(), entry.getValue());
+                }
+                buffer = css.getBytes();
+            }
             //encode CSS string in base64
-            String encoded = Base64.encodeToString(css.getBytes(), Base64.NO_WRAP);
+            String encoded = Base64.encodeToString(buffer, Base64.NO_WRAP);
             //inject CSS into the webpage <head> element
             webView.loadUrl("javascript:(function() {" +
                     "var parent = document.getElementsByTagName('head').item(0);" +
@@ -347,6 +344,7 @@ public class WebViewActivity extends CalendulaActivity {
         private boolean externalLinksEnabled = false;
         private CacheType cacheType = CacheType.NO_CACHE;
         private String customCss = null;
+        private Map<String, String> customCssOverrides = null;
 
         public enum CacheType {
             NO_CACHE,
@@ -358,7 +356,7 @@ public class WebViewActivity extends CalendulaActivity {
             this.url = url;
         }
 
-        public WebViewRequest(String url, String title, String loadingMessage, String connectionErrorMessage, String notFoundErrorMessage, boolean javaScriptEnabled, boolean externalLinksEnabled, CacheType cacheType, String customCss) {
+        public WebViewRequest(String url, String title, String loadingMessage, String connectionErrorMessage, String notFoundErrorMessage, boolean javaScriptEnabled, boolean externalLinksEnabled, CacheType cacheType, String customCss, Map<String,String> customCssOverrides) {
             this.url = url;
             this.title = title;
             this.loadingMessage = loadingMessage;
@@ -368,6 +366,7 @@ public class WebViewActivity extends CalendulaActivity {
             this.externalLinksEnabled = externalLinksEnabled;
             this.cacheType = cacheType;
             this.customCss = customCss;
+            this.customCssOverrides = customCssOverrides;
         }
 
         protected WebViewRequest(Parcel in) {
@@ -380,6 +379,14 @@ public class WebViewActivity extends CalendulaActivity {
             externalLinksEnabled = in.readByte() != 0;
             cacheType = CacheType.valueOf(in.readString());
             customCss = in.readString();
+            // read overrides map
+            customCssOverrides = new HashMap<>();
+            int size = in.readInt();
+            for(int i = 0; i < size; i++){
+                String key = in.readString();
+                String value = in.readString();
+                customCssOverrides.put(key,value);
+            }
         }
 
 
@@ -394,6 +401,12 @@ public class WebViewActivity extends CalendulaActivity {
             dest.writeByte((byte) (externalLinksEnabled ? 1 : 0));
             dest.writeString(cacheType.toString());
             dest.writeString(customCss);
+            // write overrides map
+            dest.writeInt(customCssOverrides.size());
+            for(Map.Entry<String,String> entry : customCssOverrides.entrySet()){
+                dest.writeString(entry.getKey());
+                dest.writeString(entry.getValue());
+            }
         }
 
         @Override
@@ -486,14 +499,19 @@ public class WebViewActivity extends CalendulaActivity {
             return customCss;
         }
 
+        public Map<String, String> getCustomCssOverrides() {
+            return customCssOverrides;
+        }
+
         /**
          * Set a custom CSS sheet to be injected into the page. If <code>null</code>, no CSS will be loaded.
          * Injecting the CSS <b>requires JavaScript</b> and will override setJavaScriptEnabled during the injection.
          *
          * @param filename
          */
-        public void setCustomCss(String filename) {
+        public void setCustomCss(String filename, Map<String,String> overrides) {
             this.customCss = filename;
+            this.customCssOverrides = overrides;
         }
 
         public boolean isExternalLinksEnabled() {

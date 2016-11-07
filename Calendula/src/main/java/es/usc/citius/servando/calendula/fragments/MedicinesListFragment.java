@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -45,19 +44,17 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.activities.WebViewActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.util.ProspectUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
  */
 public class MedicinesListFragment extends Fragment {
-
-    public static final String PROSPECT_URL = "https://www.aemps.gob.es/cima/dochtml/p/#ID#/Prospecto_#ID#.html";
 
     public static final String PARAM_DOWNLOAD_ID = "medicinesListFragment_download_id";
 
@@ -230,18 +227,7 @@ public class MedicinesListFragment extends Fragment {
 
 
     public void openProspect(Prescription p) {
-        final String url = PROSPECT_URL.replaceAll("#ID#", p.pid);
-        Intent i = new Intent(getActivity(), WebViewActivity.class);
-        WebViewActivity.WebViewRequest request = new WebViewActivity.WebViewRequest(url);
-        request.setCustomCss("prospectView.css");
-        request.setConnectionErrorMessage(getString(R.string.message_prospect_connection_error));
-        request.setNotFoundErrorMessage(getString(R.string.message_prospect_not_found_error));
-        request.setLoadingMessage(getString(R.string.message_prospect_loading));
-        request.setTitle(getString(R.string.title_prospect_webview));
-        request.setCacheType(WebViewActivity.WebViewRequest.CacheType.DOWNLOAD_CACHE);
-        request.setJavaScriptEnabled(true);
-        i.putExtra(WebViewActivity.PARAM_WEBVIEW_REQUEST, request);
-        getActivity().startActivity(i);
+        ProspectUtils.openProspect(p,getActivity());
     }
 
     public void showDrivingAdvice(final Prescription p) {
