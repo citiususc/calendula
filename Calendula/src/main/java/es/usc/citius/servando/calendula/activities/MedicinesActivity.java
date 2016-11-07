@@ -19,6 +19,7 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -46,6 +47,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
@@ -57,6 +59,7 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
+import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
@@ -318,7 +321,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                 item = inflater.inflate(R.layout.med_drop_down_item, null);
             }
             if (mData.size() > position) {
-                Prescription p = mData.get(position);
+                final Prescription p = mData.get(position);
                 ((TextView) item.findViewById(R.id.text1)).setText(p.shortName() + (p.generic ? " (G)" : ""));
                 ((TextView) item.findViewById(R.id.text2)).setText(p.dose);
                 ((TextView) item.findViewById(R.id.text3)).setText(p.content);
@@ -326,6 +329,21 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
                 ((TextView) item.findViewById(R.id.text1)).setTextColor(Color.parseColor("#222222"));
                 ((TextView) item.findViewById(R.id.text4)).setTextColor(color);
+                ImageView prospectIcon = ((ImageView) item.findViewById(R.id.prospect_icon));
+
+                Drawable icProspect = new IconicsDrawable(getContext())
+                        .icon(CommunityMaterial.Icon.cmd_file_document)
+                        .colorRes(R.color.agenda_item_title)
+                        .paddingDp(10)
+                        .sizeDp(40);
+
+                prospectIcon.setImageDrawable(icProspect);
+                prospectIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        openProspect(p);
+                    }
+                });
 
                 Presentation pres = p.expectedPresentation();
                 if (pres != null) {
@@ -386,6 +404,20 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             };
             return myFilter;
         }
+    }
+
+    public void openProspect(Prescription p) {
+        final String url = MedicinesListFragment.PROSPECT_URL.replaceAll("#ID#", p.pid);
+        Intent i = new Intent(this, WebViewActivity.class);
+        WebViewActivity.WebViewRequest request = new WebViewActivity.WebViewRequest(url);
+        request.setCustomCss("prospectView.css");
+        request.setErrorMessage(getString(R.string.message_prospect_load_error));
+        request.setLoadingMessage(getString(R.string.message_prospect_loading));
+        request.setTitle(getString(R.string.title_prospect_webview));
+        request.setCacheType(WebViewActivity.WebViewRequest.CacheType.NO_CACHE);
+        request.setJavaScriptEnabled(true);
+        i.putExtra(WebViewActivity.PARAM_WEBVIEW_REQUEST, request);
+        this.startActivity(i);
     }
 
 

@@ -28,7 +28,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="72dp"
         android:orientation="vertical"
-        android:paddingBottom="10dp">
+        android:paddingBottom="10dp"
+        android:layout_marginRight="72dp">
 
         <TextView
             android:id="@+id/text1"
@@ -94,6 +95,16 @@
             android:textSize="14dp"
             android:visibility="visible" />
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:id="@+id/prospect_icon"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/abc_ic_star_black_36dp"
+        android:layout_marginTop="5dp"
+        android:padding="10dp"
+        android:scaleType="fitCenter"/>
 
     <ImageView
         android:id="@+id/presentation_image"
