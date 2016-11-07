@@ -234,7 +234,8 @@ public class MedicinesListFragment extends Fragment {
         Intent i = new Intent(getActivity(), WebViewActivity.class);
         WebViewActivity.WebViewRequest request = new WebViewActivity.WebViewRequest(url);
         request.setCustomCss("prospectView.css");
-        request.setErrorMessage(getString(R.string.message_prospect_load_error));
+        request.setConnectionErrorMessage(getString(R.string.message_prospect_connection_error));
+        request.setNotFoundErrorMessage(getString(R.string.message_prospect_not_found_error));
         request.setLoadingMessage(getString(R.string.message_prospect_loading));
         request.setTitle(getString(R.string.title_prospect_webview));
         request.setCacheType(WebViewActivity.WebViewRequest.CacheType.DOWNLOAD_CACHE);

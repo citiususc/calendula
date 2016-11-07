@@ -455,8 +455,8 @@
     <string name="message_generic_pleasewait">Please wait for a few seconds…</string>
     <string name="title_generic_loading">Loading</string>
     <string name="message_prospect_loading">The leaflet will be ready soon…</string>
-    <string name="message_prospect_load_error">An error happened while loading the leaflet</string>
-
+    <string name="message_prospect_connection_error">The leaflet could not be loaded</string>
+    <string name="message_prospect_not_found_error">Sorry, but it there is no leaflet available for this med</string>
 
     <string name="intake_not_available">Intake not available</string>
     <string name="confirm_future_intake_warning">This intake will be available %1$s. We will notify you in that moment!</string>

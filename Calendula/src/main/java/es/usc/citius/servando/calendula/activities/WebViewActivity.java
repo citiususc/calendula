@@ -79,7 +79,7 @@ public class WebViewActivity extends CalendulaActivity {
         WebViewRequest request = getIntent().getParcelableExtra(PARAM_WEBVIEW_REQUEST);
         if (request == null || (url=request.getUrl()) == null) {
             Log.e(TAG, "onCreate: No WebViewRequest provided in intent!");
-            showErrorToast();
+            showErrorToast(null);
             finish();
         } else {
 
@@ -172,7 +172,7 @@ public class WebViewActivity extends CalendulaActivity {
 
                         if (view.getTitle().matches(HTTP_ERROR_REGEXP)) {
                             Log.e(TAG, "Received HTTP error, page title is: " + view.getTitle());
-                            showErrorToast();
+                            showErrorToast(request.getNotFoundErrorMessage());
                             finish();
                         }
 
@@ -198,21 +198,21 @@ public class WebViewActivity extends CalendulaActivity {
                     @Override
                     public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                         Log.e(TAG, "Received error when trying to load page");
-                        showErrorToast();
+                        showErrorToast(request.getConnectionErrorMessage());
                         finish();
                     }
 
                     @Override
-                    public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+                    public void onReceivedHttpError(WebView view, WebResourceRequest r, WebResourceResponse errorResponse) {
                         Log.e(TAG, "Received HTTP Error when trying to load page");
-                        showErrorToast();
+                        showErrorToast(request.getNotFoundErrorMessage());
                         finish();
                     }
 
                     @Override
                     public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
                         Log.e(TAG, "Received SSL Error when trying to load page");
-                        showErrorToast();
+                        showErrorToast(request.getConnectionErrorMessage());
                         finish();
                     }
                 });
@@ -273,12 +273,8 @@ public class WebViewActivity extends CalendulaActivity {
         webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
     }
 
-    private void showErrorToast() {
-
+    private void showErrorToast(String error) {
         errorDisableCache = false;
-        final WebViewRequest request = getIntent().getParcelableExtra(PARAM_WEBVIEW_REQUEST);
-        String error = request.getErrorMessage();
-
         if (error == null) error = getString(R.string.message_generic_pageloaderror);
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
     }
@@ -345,7 +341,8 @@ public class WebViewActivity extends CalendulaActivity {
         private final String url;
         private String title = null;
         private String loadingMessage = null;
-        private String errorMessage = null;
+        private String connectionErrorMessage = null;
+        private String notFoundErrorMessage = null;
         private boolean javaScriptEnabled = false;
         private boolean externalLinksEnabled = false;
         private CacheType cacheType = CacheType.NO_CACHE;
@@ -361,11 +358,12 @@ public class WebViewActivity extends CalendulaActivity {
             this.url = url;
         }
 
-        public WebViewRequest(String url, String title, String loadingMessage, String errorMessage, boolean javaScriptEnabled, boolean externalLinksEnabled, CacheType cacheType, String customCss) {
+        public WebViewRequest(String url, String title, String loadingMessage, String connectionErrorMessage, String notFoundErrorMessage, boolean javaScriptEnabled, boolean externalLinksEnabled, CacheType cacheType, String customCss) {
             this.url = url;
             this.title = title;
             this.loadingMessage = loadingMessage;
-            this.errorMessage = errorMessage;
+            this.connectionErrorMessage = connectionErrorMessage;
+            this.notFoundErrorMessage = notFoundErrorMessage;
             this.javaScriptEnabled = javaScriptEnabled;
             this.externalLinksEnabled = externalLinksEnabled;
             this.cacheType = cacheType;
@@ -376,7 +374,8 @@ public class WebViewActivity extends CalendulaActivity {
             url = in.readString();
             title = in.readString();
             loadingMessage = in.readString();
-            errorMessage = in.readString();
+            connectionErrorMessage = in.readString();
+            notFoundErrorMessage = in.readString();
             javaScriptEnabled = in.readByte() != 0;
             externalLinksEnabled = in.readByte() != 0;
             cacheType = CacheType.valueOf(in.readString());
@@ -389,7 +388,8 @@ public class WebViewActivity extends CalendulaActivity {
             dest.writeString(url);
             dest.writeString(title);
             dest.writeString(loadingMessage);
-            dest.writeString(errorMessage);
+            dest.writeString(connectionErrorMessage);
+            dest.writeString(notFoundErrorMessage);
             dest.writeByte((byte) (javaScriptEnabled ? 1 : 0));
             dest.writeByte((byte) (externalLinksEnabled ? 1 : 0));
             dest.writeString(cacheType.toString());
@@ -443,17 +443,30 @@ public class WebViewActivity extends CalendulaActivity {
             this.loadingMessage = loadingMessage;
         }
 
-        public String getErrorMessage() {
-            return errorMessage;
+        public String getConnectionErrorMessage() {
+            return connectionErrorMessage;
+        }
+
+        public String getNotFoundErrorMessage() {
+            return notFoundErrorMessage;
         }
 
         /**
-         * Set a custom error message in case the page can't be loaded. A default message will be used if <code>null</code>.
+         * Set a custom error message in case the page can't be loaded for connection reasons. A default message will be used if <code>null</code>.
          *
          * @param errorMessage the message
          */
-        public void setErrorMessage(String errorMessage) {
-            this.errorMessage = errorMessage;
+        public void setConnectionErrorMessage(String errorMessage) {
+            this.connectionErrorMessage = errorMessage;
+        }
+
+        /**
+         * Set a custom error message in case the page does not exists. A default message will be used if <code>null</code>.
+         *
+         * @param errorMessage the message
+         */
+        public void setNotFoundErrorMessage(String errorMessage) {
+            this.notFoundErrorMessage = errorMessage;
         }
 
         public boolean isJavaScriptEnabled() {

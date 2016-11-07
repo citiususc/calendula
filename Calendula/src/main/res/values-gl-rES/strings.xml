@@ -395,7 +395,8 @@
     <string name="title_prospect_webview">Vista de prospecto</string>
     <string name="message_generic_pleasewait">Por favor, espere uns segundos…</string>
     <string name="title_generic_loading">Cargando</string>
-    <string name="message_prospect_loading">O prospecto estará listo decontado…</string>
+    <string name="message_prospect_connection_error">Sentímolo, foi imposible acceder ó prospecto</string>
+    <string name="message_prospect_not_found_error">Sentímolo, o prospecto deste medicamento non está dispoñible</string>
     <string name="message_prospect_load_error">Produciuse un erro ao cargar o prospecto</string>
     <string name="action_share_link">Compartir con</string>
     <string name="action_open_with_browser">Abrir no navegador</string>
