@@ -325,10 +325,13 @@ public class WebViewActivity extends CalendulaActivity {
                 i.setType("text/plain");
                 startActivity(Intent.createChooser(i,getString(R.string.title_share_link)));
                 return true;
-            default:
+            case R.id.action_open_with_browser:
                 Intent i1=new Intent(Intent.ACTION_VIEW,Uri.parse(url));
                 startActivity(i1);
-                return false;
+                return true;
+            default:
+                onBackPressed();
+                return true;
         }
     }
 
