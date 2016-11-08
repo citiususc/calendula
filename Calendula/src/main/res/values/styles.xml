@@ -34,6 +34,9 @@
         <!-- dialog theme stuff -->
         <item name="android:dialogTheme">@style/AppTheme.DialogTheme</item>
         <item name="siv_insetForeground">#01ffffff</item>
+
+        <item name="android:actionModeBackground">@color/dark_grey_home</item>
+        <item name="android:windowActionModeOverlay">true</item>
     </style>
 
     <!-- Styles for pop-up dialogs -->
@@ -44,6 +47,7 @@
         <item name="colorAccent">@color/android_blue_darker</item>
 
     </style>
+
 
 
     <!-- just defines top layer "Animation" -->
@@ -333,7 +337,6 @@
     <style name="CaldroidDefaultDarkGridView" parent="CaldroidDefaultGridView">
         <item name="android:background">@color/transparent</item>
     </style>
-
 
 
 

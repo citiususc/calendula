@@ -14,6 +14,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Base64;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -74,6 +75,10 @@ public class WebViewActivity extends CalendulaActivity {
 
     ProgressDialog progressDialog;
 
+    View toolbarSahdow;
+
+    int color;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
@@ -93,9 +98,10 @@ public class WebViewActivity extends CalendulaActivity {
         } else {
 
             webView = (WebView) findViewById(R.id.webView1);
+            toolbarSahdow = findViewById(R.id.tabs_shadow);
 
             //setup toolbar and statusbar
-            int color = DB.patients().getActive(this).color();
+            color = DB.patients().getActive(this).color();
             String title = request.getTitle();
             setupToolbar(title, color);
             setupStatusBar(color);
@@ -105,6 +111,40 @@ public class WebViewActivity extends CalendulaActivity {
 
         }
 
+    }
+
+
+    @Override
+    public void onActionModeStarted(ActionMode mode) {
+        super.onActionModeStarted(mode);
+        Log.d(TAG, "onActionModeStarted");
+        if(toolbar!=null){
+            toolbarSahdow.setVisibility(View.GONE);
+            toolbar.setVisibility(View.GONE);
+            setupStatusBar(getResources().getColor(R.color.dark_grey_home));
+        }
+    }
+
+    @Override
+    public void onActionModeFinished(ActionMode mode) {
+        super.onActionModeFinished(mode);
+        Log.d(TAG, "onActionModeFinished");
+        if(toolbar!=null){
+            setupStatusBar(color);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    toolbar.setAlpha(0);
+                    toolbarSahdow.setAlpha(0);
+                    toolbar.setVisibility(View.VISIBLE);
+                    toolbarSahdow.setVisibility(View.VISIBLE);
+                    toolbar.animate().alpha(1).start();
+                    toolbarSahdow.animate().alpha(1).start();
+                }
+            }, 300);
+
+
+        }
     }
 
     private void setupWebView(final WebViewRequest request) {
