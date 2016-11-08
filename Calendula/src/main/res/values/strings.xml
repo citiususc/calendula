@@ -482,11 +482,12 @@
     <string name="home_menu_allergies">Allergies</string>
     <string name="title_activity_allergies">Allergies</string>
     <string name="title_add_allergies">Add an allergy</string>
-    <string name="message_allergy_add_success">Your allergy preferences have been updated.</string>
+    <string name="message_allergy_add_success">Your allergy to %1$s has been saved.</string>
     <string name="message_allergy_add_failure">There was an error while trying to save your allergy preferences.</string>
     <string name="remove_allergy_message_short">Remove allergy %1$s?</string>
     <string name="excipient">Excipient</string>
     <string name="active_ingredient">Active ingredient</string>
+    <string name="delete_allergen_error">Failed to delete allergy information.</string>
 
 
 </resources>

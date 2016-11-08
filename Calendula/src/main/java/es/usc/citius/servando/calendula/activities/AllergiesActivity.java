@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -92,6 +93,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         closeSearchButton = findViewById(R.id.close_search_button);
         searchEditText = (EditText) findViewById(R.id.search_edit_text);
         searchList = (RecyclerView) findViewById(R.id.search_list);
+        searchList.setItemAnimator(new DefaultItemAnimator());
 
         closeSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,17 +121,19 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().length() > 0) {
+                final String search = s.toString().trim();
+                if (search.length() > 0) {
                     if (closeSearchButton.getVisibility() == View.GONE) {
                         closeSearchButton.setVisibility(View.VISIBLE);
                     }
-                    if (s.toString().length() >= 3) {
-                        String filter = searchEditText.getText().toString().trim();
-                        searchAdapter.getFilter().filter(filter);
+                    if (search.length() >= 3) {
+                        doSearch();
                     }
                 } else {
                     if (closeSearchButton.getVisibility() == View.VISIBLE)
                         closeSearchButton.setVisibility(View.GONE);
+                    if (searchAdapter.getItemCount() > 0)
+                        searchAdapter.clear();
                 }
             }
         });
@@ -145,20 +149,10 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         searchEditText.setText("");
     }
 
-    private boolean storeAllergen(PatientAllergen allergen) {
-        int rows;
-        try {
-            rows = getDao().create(allergen);
-        } catch (SQLException e) {
-            Log.e(TAG, "onItemClick: couldn't create allergy", e);
-            return false;
-        }
-        Log.d(TAG, "storeAllergen: inserted allergen into database: " + allergen);
-        if (rows == 1) {
-            notifyDataChanged();
-            return true;
-        }
-        return false;
+
+    private void doSearch() {
+        String filter = searchEditText.getText().toString().trim();
+        searchAdapter.getFilter().filter(filter);
     }
 
     private void showSearchView() {
@@ -186,23 +180,18 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         return dao;
     }
 
-    @Override
-    public void onDeleteAction(PatientAllergen allergen) {
-        Log.d(TAG, "onDeleteAction: long click received for allergen " + allergen);
-        showDeleteConfirmationDialog(allergen);
-    }
-
     void showDeleteConfirmationDialog(final PatientAllergen a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final Activity ac = this;
         builder.setMessage(String.format(getString(R.string.remove_allergy_message_short), a.getName()))
                 .setCancelable(true)
                 .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        try {
-                            DB.allergens().delete(a);
-                            notifyDataChanged();
-                        } catch (SQLException e) {
-                            Log.e(TAG, "Couldn't delete allergen " + a, e);
+                        int index = store.deleteAllergen(a);
+                        if (index >= 0) {
+                            allergiesAdapter.remove(index);
+                        } else {
+                            Snack.show(R.string.delete_allergen_error, ac);
                         }
                     }
                 })
@@ -213,11 +202,6 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
                 });
         AlertDialog alert = builder.create();
         alert.show();
-    }
-
-    public void notifyDataChanged() {
-
-        new ReloadDataTask().execute();
     }
 
     @Override
@@ -232,13 +216,20 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
 
     @Override
     public void onAddAction(PatientAllergen allergen) {
-        boolean ans = storeAllergen(allergen);
-        closeSearchView();
+        KeyboardUtils.hideKeyboard(this);
+        boolean ans = store.storeAllergen(allergen);
         if (ans) {
-            Snack.show(R.string.message_allergy_add_success, this);
+            searchAdapter.remove(allergen);
+            Snack.show(getString(R.string.message_allergy_add_success, allergen.getName()), this);
         } else {
             Snack.show(R.string.message_allergy_add_failure, this);
         }
+    }
+
+    @Override
+    public void onDeleteAction(PatientAllergen allergen) {
+        Log.d(TAG, "onDeleteAction: deleting allergy " + allergen);
+        showDeleteConfirmationDialog(allergen);
     }
 
     private class ReloadDataTask extends AsyncTask<Void, Void, Void> {
@@ -252,6 +243,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         protected void onPostExecute(Void aVoid) {
             allergiesAdapter.notifyDataSetChanged();
             searchAdapter.notifyDataSetChanged();
+            doSearch();
         }
     }
 
@@ -278,8 +270,37 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
             reload();
         }
 
+        public boolean storeAllergen(PatientAllergen allergen) {
+            int rows;
+            try {
+                rows = getDao().create(allergen);
+            } catch (SQLException e) {
+                Log.e(TAG, "storeAllergen: couldn't create allergy", e);
+                return false;
+            }
+            Log.d(TAG, "storeAllergen: inserted allergen into database: " + allergen);
+            if (rows == 1) {
+                currentAllergies.add(allergen);
+                return true;
+            }
+            return false;
+        }
+
         public List<PatientAllergen> getAllergies() {
             return currentAllergies;
+        }
+
+        public int deleteAllergen(PatientAllergen a) {
+            try {
+                int index = currentAllergies.indexOf(a);
+                DB.allergens().delete(a);
+                currentAllergies.remove(a);
+                return index;
+            } catch (SQLException e) {
+                Log.e(TAG, "Couldn't delete allergen " + a, e);
+                return -1;
+            }
+
         }
     }
 

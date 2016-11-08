@@ -63,9 +63,9 @@ public class AllergiesAutocompleteAdapter extends RecyclerView.Adapter<Allergies
                             return o1.getName().compareTo(o2.getName());
                         }
                     });
-                    if (store != null) {
-                        list.removeAll(store.getAllergies());
-                    }
+//                    if (store != null) {
+//                        list.removeAll(store.getAllergies());
+//                    }
                     results.values = list;
                     results.count = list.size();
                 }
@@ -98,6 +98,12 @@ public class AllergiesAutocompleteAdapter extends RecyclerView.Adapter<Allergies
         return mFilter;
     }
 
+    public void remove(PatientAllergen allergen){
+        int index=search.indexOf(allergen);
+        search.remove(index);
+        notifyItemRemoved(index);
+    }
+
     @Override
     public void onBindViewHolder(final AllergiesAdapter.AllergenViewHolder allergenViewHolder, final int i) {
         PatientAllergen allergen = search.get(i);
@@ -105,25 +111,32 @@ public class AllergiesAutocompleteAdapter extends RecyclerView.Adapter<Allergies
         final String name = allergen.getName();
         allergenViewHolder.getTitle().setText(name);
 
-        String type = "";
-        switch (allergen.getType()) {
-            case ACTIVE_INGREDIENT:
-                type = context.getString(R.string.active_ingredient);
-                break;
-            case EXCIPIENT:
-                type = context.getString(R.string.excipient);
-                break;
-        }
-        allergenViewHolder.getSubtitle().setText(type);
-
-        allergenViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (listener != null)
-                    listener.onAddAction(getItemByPosition(allergenViewHolder.getAdapterPosition()));
+        if (store.getAllergies().contains(allergen)) {
+            allergenViewHolder.itemView.setVisibility(View.GONE);
+            ViewGroup.LayoutParams layoutParams = allergenViewHolder.itemView.getLayoutParams();
+            layoutParams.height = 0;
+            allergenViewHolder.itemView.setLayoutParams(layoutParams);
+        } else {
+            String type = "";
+            switch (allergen.getType()) {
+                case ACTIVE_INGREDIENT:
+                    type = context.getString(R.string.active_ingredient);
+                    break;
+                case EXCIPIENT:
+                    type = context.getString(R.string.excipient);
+                    break;
             }
-        });
+            allergenViewHolder.getSubtitle().setText(type);
+
+            allergenViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onAddAction(getItemByPosition(allergenViewHolder.getAdapterPosition()));
+                    }
+                }
+            });
+        }
 
     }
 

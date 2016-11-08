@@ -91,6 +91,10 @@ public class AllergiesAdapter extends RecyclerView.Adapter<AllergiesAdapter.Alle
         return new AllergenViewHolder(itemView);
     }
 
+    public void remove(int index) {
+        notifyItemRemoved(index);
+    }
+
     public static class AllergenViewHolder extends RecyclerView.ViewHolder {
 
         private TextView title;
