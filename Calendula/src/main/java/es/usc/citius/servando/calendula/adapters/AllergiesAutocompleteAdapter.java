@@ -2,54 +2,46 @@ package es.usc.citius.servando.calendula.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Filter;
-import android.widget.TextView;
+import android.widget.Filterable;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.AllergenListeners;
 import es.usc.citius.servando.calendula.activities.AllergiesActivity;
-import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 import es.usc.citius.servando.calendula.remote.AllergenRemoteFacade;
 
 /**
  * Created by alvaro.brey.vilas on 7/11/16.
  */
-public class AllergiesAutocompleteAdapter extends ArrayAdapter<PatientAllergen> {
+public class AllergiesAutocompleteAdapter extends RecyclerView.Adapter<AllergiesAdapter.AllergenViewHolder> implements Filterable {
 
     private final static String TAG = "AllergiesAutoAdapter";
     private AllergenRemoteFacade remote;
     private AllergiesActivity.AllergiesStore store;
+    private AllergenListeners.AddAllergyActionListener listener;
+    private Context context;
+    private List<PatientAllergen> search = new ArrayList<>();
 
-
-    public AllergiesAutocompleteAdapter(Context context, int resource) {
-        super(context, resource);
+    public AllergiesAutocompleteAdapter(AllergiesActivity.AllergiesStore store, Context context, AllergenListeners.AddAllergyActionListener listener) {
+        super();
+        this.store = store;
+        this.context = context;
+        this.listener = listener;
         remote = new AllergenRemoteFacade(context);
     }
 
-    public AllergiesAutocompleteAdapter(Context context, int resource, AllergiesActivity.AllergiesStore store) {
-        this(context, resource);
-        this.store = store;
-    }
-
-    @NonNull
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        PatientAllergen a = getItem(position);
-        View v = super.getView(position, convertView, parent);
-        ((TextView) v).setText(a.getName() == null ? Integer.toString(a.getRealId()) : a.getName());
-        return v;
-    }
 
     private Filter mFilter = new Filter() {
 
@@ -86,14 +78,19 @@ public class AllergiesAutocompleteAdapter extends ArrayAdapter<PatientAllergen> 
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            clear();
+            search.clear();
             if (results != null && results.count > 0) {
                 // we have filtered results
-                addAll((List<PatientAllergen>) results.values);
+                search.addAll((List<PatientAllergen>) results.values);
             }
             notifyDataSetChanged();
         }
     };
+
+    public void clear() {
+        search.clear();
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override
@@ -101,4 +98,51 @@ public class AllergiesAutocompleteAdapter extends ArrayAdapter<PatientAllergen> 
         return mFilter;
     }
 
+    @Override
+    public void onBindViewHolder(final AllergiesAdapter.AllergenViewHolder allergenViewHolder, final int i) {
+        PatientAllergen allergen = search.get(i);
+
+        final String name = allergen.getName();
+        allergenViewHolder.getTitle().setText(name);
+
+        String type = "";
+        switch (allergen.getType()) {
+            case ACTIVE_INGREDIENT:
+                type = context.getString(R.string.active_ingredient);
+                break;
+            case EXCIPIENT:
+                type = context.getString(R.string.excipient);
+                break;
+        }
+        allergenViewHolder.getSubtitle().setText(type);
+
+        allergenViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (listener != null)
+                    listener.onAddAction(getItemByPosition(allergenViewHolder.getAdapterPosition()));
+            }
+        });
+
+    }
+
+    private PatientAllergen getItemByPosition(int position) {
+        return search.get(position);
+    }
+
+    @Override
+    public AllergiesAdapter.AllergenViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View itemView = LayoutInflater.
+                from(viewGroup.getContext()).
+                inflate(R.layout.allergen_search_list_item, viewGroup, false);
+
+
+        return new AllergiesAdapter.AllergenViewHolder(itemView);
+    }
+
+    @Override
+    public int getItemCount() {
+        return search.size();
+    }
 }

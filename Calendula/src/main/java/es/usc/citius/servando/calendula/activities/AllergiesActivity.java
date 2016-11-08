@@ -12,9 +12,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.j256.ormlite.dao.Dao;
@@ -34,7 +32,7 @@ import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 
-public class AllergiesActivity extends CalendulaActivity implements AllergiesAdapter.AllergiesOnLongClickListener {
+public class AllergiesActivity extends CalendulaActivity implements AllergenListeners.DeleteAllergyActionListener, AllergenListeners.AddAllergyActionListener {
 
 
     private static final String TAG = "AllergiesActivity";
@@ -42,7 +40,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergiesAda
     private View closeSearchButton;
     private AddFloatingActionButton addButton;
     private EditText searchEditText;
-    private ListView searchList;
+    private RecyclerView searchList;
     private AllergiesAutocompleteAdapter searchAdapter;
     private AllergiesAdapter allergiesAdapter;
     private RecyclerView allergiesRecycler;
@@ -85,7 +83,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergiesAda
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         allergiesRecycler.setLayoutManager(llm);
-        allergiesAdapter = new AllergiesAdapter(store, this);
+        allergiesAdapter = new AllergiesAdapter(store, this, this);
         allergiesRecycler.setAdapter(allergiesAdapter);
     }
 
@@ -93,17 +91,20 @@ public class AllergiesActivity extends CalendulaActivity implements AllergiesAda
         searchView = findViewById(R.id.search_view);
         closeSearchButton = findViewById(R.id.close_search_button);
         searchEditText = (EditText) findViewById(R.id.search_edit_text);
-        searchList = (ListView) findViewById(R.id.search_list);
+        searchList = (RecyclerView) findViewById(R.id.search_list);
 
         closeSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideSearchView();
+                clearSearch();
             }
         });
 
-        searchAdapter = new AllergiesAutocompleteAdapter(this, android.R.layout.simple_dropdown_item_1line, store);
+        searchAdapter = new AllergiesAutocompleteAdapter(store, this, this);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
         searchList.setAdapter(searchAdapter);
+        searchList.setLayoutManager(llm);
 
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -118,32 +119,30 @@ public class AllergiesActivity extends CalendulaActivity implements AllergiesAda
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().length() >= 3) {
-                    String filter = searchEditText.getText().toString();
-                    searchAdapter.getFilter().filter(filter);
-                }
-            }
-        });
-
-        final Activity activity = this;
-        searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                KeyboardUtils.hideKeyboard(activity);
-                PatientAllergen allergen = (PatientAllergen) searchAdapter.getItem(position);
-                boolean ans = storeAllergen(allergen);
-                if (ans) {
-                    Snack.show(R.string.message_allergy_add_success, activity);
+                if (s.toString().length() > 0) {
+                    if (closeSearchButton.getVisibility() == View.GONE) {
+                        closeSearchButton.setVisibility(View.VISIBLE);
+                    }
+                    if (s.toString().length() >= 3) {
+                        String filter = searchEditText.getText().toString().trim();
+                        searchAdapter.getFilter().filter(filter);
+                    }
                 } else {
-                    Snack.show(R.string.message_allergy_add_failure, activity);
+                    if (closeSearchButton.getVisibility() == View.VISIBLE)
+                        closeSearchButton.setVisibility(View.GONE);
                 }
-                clearSearchView();
             }
         });
 
         searchView.setBackgroundColor(color);
+        searchList.setBackgroundColor(getResources().getColor(R.color.white));
 
         hideSearchView();
+    }
+
+    private void clearSearch() {
+        searchAdapter.clear();
+        searchEditText.setText("");
     }
 
     private boolean storeAllergen(PatientAllergen allergen) {
@@ -172,9 +171,10 @@ public class AllergiesActivity extends CalendulaActivity implements AllergiesAda
     private void hideSearchView() {
         addButton.setVisibility(View.VISIBLE);
         searchView.setVisibility(View.GONE);
+        KeyboardUtils.hideKeyboard(this);
     }
 
-    private void clearSearchView() {
+    private void closeSearchView() {
         hideSearchView();
         searchEditText.setText("");
         searchAdapter.clear();
@@ -187,8 +187,8 @@ public class AllergiesActivity extends CalendulaActivity implements AllergiesAda
     }
 
     @Override
-    public void onLongClick(PatientAllergen allergen) {
-        Log.d(TAG, "onLongClick: long click received for allergen " + allergen);
+    public void onDeleteAction(PatientAllergen allergen) {
+        Log.d(TAG, "onDeleteAction: long click received for allergen " + allergen);
         showDeleteConfirmationDialog(allergen);
     }
 
@@ -227,6 +227,17 @@ public class AllergiesActivity extends CalendulaActivity implements AllergiesAda
             hideSearchView();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onAddAction(PatientAllergen allergen) {
+        boolean ans = storeAllergen(allergen);
+        closeSearchView();
+        if (ans) {
+            Snack.show(R.string.message_allergy_add_success, this);
+        } else {
+            Snack.show(R.string.message_allergy_add_failure, this);
         }
     }
 

@@ -485,6 +485,8 @@
     <string name="message_allergy_add_success">Your allergy preferences have been updated.</string>
     <string name="message_allergy_add_failure">There was an error while trying to save your allergy preferences.</string>
     <string name="remove_allergy_message_short">Remove allergy %1$s?</string>
+    <string name="excipient">Excipient</string>
+    <string name="active_ingredient">Active ingredient</string>
 
 
 </resources>
