@@ -62,9 +62,9 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
-import es.usc.citius.servando.calendula.util.ProspectUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
+import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 public class MedicinesActivity extends CalendulaActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
 
@@ -340,7 +340,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                 prospectIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ProspectUtils.openProspect(p, MedicinesActivity.this);
+                        ProspectUtils.openProspect(p, MedicinesActivity.this, false);
                     }
                 });
 

@@ -48,8 +48,8 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Prescription;
-import es.usc.citius.servando.calendula.util.ProspectUtils;
 import es.usc.citius.servando.calendula.util.Snack;
+import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -227,7 +227,7 @@ public class MedicinesListFragment extends Fragment {
 
 
     public void openProspect(Prescription p) {
-        ProspectUtils.openProspect(p,getActivity());
+        ProspectUtils.openProspect(p,getActivity(), true);
     }
 
     public void showDrivingAdvice(final Prescription p) {

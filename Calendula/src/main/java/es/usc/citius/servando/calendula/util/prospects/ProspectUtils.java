@@ -16,7 +16,7 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.util;
+package es.usc.citius.servando.calendula.util.prospects;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -29,6 +29,7 @@ import es.usc.citius.servando.calendula.activities.WebViewActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 /**
  * Utility functions to simplify dealing with prospects
@@ -37,7 +38,7 @@ public class ProspectUtils {
 
     public static final String PROSPECT_URL = "https://www.aemps.gob.es/cima/dochtml/p/#ID#/Prospecto_#ID#.html";
 
-    public static void openProspect(Prescription p, final Activity activity) {
+    public static void openProspect(Prescription p, final Activity activity, boolean enableCache) {
         final String url = PROSPECT_URL.replaceAll("#ID#", p.pid);
         Intent i = new Intent(activity, WebViewActivity.class);
 
@@ -53,11 +54,11 @@ public class ProspectUtils {
         request.setNotFoundErrorMessage(activity.getString(R.string.message_prospect_not_found_error));
         request.setLoadingMessage(activity.getString(R.string.message_prospect_loading));
         request.setTitle(activity.getString(R.string.title_prospect_webview));
-        request.setCacheType(WebViewActivity.WebViewRequest.CacheType.DOWNLOAD_CACHE);
+        request.setPostProcessorClassname(LeafletHtmlPostProcessor.class.getCanonicalName());
+        if(enableCache) request.setCacheType(WebViewActivity.WebViewRequest.CacheType.DOWNLOAD_CACHE);
         request.setJavaScriptEnabled(true);
         i.putExtra(WebViewActivity.PARAM_WEBVIEW_REQUEST, request);
         activity.startActivity(i);
     }
-
 
 }

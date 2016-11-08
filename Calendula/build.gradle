@@ -183,4 +183,7 @@ dependencies {
     //
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.heinrichreimersoftware:material-intro:1.5.8'
+
+    // html parsing
+    compile 'org.jsoup:jsoup:1.7.2'
 }
