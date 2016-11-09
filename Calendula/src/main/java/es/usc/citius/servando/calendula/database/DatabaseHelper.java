@@ -125,7 +125,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
-    private Patient createDefaultPatient() throws SQLException{
+    private Patient createDefaultPatient() throws SQLException {
         // Create a default patient
         Patient p = new Patient();
         p.setName("Usuario");
@@ -144,13 +144,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.i(DatabaseHelper.class.getName(), "onUpgrade");
             Log.d(DatabaseHelper.class.getName(), "OldVersion: " + oldVersion + ", newVersion: " + newVersion);
 
-            if (oldVersion < 6)
-            {
+            if (oldVersion < 6) {
                 oldVersion = 6;
             }
 
-            switch (oldVersion + 1)
-            {
+            switch (oldVersion + 1) {
 
                 case 7:
                     // migrate to iCal
@@ -181,7 +179,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 case 10:
                     TableUtils.createTable(connectionSource, HtmlCacheEntry.class);
                 case 11:
+                    //delete all html cache entries and change datatypes (bugfix)
+                    TableUtils.dropTable(connectionSource, HtmlCacheEntry.class, true);
+                    TableUtils.createTable(connectionSource, HtmlCacheEntry.class);
                     LocalDateMigrationHelper.migrateLocalDates(this);
+
             }
 
 
@@ -194,7 +196,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     /**
      * Method that migrate models to multi-user
      */
-    private void migrateToMultiPatient() throws SQLException{
+    private void migrateToMultiPatient() throws SQLException {
 
         // add patient column to routines, schedules and medicines
         getRoutinesDao().executeRaw("ALTER TABLE Routines ADD COLUMN Patient INTEGER;");
@@ -208,24 +210,24 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         // prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).commit();
 
         // Assign all routines to the default patient
-        UpdateBuilder<Routine,Long> rUpdateBuilder = getRoutinesDao().updateBuilder();
-        rUpdateBuilder.updateColumnValue(Routine.COLUMN_PATIENT,p.id());
+        UpdateBuilder<Routine, Long> rUpdateBuilder = getRoutinesDao().updateBuilder();
+        rUpdateBuilder.updateColumnValue(Routine.COLUMN_PATIENT, p.id());
         rUpdateBuilder.update();
 
         // Assign all schedules to the default patient
-        UpdateBuilder<Schedule,Long> sUpdateBuilder = getSchedulesDao().updateBuilder();
-        sUpdateBuilder.updateColumnValue(Schedule.COLUMN_PATIENT,p.id());
+        UpdateBuilder<Schedule, Long> sUpdateBuilder = getSchedulesDao().updateBuilder();
+        sUpdateBuilder.updateColumnValue(Schedule.COLUMN_PATIENT, p.id());
         sUpdateBuilder.update();
 
         // Assign all medicines to the default patient
-        UpdateBuilder<Medicine,Long> mUpdateBuilder = getMedicinesDao().updateBuilder();
-        mUpdateBuilder.updateColumnValue(Medicine.COLUMN_PATIENT,p.id());
+        UpdateBuilder<Medicine, Long> mUpdateBuilder = getMedicinesDao().updateBuilder();
+        mUpdateBuilder.updateColumnValue(Medicine.COLUMN_PATIENT, p.id());
         mUpdateBuilder.update();
 
         // Assign all DailyScheduleItems to the default patient, for today
-        UpdateBuilder<DailyScheduleItem,Long> siUpdateBuilder = getDailyScheduleItemsDao().updateBuilder();
-        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_PATIENT,p.id());
-        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_DATE,LocalDate.now());
+        UpdateBuilder<DailyScheduleItem, Long> siUpdateBuilder = getDailyScheduleItemsDao().updateBuilder();
+        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_PATIENT, p.id());
+        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_DATE, LocalDate.now());
         siUpdateBuilder.update();
 
     }

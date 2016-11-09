@@ -672,6 +672,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
             super.onPreExecute();
             dialog = new ProgressDialog(getActivity());
             dialog.setIndeterminate(true);
+            dialog.setCancelable(false);
             dialog.setMessage(getString(R.string.enable_prescriptions_progress_messgae));
             dialog.show();
         }
