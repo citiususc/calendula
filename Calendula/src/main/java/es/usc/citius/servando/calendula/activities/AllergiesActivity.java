@@ -139,7 +139,6 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         });
 
         searchView.setBackgroundColor(color);
-        searchList.setBackgroundColor(getResources().getColor(R.color.white));
 
         hideSearchView();
     }

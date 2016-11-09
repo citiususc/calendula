@@ -98,8 +98,8 @@ public class AllergiesAutocompleteAdapter extends RecyclerView.Adapter<Allergies
         return mFilter;
     }
 
-    public void remove(PatientAllergen allergen){
-        int index=search.indexOf(allergen);
+    public void remove(PatientAllergen allergen) {
+        int index = search.indexOf(allergen);
         search.remove(index);
         notifyItemRemoved(index);
     }
@@ -132,6 +132,7 @@ public class AllergiesAutocompleteAdapter extends RecyclerView.Adapter<Allergies
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
+                        allergenViewHolder.itemView.setOnClickListener(null);
                         listener.onAddAction(getItemByPosition(allergenViewHolder.getAdapterPosition()));
                     }
                 }
