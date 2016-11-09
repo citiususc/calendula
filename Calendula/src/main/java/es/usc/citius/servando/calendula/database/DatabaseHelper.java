@@ -36,6 +36,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import es.usc.citius.servando.calendula.database.migrationHelpers.LocalDateMigrationHelper;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.HtmlCacheEntry;
@@ -76,7 +77,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
 
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
@@ -179,6 +180,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                     migrateToMultiPatient();
                 case 10:
                     TableUtils.createTable(connectionSource, HtmlCacheEntry.class);
+                case 11:
+                    LocalDateMigrationHelper.migrateLocalDates(this);
             }
 
 
