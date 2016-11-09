@@ -5,6 +5,7 @@ import android.util.Log;
 import com.j256.ormlite.dao.Dao;
 
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -20,7 +21,7 @@ import es.usc.citius.servando.calendula.persistence.HtmlCacheEntry;
 public class HtmlCacheManager {
 
 
-    public static final Integer DEFAULT_TTL_MILLIS = 300000; //5 minutes
+    public static final Long DEFAULT_TTL_MILLIS = Duration.standardMinutes(5).getMillis(); //5 minutes
 
     private static HtmlCacheManager theInstance = null;
 
@@ -70,11 +71,7 @@ public class HtmlCacheManager {
         final Date timestamp = entry.getTimestamp();
         long diff = DateTime.now().getMillis() - timestamp.getTime();
 
-        if (entry.getTtl() != null) {
-            return diff < entry.getTtl();
-        } else {
-            return diff < DEFAULT_TTL_MILLIS;
-        }
+        return diff < entry.getTtl();
     }
 
     public boolean isCached(final String url) {
@@ -92,13 +89,14 @@ public class HtmlCacheManager {
         return null;
     }
 
-    public boolean put(final String url, final String data, final Integer ttlMillis) {
+    public boolean put(final String url, final String data, final Duration ttlDuration) {
+        final Long ttl = ttlDuration == null ? DEFAULT_TTL_MILLIS : ttlDuration.getMillis();
         final int hashCode = url.hashCode();
         HtmlCacheEntry entry = retrieve(hashCode);
         if (entry != null)
             remove(entry);
 
-        HtmlCacheEntry newEntry = new HtmlCacheEntry(hashCode, new Date(DateTime.now().getMillis()), data, ttlMillis);
+        HtmlCacheEntry newEntry = new HtmlCacheEntry(hashCode, new Date(DateTime.now().getMillis()), data, ttl);
         try {
             Log.d(TAG, "put: writing entry: " + newEntry);
             return getDao().create(newEntry) == 1;
