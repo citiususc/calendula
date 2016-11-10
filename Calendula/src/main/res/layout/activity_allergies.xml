@@ -26,13 +26,23 @@
 
 
     <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/toolbar"
         android:id="@+id/allergies_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
         android:background="@drawable/touchable_white"
-        android:paddingBottom="96dp"
         android:clipToPadding="false"
+        android:paddingBottom="96dp"
+        />
+
+    <TextView
+        android:id="@+id/textview_no_allergies_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:gravity="center"
+        android:text="@string/allergies_placeholder"
+        android:visibility="gone"
         />
 
     <RelativeLayout
@@ -63,22 +73,31 @@
             android:textColor="#fff"
             android:textColorHint="#ececec"
             android:textCursorDrawable="@null"
-            android:textSize="20dp" />
+            android:textSize="20dp"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/search_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/search_edit_text"
-            android:background="@color/white" />
+            android:background="@color/white"/>
 
+        <TextView
+            android:id="@+id/allergies_search_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/search_edit_text"
+            android:paddingTop="48dp"
+            android:gravity="top|center_horizontal"
+            android:text="@string/allergies_search_placeholder"
+            />
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:padding="15dp"
-            android:src="@drawable/ic_arrow_back_white_48dp" />
+            android:src="@drawable/ic_arrow_back_white_48dp"/>
 
         <ImageView
             android:id="@+id/close_search_button"
@@ -86,8 +105,8 @@
             android:layout_height="56dp"
             android:layout_alignParentRight="true"
             android:padding="15dp"
-            android:visibility="gone"
-            android:src="@drawable/ic_cancel_white_48dp" />
+            android:src="@drawable/ic_cancel_white_48dp"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/search_shadow"
@@ -96,7 +115,7 @@
             android:layout_below="@+id/search_edit_text"
             android:alpha="0.7"
             android:scaleType="fitXY"
-            android:src="@drawable/daily_view_list_item_tab_shadow_top" />
+            android:src="@drawable/daily_view_list_item_tab_shadow_top"/>
 
     </RelativeLayout>
 
@@ -106,14 +125,14 @@
         android:id="@+id/add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="false"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="true"
         android:layout_gravity="bottom|right"
         android:layout_margin="10dp"
-        fab:fab_icon="@drawable/ic_done_black_48dp"
         fab:fab_colorNormal="#efefef"
         fab:fab_colorPressed="#b7b7b7"
+        fab:fab_icon="@drawable/ic_done_black_48dp"
         fab:fab_plusIconColor="@color/black"
         />
 

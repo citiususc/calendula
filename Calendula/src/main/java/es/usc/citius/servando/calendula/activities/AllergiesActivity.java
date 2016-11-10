@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.j256.ormlite.dao.Dao;
@@ -46,6 +47,8 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
     private AllergiesAdapter allergiesAdapter;
     private RecyclerView allergiesRecycler;
     private AllergiesStore store;
+    private TextView allergiesPlaceholder;
+    private TextView allergiesSearchPlaceholder;
     private int color;
     private Activity activity;
     private Dao<PatientAllergen, Long> dao = null;
@@ -53,16 +56,24 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         activity = this;
+
         setContentView(R.layout.activity_allergies);
+
+        allergiesPlaceholder = (TextView) findViewById(R.id.textview_no_allergies_placeholder);
+        allergiesSearchPlaceholder= (TextView) findViewById(R.id.allergies_search_placeholder);
+
         //setup toolbar and statusbar
         color = DB.patients().getActive(this).color();
         setupToolbar(getString(R.string.title_activity_allergies), color);
         setupStatusBar(color);
 
-        //load allergies
+        //load allergies, set placeholder if needed
         store = new AllergiesStore();
         store.load(this);
+        checkPlaceholder();
+
         //setup recycler
         setupRecyclerView();
         //setup FAB
@@ -135,6 +146,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
                     if (searchAdapter.getItemCount() > 0)
                         searchAdapter.clear();
                 }
+                checkSearchPlaceholder(search.length());
             }
         });
 
@@ -148,6 +160,22 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         searchEditText.setText("");
     }
 
+    private void checkPlaceholder() {
+        if (allergiesPlaceholder.getVisibility() == View.VISIBLE) {
+            if (!store.isEmpty())
+                allergiesPlaceholder.setVisibility(View.GONE);
+        } else if (store.isEmpty()) {
+            allergiesPlaceholder.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void checkSearchPlaceholder(int textLength){
+        if(textLength>=3){
+            allergiesSearchPlaceholder.setVisibility(View.GONE);
+        }else {
+            allergiesSearchPlaceholder.setVisibility(View.VISIBLE);
+        }
+    }
 
     private void doSearch() {
         String filter = searchEditText.getText().toString().trim();
@@ -188,6 +216,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
                     public void onClick(DialogInterface dialog, int id) {
                         int index = store.deleteAllergen(a);
                         if (index >= 0) {
+                            checkPlaceholder();
                             allergiesAdapter.remove(index);
                         } else {
                             Snack.show(R.string.delete_allergen_error, ac);
@@ -219,6 +248,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         boolean ans = store.storeAllergen(allergen);
         if (ans) {
             searchAdapter.remove(allergen);
+            checkPlaceholder();
             Snack.show(getString(R.string.message_allergy_add_success, allergen.getName()), this);
         } else {
             Snack.show(R.string.message_allergy_add_failure, this);
@@ -285,10 +315,6 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
             return false;
         }
 
-        public List<PatientAllergen> getAllergies() {
-            return currentAllergies;
-        }
-
         public int deleteAllergen(PatientAllergen a) {
             try {
                 int index = currentAllergies.indexOf(a);
@@ -300,6 +326,14 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
                 return -1;
             }
 
+        }
+
+        public List<PatientAllergen> getAllergies() {
+            return currentAllergies;
+        }
+
+        public boolean isEmpty() {
+            return currentAllergies.isEmpty();
         }
     }
 
