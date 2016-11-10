@@ -176,6 +176,12 @@
             android:label="AlarmIntentService">
         </service>
 
+        <service
+            android:name=".drugdb.SetupDBService"
+            android:exported="false" >
+        </service>
+
+
         <activity
             android:name=".activities.WebViewActivity"
             android:label="@string/title_activity_webview"

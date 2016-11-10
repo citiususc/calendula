@@ -19,6 +19,8 @@
 package es.usc.citius.servando.calendula.persistence;
 
 
+import android.content.Context;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -29,6 +31,7 @@ import java.util.Collection;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 
 import static java.util.Collections.sort;
 
@@ -158,11 +161,11 @@ public class Medicine implements Comparable<Medicine> {
         DB.medicines().save(this);
     }
 
-    public static Medicine fromPrescription(Prescription p) {
+    public static Medicine fromPrescription(Context ctx, Prescription p) {
         Medicine m = new Medicine();
         m.setCn(p.cn);
         m.setName(p.shortName());
-        Presentation pre = p.expectedPresentation();
+        Presentation pre = DBRegistry.instance().current(ctx).expected(p);
         m.setPresentation(pre != null ? pre : Presentation.PILLS);
         return m;
     }

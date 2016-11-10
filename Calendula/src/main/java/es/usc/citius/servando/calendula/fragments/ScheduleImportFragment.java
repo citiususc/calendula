@@ -71,6 +71,8 @@ import es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity;
 import es.usc.citius.servando.calendula.activities.qrWrappers.PrescriptionWrapper;
 import es.usc.citius.servando.calendula.activities.qrWrappers.ScheduleWrapper;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.DBRegistry;
+import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.fragments.dosePickers.DefaultDosePickerFragment;
 import es.usc.citius.servando.calendula.fragments.dosePickers.DosePickerFragment;
 import es.usc.citius.servando.calendula.fragments.dosePickers.LiquidDosePickerFragment;
@@ -169,6 +171,9 @@ public class ScheduleImportFragment extends Fragment
 
     int color;
 
+    PrescriptionDBMgr dbMgr;
+
+
     public static ScheduleImportFragment newInstance(PrescriptionWrapper pw) {
         ScheduleImportFragment fragment = new ScheduleImportFragment();
         Bundle args = new Bundle();
@@ -181,6 +186,7 @@ public class ScheduleImportFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dbMgr = DBRegistry.instance().current(getActivity());
         color = DB.patients().getActive(getActivity()).color();
         PrescriptionWrapper.Holder h = (PrescriptionWrapper.Holder) getArguments().getSerializable(ARG_PRESCRIPTION);
         prescriptionWrapper = PrescriptionWrapper.from(h);
@@ -1237,9 +1243,9 @@ public class ScheduleImportFragment extends Fragment
 
         if(prescriptionWrapper.isGroup) {
             HomogeneousGroup g = DB.groups().findOneBy(HomogeneousGroup.COLUMN_GROUP,prescriptionWrapper.group.group);
-            p = Presentation.expected(g.name,g.name);
+            p = dbMgr.expected(g.name,g.name);
         }else{
-            p = Prescription.findByCn(prescriptionWrapper.prescription.cn).expectedPresentation();
+            p = dbMgr.expected(Prescription.findByCn(prescriptionWrapper.prescription.cn));
         }
 
         final DosePickerFragment dpf = getDosePickerFragment(p,item,null);
@@ -1276,9 +1282,9 @@ public class ScheduleImportFragment extends Fragment
         Presentation p;
 
         if(prescriptionWrapper.isGroup) {
-            p = Presentation.expected(prescriptionWrapper.group.name, prescriptionWrapper.group.name);
+            p = dbMgr.expected(prescriptionWrapper.group.name, prescriptionWrapper.group.name);
         }else{
-            p = Prescription.findByCn(prescriptionWrapper.prescription.cn).expectedPresentation();
+            p = dbMgr.expected(Prescription.findByCn(prescriptionWrapper.prescription.cn));
         }
 
 

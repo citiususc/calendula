@@ -18,14 +18,11 @@
 
 package es.usc.citius.servando.calendula.persistence;
 
-import android.content.Context;
-import android.os.Environment;
 import android.util.Log;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import java.io.File;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.database.DB;
@@ -130,14 +127,9 @@ public class Prescription {
         }
     }
 
-    public Presentation expectedPresentation() {
-        return Presentation.expected(name, content);
-    }
-
-    public boolean isProspectDownloaded(Context ctx) {
-        File f = new File(ctx.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/prospects/" + pid + ".pdf");
-        return f.exists();
-    }
+//    public Presentation expectedPresentation() {
+//        return Presentation.expected(name, content);
+//    }
 
     public Long getId() {
         return id;

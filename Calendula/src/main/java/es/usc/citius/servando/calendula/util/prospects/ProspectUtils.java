@@ -29,6 +29,8 @@ import java.util.Map;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.WebViewActivity;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.DBRegistry;
+import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
@@ -38,12 +40,12 @@ import es.usc.citius.servando.calendula.util.ScreenUtils;
  */
 public class ProspectUtils {
 
-    public static final String PROSPECT_URL = "https://www.aemps.gob.es/cima/dochtml/p/#ID#/Prospecto_#ID#.html";
-
     public static final Duration PROSPECT_TTL = Duration.standardDays(30);
 
     public static void openProspect(Prescription p, final Activity activity, boolean enableCache) {
-        final String url = PROSPECT_URL.replaceAll("#ID#", p.pid);
+        PrescriptionDBMgr dbMgr = DBRegistry.instance().current(activity);
+        final String url = dbMgr.getProspectURL(p);
+
         Intent i = new Intent(activity, WebViewActivity.class);
 
         final Patient patient = DB.patients().getActive(activity);

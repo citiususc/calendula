@@ -56,6 +56,7 @@ import es.usc.citius.servando.calendula.activities.qrWrappers.PickupWrapper;
 import es.usc.citius.servando.calendula.activities.qrWrappers.PrescriptionListWrapper;
 import es.usc.citius.servando.calendula.activities.qrWrappers.PrescriptionWrapper;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationEndFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationStartFragment;
@@ -307,7 +308,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                                             m = DB.medicines().findByCnAndPatient(cn,patient);
                                             if (m == null) {
                                                 Log.d("PRESCRIPTION", "Saving medicine!");
-                                                m = Medicine.fromPrescription(Prescription.findByCn(cn));
+                                                m = Medicine.fromPrescription(ConfirmSchedulesActivity.this, Prescription.findByCn(cn));
                                                 m.setPatient(patient);
                                                 m.save();
                                             }
@@ -316,7 +317,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                                             if (m == null) {
                                                 m = new Medicine(Strings.firstPart(w.group.name));
                                                 m.setHomogeneousGroup(w.group.getId());
-                                                Presentation pres = Presentation.expected(w.group.name, w.group.name);
+                                                Presentation pres = DBRegistry.instance().current(ConfirmSchedulesActivity.this).expected(w.group.name, w.group.name);
                                                 m.setPresentation(pres != null ? pres : Presentation.PILLS);
                                                 m.setPatient(patient);
                                                 m.save();

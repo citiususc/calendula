@@ -19,17 +19,19 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.annotation.TargetApi;
-import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -52,9 +54,11 @@ import java.util.List;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.DownloadDatabaseDialogHelper;
+import es.usc.citius.servando.calendula.drugdb.SetupDBService;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
-import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
+import es.usc.citius.servando.calendula.util.view.CustomListPreference;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -75,16 +79,53 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
      * shown on tablets.
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
+    private static final String TAG = "SettingsActivity";
 
     static Context ctx;
+    static Context appCtx;
+    static String lastValidDatabase;
+    static String NONE;
+    static String SETTING_UP;
+
+    BroadcastReceiver onDBSetupComplete;
+
+    static boolean settingUp = false;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        NONE = getString(R.string.database_none_id);
+        SETTING_UP = getString(R.string.database_setting_up);
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        lastValidDatabase = settings.getString("last_valid_database", NONE);
+
+        settingUp = SETTING_UP.equals(settings.getString("prescriptions_database",null));
+
+        Log.d(TAG, "sa onCreate: prescriptions_database: " + settings.getString("prescriptions_database",null));
+        Log.d(TAG, "sa onCreate: SETTING_UP: " + SETTING_UP);
+        Log.d(TAG, "sa onCreate: setting_up: " + settingUp);
+
+        onDBSetupComplete = new BroadcastReceiver() {
+            public void onReceive(Context ctxt, Intent intent) {
+                Preference p = findPreference("prescriptions_database");
+                p.setEnabled(true);
+                bindPreferenceSummaryToValue(p, false);
+                settingUp = false;
+
+            }
+        };
+        registerReceiver(onDBSetupComplete, new IntentFilter(SetupDBService.ACTION_COMPLETE));
+    }
+
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
      */
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
+        public boolean onPreferenceChange(final Preference preference, final Object value) {
+            final String stringValue = value.toString();
 
             if (preference instanceof es.usc.citius.servando.calendula.util.RingtonePreference) {
                 Uri ringtoneUri = Uri.parse(stringValue);
@@ -92,10 +133,25 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 String name = ringtone!=null ? ringtone.getTitle(ctx) :ctx.getString(R.string.pref_notification_tone_sum);
                 preference.setSummary(name);
             } else if (preference instanceof ListPreference) {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
-                ListPreference listPreference = (ListPreference) preference;
-                int index = listPreference.findIndexOfValue(stringValue);
+                if(preference.getKey().equals("prescriptions_database")){
+                    //Toast.makeText(ctx, "Value: " + stringValue + ", settingUp:" + settingUp, Toast.LENGTH_SHORT).show();
+                    if(!onUpdatePrescriptionsDatabasePreference((ListPreference) preference, stringValue)){
+                        //return false;
+                    }
+                    ListPreference listPreference = (ListPreference) preference;
+                    int index = listPreference.findIndexOfValue(stringValue);
+                    if(stringValue.equals(SETTING_UP)) {
+                        preference.setSummary(stringValue);
+                        preference.setEnabled(false);
+                    }else{
+                        // Set the summary to reflect the new value.
+                        preference.setSummary(index>=0 ? listPreference.getEntries()[index] : "Unknown");
+                    }
+                }else {
+                    // For list preferences, look up the correct display value in
+                    // the preference's 'entries' list.
+                    ListPreference listPreference = (ListPreference) preference;
+                    int index = listPreference.findIndexOfValue(stringValue);
 
                 // Set the summary to reflect the new value.
                 preference.setSummary(
@@ -103,6 +159,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                                 ? listPreference.getEntries()[index]
                                 : null);
 
+                }
             } else {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
@@ -112,6 +169,40 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             return true;
         }
     };
+
+    static boolean onUpdatePrescriptionsDatabasePreference(final ListPreference preference, final String stringValue){
+        Log.d(TAG, "New value: " + stringValue);
+        if(!settingUp && !stringValue.equals(lastValidDatabase) && !NONE.equalsIgnoreCase(stringValue) && !SETTING_UP.equals(stringValue)) {
+            DownloadDatabaseDialogHelper.showDownloadDatabaseDialog(ctx, stringValue, new DownloadDatabaseDialogHelper.DownloadDatabaseDialogCallback() {
+                @Override
+                public void onDownloadAcceptedOrCancelled(boolean accepted) {
+                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
+                    SharedPreferences.Editor edit = settings.edit();
+                    edit.putString("prescriptions_database", accepted ? SETTING_UP : lastValidDatabase);
+                    edit.commit();
+                    if(accepted){
+                        settingUp = true;
+                        preference.setEnabled(false);
+                    }
+                    bindPreferenceSummaryToValue(preference, true);
+                }
+            });
+            return false;
+        }else if(stringValue.equalsIgnoreCase(NONE)){
+            try {
+                DB.prescriptions().executeRaw("DELETE FROM Prescriptions;");
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
+                SharedPreferences.Editor edit = settings.edit();
+                edit.putString("prescriptions_database",NONE);
+                edit.putString("last_valid_database", NONE);
+                edit.commit();
+                lastValidDatabase = NONE;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
+    }
 
     /**
      * Helper method to determine if the device has an extra-large screen. For
@@ -144,16 +235,17 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
      *
      * @see #sBindPreferenceSummaryToValueListener
      */
-    private static void bindPreferenceSummaryToValue(Preference preference) {
+    private static void bindPreferenceSummaryToValue(Preference preference, boolean triggerListener) {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
-        // Trigger the listener immediately with the preference's
-        // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
+        // Trigger the listener immediately with the preference's current value.
+        //if(triggerListener) {
+            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+                    PreferenceManager
+                            .getDefaultSharedPreferences(preference.getContext())
+                            .getString(preference.getKey(), ""));
+        //}
     }
 
     @Override
@@ -175,11 +267,19 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         });
 
         root.addView(toolbar, 0); // insert at top
-
-        ctx = getBaseContext();
+        ctx = SettingsActivity.this;
+        appCtx = getApplicationContext();
         setupSimplePreferencesScreen();
 
+        if(getIntent()!=null && getIntent().getBooleanExtra("show_database_dialog",false)){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    ((CustomListPreference)findPreference("prescriptions_database")).show();
+                }
+            },500);
 
+        }
 
     }
 
@@ -218,30 +318,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
         // their values. When their values change, their summaries are updated
         // to reflect the new value, per the Android Design guidelines.
-        bindPreferenceSummaryToValue(findPreference("display_name"));
-        bindPreferenceSummaryToValue(findPreference("alarm_repeat_frequency"));
-        bindPreferenceSummaryToValue(findPreference("alarm_reminder_window"));
-        bindPreferenceSummaryToValue(findPreference("pref_notification_tone"));
-        //bindPreferenceSummaryToValue(findPreference("check_window_margin"));
-
-        findPreference("enable_prescriptions_db").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                Boolean checked = (Boolean) newValue;
-
-                if (checked) {
-                    new PopulatePrescriptionDatabaseTask().execute("");
-                }else{
-                    try {
-                        DB.prescriptions().executeRaw("DELETE FROM Prescriptions;");
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-                return true;
-            }
-        });
-
+        bindPreferenceSummaryToValue(findPreference("display_name"), true);
+        bindPreferenceSummaryToValue(findPreference("alarm_repeat_frequency"), true);
+        bindPreferenceSummaryToValue(findPreference("alarm_reminder_window"), true);
+        bindPreferenceSummaryToValue(findPreference("pref_notification_tone"), true);
+        bindPreferenceSummaryToValue(findPreference("prescriptions_database"), true);
 
         if(!CalendulaApp.isPharmaModeEnabled(this)){
             Preference alarmPk = findPreference("alarm_pickup_notifications");
@@ -305,8 +386,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("example_text"));
-            bindPreferenceSummaryToValue(findPreference("example_list"));
+            bindPreferenceSummaryToValue(findPreference("example_text"), true);
+            bindPreferenceSummaryToValue(findPreference("example_list"), true);
         }
     }
 
@@ -325,39 +406,14 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"), true);
         }
     }
 
-
-    public class PopulatePrescriptionDatabaseTask extends AsyncTask<String, String, Void> {
-
-
-        ProgressDialog dialog;
-
-        @Override
-        protected Void doInBackground(String... params) {
-            new PopulatePrescriptionDBService().updateIfNeeded(SettingsActivity.this);
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog = new ProgressDialog(SettingsActivity.this);
-            dialog.setIndeterminate(true);
-            dialog.setCancelable(false);
-            dialog.setMessage(getString(R.string.enable_prescriptions_progress_messgae));
-            dialog.show();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (dialog.isShowing()) {
-                dialog.dismiss();
-            }
-        }
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(onDBSetupComplete);
+        super.onDestroy();
     }
 
 }

@@ -48,7 +48,6 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Prescription;
-import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 /**
@@ -154,22 +153,22 @@ public class MedicinesListFragment extends Fragment {
                     .sizeDp(40);
             ((ImageView) item.findViewById(R.id.imageView)).setImageDrawable(ic);
 
-            if (hasProspect) {
+            //if (hasProspect) {
                 item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         onClickProspect(medicine, p);
                     }
                 });
-            } else {
-                item.findViewById(R.id.imageView).setAlpha(0.2f);
-                item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Snack.show(R.string.download_prospect_not_available_message, getActivity());
-                    }
-                });
-            }
+//            } else {hasProspect
+//                item.findViewById(R.id.imageView).setAlpha(0.2f);
+//                item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Snack.show(R.string.download_prospect_not_available_message, getActivity());
+//                    }
+//                });
+//            }
         }
 
         if (p != null && p.affectsDriving) {

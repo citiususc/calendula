@@ -56,6 +56,8 @@ import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.DBRegistry;
+import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
@@ -95,6 +97,8 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     ArrayAdapter<Prescription> adapter;
     int color;
 
+    PrescriptionDBMgr dbMgr;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +106,8 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         color = DB.patients().getActive(this).color();
         setupToolbar(null, color);
         setupStatusBar(color);
+
+        dbMgr = DBRegistry.instance().current(this);
 
         processIntent();
 
@@ -344,11 +350,11 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                     }
                 });
 
-                Presentation pres = p.expectedPresentation();
+                Presentation pres = dbMgr.expected(p);
                 if (pres != null) {
 
                     Drawable ic = new IconicsDrawable(getContext())
-                            .icon(Presentation.iconFor(p.expectedPresentation()))
+                            .icon(Presentation.iconFor(pres))
                             .colorRes(R.color.agenda_item_title)
                             .paddingDp(10)
                             .sizeDp(72);
