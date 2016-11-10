@@ -490,6 +490,7 @@
     <string name="delete_allergen_error">Failed to delete allergy information.</string>
     <string name="allergies_placeholder">No allergies have been added yet!</string>
     <string name="allergies_search_placeholder">Start writing your allergy to receive suggestions.</string>
+    <string name="allergies_search_placeholder_no_result">No results for current search</string>
 
 
 </resources>

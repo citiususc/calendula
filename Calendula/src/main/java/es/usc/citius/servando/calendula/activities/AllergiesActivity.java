@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Filter;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
@@ -62,7 +63,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         setContentView(R.layout.activity_allergies);
 
         allergiesPlaceholder = (TextView) findViewById(R.id.textview_no_allergies_placeholder);
-        allergiesSearchPlaceholder= (TextView) findViewById(R.id.allergies_search_placeholder);
+        allergiesSearchPlaceholder = (TextView) findViewById(R.id.allergies_search_placeholder);
 
         //setup toolbar and statusbar
         color = DB.patients().getActive(this).color();
@@ -143,10 +144,11 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
                 } else {
                     if (closeSearchButton.getVisibility() == View.VISIBLE)
                         closeSearchButton.setVisibility(View.GONE);
-                    if (searchAdapter.getItemCount() > 0)
+                    if (searchAdapter.getItemCount() > 0) {
                         searchAdapter.clear();
+                    }
+                    checkSearchPlaceholder();
                 }
-                checkSearchPlaceholder(search.length());
             }
         });
 
@@ -169,17 +171,27 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         }
     }
 
-    private void checkSearchPlaceholder(int textLength){
-        if(textLength>=3){
+    private void checkSearchPlaceholder() {
+        if (searchAdapter.getItemCount() > 0) {
             allergiesSearchPlaceholder.setVisibility(View.GONE);
-        }else {
+        } else {
+            if (searchEditText.getText().toString().trim().length() > 3) {
+                allergiesSearchPlaceholder.setText(getText(R.string.allergies_search_placeholder_no_result));
+            } else {
+                allergiesSearchPlaceholder.setText(getText(R.string.allergies_search_placeholder));
+            }
             allergiesSearchPlaceholder.setVisibility(View.VISIBLE);
         }
     }
 
     private void doSearch() {
         String filter = searchEditText.getText().toString().trim();
-        searchAdapter.getFilter().filter(filter);
+        searchAdapter.getFilter().filter(filter, new Filter.FilterListener() {
+            @Override
+            public void onFilterComplete(int count) {
+                checkSearchPlaceholder();
+            }
+        });
     }
 
     private void showSearchView() {

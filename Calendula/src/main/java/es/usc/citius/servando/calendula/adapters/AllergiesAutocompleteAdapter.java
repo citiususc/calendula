@@ -33,6 +33,7 @@ public class AllergiesAutocompleteAdapter extends RecyclerView.Adapter<Allergies
     private AllergenListeners.AddAllergyActionListener listener;
     private Context context;
     private List<PatientAllergen> search = new ArrayList<>();
+    private Integer invalid = 0;
 
     public AllergiesAutocompleteAdapter(AllergiesActivity.AllergiesStore store, Context context, AllergenListeners.AddAllergyActionListener listener) {
         super();
@@ -63,9 +64,13 @@ public class AllergiesAutocompleteAdapter extends RecyclerView.Adapter<Allergies
                             return o1.getName().compareTo(o2.getName());
                         }
                     });
-//                    if (store != null) {
-//                        list.removeAll(store.getAllergies());
-//                    }
+                    invalid = 0;
+                    if (store != null) {
+                        for (PatientAllergen allergen : list) {
+                            if (store.getAllergies().contains(allergen))
+                                invalid++;
+                        }
+                    }
                     results.values = list;
                     results.count = list.size();
                 }
@@ -157,6 +162,6 @@ public class AllergiesAutocompleteAdapter extends RecyclerView.Adapter<Allergies
 
     @Override
     public int getItemCount() {
-        return search.size();
+        return search.size() - invalid;
     }
 }
