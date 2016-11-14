@@ -469,4 +469,7 @@
     <string name="title_share_link">Compartir con…</string>
     <string name="title_about">Acerca de</string>
 
+    <string name="notification_error_msg">Parece que ha habido un problema con la notificacion. Por favor, revisa tu agenda para ver si hay medicacion pendiente.</string>
+    <string name="notification_error_title">Ups...</string>
+
 </resources>

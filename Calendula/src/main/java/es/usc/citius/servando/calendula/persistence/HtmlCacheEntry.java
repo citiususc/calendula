@@ -30,12 +30,12 @@ public class HtmlCacheEntry {
     private String data;
 
     @DatabaseField(columnName = COLUMN_TTL)
-    private Integer ttl;
+    private Long ttl;
 
     public HtmlCacheEntry() {
     }
 
-    public HtmlCacheEntry(Integer hashCode, Date timestamp, String data, Integer ttl) {
+    public HtmlCacheEntry(Integer hashCode, Date timestamp, String data, Long ttl) {
         this.hashCode = hashCode;
         this.timestamp = timestamp;
         this.data = data;
@@ -74,11 +74,11 @@ public class HtmlCacheEntry {
         this.data = data;
     }
 
-    public Integer getTtl() {
+    public Long getTtl() {
         return ttl;
     }
 
-    public void setTtl(Integer ttl) {
+    public void setTtl(Long ttl) {
         this.ttl = ttl;
     }
 
