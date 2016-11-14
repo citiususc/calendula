@@ -18,7 +18,7 @@
 
 package es.usc.citius.servando.calendula.drugdb;
 
-import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 
 /**

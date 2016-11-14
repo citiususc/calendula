@@ -51,7 +51,7 @@ import java.util.concurrent.Callable;
 public abstract class GenericDao<T extends Object, I> implements Dao<T, I> {
 
     protected Dao<T, I> dao;
-    DatabaseHelper dbHelper;
+    protected DatabaseHelper dbHelper;
 
     public GenericDao(DatabaseHelper db) {
         dbHelper = db;

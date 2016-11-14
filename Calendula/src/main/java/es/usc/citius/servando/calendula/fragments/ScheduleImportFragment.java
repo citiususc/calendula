@@ -77,9 +77,9 @@ import es.usc.citius.servando.calendula.fragments.dosePickers.DefaultDosePickerF
 import es.usc.citius.servando.calendula.fragments.dosePickers.DosePickerFragment;
 import es.usc.citius.servando.calendula.fragments.dosePickers.LiquidDosePickerFragment;
 import es.usc.citius.servando.calendula.fragments.dosePickers.PillDosePickerFragment;
-import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Routine;
@@ -1242,10 +1242,10 @@ public class ScheduleImportFragment extends Fragment
         Presentation p;
 
         if(prescriptionWrapper.isGroup) {
-            HomogeneousGroup g = DB.groups().findOneBy(HomogeneousGroup.COLUMN_GROUP,prescriptionWrapper.group.group);
-            p = dbMgr.expected(g.name,g.name);
+            HomogeneousGroup g = DB.groups().findOneBy(HomogeneousGroup.COLUMN_HOMOGENEOUS_GROUP_ID,prescriptionWrapper.group.getHomogeneousGroupID());
+            p = dbMgr.expected(g.getName(), g.getName());
         }else{
-            p = dbMgr.expected(Prescription.findByCn(prescriptionWrapper.prescription.cn));
+            p = dbMgr.expected(DB.prescriptions().findByCn(String.valueOf(prescriptionWrapper.prescription.getCode())));
         }
 
         final DosePickerFragment dpf = getDosePickerFragment(p,item,null);
@@ -1282,9 +1282,9 @@ public class ScheduleImportFragment extends Fragment
         Presentation p;
 
         if(prescriptionWrapper.isGroup) {
-            p = dbMgr.expected(prescriptionWrapper.group.name, prescriptionWrapper.group.name);
+            p = dbMgr.expected(prescriptionWrapper.group.getName(), prescriptionWrapper.group.getName());
         }else{
-            p = dbMgr.expected(Prescription.findByCn(prescriptionWrapper.prescription.cn));
+            p = dbMgr.expected(DB.prescriptions().findByCn(String.valueOf(prescriptionWrapper.prescription.getCode())));
         }
 
 

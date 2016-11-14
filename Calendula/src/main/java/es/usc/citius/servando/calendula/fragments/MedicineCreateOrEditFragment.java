@@ -60,7 +60,7 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 import es.usc.citius.servando.calendula.util.Snack;
@@ -130,11 +130,11 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                 Prescription p = (Prescription) parent.getItemAtPosition(pos);
                 String shortName = dbMgr.shortName(p);
                 mNameTextView.setText(shortName);
-                mDescriptionTv.setText(p.name);
+                mDescriptionTv.setText(p.getName());
                 hideKeyboard();
 
                 // save referenced prescription to med
-                cn = p.cn;
+                cn = String.valueOf(p.getCode());
             }
         });
 
@@ -418,17 +418,17 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         selectPresentation(mMedicine.presentation());
 
         if (r.cn() != null) {
-            Prescription p = Prescription.findByCn(r.cn());
+            Prescription p = DB.prescriptions().findByCn(r.cn());
             if (p != null) {
                 mPrescription = p;
-                mDescriptionTv.setText(p.name);
+                mDescriptionTv.setText(p.getName());
             }
         }
     }
 
     public void setPrescription(Prescription p) {
         mNameTextView.setText(dbMgr.shortName(p));
-        mDescriptionTv.setText(p.name);
+        mDescriptionTv.setText(p.getName());
 
         mPrescription = p;
 
@@ -475,7 +475,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                     mMedicine.setPresentation(selectedPresentation);
                 }
                 if (mPrescription != null && mPrescription.shortName().toLowerCase().equals(mMedicine.name().toLowerCase())) {
-                    mMedicine.setCn(mPrescription.cn);
+                    mMedicine.setCn(String.valueOf(mPrescription.getCode()));
                 } else if (mPrescription == null) {
                     mMedicine.setCn(null);
                 }
@@ -493,7 +493,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
                 Medicine m = new Medicine(name);
                 if (mPrescription != null && mPrescription.shortName().toLowerCase().equals(m.name().toLowerCase())) {
-                    m.setCn(mPrescription.cn);
+                    m.setCn(String.valueOf(mPrescription.getCode()));
                 }
                 m.setPresentation(selectedPresentation != null ? selectedPresentation : Presentation.UNKNOWN);
                 m.setPatient(DB.patients().getActive(getContext()));
@@ -652,8 +652,8 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
             Prescription p = mData.get(position);
             ((TextView) item.findViewById(R.id.text1)).setText(p.shortName()); //  + (p.generic?" (G)":"")
-            ((TextView) item.findViewById(R.id.text2)).setText(mData.get(position).name);
-            ((TextView) item.findViewById(R.id.text3)).setText("(" + p.dose + ")");
+            ((TextView) item.findViewById(R.id.text2)).setText(mData.get(position).getName());
+            ((TextView) item.findViewById(R.id.text3)).setText("(" + p.getDose() + ")");
             return item;
         }
 
@@ -666,7 +666,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                     if (constraint != null) {
                         // A class that queries a web API, parses the data and returns an ArrayList<Style>
                         try {
-                            List<Prescription> prescriptions = Prescription.findByName(constraint.toString(), 20);
+                            List<Prescription> prescriptions = DB.prescriptions().findByName(constraint.toString(), 20);
                             /*List<String> names = new ArrayList<String>();
                             for(Prescription p : prescriptions)
                                 names.add(p.name);

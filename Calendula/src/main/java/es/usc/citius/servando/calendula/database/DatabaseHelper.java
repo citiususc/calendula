@@ -37,13 +37,20 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.migrationHelpers.LocalDateMigrationHelper;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.ActiveIngredient;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.ContentUnit;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Excipient;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.HomogeneousGroup;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.PackageType;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionActiveIngredient;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionExcipient;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.PresentationForm;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
-import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.HtmlCacheEntry;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
-import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
@@ -64,20 +71,31 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Schedule.class,
             ScheduleItem.class,
             DailyScheduleItem.class,
-            Prescription.class,
+            // Prescription.class, //deprecated in v12
             // v8
-            HomogeneousGroup.class,
+            // HomogeneousGroup.class, //deprecated in v12
             PickupInfo.class,
             // v9
             Patient.class,
             // v10
-            HtmlCacheEntry.class
+            HtmlCacheEntry.class,
+            // v12
+            ActiveIngredient.class,
+            ContentUnit.class,
+            Excipient.class,
+            HomogeneousGroup.class,
+            PackageType.class,
+            Prescription.class,
+            PresentationForm.class,
+            PrescriptionActiveIngredient.class,
+            PrescriptionExcipient.class
+
     };
 
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 12;
 
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
@@ -144,46 +162,48 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.i(DatabaseHelper.class.getName(), "onUpgrade");
             Log.d(DatabaseHelper.class.getName(), "OldVersion: " + oldVersion + ", newVersion: " + newVersion);
 
-            if (oldVersion < 6) {
-                oldVersion = 6;
-            }
+            if (oldVersion < 9) {
+                // TODO: 14/11/16 drop everything and recreate 
+            } else {
 
-            switch (oldVersion + 1) {
-
-                case 7:
-                    // migrate to iCal
-                    migrateToICal();
-                case 8:
-                    getMedicinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN hg INTEGER;");
-                    // Add column scanned (boolean, INTEGER in SQLite) to schedules table
-                    getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Scanned INTEGER;");
-                    // update schedules scanned value
-                    TransactionManager.callInTransaction(getConnectionSource(), new Callable<Void>() {
-                        @Override
-                        public Void call() throws Exception {
-                            // iterate over schedules and set Scanned to false
-                            List<Schedule> schedules = getSchedulesDao().queryForAll();
-                            for (Schedule s : schedules) {
-                                s.setScanned(false);
-                                s.save();
-                            }
-                            return null;
-                        }
-                    });
-                    // Create HomogeneousGroup and PickupInfo tables
-                    TableUtils.createTable(connectionSource, HomogeneousGroup.class);
-                    TableUtils.createTable(connectionSource, PickupInfo.class);
-                case 9:
-                    TableUtils.createTable(connectionSource, Patient.class);
-                    migrateToMultiPatient();
-                case 10:
-                    TableUtils.createTable(connectionSource, HtmlCacheEntry.class);
-                case 11:
-                    //delete all html cache entries and change datatypes (bugfix)
-                    TableUtils.dropTable(connectionSource, HtmlCacheEntry.class, true);
-                    TableUtils.createTable(connectionSource, HtmlCacheEntry.class);
-                    LocalDateMigrationHelper.migrateLocalDates(this);
-
+                switch (oldVersion + 1) {
+                    // TODO: 14/11/16 replace this with an actual migration
+//                    case 7:
+//                        // migrate to iCal
+//                        migrateToICal();
+//                    case 8:
+//                        getMedicinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN hg INTEGER;");
+//                        // Add column scanned (boolean, INTEGER in SQLite) to schedules table
+//                        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Scanned INTEGER;");
+//                        // update schedules scanned value
+//                        TransactionManager.callInTransaction(getConnectionSource(), new Callable<Void>() {
+//                            @Override
+//                            public Void call() throws Exception {
+//                                // iterate over schedules and set Scanned to false
+//                                List<Schedule> schedules = getSchedulesDao().queryForAll();
+//                                for (Schedule s : schedules) {
+//                                    s.setScanned(false);
+//                                    s.save();
+//                                }
+//                                return null;
+//                            }
+//                        });
+//                        // Create HomogeneousGroup and PickupInfo tables
+//                        TableUtils.createTable(connectionSource, HomogeneousGroup.class);
+//                        TableUtils.createTable(connectionSource, PickupInfo.class);
+                    case 9:
+                        TableUtils.createTable(connectionSource, Patient.class);
+                        migrateToMultiPatient();
+                    case 10:
+                        TableUtils.createTable(connectionSource, HtmlCacheEntry.class);
+                    case 11:
+                        //delete all html cache entries and change datatypes (bugfix)
+                        TableUtils.dropTable(connectionSource, HtmlCacheEntry.class, true);
+                        TableUtils.createTable(connectionSource, HtmlCacheEntry.class);
+                        LocalDateMigrationHelper.migrateLocalDates(this);
+                    case 12:
+                        // TODO: 14/11/16 drop Prescription and HomogeneousGroups, and migrate to new model
+                }
             }
 
 

@@ -20,7 +20,7 @@ package es.usc.citius.servando.calendula.drugdb;
 
 import android.util.Log;
 
-import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.Strings;
 
@@ -38,7 +38,7 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
 
     @Override
     public String getProspectURL(Prescription p) {
-        return PROSPECT_URL.replaceAll("#ID#", p.pid);
+        return PROSPECT_URL.replaceAll("#ID#", p.getpID());
     }
 
     @Override
@@ -51,28 +51,27 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
         }
 
         Prescription p = new Prescription();
-        p.cn = values[0];
-        p.pid = values[1];
-        p.name = values[2];
-        p.dose = values[3];
-        p.content = values[5];
-        p.generic = getBoolean(values[6]);
-        p.affectsDriving = getBoolean(values[7]);
-        p.hasProspect = getBoolean(values[8]);
+        p.setCode(Long.valueOf(values[0]));
+        p.setpID(values[1]);
+        p.setName(values[2]);
+        p.setDose(values[3]);
+        p.setContent(values[5]);
+        p.setGeneric(getBoolean(values[6]));
+        p.setAffectsDriving(getBoolean(values[7]));
 
         try {
-            p.packagingUnits = Float.valueOf(values[4].replaceAll(",", "."));
+            p.setPackagingUnits(Float.valueOf(values[4].replaceAll(",", ".")));
         } catch (Exception e) {
-            Log.w("Prescription.class", "Unable to parse med " + p.pid + " packagingUnits");
-            p.packagingUnits = -1f;
+            Log.w("Prescription.class", "Unable to parse med " + p.getpID() + " packagingUnits");
+            p.setPackagingUnits(-1f);
         }
         return p;
     }
 
     @Override
     public Presentation expected(Prescription p) {
-        String name = p.name;
-        String content = p.content;
+        String name = p.getName();
+        String content = p.getContent();
         return expected(name, content);
     }
 
@@ -116,7 +115,7 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
     @Override
     public String shortName(Prescription p) {
         try {
-            String[] parts = p.name.split(" ");
+            String[] parts = p.getName().split(" ");
             String s = parts[0].toLowerCase();
             if ((s.contains("acido") || s.contains("ácido")) && parts.length > 1) {
                 return Strings.toCamelCase(s + " " + parts[1], " ");
@@ -124,7 +123,7 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
             return Strings.toProperCase(s);
 
         } catch (Exception e) {
-            return p.name;
+            return p.getName();
         }
     }
 

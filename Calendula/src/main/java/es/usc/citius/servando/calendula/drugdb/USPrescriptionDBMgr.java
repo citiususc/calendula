@@ -20,7 +20,7 @@ package es.usc.citius.servando.calendula.drugdb;
 
 import android.text.TextUtils;
 
-import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 
 /**
@@ -34,7 +34,7 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
 
     @Override
     public String getProspectURL(Prescription p) {
-        return "http://www.accessdata.fda.gov/spl/data/#ID#/#ID#.xml".replaceAll("#ID#", p.pid);
+        return "http://www.accessdata.fda.gov/spl/data/#ID#/#ID#.xml".replaceAll("#ID#", p.getpID());
     }
 
     @Override
@@ -51,23 +51,22 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
         }
 
         Prescription p = new Prescription();
-        p.cn = values[0];
-        p.pid = values[0];
-        p.name = values[1];
-        p.dose = "0";
-        p.content = values[2];
-        p.generic = false;
-        p.affectsDriving = false;
-        p.hasProspect = false;
-        p.packagingUnits = 0f;
+        p.setCode(Long.valueOf(values[0]));
+        p.setpID(values[0]);
+        p.setName(values[1]);
+        p.setDose("0");
+        p.setContent(values[2]);
+        p.setGeneric(false);
+        p.setAffectsDriving(false);
+        p.setPackagingUnits(0f);
 
         return p;
     }
 
     @Override
     public Presentation expected(Prescription p) {
-        String name = p.name;
-        String content = p.content;
+        String name = p.getName();
+        String content = p.getContent();
         return expected(name, content);
     }
 
@@ -100,8 +99,8 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
 
     @Override
     public String shortName(Prescription p) {
-        int max = p.name.length();
-        return p.name.substring(0, Math.min(20,max));
+        int max = p.getName().length();
+        return p.getName().substring(0, Math.min(20,max));
     }
 
 }

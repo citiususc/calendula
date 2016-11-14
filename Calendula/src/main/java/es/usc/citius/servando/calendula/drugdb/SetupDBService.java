@@ -30,16 +30,12 @@ import android.util.Log;
 
 import com.j256.ormlite.misc.TransactionManager;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous database setup tasks
@@ -78,7 +74,7 @@ public class SetupDBService extends IntentService {
             if (ACTION_SETUP.equals(action)) {
                 final String dbPath = intent.getStringExtra(EXTRA_DB_PATH);
                 final String dbPref = intent.getStringExtra(EXTRA_DB_PREFERENCE_VALUE);
-                handleSetup(dbPath,dbPref);
+                handleSetup(dbPath, dbPref);
             }
         }
     }
@@ -92,54 +88,53 @@ public class SetupDBService extends IntentService {
             TransactionManager.callInTransaction(DB.helper().getConnectionSource(), new Callable<Object>() {
                 @Override
                 public Object call() throws Exception {
-
-                    DB.prescriptions().executeRaw("DELETE FROM Prescriptions;");
-
-                    Prescription p = null;
-                    Log.d(TAG, "Opening CSV db at " + dbPath);
-
-                    InputStream csvStream = new FileInputStream(dbPath);
-                    BufferedReader br = new BufferedReader(new InputStreamReader(csvStream));
-
-                    int lines = 0;
-
-                    while (br.readLine() != null) {
-                        lines++;
-                    }
-                    br.close();
-
-                    Log.d(TAG, "Show notification. Lines: " + lines);
-                    showNotification(100, 0);
-
-                    csvStream = new FileInputStream(dbPath);
-                    br = new BufferedReader(new InputStreamReader(csvStream));
-                    // step first line (headers)
-                    br.readLine();
-                    // read prescriptions and save them
-                    int i = 0;
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        if (i % 2000 == 0) {
-                            int prog = (int) (((float) i / lines) * 100);
-                            Log.d(TAG, " Reading line " + i + "... (Progress: " + prog + ")");
-                            updateNotification(100, prog);
-                        }
-                        i++;
-                        p = mgr.fromCsv(line, CSV_SPACER);
-                        if (p != null) {
-                            // cn | id | name | dose | units | content
-                            DB.prescriptions().executeRaw("INSERT INTO Prescriptions (Cn, Pid, Name, Dose, Packaging, Content, Generic, Prospect, Affectdriving) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);",
-                                    p.cn, p.pid, p.name, p.dose, String.valueOf(p.packagingUnits), p.content, String.valueOf(p.generic), String.valueOf(p.hasProspect), String.valueOf(p.affectsDriving));
-                        }
-                    }
-                    br.close();
+                    // TODO: 14/11/16 use PrescriptionDBMgr.setup()
+//                    DB.prescriptions().executeRaw("DELETE FROM Prescriptions;");
+//
+//                    Prescription p = null;
+//                    Log.d(TAG, "Opening CSV db at " + dbPath);
+//
+//                    InputStream csvStream = new FileInputStream(dbPath);
+//                    BufferedReader br = new BufferedReader(new InputStreamReader(csvStream));
+//
+//                    int lines = 0;
+//
+//                    while (br.readLine() != null) {
+//                        lines++;
+//                    }
+//                    br.close();
+//
+//                    Log.d(TAG, "Show notification. Lines: " + lines);
+//                    showNotification(100, 0);
+//
+//                    csvStream = new FileInputStream(dbPath);
+//                    br = new BufferedReader(new InputStreamReader(csvStream));
+//                    // step first line (headers)
+//                    br.readLine();
+//                    // read prescriptions and save them
+//                    int i = 0;
+//                    String line;
+//                    while ((line = br.readLine()) != null) {
+//                        if (i % 2000 == 0) {
+//                            int prog = (int) (((float) i / lines) * 100);
+//                            Log.d(TAG, " Reading line " + i + "... (Progress: " + prog + ")");
+//                            updateNotification(100, prog);
+//                        }
+//                        i++;
+//                        p = mgr.fromCsv(line, CSV_SPACER);
+////                        if (p != null) {
+////                            // cn | id | name | dose | units | content
+////                            DB.prescriptions().executeRaw("INSERT INTO Prescriptions (Cn, Pid, Name, Dose, Packaging, Content, Generic, Prospect, Affectdriving) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);",
+////                                    p.cn, p.pid, p.name, p.dose, String.valueOf(p.packagingUnits), p.content, String.valueOf(p.generic), String.valueOf(p.hasProspect), String.valueOf(p.affectsDriving));
+////                        }
+//                    }
+//                    br.close();
 
                     SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(SetupDBService.this);
                     SharedPreferences.Editor edit = settings.edit();
                     edit.putString("last_valid_database", dbPref);
                     edit.putString("prescriptions_database", dbPref);
                     edit.commit();
-
 
 
                     return null;
@@ -150,12 +145,12 @@ public class SetupDBService extends IntentService {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(SetupDBService.this);
             SharedPreferences.Editor edit = settings.edit();
             edit.putString("last_valid_database", getString(R.string.database_none_id));
-            edit.putString("prescriptions_database",getString(R.string.database_none_id));
+            edit.putString("prescriptions_database", getString(R.string.database_none_id));
             edit.commit();
         }
 
         // clear all allocated spaces
-        Log.d(TAG, "Finish saving " + Prescription.count() + " prescriptions!");
+//        Log.d(TAG, "Finish saving " + Prescription.count() + " prescriptions!");
 
         try {
             DB.prescriptions().executeRaw("VACUUM;");
@@ -167,34 +162,34 @@ public class SetupDBService extends IntentService {
     }
 
 
-    private void showNotification(int max, int prog){
+    private void showNotification(int max, int prog) {
 
         Intent activity = new Intent(this, MedicinesActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, activity, PendingIntent.FLAG_CANCEL_CURRENT);
 
         mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mBuilder = new NotificationCompat.Builder(this)
-            .setTicker("")
-            .setSmallIcon(android.R.drawable.stat_sys_download) //stat_notify_sync
-            .setTicker("Setting up database")
-            .setAutoCancel(false)
-            .setContentIntent(pIntent)
-            .setContentTitle("Setting up database")
-            .setContentText("Setup in progress")
-            .setProgress(max, prog, false);
+                .setTicker("")
+                .setSmallIcon(android.R.drawable.stat_sys_download) //stat_notify_sync
+                .setTicker("Setting up database")
+                .setAutoCancel(false)
+                .setContentIntent(pIntent)
+                .setContentTitle("Setting up database")
+                .setContentText("Setup in progress")
+                .setProgress(max, prog, false);
 
         mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 
 
-    private void updateNotification(int max, int prog){
+    private void updateNotification(int max, int prog) {
         mBuilder.setContentText("Setup in progress...");
         mBuilder.setProgress(max, prog, false);
-        mBuilder.setContentInfo(prog+"%");
+        mBuilder.setContentInfo(prog + "%");
         mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 
-    private void onComplete(){
+    private void onComplete() {
         mBuilder.setContentTitle("Database setup complete");
         mBuilder.setContentText("Tap to add a new med");
         mBuilder.setProgress(100, 100, false);

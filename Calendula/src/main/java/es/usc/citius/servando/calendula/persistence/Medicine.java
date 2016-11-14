@@ -32,6 +32,7 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 
 import static java.util.Collections.sort;
 
@@ -163,7 +164,7 @@ public class Medicine implements Comparable<Medicine> {
 
     public static Medicine fromPrescription(Context ctx, Prescription p) {
         Medicine m = new Medicine();
-        m.setCn(p.cn);
+        m.setCn(String.valueOf(p.getCode()));
         m.setName(p.shortName());
         Presentation pre = DBRegistry.instance().current(ctx).expected(p);
         m.setPresentation(pre != null ? pre : Presentation.PILLS);
