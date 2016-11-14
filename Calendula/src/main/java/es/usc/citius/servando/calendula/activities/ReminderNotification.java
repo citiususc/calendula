@@ -37,6 +37,7 @@ import android.support.v4.util.Pair;
 import android.text.SpannableStringBuilder;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.util.List;
@@ -49,6 +50,7 @@ import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.NotificationEventReceiver;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 
@@ -92,7 +94,7 @@ public class ReminderNotification {
         return ("schedule_notification_"+schedule).hashCode();
     }
 
-    public static void notify(final Context context, final String title, Routine r, List<ScheduleItem> doses, Intent intent, boolean lost)
+    public static void notify(final Context context, final String title, Routine r, List<ScheduleItem> doses, LocalDate date, Intent intent, boolean lost)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean notifications = prefs.getBoolean("alarm_notifications", true);
@@ -105,7 +107,7 @@ public class ReminderNotification {
         NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
         style.setBigContentTitle(title);
         styleForRoutine(context, style, r, doses, lost);
-        Pair<Intent, Intent> intents = lost ? null : getIntentsForRoutine(context, r);
+        Pair<Intent, Intent> intents = lost ? null : getIntentsForRoutine(context, r, date);
 
 
         NotificationOptions options = new NotificationOptions();
@@ -121,7 +123,7 @@ public class ReminderNotification {
     }
 
 
-    public static void notify(final Context context, final String title, Schedule schedule, LocalTime time, Intent intent, boolean lost)
+    public static void notify(final Context context, final String title, Schedule schedule, LocalDate date, LocalTime time, Intent intent, boolean lost)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean notifications = prefs.getBoolean("alarm_notifications", true);
@@ -131,11 +133,10 @@ public class ReminderNotification {
             return;
         }
 
-
         NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
         style.setBigContentTitle(title);
         styleForSchedule(context, style, schedule, lost);
-        Pair<Intent, Intent> intents = lost ? null : getIntentsForSchedule(context, schedule, time);
+        Pair<Intent, Intent> intents = lost ? null : getIntentsForSchedule(context, schedule, date, time);
 
         NotificationOptions options = new NotificationOptions();
         options.style = style;
@@ -299,32 +300,36 @@ public class ReminderNotification {
         }
     }
 
-    private static Pair<Intent,Intent> getIntentsForRoutine(Context context, Routine r){
+    private static Pair<Intent,Intent> getIntentsForRoutine(Context context, Routine r, LocalDate date){
 
         // delay intent sent on click delay button
         final Intent delay = new Intent(context, ConfirmActivity.class);
         delay.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, "delay");
         delay.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, r.getId());
+        delay.putExtra("date", date.toString(AlarmIntentParams.DATE_FORMAT));
 
         // delay intent sent on click delay button
         final Intent cancel = new Intent(context, NotificationEventReceiver.class);
         cancel.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_CANCEL_ROUTINE);
         cancel.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, r.getId());
+        cancel.putExtra("date", date.toString(AlarmIntentParams.DATE_FORMAT));
 
         return new Pair<>(delay, cancel);
     }
 
-    private static Pair<Intent,Intent> getIntentsForSchedule(Context context, Schedule schedule, LocalTime time){
+    private static Pair<Intent,Intent> getIntentsForSchedule(Context context, Schedule schedule, LocalDate date, LocalTime time){
 
         final Intent delay = new Intent(context, ConfirmActivity.class);
         delay.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, "delay");
         delay.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
-        delay.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, time.toString("kk:mm"));
+        delay.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, date.toString("kk:mm"));
+        delay.putExtra("date", date.toString(AlarmIntentParams.DATE_FORMAT));
 
         final Intent cancel = new Intent(context, NotificationEventReceiver.class);
         cancel.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_CANCEL_HOURLY_SCHEDULE);
         cancel.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
         cancel.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, time.toString("kk:mm"));
+        cancel.putExtra("date", date.toString(AlarmIntentParams.DATE_FORMAT));
 
         return new Pair<>(delay, cancel);
     }
@@ -364,7 +369,6 @@ public class ReminderNotification {
 
     /**
      * Cancels any notifications of this type previously shown using
-     * {@link #notify(Context, String, Routine, java.util.List, android.content.Intent, boolean)}.
      */
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     public static void cancel(final Context context, int id)
