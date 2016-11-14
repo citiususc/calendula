@@ -23,10 +23,32 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
+
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.ActiveIngredient;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.ContentUnit;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Excipient;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.HomogeneousGroup;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.PackageType;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionActiveIngredient;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionExcipient;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.PresentationForm;
+import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
+import es.usc.citius.servando.calendula.persistence.HtmlCacheEntry;
+import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
+import es.usc.citius.servando.calendula.persistence.PickupInfo;
+import es.usc.citius.servando.calendula.persistence.Routine;
+import es.usc.citius.servando.calendula.persistence.Schedule;
+import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
 /**
  * Created by joseangel.pineiro on 9/4/15.
@@ -92,6 +114,27 @@ public class DBRegistry {
 
     public PrescriptionDBMgr defaultDBMgr(){
         return  defaultDBMgr;
+    }
+
+    public void clear() throws SQLException {
+
+        Class<?>[] medDbClasses = new Class<?>[]{
+                ActiveIngredient.class,
+                ContentUnit.class,
+                Excipient.class,
+                HomogeneousGroup.class,
+                PackageType.class,
+                Prescription.class,
+                PresentationForm.class,
+                PrescriptionActiveIngredient.class,
+                PrescriptionExcipient.class
+
+        };
+
+        ConnectionSource connectionSource = DB.helper().getConnectionSource();
+        for(Class<?> c : medDbClasses){
+            TableUtils.clearTable(connectionSource, c);
+        }
     }
 
 }

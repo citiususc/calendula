@@ -25,6 +25,9 @@ import com.j256.ormlite.misc.TransactionManager;
 
 import java.util.concurrent.Callable;
 
+import es.usc.citius.servando.calendula.drugdb.model.database.HomogeneousGroupDAO;
+import es.usc.citius.servando.calendula.drugdb.model.database.PrescriptionDAO;
+
 
 public class DB {
 
@@ -52,9 +55,9 @@ public class DB {
     // DailyScheduleItem DAO
     private static DailyScheduleItemDao DailyScheduleItems;
     // Prescriptions DAO
-    private static PrescriptionDao Prescriptions;
+    private static PrescriptionDAO Prescriptions;
     // HomogeneousGroups DAO
-    private static HomogeneousGroupDao Groups;
+    private static HomogeneousGroupDAO Groups;
     // Pickups DAO
     private static PickupInfoDao Pickups;
     // Patients DAO
@@ -77,8 +80,8 @@ public class DB {
             Schedules = new ScheduleDao(db);
             ScheduleItems = new ScheduleItemDao(db);
             DailyScheduleItems = new DailyScheduleItemDao(db);
-            Prescriptions = new PrescriptionDao(db);
-            Groups = new HomogeneousGroupDao(db);
+            Prescriptions = new PrescriptionDAO(db);
+            Groups = new HomogeneousGroupDAO(db);
             Pickups = new PickupInfoDao(db);
             Patients = new PatientDao(db);
             Log.v(TAG, "DB initialized " + DB.DB_NAME);
@@ -129,11 +132,11 @@ public class DB {
         return DailyScheduleItems;
     }
 
-    public static PrescriptionDao prescriptions() {
+    public static PrescriptionDAO prescriptions() {
         return Prescriptions;
     }
 
-    public static HomogeneousGroupDao groups() {
+    public static HomogeneousGroupDAO groups() {
         return Groups;
     }
 

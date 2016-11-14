@@ -21,6 +21,7 @@ package es.usc.citius.servando.calendula.drugdb;
 import android.content.Context;
 import android.text.TextUtils;
 
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
 
@@ -30,7 +31,6 @@ import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 
 /**
@@ -38,15 +38,42 @@ import es.usc.citius.servando.calendula.persistence.Presentation;
  */
 public class USPrescriptionDBMgr extends PrescriptionDBMgr {
 
+
     @Override
     public String getProspectURL(Prescription p) {
-        return "http://www.accessdata.fda.gov/spl/data/#ID#/#ID#.xml".replaceAll("#ID#", p.pid);
+        return "http://www.accessdata.fda.gov/spl/data/#ID#/#ID#.xml".replaceAll("#ID#", p.getpID());
+    }
+
+
+    public Prescription fromCsv(String csvLine, String separator) {
+
+        String[] values = csvLine.split(separator);
+
+        if (values.length != 3) {
+            throw new RuntimeException("Invalid CSV. Input string must contain exactly 3 members. " + csvLine);
+        }
+
+        if(TextUtils.isEmpty(values[1])){
+            return null;
+        }
+
+        Prescription p = new Prescription();
+        p.setCode(Long.valueOf(values[0].hashCode()));
+        p.setpID(values[0]);
+        p.setName(values[1]);
+        p.setDose("0");
+        p.setContent(values[2]);
+        p.setGeneric(false);
+        p.setAffectsDriving(false);
+        p.setPackagingUnits(0f);
+
+        return p;
     }
 
     @Override
     public Presentation expected(Prescription p) {
-        String name = p.name;
-        String content = p.content;
+        String name = p.getName();
+        String content = p.getContent();
         return expected(name, content);
     }
 
@@ -79,8 +106,10 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
 
     @Override
     public String shortName(Prescription p) {
-        int max = p.name.length();
-        return p.name.substring(0, Math.min(20,max));
+        if(p.getName().length() < 20)
+            return p.getName();
+        return p.getName().substring(0, 20) + "…";
+
     }
 
     @Override
@@ -91,6 +120,8 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
         TransactionManager.callInTransaction(connection, new Callable<Object>() {
             @Override
             public Object call() throws Exception {
+
+                DBRegistry.instance().clear();
 
                 BufferedReader br;
                 String line;
@@ -126,30 +157,6 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
         if(l!=null) l.onProgressUpdate(progress);
     }
 
-    private Prescription fromCsv(String csvLine, String separator) {
 
-        String[] values = csvLine.split(separator);
-
-        if (values.length != 3) {
-            throw new RuntimeException("Invalid CSV. Input string must contain exactly 3 members. " + csvLine);
-        }
-
-        if(TextUtils.isEmpty(values[1])){
-            return null;
-        }
-
-        Prescription p = new Prescription();
-        p.cn = values[0];
-        p.pid = values[0];
-        p.name = values[1];
-        p.dose = "0";
-        p.content = values[2];
-        p.generic = false;
-        p.affectsDriving = false;
-        p.hasProspect = false;
-        p.packagingUnits = 0f;
-
-        return p;
-    }
 
 }

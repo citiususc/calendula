@@ -21,6 +21,7 @@ package es.usc.citius.servando.calendula.drugdb;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
 
@@ -30,7 +31,6 @@ import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.Strings;
 
@@ -43,13 +43,13 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
 
     @Override
     public String getProspectURL(Prescription p) {
-        return PROSPECT_URL.replaceAll("#ID#", p.pid);
+        return PROSPECT_URL.replaceAll("#ID#", p.getpID());
     }
 
     @Override
     public Presentation expected(Prescription p) {
-        String name = p.name;
-        String content = p.content;
+        String name = p.getName();
+        String content = p.getContent();
         return expected(name, content);
     }
 
@@ -93,7 +93,7 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
     @Override
     public String shortName(Prescription p) {
         try {
-            String[] parts = p.name.split(" ");
+            String[] parts = p.getName().split(" ");
             String s = parts[0].toLowerCase();
             if ((s.contains("acido") || s.contains("ácido")) && parts.length > 1) {
                 return Strings.toCamelCase(s + " " + parts[1], " ");
@@ -101,7 +101,7 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
             return Strings.toProperCase(s);
 
         } catch (Exception e) {
-            return p.name;
+            return p.getName();
         }
     }
 
@@ -113,6 +113,8 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
         TransactionManager.callInTransaction(connection, new Callable<Object>() {
             @Override
             public Object call() throws Exception {
+
+                DBRegistry.instance().clear();
 
                 BufferedReader br;
                 String line;

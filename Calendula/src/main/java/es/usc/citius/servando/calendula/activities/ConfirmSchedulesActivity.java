@@ -62,11 +62,11 @@ import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationEndFragmen
 import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationStartFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleImportFragment;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
-import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
-import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
@@ -166,7 +166,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
 
         for (PrescriptionWrapper pw : prescriptionListWrapper.p) {
             if (pw.cn != null) {
-                Prescription pr = Prescription.findByCn(pw.cn);
+                Prescription pr = DB.prescriptions().findByCn(pw.cn);
                 boolean prescriptionExists = pr != null;
                 boolean medExists = DB.medicines().findOneBy(Medicine.COLUMN_CN, pw.cn) != null;
 
@@ -179,7 +179,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
 
                 HomogeneousGroup group = findGroup(pw.g);
                 if (group != null) {
-                    Log.d("ConfirmSchedulesAct", "Found group: " + group.name);
+                    Log.d("ConfirmSchedulesAct", "Found group: " + group.getName());
                     pw.exists = true;
                     pw.isGroup = true;
                     pw.group = group;
@@ -199,7 +199,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
     }
 
     private HomogeneousGroup findGroup(String g) {
-        return DB.groups().findOneBy(HomogeneousGroup.COLUMN_GROUP, g);
+        return DB.groups().findOneBy(HomogeneousGroup.COLUMN_HOMOGENEOUS_GROUP_ID, g);
     }
 
 
@@ -308,16 +308,16 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                                             m = DB.medicines().findByCnAndPatient(cn,patient);
                                             if (m == null) {
                                                 Log.d("PRESCRIPTION", "Saving medicine!");
-                                                m = Medicine.fromPrescription(ConfirmSchedulesActivity.this, Prescription.findByCn(cn));
+                                                m = Medicine.fromPrescription(ConfirmSchedulesActivity.this, DB.prescriptions().findByCn(cn));
                                                 m.setPatient(patient);
                                                 m.save();
                                             }
                                         } else if (w.isGroup) {
                                             m = DB.medicines().findByGroupAndPatient(w.group.getId(),patient);
                                             if (m == null) {
-                                                m = new Medicine(Strings.firstPart(w.group.name));
+                                                m = new Medicine(Strings.firstPart(w.group.getName()));
                                                 m.setHomogeneousGroup(w.group.getId());
-                                                Presentation pres = DBRegistry.instance().current(ConfirmSchedulesActivity.this).expected(w.group.name, w.group.name);
+                                                Presentation pres = DBRegistry.instance().current(ConfirmSchedulesActivity.this).expected(w.group.getName(), w.group.getName());
                                                 m.setPresentation(pres != null ? pres : Presentation.PILLS);
                                                 m.setPatient(patient);
                                                 m.save();
@@ -482,12 +482,12 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
             PrescriptionWrapper pw = prescriptionList.get(i - 1);
             if (pw.cn != null) {
                 if (pw.prescription == null) {
-                    pw.prescription = Prescription.findByCn(pw.cn);
+                    pw.prescription = DB.prescriptions().findByCn(pw.cn);
                 }
-                medName.setText(Strings.toProperCase(pw.prescription.name));
+                medName.setText(Strings.toProperCase(pw.prescription.getName()));
 
             } else if (pw.isGroup) {
-                medName.setText(pw.group.name);
+                medName.setText(pw.group.getName());
             }
             title.setText(getResources().getString(R.string.confirm_prescription_x_of_y, i, scheduleCount));
         }

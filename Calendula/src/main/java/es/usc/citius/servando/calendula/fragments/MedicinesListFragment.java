@@ -45,9 +45,9 @@ import java.util.List;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 /**
@@ -139,9 +139,8 @@ public class MedicinesListFragment extends Fragment {
 
 
         String cn = medicine.cn();
-        final Prescription p = cn != null ? Prescription.findByCn(medicine.cn()) : null;
+        final Prescription p = cn != null ? DB.prescriptions().findByCn(medicine.cn()) : null;
         boolean boundToPrescription = p != null;
-        boolean hasProspect = (p != null && p.hasProspect);
 
         if (!boundToPrescription) {
             item.findViewById(R.id.imageView).setVisibility(View.GONE);
@@ -154,12 +153,12 @@ public class MedicinesListFragment extends Fragment {
             ((ImageView) item.findViewById(R.id.imageView)).setImageDrawable(ic);
 
             //if (hasProspect) {
-                item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onClickProspect(medicine, p);
-                    }
-                });
+            item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickProspect(medicine, p);
+                }
+            });
 //            } else {hasProspect
 //                item.findViewById(R.id.imageView).setAlpha(0.2f);
 //                item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
@@ -171,7 +170,7 @@ public class MedicinesListFragment extends Fragment {
 //            }
         }
 
-        if (p != null && p.affectsDriving) {
+        if (p != null && p.getAffectsDriving()) {
             Drawable icDriv = new IconicsDrawable(getContext())
                     .icon(CommunityMaterial.Icon.cmd_comment_alert)
                     .color(Color.parseColor("#f39c12"))
@@ -226,7 +225,7 @@ public class MedicinesListFragment extends Fragment {
 
 
     public void openProspect(Prescription p) {
-        ProspectUtils.openProspect(p,getActivity(), true);
+        ProspectUtils.openProspect(p, getActivity(), true);
     }
 
     public void showDrivingAdvice(final Prescription p) {
@@ -234,15 +233,13 @@ public class MedicinesListFragment extends Fragment {
         builder.setMessage(getString(R.string.driving_warning))
                 .setTitle(getString(R.string.driving_warning_title))
                 .setIcon(getResources().getDrawable(R.drawable.ic_warning_amber_48dp));
-        if (p.hasProspect) {
-            builder.setPositiveButton(getString(R.string.driving_warning_show_prospect), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    openProspect(p);
+        builder.setPositiveButton(getString(R.string.driving_warning_show_prospect), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                openProspect(p);
 
-                }
-            });
-        }
+            }
+        });
         builder.setNeutralButton(getString(R.string.driving_warning_gotit), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

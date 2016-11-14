@@ -33,7 +33,8 @@ import java.util.Map;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity;
 import es.usc.citius.servando.calendula.activities.qrWrappers.PrescriptionWrapper;
-import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.util.Strings;
 
@@ -120,10 +121,10 @@ public class ScheduleConfirmationEndFragment extends Fragment {
     public String getMedicineName(PrescriptionWrapper p){
         String name = "";
         if(p.cn != null){
-            Prescription prescription = Prescription.findByCn(p.cn);
+            Prescription prescription = DB.prescriptions().findByCn(p.cn);
             name = prescription.shortName();
         }else if(p.isGroup){
-            name = Strings.firstPart(p.group.name);
+            name = Strings.firstPart(p.group.getName());
         }
         return name;
     }

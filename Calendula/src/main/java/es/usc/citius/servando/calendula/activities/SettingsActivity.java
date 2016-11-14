@@ -54,6 +54,7 @@ import java.util.List;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.DownloadDatabaseDialogHelper;
 import es.usc.citius.servando.calendula.drugdb.SetupDBService;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
@@ -190,11 +191,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             return false;
         }else if(stringValue.equalsIgnoreCase(NONE)){
             try {
-                DB.prescriptions().executeRaw("DELETE FROM Prescriptions;");
+                DBRegistry.instance().clear();
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
                 SharedPreferences.Editor edit = settings.edit();
-                edit.putString("prescriptions_database",NONE);
-                edit.putString("last_valid_database", NONE);
+                edit.putString("prescriptions_database",settings.getString("last_valid_database", NONE));
+                //edit.putString("last_valid_database", settings.getString("last_valid_database", NONE));
                 edit.commit();
                 lastValidDatabase = NONE;
             } catch (SQLException e) {

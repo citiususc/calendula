@@ -23,8 +23,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
-import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.HomogeneousGroup;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 
 /**
  * Created by joseangel.pineiro on 10/6/15.
@@ -61,8 +61,8 @@ public class PrescriptionWrapper{
         pw.s = h.s;
         pw.exists = h.exists;
         pw.isGroup = h.isGroup;
-        pw.group = pw.g != null ? DB.groups().findOneBy(HomogeneousGroup.COLUMN_GROUP, pw.g) : null;
-        pw.prescription = pw.cn != null ? Prescription.findByCn(pw.cn) : null;
+        pw.group = pw.g != null ? DB.groups().findOneBy(HomogeneousGroup.COLUMN_HOMOGENEOUS_GROUP_ID, pw.g) : null;
+        pw.prescription = pw.cn != null ? DB.prescriptions().findByCn(pw.cn) : null;
         return  pw;
     }
 

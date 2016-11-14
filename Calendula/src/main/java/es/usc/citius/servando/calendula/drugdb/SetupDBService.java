@@ -31,7 +31,6 @@ import android.util.Log;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.persistence.Prescription;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous database setup tasks
@@ -69,7 +68,7 @@ public class SetupDBService extends IntentService {
             if (ACTION_SETUP.equals(action)) {
                 final String dbPath = intent.getStringExtra(EXTRA_DB_PATH);
                 final String dbPref = intent.getStringExtra(EXTRA_DB_PREFERENCE_VALUE);
-                handleSetup(dbPath,dbPref);
+                handleSetup(dbPath, dbPref);
             }
         }
     }
@@ -82,6 +81,7 @@ public class SetupDBService extends IntentService {
             mgr.setup(SetupDBService.this, dbPath, new PrescriptionDBMgr.SetupProgressListener() {
                 @Override
                 public void onProgressUpdate(int progress) {
+                    Log.d(TAG, "Setting up db " +  progress +  "%");
                     showNotification(100, progress);
                 }
             });
@@ -102,7 +102,7 @@ public class SetupDBService extends IntentService {
         }
 
         // clear all allocated spaces
-        Log.d(TAG, "Finish saving " + Prescription.count() + " prescriptions!");
+        Log.d(TAG, "Finish saving " + DB.prescriptions().count() + " prescriptions!");
 
         try {
             DB.prescriptions().executeRaw("VACUUM;");
@@ -121,14 +121,14 @@ public class SetupDBService extends IntentService {
 
         mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mBuilder = new NotificationCompat.Builder(this)
-            .setTicker("")
-            .setSmallIcon(android.R.drawable.stat_sys_download) //stat_notify_sync
-            .setTicker("Setting up database")
-            .setAutoCancel(false)
-            .setContentIntent(pIntent)
-            .setContentTitle("Setting up database")
-            .setContentText("Setup in progress")
-            .setProgress(max, prog, false);
+                .setTicker("")
+                .setSmallIcon(android.R.drawable.stat_sys_download) //stat_notify_sync
+                .setTicker("Setting up database")
+                .setAutoCancel(false)
+                .setContentIntent(pIntent)
+                .setContentTitle("Setting up database")
+                .setContentText("Setup in progress")
+                .setProgress(max, prog, false);
 
         mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
