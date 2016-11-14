@@ -18,11 +18,13 @@
 
 package es.usc.citius.servando.calendula.drugdb;
 
+import android.content.Context;
+
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 
 /**
- * Created by joseangel.pineiro on 7/27/15.
+ * Abstract class to be extended
  */
 public abstract class PrescriptionDBMgr {
 
@@ -55,20 +57,18 @@ public abstract class PrescriptionDBMgr {
         this.description = description;
     }
 
-    protected boolean getBoolean(String s) {
-        return s.contains("1");
-    }
-
-    public abstract boolean hasWebProspects();
-
     public abstract String getProspectURL(Prescription p);
-
-    public abstract Prescription fromCsv(String line, String separator);
 
     public abstract Presentation expected(Prescription p);
 
     public abstract Presentation expected(String name, String content);
 
     public abstract String shortName(Prescription p);
+
+    public abstract void setup(Context ctx, String downloadPath, SetupProgressListener l) throws Exception;
+
+    public interface SetupProgressListener{
+        void onProgressUpdate(int progress);
+    }
 
 }

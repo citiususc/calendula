@@ -28,14 +28,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.j256.ormlite.misc.TransactionManager;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.concurrent.Callable;
-
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.database.DB;
@@ -46,7 +38,6 @@ import es.usc.citius.servando.calendula.persistence.Prescription;
  */
 public class SetupDBService extends IntentService {
 
-    private static final String CSV_SPACER = "\\|";
     public static final String TAG = "SetupDBService.class";
     public static int NOTIFICATION_ID = "SetupDBService".hashCode();
 
@@ -84,67 +75,23 @@ public class SetupDBService extends IntentService {
     }
 
     private void handleSetup(final String dbPath, final String dbPref) {
-
         try {
-
+            // get a reference to  the selected dbManager
             final PrescriptionDBMgr mgr = DBRegistry.instance().db(dbPref);
-
-            TransactionManager.callInTransaction(DB.helper().getConnectionSource(), new Callable<Object>() {
+            // call mgr setup in order to let it insert prescriptions data
+            mgr.setup(SetupDBService.this, dbPath, new PrescriptionDBMgr.SetupProgressListener() {
                 @Override
-                public Object call() throws Exception {
-
-                    DB.prescriptions().executeRaw("DELETE FROM Prescriptions;");
-
-                    Prescription p = null;
-                    Log.d(TAG, "Opening CSV db at " + dbPath);
-
-                    InputStream csvStream = new FileInputStream(dbPath);
-                    BufferedReader br = new BufferedReader(new InputStreamReader(csvStream));
-
-                    int lines = 0;
-
-                    while (br.readLine() != null) {
-                        lines++;
-                    }
-                    br.close();
-
-                    Log.d(TAG, "Show notification. Lines: " + lines);
-                    showNotification(100, 0);
-
-                    csvStream = new FileInputStream(dbPath);
-                    br = new BufferedReader(new InputStreamReader(csvStream));
-                    // step first line (headers)
-                    br.readLine();
-                    // read prescriptions and save them
-                    int i = 0;
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        if (i % 2000 == 0) {
-                            int prog = (int) (((float) i / lines) * 100);
-                            Log.d(TAG, " Reading line " + i + "... (Progress: " + prog + ")");
-                            updateNotification(100, prog);
-                        }
-                        i++;
-                        p = mgr.fromCsv(line, CSV_SPACER);
-                        if (p != null) {
-                            // cn | id | name | dose | units | content
-                            DB.prescriptions().executeRaw("INSERT INTO Prescriptions (Cn, Pid, Name, Dose, Packaging, Content, Generic, Prospect, Affectdriving) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);",
-                                    p.cn, p.pid, p.name, p.dose, String.valueOf(p.packagingUnits), p.content, String.valueOf(p.generic), String.valueOf(p.hasProspect), String.valueOf(p.affectsDriving));
-                        }
-                    }
-                    br.close();
-
-                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(SetupDBService.this);
-                    SharedPreferences.Editor edit = settings.edit();
-                    edit.putString("last_valid_database", dbPref);
-                    edit.putString("prescriptions_database", dbPref);
-                    edit.commit();
-
-
-
-                    return null;
+                public void onProgressUpdate(int progress) {
+                    showNotification(100, progress);
                 }
             });
+
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(SetupDBService.this);
+            SharedPreferences.Editor edit = settings.edit();
+            edit.putString("last_valid_database", dbPref);
+            edit.putString("prescriptions_database", dbPref);
+            edit.commit();
+
         } catch (Exception e) {
             Log.e(TAG, "Error while saving prescription data", e);
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(SetupDBService.this);
@@ -183,14 +130,6 @@ public class SetupDBService extends IntentService {
             .setContentText("Setup in progress")
             .setProgress(max, prog, false);
 
-        mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
-    }
-
-
-    private void updateNotification(int max, int prog){
-        mBuilder.setContentText("Setup in progress...");
-        mBuilder.setProgress(max, prog, false);
-        mBuilder.setContentInfo(prog+"%");
         mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 

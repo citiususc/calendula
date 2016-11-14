@@ -36,9 +36,9 @@ import java.io.File;
  */
 public class DBDownloader {
 
-    // TODO: Replace with a proper URL
-    public static final String DOWNLOAD_URL = "https://dl.dropboxusercontent.com/u/4213618/calendula/db/";
+    public static final String DOWNLOAD_URL = "http://tec.citius.usc.es/calendula/dbs/";
     private static final String TAG = DBDownloader.class.getSimpleName();
+    private static  String downloadSuffix = ".db";
 
     private static long downloadId = -1;
 
@@ -50,10 +50,10 @@ public class DBDownloader {
             manager.remove(downloadId);
 
         final String dbName = db.id();
-        String url = DOWNLOAD_URL + dbName + ".csv";
+        String url = DOWNLOAD_URL + dbName + downloadSuffix;
         Log.d(TAG, "Download URL: " + url);
 
-        final String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + dbName +".csv";
+        final String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + dbName + downloadSuffix;
         File f = new File(path);
 
         Log.d(TAG, "Path to save: " + f.getAbsolutePath());
@@ -72,7 +72,7 @@ public class DBDownloader {
         request.allowScanningByMediaScanner();
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
         request.setVisibleInDownloadsUi(true);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, dbName +".csv");
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, dbName + downloadSuffix);
 
         if(l!=null) {
             final BroadcastReceiver onComplete = new BroadcastReceiver() {

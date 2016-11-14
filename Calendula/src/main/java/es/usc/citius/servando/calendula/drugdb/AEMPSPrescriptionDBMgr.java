@@ -18,8 +18,18 @@
 
 package es.usc.citius.servando.calendula.drugdb;
 
-import android.util.Log;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 
+import com.j256.ormlite.misc.TransactionManager;
+import com.j256.ormlite.support.ConnectionSource;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.concurrent.Callable;
+
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.Strings;
@@ -32,41 +42,8 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
     public static final String PROSPECT_URL = "https://www.aemps.gob.es/cima/dochtml/p/#ID#/Prospecto_#ID#.html";
 
     @Override
-    public boolean hasWebProspects() {
-        return false;
-    }
-
-    @Override
     public String getProspectURL(Prescription p) {
         return PROSPECT_URL.replaceAll("#ID#", p.pid);
-    }
-
-    @Override
-    public Prescription fromCsv(String csvLine, String separator) {
-
-        String[] values = csvLine.split(separator);
-
-        if (values.length != 9) {
-            throw new RuntimeException("Invalid CSV. Input string must contain exactly 6 members. " + csvLine);
-        }
-
-        Prescription p = new Prescription();
-        p.cn = values[0];
-        p.pid = values[1];
-        p.name = values[2];
-        p.dose = values[3];
-        p.content = values[5];
-        p.generic = getBoolean(values[6]);
-        p.affectsDriving = getBoolean(values[7]);
-        p.hasProspect = getBoolean(values[8]);
-
-        try {
-            p.packagingUnits = Float.valueOf(values[4].replaceAll(",", "."));
-        } catch (Exception e) {
-            Log.w("Prescription.class", "Unable to parse med " + p.pid + " packagingUnits");
-            p.packagingUnits = -1f;
-        }
-        return p;
     }
 
     @Override
@@ -128,4 +105,46 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
         }
     }
 
+    @Override
+    public void setup(final Context ctx, final String downloadPath, final SetupProgressListener l) throws Exception {
+
+        final ConnectionSource connection = DB.helper().getConnectionSource();
+
+        TransactionManager.callInTransaction(connection, new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+
+                BufferedReader br;
+                String line;
+                int progressUpdateBy;
+                int lines = 0;
+                int i = 0;
+
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
+                // count file lines (for progress updating)
+                while (br.readLine() != null) { lines++;} br.close();
+                progressUpdateBy = lines/20;
+                updateProgress(l, 0);
+
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
+
+                SQLiteDatabase database = DB.helper().getWritableDatabase();
+                while ((line = br.readLine()) != null) {
+                    if (l != null && i % progressUpdateBy == 0) {
+                        int progress = (int) (((float) i / lines) * 100);
+                        l.onProgressUpdate(progress);
+                    }
+                    // exec line content as raw sql
+                    database.execSQL(line);
+                    i++;
+                }
+                br.close();
+                return null;
+            }
+        });
+    }
+
+    private void updateProgress(SetupProgressListener l, int progress){
+        if(l!=null) l.onProgressUpdate(progress);
+    }
 }
