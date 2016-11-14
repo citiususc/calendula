@@ -69,6 +69,7 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.HomePagerActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
@@ -143,8 +144,9 @@ public class ConfirmActivity extends CalendulaActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_confirm);
         processIntent();
+        setContentView(R.layout.activity_confirm);
+
 
         isToday = LocalDate.now().equals(date);
         isInWindow = AlarmScheduler.isWithinDefaultMargins(date.toDateTime(time), this);
@@ -408,13 +410,18 @@ public class ConfirmActivity extends CalendulaActivity {
 
         String actionType = i.getIntExtra("actionType", AlarmIntentParams.AUTO) == AlarmIntentParams.USER? "user" : "auto";
 
-
-
         action = i.getStringExtra("action");
         position = i.getIntExtra("position", -1);
 
-        // If date is not present, is a notification // TODO: add date to notification intents
-        date = dateStr!=null ? LocalDate.parse(dateStr, dateFormatter) : LocalDate.now();
+        if(dateStr!=null) {
+            date = LocalDate.parse(dateStr, dateFormatter);
+        }else{
+            // this should never happen, but, just in case, redirect to home and show error
+            Intent intent = new Intent(this, HomePagerActivity.class);
+            intent.putExtra("invalid_notification_error",true);
+            startActivity(intent);
+            finish();
+        }
 
         Log.d("Confirm", timeStr + ", " + dateStr + ", " + routineId + ", " + scheduleId + ", " + date);
 

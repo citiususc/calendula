@@ -201,7 +201,7 @@ public class AlarmScheduler {
             intent.putExtra("routine_id", routine.getId());
             intent.putExtra("date", firstParams.date);
             intent.putExtra("actionType", firstParams.actionType);
-            ReminderNotification.notify(ctx, ctx.getResources().getString(R.string.meds_time), routine, doses, intent, false);
+            ReminderNotification.notify(ctx, ctx.getResources().getString(R.string.meds_time), routine, doses, firstParams.date(), intent, false);
             Log.d(TAG, "Show notification");
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
             boolean repeatAlarms = prefs.getBoolean("alarm_repeat_enabled", false);
@@ -233,7 +233,7 @@ public class AlarmScheduler {
             intent.putExtra("actionType", firstParams.actionType);
 
             String title = ctx.getResources().getString(R.string.meds_time);
-            ReminderNotification.notify(ctx, title, schedule, firstParams.scheduleTime(), intent, false);
+            ReminderNotification.notify(ctx, title, schedule, firstParams.date(), firstParams.scheduleTime(), intent, false);
             // Handle delay if needed
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
             boolean repeatAlarms = prefs.getBoolean("alarm_repeat_enabled", false);
@@ -260,7 +260,7 @@ public class AlarmScheduler {
         intent.putExtra("routine_id", routine.getId());
         intent.putExtra("date", params.date);
         String title = ctx.getResources().getString(R.string.meds_time_lost);
-        ReminderNotification.notify(ctx, title, routine, doses, intent, true);
+        ReminderNotification.notify(ctx, title, routine, doses, params.date(), intent, true);
     }
 
     private void onHourlyScheduleLost(Schedule schedule, AlarmIntentParams params, Context ctx) {
@@ -277,7 +277,7 @@ public class AlarmScheduler {
         intent.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, params.scheduleTime);
         intent.putExtra("date", params.date);
         String title = ctx.getResources().getString(R.string.meds_time_lost);
-        ReminderNotification.notify(ctx, title, schedule, params.scheduleTime(), intent, true);
+        ReminderNotification.notify(ctx, title, schedule, params.date(), params.scheduleTime(), intent, true);
     }
 
     public void onAlarmReceived(AlarmIntentParams params, Context ctx) {
