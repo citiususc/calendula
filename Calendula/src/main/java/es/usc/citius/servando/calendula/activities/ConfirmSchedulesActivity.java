@@ -57,16 +57,16 @@ import es.usc.citius.servando.calendula.activities.qrWrappers.PrescriptionListWr
 import es.usc.citius.servando.calendula.activities.qrWrappers.PrescriptionWrapper;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.HomogeneousGroup;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationEndFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleConfirmationStartFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleImportFragment;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
-import es.usc.citius.servando.calendula.drugdb.model.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
-import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
@@ -166,7 +166,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
 
         for (PrescriptionWrapper pw : prescriptionListWrapper.p) {
             if (pw.cn != null) {
-                Prescription pr = DB.prescriptions().findByCn(pw.cn);
+                Prescription pr = DB.drugDB().prescriptions().findByCn(pw.cn);
                 boolean prescriptionExists = pr != null;
                 boolean medExists = DB.medicines().findOneBy(Medicine.COLUMN_CN, pw.cn) != null;
 
@@ -199,7 +199,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
     }
 
     private HomogeneousGroup findGroup(String g) {
-        return DB.groups().findOneBy(HomogeneousGroup.COLUMN_HOMOGENEOUS_GROUP_ID, g);
+        return DB.drugDB().homogeneousGroups().findOneBy(HomogeneousGroup.COLUMN_HOMOGENEOUS_GROUP_ID, g);
     }
 
 
@@ -308,7 +308,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                                             m = DB.medicines().findByCnAndPatient(cn,patient);
                                             if (m == null) {
                                                 Log.d("PRESCRIPTION", "Saving medicine!");
-                                                m = Medicine.fromPrescription(ConfirmSchedulesActivity.this, DB.prescriptions().findByCn(cn));
+                                                m = Medicine.fromPrescription(ConfirmSchedulesActivity.this, DB.drugDB().prescriptions().findByCn(cn));
                                                 m.setPatient(patient);
                                                 m.save();
                                             }
@@ -482,7 +482,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
             PrescriptionWrapper pw = prescriptionList.get(i - 1);
             if (pw.cn != null) {
                 if (pw.prescription == null) {
-                    pw.prescription = DB.prescriptions().findByCn(pw.cn);
+                    pw.prescription = DB.drugDB().prescriptions().findByCn(pw.cn);
                 }
                 medName.setText(Strings.toProperCase(pw.prescription.getName()));
 

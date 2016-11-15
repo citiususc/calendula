@@ -73,13 +73,12 @@ import es.usc.citius.servando.calendula.activities.qrWrappers.ScheduleWrapper;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.fragments.dosePickers.DefaultDosePickerFragment;
 import es.usc.citius.servando.calendula.fragments.dosePickers.DosePickerFragment;
 import es.usc.citius.servando.calendula.fragments.dosePickers.LiquidDosePickerFragment;
 import es.usc.citius.servando.calendula.fragments.dosePickers.PillDosePickerFragment;
-import es.usc.citius.servando.calendula.drugdb.model.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Routine;
@@ -1242,10 +1241,10 @@ public class ScheduleImportFragment extends Fragment
         Presentation p;
 
         if(prescriptionWrapper.isGroup) {
-            HomogeneousGroup g = DB.groups().findOneBy(HomogeneousGroup.COLUMN_HOMOGENEOUS_GROUP_ID,prescriptionWrapper.group.getHomogeneousGroupID());
+            HomogeneousGroup g = DB.drugDB().homogeneousGroups().findOneBy(HomogeneousGroup.COLUMN_HOMOGENEOUS_GROUP_ID,prescriptionWrapper.group.getHomogeneousGroupID());
             p = dbMgr.expected(g.getName(), g.getName());
         }else{
-            p = dbMgr.expected(DB.prescriptions().findByCn(String.valueOf(prescriptionWrapper.prescription.getCode())));
+            p = dbMgr.expected(DB.drugDB().prescriptions().findByCn(String.valueOf(prescriptionWrapper.prescription.getCode())));
         }
 
         final DosePickerFragment dpf = getDosePickerFragment(p,item,null);
@@ -1284,7 +1283,7 @@ public class ScheduleImportFragment extends Fragment
         if(prescriptionWrapper.isGroup) {
             p = dbMgr.expected(prescriptionWrapper.group.getName(), prescriptionWrapper.group.getName());
         }else{
-            p = dbMgr.expected(DB.prescriptions().findByCn(String.valueOf(prescriptionWrapper.prescription.getCode())));
+            p = dbMgr.expected(DB.drugDB().prescriptions().findByCn(String.valueOf(prescriptionWrapper.prescription.getCode())));
         }
 
 

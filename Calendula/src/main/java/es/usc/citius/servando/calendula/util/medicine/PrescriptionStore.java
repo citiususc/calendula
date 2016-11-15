@@ -29,7 +29,6 @@ import com.j256.ormlite.misc.TransactionManager;
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 
 /**
@@ -90,10 +89,10 @@ public class PrescriptionStore {
         }
 
         // clear all allocated spaces
-        Log.d(TAG, "Finish saving " + DB.prescriptions().count() + " prescriptions!");
+        Log.d(TAG, "Finish saving " + DB.drugDB().prescriptions().count() + " prescriptions!");
 
         try {
-            DB.prescriptions().executeRaw("VACUUM;");
+            DB.drugDB().prescriptions().executeRaw("VACUUM;");
         } catch (Exception e) {
             e.printStackTrace();
         }
