@@ -461,7 +461,8 @@
     <string name="title_prospect_webview">Vista de prospecto</string>
     <string name="title_generic_loading">Cargando</string>
     <string name="message_generic_pleasewait">Por favor, espera unos segundos…</string>
-    <string name="message_prospect_load_error">Ocurrió un error al cargar el prospecto</string>
+    <string name="message_prospect_connection_error">Lo sentimos, ha sido imposible acceder al prospecto</string>
+    <string name="message_prospect_not_found_error">Lo sentimos, el prospecto de este medicamento no está disponible</string>
     <string name="message_prospect_loading">El prospecto estará listo enseguida…</string>
     <string name="action_share_link">Compartir con</string>
     <string name="action_open_with_browser">Abrir en el navegador</string>
@@ -469,5 +470,8 @@
     <string name="title_about">Acerca de</string>
     <string name="home_menu_allergies">Alergias</string>
     <string name="title_activity_allergies">Alergias</string>
+
+    <string name="notification_error_msg">Parece que ha habido un problema con la notificacion. Por favor, revisa tu agenda para ver si hay medicacion pendiente.</string>
+    <string name="notification_error_title">Ups...</string>
 
 </resources>

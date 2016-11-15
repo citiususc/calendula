@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -45,19 +44,16 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.activities.WebViewActivity;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Prescription;
-import es.usc.citius.servando.calendula.util.Snack;
+import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
  */
 public class MedicinesListFragment extends Fragment {
-
-    public static final String PROSPECT_URL = "https://www.aemps.gob.es/cima/dochtml/p/#ID#/Prospecto_#ID#.html";
 
     public static final String PARAM_DOWNLOAD_ID = "medicinesListFragment_download_id";
 
@@ -143,9 +139,8 @@ public class MedicinesListFragment extends Fragment {
 
 
         String cn = medicine.cn();
-        final Prescription p = cn != null ? Prescription.findByCn(medicine.cn()) : null;
+        final Prescription p = cn != null ? DB.prescriptions().findByCn(medicine.cn()) : null;
         boolean boundToPrescription = p != null;
-        boolean hasProspect = (p != null && p.hasProspect);
 
         if (!boundToPrescription) {
             item.findViewById(R.id.imageView).setVisibility(View.GONE);
@@ -157,25 +152,25 @@ public class MedicinesListFragment extends Fragment {
                     .sizeDp(40);
             ((ImageView) item.findViewById(R.id.imageView)).setImageDrawable(ic);
 
-            if (hasProspect) {
-                item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onClickProspect(medicine, p);
-                    }
-                });
-            } else {
-                item.findViewById(R.id.imageView).setAlpha(0.2f);
-                item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Snack.show(R.string.download_prospect_not_available_message, getActivity());
-                    }
-                });
-            }
+            //if (hasProspect) {
+            item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickProspect(medicine, p);
+                }
+            });
+//            } else {hasProspect
+//                item.findViewById(R.id.imageView).setAlpha(0.2f);
+//                item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Snack.show(R.string.download_prospect_not_available_message, getActivity());
+//                    }
+//                });
+//            }
         }
 
-        if (p != null && p.affectsDriving) {
+        if (p != null && p.getAffectsDriving()) {
             Drawable icDriv = new IconicsDrawable(getContext())
                     .icon(CommunityMaterial.Icon.cmd_comment_alert)
                     .color(Color.parseColor("#f39c12"))
@@ -230,17 +225,7 @@ public class MedicinesListFragment extends Fragment {
 
 
     public void openProspect(Prescription p) {
-        final String url = PROSPECT_URL.replaceAll("#ID#", p.pid);
-        Intent i = new Intent(getActivity(), WebViewActivity.class);
-        WebViewActivity.WebViewRequest request = new WebViewActivity.WebViewRequest(url);
-        request.setCustomCss("prospectView.css");
-        request.setErrorMessage(getString(R.string.message_prospect_load_error));
-        request.setLoadingMessage(getString(R.string.message_prospect_loading));
-        request.setTitle(getString(R.string.title_prospect_webview));
-        request.setCacheType(WebViewActivity.WebViewRequest.CacheType.DOWNLOAD_CACHE);
-        request.setJavaScriptEnabled(true);
-        i.putExtra(WebViewActivity.PARAM_WEBVIEW_REQUEST, request);
-        getActivity().startActivity(i);
+        ProspectUtils.openProspect(p, getActivity(), true);
     }
 
     public void showDrivingAdvice(final Prescription p) {
@@ -248,15 +233,13 @@ public class MedicinesListFragment extends Fragment {
         builder.setMessage(getString(R.string.driving_warning))
                 .setTitle(getString(R.string.driving_warning_title))
                 .setIcon(getResources().getDrawable(R.drawable.ic_warning_amber_48dp));
-        if (p.hasProspect) {
-            builder.setPositiveButton(getString(R.string.driving_warning_show_prospect), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    openProspect(p);
+        builder.setPositiveButton(getString(R.string.driving_warning_show_prospect), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                openProspect(p);
 
-                }
-            });
-        }
+            }
+        });
         builder.setNeutralButton(getString(R.string.driving_warning_gotit), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

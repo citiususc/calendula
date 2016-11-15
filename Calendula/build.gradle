@@ -59,8 +59,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 26
-        versionName "2.4-beta.2"
+        versionCode 29
+        versionName "2.5-SNAPSHOT"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -183,6 +183,9 @@ dependencies {
     //
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.heinrichreimersoftware:material-intro:1.5.8'
+
+    // html parsing
+    compile 'org.jsoup:jsoup:1.7.2'
 
     // REST
     compile 'com.squareup.retrofit2:retrofit:2.0.2'

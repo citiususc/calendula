@@ -32,8 +32,8 @@ import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
-import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.HomogeneousGroup;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 
 /**
@@ -54,33 +54,34 @@ public class HomogeneousGroupStore {
             TransactionManager.callInTransaction(DB.helper().getConnectionSource(), new Callable<Object>() {
                 @Override
                 public Object call() throws Exception {
+                    // TODO: 14/11/16 fix this
 
-                    if (truncateBefore && !HomogeneousGroup.empty()) {
-                        Log.d(TAG, "Truncating groups database...");
-                        // truncate groups table
-                        DB.groups().executeRaw("DELETE FROM Prescriptions;");
-
-                    }
-
-                    HomogeneousGroup g = null;
-
-                    InputStream csvStream = assetManager.open(GROUPS_CSV);
-                    BufferedReader br = new BufferedReader(new InputStreamReader(csvStream));
-                    // read prescriptions and save them
-                    String line;
-                    int i = 0;
-                    while ((line = br.readLine()) != null) {
-                        if (i % 1000 == 0) {
-                            Log.d(TAG, " Reading line " + i + "...");
-                        }
-                        i++;
-                        g = HomogeneousGroup.fromCsv(line, CSV_SPACER);
-                        DB.groups().save(g);
-                        // group, name
-                        //DB.groups().executeRaw("INSERT INTO Groups (Group, Name) VALUES (?, ?);",new String[]{g.group, g.name});
-                    }
-                    br.close();
-                    // update preferences version
+//                    if (truncateBefore && !DB.groups().empty()) {
+//                        Log.d(TAG, "Truncating groups database...");
+//                        // truncate groups table
+//                        DB.groups().executeRaw("DELETE FROM Prescriptions;");
+//
+//                    }
+//
+//                    HomogeneousGroup g = null;
+//
+//                    InputStream csvStream = assetManager.open(GROUPS_CSV);
+//                    BufferedReader br = new BufferedReader(new InputStreamReader(csvStream));
+//                    // read prescriptions and save them
+//                    String line;
+//                    int i = 0;
+//                    while ((line = br.readLine()) != null) {
+//                        if (i % 1000 == 0) {
+//                            Log.d(TAG, " Reading line " + i + "...");
+//                        }
+//                        i++;
+//                        g = HomogeneousGroup.fromCsv(line, CSV_SPACER);
+//                        DB.groups().save(g);
+//                        // group, name
+//                        //DB.groups().executeRaw("INSERT INTO Groups (Group, Name) VALUES (?, ?);",new String[]{g.group, g.name});
+//                    }
+//                    br.close();
+//                    // update preferences version
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
                     prefs.edit().putInt(PopulatePrescriptionDBService.DB_VERSION_KEY, newVersionCode).commit();
                     return null;
@@ -91,7 +92,7 @@ public class HomogeneousGroupStore {
         }
 
         // clear all allocated spaces
-        Log.d(TAG, "Finish saving " + Prescription.count() + " prescriptions!");
+        Log.d(TAG, "Finish saving " + DB.prescriptions().count() + " prescriptions!");
 
         try {
             DB.prescriptions().executeRaw("VACUUM;");

@@ -16,30 +16,27 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.database;
+package es.usc.citius.servando.calendula.util.view;
 
-import com.j256.ormlite.dao.Dao;
-
-import java.sql.SQLException;
-
-import es.usc.citius.servando.calendula.persistence.Prescription;
+import android.content.Context;
+import android.preference.ListPreference;
+import android.util.AttributeSet;
 
 /**
- * Created by joseangel.pineiro on 3/26/15.
+ * Created by joseangel.pineiro on 10/11/16.
  */
-public class PrescriptionDao extends GenericDao<Prescription, Long> {
+public class CustomListPreference extends ListPreference {
 
-    public PrescriptionDao(DatabaseHelper db) {
-        super(db);
+    public CustomListPreference(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
 
-    @Override
-    public Dao<Prescription, Long> getConcreteDao() {
-        try {
-            return dbHelper.getPrescriptionsDao();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error creating routines dao", e);
-        }
+    public CustomListPreference(Context context) {
+        super(context);
+    }
+
+    public void show(){
+        showDialog(null);
     }
 
 }

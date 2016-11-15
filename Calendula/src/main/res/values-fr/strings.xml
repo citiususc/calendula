@@ -391,11 +391,12 @@
 
     <string name="message_generic_pageloaderror">There was an error loading the page</string>
     <string name="title_prospect_webview">Prospect view</string>
-    <string name="title_generic_loading">Loading</string>
+    <string name="title_activity_webview" translatable="false">WebViewActivity</string>
     <string name="message_generic_pleasewait">Please wait for a few seconds…</string>
+    <string name="title_generic_loading">Loading</string>
     <string name="message_prospect_loading">The leaflet will be ready soon…</string>
-    <string name="message_prospect_load_error">An error happened while loading the leaflet</string>
-    <string name="action_share_link">Share with</string>
+    <string name="message_prospect_connection_error">The leaflet could not be loaded</string>
+    <string name="message_prospect_not_found_error">Sorry, but it there is no leaflet available for this med</string>
 
 
 </resources>

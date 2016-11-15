@@ -18,7 +18,9 @@
 
 package es.usc.citius.servando.calendula;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -48,6 +50,8 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 
+import org.joda.time.DateTime;
+
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -75,6 +79,7 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
+import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 
 public class HomePagerActivity extends CalendulaActivity implements
@@ -210,14 +215,57 @@ public class HomePagerActivity extends CalendulaActivity implements
 
         SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if(!prefs.getBoolean("PREFERENCE_INTRO_SHOWN", false)) {
-            new Handler().postDelayed(new Runnable() {
+            handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     launchActivity(new Intent(HomePagerActivity.this, MaterialIntroActivity.class));
                 }
             }, 500);
         }
+
+        if(getIntent()!=null && getIntent().getBooleanExtra("invalid_notification_error",false)){
+            Toast.makeText(this,"Error", Toast.LENGTH_SHORT).show();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    showInvalidNotificationError();
+                }
+            },500);
+        }
    }
+
+    private void showInvalidNotificationError() {
+
+        final boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.notification_error_title)
+                .setMessage(R.string.notification_error_msg)
+                .setCancelable(true)
+                .setIcon(IconUtils.icon(this,CommunityMaterial.Icon.cmd_bug, R.color.black))
+                .setPositiveButton(R.string.tutorial_understood, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        if(!expanded) {
+                            appBarLayout.setExpanded(expanded);
+                            expandItem.setIcon(expanded ? icAgendaMore : icAgendaLess);
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
+                                }
+                            },200);
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ((DailyAgendaFragment) getViewPagerFragment(0)).scrollTo(DateTime.now());
+                                }
+                            },600);
+                        }
+                    }
+        }).create().show();
+    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

@@ -26,7 +26,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.util.medicine.HomogeneousGroupStore;
 import es.usc.citius.servando.calendula.util.medicine.PrescriptionStore;
 
@@ -41,14 +42,14 @@ public class PopulatePrescriptionDBService {
     public static boolean isDbOutdated(Context ctx){
         final int manifestVersion = getAempDbVersionFromManifest(ctx);
         final int currentVersion = getAempDbVersionFromPreferences(ctx);
-        return (currentVersion < manifestVersion) || Prescription.empty();
+        return (currentVersion < manifestVersion) || DB.prescriptions().empty();
     }
 
     public void updateIfNeeded(Context ctx) {
 
         final int manifestVersion = getAempDbVersionFromManifest(ctx);
         final int currentVersion = getAempDbVersionFromPreferences(ctx);
-        boolean needUpdate = (currentVersion < manifestVersion) || Prescription.empty();
+        boolean needUpdate = (currentVersion < manifestVersion) || DB.prescriptions().empty();
 
         if (needUpdate) {
             Log.d(TAG, "Updating prescriptions database...");
