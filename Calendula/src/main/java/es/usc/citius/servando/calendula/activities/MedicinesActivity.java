@@ -56,10 +56,12 @@ import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.DBRegistry;
+import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Snack;
@@ -95,6 +97,8 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     ArrayAdapter<Prescription> adapter;
     int color;
 
+    PrescriptionDBMgr dbMgr;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +106,8 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         color = DB.patients().getActive(this).color();
         setupToolbar(null, color);
         setupStatusBar(color);
+
+        dbMgr = DBRegistry.instance().current(this);
 
         processIntent();
 
@@ -321,10 +327,10 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             }
             if (mData.size() > position) {
                 final Prescription p = mData.get(position);
-                ((TextView) item.findViewById(R.id.text1)).setText(p.shortName() + (p.generic ? " (G)" : ""));
-                ((TextView) item.findViewById(R.id.text2)).setText(p.dose);
-                ((TextView) item.findViewById(R.id.text3)).setText(p.content);
-                ((TextView) item.findViewById(R.id.text4)).setText(Strings.toCamelCase(p.name, " "));
+                ((TextView) item.findViewById(R.id.text1)).setText(dbMgr.shortName(p) + (p.getGeneric() ? " (G)" : ""));
+                ((TextView) item.findViewById(R.id.text2)).setText(p.getDose());
+                ((TextView) item.findViewById(R.id.text3)).setText(p.getContent());
+                ((TextView) item.findViewById(R.id.text4)).setText(Strings.toCamelCase(p.getName(), " "));
 
                 ((TextView) item.findViewById(R.id.text1)).setTextColor(Color.parseColor("#222222"));
                 ((TextView) item.findViewById(R.id.text4)).setTextColor(color);
@@ -344,11 +350,11 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                     }
                 });
 
-                Presentation pres = p.expectedPresentation();
+                Presentation pres = dbMgr.expected(p);
                 if (pres != null) {
 
                     Drawable ic = new IconicsDrawable(getContext())
-                            .icon(Presentation.iconFor(p.expectedPresentation()))
+                            .icon(Presentation.iconFor(pres))
                             .colorRes(R.color.agenda_item_title)
                             .paddingDp(10)
                             .sizeDp(72);
@@ -375,7 +381,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 //                                filterResults.values = null;
 //                                filterResults.count = 0;
 //                            }else{
-                            List<Prescription> prescriptions = Prescription.findByName(constraint.toString(), 50);
+                            List<Prescription> prescriptions = DB.prescriptions().findByName(constraint.toString(), 50);
                             mData = prescriptions;//Fetcher.fetchNames(constraint.toString());
                             // Now assign the values and count to the FilterResults object
                             filterResults.values = mData;

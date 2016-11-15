@@ -26,13 +26,10 @@ import android.util.Log;
 
 import com.j256.ormlite.misc.TransactionManager;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 
 /**
@@ -53,36 +50,36 @@ public class PrescriptionStore {
             TransactionManager.callInTransaction(DB.helper().getConnectionSource(), new Callable<Object>() {
                 @Override
                 public Object call() throws Exception {
-
-                    if (truncateBefore && !Prescription.empty()) {
-                        Log.d(TAG, "Truncating prescriptions database...");
-                        // truncate prescriptions table
-                        DB.prescriptions().executeRaw("DELETE FROM Prescriptions;");
-
-                    }
-
-                    Prescription p = null;
-
-                    InputStream csvStream = assetManager.open(MEDS_CSV);
-                    BufferedReader br = new BufferedReader(new InputStreamReader(csvStream));
-                    // step first line (headers)
-                    br.readLine();
-                    // read prescriptions and save them
-                    String line;
-                    int i = 0;
-                    while ((line = br.readLine()) != null) {
-                        if (i % 1000 == 0) {
-                            Log.d(TAG, " Reading line " + i + "...");
-                        }
-                        i++;
-                        p = Prescription.fromCsv(line, CSV_SPACER);
-                        DB.prescriptions().save(p);
-                        // cn | id | name | dose | units | content
-                        //DB.prescriptions().executeRaw("INSERT INTO Prescriptions (Cn, Pid, Name, Dose, Packaging, Content, Generic, Prospect, Affectdriving) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);",
-                        //       new String[]{p.cn, p.pid, p.name, p.dose, String.valueOf(p.packagingUnits), p.content, String.valueOf(p.generic), String.valueOf(p.hasProspect), String.valueOf(p.affectsDriving)});
-                    }
-                    br.close();
-                    // update preferences version
+                    // TODO: 14/11/16 fix this
+//                    if (truncateBefore && !DB.prescriptions().empty()) {
+//                        Log.d(TAG, "Truncating prescriptions database...");
+//                        // truncate prescriptions table
+//                        DB.prescriptions().executeRaw("DELETE FROM Prescriptions;");
+//
+//                    }
+//
+//                    Prescription p = null;
+//
+//                    InputStream csvStream = assetManager.open(MEDS_CSV);
+//                    BufferedReader br = new BufferedReader(new InputStreamReader(csvStream));
+//                    // step first line (headers)
+//                    br.readLine();
+//                    // read prescriptions and save them
+//                    String line;
+//                    int i = 0;
+//                    while ((line = br.readLine()) != null) {
+//                        if (i % 1000 == 0) {
+//                            Log.d(TAG, " Reading line " + i + "...");
+//                        }
+//                        i++;
+//                        p = Prescription.fromCsv(line, CSV_SPACER);
+//                        DB.prescriptions().save(p);
+//                        // cn | id | name | dose | units | content
+//                        //DB.prescriptions().executeRaw("INSERT INTO Prescriptions (Cn, Pid, Name, Dose, Packaging, Content, Generic, Prospect, Affectdriving) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);",
+//                        //       new String[]{p.cn, p.pid, p.name, p.dose, String.valueOf(p.packagingUnits), p.content, String.valueOf(p.generic), String.valueOf(p.hasProspect), String.valueOf(p.affectsDriving)});
+//                    }
+//                    br.close();
+//                    // update preferences version
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
                     prefs.edit().putInt(PopulatePrescriptionDBService.DB_VERSION_KEY, newVersionCode).commit();
                     return null;
@@ -93,7 +90,7 @@ public class PrescriptionStore {
         }
 
         // clear all allocated spaces
-        Log.d(TAG, "Finish saving " + Prescription.count() + " prescriptions!");
+        Log.d(TAG, "Finish saving " + DB.prescriptions().count() + " prescriptions!");
 
         try {
             DB.prescriptions().executeRaw("VACUUM;");

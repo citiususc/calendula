@@ -43,6 +43,7 @@ import java.util.Locale;
 import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.database.PatientDao;
+import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
@@ -124,6 +125,21 @@ public class CalendulaApp extends Application {
         Iconics.init(getApplicationContext());
         //register custom fonts like this (or also provide a font definition file)
         Iconics.registerFont(new PresentationsTypeface());
+        updatePreferences();
+    }
+
+    private void updatePreferences() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean dbWasEnabled = prefs.getBoolean("enable_prescriptions_db", false);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        // replace old "enable db preference" with the default db key (AEMPS)
+        if(dbWasEnabled){
+            editor.putString("last_valid_database", DBRegistry.instance().defaultDBMgr().id())
+                    .putString("prescriptions_database", DBRegistry.instance().defaultDBMgr().id());
+        }
+        editor.remove("enable_prescriptions_db");
+        editor.commit();
     }
 
     public static boolean isPharmaModeEnabled(Context ctx){
@@ -142,6 +158,7 @@ public class CalendulaApp extends Application {
 
     public void initializeDatabase() {
         DB.init(this);
+        DBRegistry.init(this);
         try{
             if(DB.patients().countOf() == 1) {
                 Patient p = DB.patients().getDefault();

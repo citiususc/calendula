@@ -88,5 +88,21 @@
         <item>24</item>
     </string-array>
 
+    <string-array name="pref_available_databases">
+        <item>@string/database_none_display</item>
+        <item>@string/database_aemps_display</item>
+        <item>@string/database_us_display</item>
+        <!--<item>@string/database_uk_display</item>-->
+    </string-array>
+
+    <string-array name="pref_available_databases_values">
+        <item>@string/database_none_id</item>
+        <item>@string/database_aemps_id</item>
+        <item>@string/database_us_id</item>
+        <!--<item>@string/database_uk_id</item>-->
+    </string-array>
+
+    <string name="pref_available_databases_title">Search assistant database</string>
+
 
 </resources>

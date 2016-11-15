@@ -24,6 +24,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -54,9 +55,12 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
+import es.usc.citius.servando.calendula.activities.SettingsActivity;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.DBRegistry;
+import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 import es.usc.citius.servando.calendula.util.Snack;
@@ -64,7 +68,7 @@ import es.usc.citius.servando.calendula.util.Snack;
 /**
  * Created by joseangel.pineiro on 12/4/13.
  */
-public class MedicineCreateOrEditFragment extends Fragment {
+public class MedicineCreateOrEditFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     OnMedicineEditListener mMedicineEditCallback;
     Medicine mMedicine;
@@ -82,6 +86,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
     long mMedicineId;
     String cn;
     int pColor;
+    PrescriptionDBMgr dbMgr;
 
     private static ArrayList<View> getViewsByTag(ViewGroup root, String tag) {
         ArrayList<View> views = new ArrayList<View>();
@@ -102,6 +107,14 @@ public class MedicineCreateOrEditFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        dbMgr = DBRegistry.instance().current(getActivity());
+    }
+
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_or_edit_medicine, container, false);
 
@@ -115,13 +128,13 @@ public class MedicineCreateOrEditFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
                 Prescription p = (Prescription) parent.getItemAtPosition(pos);
-                String shortName = p.shortName();
+                String shortName = dbMgr.shortName(p);
                 mNameTextView.setText(shortName);
-                mDescriptionTv.setText(p.name);
+                mDescriptionTv.setText(p.getName());
                 hideKeyboard();
 
                 // save referenced prescription to med
-                cn = p.cn;
+                cn = String.valueOf(p.getCode());
             }
         });
 
@@ -130,8 +143,10 @@ public class MedicineCreateOrEditFragment extends Fragment {
         mDescriptionTv.setTextColor(pColor);
         mPresentationTv.setTextColor(pColor);
 
-        enableSearch = prefs.getBoolean("enable_prescriptions_db", false);
-
+        String none = getString(R.string.database_none_id);
+        String settingUp = getString(R.string.database_setting_up);
+        String value = prefs.getString("prescriptions_database", none);
+        enableSearch = !value.equals(none) && !value.equals(settingUp);
         if (enableSearch) {
             enableSearchButton();
         } else {
@@ -171,7 +186,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 String name = mNameTextView.getText().toString();
 
-                if (mPrescription != null && !mPrescription.shortName().toLowerCase().equals(name.toLowerCase())) {
+                if (mPrescription != null && !dbMgr.shortName(mPrescription).toLowerCase().equals(name.toLowerCase())) {
                     mPrescription = null;
                     mDescriptionTv.setText("");
                 }
@@ -225,6 +240,13 @@ public class MedicineCreateOrEditFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
     }
 
     public boolean validate() {
@@ -396,21 +418,21 @@ public class MedicineCreateOrEditFragment extends Fragment {
         selectPresentation(mMedicine.presentation());
 
         if (r.cn() != null) {
-            Prescription p = Prescription.findByCn(r.cn());
+            Prescription p = DB.prescriptions().findByCn(r.cn());
             if (p != null) {
                 mPrescription = p;
-                mDescriptionTv.setText(p.name);
+                mDescriptionTv.setText(p.getName());
             }
         }
     }
 
     public void setPrescription(Prescription p) {
-        mNameTextView.setText(p.shortName());
-        mDescriptionTv.setText(p.name);
+        mNameTextView.setText(dbMgr.shortName(p));
+        mDescriptionTv.setText(p.getName());
 
         mPrescription = p;
 
-        Presentation pr = p.expectedPresentation();
+        Presentation pr= DBRegistry.instance().current(getActivity()).expected(p);
         if (pr != null) {
             mPresentationTv.setText(pr.getName(getResources()));
             selectedPresentation = pr;
@@ -453,7 +475,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
                     mMedicine.setPresentation(selectedPresentation);
                 }
                 if (mPrescription != null && mPrescription.shortName().toLowerCase().equals(mMedicine.name().toLowerCase())) {
-                    mMedicine.setCn(mPrescription.cn);
+                    mMedicine.setCn(String.valueOf(mPrescription.getCode()));
                 } else if (mPrescription == null) {
                     mMedicine.setCn(null);
                 }
@@ -471,7 +493,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
 
                 Medicine m = new Medicine(name);
                 if (mPrescription != null && mPrescription.shortName().toLowerCase().equals(m.name().toLowerCase())) {
-                    m.setCn(mPrescription.cn);
+                    m.setCn(String.valueOf(mPrescription.getCode()));
                 }
                 m.setPresentation(selectedPresentation != null ? selectedPresentation : Presentation.UNKNOWN);
                 m.setPatient(DB.patients().getActive(getContext()));
@@ -537,7 +559,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean adviceShown = prefs.getBoolean("show_use_prescriptions_advice", false);
-        boolean dbEnabled = prefs.getBoolean("enable_prescriptions_db", false);
+        boolean dbEnabled = !prefs.getString("prescriptions_database",getString(R.string.database_none_id)).equals(getString(R.string.database_none_id));
 
         if (!adviceShown && !dbEnabled) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -547,7 +569,9 @@ public class MedicineCreateOrEditFragment extends Fragment {
                     .setCancelable(false)
                     .setPositiveButton(getString(R.string.enable_prescriptions_dialog_yes), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            new PopulatePrescriptionDatabaseTask().execute("");
+                            Intent i = new Intent(getActivity(), SettingsActivity.class);
+                            i.putExtra("show_database_dialog",true);
+                            startActivity(i);
                         }
                     })
                     .setNegativeButton(getString(R.string.enable_prescriptions_dialog_no), new DialogInterface.OnClickListener() {
@@ -573,6 +597,21 @@ public class MedicineCreateOrEditFragment extends Fragment {
             }
         }, 10);
 
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if ("prescriptions_database".equals(key)) {
+            String none = getString(R.string.database_none_id);
+            String settingUp = getString(R.string.database_setting_up);
+            String value = sharedPreferences.getString("prescriptions_database", none);
+            enableSearch = !value.equals(none) && !value.equals(settingUp);
+            if (enableSearch) {
+                enableSearchButton();
+            } else {
+                searchButton.setVisibility(View.GONE);
+            }
+        }
     }
 
 
@@ -613,8 +652,8 @@ public class MedicineCreateOrEditFragment extends Fragment {
 
             Prescription p = mData.get(position);
             ((TextView) item.findViewById(R.id.text1)).setText(p.shortName()); //  + (p.generic?" (G)":"")
-            ((TextView) item.findViewById(R.id.text2)).setText(mData.get(position).name);
-            ((TextView) item.findViewById(R.id.text3)).setText("(" + p.dose + ")");
+            ((TextView) item.findViewById(R.id.text2)).setText(mData.get(position).getName());
+            ((TextView) item.findViewById(R.id.text3)).setText("(" + p.getDose() + ")");
             return item;
         }
 
@@ -627,7 +666,7 @@ public class MedicineCreateOrEditFragment extends Fragment {
                     if (constraint != null) {
                         // A class that queries a web API, parses the data and returns an ArrayList<Style>
                         try {
-                            List<Prescription> prescriptions = Prescription.findByName(constraint.toString(), 20);
+                            List<Prescription> prescriptions = DB.prescriptions().findByName(constraint.toString(), 20);
                             /*List<String> names = new ArrayList<String>();
                             for(Prescription p : prescriptions)
                                 names.add(p.name);

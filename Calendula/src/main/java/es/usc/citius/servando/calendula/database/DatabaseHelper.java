@@ -36,14 +36,22 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import es.usc.citius.servando.calendula.database.migrationHelpers.DrugModelMigrationHelper;
 import es.usc.citius.servando.calendula.database.migrationHelpers.LocalDateMigrationHelper;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.ActiveIngredient;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.ContentUnit;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Excipient;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.HomogeneousGroup;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.PackageType;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionActiveIngredient;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionExcipient;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.PresentationForm;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
-import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.HtmlCacheEntry;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
-import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
@@ -64,20 +72,31 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Schedule.class,
             ScheduleItem.class,
             DailyScheduleItem.class,
-            Prescription.class,
+            // Prescription.class, //deprecated in v12
             // v8
-            HomogeneousGroup.class,
+            // HomogeneousGroup.class, //deprecated in v12
             PickupInfo.class,
             // v9
             Patient.class,
             // v10
-            HtmlCacheEntry.class
+            HtmlCacheEntry.class,
+            // v12
+            ActiveIngredient.class,
+            ContentUnit.class,
+            Excipient.class,
+            HomogeneousGroup.class,
+            PackageType.class,
+            Prescription.class,
+            PresentationForm.class,
+            PrescriptionActiveIngredient.class,
+            PrescriptionExcipient.class
+
     };
 
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 12;
 
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
@@ -144,12 +163,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.i(DatabaseHelper.class.getName(), "onUpgrade");
             Log.d(DatabaseHelper.class.getName(), "OldVersion: " + oldVersion + ", newVersion: " + newVersion);
 
-            if (oldVersion < 6) {
+            if (oldVersion < 6)
+            {
                 oldVersion = 6;
             }
 
-            switch (oldVersion + 1) {
-
+            switch (oldVersion + 1){
                 case 7:
                     // migrate to iCal
                     migrateToICal();
@@ -170,7 +189,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                             return null;
                         }
                     });
-                    // Create HomogeneousGroup and PickupInfo tables
+                    // v8: Create HomogeneousGroup and PickupInfo tables:
+                    // v12: HomogeneousGroup becomes deprecated, so we don't need to create it
                     TableUtils.createTable(connectionSource, HomogeneousGroup.class);
                     TableUtils.createTable(connectionSource, PickupInfo.class);
                 case 9:
@@ -179,13 +199,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 case 10:
                     TableUtils.createTable(connectionSource, HtmlCacheEntry.class);
                 case 11:
-                    //delete all html cache entries and change datatypes (bugfix)
+                    //delete all html cache entries and change data types (bugfix)
                     TableUtils.dropTable(connectionSource, HtmlCacheEntry.class, true);
                     TableUtils.createTable(connectionSource, HtmlCacheEntry.class);
                     LocalDateMigrationHelper.migrateLocalDates(this);
-
+                case 12:
+                    DrugModelMigrationHelper.migrateDrugModel(db, connectionSource);
             }
-
 
         } catch (Exception e) {
             Log.e(DatabaseHelper.class.getName(), "Can't upgrade databases", e);
@@ -227,8 +247,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         // Assign all DailyScheduleItems to the default patient, for today
         UpdateBuilder<DailyScheduleItem, Long> siUpdateBuilder = getDailyScheduleItemsDao().updateBuilder();
         siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_PATIENT, p.id());
-        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_DATE, LocalDate.now());
         siUpdateBuilder.update();
+
+        // date formatter changes on v11, so we can no use LocalDatePersister here
+        String now = LocalDate.now().toString("ddMMYYYY");
+        String updateDateSql = "UPDATE DailyScheduleItems SET " + DailyScheduleItem.COLUMN_DATE + " = '" +now + "'";
+        getDailyScheduleItemsDao().executeRaw(updateDateSql);
 
     }
 
