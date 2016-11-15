@@ -10,17 +10,17 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.activities.AllergenListeners;
 import es.usc.citius.servando.calendula.activities.AllergiesActivity;
+import es.usc.citius.servando.calendula.allergies.AllergenFacade;
+import es.usc.citius.servando.calendula.allergies.AllergenListeners;
+import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
-import es.usc.citius.servando.calendula.remote.AllergenRemoteFacade;
 
 /**
  * Created by alvaro.brey.vilas on 7/11/16.
@@ -28,11 +28,10 @@ import es.usc.citius.servando.calendula.remote.AllergenRemoteFacade;
 public class AllergiesAutocompleteAdapter extends RecyclerView.Adapter<AllergiesAdapter.AllergenViewHolder> implements Filterable {
 
     private final static String TAG = "AllergiesAutoAdapter";
-    private AllergenRemoteFacade remote;
     private AllergiesActivity.AllergiesStore store;
     private AllergenListeners.AddAllergyActionListener listener;
     private Context context;
-    private List<PatientAllergen> search = new ArrayList<>();
+    private List<AllergenVO> search = new ArrayList<>();
     private Integer invalid = 0;
 
     public AllergiesAutocompleteAdapter(AllergiesActivity.AllergiesStore store, Context context, AllergenListeners.AddAllergyActionListener listener) {
@@ -40,7 +39,6 @@ public class AllergiesAutocompleteAdapter extends RecyclerView.Adapter<Allergies
         this.store = store;
         this.context = context;
         this.listener = listener;
-        remote = new AllergenRemoteFacade(context);
     }
 
 
@@ -57,25 +55,25 @@ public class AllergiesAutocompleteAdapter extends RecyclerView.Adapter<Allergies
 
             try {
                 if (constraint != null) {
-                    List<PatientAllergen> list = remote.findAllergensByName(constraint.toString());
-                    Collections.sort(list, new Comparator<PatientAllergen>() {
+                    List<AllergenVO> list = AllergenFacade.searchForAllergens(constraint.toString());
+                    Collections.sort(list, new Comparator<AllergenVO>() {
                         @Override
-                        public int compare(PatientAllergen o1, PatientAllergen o2) {
+                        public int compare(AllergenVO o1, AllergenVO o2) {
                             return o1.getName().compareTo(o2.getName());
                         }
                     });
                     invalid = 0;
                     if (store != null) {
-                        for (PatientAllergen allergen : list) {
-                            if (store.getAllergies().contains(allergen))
+                        for (AllergenVO allergen : list) {
+                            if (store.getAllergiesVO().contains(allergen))
                                 invalid++;
                         }
                     }
                     results.values = list;
                     results.count = list.size();
                 }
-            } catch (IOException | IllegalStateException e) {
-                Log.e(TAG, "performFiltering: could not recover allergens", e);
+            } catch (IllegalStateException e) {
+                Log.e(TAG, "performFiltering: could not recover patientAllergens", e);
             }
 
             return results;
@@ -86,7 +84,7 @@ public class AllergiesAutocompleteAdapter extends RecyclerView.Adapter<Allergies
             search.clear();
             if (results != null && results.count > 0) {
                 // we have filtered results
-                search.addAll((List<PatientAllergen>) results.values);
+                search.addAll((List<AllergenVO>) results.values);
             }
             notifyDataSetChanged();
         }
@@ -103,7 +101,7 @@ public class AllergiesAutocompleteAdapter extends RecyclerView.Adapter<Allergies
         return mFilter;
     }
 
-    public void remove(PatientAllergen allergen) {
+    public void remove(AllergenVO allergen) {
         int index = search.indexOf(allergen);
         search.remove(index);
         notifyItemRemoved(index);
@@ -111,12 +109,12 @@ public class AllergiesAutocompleteAdapter extends RecyclerView.Adapter<Allergies
 
     @Override
     public void onBindViewHolder(final AllergiesAdapter.AllergenViewHolder allergenViewHolder, final int i) {
-        PatientAllergen allergen = search.get(i);
+        AllergenVO allergen = search.get(i);
 
         final String name = allergen.getName();
         allergenViewHolder.getTitle().setText(name);
 
-        if (store.getAllergies().contains(allergen)) {
+        if (store.getAllergiesVO().contains(allergen)) {
             allergenViewHolder.itemView.setVisibility(View.GONE);
             ViewGroup.LayoutParams layoutParams = allergenViewHolder.itemView.getLayoutParams();
             layoutParams.height = 0;
@@ -146,7 +144,7 @@ public class AllergiesAutocompleteAdapter extends RecyclerView.Adapter<Allergies
 
     }
 
-    private PatientAllergen getItemByPosition(int position) {
+    private AllergenVO getItemByPosition(int position) {
         return search.get(position);
     }
 

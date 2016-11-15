@@ -69,7 +69,7 @@ public class PatientAllergenDao extends GenericDao<PatientAllergen, Long> {
                     .where().eq(PatientAllergen.COLUMN_PATIENT, patientId)
                     .query();
         } catch (SQLException e) {
-            throw new RuntimeException("Error finding allergens", e);
+            throw new RuntimeException("Error finding patientAllergens", e);
         }
     }
 

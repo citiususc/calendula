@@ -21,19 +21,18 @@ package es.usc.citius.servando.calendula.persistence;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import es.usc.citius.servando.calendula.allergies.AllergenType;
+import es.usc.citius.servando.calendula.allergies.AllergenVO;
+
 /**
  * Models an user
  */
 @DatabaseTable(tableName = "Allergens")
 public class PatientAllergen {
 
-    public enum AllergenType {
-        ACTIVE_INGREDIENT, EXCIPIENT
-    }
-
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_ALLERGEN_TYPE = "Type";
-    public static final String COLUMN_REALID = "RealID";
+    public static final String COLUMN_IDENTIFIER = "Identifier";
     public static final String COLUMN_NAME = "Name";
     public static final String COLUMN_PATIENT = "Patient";
 
@@ -45,10 +44,10 @@ public class PatientAllergen {
     private String name;
 
     @DatabaseField(columnName = COLUMN_ALLERGEN_TYPE, uniqueCombo = true)
-    private PatientAllergen.AllergenType type;
+    private AllergenType type;
 
-    @DatabaseField(columnName = COLUMN_REALID, uniqueCombo = true)
-    private int realId;
+    @DatabaseField(columnName = COLUMN_IDENTIFIER, uniqueCombo = true)
+    private String identifier;
 
     @DatabaseField(columnName = COLUMN_PATIENT, foreign = true, foreignAutoRefresh = true, uniqueCombo = true)
     private Patient patient;
@@ -56,10 +55,17 @@ public class PatientAllergen {
     public PatientAllergen() {
     }
 
-    public PatientAllergen(String name, PatientAllergen.AllergenType type, int realId, Patient patient) {
+    public PatientAllergen(String name, AllergenType type, String identifier, Patient patient) {
         this.name = name;
         this.type = type;
-        this.realId = realId;
+        this.identifier = identifier;
+        this.patient = patient;
+    }
+
+    public PatientAllergen(AllergenVO allergenVO, Patient patient) {
+        this.name = allergenVO.getName();
+        this.type = allergenVO.getType();
+        this.identifier = allergenVO.getIdentifier();
         this.patient = patient;
     }
 
@@ -80,20 +86,20 @@ public class PatientAllergen {
         this.name = name;
     }
 
-    public PatientAllergen.AllergenType getType() {
+    public AllergenType getType() {
         return type;
     }
 
-    public void setType(PatientAllergen.AllergenType type) {
+    public void setType(AllergenType type) {
         this.type = type;
     }
 
-    public int getRealId() {
-        return realId;
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public void setRealId(int realId) {
-        this.realId = realId;
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public Patient getPatient() {
@@ -110,7 +116,7 @@ public class PatientAllergen {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", type=" + type +
-                ", realId=" + realId +
+                ", identifier=" + identifier +
                 ", patient=" + patient +
                 '}';
     }
@@ -122,7 +128,7 @@ public class PatientAllergen {
 
         PatientAllergen allergen = (PatientAllergen) o;
 
-        if (realId != allergen.realId) return false;
+        if (identifier != allergen.identifier) return false;
         if (type != allergen.type) return false;
         return patient != null ? patient.equals(allergen.patient) : allergen.patient == null;
 
@@ -131,7 +137,7 @@ public class PatientAllergen {
     @Override
     public int hashCode() {
         int result = type != null ? type.hashCode() : 0;
-        result = 31 * result + realId;
+        result = 31 * result + identifier.hashCode();
         result = 31 * result + (patient != null ? patient.hashCode() : 0);
         return result;
     }

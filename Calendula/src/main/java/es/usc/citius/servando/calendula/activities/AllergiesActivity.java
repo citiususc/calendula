@@ -29,6 +29,9 @@ import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.adapters.AllergiesAdapter;
 import es.usc.citius.servando.calendula.adapters.AllergiesAutocompleteAdapter;
+import es.usc.citius.servando.calendula.allergies.AllergenConversionUtil;
+import es.usc.citius.servando.calendula.allergies.AllergenListeners;
+import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.database.PatientAllergenDao;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
@@ -255,9 +258,10 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
     }
 
     @Override
-    public void onAddAction(PatientAllergen allergen) {
+    public void onAddAction(AllergenVO allergen) {
         KeyboardUtils.hideKeyboard(this);
-        boolean ans = store.storeAllergen(allergen);
+        PatientAllergen p = new PatientAllergen(allergen, DB.patients().getActive(this));
+        boolean ans = store.storeAllergen(p);
         if (ans) {
             searchAdapter.remove(allergen);
             checkPlaceholder();
@@ -291,19 +295,21 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
     public class AllergiesStore {
 
         private List<PatientAllergen> currentAllergies;
+        private List<AllergenVO> currentAllergiesVO;
         private Context context;
 
         public AllergiesStore() {
         }
 
         public void reload() {
-            currentAllergies = DB.allergens().findAllForActivePatient(context);
+            currentAllergies = DB.patientAllergens().findAllForActivePatient(context);
             Collections.sort(currentAllergies, new Comparator<PatientAllergen>() {
                 @Override
                 public int compare(PatientAllergen o1, PatientAllergen o2) {
                     return o1.getName().compareTo(o2.getName());
                 }
             });
+            currentAllergiesVO = AllergenConversionUtil.toVO(currentAllergies);
         }
 
         public void load(Context ctx) {
@@ -330,7 +336,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         public int deleteAllergen(PatientAllergen a) {
             try {
                 int index = currentAllergies.indexOf(a);
-                DB.allergens().delete(a);
+                DB.patientAllergens().delete(a);
                 currentAllergies.remove(a);
                 return index;
             } catch (SQLException e) {
@@ -346,6 +352,10 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
 
         public boolean isEmpty() {
             return currentAllergies.isEmpty();
+        }
+
+        public List<AllergenVO> getAllergiesVO() {
+            return currentAllergiesVO;
         }
     }
 
