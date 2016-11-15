@@ -25,8 +25,7 @@ import com.j256.ormlite.misc.TransactionManager;
 
 import java.util.concurrent.Callable;
 
-import es.usc.citius.servando.calendula.drugdb.model.database.HomogeneousGroupDAO;
-import es.usc.citius.servando.calendula.drugdb.model.database.PrescriptionDAO;
+import es.usc.citius.servando.calendula.drugdb.model.database.DrugDBModule;
 
 
 public class DB {
@@ -54,16 +53,14 @@ public class DB {
     private static ScheduleItemDao ScheduleItems;
     // DailyScheduleItem DAO
     private static DailyScheduleItemDao DailyScheduleItems;
-    // Prescriptions DAO
-    private static PrescriptionDAO Prescriptions;
-    // HomogeneousGroups DAO
-    private static HomogeneousGroupDAO Groups;
     // Pickups DAO
     private static PickupInfoDao Pickups;
     // Patients DAO
     private static PatientDao Patients;
     //Allergens DAO
     private static PatientAllergenDao PatientAllergens;
+    //Drug DB module
+    private static DrugDBModule DrugDB;
 
     /**
      * Initialize database and DAOs
@@ -82,11 +79,12 @@ public class DB {
             Schedules = new ScheduleDao(db);
             ScheduleItems = new ScheduleItemDao(db);
             DailyScheduleItems = new DailyScheduleItemDao(db);
-            Prescriptions = new PrescriptionDAO(db);
-            Groups = new HomogeneousGroupDAO(db);
             Pickups = new PickupInfoDao(db);
             Patients = new PatientDao(db);
             PatientAllergens = new PatientAllergenDao(db);
+
+            DrugDB = DrugDBModule.getInstance();
+
             Log.v(TAG, "DB initialized " + DB.DB_NAME);
         }
 
@@ -135,14 +133,6 @@ public class DB {
         return DailyScheduleItems;
     }
 
-    public static PrescriptionDAO prescriptions() {
-        return Prescriptions;
-    }
-
-    public static HomogeneousGroupDAO groups() {
-        return Groups;
-    }
-
     public static PickupInfoDao pickups() {
         return Pickups;
     }
@@ -151,7 +141,13 @@ public class DB {
         return Patients;
     }
 
-    public static PatientAllergenDao allergens(){ return PatientAllergens; }
+    public static PatientAllergenDao patientAllergens() {
+        return PatientAllergens;
+    }
+
+    public static DrugDBModule drugDB() {
+        return DrugDB;
+    }
 
     public static void dropAndCreateDatabase() {
         db.dropAndCreateAllTables();
