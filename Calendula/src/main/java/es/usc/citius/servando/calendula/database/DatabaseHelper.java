@@ -186,10 +186,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
             }
 
-
         } catch (Exception e) {
             Log.e(DatabaseHelper.class.getName(), "Can't upgrade databases", e);
-            throw new RuntimeException(e);
+            try {
+                Log.d(DatabaseHelper.class.getName(), "Will try to recreate db...");
+                dropAndCreateAllTables();
+                createDefaultPatient();
+            }catch (Exception ex){
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -227,8 +232,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         // Assign all DailyScheduleItems to the default patient, for today
         UpdateBuilder<DailyScheduleItem, Long> siUpdateBuilder = getDailyScheduleItemsDao().updateBuilder();
         siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_PATIENT, p.id());
-        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_DATE, LocalDate.now());
         siUpdateBuilder.update();
+
+        // date formatter changes on v11, so we can no use LocalDatePersister here
+        String now = LocalDate.now().toString("ddMMYYYY");
+        String updateDateSql = "UPDATE DailyScheduleItems SET " + DailyScheduleItem.COLUMN_DATE + " = '" +now + "'";
+        getDailyScheduleItemsDao().executeRaw(updateDateSql);
 
     }
 
