@@ -21,7 +21,7 @@ public class PackageType {
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
     @DatabaseField(columnName = COLUMN_PACKAGE_TYPE_ID)
-    private Long packageTypeID;
+    private String packageTypeID;
     @DatabaseField(columnName = COLUMN_NAME)
     private String name;
 
@@ -31,7 +31,7 @@ public class PackageType {
     public PackageType() {
     }
 
-    public PackageType(Long packageTypeID, String name) {
+    public PackageType(String packageTypeID, String name) {
         this.packageTypeID = packageTypeID;
         this.name = name;
     }
@@ -44,12 +44,12 @@ public class PackageType {
         this.id = id;
     }
 
-    public Long getPackageTypeID() {
+    public String getPackageTypeID() {
 
         return packageTypeID;
     }
 
-    public void setPackageTypeID(Long packageTypeID) {
+    public void setPackageTypeID(String packageTypeID) {
         this.packageTypeID = packageTypeID;
     }
 

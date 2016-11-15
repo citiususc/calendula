@@ -24,16 +24,16 @@ public class PrescriptionActiveIngredient{
 	@DatabaseField(columnName = COLUMN_ID, generatedId = true)
 	private Long id;
 	@DatabaseField(columnName = COLUMN_ACTIVE_INGREDIENT_ID)
-	private Long activeIngredientID;
+	private String activeIngredientID;
 	@DatabaseField(columnName = COLUMN_PRESCRIPTION_CODE)
-	private Long prescriptionCode;
+	private String prescriptionCode;
 
 	/**
 	* Empty constructor, required by ORMLite
 	*/
 	public PrescriptionActiveIngredient(){}
 
-	public PrescriptionActiveIngredient(Long activeIngredientID, Long prescriptionCode){
+	public PrescriptionActiveIngredient(String activeIngredientID, String prescriptionCode){
 		this.activeIngredientID = activeIngredientID;
 		this.prescriptionCode = prescriptionCode;
 	}
@@ -42,19 +42,19 @@ public class PrescriptionActiveIngredient{
 
 	public void setId(Long id) { this.id = id; }
 
-	public Long getActiveIngredientID() {
+	public String getActiveIngredientID() {
 		return activeIngredientID;
 	}
 
-	public void setActiveIngredientID(Long activeIngredientID) {
+	public void setActiveIngredientID(String activeIngredientID) {
 		this.activeIngredientID = activeIngredientID;
 	}
 
-	public Long getPrescriptionCode() {
+	public String getPrescriptionCode() {
 		return prescriptionCode;
 	}
 
-	public void setPrescriptionCode(Long prescriptionCode) {
+	public void setPrescriptionCode(String prescriptionCode) {
 		this.prescriptionCode = prescriptionCode;
 	}
 }

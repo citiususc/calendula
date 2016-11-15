@@ -21,7 +21,7 @@ public class Excipient {
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
     @DatabaseField(columnName = COLUMN_EXCIPIENT_ID)
-    private Long excipientID;
+    private String excipientID;
     @DatabaseField(columnName = COLUMN_NAME)
     private String name;
 
@@ -31,7 +31,7 @@ public class Excipient {
     public Excipient() {
     }
 
-    public Excipient(Long excipientID, String name) {
+    public Excipient(String excipientID, String name) {
         this.excipientID = excipientID;
         this.name = name;
     }
@@ -44,11 +44,11 @@ public class Excipient {
         this.id = id;
     }
 
-    public Long getExcipientID() {
+    public String getExcipientID() {
         return excipientID;
     }
 
-    public void setExcipientID(Long excipientID) {
+    public void setExcipientID(String excipientID) {
         this.excipientID = excipientID;
     }
 

@@ -58,7 +58,7 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
         }
 
         Prescription p = new Prescription();
-        p.setCode(Long.valueOf(values[0].hashCode()));
+        p.setCode(values[0]);
         p.setpID(values[0]);
         p.setName(values[1]);
         p.setDose("0");
