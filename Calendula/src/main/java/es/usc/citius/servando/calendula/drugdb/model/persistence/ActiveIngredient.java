@@ -24,7 +24,7 @@ public class ActiveIngredient {
     @DatabaseField(columnName = COLUMN_ACTIVE_INGREDIENT_CODE)
     private String activeIngredientCode;
     @DatabaseField(columnName = COLUMN_ACTIVE_INGREDIENT_ID)
-    private Long activeIngredientID;
+    private String activeIngredientID;
     @DatabaseField(columnName = COLUMN_NAME)
     private String name;
 
@@ -34,7 +34,7 @@ public class ActiveIngredient {
     public ActiveIngredient() {
     }
 
-    public ActiveIngredient(String activeIngredientCode, Long activeIngredientID, String name) {
+    public ActiveIngredient(String activeIngredientCode, String activeIngredientID, String name) {
         this.activeIngredientCode = activeIngredientCode;
         this.activeIngredientID = activeIngredientID;
         this.name = name;
@@ -56,11 +56,11 @@ public class ActiveIngredient {
         this.activeIngredientCode = activeIngredientCode;
     }
 
-    public Long getActiveIngredientID() {
+    public String getActiveIngredientID() {
         return activeIngredientID;
     }
 
-    public void setActiveIngredientID(Long activeIngredientID) {
+    public void setActiveIngredientID(String activeIngredientID) {
         this.activeIngredientID = activeIngredientID;
     }
 

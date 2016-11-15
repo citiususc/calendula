@@ -23,7 +23,7 @@ public class PresentationForm {
     @DatabaseField(columnName = COLUMN_NAME)
     private String name;
     @DatabaseField(columnName = COLUMN_PRESENTATION_FORM_ID)
-    private Long presentationFormID;
+    private String presentationFormID;
 
     /**
      * Empty constructor, required by ORMLite
@@ -31,7 +31,7 @@ public class PresentationForm {
     public PresentationForm() {
     }
 
-    public PresentationForm(String name, Long presentationFormID) {
+    public PresentationForm(String name, String presentationFormID) {
         this.name = name;
         this.presentationFormID = presentationFormID;
     }
@@ -52,11 +52,11 @@ public class PresentationForm {
         this.name = name;
     }
 
-    public Long getPresentationFormID() {
+    public String getPresentationFormID() {
         return presentationFormID;
     }
 
-    public void setPresentationFormID(Long presentationFormID) {
+    public void setPresentationFormID(String presentationFormID) {
         this.presentationFormID = presentationFormID;
     }
 }

@@ -21,7 +21,7 @@ public class ContentUnit {
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
     @DatabaseField(columnName = COLUMN_CONTENT_UNIT_ID)
-    private Long contentUnitID;
+    private String contentUnitID;
     @DatabaseField(columnName = COLUMN_NAME)
     private String name;
 
@@ -31,7 +31,7 @@ public class ContentUnit {
     public ContentUnit() {
     }
 
-    public ContentUnit(Long contentUnitID, String name) {
+    public ContentUnit(String contentUnitID, String name) {
         this.contentUnitID = contentUnitID;
         this.name = name;
     }
@@ -44,11 +44,11 @@ public class ContentUnit {
         this.id = id;
     }
 
-    public Long getContentUnitID() {
+    public String getContentUnitID() {
         return contentUnitID;
     }
 
-    public void setContentUnitID(Long contentUnitID) {
+    public void setContentUnitID(String contentUnitID) {
         this.contentUnitID = contentUnitID;
     }
 

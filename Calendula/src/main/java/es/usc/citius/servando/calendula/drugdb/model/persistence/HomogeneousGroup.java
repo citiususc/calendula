@@ -21,7 +21,7 @@ public class HomogeneousGroup {
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
     @DatabaseField(columnName = COLUMN_HOMOGENEOUS_GROUP_ID)
-    private Long homogeneousGroupID;
+    private String homogeneousGroupID;
     @DatabaseField(columnName = COLUMN_NAME)
     private String name;
 
@@ -31,7 +31,7 @@ public class HomogeneousGroup {
     public HomogeneousGroup() {
     }
 
-    public HomogeneousGroup(Long homogeneousGroupID, String name) {
+    public HomogeneousGroup(String homogeneousGroupID, String name) {
         this.homogeneousGroupID = homogeneousGroupID;
         this.name = name;
     }
@@ -44,11 +44,11 @@ public class HomogeneousGroup {
         this.id = id;
     }
 
-    public Long getHomogeneousGroupID() {
+    public String getHomogeneousGroupID() {
         return homogeneousGroupID;
     }
 
-    public void setHomogeneousGroupID(Long homogeneousGroupID) {
+    public void setHomogeneousGroupID(String homogeneousGroupID) {
         this.homogeneousGroupID = homogeneousGroupID;
     }
 

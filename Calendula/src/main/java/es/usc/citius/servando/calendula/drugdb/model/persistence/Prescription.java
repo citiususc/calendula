@@ -35,7 +35,7 @@ public class Prescription {
     @DatabaseField(columnName = COLUMN_AFFECTS_DRIVING)
     private Boolean affectsDriving;
     @DatabaseField(columnName = COLUMN_CODE)
-    private Long code;
+    private String code;
     @DatabaseField(columnName = COLUMN_CONTENT)
     private String content;
     @DatabaseField(columnName = COLUMN_CONTENT_UNIT)
@@ -45,17 +45,17 @@ public class Prescription {
     @DatabaseField(columnName = COLUMN_GENERIC)
     private Boolean generic;
     @DatabaseField(columnName = COLUMN_HOMOGENEOUS_GROUP)
-    private Long homogeneousGroup;
+    private String homogeneousGroup;
     @DatabaseField(columnName = COLUMN_NAME)
     private String name;
     @DatabaseField(columnName = COLUMN_PID)
     private String pID;
     @DatabaseField(columnName = COLUMN_PACKAGE_TYPE)
-    private Long packageType;
+    private String packageType;
     @DatabaseField(columnName = COLUMN_PACKAGING_UNITS)
     private Float packagingUnits;
     @DatabaseField(columnName = COLUMN_PRESENTATION_FORM)
-    private Long presentationForm;
+    private String presentationForm;
 
     /**
      * Empty constructor, required by ORMLite
@@ -63,7 +63,7 @@ public class Prescription {
     public Prescription() {
     }
 
-    public Prescription(Boolean affectsDriving, Long code, String content, Long contentUnit, String dose, Boolean generic, Long homogeneousGroup, String name, String pID, Long packageType, Float packagingUnits, Long presentationForm) {
+    public Prescription(Boolean affectsDriving, String code, String content, Long contentUnit, String dose, Boolean generic, String homogeneousGroup, String name, String pID, String packageType, Float packagingUnits, String presentationForm) {
         this.affectsDriving = affectsDriving;
         this.code = code;
         this.content = content;
@@ -94,11 +94,11 @@ public class Prescription {
         this.affectsDriving = affectsDriving;
     }
 
-    public Long getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(Long code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
@@ -134,11 +134,11 @@ public class Prescription {
         this.generic = generic;
     }
 
-    public Long getHomogeneousGroup() {
+    public String getHomogeneousGroup() {
         return homogeneousGroup;
     }
 
-    public void setHomogeneousGroup(Long homogeneousGroup) {
+    public void setHomogeneousGroup(String homogeneousGroup) {
         this.homogeneousGroup = homogeneousGroup;
     }
 
@@ -158,11 +158,11 @@ public class Prescription {
         this.pID = pID;
     }
 
-    public Long getPackageType() {
+    public String getPackageType() {
         return packageType;
     }
 
-    public void setPackageType(Long packageType) {
+    public void setPackageType(String packageType) {
         this.packageType = packageType;
     }
 
@@ -174,11 +174,11 @@ public class Prescription {
         this.packagingUnits = packagingUnits;
     }
 
-    public Long getPresentationForm() {
+    public String getPresentationForm() {
         return presentationForm;
     }
 
-    public void setPresentationForm(Long presentationForm) {
+    public void setPresentationForm(String presentationForm) {
         this.presentationForm = presentationForm;
     }
 
