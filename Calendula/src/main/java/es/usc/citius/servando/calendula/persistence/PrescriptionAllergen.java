@@ -21,6 +21,8 @@ package es.usc.citius.servando.calendula.persistence;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
+
 /**
  * Models an user
  */
