@@ -1242,10 +1242,10 @@ public class ScheduleImportFragment extends Fragment
         Presentation p;
 
         if(prescriptionWrapper.isGroup) {
-            HomogeneousGroup g = DB.groups().findOneBy(HomogeneousGroup.COLUMN_HOMOGENEOUS_GROUP_ID,prescriptionWrapper.group.getHomogeneousGroupID());
+            HomogeneousGroup g = DB.drugDB().homogeneousGroups().findOneBy(HomogeneousGroup.COLUMN_HOMOGENEOUS_GROUP_ID,prescriptionWrapper.group.getHomogeneousGroupID());
             p = dbMgr.expected(g.getName(), g.getName());
         }else{
-            p = dbMgr.expected(DB.prescriptions().findByCn(String.valueOf(prescriptionWrapper.prescription.getCode())));
+            p = dbMgr.expected(DB.drugDB().prescriptions().findByCn(String.valueOf(prescriptionWrapper.prescription.getCode())));
         }
 
         final DosePickerFragment dpf = getDosePickerFragment(p,item,null);
@@ -1284,7 +1284,7 @@ public class ScheduleImportFragment extends Fragment
         if(prescriptionWrapper.isGroup) {
             p = dbMgr.expected(prescriptionWrapper.group.getName(), prescriptionWrapper.group.getName());
         }else{
-            p = dbMgr.expected(DB.prescriptions().findByCn(String.valueOf(prescriptionWrapper.prescription.getCode())));
+            p = dbMgr.expected(DB.drugDB().prescriptions().findByCn(String.valueOf(prescriptionWrapper.prescription.getCode())));
         }
 
 

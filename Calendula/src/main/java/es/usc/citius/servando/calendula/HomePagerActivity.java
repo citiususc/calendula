@@ -473,7 +473,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                     .putBoolean("enable_prescriptions_db", true)
                     .commit();
             try {
-                DB.prescriptions().executeRaw("DELETE FROM Prescriptions;");
+                DB.drugDB().prescriptions().executeRaw("DELETE FROM Prescriptions;");
             } catch (SQLException e) {
                 e.printStackTrace();
             }

@@ -90,10 +90,10 @@ public class PrescriptionStore {
         }
 
         // clear all allocated spaces
-        Log.d(TAG, "Finish saving " + DB.prescriptions().count() + " prescriptions!");
+        Log.d(TAG, "Finish saving " + DB.drugDB().prescriptions().count() + " prescriptions!");
 
         try {
-            DB.prescriptions().executeRaw("VACUUM;");
+            DB.drugDB().prescriptions().executeRaw("VACUUM;");
         } catch (Exception e) {
             e.printStackTrace();
         }

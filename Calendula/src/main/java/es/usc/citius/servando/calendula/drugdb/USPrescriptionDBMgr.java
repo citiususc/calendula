@@ -144,7 +144,7 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
                     }
                     // exec line content as raw sql
                     Prescription prescription = fromCsv(line,"\\|");
-                    DB.prescriptions().save(prescription);
+                    DB.drugDB().prescriptions().save(prescription);
                     i++;
                 }
                 br.close();

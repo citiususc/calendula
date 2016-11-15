@@ -418,7 +418,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         selectPresentation(mMedicine.presentation());
 
         if (r.cn() != null) {
-            Prescription p = DB.prescriptions().findByCn(r.cn());
+            Prescription p = DB.drugDB().prescriptions().findByCn(r.cn());
             if (p != null) {
                 mPrescription = p;
                 mDescriptionTv.setText(p.getName());
@@ -666,7 +666,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                     if (constraint != null) {
                         // A class that queries a web API, parses the data and returns an ArrayList<Style>
                         try {
-                            List<Prescription> prescriptions = DB.prescriptions().findByName(constraint.toString(), 20);
+                            List<Prescription> prescriptions = DB.drugDB().prescriptions().findByName(constraint.toString(), 20);
                             /*List<String> names = new ArrayList<String>();
                             for(Prescription p : prescriptions)
                                 names.add(p.name);

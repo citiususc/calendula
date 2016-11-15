@@ -42,14 +42,14 @@ public class PopulatePrescriptionDBService {
     public static boolean isDbOutdated(Context ctx){
         final int manifestVersion = getAempDbVersionFromManifest(ctx);
         final int currentVersion = getAempDbVersionFromPreferences(ctx);
-        return (currentVersion < manifestVersion) || DB.prescriptions().empty();
+        return (currentVersion < manifestVersion) || DB.drugDB().prescriptions().empty();
     }
 
     public void updateIfNeeded(Context ctx) {
 
         final int manifestVersion = getAempDbVersionFromManifest(ctx);
         final int currentVersion = getAempDbVersionFromPreferences(ctx);
-        boolean needUpdate = (currentVersion < manifestVersion) || DB.prescriptions().empty();
+        boolean needUpdate = (currentVersion < manifestVersion) || DB.drugDB().prescriptions().empty();
 
         if (needUpdate) {
             Log.d(TAG, "Updating prescriptions database...");

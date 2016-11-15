@@ -121,7 +121,7 @@ public class ScheduleConfirmationEndFragment extends Fragment {
     public String getMedicineName(PrescriptionWrapper p){
         String name = "";
         if(p.cn != null){
-            Prescription prescription = DB.prescriptions().findByCn(p.cn);
+            Prescription prescription = DB.drugDB().prescriptions().findByCn(p.cn);
             name = prescription.shortName();
         }else if(p.isGroup){
             name = Strings.firstPart(p.group.getName());

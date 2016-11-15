@@ -381,7 +381,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 //                                filterResults.values = null;
 //                                filterResults.count = 0;
 //                            }else{
-                            List<Prescription> prescriptions = DB.prescriptions().findByName(constraint.toString(), 50);
+                            List<Prescription> prescriptions = DB.drugDB().prescriptions().findByName(constraint.toString(), 50);
                             mData = prescriptions;//Fetcher.fetchNames(constraint.toString());
                             // Now assign the values and count to the FilterResults object
                             filterResults.values = mData;
