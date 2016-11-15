@@ -19,13 +19,11 @@
 package es.usc.citius.servando.calendula;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -52,7 +50,6 @@ import com.mikepenz.iconics.typeface.IIcon;
 
 import org.joda.time.DateTime;
 
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -77,7 +74,6 @@ import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
-import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.Snack;
@@ -204,14 +200,6 @@ public class HomePagerActivity extends CalendulaActivity implements
                 .icon(CommunityMaterial.Icon.cmd_unfold_more)
                 .color(Color.WHITE)
                 .sizeDp(24);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                updateAempsIfNeeded();
-            }
-        }, 1500);
-
 
         SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if(!prefs.getBoolean("PREFERENCE_INTRO_SHOWN", false)) {
@@ -465,73 +453,16 @@ public class HomePagerActivity extends CalendulaActivity implements
 
         if(CalendulaApp.isPharmaModeEnabled(getApplicationContext())){
             prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, false).commit();
-            Snack.show("Acabas de deshabilitar el modo farmacia!", HomePagerActivity.this);
+            Snack.show("Acabas de deshabilitar el modo farmacia!", this);
             fabMgr.onPharmacyModeChanged(false);
             drawerMgr.onPharmacyModeChanged(false);
         }else {
-            prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, true)
-                    .putBoolean("enable_prescriptions_db", true)
-                    .commit();
-            try {
-                DB.prescriptions().executeRaw("DELETE FROM Prescriptions;");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            new PopulatePrescriptionDatabaseTask().execute("");
+            prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, true).commit();
+            Snack.show("Acabas de habilitar el modo farmacia!", this);
+            fabMgr.onPharmacyModeChanged(false);
+            drawerMgr.onPharmacyModeChanged(false);
         }
     }
-
-
-    public class PopulatePrescriptionDatabaseTask extends AsyncTask<String, String, Void> {
-
-
-        ProgressDialog dialog;
-        int msgResource = R.string.enable_prescriptions_progress_messgae;
-
-
-        public  PopulatePrescriptionDatabaseTask(){}
-
-        public PopulatePrescriptionDatabaseTask(int msgResource){
-            this.msgResource = msgResource;
-        }
-
-        @Override
-        protected Void doInBackground(String... params) {
-            new PopulatePrescriptionDBService().updateIfNeeded(HomePagerActivity.this);
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog = new ProgressDialog(HomePagerActivity.this);
-            dialog.setIndeterminate(true);
-            dialog.setCancelable(false);
-            dialog.setMessage(getString(msgResource));
-            dialog.show();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (dialog.isShowing()) {
-                dialog.dismiss();
-            }
-            Snack.show("Acabas de habilitar el modo farmacia!", HomePagerActivity.this);
-            fabMgr.onPharmacyModeChanged(true);
-            drawerMgr.onPharmacyModeChanged(true);
-        }
-    }
-
-    void updateAempsIfNeeded(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        int msgRes = R.string.updating_prescriptions_db_msg;
-        boolean dbEnabled = prefs.getBoolean("enable_prescriptions_db", false);
-        if(dbEnabled && PopulatePrescriptionDBService.isDbOutdated(this)){
-            new PopulatePrescriptionDatabaseTask(msgRes).execute("");
-        }
-    }
-
 
     Fragment getViewPagerFragment(int position) {
         String tag = FragmentUtils.makeViewPagerFragmentName(R.id.container, position);
