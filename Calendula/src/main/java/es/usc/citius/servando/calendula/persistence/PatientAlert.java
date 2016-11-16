@@ -52,7 +52,7 @@ public abstract class PatientAlert<T> {
         return type;
     }
 
-    public void setType(AlertType type) {
+    protected void setType(AlertType type) {
         this.type = type;
     }
 
@@ -77,7 +77,9 @@ public abstract class PatientAlert<T> {
 
     public abstract Class<?> getDetailsType();
 
-    public abstract boolean hasDetails();
+    public final boolean hasDetails() {
+        return getDetailsType() != null;
+    }
 
 
     @Override
