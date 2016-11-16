@@ -495,6 +495,8 @@
 
     <string name="notification_error_msg">It seems there was a problem with the notification. Please, take a look at your agenda to see if there is something pending.</string>
     <string name="notification_error_title">Oops...</string>
+    <string name="title_medicine_allergy_alert">Allergies detected for this medicine.</string>
+    <string name="message_medicine_alert">This medicine contains ingredients to which you have an allergy. For your safety, this medicine can\'t be scheduled.</string>
 
 
 </resources>

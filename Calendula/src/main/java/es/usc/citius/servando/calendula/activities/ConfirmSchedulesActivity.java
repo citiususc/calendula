@@ -154,9 +154,9 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
         qrData = getIntent().getStringExtra("qr_data");
         try {
             new ProcessQRTask().execute(qrData);
-        }catch (Exception e){
-            Log.e(TAG, "Error processing QR",e);
-            Toast.makeText(this,"Error inesperado actualizando!", Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Log.e(TAG, "Error processing QR", e);
+            Toast.makeText(this, "Error inesperado actualizando!", Toast.LENGTH_LONG).show();
             finish();
         }
     }
@@ -251,7 +251,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
         }
     }
 
-    public Map<Schedule, PrescriptionWrapper> getScheduleInfo(){
+    public Map<Schedule, PrescriptionWrapper> getScheduleInfo() {
         Map<Schedule, PrescriptionWrapper> schedules = new HashMap<>();
         for (int i = 0; i < scheduleCount; i++) {
             Fragment f = getViewPagerFragment(i + 1);
@@ -264,7 +264,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
     }
 
 
-    public List<Schedule> getSchedules(){
+    public List<Schedule> getSchedules() {
         List<Schedule> schedules = new ArrayList<>();
         for (int i = 0; i < scheduleCount; i++) {
             Fragment f = getViewPagerFragment(i + 1);
@@ -277,7 +277,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
 
     private void saveSchedules() {
 
-        final ProgressDialog progress = ProgressDialog.show(this,"Calendula","Actualizando pautas...", true);
+        final ProgressDialog progress = ProgressDialog.show(this, "Calendula", "Actualizando pautas...", true);
 
         AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>() {
             @Override
@@ -305,7 +305,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                                         String cn = w.cn;
                                         Medicine m = null;
                                         if (cn != null) {
-                                            m = DB.medicines().findByCnAndPatient(cn,patient);
+                                            m = DB.medicines().findByCnAndPatient(cn, patient);
                                             if (m == null) {
                                                 Log.d("PRESCRIPTION", "Saving medicine!");
                                                 m = Medicine.fromPrescription(DB.drugDB().prescriptions().findByCn(cn));
@@ -313,13 +313,14 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                                                 m.save();
                                             }
                                         } else if (w.isGroup) {
-                                            m = DB.medicines().findByGroupAndPatient(w.group.getId(),patient);
+                                            m = DB.medicines().findByGroupAndPatient(w.group.getId(), patient);
                                             if (m == null) {
                                                 m = new Medicine(Strings.firstPart(w.group.getName()));
                                                 m.setHomogeneousGroup(w.group.getId());
                                                 Presentation pres = DBRegistry.instance().current().expected(w.group.getName(), w.group.getName());
                                                 m.setPresentation(pres != null ? pres : Presentation.PILLS);
                                                 m.setPatient(patient);
+                                                m.setDatabase(DBRegistry.instance().current().id());
                                                 m.save();
                                             }
                                         } else {
@@ -337,7 +338,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                                             createSchedule(s, c.getScheduleItems(), m);
                                         }
 
-                                        if(m!=null){
+                                        if (m != null) {
                                             // remove old pickups before inserting the new ones
                                             DB.pickups().removeByMed(m);
                                         }
@@ -368,7 +369,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
 
                     return true;
 
-                } catch (Exception e){
+                } catch (Exception e) {
                     Log.e("ConfirmSchedulesAct", "Error saving prescriptions", e);
                     return false;
                 }
@@ -376,16 +377,16 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
 
             @Override
             protected void onPostExecute(Boolean result) {
-                if(progress!=null) {
+                if (progress != null) {
                     progress.dismiss();
                 }
-                if(result){
+                if (result) {
                     finish();
                 }
             }
         };
 
-        task.execute((Void[])null);
+        task.execute((Void[]) null);
     }
 
     public void createSchedule(final Schedule s, List<ScheduleItem> items, Medicine m) {
@@ -432,7 +433,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
             for (ScheduleItem item : s.items()) {
                 DailyScheduleItem d = DailyScheduleItem.findByScheduleItem(item);
                 // if taken today, add to the list
-                if (d!=null && d.takenToday()) {
+                if (d != null && d.takenToday()) {
                     routinesTaken.add(item.routine().getId());
                 }
                 item.deleteCascade();
@@ -592,7 +593,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
 
 
     public PrescriptionListWrapper parseQRData(String data) {
-        Log.d(TAG,"QRDATA: " + data);
+        Log.d(TAG, "QRDATA: " + data);
         return new Gson().fromJson(data, PrescriptionListWrapper.class);
     }
 
@@ -633,7 +634,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                     } else {
                         return 0l;
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     Log.e(TAG, "Error processing QR", e);
                     return -1l;
                 }

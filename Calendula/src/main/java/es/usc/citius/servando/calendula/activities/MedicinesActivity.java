@@ -55,6 +55,8 @@ import java.util.List;
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.allergies.AllergenFacade;
+import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
@@ -240,6 +242,20 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
     @Override
     public void onMedicineCreated(Medicine m) {
+
+        // check for allergies
+        if (m.isBoundToPrescription()) {
+            List<AllergenVO> vos = AllergenFacade.checkAllergies(this, DB.drugDB().prescriptions().findByCn(m.cn()));
+            if (!vos.isEmpty()) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+                builder.setTitle(R.string.title_medicine_allergy_alert);
+                builder.setMessage(R.string.message_medicine_alert)
+                        .setCancelable(true);
+                android.app.AlertDialog alert = builder.create();
+                alert.show();
+            }
+        }
+
         DB.medicines().saveAndFireEvent(m);
         CalendulaApp.eventBus().post(new PersistenceEvents.MedicineAddedEvent(m.getId()));
         Toast.makeText(this, getString(R.string.medicine_created_message), Toast.LENGTH_SHORT).show();
