@@ -35,7 +35,7 @@ public class MaterialIntroActivity extends IntroActivity{
         setFullscreen(true);
         super.onCreate(savedInstanceState);
 
-        setSkipEnabled(false);
+        setSkipEnabled(true);
 
         addSlide(new SimpleSlide.Builder()
                 .layout(R.layout.intro_slide_1)

@@ -58,10 +58,10 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Snack;
@@ -107,7 +107,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         setupToolbar(null, color);
         setupStatusBar(color);
 
-        dbMgr = DBRegistry.instance().current(this);
+        dbMgr = DBRegistry.instance().current();
 
         processIntent();
 
@@ -229,9 +229,11 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         imm.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
     }
 
+
     @Override
     public void onMedicineEdited(Medicine m) {
         DB.medicines().saveAndFireEvent(m);
+
         Snack.show(getString(R.string.medicine_edited_message), this);
         finish();
     }

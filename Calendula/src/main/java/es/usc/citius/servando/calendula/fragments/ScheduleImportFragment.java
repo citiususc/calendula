@@ -73,13 +73,12 @@ import es.usc.citius.servando.calendula.activities.qrWrappers.ScheduleWrapper;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.fragments.dosePickers.DefaultDosePickerFragment;
 import es.usc.citius.servando.calendula.fragments.dosePickers.DosePickerFragment;
 import es.usc.citius.servando.calendula.fragments.dosePickers.LiquidDosePickerFragment;
 import es.usc.citius.servando.calendula.fragments.dosePickers.PillDosePickerFragment;
-import es.usc.citius.servando.calendula.drugdb.model.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Routine;
@@ -186,7 +185,7 @@ public class ScheduleImportFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dbMgr = DBRegistry.instance().current(getActivity());
+        dbMgr = DBRegistry.instance().current();
         color = DB.patients().getActive(getActivity()).color();
         PrescriptionWrapper.Holder h = (PrescriptionWrapper.Holder) getArguments().getSerializable(ARG_PRESCRIPTION);
         prescriptionWrapper = PrescriptionWrapper.from(h);

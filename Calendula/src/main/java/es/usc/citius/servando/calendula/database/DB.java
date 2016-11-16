@@ -57,10 +57,10 @@ public class DB {
     private static PickupInfoDao Pickups;
     // Patients DAO
     private static PatientDao Patients;
-    //Allergens DAO
-    private static PatientAllergenDao PatientAllergens;
     //Drug DB module
     private static DrugDBModule DrugDB;
+    //Allergens DAO
+    private static PatientAllergenDao PatientAllergens;
 
     /**
      * Initialize database and DAOs
@@ -81,9 +81,9 @@ public class DB {
             DailyScheduleItems = new DailyScheduleItemDao(db);
             Pickups = new PickupInfoDao(db);
             Patients = new PatientDao(db);
-            PatientAllergens = new PatientAllergenDao(db);
-
             DrugDB = DrugDBModule.getInstance();
+
+            PatientAllergens = new PatientAllergenDao(db);
 
             Log.v(TAG, "DB initialized " + DB.DB_NAME);
         }
@@ -141,12 +141,12 @@ public class DB {
         return Patients;
     }
 
-    public static PatientAllergenDao patientAllergens() {
-        return PatientAllergens;
-    }
-
     public static DrugDBModule drugDB() {
         return DrugDB;
+    }
+
+    public static PatientAllergenDao patientAllergens() {
+        return PatientAllergens;
     }
 
     public static void dropAndCreateDatabase() {

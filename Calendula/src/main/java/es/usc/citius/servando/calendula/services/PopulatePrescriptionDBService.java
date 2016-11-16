@@ -27,7 +27,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.util.medicine.HomogeneousGroupStore;
 import es.usc.citius.servando.calendula.util.medicine.PrescriptionStore;
 
