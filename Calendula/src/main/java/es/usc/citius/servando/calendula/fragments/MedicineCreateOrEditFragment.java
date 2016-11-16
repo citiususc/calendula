@@ -21,11 +21,11 @@ package es.usc.citius.servando.calendula.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -40,13 +40,25 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
+import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
 
+import com.doomonafireball.betterpickers.numberpicker.NumberPickerBuilder;
+import com.doomonafireball.betterpickers.numberpicker.NumberPickerDialogFragment;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,13 +74,22 @@ import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
-import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
+import es.usc.citius.servando.calendula.persistence.Schedule;
+import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 
 /**
  * Created by joseangel.pineiro on 12/4/13.
  */
-public class MedicineCreateOrEditFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class MedicineCreateOrEditFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener,
+        NumberPickerDialogFragment.NumberPickerDialogHandler
+{
+
+
+    private static final int DIALOG_STOCK_ADD = 1;
+    private static final int DIALOG_STOCK_REMOVE = 2;
+    private static final String TAG = "MedicineCOEFragment";
 
     OnMedicineEditListener mMedicineEditCallback;
     Medicine mMedicine;
@@ -81,12 +102,22 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     ImageView searchButton;
     Presentation selectedPresentation;
     HorizontalScrollView presentationScroll;
+    ScrollView verticalScrollView;
+
+    TextView mStockUnits;
+    TextView mStockEstimation;
+    Switch stockSwitch;
+    ImageButton addBtn;
+    ImageButton rmBtn;
 
     boolean enableSearch = false;
     long mMedicineId;
     String cn;
     int pColor;
     PrescriptionDBMgr dbMgr;
+
+    float stock = -1;
+    String estimatedStockText = "";
 
     private static ArrayList<View> getViewsByTag(ViewGroup root, String tag) {
         ArrayList<View> views = new ArrayList<View>();
@@ -120,10 +151,17 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
+        setupIcons(rootView);
+        verticalScrollView = (ScrollView) rootView.findViewById(R.id.scrollView);
         mNameTextView = (AutoCompleteTextView) rootView.findViewById(R.id.medicine_edit_name);
         mPresentationTv = (TextView) rootView.findViewById(R.id.textView3);
         mDescriptionTv = (TextView) rootView.findViewById(R.id.medicine_edit_description);
         searchButton = (ImageView) rootView.findViewById(R.id.search_button);
+        mStockUnits = (TextView) rootView.findViewById(R.id.stock_units);
+        mStockEstimation = (TextView) rootView.findViewById(R.id.stock_estimated_duration);
+        stockSwitch = (Switch) rootView.findViewById(R.id.stock_switch);
+        addBtn = ((ImageButton)rootView.findViewById(R.id.btn_stock_add));
+        rmBtn = ((ImageButton)rootView.findViewById(R.id.btn_stock_remove));
         mNameTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
@@ -132,9 +170,10 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                 mNameTextView.setText(shortName);
                 mDescriptionTv.setText(p.getName());
                 hideKeyboard();
-
                 // save referenced prescription to med
                 cn = String.valueOf(p.getCode());
+                new ComputeEstimatedStockEndTaks().execute();
+
             }
         });
 
@@ -193,6 +232,8 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
             }
         });
+
+        setupStockViews();
         mNameTextView.requestFocus();
         askForPrescriptionUsage();
         return rootView;
@@ -207,6 +248,113 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                 ((MedicinesActivity) getActivity()).showSearchView(editable != null ? editable.toString() : null);
             }
         });
+    }
+
+    private void setupStockViews(){
+        Context c = getActivity();
+        Drawable add = IconUtils.icon(c, CommunityMaterial.Icon.cmd_plus_circle, R.color.dark_grey_text, 24,4);
+        Drawable remove = IconUtils.icon(c, CommunityMaterial.Icon.cmd_minus_circle, R.color.dark_grey_text, 24,4);
+
+        addBtn.setImageDrawable(add);
+        rmBtn.setImageDrawable(remove);
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showStockDialog(DIALOG_STOCK_ADD);
+            }
+        });
+
+        rmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showStockDialog(DIALOG_STOCK_REMOVE);
+            }
+        });
+
+        stockSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                updateStockControlsVisibility();
+                if(isChecked){
+                    verticalScrollView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            verticalScrollView.fullScroll(View.FOCUS_DOWN);
+                        }
+                    });
+                }
+
+            }
+        });
+
+        stock = mMedicine != null ? mMedicine.stock() : -1;
+
+        if(stock > -1){
+            stockSwitch.setChecked(true);
+        }
+
+        updateStockControlsVisibility();
+        updateStockText();
+    }
+
+    private void updateStockControlsVisibility() {
+        int visibility = stockSwitch.isChecked() ? View.VISIBLE : View.INVISIBLE;
+        mStockUnits.setVisibility(visibility);
+        mStockEstimation.setVisibility(stockSwitch.isChecked() & estimatedStockText !=null? View.VISIBLE : View.INVISIBLE);
+        addBtn.setVisibility(visibility);
+        rmBtn.setVisibility(visibility);
+    }
+
+    void updateStockText(){
+        String units = selectedPresentation != null ? selectedPresentation.units(getResources()) : Presentation.UNKNOWN.units(getResources());
+        String text = stock == -1 ? "No stock info" : (stock + " " + units + "(s)");
+        mStockEstimation.setVisibility(estimatedStockText != null ? View.VISIBLE: View.INVISIBLE);
+        mStockEstimation.setText(estimatedStockText != null ? estimatedStockText : "");
+        mStockUnits.setText(text);
+    }
+
+    private LocalDate getEstimatedStockEnd(List<Schedule> schedules , float stock) {
+        LocalDate current = LocalDate.now();
+        LocalDate end = LocalDate.now().plusMonths(3);
+        Duration duration = new Duration(current.toDateTimeAtStartOfDay(),end.toDateTimeAtStartOfDay());
+
+        float virtualStock = stock;
+
+        Log.d(TAG, "getEstimatedStockEnd: virtual stock " + virtualStock );
+
+        for(int i = 0; i < duration.getStandardDays(); i++){
+            for(Schedule s : schedules){
+                if(s.enabledForDate(current)){
+                    if(s.repeatsHourly()){
+                        virtualStock = virtualStock - (s.hourlyItemsAt(current.toDateTimeAtStartOfDay()).size() * s.dose());
+                    }else{
+                        List<ScheduleItem> items = s.items();
+                        for(ScheduleItem item : items){
+                            virtualStock = virtualStock - item.dose();
+                        }
+                    }
+                }
+                Log.d(TAG, "getEstimatedStockEnd: virtual stock " + virtualStock + " on " + current.toString("dd/MM"));
+            }
+            if(virtualStock < 0){
+                return  current;
+            }
+            current = current.plusDays(1);
+        }
+        return null;
+    }
+
+
+    void showStockDialog(int ref){
+        NumberPickerBuilder npb =
+                new NumberPickerBuilder()
+                        .setMinNumber(1)
+                        //.setLabelText(ref == DIALOG_STOCK_ADD ? "Increase stock by" : "Decrease stock by")
+                        .setDecimalVisibility(NumberPicker.VISIBLE)
+                        .setPlusMinusVisibility(NumberPicker.INVISIBLE)
+                        .setFragmentManager(getChildFragmentManager())
+                        .setTargetFragment(this).setReference(ref)
+                        .setStyleResId(R.style.BetterPickersDialogFragment_Calendula);
+        npb.show();
     }
 
     public void showDeleteConfirmationDialog(final Medicine m) {
@@ -388,6 +536,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
         if (selectedPresentation != null) {
             mPresentationTv.setText(selectedPresentation.getName(getResources()));
+            updateStockText();
         }
     }
 
@@ -422,6 +571,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             if (p != null) {
                 mPrescription = p;
                 mDescriptionTv.setText(p.getName());
+                new ComputeEstimatedStockEndTaks().execute();
             }
         }
     }
@@ -429,7 +579,6 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     public void setPrescription(Prescription p) {
         mNameTextView.setText(dbMgr.shortName(p));
         mDescriptionTv.setText(p.getName());
-
         mPrescription = p;
 
         Presentation pr= DBRegistry.instance().current().expected(p);
@@ -471,6 +620,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             // if editing
             if (mMedicine != null) {
                 mMedicine.setName(name);
+                mMedicine.setStock(stockSwitch.isChecked() ? stock : -1);
                 if (selectedPresentation != null) {
                     mMedicine.setPresentation(selectedPresentation);
                 }
@@ -495,6 +645,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                 if (mPrescription != null && mPrescription.shortName().toLowerCase().equals(m.name().toLowerCase())) {
                     m.setCn(String.valueOf(mPrescription.getCode()));
                 }
+                m.setStock(stockSwitch.isActivated() ? stock : -1);
                 m.setPresentation(selectedPresentation != null ? selectedPresentation : Presentation.UNKNOWN);
                 m.setPatient(DB.patients().getActive(getContext()));
                 if (mMedicineEditCallback != null) {
@@ -582,7 +733,9 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             AlertDialog alert = builder.create();
             alert.show();
         } else {
-            showSoftInput();
+            if(mMedicine == null) {
+                showSoftInput();
+            }
         }
         prefs.edit().putBoolean("show_use_prescriptions_advice", true).commit();
 
@@ -612,6 +765,33 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                 searchButton.setVisibility(View.GONE);
             }
         }
+    }
+
+    public void setupIcons(View root) {
+        Context c = getActivity();
+        int color = R.color.dark_grey_home;
+        int size = 24;
+        Drawable ic1 = IconUtils.icon(c, CommunityMaterial.Icon.cmd_pencil, color, size,4);
+        Drawable ic2 = IconUtils.icon(c, CommunityMaterial.Icon.cmd_eye, color, size,4);
+        Drawable ic3 = IconUtils.icon(c, CommunityMaterial.Icon.cmd_cart, color, size, 4);
+        ((ImageView)root.findViewById(R.id.ic_med_name)).setImageDrawable(ic1);
+        ((ImageView)root.findViewById(R.id.ic_med_presentation)).setImageDrawable(ic2);
+        ((ImageView)root.findViewById(R.id.ic_med_stock)).setImageDrawable(ic3);
+    }
+
+    @Override
+    public void onDialogNumberSet(int reference, int number, double decimal, boolean isNegative, double fullNumber) {
+
+        float amount = (float) fullNumber;
+        if(reference == DIALOG_STOCK_ADD){
+            stock = (stock == -1) ? amount : (stock + amount);
+        } else if(reference == DIALOG_STOCK_REMOVE){
+            if(amount>=stock)
+                stock=0;
+            else
+                stock-=amount;
+        }
+        new ComputeEstimatedStockEndTaks().execute();
     }
 
 
@@ -695,37 +875,51 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         }
     }
 
-    public class PopulatePrescriptionDatabaseTask extends AsyncTask<String, String, Void> {
+    public class ComputeEstimatedStockEndTaks extends AsyncTask<Void, Void, Boolean> {
 
-
-        ProgressDialog dialog;
+        String text;
 
         @Override
-        protected Void doInBackground(String... params) {
-            new PopulatePrescriptionDBService().updateIfNeeded(getActivity());
-            return null;
+        protected Boolean doInBackground(Void... params) {
+            if(stock>=0 && mMedicine!=null){
+                Log.d(TAG, "updateStockText: medicina ok");
+                List<Schedule> schedules = DB.schedules().findByMedicine(mMedicine);
+                if(!schedules.isEmpty()) {
+                    Log.d(TAG, "updateStockText: pautas " + schedules.size());
+                    LocalDate estimatedEnd = getEstimatedStockEnd(schedules, stock);
+                    if(estimatedEnd != null){
+                        Log.d(TAG, "updateStockText: esitmado " + estimatedEnd.toString("dd/MM"));
+                        long days = new Duration(DateTime.now().withTimeAtStartOfDay(), estimatedEnd.toDateTimeAtStartOfDay()).getStandardDays();
+                        if(days < 21){
+                            text = "Suficiente para " + days + " días con la pauta actual";
+                        }else{
+                            text = "Suficiente para " + (int)(days/7) + " semanas y " + (days%7) + " días con la pauta actual";
+                        }
+                    }else{
+                        text = "Suficiente para más de tres meses";
+                    }
+                    return true;
+                }
+            }
+            return false;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog = new ProgressDialog(getActivity());
-            dialog.setIndeterminate(true);
-            dialog.setCancelable(false);
-            dialog.setMessage(getString(R.string.enable_prescriptions_progress_messgae));
-            dialog.show();
+            estimatedStockText = null;
+            updateStockText();
+
+
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (dialog.isShowing()) {
-                dialog.dismiss();
+        protected void onPostExecute(Boolean res) {
+            super.onPostExecute(res);
+            if(res) {
+                estimatedStockText = text;
+                updateStockText();
             }
-            enableSearchButton();
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            prefs.edit().putBoolean("enable_prescriptions_db", true).commit();
-            Snack.show(R.string.enable_prescriptions_finish_message, getActivity());
         }
     }
 
