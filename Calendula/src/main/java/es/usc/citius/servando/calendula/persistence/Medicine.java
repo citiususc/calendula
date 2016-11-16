@@ -19,8 +19,6 @@
 package es.usc.citius.servando.calendula.persistence;
 
 
-import android.content.Context;
-
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -50,6 +48,7 @@ public class Medicine implements Comparable<Medicine> {
     public static final String COLUMN_HG = "hg";
     public static final String COLUMN_STOCK = "Stock";
     public static final String COLUMN_PATIENT = "Patient";
+    public static final String COLUMN_DATABASE = "Database";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
@@ -71,6 +70,9 @@ public class Medicine implements Comparable<Medicine> {
 
     @DatabaseField(columnName = COLUMN_PATIENT, foreign = true, foreignAutoRefresh = true)
     private Patient patient;
+
+    @DatabaseField(columnName = COLUMN_DATABASE)
+    private String database;
 
     public Medicine() {
     }
@@ -136,6 +138,14 @@ public class Medicine implements Comparable<Medicine> {
         this.patient = patient;
     }
 
+    public String getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
+    }
+
     @Override
     public int compareTo(Medicine another) {
         return name.compareTo(another.name);
@@ -166,11 +176,11 @@ public class Medicine implements Comparable<Medicine> {
         DB.medicines().save(this);
     }
 
-    public static Medicine fromPrescription(Context ctx, Prescription p) {
+    public static Medicine fromPrescription(Prescription p) {
         Medicine m = new Medicine();
         m.setCn(String.valueOf(p.getCode()));
         m.setName(p.shortName());
-        Presentation pre = DBRegistry.instance().current(ctx).expected(p);
+        Presentation pre = DBRegistry.instance().current().expected(p);
         m.setPresentation(pre != null ? pre : Presentation.PILLS);
         return m;
     }
@@ -194,6 +204,10 @@ public class Medicine implements Comparable<Medicine> {
     public String nextPickup() {
         LocalDate np = nextPickupDate();
         return np != null ? np.toString("dd MMMM") : null;
+    }
+
+    public boolean isBoundToPrescription() {
+        return cn != null && database != null && database.equals(DBRegistry.instance().current().id());
     }
 
     public Float stock() {

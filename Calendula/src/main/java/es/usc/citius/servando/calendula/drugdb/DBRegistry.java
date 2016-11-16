@@ -41,14 +41,6 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionActiveIngredient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionExcipient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PresentationForm;
-import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
-import es.usc.citius.servando.calendula.persistence.HtmlCacheEntry;
-import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Patient;
-import es.usc.citius.servando.calendula.persistence.PickupInfo;
-import es.usc.citius.servando.calendula.persistence.Routine;
-import es.usc.citius.servando.calendula.persistence.Schedule;
-import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
 /**
  * Created by joseangel.pineiro on 9/4/15.
@@ -61,18 +53,28 @@ public class DBRegistry {
 
     private PrescriptionDBMgr defaultDBMgr;
 
+    private SharedPreferences settings;
+    private String none;
+    private String settingUp;
 
-    public  static DBRegistry instance(){
-        if(instance == null){
-            throw  new RuntimeException("DBRegistry is not initialized!");
+
+    public static DBRegistry instance() {
+        if (instance == null) {
+            throw new RuntimeException("DBRegistry is not initialized!");
         }
         return instance;
     }
 
-    public  static DBRegistry init(Context ctx){
-        if(instance==null) {
+    public static DBRegistry init(Context ctx) {
+        if (instance == null) {
+
+
             instance = new DBRegistry();
             instance.databases = new HashMap<>();
+
+            instance.settings = PreferenceManager.getDefaultSharedPreferences(ctx);
+            instance.none = ctx.getString(R.string.database_none_id);
+            instance.settingUp = ctx.getString(R.string.database_setting_up);
 
             PrescriptionDBMgr aemps = new AEMPSPrescriptionDBMgr();
             aemps.setId(ctx.getString(R.string.database_aemps_id));
@@ -91,29 +93,25 @@ public class DBRegistry {
 
             instance.databases.put(aemps.id(), aemps);
 //            instance.databases.put(uk.id(),uk);
-            instance.databases.put(us.id(),us);
+            instance.databases.put(us.id(), us);
 
             instance.defaultDBMgr = aemps;
         }
         return instance;
     }
 
-    public PrescriptionDBMgr db(String key){
+    public PrescriptionDBMgr db(String key) {
         return databases.get(key);
     }
 
-    public PrescriptionDBMgr current(Context ctx){
-
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
-        String none = ctx.getString(R.string.database_none_id);
-        String settingUp= ctx.getString(R.string.database_setting_up);
-        String key = settings.getString("prescriptions_database",none);
+    public PrescriptionDBMgr current() {
+        String key = settings.getString("prescriptions_database", none);
         Log.d("DBRegistry", "Key: " + key);
-        return (key!=null && !key.equals(none) && !key.equals(settingUp)) ? databases.get(key) :  defaultDBMgr;
+        return (key != null && !key.equals(none) && !key.equals(settingUp)) ? databases.get(key) : defaultDBMgr;
     }
 
-    public PrescriptionDBMgr defaultDBMgr(){
-        return  defaultDBMgr;
+    public PrescriptionDBMgr defaultDBMgr() {
+        return defaultDBMgr;
     }
 
     public void clear() throws SQLException {
@@ -132,7 +130,7 @@ public class DBRegistry {
         };
 
         ConnectionSource connectionSource = DB.helper().getConnectionSource();
-        for(Class<?> c : medDbClasses){
+        for (Class<?> c : medDbClasses) {
             TableUtils.clearTable(connectionSource, c);
         }
     }

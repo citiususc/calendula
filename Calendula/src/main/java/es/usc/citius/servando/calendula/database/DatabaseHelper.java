@@ -207,6 +207,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 case 12:
                     DrugModelMigrationHelper.migrateDrugModel(db, connectionSource);
                 case 13:
+                    getMedicinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN Database TEXT;");
                     getMedicinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN Stock REAL DEFAULT -1;");
 
             }
@@ -255,7 +256,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
         // date formatter changes on v11, so we can no use LocalDatePersister here
         String now = LocalDate.now().toString("ddMMYYYY");
-        String updateDateSql = "UPDATE DailyScheduleItems SET " + DailyScheduleItem.COLUMN_DATE + " = '" +now + "'";
+        String updateDateSql = "UPDATE DailyScheduleItems SET " + DailyScheduleItem.COLUMN_DATE + " = '" + now + "'";
         getDailyScheduleItemsDao().executeRaw(updateDateSql);
 
     }
