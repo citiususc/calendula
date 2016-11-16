@@ -14,12 +14,6 @@ public class AllergyPatientAlert extends PatientAlert<AllergyPatientAlert.Allerg
         return AllergyAlertInfo.class;
     }
 
-    @Override
-    public boolean hasDetails() {
-        return true;
-    }
-
-
     public static class AllergyAlertInfo {
         private String prescriptionIdentifier;
         private String allergenIdentifier;
