@@ -308,7 +308,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                                             m = DB.medicines().findByCnAndPatient(cn,patient);
                                             if (m == null) {
                                                 Log.d("PRESCRIPTION", "Saving medicine!");
-                                                m = Medicine.fromPrescription(ConfirmSchedulesActivity.this, DB.prescriptions().findByCn(cn));
+                                                m = Medicine.fromPrescription(DB.prescriptions().findByCn(cn));
                                                 m.setPatient(patient);
                                                 m.save();
                                             }
@@ -317,7 +317,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                                             if (m == null) {
                                                 m = new Medicine(Strings.firstPart(w.group.getName()));
                                                 m.setHomogeneousGroup(w.group.getId());
-                                                Presentation pres = DBRegistry.instance().current(ConfirmSchedulesActivity.this).expected(w.group.getName(), w.group.getName());
+                                                Presentation pres = DBRegistry.instance().current().expected(w.group.getName(), w.group.getName());
                                                 m.setPresentation(pres != null ? pres : Presentation.PILLS);
                                                 m.setPatient(patient);
                                                 m.save();

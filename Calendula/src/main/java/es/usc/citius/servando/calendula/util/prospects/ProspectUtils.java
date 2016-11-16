@@ -43,7 +43,7 @@ public class ProspectUtils {
     public static final Duration PROSPECT_TTL = Duration.standardDays(30);
 
     public static void openProspect(Prescription p, final Activity activity, boolean enableCache) {
-        PrescriptionDBMgr dbMgr = DBRegistry.instance().current(activity);
+        PrescriptionDBMgr dbMgr = DBRegistry.instance().current();
         final String url = dbMgr.getProspectURL(p);
 
         Intent i = new Intent(activity, WebViewActivity.class);

@@ -186,7 +186,7 @@ public class ScheduleImportFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dbMgr = DBRegistry.instance().current(getActivity());
+        dbMgr = DBRegistry.instance().current();
         color = DB.patients().getActive(getActivity()).color();
         PrescriptionWrapper.Holder h = (PrescriptionWrapper.Holder) getArguments().getSerializable(ARG_PRESCRIPTION);
         prescriptionWrapper = PrescriptionWrapper.from(h);

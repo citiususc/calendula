@@ -107,7 +107,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         setupToolbar(null, color);
         setupStatusBar(color);
 
-        dbMgr = DBRegistry.instance().current(this);
+        dbMgr = DBRegistry.instance().current();
 
         processIntent();
 
@@ -229,9 +229,11 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         imm.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
     }
 
+
     @Override
     public void onMedicineEdited(Medicine m) {
         DB.medicines().saveAndFireEvent(m);
+
         Snack.show(getString(R.string.medicine_edited_message), this);
         finish();
     }
