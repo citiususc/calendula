@@ -48,6 +48,7 @@ public class Medicine implements Comparable<Medicine> {
     public static final String COLUMN_PRESENTATION = "Presentation";
     public static final String COLUMN_CN = "cn";
     public static final String COLUMN_HG = "hg";
+    public static final String COLUMN_STOCK = "Stock";
     public static final String COLUMN_PATIENT = "Patient";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
@@ -61,6 +62,9 @@ public class Medicine implements Comparable<Medicine> {
 
     @DatabaseField(columnName = COLUMN_CN)
     private String cn;
+
+    @DatabaseField(columnName = COLUMN_STOCK)
+    private Float stock;
 
     @DatabaseField(columnName = COLUMN_HG)
     private Long homogeneousGroup;
@@ -190,5 +194,13 @@ public class Medicine implements Comparable<Medicine> {
     public String nextPickup() {
         LocalDate np = nextPickupDate();
         return np != null ? np.toString("dd MMMM") : null;
+    }
+
+    public Float stock() {
+        return stock;
+    }
+
+    public void setStock(Float stock) {
+        this.stock = stock;
     }
 }
