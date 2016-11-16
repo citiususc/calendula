@@ -61,8 +61,8 @@ public class PrescriptionWrapper{
         pw.s = h.s;
         pw.exists = h.exists;
         pw.isGroup = h.isGroup;
-        pw.group = pw.g != null ? DB.groups().findOneBy(HomogeneousGroup.COLUMN_HOMOGENEOUS_GROUP_ID, pw.g) : null;
-        pw.prescription = pw.cn != null ? DB.prescriptions().findByCn(pw.cn) : null;
+        pw.group = pw.g != null ? DB.drugDB().homogeneousGroups().findOneBy(HomogeneousGroup.COLUMN_HOMOGENEOUS_GROUP_ID, pw.g) : null;
+        pw.prescription = pw.cn != null ? DB.drugDB().prescriptions().findByCn(pw.cn) : null;
         return  pw;
     }
 

@@ -139,7 +139,7 @@ public class MedicinesListFragment extends Fragment {
 
 
         String cn = medicine.cn();
-        final Prescription p = cn != null ? DB.prescriptions().findByCn(medicine.cn()) : null;
+        final Prescription p = cn != null ? DB.drugDB().prescriptions().findByCn(medicine.cn()) : null;
         boolean boundToPrescription = p != null;
 
         if (!boundToPrescription) {

@@ -58,10 +58,10 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Snack;
@@ -383,7 +383,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 //                                filterResults.values = null;
 //                                filterResults.count = 0;
 //                            }else{
-                            List<Prescription> prescriptions = DB.prescriptions().findByName(constraint.toString(), 50);
+                            List<Prescription> prescriptions = DB.drugDB().prescriptions().findByName(constraint.toString(), 50);
                             mData = prescriptions;//Fetcher.fetchNames(constraint.toString());
                             // Now assign the values and count to the FilterResults object
                             filterResults.values = mData;

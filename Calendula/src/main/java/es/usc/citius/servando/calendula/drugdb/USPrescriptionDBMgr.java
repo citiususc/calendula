@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula.drugdb;
 import android.content.Context;
 import android.text.TextUtils;
 
-import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
 
@@ -31,6 +30,7 @@ import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 
 /**
@@ -144,7 +144,7 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
                     }
                     // exec line content as raw sql
                     Prescription prescription = fromCsv(line,"\\|");
-                    DB.prescriptions().save(prescription);
+                    DB.drugDB().prescriptions().save(prescription);
                     i++;
                 }
                 br.close();
