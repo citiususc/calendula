@@ -19,6 +19,7 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -241,7 +242,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     }
 
     @Override
-    public void onMedicineCreated(Medicine m) {
+    public void onMedicineCreated(final Medicine m) {
 
         // check for allergies
         if (m.isBoundToPrescription()) {
@@ -249,17 +250,29 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             if (!vos.isEmpty()) {
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
                 builder.setTitle(R.string.title_medicine_allergy_alert);
+                final Context ctx = this;
                 builder.setMessage(R.string.message_medicine_alert)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                DB.medicines().saveAndFireEvent(m);
+                                CalendulaApp.eventBus().post(new PersistenceEvents.MedicineAddedEvent(m.getId()));
+                                Toast.makeText(ctx, getString(R.string.medicine_created_message), Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
                         .setCancelable(true);
                 android.app.AlertDialog alert = builder.create();
                 alert.show();
             }
         }
 
-        DB.medicines().saveAndFireEvent(m);
-        CalendulaApp.eventBus().post(new PersistenceEvents.MedicineAddedEvent(m.getId()));
-        Toast.makeText(this, getString(R.string.medicine_created_message), Toast.LENGTH_SHORT).show();
-        finish();
+
     }
 
     @Override

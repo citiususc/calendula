@@ -52,7 +52,7 @@ public class AllergenFacade {
         // active ingredients
         List<PrescriptionActiveIngredient> pais = DB.drugDB().prescriptionActiveIngredients().findBy(PrescriptionActiveIngredient.COLUMN_PRESCRIPTION_CODE, code);
         for (PrescriptionActiveIngredient pai : pais) {
-            List<ActiveIngredient> dbai = DB.drugDB().activeIngredients().findBy(ActiveIngredient.COLUMN_ACTIVE_INGREDIENT_ID, pai.getActiveIngredientID());
+            List<ActiveIngredient> dbai = DB.drugDB().activeIngredients().findBy(ActiveIngredient.COLUMN_ACTIVE_INGREDIENT_CODE, pai.getActiveIngredientID());
             if (dbai.size() != 1) {
                 Log.e(TAG, "findAllergensForPrescription: wrong AI: " + pai);
             } else {
