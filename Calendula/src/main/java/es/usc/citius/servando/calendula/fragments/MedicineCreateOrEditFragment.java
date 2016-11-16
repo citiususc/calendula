@@ -172,7 +172,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                 hideKeyboard();
                 // save referenced prescription to med
                 cn = String.valueOf(p.getCode());
-                new ComputeEstimatedStockEndTaks().execute();
+                new ComputeEstimatedStockEndTask().execute();
 
             }
         });
@@ -275,6 +275,12 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 updateStockControlsVisibility();
                 if(isChecked){
+                    // user is enabling stock first time
+                    if(stock == -1 && mPrescription != null && mPrescription.getPackagingUnits() > 0){
+                        stock = mPrescription.getPackagingUnits();
+                        new ComputeEstimatedStockEndTask().execute();
+                    }
+
                     verticalScrollView.post(new Runnable() {
                         @Override
                         public void run() {
@@ -282,7 +288,6 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                         }
                     });
                 }
-
             }
         });
 
@@ -571,7 +576,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             if (p != null) {
                 mPrescription = p;
                 mDescriptionTv.setText(p.getName());
-                new ComputeEstimatedStockEndTaks().execute();
+                new ComputeEstimatedStockEndTask().execute();
             }
         }
     }
@@ -791,7 +796,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             else
                 stock-=amount;
         }
-        new ComputeEstimatedStockEndTaks().execute();
+        new ComputeEstimatedStockEndTask().execute();
     }
 
 
@@ -875,7 +880,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         }
     }
 
-    public class ComputeEstimatedStockEndTaks extends AsyncTask<Void, Void, Boolean> {
+    public class ComputeEstimatedStockEndTask extends AsyncTask<Void, Void, Boolean> {
 
         String text;
 
