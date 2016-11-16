@@ -132,11 +132,14 @@ public class MedicinesListFragment extends Fragment {
         overlay.setTag(medicine);
 
         String nextPickup = medicine.nextPickup();
+        TextView stockInfo = (TextView) item.findViewById(R.id.stock_info);
         if (nextPickup != null) {
-            TextView stockInfo = (TextView) item.findViewById(R.id.stock_info);
             stockInfo.setText("Próxima e-Receta: " + nextPickup);
         }
 
+        if(medicine.stock() >= 0){
+            stockInfo.setText("Quedan " + medicine.stock().intValue() + " " + medicine.presentation().units(getResources())+"s");
+        }
 
         String cn = medicine.cn();
         final Prescription p = cn != null ? DB.drugDB().prescriptions().findByCn(medicine.cn()) : null;
