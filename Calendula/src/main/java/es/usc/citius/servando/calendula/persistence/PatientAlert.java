@@ -8,7 +8,7 @@ import com.j256.ormlite.table.DatabaseTable;
 public abstract class PatientAlert<T> {
 
     public enum AlertType {
-        // TODO: 16/11/16 add alert types
+        ALLERGY_ALERT
     }
 
     public static final String COLUMN_ID = "_id";
