@@ -132,7 +132,6 @@
         android:textColor="@color/android_blue_dark"
         android:textSize="18sp"
         android:layout_alignTop="@+id/textView2"
-        android:text="fdsfdsfds"
         android:layout_alignBottom="@+id/textView2"
         android:layout_toRightOf="@+id/textView2"
         android:layout_marginLeft="20dp"
