@@ -41,4 +41,11 @@ public class IconUtils {
                 .paddingDp(0)
                 .colorRes(color);
     }
+
+    public static IconicsDrawable icon(Context ctx, IIcon ic, int color, int size, int padding){
+        return new IconicsDrawable(ctx, ic)
+                .sizeDp(size)
+                .paddingDp(padding)
+                .colorRes(color);
+    }
 }
