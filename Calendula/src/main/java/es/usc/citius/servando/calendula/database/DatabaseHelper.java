@@ -89,14 +89,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Prescription.class,
             PresentationForm.class,
             PrescriptionActiveIngredient.class,
-            PrescriptionExcipient.class
-
+            PrescriptionExcipient.class,
     };
 
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
 
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
@@ -205,6 +204,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                     LocalDateMigrationHelper.migrateLocalDates(this);
                 case 12:
                     DrugModelMigrationHelper.migrateDrugModel(db, connectionSource);
+                case 13:
+                    getMedicinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN Database TEXT;");
             }
 
         } catch (Exception e) {
@@ -251,7 +252,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
         // date formatter changes on v11, so we can no use LocalDatePersister here
         String now = LocalDate.now().toString("ddMMYYYY");
-        String updateDateSql = "UPDATE DailyScheduleItems SET " + DailyScheduleItem.COLUMN_DATE + " = '" +now + "'";
+        String updateDateSql = "UPDATE DailyScheduleItems SET " + DailyScheduleItem.COLUMN_DATE + " = '" + now + "'";
         getDailyScheduleItemsDao().executeRaw(updateDateSql);
 
     }

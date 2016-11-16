@@ -109,7 +109,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dbMgr = DBRegistry.instance().current(getActivity());
+        dbMgr = DBRegistry.instance().current();
     }
 
 
@@ -432,7 +432,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
         mPrescription = p;
 
-        Presentation pr= DBRegistry.instance().current(getActivity()).expected(p);
+        Presentation pr= DBRegistry.instance().current().expected(p);
         if (pr != null) {
             mPresentationTv.setText(pr.getName(getResources()));
             selectedPresentation = pr;
