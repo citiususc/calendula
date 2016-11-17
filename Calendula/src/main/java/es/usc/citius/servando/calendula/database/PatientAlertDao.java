@@ -27,13 +27,13 @@ import es.usc.citius.servando.calendula.persistence.PatientAlert;
 /**
  * Created by alvaro.brey on 3/26/15.
  */
-public class AlertDAO extends GenericDao<PatientAlert, Long> {
+public class PatientAlertDao extends GenericDao<PatientAlert, Long> {
 
     public static final String TAG = "AlertDao";
 
     private Dao<PatientAlert, Long> daoInstance = null;
 
-    public AlertDAO(DatabaseHelper db) {
+    public PatientAlertDao(DatabaseHelper db) {
         super(db);
     }
 

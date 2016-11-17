@@ -59,6 +59,8 @@ public class DB {
     private static PatientDao Patients;
     //Drug DB module
     private static DrugDBModule DrugDB;
+    // Alerts DAO
+    private static PatientAlertDao PatientAlerts;
 
     /**
      * Initialize database and DAOs
@@ -80,6 +82,7 @@ public class DB {
             Pickups = new PickupInfoDao(db);
             Patients = new PatientDao(db);
             DrugDB = DrugDBModule.getInstance();
+            PatientAlerts = new PatientAlertDao(db);
             Log.v(TAG, "DB initialized " + DB.DB_NAME);
         }
 
@@ -139,6 +142,9 @@ public class DB {
     public static DrugDBModule drugDB() {
         return DrugDB;
     }
+
+    public static PatientAlertDao alerts() { return PatientAlerts; }
+
     public static void dropAndCreateDatabase() {
         db.dropAndCreateAllTables();
     }
