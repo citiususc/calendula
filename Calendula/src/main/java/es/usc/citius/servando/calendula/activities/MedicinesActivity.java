@@ -27,6 +27,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -232,11 +233,38 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         imm.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
     }
 
+    private void showAllergyDialog(final DialogInterface.OnClickListener onOk, final DialogInterface.OnClickListener onCancel) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.title_medicine_allergy_alert);
+        builder.setMessage(R.string.message_medicine_alert)
+                .setPositiveButton(R.string.ok, onOk).setNegativeButton(R.string.cancel, onCancel)
+                .setCancelable(true);
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
     @Override
-    public void onMedicineEdited(Medicine m) {
-        DB.medicines().saveAndFireEvent(m);
+    public void onMedicineEdited(final Medicine m) {
+        // check for allergies
+        if (m.isBoundToPrescription()) {
+            List<AllergenVO> vos = AllergenFacade.checkAllergies(this, DB.drugDB().prescriptions().findByCn(m.cn()));
+            if (!vos.isEmpty()) {
+                showAllergyDialog(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        saveMedicine(m);
+                    }
+                }, null);
+            } else {
+                saveMedicine(m);
+            }
+        } else {
+            saveMedicine(m);
+        }
+    }
 
+    private void saveMedicine(final Medicine m) {
+        DB.medicines().saveAndFireEvent(m);
         Snack.show(getString(R.string.medicine_edited_message), this);
         finish();
     }
@@ -248,18 +276,14 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         if (m.isBoundToPrescription()) {
             List<AllergenVO> vos = AllergenFacade.checkAllergies(this, DB.drugDB().prescriptions().findByCn(m.cn()));
             if (!vos.isEmpty()) {
-                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-                builder.setTitle(R.string.title_medicine_allergy_alert);
-                builder.setMessage(R.string.message_medicine_alert)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                createMedicine(m);
-                            }
-                        }).setNegativeButton(R.string.cancel, null)
-                        .setCancelable(true);
-                android.app.AlertDialog alert = builder.create();
-                alert.show();
+                showAllergyDialog(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        createMedicine(m);
+                    }
+                }, null);
+            } else {
+                createMedicine(m);
             }
         } else {
             createMedicine(m);
