@@ -60,6 +60,7 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.allergies.AllergenFacade;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
+import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
@@ -258,27 +259,41 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                 showAllergyDialog(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        saveMedicine(m, vos);
+                        updateMedicine(m, vos);
                     }
                 }, null);
             } else {
-                saveMedicine(m, null);
+                updateMedicine(m, null);
             }
         } else {
-            saveMedicine(m, null);
+            updateMedicine(m, null);
         }
     }
 
-    private void saveMedicine(final Medicine m, final List<AllergenVO> allergies) {
+    private void updateMedicine(final Medicine m, final List<AllergenVO> allergies) {
         try {
             if (allergies != null) {
                 createAllergyAlerts(m, allergies);
             }
+            removeOldAlerts(m);
             DB.medicines().saveAndFireEvent(m);
             Snack.show(getString(R.string.medicine_edited_message), this);
             finish();
         } catch (RuntimeException e) {
             Snack.show(R.string.medicine_save_error_message, this);
+        }
+    }
+
+    /**
+     * Removes obsolete alerts for a medicine that is going to be updated.
+     * This MUST be called before calling the persistence method.
+     *
+     * @param m the medicine
+     */
+    private void removeOldAlerts(final Medicine m) {
+        Medicine old = DB.medicines().findById(m.getId());
+        if (!m.cn().equals(old.cn())) { // if prescription didn't change, don't check for alerts
+            AllergyAlertUtil.removeAllergyAlerts(m);
         }
     }
 

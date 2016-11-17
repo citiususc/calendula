@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
@@ -92,6 +93,9 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
                     DB.pickups().remove(p);
                 }
                 DB.medicines().remove(m);
+                //remove allergy alerts for this medicine
+                AllergyAlertUtil.removeAllergyAlerts(m);
+
                 return null;
             }
         });
@@ -103,29 +107,25 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
     }
 
     public Medicine findByGroupAndPatient(Long group, Patient p) {
-        try
-        {
+        try {
             QueryBuilder<Medicine, Long> qb = dao.queryBuilder();
             Where w = qb.where();
-            w.and(w.eq(Medicine.COLUMN_HG, group),w.eq(Medicine.COLUMN_PATIENT, p));
+            w.and(w.eq(Medicine.COLUMN_HG, group), w.eq(Medicine.COLUMN_PATIENT, p));
             qb.setWhere(w);
             return qb.queryForFirst();
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new RuntimeException("Error finding med", e);
         }
     }
 
     public Medicine findByCnAndPatient(String cn, Patient p) {
-        try
-        {
+        try {
             QueryBuilder<Medicine, Long> qb = dao.queryBuilder();
             Where w = qb.where();
-            w.and(w.eq(Medicine.COLUMN_CN, cn),w.eq(Medicine.COLUMN_PATIENT, p));
+            w.and(w.eq(Medicine.COLUMN_CN, cn), w.eq(Medicine.COLUMN_PATIENT, p));
             qb.setWhere(w);
             return qb.queryForFirst();
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new RuntimeException("Error finding med", e);
         }
     }
