@@ -250,29 +250,27 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             if (!vos.isEmpty()) {
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
                 builder.setTitle(R.string.title_medicine_allergy_alert);
-                final Context ctx = this;
                 builder.setMessage(R.string.message_medicine_alert)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                DB.medicines().saveAndFireEvent(m);
-                                CalendulaApp.eventBus().post(new PersistenceEvents.MedicineAddedEvent(m.getId()));
-                                Toast.makeText(ctx, getString(R.string.medicine_created_message), Toast.LENGTH_SHORT).show();
-                                finish();
+                                createMedicine(m);
                             }
-                        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
+                        }).setNegativeButton(R.string.cancel, null)
                         .setCancelable(true);
                 android.app.AlertDialog alert = builder.create();
                 alert.show();
             }
+        } else {
+            createMedicine(m);
         }
+    }
 
-
+    private void createMedicine(final Medicine m) {
+        DB.medicines().saveAndFireEvent(m);
+        CalendulaApp.eventBus().post(new PersistenceEvents.MedicineAddedEvent(m.getId()));
+        Toast.makeText(this, getString(R.string.medicine_created_message), Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override
