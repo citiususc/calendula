@@ -53,6 +53,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
@@ -66,7 +67,9 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.Presentation;
+import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
@@ -102,6 +105,9 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     int color;
 
     PrescriptionDBMgr dbMgr;
+
+
+    private final static String TAG = MedicinesActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,26 +253,33 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     public void onMedicineEdited(final Medicine m) {
         // check for allergies
         if (m.isBoundToPrescription()) {
-            List<AllergenVO> vos = AllergenFacade.checkAllergies(this, DB.drugDB().prescriptions().findByCn(m.cn()));
+            final List<AllergenVO> vos = AllergenFacade.checkAllergies(this, DB.drugDB().prescriptions().findByCn(m.cn()));
             if (!vos.isEmpty()) {
                 showAllergyDialog(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        saveMedicine(m);
+                        saveMedicine(m, vos);
                     }
                 }, null);
             } else {
-                saveMedicine(m);
+                saveMedicine(m, null);
             }
         } else {
-            saveMedicine(m);
+            saveMedicine(m, null);
         }
     }
 
-    private void saveMedicine(final Medicine m) {
-        DB.medicines().saveAndFireEvent(m);
-        Snack.show(getString(R.string.medicine_edited_message), this);
-        finish();
+    private void saveMedicine(final Medicine m, final List<AllergenVO> allergies) {
+        try {
+            if (allergies != null) {
+                createAllergyAlerts(m, allergies);
+            }
+            DB.medicines().saveAndFireEvent(m);
+            Snack.show(getString(R.string.medicine_edited_message), this);
+            finish();
+        } catch (RuntimeException e) {
+            Snack.show(R.string.medicine_save_error_message, this);
+        }
     }
 
     @Override
@@ -274,27 +287,55 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
         // check for allergies
         if (m.isBoundToPrescription()) {
-            List<AllergenVO> vos = AllergenFacade.checkAllergies(this, DB.drugDB().prescriptions().findByCn(m.cn()));
+            final List<AllergenVO> vos = AllergenFacade.checkAllergies(this, DB.drugDB().prescriptions().findByCn(m.cn()));
             if (!vos.isEmpty()) {
                 showAllergyDialog(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        createMedicine(m);
+                        createMedicine(m, vos);
                     }
                 }, null);
             } else {
-                createMedicine(m);
+                createMedicine(m, null);
             }
         } else {
-            createMedicine(m);
+            createMedicine(m, null);
         }
     }
 
-    private void createMedicine(final Medicine m) {
-        DB.medicines().saveAndFireEvent(m);
-        CalendulaApp.eventBus().post(new PersistenceEvents.MedicineAddedEvent(m.getId()));
-        Toast.makeText(this, getString(R.string.medicine_created_message), Toast.LENGTH_SHORT).show();
-        finish();
+    private void createMedicine(final Medicine m, final List<AllergenVO> allergies) {
+        try {
+            if (allergies != null) {
+                createAllergyAlerts(m, allergies);
+            }
+            DB.medicines().saveAndFireEvent(m);
+            CalendulaApp.eventBus().post(new PersistenceEvents.MedicineAddedEvent(m.getId()));
+            Toast.makeText(this, getString(R.string.medicine_created_message), Toast.LENGTH_SHORT).show();
+            finish();
+        } catch (RuntimeException e) {
+            Snack.show(R.string.medicine_save_error_message, this);
+        }
+    }
+
+    private void createAllergyAlerts(final Medicine m, final List<AllergenVO> allergies) throws RuntimeException {
+
+        final List<PatientAlert> alerts = new ArrayList<>();
+        for (AllergenVO allergen : allergies) {
+            AllergyPatientAlert alert = new AllergyPatientAlert(DB.patients().getActive(this), m, allergen);
+            alerts.add(alert);
+        }
+
+        DB.transaction(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                for (PatientAlert alert : alerts) {
+                    DB.alerts().create(alert);
+                    Log.d(TAG, "Created alert: " + alert);
+                }
+                return null;
+            }
+        });
+
     }
 
     @Override

@@ -21,6 +21,7 @@ package es.usc.citius.servando.calendula.persistence;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import es.usc.citius.servando.calendula.allergies.AllergenType;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 
 /**
@@ -29,9 +30,6 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 @DatabaseTable(tableName = "PrescriptionAllergens")
 public class PrescriptionAllergen {
 
-    public enum AllergenType {
-        ACTIVE_INGREDIENT, EXCIPIENT
-    }
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_ALLERGEN_TYPE = "Type";
@@ -47,7 +45,7 @@ public class PrescriptionAllergen {
     private String name;
 
     @DatabaseField(columnName = COLUMN_ALLERGEN_TYPE, uniqueCombo = true)
-    private PrescriptionAllergen.AllergenType type;
+    private AllergenType type;
 
     @DatabaseField(columnName = COLUMN_REALID, uniqueCombo = true)
     private int realId;

@@ -497,6 +497,7 @@
     <string name="notification_error_title">Oops...</string>
     <string name="title_medicine_allergy_alert">Allergies detected for this medicine.</string>
     <string name="message_medicine_alert">This medicine contains ingredients to which you have an allergy. For your safety, this medicine can\'t be scheduled.</string>
+    <string name="medicine_save_error_message">There was an error while saving your medicine.</string>
 
 
 </resources>

@@ -1,5 +1,8 @@
 package es.usc.citius.servando.calendula.persistence.alerts;
 
+import es.usc.citius.servando.calendula.allergies.AllergenVO;
+import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 
 public class AllergyPatientAlert extends PatientAlert<AllergyPatientAlert.AllergyAlertInfo> {
@@ -9,29 +12,43 @@ public class AllergyPatientAlert extends PatientAlert<AllergyPatientAlert.Allerg
         setType(AlertType.ALLERGY_ALERT);
     }
 
+    public AllergyPatientAlert(final Patient patient, final Medicine medicine, final AllergenVO allergen) {
+        this();
+        setDetails(new AllergyAlertInfo(medicine, allergen));
+        setPatient(patient);
+    }
+
     @Override
     public Class<?> getDetailsType() {
         return AllergyAlertInfo.class;
     }
 
     public static class AllergyAlertInfo {
-        private String prescriptionIdentifier;
-        private String allergenIdentifier;
+        private Medicine medicine;
+        private AllergenVO allergen;
 
-        public String getPrescriptionIdentifier() {
-            return prescriptionIdentifier;
+        public AllergyAlertInfo() {
         }
 
-        public void setPrescriptionIdentifier(String prescriptionIdentifier) {
-            this.prescriptionIdentifier = prescriptionIdentifier;
+        public AllergyAlertInfo(Medicine medicine, AllergenVO allergen) {
+            this.medicine = medicine;
+            this.allergen = allergen;
         }
 
-        public String getAllergenIdentifier() {
-            return allergenIdentifier;
+        public Medicine getMedicine() {
+            return medicine;
         }
 
-        public void setAllergenIdentifier(String allergenIdentifier) {
-            this.allergenIdentifier = allergenIdentifier;
+        public void setMedicine(Medicine medicine) {
+            this.medicine = medicine;
+        }
+
+        public AllergenVO getAllergen() {
+            return allergen;
+        }
+
+        public void setAllergen(AllergenVO allergen) {
+            this.allergen = allergen;
         }
     }
 }
