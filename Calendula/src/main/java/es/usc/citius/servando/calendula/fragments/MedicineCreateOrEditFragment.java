@@ -144,7 +144,6 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_or_edit_medicine, container, false);
@@ -479,7 +478,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         }
     }
 
-    IconicsDrawable iconFor(Presentation p){
+    IconicsDrawable iconFor(Presentation p) {
         return new IconicsDrawable(getContext())
                 .icon(Presentation.iconFor(p))
                 //.color(pColor)
@@ -586,7 +585,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         mDescriptionTv.setText(p.getName());
         mPrescription = p;
 
-        Presentation pr= DBRegistry.instance().current().expected(p);
+        Presentation pr = DBRegistry.instance().current().expected(p);
         if (pr != null) {
             mPresentationTv.setText(pr.getName(getResources()));
             selectedPresentation = pr;
@@ -649,6 +648,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                 Medicine m = new Medicine(name);
                 if (mPrescription != null && mPrescription.shortName().toLowerCase().equals(m.name().toLowerCase())) {
                     m.setCn(String.valueOf(mPrescription.getCode()));
+                    m.setDatabase(DBRegistry.instance().current().id());
                 }
                 m.setStock(stockSwitch.isActivated() ? stock : -1);
                 m.setPresentation(selectedPresentation != null ? selectedPresentation : Presentation.UNKNOWN);
@@ -715,7 +715,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean adviceShown = prefs.getBoolean("show_use_prescriptions_advice", false);
-        boolean dbEnabled = !prefs.getString("prescriptions_database",getString(R.string.database_none_id)).equals(getString(R.string.database_none_id));
+        boolean dbEnabled = !prefs.getString("prescriptions_database", getString(R.string.database_none_id)).equals(getString(R.string.database_none_id));
 
         if (!adviceShown && !dbEnabled) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -726,7 +726,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                     .setPositiveButton(getString(R.string.enable_prescriptions_dialog_yes), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             Intent i = new Intent(getActivity(), SettingsActivity.class);
-                            i.putExtra("show_database_dialog",true);
+                            i.putExtra("show_database_dialog", true);
                             startActivity(i);
                         }
                     })
