@@ -59,6 +59,8 @@ public class DB {
     private static PatientDao Patients;
     //Drug DB module
     private static DrugDBModule DrugDB;
+    // Alerts DAO
+    private static PatientAlertDao PatientAlerts;
     //Allergens DAO
     private static PatientAllergenDao PatientAllergens;
 
@@ -82,9 +84,8 @@ public class DB {
             Pickups = new PickupInfoDao(db);
             Patients = new PatientDao(db);
             DrugDB = DrugDBModule.getInstance();
-
+            PatientAlerts = new PatientAlertDao(db);
             PatientAllergens = new PatientAllergenDao(db);
-
             Log.v(TAG, "DB initialized " + DB.DB_NAME);
         }
 
@@ -144,6 +145,9 @@ public class DB {
     public static DrugDBModule drugDB() {
         return DrugDB;
     }
+
+    public static PatientAlertDao alerts() { return PatientAlerts; }
+
 
     public static PatientAllergenDao patientAllergens() {
         return PatientAllergens;
