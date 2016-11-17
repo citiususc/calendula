@@ -26,6 +26,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,17 +64,18 @@ public class MedicinesListFragment extends Fragment {
     OnMedicineSelectedListener mMedicineSelectedCallback;
     ArrayAdapter adapter;
     ListView listview;
+    Handler handler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_medicines_list, container, false);
+        handler =new Handler();
         listview = (ListView) rootView.findViewById(R.id.medicines_list);
         View empty = rootView.findViewById(android.R.id.empty);
         listview.setEmptyView(empty);
         mMedicines = DB.medicines().findAllForActivePatient(getContext());
         adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
         listview.setAdapter(adapter);
-
         return rootView;
     }
 
@@ -321,6 +323,15 @@ public class MedicinesListFragment extends Fragment {
     public void onEvent(Object evt) {
         if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
             notifyDataChange();
+        }else if (evt instanceof PersistenceEvents.ModelCreateOrUpdateEvent){
+            if(((PersistenceEvents.ModelCreateOrUpdateEvent) evt).clazz.equals(Medicine.class)){
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        notifyDataChange();
+                    }
+                });
+            }
         }
     }
 

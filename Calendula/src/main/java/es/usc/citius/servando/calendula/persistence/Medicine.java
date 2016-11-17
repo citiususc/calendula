@@ -217,4 +217,8 @@ public class Medicine implements Comparable<Medicine> {
     public void setStock(Float stock) {
         this.stock = stock;
     }
+
+    public boolean stockManagementEnabled() {
+        return stock != -1;
+    }
 }
