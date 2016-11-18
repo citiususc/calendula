@@ -89,6 +89,9 @@ public class CalendulaApp extends Application {
     public static final int ACTION_CANCEL_HOURLY_SCHEDULE = 9;
     public static final int ACTION_CHECK_PICKUPS_ALARM = 10;
 
+    public static final int ACTION_CONFIRM_ALL_ROUTINE = 11;
+    public static final int ACTION_CONFIRM_ALL_SCHEDULE = 12;
+
 
     // REQUEST CODES
     public static final int RQ_SHOW_ROUTINE = 1;
