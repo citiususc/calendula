@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,16 +35,19 @@ import android.widget.TextView;
 
 import com.mikepenz.iconics.IconicsDrawable;
 
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
+import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
+import es.usc.citius.servando.calendula.util.Snack;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -58,6 +62,8 @@ public class SelectMedicineListFragment extends Fragment {
 
     ScheduleCreationActivity mActivity;
     int pColor;
+
+    private static String TAG = "SelectMedicineListFragm";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,10 +94,26 @@ public class SelectMedicineListFragment extends Fragment {
 
         final View item = inflater.inflate(R.layout.select_medicines_list_item, null);
 
-        ((TextView) item.findViewById(R.id.medicines_list_item_name)).setText(medicine.name());
+        Boolean hasAllergies = false;
+        try {
+            if (AllergyAlertUtil.hasAllergyAlerts(medicine)) {
+                hasAllergies = true;
+            }
+        } catch (SQLException e) {
+            Log.e(TAG, "createMedicineListItem: ", e);
+            hasAllergies = true;
+        }
+
+        final boolean disabled = hasAllergies;
+
+        TextView tv = (TextView) item.findViewById(R.id.medicines_list_item_name);
+        if (disabled) {
+            tv.setTextColor(getResources().getColor(R.color.drawer_item_disabled));
+        }
+        tv.setText(medicine.name());
 
         ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
-        icon.setImageDrawable(iconFor(medicine.presentation()));
+        icon.setImageDrawable(iconFor(medicine.presentation(), disabled));
 
         View overlay = item.findViewById(R.id.medicines_list_item_container);
         overlay.setTag(medicine);
@@ -110,21 +132,28 @@ public class SelectMedicineListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Medicine m = (Medicine) view.getTag();
-                selectedId = m.getId();
-                if (mActivity != null) {
-                    mActivity.onMedicineSelected(m, true);
+                if (disabled) {
+                    Snack.showIfUnobstructed(R.string.message_schedule_medicine_allergy, getActivity());
+                } else {
+                    selectedId = m.getId();
+                    if (mActivity != null) {
+                        mActivity.onMedicineSelected(m, true);
+                    }
+                    adapter.notifyDataSetChanged();
                 }
-                adapter.notifyDataSetChanged();
+
             }
         };
         overlay.setOnClickListener(clickListener);
+
         return item;
     }
 
-    IconicsDrawable iconFor(Presentation p){
+    IconicsDrawable iconFor(Presentation p, boolean disabled) {
+        int color = disabled ? R.color.drawer_item_disabled : R.color.agenda_item_title;
         return new IconicsDrawable(getContext())
                 .icon(Presentation.iconFor(p))
-                .colorRes(R.color.agenda_item_title)
+                .colorRes(color)
                 .paddingDp(5)
                 .sizeDp(55);
     }

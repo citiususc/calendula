@@ -32,9 +32,9 @@ public class Snack {
     public static void show(String string, Activity activity, com.nispok.snackbar.Snackbar.SnackbarDuration duration) {
 
         SnackbarManager.show(com.nispok.snackbar.Snackbar.with(activity.getApplicationContext())
-                .type(SnackbarType.MULTI_LINE)
-                .duration(duration)
-                .text(string)
+                        .type(SnackbarType.MULTI_LINE)
+                        .duration(duration)
+                        .text(string)
                 , activity);
     }
 
@@ -44,6 +44,12 @@ public class Snack {
 
     public static void show(int string, Activity activity) {
         show(activity.getResources().getString(string), activity, Snackbar.SnackbarDuration.LENGTH_SHORT);
+    }
+
+    public static void showIfUnobstructed(int string, Activity activity) {
+        Snackbar current = SnackbarManager.getCurrentSnackbar();
+        if (current == null || !current.isShowing())
+            show(string, activity);
     }
 
 }
