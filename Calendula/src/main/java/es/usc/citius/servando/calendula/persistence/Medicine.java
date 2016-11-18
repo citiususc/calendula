@@ -206,4 +206,17 @@ public class Medicine implements Comparable<Medicine> {
     public boolean isBoundToPrescription() {
         return cn != null && database != null && database.equals(DBRegistry.instance().current().id());
     }
+
+    @Override
+    public String toString() {
+        return "Medicine{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", presentation=" + presentation +
+                ", cn='" + cn + '\'' +
+                ", homogeneousGroup=" + homogeneousGroup +
+                ", patient=" + patient +
+                ", database='" + database + '\'' +
+                '}';
+    }
 }
