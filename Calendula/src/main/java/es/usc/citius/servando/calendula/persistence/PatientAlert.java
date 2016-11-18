@@ -5,7 +5,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "PatientAlerts")
-public abstract class PatientAlert<T> {
+public class PatientAlert<T> {
 
     public enum AlertType {
         ALLERGY_ALERT
@@ -15,6 +15,7 @@ public abstract class PatientAlert<T> {
     public static final String COLUMN_DETAILS = "Details";
     public static final String COLUMN_PATIENT = "Patient";
     public static final String COLUMN_TYPE = "Type";
+    public static final String COLUMN_EXTRA_ID = "ExtraID";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
@@ -27,6 +28,9 @@ public abstract class PatientAlert<T> {
 
     @DatabaseField(columnName = COLUMN_DETAILS)
     private String jsonDetails;
+
+    @DatabaseField(columnName = COLUMN_EXTRA_ID)
+    private String extraID;
 
 
     public PatientAlert() {
@@ -64,6 +68,14 @@ public abstract class PatientAlert<T> {
         this.patient = patient;
     }
 
+    public String getExtraID() {
+        return extraID;
+    }
+
+    public void setExtraID(String extraID) {
+        this.extraID = extraID;
+    }
+
     public T getDetails() {
         if (getDetailsType() != null) {
             return (T) new Gson().fromJson(jsonDetails, getDetailsType());
@@ -75,7 +87,9 @@ public abstract class PatientAlert<T> {
         this.jsonDetails = new Gson().toJson(details);
     }
 
-    public abstract Class<?> getDetailsType();
+    public Class<?> getDetailsType() {
+        throw new RuntimeException("This method must be overriden by subclasses");
+    }
 
     public final boolean hasDetails() {
         return getDetailsType() != null;
