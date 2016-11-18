@@ -5,7 +5,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "PatientAlerts")
-public abstract class PatientAlert<T> {
+public class PatientAlert<T> {
 
     public enum AlertType {
         // TODO: 16/11/16 add alert types
@@ -75,7 +75,9 @@ public abstract class PatientAlert<T> {
         this.jsonDetails = new Gson().toJson(details);
     }
 
-    public abstract Class<?> getDetailsType();
+    public Class<?> getDetailsType() {
+        throw new RuntimeException("This method must be overriden by subclasses");
+    }
 
     public final boolean hasDetails() {
         return getDetailsType() != null;
