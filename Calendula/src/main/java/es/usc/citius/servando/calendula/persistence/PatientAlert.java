@@ -15,6 +15,7 @@ public class PatientAlert<T> {
     public static final String COLUMN_DETAILS = "Details";
     public static final String COLUMN_PATIENT = "Patient";
     public static final String COLUMN_TYPE = "Type";
+    public static final String COLUMN_EXTRA_ID = "ExtraID";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
@@ -27,6 +28,9 @@ public class PatientAlert<T> {
 
     @DatabaseField(columnName = COLUMN_DETAILS)
     private String jsonDetails;
+
+    @DatabaseField(columnName = COLUMN_EXTRA_ID)
+    private String extraID;
 
 
     public PatientAlert() {
@@ -62,6 +66,14 @@ public class PatientAlert<T> {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    public String getExtraID() {
+        return extraID;
+    }
+
+    public void setExtraID(String extraID) {
+        this.extraID = extraID;
     }
 
     public T getDetails() {
