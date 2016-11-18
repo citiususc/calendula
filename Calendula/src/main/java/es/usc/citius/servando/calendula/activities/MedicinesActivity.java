@@ -51,6 +51,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -279,7 +280,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             DB.medicines().saveAndFireEvent(m);
             Snack.show(getString(R.string.medicine_edited_message), this);
             finish();
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | SQLException e) {
             Snack.show(R.string.medicine_save_error_message, this);
         }
     }
@@ -290,7 +291,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
      *
      * @param m the medicine
      */
-    private void removeOldAlerts(final Medicine m) {
+    private void removeOldAlerts(final Medicine m) throws SQLException {
         Medicine old = DB.medicines().findById(m.getId());
         if (!m.cn().equals(old.cn())) { // if prescription didn't change, don't check for alerts
             AllergyAlertUtil.removeAllergyAlerts(m);
@@ -320,15 +321,24 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
     private void createMedicine(final Medicine m, final List<AllergenVO> allergies) {
         try {
-            if (allergies != null) {
-                createAllergyAlerts(m, allergies);
-            }
-            DB.medicines().saveAndFireEvent(m);
+            DB.transaction(new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    DB.medicines().save(m);
+                    if (allergies != null) {
+                        createAllergyAlerts(m, allergies);
+                    }
+                    DB.medicines().fireEvent();
+                    return null;
+                }
+            });
+
             CalendulaApp.eventBus().post(new PersistenceEvents.MedicineAddedEvent(m.getId()));
             Toast.makeText(this, getString(R.string.medicine_created_message), Toast.LENGTH_SHORT).show();
             finish();
         } catch (RuntimeException e) {
             Snack.show(R.string.medicine_save_error_message, this);
+            Log.e(TAG, "createMedicine: ", e);
         }
     }
 
@@ -336,7 +346,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
         final List<PatientAlert> alerts = new ArrayList<>();
         for (AllergenVO allergen : allergies) {
-            AllergyPatientAlert alert = new AllergyPatientAlert(DB.patients().getActive(this), m, allergen);
+            AllergyPatientAlert alert = new AllergyPatientAlert(m, allergen);
             alerts.add(alert);
         }
 

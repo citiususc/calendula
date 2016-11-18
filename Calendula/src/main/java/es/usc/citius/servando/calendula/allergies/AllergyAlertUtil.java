@@ -1,11 +1,15 @@
 package es.usc.citius.servando.calendula.allergies;
 
+import android.util.Log;
+
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
-import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 
 /**
  * Created by alvaro.brey.vilas on 17/11/16.
@@ -13,18 +17,36 @@ import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 
 public class AllergyAlertUtil {
 
+
+    private static final String TAG = "AllergyAlertUtil";
+
     /**
      * Removes all allergy alerts for the given medicine.
      *
      * @param m the medicine
      */
-    public static void removeAllergyAlerts(Medicine m) {
-        List<PatientAlert> alerts = DB.alerts().findBy(PatientAlert.COLUMN_TYPE, PatientAlert.AlertType.ALLERGY_ALERT);
-        for (PatientAlert alert : alerts) {
-            AllergyPatientAlert.AllergyAlertInfo details = (AllergyPatientAlert.AllergyAlertInfo) alert.getDetails();
-            if (details.getMedicine().cn() != null && details.getMedicine().cn().equals(m.cn())
-                    && details.getMedicine().patient().id().equals(m.patient().id()))
-                DB.alerts().remove(alert);
-        }
+    public static void removeAllergyAlerts(final Medicine m) throws SQLException {
+
+        Log.d(TAG, "removeAllergyAlerts() called with: m = [" + m + "]");
+
+        // TODO: 18/11/16 check if we need to escape quotes (queryForFieldValuesArgs)
+        HashMap<String, Object> query = new HashMap<String, Object>() {{
+            put(PatientAlert.COLUMN_TYPE, PatientAlert.AlertType.ALLERGY_ALERT);
+            put(PatientAlert.COLUMN_PATIENT, m.patient());
+            put(PatientAlert.COLUMN_EXTRA_ID, m.getId());
+        }};
+        final List<PatientAlert> alerts = DB.alerts().queryForFieldValues(query);
+
+        DB.transaction(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                for (PatientAlert alert : alerts) {
+                    DB.alerts().remove(alert);
+                }
+                Log.d(TAG, "removeAllergyAlerts: Removed " + alerts.size() + " alerts");
+                return null;
+            }
+        });
+
     }
 }

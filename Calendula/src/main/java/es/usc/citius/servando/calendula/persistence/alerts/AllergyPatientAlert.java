@@ -12,10 +12,11 @@ public class AllergyPatientAlert extends PatientAlert<AllergyPatientAlert.Allerg
         setType(AlertType.ALLERGY_ALERT);
     }
 
-    public AllergyPatientAlert(final Patient patient, final Medicine medicine, final AllergenVO allergen) {
+    public AllergyPatientAlert(final Medicine medicine, final AllergenVO allergen) {
         this();
+        setExtraID(medicine.getId().toString());
+        setPatient(medicine.patient());
         setDetails(new AllergyAlertInfo(medicine, allergen));
-        setPatient(patient);
     }
 
     @Override
