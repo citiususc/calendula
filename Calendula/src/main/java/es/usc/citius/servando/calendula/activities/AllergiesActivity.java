@@ -21,6 +21,7 @@ import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -30,11 +31,15 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.adapters.AllergiesAdapter;
 import es.usc.citius.servando.calendula.adapters.AllergiesAutocompleteAdapter;
 import es.usc.citius.servando.calendula.allergies.AllergenConversionUtil;
+import es.usc.citius.servando.calendula.allergies.AllergenFacade;
 import es.usc.citius.servando.calendula.allergies.AllergenListeners;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
+import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.database.PatientAllergenDao;
+import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
+import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 
@@ -56,10 +61,13 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
     private int color;
     private Activity activity;
     private Dao<PatientAllergen, Long> dao = null;
+    private List<AllergenVO> recentlyAdded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        recentlyAdded = new ArrayList<>();
 
         activity = this;
 
@@ -222,7 +230,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         return dao;
     }
 
-    void showDeleteConfirmationDialog(final PatientAllergen a) {
+    private void showDeleteConfirmationDialog(final PatientAllergen a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final Activity ac = this;
         builder.setMessage(String.format(getString(R.string.remove_allergy_message_short), a.getName()))
@@ -247,6 +255,17 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         alert.show();
     }
 
+    private void showNewAllergyConflictDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final Activity ac = this;
+        builder.setTitle(R.string.title_allergies_detected_dialog)
+                .setMessage(R.string.message_allergies_detected_dialog)
+                .setCancelable(true)
+                .setPositiveButton(getString(R.string.ok), null);
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed: " + (searchView.getVisibility() == View.VISIBLE));
@@ -266,6 +285,17 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
             searchAdapter.remove(allergen);
             checkPlaceholder();
             Snack.show(getString(R.string.message_allergy_add_success, allergen.getName()), this);
+            List<Medicine> conflicts = AllergenFacade.checkNewMedicineAllergies(this, allergen);
+            if (!conflicts.isEmpty()) {
+                showNewAllergyConflictDialog();
+                for (Medicine conflict : conflicts) {
+                    try {
+                        DB.alerts().create(new AllergyPatientAlert(conflict, allergen));
+                    } catch (SQLException e) {
+                        Log.e(TAG, "onAddAction: ", e);
+                    }
+                }
+            }
         } else {
             Snack.show(R.string.message_allergy_add_failure, this);
         }

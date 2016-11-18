@@ -500,6 +500,8 @@
     <string name="medicine_save_error_message">There was an error while saving your medicine.</string>
     <string name="select_medicine_error">There was an error when selecting this medicine.</string>
     <string name="message_schedule_medicine_allergy">This medicine cannot be scheduled because you have an allergy to some of its components.</string>
+    <string name="title_allergies_detected_dialog">Warning</string>
+    <string name="message_allergies_detected_dialog">Some of the medicines in your medkit contain the allergen you\'ve just added. Please review their prospects carefully.</string>
 
 
 </resources>

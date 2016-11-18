@@ -12,6 +12,7 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.Excipient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionActiveIngredient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionExcipient;
+import es.usc.citius.servando.calendula.persistence.Medicine;
 
 /**
  * Created by alvaro.brey.vilas on 15/11/16.
@@ -45,10 +46,13 @@ public class AllergenFacade {
     }
 
     public static List<AllergenVO> findAllergensForPrescription(final Prescription p) {
-        Log.d(TAG, "getAllergensForPrescription() called with: p = [" + p + "]");
-        List<AllergenVO> ret = new ArrayList<>();
         String code = p.getCode();
+        return findAllergensForPrescription(code);
+    }
 
+    public static List<AllergenVO> findAllergensForPrescription(final String code) {
+        Log.d(TAG, "getAllergensForPrescription() called with: p = [" + code + "]");
+        List<AllergenVO> ret = new ArrayList<>();
         // active ingredients
         List<PrescriptionActiveIngredient> pais = DB.drugDB().prescriptionActiveIngredients().findBy(PrescriptionActiveIngredient.COLUMN_PRESCRIPTION_CODE, code);
         for (PrescriptionActiveIngredient pai : pais) {
@@ -90,6 +94,31 @@ public class AllergenFacade {
         prescriptionAllergens.retainAll(patientAllergies);
 
         return prescriptionAllergens;
+    }
+
+    /**
+     * Returns a list of medicines for the current patient which contain the given allergen.
+     *
+     * @param ctx         the context
+     * @param newAllergen the allergen
+     * @return the medicines
+     */
+    public static List<Medicine> checkNewMedicineAllergies(Context ctx, AllergenVO newAllergen) {
+        Log.d(TAG, "checkNewMedicineAllergies() called with: ctx = [" + ctx + "], newAllergen = [" + newAllergen + "]");
+
+        List<Medicine> medicines = new ArrayList<>();
+
+        List<Medicine> patientMedicines = DB.medicines().findAllForActivePatient(ctx);
+        for (Medicine m : patientMedicines) {
+            if (m.isBoundToPrescription()) {
+                List<AllergenVO> prescriptionAllergens = findAllergensForPrescription(m.cn());
+                if (prescriptionAllergens.contains(newAllergen))
+                    medicines.add(m);
+            }
+        }
+
+        Log.d(TAG, "checkNewMedicineAllergies() returned: " + medicines);
+        return medicines;
     }
 
 }
