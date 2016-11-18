@@ -186,4 +186,7 @@ dependencies {
 
     // html parsing
     compile 'org.jsoup:jsoup:1.7.2'
+
+    // material dialogs
+    compile 'com.github.javiersantos:MaterialStyledDialogs:2.0'
 }

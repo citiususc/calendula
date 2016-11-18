@@ -56,8 +56,6 @@ import com.doomonafireball.betterpickers.numberpicker.NumberPickerDialogFragment
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
@@ -75,9 +73,9 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Schedule;
-import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.Snack;
+import es.usc.citius.servando.calendula.util.medicine.StockUtils;
 
 /**
  * Created by joseangel.pineiro on 12/4/13.
@@ -314,37 +312,6 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         mStockEstimation.setVisibility(estimatedStockText != null ? View.VISIBLE: View.INVISIBLE);
         mStockEstimation.setText(estimatedStockText != null ? estimatedStockText : "");
         mStockUnits.setText(text);
-    }
-
-    private LocalDate getEstimatedStockEnd(List<Schedule> schedules , float stock) {
-        LocalDate current = LocalDate.now();
-        LocalDate end = LocalDate.now().plusMonths(3);
-        Duration duration = new Duration(current.toDateTimeAtStartOfDay(),end.toDateTimeAtStartOfDay());
-
-        float virtualStock = stock;
-
-        Log.d(TAG, "getEstimatedStockEnd: virtual stock " + virtualStock );
-
-        for(int i = 0; i < duration.getStandardDays(); i++){
-            for(Schedule s : schedules){
-                if(s.enabledForDate(current)){
-                    if(s.repeatsHourly()){
-                        virtualStock = virtualStock - (s.hourlyItemsAt(current.toDateTimeAtStartOfDay()).size() * s.dose());
-                    }else{
-                        List<ScheduleItem> items = s.items();
-                        for(ScheduleItem item : items){
-                            virtualStock = virtualStock - item.dose();
-                        }
-                    }
-                }
-                Log.d(TAG, "getEstimatedStockEnd: virtual stock " + virtualStock + " on " + current.toString("dd/MM"));
-            }
-            if(virtualStock < 0){
-                return  current;
-            }
-            current = current.plusDays(1);
-        }
-        return null;
     }
 
 
@@ -891,18 +858,8 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                 List<Schedule> schedules = DB.schedules().findByMedicine(mMedicine);
                 if(!schedules.isEmpty()) {
                     Log.d(TAG, "updateStockText: pautas " + schedules.size());
-                    LocalDate estimatedEnd = getEstimatedStockEnd(schedules, stock);
-                    if(estimatedEnd != null){
-                        Log.d(TAG, "updateStockText: esitmado " + estimatedEnd.toString("dd/MM"));
-                        long days = new Duration(DateTime.now().withTimeAtStartOfDay(), estimatedEnd.toDateTimeAtStartOfDay()).getStandardDays();
-                        if(days < 21){
-                            text = "Suficiente para " + days + " días con la pauta actual";
-                        }else{
-                            text = "Suficiente para " + (int)(days/7) + " semanas y " + (days%7) + " días con la pauta actual";
-                        }
-                    }else{
-                        text = "Suficiente para más de tres meses";
-                    }
+                    LocalDate estimatedEnd = StockUtils.getEstimatedStockEnd(schedules, stock);
+                    text = StockUtils.getReadableStockDuration(estimatedEnd);
                     return true;
                 }
             }

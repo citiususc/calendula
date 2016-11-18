@@ -18,6 +18,11 @@
 
 package es.usc.citius.servando.calendula.database;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -30,11 +35,14 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.events.StockRunningOutEvent;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.util.medicine.StockUtils;
 
 /**
  * Created by joseangel.pineiro on 3/26/15.
@@ -183,7 +191,7 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
         }
     }
 
-    public void saveAndUpdateStock(DailyScheduleItem model, boolean fireEvent) {
+    public void saveAndUpdateStock(DailyScheduleItem model, boolean fireEvent, Context c) {
         try {
             // get original value
             DailyScheduleItem original = findById(model.getId());
@@ -197,17 +205,33 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
                 DB.medicines().refresh(m);
 
                 if(m.stockManagementEnabled()) {
-                    float amount;
-                    if (s.repeatsHourly()) {
-                        amount = model.takenToday() ? -s.dose() : s.dose();
-                    } else {
-                        ScheduleItem si = model.scheduleItem();
-                        amount = model.takenToday() ? -si.dose() : si.dose();
-                    }
-                    m.setStock(m.stock() + amount);
-                    DB.medicines().save(m);
-                    if(fireEvent){
-                        DB.medicines().fireEvent();
+                    try{
+                        float amount;
+                        if (s.repeatsHourly()) {
+                            amount = model.takenToday() ? -s.dose() : s.dose();
+                        } else {
+                            ScheduleItem si = model.scheduleItem();
+                            amount = model.takenToday() ? -si.dose() : si.dose();
+                        }
+                        m.setStock(m.stock() + amount);
+                        DB.medicines().save(m);
+
+                        if(fireEvent){
+                            DB.medicines().fireEvent();
+                        }
+
+                        if(amount < 0){
+                            Long days = StockUtils.getEstimatedStockDays(m);
+                            if(days!=null) {
+                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
+                                int stock_alert_days = Integer.parseInt(preferences.getString("stock_alert_days", "-1"));
+                                if(days < stock_alert_days) {
+                                    CalendulaApp.eventBus().post(new StockRunningOutEvent(m, days));
+                                }
+                            }
+                        }
+                    }catch (Exception e){
+                        Log.e("DSIDAO", "An error occurred updating stock", e);
                     }
                 }
             }

@@ -272,7 +272,7 @@ public class ConfirmActivity extends CalendulaActivity {
         for (DailyScheduleItem item : items) {
             if(!item.takenToday()) {
                 item.setTakenToday(true);
-                DB.dailyScheduleItems().saveAndUpdateStock(item,true);
+                DB.dailyScheduleItems().saveAndUpdateStock(item,true,ConfirmActivity.this);
                 somethingChecked = true;
             }
 
@@ -619,7 +619,7 @@ public class ConfirmActivity extends CalendulaActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dailyScheduleItem.setTakenToday(!taken);
-                            DB.dailyScheduleItems().saveAndUpdateStock(dailyScheduleItem,true);
+                            DB.dailyScheduleItems().saveAndUpdateStock(dailyScheduleItem,true, ConfirmActivity.this);
                             stateChanged = true;
                             onDailyAgendaItemCheck(check);
                             notifyItemChanged(getAdapterPosition());
@@ -628,7 +628,7 @@ public class ConfirmActivity extends CalendulaActivity {
                 }else{
 
                     dailyScheduleItem.setTakenToday(!taken);
-                    DB.dailyScheduleItems().saveAndUpdateStock(dailyScheduleItem,true);
+                    DB.dailyScheduleItems().saveAndUpdateStock(dailyScheduleItem,true,ConfirmActivity.this);
                     stateChanged = true;
                     onDailyAgendaItemCheck(check);
                     notifyItemChanged(getAdapterPosition());

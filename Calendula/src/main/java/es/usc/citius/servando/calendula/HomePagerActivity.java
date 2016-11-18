@@ -64,6 +64,7 @@ import es.usc.citius.servando.calendula.activities.SchedulesHelpActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
+import es.usc.citius.servando.calendula.events.StockRunningOutEvent;
 import es.usc.citius.servando.calendula.fragments.DailyAgendaFragment;
 import es.usc.citius.servando.calendula.fragments.HomeProfileMgr;
 import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
@@ -77,6 +78,7 @@ import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.Snack;
+import es.usc.citius.servando.calendula.util.medicine.StockUtils;
 
 public class HomePagerActivity extends CalendulaActivity implements
         RoutinesListFragment.OnRoutineSelectedListener,
@@ -566,6 +568,14 @@ public class HomePagerActivity extends CalendulaActivity implements
                     } else if (evt instanceof DailyAgenda.AgendaUpdatedEvent) {
                         ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
                         homeProfileMgr.updateDate();
+                    } else if (evt instanceof StockRunningOutEvent) {
+                        final StockRunningOutEvent sro = (StockRunningOutEvent) evt;
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                StockUtils.showStockRunningOutDialog(HomePagerActivity.this, sro.m, sro.days);
+                            }
+                        },1000);
                     }
                 }
             });
