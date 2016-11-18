@@ -28,6 +28,7 @@ import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.evernote.android.job.JobManager;
 import com.mikepenz.iconics.Iconics;
 
 import org.joda.time.LocalTime;
@@ -43,6 +44,8 @@ import java.util.Locale;
 import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.database.PatientDao;
+import es.usc.citius.servando.calendula.jobs.CalendulaJobCreator;
+import es.usc.citius.servando.calendula.jobs.PurgeCacheJob;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
@@ -89,7 +92,7 @@ public class CalendulaApp extends Application {
     // REQUEST CODES
     public static final int RQ_SHOW_ROUTINE = 1;
     public static final int RQ_DELAY_ROUTINE = 2;
-    
+
     private static EventBus eventBus = EventBus.getDefault();
 
     public static boolean isOpen() {
@@ -105,11 +108,11 @@ public class CalendulaApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        prefs =  PreferenceManager.getDefaultSharedPreferences(this);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // initialize SQLite engine
         initializeDatabase();
 
-        if(!prefs.getBoolean("DEFAULT_DATA_INSERTED", false)){
+        if (!prefs.getBoolean("DEFAULT_DATA_INSERTED", false)) {
             DefaultDataGenerator.fillDBWithDummyData(getApplicationContext());
             prefs.edit().putBoolean("DEFAULT_DATA_INSERTED", true).commit();
         }
@@ -124,10 +127,16 @@ public class CalendulaApp extends Application {
         Iconics.init(getApplicationContext());
         //register custom fonts like this (or also provide a font definition file)
         Iconics.registerFont(new PresentationsTypeface());
+
+        //initialize job engine
+        JobManager.create(this).addJobCreator(new CalendulaJobCreator());
+        PurgeCacheJob.scheduleJob();
     }
 
-    public static boolean isPharmaModeEnabled(Context ctx){
-        SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(ctx);
+
+
+    public static boolean isPharmaModeEnabled(Context ctx) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         return prefs.getBoolean(PHARMACY_MODE_ENABLED, false);
     }
 
@@ -147,7 +156,7 @@ public class CalendulaApp extends Application {
                 Patient p = DB.patients().getDefault();
                 prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).commit();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -163,7 +172,7 @@ public class CalendulaApp extends Application {
         // intent our receiver will receive
         Intent intent = new Intent(this, AlarmReceiver.class);
         AlarmIntentParams params = AlarmIntentParams.forDailyUpdate();
-        AlarmScheduler.setAlarmParams(intent,params);
+        AlarmScheduler.setAlarmParams(intent, params);
         PendingIntent dailyAlarm = PendingIntent.getBroadcast(this, params.hashCode(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
