@@ -31,9 +31,7 @@ public class AlertManager {
             case Level.HIGH:
                 blockSchedulesForMedicine(alert.getMedicine());
             case Level.MEDIUM:
-                if (ctx != null) {
-                    alert.showDialog(ctx);
-                }
+                //nothing
             case Level.LOW:
                 //nothing
             default:
