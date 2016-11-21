@@ -471,5 +471,6 @@
 
     <string name="notification_error_msg">Parece que ha habido un problema con la notificacion. Por favor, revisa tu agenda para ver si hay medicacion pendiente.</string>
     <string name="notification_error_title">Ups...</string>
+    <string name="error_duplicate_medicine">Este medicamento ya está en el botiquín.</string>
 
 </resources>
