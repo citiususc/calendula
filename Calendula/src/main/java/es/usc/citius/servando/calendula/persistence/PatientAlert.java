@@ -10,7 +10,7 @@ public class PatientAlert<T> {
 
 
     public enum AlertType {
-        // TODO: 16/11/16 add alert types
+        STOCK_ALERT
     }
 
     public final static class Level {

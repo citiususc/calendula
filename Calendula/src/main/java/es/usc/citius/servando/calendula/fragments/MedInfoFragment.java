@@ -32,6 +32,8 @@ import android.widget.TextView;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 
+import org.joda.time.LocalDate;
+
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
@@ -39,6 +41,7 @@ import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.medicine.StockUtils;
 import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 
@@ -146,9 +149,15 @@ public class MedInfoFragment extends Fragment{
             scheduleInfo.setText(scheduleCount + " pautas activas");
         }
 
-        stockInfo.setText("Sin información de stock");
-        stockInfoEnd.setVisibility(View.GONE);
-
+        if(m.stockManagementEnabled()){
+            stockInfo.setText(m.stock() + " " + m.presentation().units(getResources()));
+            LocalDate d = StockUtils.getEstimatedStockEnd(m);
+            String msg = StockUtils.getReadableStockDuration(d);
+            stockInfoEnd.setText(msg);
+        }else{
+            stockInfo.setText("Sin datos");
+            stockInfoEnd.setText("No se ha indicado información de stock para este medicamento");
+        }
 
     }
 
