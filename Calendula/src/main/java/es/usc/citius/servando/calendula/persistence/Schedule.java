@@ -52,6 +52,10 @@ import es.usc.citius.servando.calendula.util.ScheduleHelper;
 @DatabaseTable(tableName = "Schedules")
 public class Schedule {
 
+    public enum ScheduleState {
+        ENABLED, DISABLED, BLOCKED, SILENCED
+    }
+
     public static final int SCHEDULE_TYPE_EVERYDAY = 0; // DEFAULT
     public static final int SCHEDULE_TYPE_SOMEDAYS = 1;
     public static final int SCHEDULE_TYPE_INTERVAL = 2;
@@ -72,6 +76,8 @@ public class Schedule {
     public static final String COLUMN_SCANNED = "Scanned";
 
     public static final String COLUMN_PATIENT = "Patient";
+
+    public static final String COLUMN_STATE = "State";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
@@ -106,37 +112,33 @@ public class Schedule {
     @DatabaseField(columnName = COLUMN_PATIENT, foreign = true, foreignAutoRefresh = true)
     private Patient patient;
 
-    public RepetitionRule rule()
-    {
+    @DatabaseField(columnName = COLUMN_STATE)
+    private ScheduleState state;
+
+    public RepetitionRule rule() {
         return rrule;
     }
 
-    public void setRepetition(RepetitionRule rrule)
-    {
+    public void setRepetition(RepetitionRule rrule) {
         this.rrule = rrule;
     }
 
-    public int type()
-    {
+    public int type() {
         return type;
     }
 
-    public void setType(int type)
-    {
-        if (type < 0 || type > 5)
-        {
+    public void setType(int type) {
+        if (type < 0 || type > 5) {
             throw new RuntimeException("Invalid schedule type");
         }
         this.type = type;
     }
 
-    public Schedule()
-    {
+    public Schedule() {
         rrule = new RepetitionRule(null);
     }
 
-    public Schedule(Medicine medicine)
-    {
+    public Schedule(Medicine medicine) {
         this.medicine = medicine;
     }
 
@@ -145,8 +147,7 @@ public class Schedule {
         setDays(days);
     }
 
-    public Long getId()
-    {
+    public Long getId() {
         return id;
     }
 
@@ -158,37 +159,31 @@ public class Schedule {
         return DB.scheduleItems().findBySchedule(this);
     }
 
-    public List<DateTime> hourlyItemsToday()
-    {
+    public List<DateTime> hourlyItemsToday() {
         DateTime today = DateTime.now().withTimeAtStartOfDay();
         // get schedule occurrences for the current day
         return rrule.occurrencesBetween(today, today.plusDays(1), startDateTime());
     }
 
-    public List<DateTime> hourlyItemsAt(DateTime d)
-    {
+    public List<DateTime> hourlyItemsAt(DateTime d) {
         DateTime date = d.withTimeAtStartOfDay();
         // get schedule occurrences for the current day
         return rrule.occurrencesBetween(date, date.plusDays(1), startDateTime());
     }
 
-    public Medicine medicine()
-    {
+    public Medicine medicine() {
         return medicine;
     }
 
-    public void setMedicine(Medicine medicine)
-    {
+    public void setMedicine(Medicine medicine) {
         this.medicine = medicine;
     }
 
-    public boolean[] days()
-    {
+    public boolean[] days() {
         return rrule.days();
     }
 
-    public void setDays(boolean[] days)
-    {
+    public void setDays(boolean[] days) {
         rrule.setDays(days);
     }
 
@@ -216,21 +211,18 @@ public class Schedule {
     // DB queries
     // *************************************
 
-    public static List<Schedule> findAll()
-    {
+    public static List<Schedule> findAll() {
         return DB.schedules().findAll();
     }
 
-    public static List<Schedule> findByMedicine(Medicine med)
-    {
+    public static List<Schedule> findByMedicine(Medicine med) {
         return DB.schedules().findByMedicine(med);
     }
 
-    public static Schedule findById(long id)
-    {
+    public static Schedule findById(long id) {
         return DB.schedules().findById(id);
     }
-    
+
 
     public void setDose(float dose) {
         this.dose = dose;
@@ -252,31 +244,24 @@ public class Schedule {
     }
 
 
-    public String toReadableString(Context ctx)
-    {
+    public String toReadableString(Context ctx) {
 
-        if (rule().frequency() == Frequency.HOURLY)
-        {
+        if (rule().frequency() == Frequency.HOURLY) {
             return ctx.getString(R.string.repeat_every_tostr, rule().interval(),
                     ctx.getString(R.string.hours));
-        } else if (type == SCHEDULE_TYPE_CYCLE)
-        {
+        } else if (type == SCHEDULE_TYPE_CYCLE) {
             return getCycleDays() + " + " + getCycleRest();
-        } else if (type == SCHEDULE_TYPE_SOMEDAYS)
-        {
-            return ScheduleUtils.stringifyDays(days(),ctx);
-        } else
-        {
+        } else if (type == SCHEDULE_TYPE_SOMEDAYS) {
+            return ScheduleUtils.stringifyDays(days(), ctx);
+        } else {
             String ical = rrule.toIcal();
 
             EventRecurrence e = new EventRecurrence();
             Time t;
-            if (start != null)
-            {
+            if (start != null) {
                 t = new Time();
                 t.set(start.getDayOfWeek(), start.getMonthOfYear(), start.getYear());
-            } else
-            {
+            } else {
                 t = new Time();
                 t.setToNow();
                 t.normalize(true);
@@ -368,14 +353,12 @@ public class Schedule {
                 '}';
     }
 
-    public static final boolean[] noWeekDays()
-    {
-        return new boolean[] { false, false, false, false, false, false, false };
+    public static final boolean[] noWeekDays() {
+        return new boolean[]{false, false, false, false, false, false, false};
     }
 
-    public static final boolean[] allWeekDays()
-    {
-        return new boolean[] { true, true, true, true, true, true, true };
+    public static final boolean[] allWeekDays() {
+        return new boolean[]{true, true, true, true, true, true, true};
     }
 
     public String displayDose() {
@@ -431,6 +414,14 @@ public class Schedule {
 
     public void setScanned(boolean scanned) {
         this.scanned = scanned;
+    }
+
+    public ScheduleState getState() {
+        return state;
+    }
+
+    public void setState(ScheduleState state) {
+        this.state = state;
     }
 }
 
