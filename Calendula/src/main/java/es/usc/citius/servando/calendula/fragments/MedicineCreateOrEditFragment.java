@@ -51,11 +51,13 @@ import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.doomonafireball.betterpickers.numberpicker.NumberPickerBuilder;
 import com.doomonafireball.betterpickers.numberpicker.NumberPickerDialogFragment;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import java.sql.SQLException;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
@@ -87,8 +89,8 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
     private static final int DIALOG_STOCK_ADD = 1;
     private static final int DIALOG_STOCK_REMOVE = 2;
-    private static final String TAG = "MedicineCOEFragment";
 
+    private static final String TAG = "MedicineCreateOrEditFr";
     OnMedicineEditListener mMedicineEditCallback;
     Medicine mMedicine;
     Prescription mPrescription;
@@ -601,7 +603,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                     mMedicine.setCn(null);
                 }
 
-                if (mMedicineEditCallback != null) {
+                if (mMedicineEditCallback != null && !checkIfDuplicate(mMedicine)) {
                     mMedicineEditCallback.onMedicineEdited(mMedicine);
                 }
             }
@@ -620,12 +622,49 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                 m.setStock(stockSwitch.isActivated() ? stock : -1);
                 m.setPresentation(selectedPresentation != null ? selectedPresentation : Presentation.UNKNOWN);
                 m.setPatient(DB.patients().getActive(getContext()));
-                if (mMedicineEditCallback != null) {
+
+                if (mMedicineEditCallback != null && !checkIfDuplicate(m)) {
                     mMedicineEditCallback.onMedicineCreated(m);
                 }
             }
         } else {
             Snack.show(R.string.medicine_no_name_error_message, getActivity());
+        }
+    }
+
+
+    private boolean checkIfDuplicate(final Medicine m) {
+        try {
+            List<Medicine> others;
+            if (m.isBoundToPrescription()) {
+                final String cn = m.cn();
+                final PreparedQuery<Medicine> query = DB.medicines().queryBuilder().where()
+                        .eq(Medicine.COLUMN_PATIENT, m.patient())
+                        .and().eq(Medicine.COLUMN_CN, cn).prepare();
+                others = DB.medicines().query(query);
+            } else {
+                final String name = m.name();
+                final Presentation presentation = m.presentation();
+                final PreparedQuery<Medicine> query = DB.medicines().queryBuilder().where()
+                        .eq(Medicine.COLUMN_PATIENT, m.patient())
+                        .and().eq(Medicine.COLUMN_NAME, name)
+                        .and().eq(Medicine.COLUMN_PRESENTATION, presentation).prepare();
+                others = DB.medicines().query(query);
+            }
+            boolean ret = false;
+            if (others != null && others.size() > 0) {
+                if (others.size() > 1) //should not happen
+                    Log.e(TAG, "checkIfDuplicate: multiple duplicates detected for medicine: " + m);
+                final Medicine other = others.get(0);
+                ret = !other.getId().equals(m.getId());
+            }
+            if (ret) {
+                Snack.show(R.string.error_duplicate_medicine, this.getActivity());
+            }
+            return ret;
+        } catch (SQLException e) {
+            Log.e(TAG, "checkIfDuplicate: ", e);
+            return false;
         }
     }
 
