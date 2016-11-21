@@ -106,6 +106,14 @@ public class PatientAlert<T> {
         this.jsonDetails = new Gson().toJson(details);
     }
 
+    protected String getJsonDetails() {
+        return jsonDetails;
+    }
+
+    protected void setJsonDetails(String jsonDetails) {
+        this.jsonDetails = jsonDetails;
+    }
+
     public Class<?> getDetailsType() {
         throw new RuntimeException("This method must be overridden by subclasses");
     }
