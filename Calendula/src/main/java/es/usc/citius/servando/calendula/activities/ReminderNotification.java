@@ -216,7 +216,7 @@ public class ReminderNotification {
                 .setSmallIcon(options.lost ? R.drawable.ic_pill_small_lost : R.drawable.ic_pill_small)
                 .setContentTitle(options.title)
                 .setContentText(options.text)
-                .setPriority(options.insistent ? NotificationCompat.PRIORITY_MAX : NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(options.insistent ? NotificationCompat.PRIORITY_MAX : NotificationCompat.PRIORITY_HIGH)
                         // Provide a large icon, shown with the notification in the
                         // notification drawer on devices running Android 3.0 or later.
                 .setLargeIcon(options.picture)
@@ -231,8 +231,7 @@ public class ReminderNotification {
                         // or later.
                 .setStyle(options.style)
                         //.setLights(0x00ff0000, 500, 1000)
-                .setPriority(Notification.PRIORITY_DEFAULT)
-                .setVibrate(new long[] { 1000, 200, 500, 200, 100, 200, 1000 }).setSound(options.ringtone)
+                .setVibrate(new long[] { 1000, 200, 100, 500, 400, 200, 100, 500, 400, 200, 100, 500, 1000 }).setSound(options.ringtone)
                         // Automatically dismiss the notification when it is touched.
                 .setAutoCancel(true);
 
