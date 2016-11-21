@@ -502,6 +502,7 @@
     <string name="message_schedule_medicine_allergy">This medicine cannot be scheduled because you have an allergy to some of its components.</string>
     <string name="title_allergies_detected_dialog">Warning</string>
     <string name="message_allergies_detected_dialog">Some of the medicines in your medkit contain the allergen you\'ve just added. Please review their prospects carefully.</string>
+    <string name="error_duplicate_medicine">This medicine is already in your medkit.</string>
 
 
 </resources>

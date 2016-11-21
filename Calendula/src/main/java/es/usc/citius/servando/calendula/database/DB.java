@@ -105,9 +105,9 @@ public class DB {
         return db;
     }
 
-    public static void transaction(Callable<?> callable) {
+    public static Object transaction(Callable<?> callable) {
         try {
-            TransactionManager.callInTransaction(db.getConnectionSource(), callable);
+            return TransactionManager.callInTransaction(db.getConnectionSource(), callable);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

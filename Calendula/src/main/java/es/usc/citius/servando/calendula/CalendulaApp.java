@@ -28,6 +28,7 @@ import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.evernote.android.job.JobManager;
 import com.mikepenz.iconics.Iconics;
 
 import org.joda.time.LocalTime;
@@ -44,6 +45,8 @@ import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.database.PatientDao;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
+import es.usc.citius.servando.calendula.jobs.CalendulaJobCreator;
+import es.usc.citius.servando.calendula.jobs.PurgeCacheJob;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
@@ -87,12 +90,16 @@ public class CalendulaApp extends Application {
     public static final int ACTION_CANCEL_HOURLY_SCHEDULE = 9;
     public static final int ACTION_CHECK_PICKUPS_ALARM = 10;
 
+    public static final int ACTION_CONFIRM_ALL_ROUTINE = 11;
+    public static final int ACTION_CONFIRM_ALL_SCHEDULE = 12;
+
 
     // REQUEST CODES
     public static final int RQ_SHOW_ROUTINE = 1;
     public static final int RQ_DELAY_ROUTINE = 2;
 
     private final static String TAG="CalendulaApp";
+
 
     private static EventBus eventBus = EventBus.getDefault();
 
@@ -109,11 +116,11 @@ public class CalendulaApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        prefs =  PreferenceManager.getDefaultSharedPreferences(this);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         // initialize SQLite engine
         initializeDatabase();
 
-        if(!prefs.getBoolean("DEFAULT_DATA_INSERTED", false)){
+        if (!prefs.getBoolean("DEFAULT_DATA_INSERTED", false)) {
             DefaultDataGenerator.fillDBWithDummyData(getApplicationContext());
             prefs.edit().putBoolean("DEFAULT_DATA_INSERTED", true).commit();
         }
@@ -136,6 +143,10 @@ public class CalendulaApp extends Application {
             Log.w(TAG, "onCreate: An exception happened when loading settings file");
         }
         updatePreferences();
+
+        //initialize job engine
+        JobManager.create(this).addJobCreator(new CalendulaJobCreator());
+        PurgeCacheJob.scheduleJob();
     }
 
     private void updatePreferences() {
@@ -144,7 +155,7 @@ public class CalendulaApp extends Application {
         SharedPreferences.Editor editor = prefs.edit();
 
         // replace old "enable db preference" with the default db key (AEMPS)
-        if(dbWasEnabled){
+        if (dbWasEnabled) {
             editor.putString("last_valid_database", DBRegistry.instance().defaultDBMgr().id())
                     .putString("prescriptions_database", DBRegistry.instance().defaultDBMgr().id());
         }
@@ -152,8 +163,8 @@ public class CalendulaApp extends Application {
         editor.commit();
     }
 
-    public static boolean isPharmaModeEnabled(Context ctx){
-        SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(ctx);
+    public static boolean isPharmaModeEnabled(Context ctx) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         return prefs.getBoolean(PHARMACY_MODE_ENABLED, false);
     }
 
@@ -169,12 +180,12 @@ public class CalendulaApp extends Application {
     public void initializeDatabase() {
         DB.init(this);
         DBRegistry.init(this);
-        try{
-            if(DB.patients().countOf() == 1) {
+        try {
+            if (DB.patients().countOf() == 1) {
                 Patient p = DB.patients().getDefault();
                 prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).commit();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -190,7 +201,7 @@ public class CalendulaApp extends Application {
         // intent our receiver will receive
         Intent intent = new Intent(this, AlarmReceiver.class);
         AlarmIntentParams params = AlarmIntentParams.forDailyUpdate();
-        AlarmScheduler.setAlarmParams(intent,params);
+        AlarmScheduler.setAlarmParams(intent, params);
         PendingIntent dailyAlarm = PendingIntent.getBroadcast(this, params.hashCode(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {

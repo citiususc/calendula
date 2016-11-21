@@ -404,5 +404,6 @@
     <string name="title_about">Acerca de</string>
     <string name="home_menu_allergies">Alerxias</string>
     <string name="title_activity_allergies">Alerxias</string>
+    <string name="error_duplicate_medicine">Este medicamento xa se atopa no botiquín.</string>
 </resources>
 

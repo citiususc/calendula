@@ -131,7 +131,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
         tabs.setDividerPadding(3);
         tabs.setDividerColor(getResources().getColor(R.color.white_50));
         tabs.setDividerColor(getResources().getColor(R.color.transparent));
-        tabs.setIndicatorHeight(ScreenUtils.dpToPx(getResources(),4));
+        tabs.setIndicatorHeight(ScreenUtils.dpToPx(getResources(), 4));
         tabs.setIndicatorColor(ScreenUtils.equivalentNoAlpha(pColor, 0.8f));
         tabs.setTextColor(Color.parseColor("#222222"));
         tabs.setUnderlineColor(ScreenUtils.equivalentNoAlpha(pColor, 0.5f));
@@ -140,7 +140,6 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
         if (mSchedule != null) {
             mViewPager.setCurrentItem(1);
         }
-
 
 
         findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
@@ -185,6 +184,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                     final Patient patient = DB.patients().getActive(getBaseContext());
                     s.setMedicine(ScheduleHelper.instance().getSelectedMed());
                     s.setPatient(patient);
+                    s.setState(Schedule.ScheduleState.ENABLED);
                     s.save();
 
                     Log.d(TAG, "Saving schedule..." + s.toString());
@@ -240,7 +240,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                         // remove days if changed
                         boolean[] days = s.days();
                         for (DailyScheduleItem dsi : DB.dailyScheduleItems().findBySchedule(s)) {
-                            if(days[dsi.date().getDayOfWeek()-1]){
+                            if (days[dsi.date().getDayOfWeek() - 1]) {
                                 DB.dailyScheduleItems().remove(dsi);
                             }
                         }
@@ -248,7 +248,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                         for (ScheduleItem item : s.items()) {
                             DailyScheduleItem d = DailyScheduleItem.findByScheduleItem(item);
                             // if taken today, add to the list
-                            if (d!=null && d.takenToday()) {
+                            if (d != null && d.takenToday()) {
                                 routinesTaken.add(item.routine().getId());
                             }
                             item.deleteCascade();
@@ -263,7 +263,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                             item.setSchedule(s);
                             item.save();
                             // add to daily schedule
-                            DailyAgenda.instance().addItem(patient, item,routinesTaken.contains(item.routine().getId()));
+                            DailyAgenda.instance().addItem(patient, item, routinesTaken.contains(item.routine().getId()));
                         }
                     } else {
                         DB.dailyScheduleItems().removeAllFrom(s);

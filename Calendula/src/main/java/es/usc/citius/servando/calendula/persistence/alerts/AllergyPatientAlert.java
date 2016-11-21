@@ -14,7 +14,7 @@ public class AllergyPatientAlert extends PatientAlert<AllergyPatientAlert.Allerg
 
     public AllergyPatientAlert(final Medicine medicine, final AllergenVO allergen) {
         this();
-        setExtraID(medicine.getId().toString());
+        setMedicine(medicine);
         setPatient(medicine.patient());
         setDetails(new AllergyAlertInfo(medicine, allergen));
     }
@@ -25,23 +25,13 @@ public class AllergyPatientAlert extends PatientAlert<AllergyPatientAlert.Allerg
     }
 
     public static class AllergyAlertInfo {
-        private Medicine medicine;
         private AllergenVO allergen;
 
         public AllergyAlertInfo() {
         }
 
         public AllergyAlertInfo(Medicine medicine, AllergenVO allergen) {
-            this.medicine = medicine;
             this.allergen = allergen;
-        }
-
-        public Medicine getMedicine() {
-            return medicine;
-        }
-
-        public void setMedicine(Medicine medicine) {
-            this.medicine = medicine;
         }
 
         public AllergenVO getAllergen() {

@@ -187,4 +187,7 @@ dependencies {
     // html parsing
     compile 'org.jsoup:jsoup:1.7.2'
 
+    // jobs
+    compile 'com.evernote:android-job:1.1.3'
+
 }
