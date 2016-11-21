@@ -3,11 +3,15 @@ package es.usc.citius.servando.calendula.util.alerts;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.List;
+import java.util.concurrent.Callable;
+
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
+import es.usc.citius.servando.calendula.persistence.Schedule;
 
 import static es.usc.citius.servando.calendula.persistence.PatientAlert.Level;
 
@@ -25,7 +29,7 @@ public class AlertManager {
 
         switch (alert.getLevel()) {
             case Level.HIGH:
-                blockRoutinesForMedicine(alert.getMedicine());
+                blockSchedulesForMedicine(alert.getMedicine());
             case Level.MEDIUM:
                 if (ctx != null) {
                     alert.showDialog(ctx);
@@ -38,8 +42,20 @@ public class AlertManager {
 
     }
 
-    private static void blockRoutinesForMedicine(Medicine medicine) {
-        // TODO: 21/11/16
+    private static void blockSchedulesForMedicine(final Medicine medicine) {
+
+        DB.transaction(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                final List<Schedule> schedules = DB.schedules().findByMedicine(medicine);
+                for (Schedule schedule : schedules) {
+                    schedule.setState(Schedule.ScheduleState.BLOCKED);
+                    schedule.save();
+                }
+                return null;
+            }
+        });
+
     }
 
 }
