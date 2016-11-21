@@ -2,6 +2,7 @@ package es.usc.citius.servando.calendula.util;
 
 import android.util.Log;
 
+import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 
 import org.joda.time.DateTime;
@@ -10,6 +11,7 @@ import org.joda.time.Duration;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.database.HtmlCacheDAO;
@@ -138,6 +140,36 @@ public class HtmlCacheManager {
         }
     }
 
+    /**
+     * Removes all invalid entries from cache.
+     *
+     * @return number of removed entries
+     */
+    public Integer purgeCache() {
+
+        try {
+            Integer count = (Integer) DB.transaction(new Callable<Integer>() {
+                @Override
+                public Integer call() throws Exception {
+                    Integer count = 0;
+                    CloseableIterator<HtmlCacheEntry> iterator = getDao().iterator();
+                    while (iterator.hasNext()) {
+                        HtmlCacheEntry entry = iterator.nextThrow();
+                        if (!checkTtl(entry))
+                            remove(entry);
+                        count++;
+                    }
+                    iterator.close();
+
+                    return count;
+                }
+            });
+            Log.v(TAG, "purgeCache: purged " + count + " entries");
+            return count;
+        } catch (Exception e) {
+            return -1;
+        }
+    }
 
     private Dao<HtmlCacheEntry, Long> getDao() {
         if (dao == null)

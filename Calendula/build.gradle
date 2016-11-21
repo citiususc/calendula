@@ -189,4 +189,9 @@ dependencies {
 
     // material dialogs
     compile 'com.github.javiersantos:MaterialStyledDialogs:2.0'
+
+    // jobs
+    compile 'com.evernote:android-job:1.1.3'
+
+
 }
