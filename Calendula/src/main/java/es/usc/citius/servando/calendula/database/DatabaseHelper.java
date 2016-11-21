@@ -91,7 +91,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             PresentationForm.class,
             PrescriptionActiveIngredient.class,
             PrescriptionExcipient.class,
-            // v13
             PatientAlert.class
     };
 
@@ -206,9 +205,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                     LocalDateMigrationHelper.migrateLocalDates(this);
                 case 12:
                     DrugModelMigrationHelper.migrateDrugModel(db, connectionSource);
-                case 13:
                     getMedicinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN Database TEXT;");
+                    getMedicinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN Stock REAL DEFAULT -1;");
                     TableUtils.createTable(connectionSource, PatientAlert.class);
+                    getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN " + Schedule.COLUMN_STATE + " TEXT;");
             }
 
         } catch (Exception e) {

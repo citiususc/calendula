@@ -16,21 +16,15 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<preference-headers>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- These settings headers are only used on tablets. -->
+    <ListPreference
+        android:defaultValue="7"
+        android:entries="@array/pref_stock"
+        android:entryValues="@array/pref_stock_values"
+        android:key="stock_alert_days"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_stock_alert_title" />
 
-    <!--<header-->
-        <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$GeneralPreferenceFragment"-->
-        <!--android:title="@string/pref_header_general" />-->
-
-    <!--<header-->
-        <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$NotificationPreferenceFragment"-->
-        <!--android:title="@string/pref_header_notifications" />-->
-
-    <!--<header-->
-        <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$StockPreferenceFragment"-->
-        <!--android:title="@string/pref_header_stock" />-->
-
-
-</preference-headers>
+</PreferenceScreen>

@@ -17,10 +17,19 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#fff">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+                android:id="@+id/scrollView"
+                android:background="#fff">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff"
+        android:paddingBottom="60dp">
+
 
     <TextView
         android:id="@+id/textView"
@@ -45,7 +54,8 @@
         android:layout_marginTop="5dp"
         android:gravity="center_vertical"
         android:textColor="@color/android_blue"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        android:visibility="invisible"/>
 
     <AutoCompleteTextView
         android:id="@+id/medicine_edit_name"
@@ -79,7 +89,7 @@
         android:layout_height="26dp"
         android:layout_below="@+id/medicine_edit_description"
         android:layout_marginLeft="72dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="10dp"
         android:gravity="center_vertical"
         android:text="@string/medicine_presentation"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -88,6 +98,7 @@
 
 
     <ImageView
+        android:id="@+id/ic_med_name"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignTop="@+id/textView"
@@ -95,6 +106,7 @@
         android:src="@drawable/ic_edit_black_48dp" />
 
     <ImageView
+        android:id="@+id/ic_med_presentation"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignTop="@+id/textView2"
@@ -105,7 +117,7 @@
         android:id="@+id/med_presentation"
         layout="@layout/fragment_med_presentation"
         android:layout_width="wrap_content"
-        android:layout_height="90dp"
+        android:layout_height="80dp"
         android:layout_below="@+id/textView2"
         android:layout_marginLeft="72dp"
         android:layout_marginRight="42dp"
@@ -114,14 +126,16 @@
     <TextView
         android:id="@+id/textView3"
         android:layout_width="fill_parent"
-        android:layout_height="36dp"
-        android:layout_below="@+id/med_presentation"
-        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
         android:fontFamily="sans-serif-condensed"
-        android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/android_blue_dark"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_toRightOf="@+id/textView2"
+        android:layout_marginLeft="20dp"
+        android:gravity="center_vertical"/>
 
 
     <ImageView
@@ -147,4 +161,94 @@
         android:src="@drawable/ic_arrow_left_black_48dp" />
 
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/medicine_stock_title"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:layout_below="@+id/med_presentation"
+            android:layout_marginLeft="72dp"
+            android:layout_marginTop="25dp"
+            android:gravity="center_vertical"
+            android:text="Stock"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/dark_grey_text"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/ic_med_stock"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignTop="@+id/medicine_stock_title"
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/ic_edit_black_48dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="19sp"
+            android:text="30 capsules"
+            android:id="@+id/stock_units"
+            android:gravity="center_vertical"
+            android:layout_below="@+id/medicine_stock_title"
+            android:layout_marginLeft="72dp"
+            android:layout_marginTop="20dp"
+            android:layout_toLeftOf="@+id/btn_stock_remove"
+            android:textStyle="bold"
+            android:textIsSelectable="false"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/android_blue_dark"
+            android:textSize="16sp"
+            android:text="Enough for 2 weeks with the current schedule"
+            android:id="@+id/stock_estimated_duration"
+            android:gravity="center_vertical"
+            android:layout_below="@+id/stock_units"
+            android:layout_marginLeft="72dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="32dp"
+            />
+
+        <ImageButton
+            android:layout_width="45dp"
+            android:layout_height="50dp"
+            android:id="@+id/btn_stock_remove"
+            android:layout_alignTop="@+id/stock_units"
+            android:src="@drawable/abc_ic_star_black_16dp"
+            android:scaleType="fitCenter"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_toLeftOf="@+id/btn_stock_add"
+            android:layout_marginRight="5dp"
+            android:background="@null"/>
+
+        <ImageButton
+            android:layout_width="45dp"
+            android:layout_height="50dp"
+            android:id="@+id/btn_stock_add"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_alignTop="@+id/stock_units"
+            android:src="@drawable/abc_ic_star_black_16dp"
+            android:scaleType="fitCenter"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="32dp"
+            android:background="@null"/>
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/stock_switch"
+            android:layout_alignParentRight="false"
+            android:layout_marginRight="32dp"
+            android:checked="false"
+            android:layout_toRightOf="@+id/medicine_stock_title"
+            android:layout_marginLeft="15dp"
+            android:layout_alignTop="@+id/medicine_stock_title"/>
+
+
+    </RelativeLayout>
+</ScrollView>
