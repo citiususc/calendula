@@ -35,11 +35,15 @@ import es.usc.citius.servando.calendula.allergies.AllergenConversionUtil;
 import es.usc.citius.servando.calendula.allergies.AllergenFacade;
 import es.usc.citius.servando.calendula.allergies.AllergenListeners;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
+import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.database.PatientAllergenDao;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
+import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
+import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert.AllergyAlertInfo;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
@@ -299,8 +303,25 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
             DB.transaction(new Callable<Object>() {
                 @Override
                 public Object call() throws Exception {
+                    final Patient patient = DB.patients().getActive(AllergiesActivity.this);
                     for (Medicine conflict : conflicts) {
-                        AlertManager.createAlert(new AllergyPatientAlert(conflict, allergen), AllergiesActivity.this);
+//                        AlertManager.createAlert(new AllergyPatientAlert(conflict, allergen), AllergiesActivity.this);
+                        final List<PatientAlert> list = AllergyAlertUtil.getAlertsForMedicine(conflict);
+                        if (list.size() > 0) {
+                            if (list.size() == 1) {
+                                AllergyPatientAlert a = new AllergyPatientAlert(list.get(0));
+                                final AllergyAlertInfo d = a.getDetails();
+                                d.getAllergens().add(allergen);
+                                a.setDetails(d);
+                                DB.alerts().save(a);
+                            } else {
+                                Log.wtf(TAG, "Duplicate alerts: " + list);
+                            }
+                        } else {
+                            AlertManager.createAlert(new AllergyPatientAlert(conflict, new ArrayList<AllergenVO>() {{
+                                add(allergen);
+                            }}), AllergiesActivity.this);
+                        }
                     }
                     return null;
                 }

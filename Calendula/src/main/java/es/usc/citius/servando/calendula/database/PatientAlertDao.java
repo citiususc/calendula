@@ -18,10 +18,16 @@
 
 package es.usc.citius.servando.calendula.database;
 
+import android.util.Log;
+
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.PreparedQuery;
 
 import java.sql.SQLException;
+import java.util.List;
 
+import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 
 /**
@@ -48,5 +54,18 @@ public class PatientAlertDao extends GenericDao<PatientAlert, Long> {
         }
     }
 
+    public List<PatientAlert> findByPatientMedicineAndType(Patient p, Medicine m, PatientAlert.AlertType t) {
+
+        try {
+            final PreparedQuery<PatientAlert> query = this.queryBuilder().where()
+                    .eq(PatientAlert.COLUMN_TYPE, t).and()
+                    .eq(PatientAlert.COLUMN_PATIENT, p).and()
+                    .eq(PatientAlert.COLUMN_MEDICINE, m).prepare();
+            return query(query);
+        } catch (SQLException e) {
+            Log.e(TAG, "findByPatientMedicineAndType: ", e);
+            return null;
+        }
+    }
 
 }

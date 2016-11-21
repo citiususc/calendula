@@ -69,7 +69,6 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
@@ -345,21 +344,8 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
     private void createAllergyAlerts(final Medicine m, final List<AllergenVO> allergies) throws RuntimeException {
 
-        final List<PatientAlert> alerts = new ArrayList<>();
-        for (AllergenVO allergen : allergies) {
-            AllergyPatientAlert alert = new AllergyPatientAlert(m, allergen);
-            alerts.add(alert);
-        }
-
-        DB.transaction(new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                for (PatientAlert alert : alerts) {
-                    AlertManager.createAlert(alert, MedicinesActivity.this);
-                }
-                return null;
-            }
-        });
+        AllergyPatientAlert alert = new AllergyPatientAlert(m, allergies);
+        AlertManager.createAlert(alert, MedicinesActivity.this);
 
     }
 
