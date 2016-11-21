@@ -110,10 +110,6 @@ public class PatientAlert<T> {
         throw new RuntimeException("This method must be overridden by subclasses");
     }
 
-    public void showDialog(Context ctx) {
-        throw new RuntimeException("This method must be overridden by subclasses");
-    }
-
     public final boolean hasDetails() {
         return getDetailsType() != null;
     }
