@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -35,7 +36,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -44,6 +44,7 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.MedicineInfoActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
@@ -215,12 +216,17 @@ public class MedicinesListFragment extends Fragment {
 
 
     void onClickProspect(Medicine medicine, final Prescription p) {
-        if (p != null) {
-            openProspect(p);
-        } else {
-            Toast.makeText(getActivity(), R.string.download_prospect_not_available_message, Toast.LENGTH_SHORT).show();
-            Log.d("MedicinesList", "Prospect url not available");
-        }
+
+        Intent i = new Intent(getActivity(), MedicineInfoActivity.class);
+        i.putExtra("medicine_id", medicine.getId());
+        getActivity().startActivity(i);
+
+//        if (p != null) {
+//            openProspect(p);
+//        } else {
+//            Toast.makeText(getActivity(), R.string.download_prospect_not_available_message, Toast.LENGTH_SHORT).show();
+//            Log.d("MedicinesList", "Prospect url not available");
+//        }
     }
 
 

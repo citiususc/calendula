@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2016 CITIUS - USC
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nestedScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    android:paddingTop="10dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:background="#fff">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp">
+
+            <ImageView
+                android:id="@+id/ic_med_large_name"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignTop="@+id/textView"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/ic_edit_black_48dp"
+                />
+
+            <TextView
+                android:id="@+id/med_large_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="72dp"
+                android:gravity="center_vertical"
+                android:text="Ácido fusídico"
+                android:textAllCaps="true"
+                android:textColor="@color/dark_grey_text"
+                android:textSize="19dp"
+                android:layout_toRightOf="@+id/ic_med_large_name"
+                android:textIsSelectable="false"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/med_large_name_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="false"
+                android:layout_marginLeft="72dp"
+                android:gravity="center_vertical"
+                android:fontFamily="sans-serif-condensed"
+                android:text="1tubo de 15 mg\n20mg/g"
+                android:textColor="@color/dark_grey_text"
+                android:textSize="18dp"
+                android:layout_toRightOf="@+id/ic_med_large_name"
+                android:layout_below="@+id/ic_med_large_name"/>
+
+        </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp">
+
+                <ImageView
+                    android:id="@+id/ic_med_stock"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignTop="@+id/textView"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/ic_edit_black_48dp"
+                    />
+
+                <TextView
+                    android:id="@+id/med_stock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="72dp"
+                    android:gravity="center_vertical"
+                    android:text="20 comprimidos"
+                    android:textAllCaps="false"
+                    android:textColor="@color/dark_grey_text"
+                    android:textSize="19dp"
+                    android:layout_toRightOf="@+id/ic_med_stock"
+                    android:textIsSelectable="false"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/med_stock_readable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="false"
+                    android:layout_marginLeft="72dp"
+                    android:gravity="center_vertical"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="Suficiente para 2 semanas"
+                    android:textColor="@color/dark_grey_text"
+                    android:textSize="18dp"
+                    android:layout_toRightOf="@+id/ic_med_stock"
+                    android:layout_below="@+id/ic_med_stock"/>
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp">
+
+                <ImageView
+                    android:id="@+id/ic_schedule_info"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignTop="@+id/textView"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/ic_edit_black_48dp"
+                    />
+
+                <TextView
+                    android:id="@+id/schedule_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="72dp"
+                    android:gravity="center_vertical"
+                    android:text="1 pauta activa"
+                    android:textAllCaps="false"
+                    android:textColor="@color/dark_grey_text"
+                    android:textSize="19dp"
+                    android:layout_toRightOf="@+id/ic_schedule_info"
+                    android:textIsSelectable="false"
+                    android:textStyle="bold"/>
+
+            </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp">
+
+            <ImageView
+                android:id="@+id/ic_prospect"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignTop="@+id/textView"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/ic_edit_black_48dp"
+                android:layout_marginTop="10dp"/>
+
+            <Button
+                android:id="@+id/med_leaflet_butn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="72dp"
+                android:gravity="center_vertical"
+                android:text="CONSULTAR PROSPECTO"
+                android:textColor="@color/dark_grey_text"
+                android:textSize="15dp"
+                android:layout_toRightOf="@+id/ic_prospect"/>
+        </RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+
+</android.support.v4.widget.NestedScrollView>
+
+
