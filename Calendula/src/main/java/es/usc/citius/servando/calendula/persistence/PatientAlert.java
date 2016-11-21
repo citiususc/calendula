@@ -1,7 +1,5 @@
 package es.usc.citius.servando.calendula.persistence;
 
-import android.content.Context;
-
 import com.google.gson.Gson;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -106,11 +104,11 @@ public class PatientAlert<T> {
         this.jsonDetails = new Gson().toJson(details);
     }
 
-    protected String getJsonDetails() {
+    public String getJsonDetails() {
         return jsonDetails;
     }
 
-    protected void setJsonDetails(String jsonDetails) {
+    public void setJsonDetails(String jsonDetails) {
         this.jsonDetails = jsonDetails;
     }
 
