@@ -51,6 +51,7 @@ import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.HtmlCacheEntry;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
+import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Routine;
@@ -90,6 +91,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             PresentationForm.class,
             PrescriptionActiveIngredient.class,
             PrescriptionExcipient.class,
+            // v13
+            PatientAlert.class
     };
 
     // name of the database file for our application
@@ -162,12 +165,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.i(DatabaseHelper.class.getName(), "onUpgrade");
             Log.d(DatabaseHelper.class.getName(), "OldVersion: " + oldVersion + ", newVersion: " + newVersion);
 
-            if (oldVersion < 6)
-            {
+            if (oldVersion < 6) {
                 oldVersion = 6;
             }
 
-            switch (oldVersion + 1){
+            switch (oldVersion + 1) {
                 case 7:
                     // migrate to iCal
                     migrateToICal();
@@ -206,6 +208,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                     DrugModelMigrationHelper.migrateDrugModel(db, connectionSource);
                 case 13:
                     getMedicinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN Database TEXT;");
+                    TableUtils.createTable(connectionSource, PatientAlert.class);
             }
 
         } catch (Exception e) {
