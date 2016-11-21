@@ -2,7 +2,6 @@ package es.usc.citius.servando.calendula.persistence.alerts;
 
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 
 public class AllergyPatientAlert extends PatientAlert<AllergyPatientAlert.AllergyAlertInfo> {
@@ -14,6 +13,7 @@ public class AllergyPatientAlert extends PatientAlert<AllergyPatientAlert.Allerg
 
     public AllergyPatientAlert(final Medicine medicine, final AllergenVO allergen) {
         this();
+        setLevel(Level.HIGH);
         setMedicine(medicine);
         setPatient(medicine.patient());
         setDetails(new AllergyAlertInfo(medicine, allergen));
