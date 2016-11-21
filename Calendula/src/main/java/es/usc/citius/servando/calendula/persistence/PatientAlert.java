@@ -1,21 +1,36 @@
 package es.usc.citius.servando.calendula.persistence;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+@SuppressWarnings("unused")
 @DatabaseTable(tableName = "PatientAlerts")
 public class PatientAlert<T> {
 
+
     public enum AlertType {
         // TODO: 16/11/16 add alert types
+    }
+
+    public final static class Level {
+
+        private Level() {
+        }
+
+        public static final int LOW = 1;
+        public static final int MEDIUM = 2;
+        public static final int HIGH = 3;
     }
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_DETAILS = "Details";
     public static final String COLUMN_PATIENT = "Patient";
     public static final String COLUMN_TYPE = "Type";
-    public static final String COLUMN_EXTRA_ID = "ExtraID";
+    public static final String COLUMN_MEDICINE = "Medicine";
+    public static final String COLUMN_LEVEL = "Level";
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
@@ -26,20 +41,16 @@ public class PatientAlert<T> {
     @DatabaseField(columnName = COLUMN_PATIENT, foreign = true, foreignAutoRefresh = true)
     private Patient patient;
 
+    @DatabaseField(columnName = COLUMN_MEDICINE, foreign = true, foreignAutoRefresh = true)
+    private Medicine medicine;
+
+    @DatabaseField(columnName = COLUMN_LEVEL)
+    private int level;
+
     @DatabaseField(columnName = COLUMN_DETAILS)
     private String jsonDetails;
 
-    @DatabaseField(columnName = COLUMN_EXTRA_ID)
-    private String extraID;
-
-
     public PatientAlert() {
-    }
-
-    public PatientAlert(T details, Patient patient, AlertType type) {
-        setDetails(details);
-        this.patient = patient;
-        this.type = type;
     }
 
     public Long id() {
@@ -68,12 +79,20 @@ public class PatientAlert<T> {
         this.patient = patient;
     }
 
-    public String getExtraID() {
-        return extraID;
+    public Medicine getMedicine() {
+        return medicine;
     }
 
-    public void setExtraID(String extraID) {
-        this.extraID = extraID;
+    public void setMedicine(Medicine medicine) {
+        this.medicine = medicine;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public T getDetails() {
@@ -88,7 +107,11 @@ public class PatientAlert<T> {
     }
 
     public Class<?> getDetailsType() {
-        throw new RuntimeException("This method must be overriden by subclasses");
+        throw new RuntimeException("This method must be overridden by subclasses");
+    }
+
+    public void showDialog(Context ctx) {
+        throw new RuntimeException("This method must be overridden by subclasses");
     }
 
     public final boolean hasDetails() {
@@ -101,6 +124,9 @@ public class PatientAlert<T> {
         return "PatientAlert{" +
                 "id=" + id +
                 ", type=" + type +
+                ", patient=" + patient +
+                ", medicine=" + medicine +
+                ", level=" + level +
                 ", jsonDetails='" + jsonDetails + '\'' +
                 '}';
     }
