@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
@@ -34,7 +35,6 @@ import es.usc.citius.servando.calendula.allergies.AllergenConversionUtil;
 import es.usc.citius.servando.calendula.allergies.AllergenFacade;
 import es.usc.citius.servando.calendula.allergies.AllergenListeners;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
-import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.database.PatientAllergenDao;
 import es.usc.citius.servando.calendula.persistence.Medicine;
@@ -42,6 +42,7 @@ import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.Snack;
+import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 
 public class AllergiesActivity extends CalendulaActivity implements AllergenListeners.DeleteAllergyActionListener, AllergenListeners.AddAllergyActionListener {
 
@@ -277,7 +278,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
     }
 
     @Override
-    public void onAddAction(AllergenVO allergen) {
+    public void onAddAction(final AllergenVO allergen) {
         KeyboardUtils.hideKeyboard(this);
         PatientAllergen p = new PatientAllergen(allergen, DB.patients().getActive(this));
         boolean ans = store.storeAllergen(p);
@@ -285,19 +286,25 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
             searchAdapter.remove(allergen);
             checkPlaceholder();
             Snack.show(getString(R.string.message_allergy_add_success, allergen.getName()), this);
-            List<Medicine> conflicts = AllergenFacade.checkNewMedicineAllergies(this, allergen);
-            if (!conflicts.isEmpty()) {
-                showNewAllergyConflictDialog();
-                for (Medicine conflict : conflicts) {
-                    try {
-                        DB.alerts().create(new AllergyPatientAlert(conflict, allergen));
-                    } catch (SQLException e) {
-                        Log.e(TAG, "onAddAction: ", e);
-                    }
-                }
-            }
+            checkConflictsAndCreateAlerts(allergen);
         } else {
             Snack.show(R.string.message_allergy_add_failure, this);
+        }
+    }
+
+    private void checkConflictsAndCreateAlerts(final AllergenVO allergen) {
+        final List<Medicine> conflicts = AllergenFacade.checkNewMedicineAllergies(this, allergen);
+        if (!conflicts.isEmpty()) {
+            showNewAllergyConflictDialog();
+            DB.transaction(new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    for (Medicine conflict : conflicts) {
+                        AlertManager.createAlert(new AllergyPatientAlert(conflict, allergen), AllergiesActivity.this);
+                    }
+                    return null;
+                }
+            });
         }
     }
 

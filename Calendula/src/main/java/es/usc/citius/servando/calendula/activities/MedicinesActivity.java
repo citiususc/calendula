@@ -75,6 +75,7 @@ import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
+import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 public class MedicinesActivity extends CalendulaActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
@@ -354,8 +355,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             @Override
             public Object call() throws Exception {
                 for (PatientAlert alert : alerts) {
-                    DB.alerts().create(alert);
-                    Log.d(TAG, "Created alert: " + alert);
+                    AlertManager.createAlert(alert, MedicinesActivity.this);
                 }
                 return null;
             }
