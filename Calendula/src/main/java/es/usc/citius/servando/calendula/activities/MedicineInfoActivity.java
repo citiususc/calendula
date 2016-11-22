@@ -108,16 +108,13 @@ public class MedicineInfoActivity extends CalendulaActivity {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
-                if((toolbarLayout.getHeight() + verticalOffset) < (1.8 * ViewCompat.getMinimumHeight(toolbarLayout))) {
+                if((toolbarLayout.getHeight() + verticalOffset) < (1.6 * ViewCompat.getMinimumHeight(toolbarLayout))) {
                     toolbarTitle.animate().alpha(1);
                     Log.d(TAG, "OnCollapse");
                 } else {
                     toolbarTitle.animate().alpha(0);
                     Log.d(TAG, "OnExpand");
                 }
-
-
-
             }
         };
         appBarLayout.addOnOffsetChangedListener(mListener);

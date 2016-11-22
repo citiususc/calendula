@@ -29,6 +29,9 @@ import es.usc.citius.servando.calendula.persistence.PatientAlert;
  */
 public class StockRunningOutAlert extends PatientAlert<StockRunningOutAlert, StockRunningOutAlert.StockAlertInfo>{
 
+    public StockRunningOutAlert() {
+    }
+
     public StockRunningOutAlert(Medicine m){
         setPatient(m.patient());
         setMedicine(m);

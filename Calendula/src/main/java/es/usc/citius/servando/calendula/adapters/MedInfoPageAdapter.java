@@ -22,6 +22,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import es.usc.citius.servando.calendula.fragments.AlertListFragment;
 import es.usc.citius.servando.calendula.fragments.MedInfoFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 
@@ -43,7 +44,7 @@ public class MedInfoPageAdapter extends FragmentPagerAdapter {
             case 0:
                 return MedInfoFragment.newInstance(m);
             case 1:
-                return MedInfoFragment.newInstance(m);
+                return AlertListFragment.newInstance(m);
         }
         return null;
     }
