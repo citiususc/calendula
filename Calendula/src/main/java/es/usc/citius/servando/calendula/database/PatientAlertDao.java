@@ -54,6 +54,18 @@ public class PatientAlertDao extends GenericDao<PatientAlert, Long> {
         }
     }
 
+    public List<PatientAlert> findByMedicineAndLevel(Medicine m, int level) {
+        try {
+            final PreparedQuery<PatientAlert> q = dao.queryBuilder().where()
+                    .eq(PatientAlert.COLUMN_MEDICINE, m)
+                    .and().eq(PatientAlert.COLUMN_LEVEL, level)
+                    .prepare();
+            return dao.query(q);
+        } catch (SQLException e) {
+            Log.e(TAG, "findByMedicineAndLevel: ", e);
+            throw new RuntimeException("Cannot retrieve alerts: ", e);
+        }
+    }
     public List<PatientAlert> findByPatientMedicineAndType(Patient p, Medicine m, PatientAlert.AlertType t) {
 
         try {
