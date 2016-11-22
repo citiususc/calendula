@@ -3,6 +3,9 @@ package es.usc.citius.servando.calendula.util.alerts;
 import android.content.Context;
 import android.util.Log;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
+
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -13,6 +16,7 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 
 import static es.usc.citius.servando.calendula.persistence.PatientAlert.Level;
 
@@ -83,8 +87,7 @@ public class AlertManager {
                         @Override
                         public Object call() throws Exception {
                             for (Schedule schedule : blocked) {
-                                schedule.setState(Schedule.ScheduleState.ENABLED);
-                                schedule.save();
+                                unblockSchedule(schedule);
                             }
                             return null;
                         }
@@ -93,6 +96,22 @@ public class AlertManager {
             }
 
         }
+    }
+
+    public static void unblockSchedule(final Schedule schedule) {
+        schedule.setState(Schedule.ScheduleState.ENABLED);
+        schedule.save();
+        if (!schedule.repeatsHourly()) {
+            for (ScheduleItem item : schedule.items()) {
+                DailyAgenda.instance().addItem(schedule.patient(), item, false);
+            }
+        } else {
+            for (DateTime time : schedule.hourlyItemsToday()) {
+                LocalTime timeToday = time.toLocalTime();
+                DailyAgenda.instance().addItem(schedule.patient() , schedule, timeToday);
+            }
+        }
+        CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
     }
 
 }
