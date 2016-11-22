@@ -230,6 +230,9 @@ public class Schedule {
 
     public boolean enabledForDate(LocalDate date) {
 
+        if (state == ScheduleState.BLOCKED)
+            return false;
+
         if (type == SCHEDULE_TYPE_CYCLE) {
             return cycleEnabledForDate(date);
         } else {

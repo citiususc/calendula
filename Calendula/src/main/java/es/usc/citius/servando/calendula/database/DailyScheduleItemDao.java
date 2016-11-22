@@ -95,6 +95,16 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
         });
     }
 
+    public void removeAllFrom(final ScheduleItem scheduleItem) {
+        final DeleteBuilder<DailyScheduleItem, Long> db = dao.deleteBuilder();
+        try {
+            db.setWhere(db.where().eq(DailyScheduleItem.COLUMN_SCHEDULE_ITEM, scheduleItem));
+            db.delete();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting items", e);
+        }
+    }
+
     public int removeOlderThan(LocalDate date) {
         try {
             DeleteBuilder<DailyScheduleItem, Long> qb = dao.deleteBuilder();
