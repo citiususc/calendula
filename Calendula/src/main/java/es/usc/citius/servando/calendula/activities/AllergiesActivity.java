@@ -14,11 +14,14 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Filter;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.j256.ormlite.dao.Dao;
+import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.IAdapter;
+import com.mikepenz.fastadapter.IItem;
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -30,7 +33,7 @@ import java.util.concurrent.Callable;
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.adapters.AllergiesAdapter;
-import es.usc.citius.servando.calendula.adapters.AllergiesAutocompleteAdapter;
+import es.usc.citius.servando.calendula.adapters.items.AllergenItem;
 import es.usc.citius.servando.calendula.allergies.AllergenConversionUtil;
 import es.usc.citius.servando.calendula.allergies.AllergenFacade;
 import es.usc.citius.servando.calendula.allergies.AllergenListeners;
@@ -48,7 +51,7 @@ import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 
-public class AllergiesActivity extends CalendulaActivity implements AllergenListeners.DeleteAllergyActionListener, AllergenListeners.AddAllergyActionListener {
+public class AllergiesActivity extends CalendulaActivity implements AllergenListeners.DeleteAllergyActionListener {
 
 
     private static final String TAG = "AllergiesActivity";
@@ -57,7 +60,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
     private AddFloatingActionButton addButton;
     private EditText searchEditText;
     private RecyclerView searchList;
-    private AllergiesAutocompleteAdapter searchAdapter;
+    private FastItemAdapter searchAdapter;
     private AllergiesAdapter allergiesAdapter;
     private RecyclerView allergiesRecycler;
     private AllergiesStore store;
@@ -130,9 +133,20 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
             }
         });
 
-        searchAdapter = new AllergiesAutocompleteAdapter(store, this, this);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
+
+        searchAdapter = new FastItemAdapter();
+        searchAdapter.withOnClickListener(new FastAdapter.OnClickListener() {
+            @Override
+            public boolean onClick(View v, IAdapter adapter, IItem item, int position) {
+                AllergenItem i = (AllergenItem) item;
+                onAddAction(i.getVo());
+                searchAdapter.remove(position);
+                return true;
+            }
+        });
+
         searchList.setAdapter(searchAdapter);
         searchList.setLayoutManager(llm);
 
@@ -154,9 +168,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
                     if (closeSearchButton.getVisibility() == View.GONE) {
                         closeSearchButton.setVisibility(View.VISIBLE);
                     }
-                    if (search.length() >= 3) {
-                        doSearch();
-                    }
+                    doSearch();
                 } else {
                     if (closeSearchButton.getVisibility() == View.VISIBLE)
                         closeSearchButton.setVisibility(View.GONE);
@@ -202,12 +214,18 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
 
     private void doSearch() {
         String filter = searchEditText.getText().toString().trim();
-        searchAdapter.getFilter().filter(filter, new Filter.FilterListener() {
-            @Override
-            public void onFilterComplete(int count) {
-                checkSearchPlaceholder();
+        if (filter.length() >= 3) {
+            final List<AllergenVO> allergenVOs = AllergenFacade.searchForAllergens(filter);
+            allergenVOs.removeAll(store.getAllergiesVO());
+            List<AllergenItem> items = new ArrayList<>();
+            for (AllergenVO vo : allergenVOs) {
+                items.add(new AllergenItem(vo, AllergiesActivity.this));
             }
-        });
+            Collections.sort(items);
+            searchAdapter.clear();
+            searchAdapter.add(items);
+            checkSearchPlaceholder();
+        }
     }
 
     private void showSearchView() {
@@ -245,6 +263,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
                         int index = store.deleteAllergen(a);
                         if (index >= 0) {
                             checkPlaceholder();
+                            doSearch();
                             allergiesAdapter.remove(index);
                         } else {
                             Snack.show(R.string.delete_allergen_error, ac);
@@ -281,13 +300,11 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         }
     }
 
-    @Override
     public void onAddAction(final AllergenVO allergen) {
         KeyboardUtils.hideKeyboard(this);
         PatientAllergen p = new PatientAllergen(allergen, DB.patients().getActive(this));
         boolean ans = store.storeAllergen(p);
         if (ans) {
-            searchAdapter.remove(allergen);
             checkPlaceholder();
             Snack.show(getString(R.string.message_allergy_add_success, allergen.getName()), this);
         } else {
@@ -352,7 +369,6 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
     public class AllergiesStore {
 
         private List<PatientAllergen> currentAllergies;
-        private List<AllergenVO> currentAllergiesVO;
         private Context context;
 
         public AllergiesStore() {
@@ -366,7 +382,6 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
                     return o1.getName().compareTo(o2.getName());
                 }
             });
-            currentAllergiesVO = AllergenConversionUtil.toVO(currentAllergies);
         }
 
         public void load(Context ctx) {
@@ -414,7 +429,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         }
 
         public List<AllergenVO> getAllergiesVO() {
-            return currentAllergiesVO;
+            return AllergenConversionUtil.toVO(currentAllergies);
         }
     }
 
