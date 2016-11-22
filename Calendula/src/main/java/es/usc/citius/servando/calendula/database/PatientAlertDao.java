@@ -66,11 +66,11 @@ public class PatientAlertDao extends GenericDao<PatientAlert, Long> {
             throw new RuntimeException("Cannot retrieve alerts: ", e);
         }
     }
-    public List<PatientAlert> findByPatientMedicineAndType(Patient p, Medicine m, PatientAlert.AlertType t) {
+    public List<PatientAlert> findByPatientMedicineAndType(Patient p, Medicine m, String className) {
 
         try {
             final PreparedQuery<PatientAlert> query = this.queryBuilder().where()
-                    .eq(PatientAlert.COLUMN_TYPE, t).and()
+                    .eq(PatientAlert.COLUMN_TYPE, className).and()
                     .eq(PatientAlert.COLUMN_PATIENT, p).and()
                     .eq(PatientAlert.COLUMN_MEDICINE, m).prepare();
             return query(query);

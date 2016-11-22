@@ -13,7 +13,6 @@ import java.util.concurrent.Callable;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
-import es.usc.citius.servando.calendula.persistence.PatientAlert.AlertType;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
@@ -32,7 +31,7 @@ public class AllergyAlertUtil {
         Log.d(TAG, "getAlertsForMedicine() called with: m = [" + m + "]");
         // TODO: 18/11/16 check if we need to escape quotes (queryForFieldValuesArgs)
         HashMap<String, Object> query = new HashMap<String, Object>() {{
-            put(PatientAlert.COLUMN_TYPE, AlertType.ALLERGY_ALERT);
+            put(PatientAlert.COLUMN_TYPE, AllergyPatientAlert.class.getCanonicalName());
             put(PatientAlert.COLUMN_PATIENT, m.patient());
             put(PatientAlert.COLUMN_MEDICINE, m);
         }};
@@ -71,12 +70,12 @@ public class AllergyAlertUtil {
             @Override
             public Object call() throws Exception {
                 final PreparedQuery<PatientAlert> query = DB.alerts().queryBuilder().where()
-                        .eq(PatientAlert.COLUMN_TYPE, AlertType.ALLERGY_ALERT)
+                        .eq(PatientAlert.COLUMN_TYPE, AllergyPatientAlert.class.getCanonicalName())
                         .and().eq(PatientAlert.COLUMN_PATIENT, allergen.getPatient()).prepare();
                 final List<PatientAlert> alerts = DB.alerts().query(query);
 
                 for (PatientAlert alert : alerts) {
-                    AllergyPatientAlert a = new AllergyPatientAlert(alert);
+                    AllergyPatientAlert a = (AllergyPatientAlert) alert.map();
                     final AllergyPatientAlert.AllergyAlertInfo details = a.getDetails();
                     if (details.getAllergens().contains(vo)) {
                         details.getAllergens().remove(vo);

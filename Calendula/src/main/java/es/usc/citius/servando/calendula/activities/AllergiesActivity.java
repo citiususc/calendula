@@ -308,7 +308,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
                         final List<PatientAlert> list = AllergyAlertUtil.getAlertsForMedicine(conflict);
                         if (list.size() > 0) {
                             if (list.size() == 1) {
-                                AllergyPatientAlert a = new AllergyPatientAlert(list.get(0));
+                                AllergyPatientAlert a = (AllergyPatientAlert) list.get(0).map();
                                 final AllergyAlertInfo d = a.getDetails();
                                 d.getAllergens().add(allergen);
                                 a.setDetails(d);

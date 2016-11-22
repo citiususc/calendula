@@ -6,11 +6,11 @@ import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 
-public class AllergyPatientAlert extends PatientAlert<AllergyPatientAlert.AllergyAlertInfo> {
+public class AllergyPatientAlert extends PatientAlert<AllergyPatientAlert, AllergyPatientAlert.AllergyAlertInfo> {
 
 
     public AllergyPatientAlert() {
-        setType(AlertType.ALLERGY_ALERT);
+        setType(AllergyPatientAlert.class.getCanonicalName());
     }
 
     public AllergyPatientAlert(final Medicine medicine, final List<AllergenVO> allergens) {
@@ -19,15 +19,6 @@ public class AllergyPatientAlert extends PatientAlert<AllergyPatientAlert.Allerg
         setMedicine(medicine);
         setPatient(medicine.patient());
         setDetails(new AllergyAlertInfo(allergens));
-    }
-
-    public AllergyPatientAlert(PatientAlert patientAlert) {
-        this();
-        setPatient(patientAlert.getPatient());
-        setMedicine(patientAlert.getMedicine());
-        setJsonDetails(patientAlert.getJsonDetails());
-        setId(patientAlert.id());
-        setLevel(patientAlert.getLevel());
     }
 
     @Override
