@@ -40,8 +40,11 @@ import es.usc.citius.servando.calendula.events.StockRunningOutEvent;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
+import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.persistence.alerts.StockRunningOutAlert;
+import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 import es.usc.citius.servando.calendula.util.medicine.StockUtils;
 
 /**
@@ -235,8 +238,13 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
                             if(days!=null) {
                                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
                                 int stock_alert_days = Integer.parseInt(preferences.getString("stock_alert_days", "-1"));
+
                                 if(days < stock_alert_days) {
-                                    CalendulaApp.eventBus().post(new StockRunningOutEvent(m, days));
+                                    List<PatientAlert> alerts = DB.alerts().findByMedicineAndType(m, StockRunningOutAlert.class.getCanonicalName());
+                                    if(alerts.isEmpty()) {
+                                        AlertManager.createAlert(new StockRunningOutAlert(m),c);
+                                        CalendulaApp.eventBus().post(new StockRunningOutEvent(m, days));
+                                    }
                                 }
                             }
                         }

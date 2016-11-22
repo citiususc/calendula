@@ -19,24 +19,47 @@
 package es.usc.citius.servando.calendula.persistence.alerts;
 
 
+import org.joda.time.LocalDate;
+
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 
 /**
  * Represents an stock alert for an specific medicine
  */
-public class StockRunningOutAlert extends PatientAlert{
+public class StockRunningOutAlert extends PatientAlert<StockRunningOutAlert, StockRunningOutAlert.StockAlertInfo>{
 
     public StockRunningOutAlert(Medicine m){
         setPatient(m.patient());
         setMedicine(m);
-        setType(AlertType.STOCK_ALERT);
+        setType(StockRunningOutAlert.class.getCanonicalName());
         setLevel(Level.MEDIUM);
     }
 
     @Override
     public Class<?> getDetailsType() {
-        return null;
+        return StockAlertInfo.class;
+    }
+
+
+    public static class StockAlertInfo{
+        private LocalDate date;
+        Double stock;
+
+        public StockAlertInfo(){}
+
+        public StockAlertInfo(LocalDate date, Double stock) {
+            this.date = date;
+            this.stock = stock;
+        }
+
+        public LocalDate getDate() {
+            return date;
+        }
+
+        public void setDate(LocalDate date) {
+            this.date = date;
+        }
     }
 
 }
