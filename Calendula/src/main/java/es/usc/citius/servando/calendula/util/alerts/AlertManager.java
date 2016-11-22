@@ -56,4 +56,32 @@ public class AlertManager {
 
     }
 
+    public static void removeAlert(final PatientAlert alert) {
+
+        DB.alerts().remove(alert);
+        //if alertlevel was high, check if we need to unblock schedules
+        if (alert.getLevel() == Level.HIGH) {
+
+            final List<Schedule> blocked = DB.schedules()
+                    .findByMedicineAndState(alert.getMedicine(), Schedule.ScheduleState.BLOCKED);
+            if (blocked.size() > 0) {
+                final List<PatientAlert> alerts = DB.alerts()
+                        .findByMedicineAndLevel(alert.getMedicine(), Level.HIGH);
+                if (alerts.size() == 0) {
+                    DB.transaction(new Callable<Object>() {
+                        @Override
+                        public Object call() throws Exception {
+                            for (Schedule schedule : blocked) {
+                                schedule.setState(Schedule.ScheduleState.ENABLED);
+                                schedule.save();
+                            }
+                            return null;
+                        }
+                    });
+                }
+            }
+
+        }
+    }
+
 }
