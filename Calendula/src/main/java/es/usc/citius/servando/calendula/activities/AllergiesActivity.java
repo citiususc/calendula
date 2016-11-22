@@ -290,7 +290,6 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
             searchAdapter.remove(allergen);
             checkPlaceholder();
             Snack.show(getString(R.string.message_allergy_add_success, allergen.getName()), this);
-            checkConflictsAndCreateAlerts(allergen);
         } else {
             Snack.show(R.string.message_allergy_add_failure, this);
         }
@@ -385,6 +384,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
             }
             Log.d(TAG, "storeAllergen: inserted allergen into database: " + allergen);
             if (rows == 1) {
+                checkConflictsAndCreateAlerts(new AllergenVO(allergen));
                 currentAllergies.add(allergen);
                 return true;
             }
@@ -395,6 +395,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
             try {
                 int index = currentAllergies.indexOf(a);
                 DB.patientAllergens().delete(a);
+                AllergyAlertUtil.removeAllergyAlerts(a);
                 currentAllergies.remove(a);
                 return index;
             } catch (SQLException e) {
