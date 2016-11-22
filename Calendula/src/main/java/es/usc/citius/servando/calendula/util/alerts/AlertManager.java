@@ -12,6 +12,7 @@ import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.Schedule;
+import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
 import static es.usc.citius.servando.calendula.persistence.PatientAlert.Level;
 
@@ -46,14 +47,24 @@ public class AlertManager {
             @Override
             public Object call() throws Exception {
                 final List<Schedule> schedules = DB.schedules().findByMedicine(medicine);
+                Log.d(TAG, "blockSchedulesForMedicine: Found " + schedules.size() + " schedules to block.");
                 for (Schedule schedule : schedules) {
-                    schedule.setState(Schedule.ScheduleState.BLOCKED);
-                    schedule.save();
+                    blockSchedule(schedule);
                 }
                 return null;
             }
         });
 
+    }
+
+    private static void blockSchedule(final Schedule schedule) {
+        schedule.setState(Schedule.ScheduleState.BLOCKED);
+        schedule.save();
+        for (ScheduleItem i : schedule.items()) {
+            DB.dailyScheduleItems().removeAllFrom(i);
+        }
+        DB.dailyScheduleItems().removeAllFrom(schedule);
+        CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
     }
 
     public static void removeAlert(final PatientAlert alert) {
