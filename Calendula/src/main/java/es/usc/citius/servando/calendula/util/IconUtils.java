@@ -20,13 +20,29 @@ package es.usc.citius.servando.calendula.util;
 
 import android.content.Context;
 
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by joseangel.pineiro on 10/29/15.
  */
 public class IconUtils {
+
+    private static Random random = new Random();
+
+    private static List<CommunityMaterial.Icon> niceIcons = Arrays.asList(
+            CommunityMaterial.Icon.cmd_cow,
+            CommunityMaterial.Icon.cmd_duck,
+            CommunityMaterial.Icon.cmd_flower,
+            CommunityMaterial.Icon.cmd_thumb_up,
+            CommunityMaterial.Icon.cmd_owl,
+            CommunityMaterial.Icon.cmd_cat
+    );
 
     public static IconicsDrawable icon(Context ctx, IIcon ic, int color){
         return new IconicsDrawable(ctx, ic)
@@ -40,5 +56,16 @@ public class IconUtils {
                 .sizeDp(size)
                 .paddingDp(0)
                 .colorRes(color);
+    }
+
+    public static IconicsDrawable icon(Context ctx, IIcon ic, int color, int size, int padding){
+        return new IconicsDrawable(ctx, ic)
+                .sizeDp(size)
+                .paddingDp(padding)
+                .colorRes(color);
+    }
+
+    public static IIcon randomNiceIcon(){
+        return niceIcons.get(random.nextInt(niceIcons.size()));
     }
 }

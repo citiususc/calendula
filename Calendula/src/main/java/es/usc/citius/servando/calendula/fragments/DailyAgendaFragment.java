@@ -35,7 +35,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import org.joda.time.DateTime;
@@ -61,6 +60,7 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub.DailyAgendaItemStubElement;
+import es.usc.citius.servando.calendula.util.IconUtils;
 
 /**
  * Daily agenda fragment
@@ -154,7 +154,7 @@ public class DailyAgendaFragment extends Fragment{
 
     private void setupEmptyView() {
         Drawable icon = new IconicsDrawable(getContext())
-                .icon(GoogleMaterial.Icon.gmd_alarm_check)
+                .icon(IconUtils.randomNiceIcon())
                 .colorRes(R.color.agenda_item_title)
                 .sizeDp(90)
                 .paddingDp(0);
