@@ -221,7 +221,6 @@
             android:layout_alignTop="@+id/stock_units"
             android:src="@drawable/abc_ic_star_black_16dp"
             android:scaleType="fitCenter"
-            style="?android:attr/borderlessButtonStyle"
             android:layout_toLeftOf="@+id/btn_stock_add"
             android:layout_marginRight="5dp"
             android:background="@null"/>
@@ -230,7 +229,6 @@
             android:layout_width="45dp"
             android:layout_height="50dp"
             android:id="@+id/btn_stock_add"
-            style="?android:attr/borderlessButtonStyle"
             android:layout_alignTop="@+id/stock_units"
             android:src="@drawable/abc_ic_star_black_16dp"
             android:scaleType="fitCenter"

@@ -257,8 +257,8 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
     private void setupStockViews(){
         Context c = getActivity();
-        Drawable add = IconUtils.icon(c, CommunityMaterial.Icon.cmd_plus_circle, R.color.dark_grey_text, 24,4);
-        Drawable remove = IconUtils.icon(c, CommunityMaterial.Icon.cmd_minus_circle, R.color.dark_grey_text, 24,4);
+        Drawable add = IconUtils.icon(c, CommunityMaterial.Icon.cmd_basket_fill, R.color.android_green, 24,6);
+        Drawable remove = IconUtils.icon(c, CommunityMaterial.Icon.cmd_basket_unfill, R.color.android_red, 24,6);
 
         addBtn.setImageDrawable(add);
         rmBtn.setImageDrawable(remove);
@@ -790,7 +790,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         int size = 24;
         Drawable ic1 = IconUtils.icon(c, CommunityMaterial.Icon.cmd_pencil, color, size,4);
         Drawable ic2 = IconUtils.icon(c, CommunityMaterial.Icon.cmd_eye, color, size,4);
-        Drawable ic3 = IconUtils.icon(c, CommunityMaterial.Icon.cmd_cart, color, size, 4);
+        Drawable ic3 = IconUtils.icon(c, CommunityMaterial.Icon.cmd_basket, color, size, 4);
         ((ImageView)root.findViewById(R.id.ic_med_name)).setImageDrawable(ic1);
         ((ImageView)root.findViewById(R.id.ic_med_presentation)).setImageDrawable(ic2);
         ((ImageView)root.findViewById(R.id.ic_med_stock)).setImageDrawable(ic3);
