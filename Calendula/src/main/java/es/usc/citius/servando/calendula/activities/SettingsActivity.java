@@ -53,7 +53,6 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.DownloadDatabaseDialogHelper;
 import es.usc.citius.servando.calendula.drugdb.SetupDBService;
@@ -303,12 +302,16 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         // Add 'general' preferences.
         addPreferencesFromResource(R.xml.pref_general);
-
         // Add 'notifications' preferences, and a corresponding header.
         PreferenceCategory fakeHeader2 = new PreferenceCategory(this);
         fakeHeader2.setTitle(R.string.pref_header_notifications);
         getPreferenceScreen().addPreference(fakeHeader2);
         addPreferencesFromResource(R.xml.pref_notification);
+
+        PreferenceCategory fakeHeader3 = new PreferenceCategory(this);
+        fakeHeader3.setTitle(R.string.pref_header_stock);
+        getPreferenceScreen().addPreference(fakeHeader3);
+        addPreferencesFromResource(R.xml.pref_stock);
 
         // Add 'data and sync' preferences, and a corresponding header.
         //fakeHeader = new PreferenceCategory(this);
@@ -324,6 +327,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         bindPreferenceSummaryToValue(findPreference("alarm_reminder_window"), true);
         bindPreferenceSummaryToValue(findPreference("pref_notification_tone"), true);
         bindPreferenceSummaryToValue(findPreference("prescriptions_database"), true);
+        bindPreferenceSummaryToValue(findPreference("stock_alert_days"), true);
 
         if(!CalendulaApp.isPharmaModeEnabled(this)){
             Preference alarmPk = findPreference("alarm_pickup_notifications");
@@ -372,44 +376,57 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
     }
 
-    /**
-     * This fragment shows general preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class GeneralPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_general);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("example_text"), true);
-            bindPreferenceSummaryToValue(findPreference("example_list"), true);
-        }
-    }
-
-    /**
-     * This fragment shows notification preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class NotificationPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_notification);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"), true);
-        }
-    }
+//    /**
+//     * This fragment shows general preferences only. It is used when the
+//     * activity is showing a two-pane settings UI.
+//     */
+//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+//    public static class GeneralPreferenceFragment extends PreferenceFragment {
+//        @Override
+//        public void onCreate(Bundle savedInstanceState) {
+//            super.onCreate(savedInstanceState);
+//            addPreferencesFromResource(R.xml.pref_general);
+//
+//            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+//            // to their values. When their values change, their summaries are
+//            // updated to reflect the new value, per the Android Design
+//            // guidelines.
+//            bindPreferenceSummaryToValue(findPreference("example_text"), true);
+//            bindPreferenceSummaryToValue(findPreference("example_list"), true);
+//        }
+//    }
+//
+//    /**
+//     * This fragment shows general preferences only. It is used when the
+//     * activity is showing a two-pane settings UI.
+//     */
+//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+//    public static class StockPreferenceFragment extends PreferenceFragment {
+//        @Override
+//        public void onCreate(Bundle savedInstanceState) {
+//            super.onCreate(savedInstanceState);
+//            addPreferencesFromResource(R.xml.pref_stock);
+//        }
+//    }
+//
+//    /**
+//     * This fragment shows notification preferences only. It is used when the
+//     * activity is showing a two-pane settings UI.
+//     */
+//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+//    public static class NotificationPreferenceFragment extends PreferenceFragment {
+//        @Override
+//        public void onCreate(Bundle savedInstanceState) {
+//            super.onCreate(savedInstanceState);
+//            addPreferencesFromResource(R.xml.pref_notification);
+//
+//            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+//            // to their values. When their values change, their summaries are
+//            // updated to reflect the new value, per the Android Design
+//            // guidelines.
+//            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"), true);
+//        }
+//    }
 
     @Override
     protected void onDestroy() {

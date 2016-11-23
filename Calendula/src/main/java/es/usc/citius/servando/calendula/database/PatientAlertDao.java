@@ -18,10 +18,15 @@
 
 package es.usc.citius.servando.calendula.database;
 
+import android.util.Log;
+
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.PreparedQuery;
 
 import java.sql.SQLException;
+import java.util.List;
 
+import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 
 /**
@@ -48,5 +53,30 @@ public class PatientAlertDao extends GenericDao<PatientAlert, Long> {
         }
     }
 
+    public List<PatientAlert> findByMedicineAndLevel(Medicine m, int level) {
+        try {
+            final PreparedQuery<PatientAlert> q = dao.queryBuilder().where()
+                    .eq(PatientAlert.COLUMN_MEDICINE, m)
+                    .and().eq(PatientAlert.COLUMN_LEVEL, level)
+                    .prepare();
+            return dao.query(q);
+        } catch (SQLException e) {
+            Log.e(TAG, "findByMedicineAndLevel: ", e);
+            throw new RuntimeException("Cannot retrieve alerts: ", e);
+        }
+    }
+
+    public List<PatientAlert> findByMedicineAndType(Medicine m, String type) {
+        try {
+            final PreparedQuery<PatientAlert> q = dao.queryBuilder().where()
+                    .eq(PatientAlert.COLUMN_MEDICINE, m)
+                    .and().eq(PatientAlert.COLUMN_TYPE, type)
+                    .prepare();
+            return dao.query(q);
+        } catch (SQLException e) {
+            Log.e(TAG, "findByMedicineAndType: ", e);
+            throw new RuntimeException("Cannot retrieve alerts: ", e);
+        }
+    }
 
 }

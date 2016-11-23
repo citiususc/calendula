@@ -257,6 +257,7 @@ public class DailyAgendaFragment extends Fragment{
                 List<DailyScheduleItem> dailyScheduleItems = DB.dailyScheduleItems().findAllByScheduleItem(scheduleItem);
 
                 for (DailyScheduleItem dailyScheduleItem : dailyScheduleItems) {
+
                     // break if not, this means is not enabled for today
                     if (dailyScheduleItem == null) {
                         break;

@@ -234,8 +234,12 @@ public abstract class GenericDao<T extends Object, I> implements Dao<T, I> {
         return dao.update(preparedUpdate);
     }
 
-    public int refresh(T data) throws SQLException {
-        return dao.refresh(data);
+    public int refresh(T data) {
+        try {
+            return dao.refresh(data);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public int delete(T data) throws SQLException {

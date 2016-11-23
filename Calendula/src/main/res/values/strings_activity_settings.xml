@@ -104,5 +104,23 @@
 
     <string name="pref_available_databases_title">Search assistant database</string>
 
+    <string name="pref_header_stock">Control de stock</string>
+
+    <string name="pref_stock_alert_title">Avisar cuando la medicación se acabe</string>
+
+    <string-array name="pref_stock">
+        <item>No avisar</item>
+        <item>En menos de 1 semana</item>
+        <item>En menos de 2 semanas</item>
+        <item>En menos de 3 semanas</item>
+    </string-array>
+
+    <string-array name="pref_stock_values">
+        <item>-1</item>
+        <item>7</item>
+        <item>14</item>
+        <item>21</item>
+    </string-array>
+
 
 </resources>
