@@ -51,15 +51,15 @@ import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.j256.ormlite.stmt.PreparedQuery;
 import com.doomonafireball.betterpickers.numberpicker.NumberPickerBuilder;
 import com.doomonafireball.betterpickers.numberpicker.NumberPickerDialogFragment;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
-import java.sql.SQLException;
 import org.joda.time.LocalDate;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,6 +118,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
     float stock = -1;
     String estimatedStockText = "";
+    private String mIntentAction;
 
     private static ArrayList<View> getViewsByTag(ViewGroup root, String tag) {
         ArrayList<View> views = new ArrayList<View>();
@@ -195,7 +196,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
         Log.d(getTag(), "Arguments:  " + (getArguments() != null) + ", savedState: " + (savedInstanceState != null));
         if (getArguments() != null) {
-
+            mIntentAction = getArguments().getString(CalendulaApp.INTENT_EXTRA_ACTION);
             mMedicineId = getArguments().getLong(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, -1);
         }
 
@@ -233,8 +234,13 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         });
 
         setupStockViews();
-        mNameTextView.requestFocus();
-        askForPrescriptionUsage();
+        if(mIntentAction == null){
+            mNameTextView.requestFocus();
+            askForPrescriptionUsage();
+        }else if ("add_stock".equals(mIntentAction)){
+            showStockDialog(DIALOG_STOCK_ADD);
+        }
+
         return rootView;
     }
 
@@ -619,7 +625,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                     m.setCn(String.valueOf(mPrescription.getCode()));
                     m.setDatabase(DBRegistry.instance().current().id());
                 }
-                m.setStock(stockSwitch.isActivated() ? stock : -1);
+                m.setStock(stockSwitch.isChecked() ? stock : -1);
                 m.setPresentation(selectedPresentation != null ? selectedPresentation : Presentation.UNKNOWN);
                 m.setPatient(DB.patients().getActive(getContext()));
 

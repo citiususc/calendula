@@ -146,7 +146,7 @@ public class MedicineInfoActivity extends CalendulaActivity {
 
         IIcon[] icons = new IIcon[]{
                 CommunityMaterial.Icon.cmd_book_open,
-                CommunityMaterial.Icon.cmd_comment_alert_outline
+                CommunityMaterial.Icon.cmd_message_alert
         } ;
 
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
@@ -158,10 +158,6 @@ public class MedicineInfoActivity extends CalendulaActivity {
                     .sizeDp(24);
 
             tabLayout.getTabAt(i).setIcon(icon);
-            if(i == 1){
-
-            }
-
         }
     }
 

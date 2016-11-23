@@ -29,7 +29,7 @@
     <color name="android_green_light_noalpha">#efB8DB57</color>
 
     <color name="android_orange">#FFBB33</color>
-    <color name="android_orange_dark">#FF8800</color>
+    <color name="android_orange_dark">#ff8800</color>
     <color name="android_orange_light">#55FFBB33</color>
     <color name="android_orange_lighter">#22FFBB33</color>
     <color name="android_red">#FF4444</color>

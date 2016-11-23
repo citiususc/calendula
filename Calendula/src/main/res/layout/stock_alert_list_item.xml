@@ -60,13 +60,39 @@
         android:textColor="#888"
         android:layout_marginTop="5dp"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Suficiente para 5 días con la pauta actual"
+        android:id="@+id/stock_duration"
+        android:layout_toRightOf="@+id/alert_icon"
+        android:layout_below="@+id/alert_description"
+        android:layout_marginLeft="16dp"
+        android:textSize="18dp"
+        android:textColor="@color/android_orange_dark"
+        android:layout_marginTop="5dp"
+        android:paddingRight="16dp"/>
+
+    <Button
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recargar"
+        android:id="@+id/manage_stock_btn"
+        android:layout_below="@+id/stock_duration"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentRight="true"/>
+
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="1px"
         android:id="@+id/imageView12"
         android:layout_alignParentBottom="false"
-        android:layout_below="@+id/alert_description"
+        android:layout_below="@+id/manage_stock_btn"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/alert_icon"
         android:background="#eaeaea"/>
+
 </RelativeLayout>

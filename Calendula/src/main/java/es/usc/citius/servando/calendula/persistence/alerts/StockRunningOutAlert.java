@@ -19,24 +19,50 @@
 package es.usc.citius.servando.calendula.persistence.alerts;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import org.joda.time.LocalDate;
 
+import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.MedicinesActivity;
+import es.usc.citius.servando.calendula.adapters.AlertViewRecyclerAdapter;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
+import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.medicine.StockUtils;
 
 /**
  * Represents an stock alert for an specific medicine
  */
-public class StockRunningOutAlert extends PatientAlert<StockRunningOutAlert, StockRunningOutAlert.StockAlertInfo>{
+public class StockRunningOutAlert extends PatientAlert<StockRunningOutAlert, StockRunningOutAlert.StockAlertInfo> {
 
+    // mandatory no-arg constructor
     public StockRunningOutAlert() {
+        super();
     }
 
-    public StockRunningOutAlert(Medicine m){
+    /**
+     *  Create an instance of an stock alert
+     * @param m Medicine whose stock is running out
+     * @param date Date the alert is created
+     */
+    public StockRunningOutAlert(Medicine m, LocalDate date){
+        super();
         setPatient(m.patient());
         setMedicine(m);
         setType(StockRunningOutAlert.class.getCanonicalName());
         setLevel(Level.MEDIUM);
+        setDetails(new StockAlertInfo(date));
     }
 
     @Override
@@ -44,16 +70,27 @@ public class StockRunningOutAlert extends PatientAlert<StockRunningOutAlert, Sto
         return StockAlertInfo.class;
     }
 
+    @Override
+    public Class<?> viewProviderType() {
+        // the view of this type of alerts will be created by
+        // an instance of StockAlertViewProvider class
+        return StockRunningOutAlert.StockAlertViewProvider.class;
+    }
 
+    /**
+     * Envelope for details of stock alert instances
+     */
     public static class StockAlertInfo{
+
+        /**
+         * Date of the stock alert
+         */
         private LocalDate date;
-        Double stock;
 
         public StockAlertInfo(){}
 
-        public StockAlertInfo(LocalDate date, Double stock) {
+        public StockAlertInfo(LocalDate date) {
             this.date = date;
-            this.stock = stock;
         }
 
         public LocalDate getDate() {
@@ -64,5 +101,69 @@ public class StockRunningOutAlert extends PatientAlert<StockRunningOutAlert, Sto
             this.date = date;
         }
     }
+
+
+    /**
+     * Handles the creation of views for stock alerts
+     */
+    public static class StockAlertViewProvider implements AlertViewRecyclerAdapter.AlertViewProvider {
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.stock_alert_list_item, parent, false);
+            return new StockAlertViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, PatientAlert alert) {
+
+            StockAlertViewHolder viewHolder = (StockAlertViewHolder) holder;
+            viewHolder.alert = alert;
+            final Medicine m = alert.getMedicine();
+            final Context c = viewHolder.context;
+            DB.medicines().refresh(m);
+            int stock = m.stock().intValue();
+            // setup ui
+            viewHolder.alertIcon.setImageDrawable(IconUtils.alertLevelIcon(alert.getLevel(), c));
+            viewHolder.title.setText("Se está agotando");
+            viewHolder.description.setText("Quedan " + stock +  " " + m.presentation().units(c.getResources()) + (stock != 1 ? "s" : ""));
+            viewHolder.duration.setText("Suficiente para " + StockUtils.getEstimatedStockDays(m) + " días con la pauta actual");
+            viewHolder.manageStockBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(c, MedicinesActivity.class);
+                    intent.putExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, m.getId());
+                    intent.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, "add_stock");
+                    c.startActivity(intent);
+                }
+            });
+        }
+
+        public static class StockAlertViewHolder extends RecyclerView.ViewHolder{
+
+            Context context;
+            PatientAlert alert;
+            LayoutInflater inflater;
+            ImageView alertIcon;
+            TextView title;
+            TextView description;
+            TextView duration;
+            Button manageStockBtn;
+
+            public StockAlertViewHolder(View itemView) {
+                super(itemView);
+                this.context = itemView.getContext();
+                this.inflater = LayoutInflater.from(itemView.getContext());
+                this.title = (TextView) itemView.findViewById(R.id.alert_title);
+                this.description = (TextView) itemView.findViewById(R.id.alert_description);
+                this.duration = (TextView) itemView.findViewById(R.id.stock_duration);
+                this.alertIcon = (ImageView) itemView.findViewById(R.id.alert_icon);
+                this.manageStockBtn = (Button) itemView.findViewById(R.id.manage_stock_btn);
+            }
+        }
+
+    }
+
+
 
 }

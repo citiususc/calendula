@@ -32,7 +32,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
@@ -43,6 +42,8 @@ import es.usc.citius.servando.calendula.adapters.AlertViewRecyclerAdapter;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
+import es.usc.citius.servando.calendula.persistence.alerts.DrivingCautionAlert;
+import es.usc.citius.servando.calendula.persistence.alerts.StockRunningOutAlert;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 
 /**
@@ -101,6 +102,9 @@ public class AlertListFragment extends Fragment{
         llm = new LinearLayoutManager(getContext());
         rv.setLayoutManager(llm);
         rvAdapter = new AlertViewRecyclerAdapter(items, rv, llm, getActivity());
+        // register alert view providers on the adapter
+        rvAdapter.registerViewProvider(new StockRunningOutAlert.StockAlertViewProvider(), StockRunningOutAlert.StockAlertViewProvider.class);
+        rvAdapter.registerViewProvider(new DrivingCautionAlert.DrivingAlertViewProvider(), DrivingCautionAlert.DrivingAlertViewProvider.class);
         rv.setAdapter(rvAdapter);
         rv.setItemAnimator(new DefaultItemAnimator());
         rvListener = new AlertViewRecyclerAdapter.EventListener() {
@@ -126,7 +130,14 @@ public class AlertListFragment extends Fragment{
 
 
     public List<PatientAlert> buildItems() {
-        return DB.alerts().findBy(PatientAlert.COLUMN_MEDICINE, m);
+        List<PatientAlert> typed = new ArrayList<>();
+        List<PatientAlert> original = DB.alerts().findBy(PatientAlert.COLUMN_MEDICINE, m);
+        for(PatientAlert a : original){
+            typed.add(a.map());
+        }
+        Log.d(TAG, "buildItems: Alerts: " + typed.size());
+        return typed;
+
     }
 
     public void refresh() {

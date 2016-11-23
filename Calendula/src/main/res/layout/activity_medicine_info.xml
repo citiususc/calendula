@@ -64,7 +64,7 @@
 
                         <ImageView
                             android:layout_width="60dp"
-                            android:layout_height="60dp"
+                            android:layout_height="80dp"
                             android:id="@+id/medicine_icon"
                             android:layout_marginTop="80dp"
                             android:layout_centerHorizontal="true"/>

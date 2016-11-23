@@ -205,58 +205,54 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
     }
 
     public void saveAndUpdateStock(DailyScheduleItem model, boolean fireEvent, Context c) {
-        try {
-            // get original value
-            DailyScheduleItem original = findById(model.getId());
-            // ensure checked status has changed
-            boolean updateStock = original.takenToday() != model.takenToday();
+        // get original value
+        DailyScheduleItem original = findById(model.getId());
+        // ensure checked status has changed
+        boolean updateStock = original.takenToday() != model.takenToday();
 
-            if(updateStock) {
-                Schedule s = model.boundToSchedule() ? model.schedule() : model.scheduleItem().schedule();
-                DB.schedules().refresh(s);
-                Medicine m = s.medicine();
-                DB.medicines().refresh(m);
+        if(updateStock) {
+            Schedule s = model.boundToSchedule() ? model.schedule() : model.scheduleItem().schedule();
+            DB.schedules().refresh(s);
+            Medicine m = s.medicine();
+            DB.medicines().refresh(m);
 
-                if(m.stockManagementEnabled()) {
-                    try{
-                        float amount;
-                        if (s.repeatsHourly()) {
-                            amount = model.takenToday() ? -s.dose() : s.dose();
-                        } else {
-                            ScheduleItem si = model.scheduleItem();
-                            amount = model.takenToday() ? -si.dose() : si.dose();
-                        }
-                        m.setStock(m.stock() + amount);
-                        DB.medicines().save(m);
+            if(m.stockManagementEnabled()) {
+                try{
+                    float amount;
+                    if (s.repeatsHourly()) {
+                        amount = model.takenToday() ? -s.dose() : s.dose();
+                    } else {
+                        ScheduleItem si = model.scheduleItem();
+                        amount = model.takenToday() ? -si.dose() : si.dose();
+                    }
+                    m.setStock(m.stock() + amount);
+                    DB.medicines().save(m);
 
-                        if(fireEvent){
-                            DB.medicines().fireEvent();
-                        }
+                    if(fireEvent){
+                        DB.medicines().fireEvent();
+                    }
 
-                        if(amount < 0){
-                            Long days = StockUtils.getEstimatedStockDays(m);
-                            if(days!=null) {
-                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
-                                int stock_alert_days = Integer.parseInt(preferences.getString("stock_alert_days", "-1"));
+                    if(amount < 0){
+                        Long days = StockUtils.getEstimatedStockDays(m);
+                        if(days!=null) {
+                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
+                            int stock_alert_days = Integer.parseInt(preferences.getString("stock_alert_days", "-1"));
 
-                                if(days < stock_alert_days) {
-                                    List<PatientAlert> alerts = DB.alerts().findByMedicineAndType(m, StockRunningOutAlert.class.getCanonicalName());
-                                    if(alerts.isEmpty()) {
-                                        AlertManager.createAlert(new StockRunningOutAlert(m),c);
-                                        CalendulaApp.eventBus().post(new StockRunningOutEvent(m, days));
-                                    }
+                            if(days < stock_alert_days) {
+                                List<PatientAlert> alerts = DB.alerts().findByMedicineAndType(m, StockRunningOutAlert.class.getCanonicalName());
+                                if(alerts.isEmpty()) {
+                                    AlertManager.createAlert(new StockRunningOutAlert(m, LocalDate.now()),c);
+                                    CalendulaApp.eventBus().post(new StockRunningOutEvent(m, days));
                                 }
                             }
                         }
-                    }catch (Exception e){
-                        Log.e("DSIDAO", "An error occurred updating stock", e);
                     }
+                }catch (Exception e){
+                    Log.e("DSIDAO", "An error occurred updating stock", e);
                 }
             }
-            // finally save model
-            save(model);
-        } catch (SQLException e) {
-            throw new RuntimeException("Error updating stock", e);
         }
+        // finally save model
+        save(model);
     }
 }

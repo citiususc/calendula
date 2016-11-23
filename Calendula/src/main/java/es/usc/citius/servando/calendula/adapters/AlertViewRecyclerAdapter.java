@@ -18,65 +18,45 @@
 
 package es.usc.citius.servando.calendula.adapters;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Point;
-import android.graphics.drawable.Drawable;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.typeface.IIcon;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
-import es.usc.citius.servando.calendula.persistence.Routine;
-import es.usc.citius.servando.calendula.persistence.Schedule;
-import es.usc.citius.servando.calendula.persistence.ScheduleItem;
-import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
-import es.usc.citius.servando.calendula.util.DailyAgendaItemStub.DailyAgendaItemStubElement;
-import es.usc.citius.servando.calendula.util.ScreenUtils;
-import es.usc.citius.servando.calendula.util.view.ParallaxImageView;
+import es.usc.citius.servando.calendula.util.IconUtils;
 
 /**
  * Created by joseangel.pineiro on 11/6/15.
  */
 public class AlertViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final String TAG = "DailyAgendaAdapter";
 
-    private final int ALERT = 1;
+    private static final String TAG = "AlertViewAdapter";
+
+    private final int DEFAULT_ALERT = 1;
+
+    HashMap<Class<?>, Integer> alertTypeMap = new HashMap<>();
+    HashMap<Integer,AlertViewProvider> providerMap = new HashMap<>();
 
     List<PatientAlert> items;
     private EventListener listener;
 
     public AlertViewRecyclerAdapter(List<PatientAlert> items, final RecyclerView rv, final LinearLayoutManager llm, Activity ctx) {
         this.items = items;
+        Log.d(TAG, "AlertViewRecyclerAdapter: items " + this.items.size());
 
     }
 
@@ -85,42 +65,56 @@ public class AlertViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v;
-        switch (viewType) {
-            case ALERT:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.medicine_alert_list_item, parent, false);
-                return new NormalItemViewHolder(v);
-            default:
-                throw new RuntimeException("Unsupported view type: " + viewType);
+    public int getItemViewType(int position) {
+        PatientAlert item = items.get(position);
+        Log.d(TAG, "getItemViewType() called with: " + "position = [" + position + "]: " +  item.viewProviderType());
+        if(item.viewProviderType() != null){
+            return getTypeForClass(item.viewProviderType());
         }
+        return DEFAULT_ALERT;
     }
 
     @Override
-    public int getItemViewType(int position) {
-        PatientAlert item = items.get(position);
-        int type = ALERT;
-        // may be useful later
-        return type;
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int type) {
+
+        Integer viewType = new Integer(type);
+        Log.d(TAG, "onCreateViewHolder() called with: viewType = [" + viewType + "]");
+        if(viewType == DEFAULT_ALERT) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.medicine_alert_list_item, parent, false);
+            return new NormalItemViewHolder(v);
+        }else{
+            return providerMap.get(viewType).onCreateViewHolder(parent);
+        }
     }
 
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
         final PatientAlert item = items.get(position);
-
+        Log.d(TAG, "onBindViewHolder() called with: " + item.viewProviderType());
         if (holder instanceof NormalItemViewHolder) {
             onBindNormalItemViewHolder((NormalItemViewHolder) holder, item, position);
+        }else  if(item.viewProviderType() != null){
+            Log.d(TAG, "onBindViewHolder() provider type found");
+            getProviderForClass(item.viewProviderType()).onBindViewHolder(holder, item);
+        }else{
+            Log.d(TAG, "onBindViewHolder: unknown view holder type");
         }
     }
 
     @Override
     public int getItemCount() {
+        Log.d(TAG, "getItemCount: " + items.size());
         return items.size();
     }
 
+    private AlertViewProvider getProviderForClass(Class<?> type){
+        return providerMap.get(getTypeForClass(type));
+    }
 
+    private int getTypeForClass(Class<?> type){
+        return alertTypeMap.get(type);
+    }
 
     public class NormalItemViewHolder extends RecyclerView.ViewHolder implements OnClickListener{
 
@@ -152,41 +146,28 @@ public class AlertViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         viewHolder.alert = item;
         // setup ui
         PatientAlert alert = item.map();
-        viewHolder.alertIcon.setImageDrawable(levelIcon(alert.getLevel(), viewHolder.context));
+        viewHolder.alertIcon.setImageDrawable(IconUtils.alertLevelIcon(alert.getLevel(), viewHolder.context));
         viewHolder.title.setText("Alert " + alert.getClass().getSimpleName());
         viewHolder.description.setText("Description gose here");
     }
 
 
-    private Drawable levelIcon(int level, Context context){
 
-        IIcon ic;
-        int color;
-
-        switch (level){
-            case PatientAlert.Level.HIGH:
-                ic = CommunityMaterial.Icon.cmd_alert_circle;
-                color = R.color.android_red_dark;
-                break;
-            case PatientAlert.Level.MEDIUM:
-                ic = CommunityMaterial.Icon.cmd_alert_circle;
-                color = R.color.android_orange_darker;
-                break;
-            default:
-                ic = CommunityMaterial.Icon.cmd_alert_circle;
-                color = R.color.android_orange;
-                break;
-        }
-
-        return new IconicsDrawable(context)
-                .icon(ic)
-                .colorRes(color)
-                .sizeDp(24)
-                .paddingDp(4);
-    }
 
     public interface EventListener {
         void onItemClick(View v, DailyAgendaItemStub item, int position);
+    }
+
+    public interface AlertViewProvider {
+        RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent);
+        void onBindViewHolder(RecyclerView.ViewHolder holder, PatientAlert item);
+    }
+
+    public void registerViewProvider(AlertViewProvider provider, Class<?> cls){
+
+        Integer type = new Integer(cls.hashCode());
+        this.alertTypeMap.put(provider.getClass(), type);
+        this.providerMap.put(type, provider);
     }
 
 }
