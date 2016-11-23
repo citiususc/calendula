@@ -1,8 +1,6 @@
 package es.usc.citius.servando.calendula.activities;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -12,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.util.Log;
 import android.view.ActionMode;
@@ -27,6 +26,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -40,6 +43,7 @@ import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.util.HtmlCacheManager;
+import es.usc.citius.servando.calendula.util.IconUtils;
 
 public class WebViewActivity extends CalendulaActivity {
 
@@ -73,7 +77,9 @@ public class WebViewActivity extends CalendulaActivity {
     // handler to access activity methods from javascript interface
     Handler handler;
 
-    ProgressDialog progressDialog;
+    //ProgressDialog progressDialog;
+
+    MaterialStyledDialog loadingDialog;
 
     View toolbarSahdow;
 
@@ -168,17 +174,7 @@ public class WebViewActivity extends CalendulaActivity {
         String loadingMessage = request.getLoadingMessage();
         if (loadingMessage == null) loadingMessage = getString(R.string.message_generic_pleasewait);
         webView.setVisibility(View.INVISIBLE);
-        progressDialog = ProgressDialog.show(this, getString(R.string.title_generic_loading), loadingMessage);
-        progressDialog.setCancelable(true);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-                progressDialog.dismiss();
-                finish();
-            }
-        });
-
+        showProgressDialog(loadingMessage);
         //misc webView settings
         //set single column layout
         webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
@@ -239,7 +235,7 @@ public class WebViewActivity extends CalendulaActivity {
                             webView.getSettings().setJavaScriptEnabled(request.isJavaScriptEnabled());
                         } else {
                             webView.setVisibility(View.VISIBLE);
-                            progressDialog.dismiss();
+                            loadingDialog.dismiss();
                         }
                         Log.d(TAG, "Finished loading URL: " + url);
                     }
@@ -273,6 +269,28 @@ public class WebViewActivity extends CalendulaActivity {
             Log.d(TAG, "setupWebView: Loading page from URL");
             webView.loadUrl(originalUrl);
         }
+    }
+
+    private void showProgressDialog(String loadingMsg) {
+        loadingDialog = new MaterialStyledDialog.Builder(this)
+                .setTitle("")
+                .setStyle(Style.HEADER_WITH_ICON)
+                .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_file_document, R.color.white, 100))
+                .setHeaderColor(R.color.android_blue)
+                .withDialogAnimation(false)
+                .setTitle(loadingMsg)
+                .setDescription(" ")
+                .setCancelable(false)
+                .setNegativeText(R.string.cancel)
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        webView.stopLoading();
+                        loadingDialog.dismiss();
+                        finish();
+                    }
+                })
+                .show();
     }
 
     private boolean isCached() {
@@ -695,9 +713,9 @@ public class WebViewActivity extends CalendulaActivity {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (progressDialog.isShowing()) {
+                    if (loadingDialog!=null) {
                         webView.setVisibility(View.VISIBLE);
-                        progressDialog.dismiss();
+                        //loadingDialog.dismiss();
                     }
                 }
             });
