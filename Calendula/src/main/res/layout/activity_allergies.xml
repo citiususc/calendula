@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="@dimen/status_bar_height"
-    tools:context="es.usc.citius.servando.calendula.activities.WebViewActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="@dimen/status_bar_height"
+                tools:context="es.usc.citius.servando.calendula.activities.WebViewActivity">
 
     <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/dark_grey_home"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+                                       android:id="@+id/toolbar"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="56dp"
+                                       android:background="@color/dark_grey_home"
+                                       app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                                       app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <ImageView
         android:id="@+id/tabs_shadow"
@@ -22,7 +22,7 @@
         android:layout_below="@+id/toolbar"
         android:alpha="0.7"
         android:scaleType="fitXY"
-        android:src="@drawable/daily_view_list_item_tab_shadow_top" />
+        android:src="@drawable/daily_view_list_item_tab_shadow_top"/>
 
 
     <android.support.v7.widget.RecyclerView
@@ -87,8 +87,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/search_edit_text"
-            android:paddingTop="48dp"
             android:gravity="top|center_horizontal"
+            android:paddingTop="48dp"
             android:text="@string/allergies_search_placeholder"
             />
 
@@ -117,6 +117,38 @@
             android:scaleType="fitXY"
             android:src="@drawable/daily_view_list_item_tab_shadow_top"/>
 
+        <LinearLayout
+            android:id="@+id/allergies_selected_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+
+            <TextView
+                android:id="@+id/allergies_selected_message"
+                style="@style/menu_labels_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3.5dp"/>
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/accept_selection_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                fab:fab_colorNormal="@color/md_light_green_800"
+                fab:fab_colorPressed="@color/md_light_green_500"
+                fab:fab_icon="@drawable/ic_done_white_48dp"
+                fab:fab_labelStyle="@style/menu_labels_style"
+                />
+
+        </LinearLayout>
+
     </RelativeLayout>
 
 
@@ -126,14 +158,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="false"
         android:layout_alignParentRight="true"
-        android:layout_gravity="bottom|right"
         android:layout_margin="10dp"
         fab:fab_colorNormal="#efefef"
         fab:fab_colorPressed="#b7b7b7"
         fab:fab_icon="@drawable/ic_done_black_48dp"
+        fab:fab_labelStyle="@style/menu_labels_style"
         fab:fab_plusIconColor="@color/black"
+        fab:fab_title="HOLA"
         />
+
 
 </RelativeLayout>

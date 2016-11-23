@@ -18,9 +18,20 @@ import es.usc.citius.servando.calendula.allergies.AllergenVO;
 
 public class AllergenItem extends AbstractItem<AllergenItem, AllergenItem.ViewHolder> implements Comparable<AllergenItem> {
 
-    private String title;
     private String allergenType;
     private AllergenVO vo;
+    private ViewHolder holder;
+
+    protected String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public AllergenVO getVo() {
         return vo;
@@ -52,6 +63,7 @@ public class AllergenItem extends AbstractItem<AllergenItem, AllergenItem.ViewHo
     @Override
     public void bindView(ViewHolder viewHolder, List<Object> payloads) {
         super.bindView(viewHolder, payloads);
+        this.holder = viewHolder;
         viewHolder.title.setText(title);
         viewHolder.subtitle.setText(allergenType);
     }
@@ -64,9 +76,15 @@ public class AllergenItem extends AbstractItem<AllergenItem, AllergenItem.ViewHo
     }
 
     @Override
+    public boolean isSelectable() {
+        return false;
+    }
+
+    @Override
     public int compareTo(AllergenItem o) {
         return this.title.compareTo(o.title);
     }
+
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 

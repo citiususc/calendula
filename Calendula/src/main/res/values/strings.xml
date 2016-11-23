@@ -503,6 +503,9 @@
     <string name="title_allergies_detected_dialog">Warning</string>
     <string name="message_allergies_detected_dialog">Some of the medicines in your medkit contain the allergen you\'ve just added. Please review their prospects carefully.</string>
     <string name="error_duplicate_medicine">This medicine is already in your medkit.</string>
+    <string name="allergies_group_elements_number">%1$d elements</string>
+    <string name="allergies_selected_number">%1$d selected</string>
+    <string name="message_allergy_add_multiple_success">Your allergy information has been saved.</string>
 
 
 </resources>
