@@ -23,8 +23,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,7 +36,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.List;
@@ -50,14 +47,14 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.PatientAlert;
+import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
  */
 public class MedicinesListFragment extends Fragment {
-
-    public static final String PARAM_DOWNLOAD_ID = "medicinesListFragment_download_id";
 
     private static final String TAG = "MedicinesListFragment";
 
@@ -120,13 +117,12 @@ public class MedicinesListFragment extends Fragment {
     private View createMedicineListItem(LayoutInflater inflater, final Medicine medicine) {
 
         View item = inflater.inflate(R.layout.medicines_list_item, null);
-
-        ((TextView) item.findViewById(R.id.medicines_list_item_name)).setText(medicine.name());
-
         ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
+        TextView name = (TextView) item.findViewById(R.id.medicines_list_item_name);
+        ImageView alertIcon = (ImageView) item.findViewById(R.id.imageView);
+        name.setText(medicine.name());
         icon.setImageDrawable(new IconicsDrawable(getContext())
                 .icon(medicine.presentation().icon())
-                //.color(Color.WHITE)
                 .colorRes(R.color.agenda_item_title)
                 .paddingDp(8)
                 .sizeDp(40));
@@ -146,52 +142,27 @@ public class MedicinesListFragment extends Fragment {
 
         String cn = medicine.cn();
         final Prescription p = cn != null ? DB.drugDB().prescriptions().findByCn(medicine.cn()) : null;
-        boolean boundToPrescription = p != null;
 
-        if (!boundToPrescription) {
+        List<PatientAlert> alerts = DB.alerts().findBy(PatientAlert.COLUMN_MEDICINE, medicine);
+        boolean hasAlerts = !alerts.isEmpty();
+
+        if (!hasAlerts) {
             item.findViewById(R.id.imageView).setVisibility(View.GONE);
         } else {
-            IconicsDrawable ic = new IconicsDrawable(getContext())
-                    .icon(CommunityMaterial.Icon.cmd_file_document)
-                    .colorRes(R.color.agenda_item_title)
-                    .paddingDp(10)
-                    .sizeDp(40);
-            ((ImageView) item.findViewById(R.id.imageView)).setImageDrawable(ic);
+            int level = PatientAlert.Level.LOW;
+            for(PatientAlert a : alerts){
+                if(a.getLevel() > level){
+                    level = a.getLevel();
+                }
+            }
+            alertIcon.setImageDrawable(IconUtils.alertLevelIcon(level,getActivity()));
 
-            //if (hasProspect) {
             item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onClickProspect(medicine, p);
+                    openMedicineInfoActivity(medicine, true);
                 }
             });
-//            } else {hasProspect
-//                item.findViewById(R.id.imageView).setAlpha(0.2f);
-//                item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Snack.show(R.string.download_prospect_not_available_message, getActivity());
-//                    }
-//                });
-//            }
-        }
-
-        if (p != null && p.getAffectsDriving()) {
-            Drawable icDriv = new IconicsDrawable(getContext())
-                    .icon(CommunityMaterial.Icon.cmd_comment_alert)
-                    .color(Color.parseColor("#f39c12"))
-                    .paddingDp(10)
-                    .sizeDp(40);
-            ((ImageView) item.findViewById(R.id.drive_icon)).setImageDrawable(icDriv);
-            item.findViewById(R.id.drive_icon).setVisibility(View.VISIBLE);
-            item.findViewById(R.id.drive_icon).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showDrivingAdvice(p);
-                }
-            });
-        } else {
-            item.findViewById(R.id.drive_icon).setVisibility(View.GONE);
         }
 
         View.OnClickListener clickListener = new View.OnClickListener() {
@@ -219,19 +190,11 @@ public class MedicinesListFragment extends Fragment {
         return item;
     }
 
-
-    void onClickProspect(Medicine medicine, final Prescription p) {
-
+    void openMedicineInfoActivity(Medicine medicine, boolean showAlerts){
         Intent i = new Intent(getActivity(), MedicineInfoActivity.class);
         i.putExtra("medicine_id", medicine.getId());
+        i.putExtra("show_alerts", showAlerts);
         getActivity().startActivity(i);
-
-//        if (p != null) {
-//            openProspect(p);
-//        } else {
-//            Toast.makeText(getActivity(), R.string.download_prospect_not_available_message, Toast.LENGTH_SHORT).show();
-//            Log.d("MedicinesList", "Prospect url not available");
-//        }
     }
 
 

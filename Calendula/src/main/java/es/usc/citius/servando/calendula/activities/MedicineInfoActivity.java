@@ -18,6 +18,7 @@
 
 package es.usc.citius.servando.calendula.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +40,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 
 import es.usc.citius.servando.calendula.CalendulaActivity;
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.adapters.MedInfoPageAdapter;
 import es.usc.citius.servando.calendula.database.DB;
@@ -68,6 +72,7 @@ public class MedicineInfoActivity extends CalendulaActivity {
     PrescriptionDBMgr dbMgr;
 
     ImageView medIcon;
+    private boolean showAlerts = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,11 +124,16 @@ public class MedicineInfoActivity extends CalendulaActivity {
         };
         appBarLayout.addOnOffsetChangedListener(mListener);
         toolbarTitle.animate().alpha(0);
+
+        if(showAlerts){
+            mViewPager.setCurrentItem(1);
+        }
    }
 
     private void processIntent() {
 
         long medId = getIntent() != null ? getIntent().getLongExtra("medicine_id", -1) : -1;
+        showAlerts = getIntent() != null ? getIntent().getBooleanExtra("show_alerts", false) : false;
 
         if(medId != -1 ){
             medicine = DB.medicines().findById(medId);
@@ -161,9 +171,6 @@ public class MedicineInfoActivity extends CalendulaActivity {
         }
     }
 
-
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -172,6 +179,32 @@ public class MedicineInfoActivity extends CalendulaActivity {
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.medicine_info, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.getItem(0).setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_pencil, R.color.white, 24, 2));
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_edit:
+                Intent intent = new Intent(this, MedicinesActivity.class);
+                intent.putExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, medicine.getId());
+                startActivity(intent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private ViewPager.OnPageChangeListener getPageChangeListener() {

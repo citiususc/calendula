@@ -25,12 +25,12 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 
-import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.persistence.PatientAlert;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.persistence.PatientAlert;
 
 /**
  * Created by joseangel.pineiro on 10/29/15.
@@ -76,16 +76,16 @@ public class IconUtils {
 
         switch (level){
             case PatientAlert.Level.HIGH:
-                ic = CommunityMaterial.Icon.cmd_alert_circle;
+                ic = CommunityMaterial.Icon.cmd_message_alert;
                 color = R.color.android_red_dark;
                 break;
             case PatientAlert.Level.MEDIUM:
-                ic = CommunityMaterial.Icon.cmd_alert_circle;
+                ic = CommunityMaterial.Icon.cmd_message_alert;
                 color = R.color.android_orange_dark;
                 break;
             default:
-                ic = CommunityMaterial.Icon.cmd_alert_circle;
-                color = R.color.android_orange_light;
+                ic = CommunityMaterial.Icon.cmd_message_alert;
+                color = R.color.android_blue;
                 break;
         }
 
