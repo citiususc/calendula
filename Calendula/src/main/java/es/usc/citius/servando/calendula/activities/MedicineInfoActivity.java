@@ -26,9 +26,7 @@ import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -39,6 +37,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 
+import java.util.List;
+
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
@@ -48,6 +48,7 @@ import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
+import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.util.IconUtils;
 
 public class MedicineInfoActivity extends CalendulaActivity {
@@ -73,6 +74,7 @@ public class MedicineInfoActivity extends CalendulaActivity {
 
     ImageView medIcon;
     private boolean showAlerts = false;
+    int alertLevel = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,13 +114,13 @@ public class MedicineInfoActivity extends CalendulaActivity {
         AppBarLayout.OnOffsetChangedListener mListener = new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-
-                if((toolbarLayout.getHeight() + verticalOffset) < (1.6 * ViewCompat.getMinimumHeight(toolbarLayout))) {
+                verticalOffset = Math.abs(verticalOffset);
+                if(verticalOffset > 100){
+                    // collapse
                     toolbarTitle.animate().alpha(1);
-                    Log.d(TAG, "OnCollapse");
-                } else {
+                }else{
+                    // expand
                     toolbarTitle.animate().alpha(0);
-                    Log.d(TAG, "OnExpand");
                 }
             }
         };
@@ -142,6 +144,13 @@ public class MedicineInfoActivity extends CalendulaActivity {
             Toast.makeText(MedicineInfoActivity.this, "Medicine not found", Toast.LENGTH_SHORT).show();
             finish();
         }
+
+        List<PatientAlert> alerts = DB.alerts().findBy(PatientAlert.COLUMN_MEDICINE, medicine);
+        for(PatientAlert a : alerts){
+            if(a.getLevel() > alertLevel){
+                alertLevel = a.getLevel();
+            }
+        }
     }
 
     @Override
@@ -160,12 +169,13 @@ public class MedicineInfoActivity extends CalendulaActivity {
         } ;
 
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
+
             Drawable icon = new IconicsDrawable(this)
-                    .icon(icons[i])
-                    .alpha(80)
-                    .paddingDp(2)
-                    .color(Color.WHITE)
-                    .sizeDp(24);
+                        .icon(icons[i])
+                        .alpha(80)
+                        .paddingDp(2)
+                        .color(Color.WHITE)
+                        .sizeDp(24);
 
             tabLayout.getTabAt(i).setIcon(icon);
         }

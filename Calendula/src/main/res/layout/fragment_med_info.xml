@@ -188,20 +188,68 @@
                 android:layout_alignTop="@+id/textView"
                 android:layout_marginLeft="16dp"
                 android:src="@drawable/ic_edit_black_48dp"
-                android:layout_marginTop="10dp"/>
+                />
 
-            <Button
-                android:id="@+id/med_leaflet_butn"
+            <TextView
+                android:id="@+id/prospect_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="72dp"
                 android:gravity="center_vertical"
-                android:text="CONSULTAR PROSPECTO"
+                android:text="Prospecto"
+                android:textAllCaps="false"
+                android:textColor="#000"
+                android:textSize="19dp"
+                android:layout_toRightOf="@+id/ic_prospect"
+                android:textIsSelectable="false"
+                android:textStyle="bold"/>
+
+            <ImageButton
+                android:id="@+id/med_leaflet_butn"
+                android:layout_width="fill_parent"
+                android:layout_height="100dp"
+                android:layout_marginRight="26dp"
+                android:layout_below="@+id/prospect_title"
+                android:layout_marginTop="10dp"
+                android:layout_alignLeft="@+id/prospect_title"
+                android:background="@drawable/shape_list_item"/>
+
+            <ImageView
+                android:id="@+id/imageView13"
+                android:layout_width="60dp"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_height="60dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="false"
+                android:layout_marginLeft="82dp"
+                android:src="@drawable/ic_help_white_48dp"
+                android:gravity="center_vertical"
                 android:textColor="@color/dark_grey_text"
                 android:textSize="15dp"
-                android:layout_toRightOf="@+id/ic_prospect"/>
+                android:layout_below="@+id/prospect_title"
+                android:layout_toRightOf="@+id/ic_prospect"
+                android:layout_marginTop="30dp"
+                android:scaleType="fitCenter"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Prospecto oficial de la Agencia Española de Medicamentos y Productos sanitarios"
+                android:id="@+id/textView14"
+                android:layout_toRightOf="@+id/imageView13"
+                android:layout_marginLeft="10dp"
+                android:layout_alignBottom="@+id/med_leaflet_butn"
+                android:layout_alignTop="@+id/med_leaflet_butn"
+                android:gravity="center"
+                android:textSize="13dp"
+                android:textColor="#222"
+                android:layout_alignRight="@+id/med_leaflet_butn"
+                android:layout_alignEnd="@+id/med_leaflet_butn"
+                android:layout_marginRight="10dp"/>
+
         </RelativeLayout>
 
         </LinearLayout>

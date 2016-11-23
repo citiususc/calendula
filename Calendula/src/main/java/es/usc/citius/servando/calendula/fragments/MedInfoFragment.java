@@ -20,17 +20,19 @@ package es.usc.citius.servando.calendula.fragments;
 
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import org.joda.time.LocalDate;
 
@@ -60,7 +62,8 @@ public class MedInfoFragment extends Fragment{
     TextView scheduleInfo;
     TextView stockInfo;
     TextView stockInfoEnd;
-    Button showProspectBtn;
+    ImageButton showProspectBtn;
+    ImageView showProspectIcon;
 
     Medicine m;
     PrescriptionDBMgr dbMgr;
@@ -95,7 +98,8 @@ public class MedInfoFragment extends Fragment{
         scheduleInfo = (TextView) rootView.findViewById(R.id.schedule_info);
         stockInfo = (TextView) rootView.findViewById(R.id.med_stock);
         stockInfoEnd = (TextView) rootView.findViewById(R.id.med_stock_readable);
-        showProspectBtn = (Button) rootView.findViewById(R.id.med_leaflet_butn);
+        showProspectBtn = (ImageButton) rootView.findViewById(R.id.med_leaflet_butn);
+        showProspectIcon = (ImageView) rootView.findViewById(R.id.imageView13);
         setupView();
 
         if(m.isBoundToPrescription()) {
@@ -106,7 +110,8 @@ public class MedInfoFragment extends Fragment{
                 }
             });
         }else{
-            showProspectBtn.setText("Prospecto no disponible");
+            showProspectBtn.setAlpha(0.3f);
+            showProspectIcon.setAlpha(0.3f);
         }
 
         return rootView;
@@ -115,10 +120,18 @@ public class MedInfoFragment extends Fragment{
     private void setupView() {
         Context c = getActivity();
         int color = R.color.black;
-        icMedName.setImageDrawable(IconUtils.icon(c, CommunityMaterial.Icon.cmd_information,color , 24, 4));
-        icProspect.setImageDrawable(IconUtils.icon(c, CommunityMaterial.Icon.cmd_file_document, color, 24, 4));
+        icMedName.setImageDrawable(IconUtils.icon(c, CommunityMaterial.Icon.cmd_script,color , 24, 4));
+        icProspect.setImageDrawable(IconUtils.icon(c, CommunityMaterial.Icon.cmd_information, color, 24, 4));
         icScheduleInfo.setImageDrawable(IconUtils.icon(c, CommunityMaterial.Icon.cmd_calendar, color, 24, 4));
         icMedStock.setImageDrawable(IconUtils.icon(c, CommunityMaterial.Icon.cmd_basket, color, 24, 4));
+
+        Drawable ic = new IconicsDrawable(c, CommunityMaterial.Icon.cmd_file_document)
+                .sizeDp(60)
+                .paddingDp(0)
+                .color(DB.patients().getActive(c).color());
+
+        showProspectIcon.setImageDrawable(ic);
+
 
         String name = "";
         String desc = "";

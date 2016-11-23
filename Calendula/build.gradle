@@ -170,7 +170,7 @@ dependencies {
     compile('com.mikepenz:materialdrawer:4.4.1@aar') {
         transitive = true
     }
-    compile 'com.mikepenz:iconics-core:2.1.0@aar'
+    compile 'com.mikepenz:iconics-core:2.7.1@aar'
     compile 'com.mikepenz:google-material-typeface:2.1.2.1@aar'
     compile 'com.mikepenz:community-material-typeface:1.2.65.1@aar'
     compile('com.mikepenz:materialize:0.2.7@aar') {

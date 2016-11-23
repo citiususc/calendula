@@ -26,7 +26,7 @@
     <!--android:angle="90">-->
     <!--</gradient>-->
 
-    <solid android:color="#ffffff"></solid>
+    <solid android:color="#fcfcfc"></solid>
 
     <corners android:radius="2dip" />
 

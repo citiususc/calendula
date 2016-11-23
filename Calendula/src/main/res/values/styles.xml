@@ -338,6 +338,13 @@
         <item name="android:background">@color/transparent</item>
     </style>
 
+    <style name="AppTheme.LeafletButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">#ececec</item>
+    </style>
 
+
+    <style name="AppTheme.light_button" >
+        <item name="android:background">@drawable/shape_list_item</item>
+    </style>
 
 </resources>
