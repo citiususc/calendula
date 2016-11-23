@@ -45,7 +45,9 @@ public class IconUtils {
             CommunityMaterial.Icon.cmd_flower,
             CommunityMaterial.Icon.cmd_thumb_up,
             CommunityMaterial.Icon.cmd_owl,
-            CommunityMaterial.Icon.cmd_cat
+            CommunityMaterial.Icon.cmd_cat,
+            CommunityMaterial.Icon.cmd_check_all
+
     );
 
     public static IconicsDrawable icon(Context ctx, IIcon ic, int color){

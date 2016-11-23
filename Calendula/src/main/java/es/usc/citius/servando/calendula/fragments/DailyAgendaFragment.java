@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
@@ -36,6 +37,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.typeface.IIcon;
 
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
@@ -49,6 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.DailyAgendaRecyclerAdapter;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ConfirmActivity;
@@ -79,6 +82,8 @@ public class DailyAgendaFragment extends Fragment{
 
     List<DailyAgendaItemStub> items = new ArrayList<>();
 
+    IIcon emptyViewIcon = IconUtils.randomNiceIcon();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,10 +96,16 @@ public class DailyAgendaFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.fragment_daily_agenda, container, false);
         rv = (RecyclerView) rootView.findViewById(R.id.rv);
         emptyView = rootView.findViewById(R.id.empty_view_placeholder);
-
+        CalendulaApp.eventBus().register(this);
         setupRecyclerView();
         setupEmptyView();
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        CalendulaApp.eventBus().unregister(this);
     }
 
     @Override
@@ -153,9 +164,10 @@ public class DailyAgendaFragment extends Fragment{
 
 
     private void setupEmptyView() {
+        int color = HomeProfileMgr.colorForCurrent(getActivity());
         Drawable icon = new IconicsDrawable(getContext())
-                .icon(IconUtils.randomNiceIcon())
-                .colorRes(R.color.agenda_item_title)
+                .icon(emptyViewIcon)
+                .color(color)
                 .sizeDp(90)
                 .paddingDp(0);
         ((ImageView) emptyView.findViewById(R.id.imageView_ok)).setImageDrawable(icon);
@@ -455,5 +467,29 @@ public class DailyAgendaFragment extends Fragment{
             }
             return aT.compareTo(bT);
         }
+    }
+
+    // Method called from the event bus
+    @SuppressWarnings("unused")
+    public void onEvent(final Object evt) {
+        if(evt instanceof HomeProfileMgr.BackgroundUpdatedEvent){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    onBackgroundChange(HomeProfileMgr.colorForCurrent(getActivity()));
+                }
+            }, 500);
+
+        }
+    }
+
+
+    private void onBackgroundChange(int color) {
+        Drawable icon = new IconicsDrawable(getContext())
+                .icon(emptyViewIcon)
+                .color(color)
+                .sizeDp(90)
+                .paddingDp(0);
+        ((ImageView) emptyView.findViewById(R.id.imageView_ok)).setImageDrawable(icon);
     }
 }
