@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +37,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.List;
@@ -224,22 +230,38 @@ public class MedicinesListFragment extends Fragment {
     }
 
     void showDeleteConfirmationDialog(final Medicine m) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(String.format(getString(R.string.remove_medicine_message_short), m.name()))
+        String message;
+        if (!DB.schedules().findByMedicine(m).isEmpty()) {
+            message = String.format(getString(R.string.remove_medicine_message_long), m.name());
+        } else {
+            message = String.format(getString(R.string.remove_medicine_message_short), m.name());
+        }
+
+        new MaterialStyledDialog.Builder(getActivity())
+                .setStyle(Style.HEADER_WITH_ICON)
+                .setIcon(IconUtils.icon(getActivity(), CommunityMaterial.Icon.cmd_pill, R.color.white, 100))
+                .setHeaderColor(R.color.android_red)
+                .withDialogAnimation(true)
+                .setTitle(getString(R.string.remove_medicine_dialog_title))
+                .setDescription(message)
                 .setCancelable(true)
-                .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+                .setNeutralText(getString(R.string.dialog_no_option))
+                .setPositiveText(getString(R.string.dialog_yes_option))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         DB.medicines().deleteCascade(m, true);
                         notifyDataChange();
                     }
                 })
-                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         dialog.cancel();
                     }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
+                })
+                .show();
+
     }
 
     private class MedicinesListAdapter extends ArrayAdapter<Medicine> {
