@@ -38,7 +38,8 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingRight="16dp">
 
 
 
@@ -67,7 +68,7 @@
                 android:gravity="center_vertical"
                 android:text="Ácido fusídico"
                 android:textAllCaps="true"
-                android:textColor="@color/dark_grey_text"
+                android:textColor="#000"
                 android:textSize="19dp"
                 android:layout_toRightOf="@+id/ic_med_large_name"
                 android:textIsSelectable="false"
@@ -116,7 +117,7 @@
                     android:gravity="center_vertical"
                     android:text="20 comprimidos"
                     android:textAllCaps="false"
-                    android:textColor="@color/dark_grey_text"
+                    android:textColor="#000"
                     android:textSize="19dp"
                     android:layout_toRightOf="@+id/ic_med_stock"
                     android:textIsSelectable="false"
@@ -165,7 +166,7 @@
                     android:gravity="center_vertical"
                     android:text="1 pauta activa"
                     android:textAllCaps="false"
-                    android:textColor="@color/dark_grey_text"
+                    android:textColor="#000"
                     android:textSize="19dp"
                     android:layout_toRightOf="@+id/ic_schedule_info"
                     android:textIsSelectable="false"

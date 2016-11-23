@@ -114,7 +114,7 @@ public class MedInfoFragment extends Fragment{
 
     private void setupView() {
         Context c = getActivity();
-        int color = R.color.black_80;
+        int color = R.color.black;
         icMedName.setImageDrawable(IconUtils.icon(c, CommunityMaterial.Icon.cmd_information,color , 24, 4));
         icProspect.setImageDrawable(IconUtils.icon(c, CommunityMaterial.Icon.cmd_file_document, color, 24, 4));
         icScheduleInfo.setImageDrawable(IconUtils.icon(c, CommunityMaterial.Icon.cmd_calendar, color, 24, 4));
@@ -132,6 +132,7 @@ public class MedInfoFragment extends Fragment{
                     desc += "" + p.getDose();
                 }
             }else{
+                medDesc.setVisibility(View.GONE);
                 name += m.name();
             }
         }
