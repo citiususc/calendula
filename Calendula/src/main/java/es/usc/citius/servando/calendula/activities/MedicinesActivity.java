@@ -101,6 +101,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     PrescriptionDBMgr dbMgr;
 
     private String intentAction;
+    private String intentSearchText = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,13 +172,17 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         title.setBackgroundColor(color);
         searchView.setBackgroundColor(color);
 
-        hideSearchView();
+        if(intentSearchText != null){
+            showSearchView(intentSearchText);
+        }
+
     }
 
 
     private void processIntent() {
         mMedicineId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, -1);
         intentAction = getIntent().getStringExtra(CalendulaApp.INTENT_EXTRA_ACTION);
+        intentSearchText = getIntent().getStringExtra("search_text");
     }
 
 

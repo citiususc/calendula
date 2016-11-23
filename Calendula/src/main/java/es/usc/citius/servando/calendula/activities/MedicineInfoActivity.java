@@ -26,6 +26,7 @@ import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,6 +37,9 @@ import android.widget.Toast;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
+import com.nispok.snackbar.Snackbar;
+import com.nispok.snackbar.SnackbarManager;
+import com.nispok.snackbar.enums.SnackbarType;
 
 import java.util.List;
 
@@ -46,9 +50,13 @@ import es.usc.citius.servando.calendula.adapters.MedInfoPageAdapter;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
+import es.usc.citius.servando.calendula.events.PersistenceEvents;
+import es.usc.citius.servando.calendula.fragments.AlertListFragment;
+import es.usc.citius.servando.calendula.fragments.MedInfoFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
+import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
 
 public class MedicineInfoActivity extends CalendulaActivity {
@@ -85,7 +93,6 @@ public class MedicineInfoActivity extends CalendulaActivity {
         handler = new Handler();
         activePatient = DB.patients().getActive(this);
         dbMgr = DBRegistry.instance().current();
-
         processIntent();
 
         // Create the adapter that will return a fragment for each of the three
@@ -130,7 +137,16 @@ public class MedicineInfoActivity extends CalendulaActivity {
         if(showAlerts){
             mViewPager.setCurrentItem(1);
         }
+
+        CalendulaApp.eventBus().register(this);
    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CalendulaApp.eventBus().unregister(this);
+    }
 
     private void processIntent() {
 
@@ -198,7 +214,6 @@ public class MedicineInfoActivity extends CalendulaActivity {
         return true;
     }
 
-
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.getItem(0).setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_pencil, R.color.white, 24, 2));
@@ -241,6 +256,31 @@ public class MedicineInfoActivity extends CalendulaActivity {
 
             }
         };
+    }
+
+    Fragment getViewPagerFragment(int position) {
+        String tag = FragmentUtils.makeViewPagerFragmentName(R.id.container, position);
+        return getSupportFragmentManager().findFragmentByTag(tag);
+    }
+
+    // Method called from the event bus
+    @SuppressWarnings("unused")
+    public void onEvent(Object evt) {
+        if (evt instanceof PersistenceEvents.ModelCreateOrUpdateEvent) {
+            Class<?> cls = ((PersistenceEvents.ModelCreateOrUpdateEvent) evt).clazz;
+            if(cls.equals(Medicine.class)){
+                SnackbarManager.show(Snackbar.with(getApplicationContext())
+                                .type(SnackbarType.MULTI_LINE)
+                                .color(getResources().getColor(R.color.android_green_dark))
+                                .textColor(getResources().getColor(R.color.white))
+                                .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
+                                .text("¡Medicamento vinculado!")
+                        , this);
+                ((MedInfoFragment) getViewPagerFragment(0)).notifyDataChange();
+                ((AlertListFragment) getViewPagerFragment(1)).notifyDataChange();
+            }
+
+        }
     }
 
 }

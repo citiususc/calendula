@@ -603,8 +603,9 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                 if (selectedPresentation != null) {
                     mMedicine.setPresentation(selectedPresentation);
                 }
-                if (mPrescription != null && mPrescription.shortName().toLowerCase().equals(mMedicine.name().toLowerCase())) {
+                if (mPrescription != null) { //  && mPrescription.shortName().toLowerCase().equals(mMedicine.name().toLowerCase())
                     mMedicine.setCn(String.valueOf(mPrescription.getCode()));
+                    mMedicine.setDatabase(DBRegistry.instance().current().id());
                 } else if (mPrescription == null) {
                     mMedicine.setCn(null);
                 }

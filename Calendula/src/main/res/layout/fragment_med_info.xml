@@ -66,7 +66,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="72dp"
                 android:gravity="center_vertical"
-                android:text="Ácido fusídico"
+                android:text="Frenadol Granulado para solución oral"
                 android:textAllCaps="true"
                 android:textColor="#000"
                 android:textSize="19dp"
@@ -87,7 +87,20 @@
                 android:textColor="@color/dark_grey_text"
                 android:textSize="18dp"
                 android:layout_toRightOf="@+id/ic_med_large_name"
-                android:layout_below="@+id/ic_med_large_name"/>
+                android:layout_below="@+id/med_large_name"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Asociar medicamento"
+                android:background="@drawable/shape_list_item"
+                android:id="@+id/bind_medicine"
+                android:layout_below="@+id/med_large_name_description"
+                android:layout_alignLeft="@+id/med_large_name_description"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"/>
 
         </RelativeLayout>
 

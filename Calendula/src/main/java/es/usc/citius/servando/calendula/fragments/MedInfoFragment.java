@@ -20,6 +20,7 @@ package es.usc.citius.servando.calendula.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,6 +28,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,7 +38,9 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import org.joda.time.LocalDate;
 
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
@@ -64,6 +68,8 @@ public class MedInfoFragment extends Fragment{
     TextView stockInfoEnd;
     ImageButton showProspectBtn;
     ImageView showProspectIcon;
+
+    Button bindMedBtn;
 
     Medicine m;
     PrescriptionDBMgr dbMgr;
@@ -100,20 +106,8 @@ public class MedInfoFragment extends Fragment{
         stockInfoEnd = (TextView) rootView.findViewById(R.id.med_stock_readable);
         showProspectBtn = (ImageButton) rootView.findViewById(R.id.med_leaflet_butn);
         showProspectIcon = (ImageView) rootView.findViewById(R.id.imageView13);
+        bindMedBtn = (Button) rootView.findViewById(R.id.bind_medicine);
         setupView();
-
-        if(m.isBoundToPrescription()) {
-            showProspectBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ProspectUtils.openProspect(DB.drugDB().prescriptions().findByCn(m.cn()), getActivity(), true);
-                }
-            });
-        }else{
-            showProspectBtn.setAlpha(0.3f);
-            showProspectIcon.setAlpha(0.3f);
-        }
-
         return rootView;
     }
 
@@ -145,7 +139,7 @@ public class MedInfoFragment extends Fragment{
                     desc += "" + p.getDose();
                 }
             }else{
-                medDesc.setVisibility(View.GONE);
+                desc = "Asocia un medicamento real para obtener más información";
                 name += m.name();
             }
         }
@@ -163,6 +157,30 @@ public class MedInfoFragment extends Fragment{
             scheduleInfo.setText(scheduleCount + " pautas activas");
         }
 
+        if(m.isBoundToPrescription()) {
+            showProspectBtn.setAlpha(1f);
+            showProspectIcon.setAlpha(1f);
+            bindMedBtn.setVisibility(View.GONE);
+            showProspectBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ProspectUtils.openProspect(DB.drugDB().prescriptions().findByCn(m.cn()), getActivity(), true);
+                }
+            });
+        }else{
+            showProspectBtn.setAlpha(0.8f);
+            showProspectIcon.setAlpha(0.3f);
+            bindMedBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), MedicinesActivity.class);
+                    intent.putExtra("search_text", m.name());
+                    intent.putExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, m.getId());
+                    startActivity(intent);
+                }
+            });
+        }
+
         if(m.stockManagementEnabled()){
             stockInfo.setText(m.stock() + " " + m.presentation().units(getResources()));
             LocalDate d = StockUtils.getEstimatedStockEnd(m);
@@ -172,6 +190,10 @@ public class MedInfoFragment extends Fragment{
             stockInfo.setText("Sin datos");
             stockInfoEnd.setText("No se ha indicado información de stock para este medicamento");
         }
+
+
+
+
 
     }
 
@@ -188,5 +210,11 @@ public class MedInfoFragment extends Fragment{
             return originalName.substring(0, index);
         }
         return originalName;
+    }
+
+
+    public void notifyDataChange(){
+        DB.medicines().refresh(m);
+        setupView();
     }
 }
