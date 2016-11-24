@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityManagerCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
@@ -76,20 +78,16 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
     private TextView allergiesPlaceholder;
     private TextView allergiesSearchPlaceholder;
     private int color;
-    private Activity activity;
     private Dao<PatientAllergen, Long> dao = null;
-    private List<AllergenVO> recentlyAdded;
     private FloatingActionButton selectFab;
     private LinearLayout selectLayout;
     private TextView selectText;
+    private ProgressBar progressBar;
+    private AsyncTask searchTask = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        recentlyAdded = new ArrayList<>();
-
-        activity = this;
 
         setContentView(R.layout.activity_allergies);
 
@@ -105,10 +103,8 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         setupToolbar(getString(R.string.title_activity_allergies), color);
         setupStatusBar(color);
 
-        //load allergies, set placeholder if needed
+        //initialize allergies store
         store = new AllergiesStore();
-        store.load(this);
-        checkPlaceholder();
 
         //setup recycler
         setupRecyclerView();
@@ -120,8 +116,16 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
                 showSearchView();
             }
         });
+
+        progressBar = (ProgressBar) findViewById(R.id.main_progress_bar);
+        progressBar.getIndeterminateDrawable().setColorFilter(DB.patients().getActive(this).color(),
+                android.graphics.PorterDuff.Mode.MULTIPLY);
+
         //setup search view
         setupSearchView();
+
+        //load allergies, set placeholder if needed
+        new LoadAllergiesTask().execute();
 
 
     }
@@ -135,9 +139,12 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         allergiesRecycler.setAdapter(allergiesAdapter);
     }
 
+
     FastAdapter.OnClickListener<AbstractItem> cl = new FastAdapter.OnClickListener<AbstractItem>() {
         @Override
         public boolean onClick(View v, IAdapter<AbstractItem> adapter, AbstractItem item, int position) {
+
+            KeyboardUtils.hideKeyboard(AllergiesActivity.this);
             boolean select = !item.isSelected();
 
             //handle selection/deselection of groups and items
@@ -242,38 +249,222 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         selectFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectFab.setOnClickListener(null);
-                List<PatientAllergen> pa = new ArrayList<>();
-                Patient p = DB.patients().getActive(AllergiesActivity.this);
-                for (IItem i : getSelected()) {
-                    AllergenVO vo = null;
-                    switch (i.getType()) {
-                        case R.id.fastadapter_allergen_group_sub_item:
-                            vo = ((AllergenGroupSubItem) i).getVo();
-                            break;
-                        case R.id.fastadapter_allergen_item:
-                            vo = ((AllergenItem) i).getVo();
-                            break;
-                        default:
-                            Log.wtf(TAG, "Invalid item type in adapter: " + i);
-                            break;
-                    }
-                    pa.add(new PatientAllergen(vo, p));
-                }
-                boolean ans = store.storeAllergens(pa);
-                if (ans) {
-                    checkPlaceholder();
-                    Snack.show(getString(R.string.message_allergy_add_multiple_success), AllergiesActivity.this);
-                } else {
-                    Snack.show(R.string.message_allergy_add_failure, AllergiesActivity.this);
-                }
-                selectFab.setOnClickListener(this);
                 selectLayout.setVisibility(View.GONE);
-                doSearch();
+                new SaveAllergiesTask().execute(getSelected());
             }
         });
 
         hideSearchView();
+    }
+
+
+    private void hideAllergiesView(boolean hide) {
+        final int visibility = hide ? View.GONE : View.VISIBLE;
+        allergiesRecycler.setVisibility(visibility);
+        addButton.setVisibility(visibility);
+        if (!hide)
+            checkPlaceholder();
+
+    }
+
+    private class SaveAllergiesTask extends AsyncTask<Collection<IItem>, Void, SaveAllergiesTask.Result> {
+
+        class Result {
+            boolean saved;
+            boolean allergies;
+
+            private Result(boolean saved, boolean allergies) {
+                this.saved = saved;
+                this.allergies = allergies;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Result res) {
+            progressBar.setVisibility(View.GONE);
+            if (res.saved) {
+                allergiesAdapter.notifyDataSetChanged();
+                if (res.allergies)
+                    showNewAllergyConflictDialog();
+                hideAllergiesView(false);
+                Snack.show(getString(R.string.message_allergy_add_multiple_success), AllergiesActivity.this);
+            } else {
+                Snack.show(R.string.message_allergy_add_failure, AllergiesActivity.this);
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            hideAllergiesView(true);
+            progressBar.setVisibility(View.VISIBLE);
+            closeSearchView();
+        }
+
+        @Override
+        protected Result doInBackground(Collection<IItem>... items) {
+            if (items.length != 1) {
+                Log.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + items.length);
+                throw new IllegalArgumentException("Invalid argument length");
+            }
+            List<PatientAllergen> pa = new ArrayList<>();
+            Patient p = DB.patients().getActive(AllergiesActivity.this);
+            for (IItem i : items[0]) {
+                AllergenVO vo = null;
+                switch (i.getType()) {
+                    case R.id.fastadapter_allergen_group_sub_item:
+                        vo = ((AllergenGroupSubItem) i).getVo();
+                        break;
+                    case R.id.fastadapter_allergen_item:
+                        vo = ((AllergenItem) i).getVo();
+                        break;
+                    default:
+                        Log.wtf(TAG, "Invalid item type in adapter: " + i);
+                        break;
+                }
+                pa.add(new PatientAllergen(vo, p));
+            }
+            final SaveResult r = store.storeAllergens(pa);
+            return new Result(r == SaveResult.OK || r == SaveResult.ALLERGY, r == SaveResult.ALLERGY);
+        }
+    }
+
+    private class DoSearchTask extends AsyncTask<String, Void, List<AbstractItem>> {
+
+        @Override
+        protected void onPreExecute() {
+            searchAdapter.clear();
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(List<AbstractItem> abstractItems) {
+            searchAdapter.add(abstractItems);
+            progressBar.setVisibility(View.GONE);
+            checkSearchPlaceholder();
+            searchTask = null;
+        }
+
+        @Override
+        protected List<AbstractItem> doInBackground(String... params) {
+            if (params.length != 1) {
+                Log.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + params.length);
+                throw new IllegalArgumentException("Invalid argument length");
+            }
+
+            final String filter = params[0];
+            final List<AllergenVO> allergenVOs = AllergenFacade.searchForAllergens(filter);
+            allergenVOs.removeAll(store.getAllergiesVO());
+
+            final Map<String, List<AllergenVO>> groups = new ArrayMap<>();
+            groups.put("Lactosa", new ArrayList<AllergenVO>());
+
+            final List<AllergenVO> toRemove = new ArrayList<>();
+
+            // TODO: 23/11/16 generate groups dynamically
+            for (AllergenVO vo : allergenVOs) {
+                if (vo.getName().contains("Lactosa")) {
+                    groups.get("Lactosa").add(vo);
+                    toRemove.add(vo);
+                }
+            }
+
+            allergenVOs.removeAll(toRemove);
+            List<AbstractItem> items = new ArrayList<>();
+            for (String s : groups.keySet()) {
+                final List<AllergenVO> subs = groups.get(s);
+                if (!subs.isEmpty()) {
+                    AllergenGroupItem g = new AllergenGroupItem(s, "");
+                    List<AllergenGroupSubItem> sub = new ArrayList<>();
+                    for (AllergenVO vo : subs) {
+                        final AllergenGroupSubItem e = new AllergenGroupSubItem(vo, AllergiesActivity.this);
+                        e.setParent(g);
+                        sub.add(e);
+                    }
+                    g.setSubtitle(getString(R.string.allergies_group_elements_number, sub.size()));
+                    g.withSubItems(sub);
+                    items.add(g);
+                }
+            }
+            for (AllergenVO vo : allergenVOs) {
+                items.add(new AllergenItem(vo, AllergiesActivity.this));
+            }
+            Collections.sort(items, new Comparator<AbstractItem>() {
+                @Override
+                public int compare(AbstractItem o1, AbstractItem o2) {
+                    final int o1Type = o1.getType();
+                    final int o2Type = o2.getType();
+                    if (o1Type != o2Type) {
+                        if (o1Type == R.id.fastadapter_allergen_group_item)
+                            return -1;
+                        return 1;
+                    } else {
+                        if (o1Type == R.id.fastadapter_allergen_group_item)
+                            return ((AllergenGroupItem) o1).compareTo((AllergenGroupItem) o2);
+                        return ((AllergenItem) o1).compareTo((AllergenItem) o2);
+                    }
+                }
+            });
+
+            return items;
+        }
+    }
+
+    private class LoadAllergiesTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            hideAllergiesView(true);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            allergiesAdapter.notifyDataSetChanged();
+            progressBar.setVisibility(View.GONE);
+            checkPlaceholder();
+            hideAllergiesView(false);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            store.load(AllergiesActivity.this);
+            return null;
+        }
+    }
+
+    private class DeleteAllergyTask extends AsyncTask<PatientAllergen, Void, Integer> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(Integer index) {
+            if (index >= 0) {
+                checkPlaceholder();
+                doSearch();
+                allergiesAdapter.remove(index);
+            } else {
+                Snack.show(R.string.delete_allergen_error, AllergiesActivity.this);
+            }
+            progressBar.setVisibility(View.GONE);
+            checkPlaceholder();
+            hideAllergiesView(false);
+        }
+
+        @Override
+        protected Integer doInBackground(PatientAllergen... params) {
+            if (params.length != 1) {
+                Log.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + params.length);
+                throw new IllegalArgumentException("Invalid argument length");
+            }
+            int index = store.deleteAllergen(params[0]);
+            return index;
+        }
     }
 
     private void clearSearch() {
@@ -306,60 +497,10 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
     private void doSearch() {
         String filter = searchEditText.getText().toString().trim();
         if (filter.length() >= 3) {
-            final List<AllergenVO> allergenVOs = AllergenFacade.searchForAllergens(filter);
-            allergenVOs.removeAll(store.getAllergiesVO());
-
-            final Map<String, List<AllergenVO>> groups = new ArrayMap<>();
-            groups.put("Lactosa", new ArrayList<AllergenVO>());
-
-            final List<AllergenVO> toRemove = new ArrayList<>();
-
-            // TODO: 23/11/16 generate groups dynamically
-            for (AllergenVO vo : allergenVOs) {
-                if (vo.getName().contains("Lactosa")) {
-                    groups.get("Lactosa").add(vo);
-                    toRemove.add(vo);
-                }
-            }
-            allergenVOs.removeAll(toRemove);
-            List<AbstractItem> items = new ArrayList<>();
-            for (String s : groups.keySet()) {
-                final List<AllergenVO> subs = groups.get(s);
-                if (!subs.isEmpty()) {
-                    AllergenGroupItem g = new AllergenGroupItem(s, "");
-                    List<AllergenGroupSubItem> sub = new ArrayList<>();
-                    for (AllergenVO vo : subs) {
-                        final AllergenGroupSubItem e = new AllergenGroupSubItem(vo, this);
-                        e.setParent(g);
-                        sub.add(e);
-                    }
-                    g.setSubtitle(getString(R.string.allergies_group_elements_number, sub.size()));
-                    g.withSubItems(sub);
-                    items.add(g);
-                }
-            }
-            for (AllergenVO vo : allergenVOs) {
-                items.add(new AllergenItem(vo, AllergiesActivity.this));
-            }
-            Collections.sort(items, new Comparator<AbstractItem>() {
-                @Override
-                public int compare(AbstractItem o1, AbstractItem o2) {
-                    final int o1Type = o1.getType();
-                    final int o2Type = o2.getType();
-                    if (o1Type != o2Type) {
-                        if (o1Type == R.id.fastadapter_allergen_group_item)
-                            return -1;
-                        return 1;
-                    } else {
-                        if (o1Type == R.id.fastadapter_allergen_group_item)
-                            return ((AllergenGroupItem) o1).compareTo((AllergenGroupItem) o2);
-                        return ((AllergenItem) o1).compareTo((AllergenItem) o2);
-                    }
-                }
-            });
-            searchAdapter.clear();
-            searchAdapter.add(items);
-            checkSearchPlaceholder();
+            if (searchTask != null)
+                searchTask.cancel(true);
+            searchTask = new DoSearchTask();
+            searchTask.execute(new String[]{filter});
         }
     }
 
@@ -382,7 +523,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
                     break;
             }
         }
-        Log.d(TAG, "getSelected() returned: " + selected.size()+" elements");
+        Log.d(TAG, "getSelected() returned: " + selected.size() + " elements");
         return selected;
     }
 
@@ -418,14 +559,8 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
                 .setCancelable(true)
                 .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        int index = store.deleteAllergen(a);
-                        if (index >= 0) {
-                            checkPlaceholder();
-                            doSearch();
-                            allergiesAdapter.remove(index);
-                        } else {
-                            Snack.show(R.string.delete_allergen_error, ac);
-                        }
+                        new DeleteAllergyTask().execute(a);
+                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
@@ -453,14 +588,13 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         if (searchView.getVisibility() == View.VISIBLE) {
             hideSearchView();
         } else {
-            super.onBackPressed();
+            finish();
         }
     }
 
-    private void checkConflictsAndCreateAlerts(final AllergenVO allergen) {
+    private boolean checkConflictsAndCreateAlerts(final AllergenVO allergen) {
         final List<Medicine> conflicts = AllergenFacade.checkNewMedicineAllergies(this, allergen);
         if (!conflicts.isEmpty()) {
-            showNewAllergyConflictDialog();
             DB.transaction(new Callable<Object>() {
                 @Override
                 public Object call() throws Exception {
@@ -488,6 +622,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
                 }
             });
         }
+        return !conflicts.isEmpty();
     }
 
     @Override
@@ -511,7 +646,12 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         }
     }
 
+    public enum SaveResult {
+        OK, ERROR, ALLERGY
+    }
+
     public class AllergiesStore {
+
 
         private List<PatientAllergen> currentAllergies;
         private Context context;
@@ -534,30 +674,37 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
             reload();
         }
 
-        public boolean storeAllergen(PatientAllergen allergen) {
+        public SaveResult storeAllergen(PatientAllergen allergen) {
             int rows;
             try {
                 rows = getDao().create(allergen);
             } catch (SQLException e) {
                 Log.e(TAG, "storeAllergen: couldn't create allergy", e);
-                return false;
+                return SaveResult.ERROR;
             }
             Log.d(TAG, "storeAllergen: inserted allergen into database: " + allergen);
             if (rows == 1) {
-                checkConflictsAndCreateAlerts(new AllergenVO(allergen));
+                final boolean r = checkConflictsAndCreateAlerts(new AllergenVO(allergen));
                 currentAllergies.add(allergen);
-                return true;
+                if (r)
+                    return SaveResult.ALLERGY;
+                return SaveResult.OK;
+
             }
-            return false;
+            return SaveResult.ERROR;
         }
 
-        public boolean storeAllergens(final Collection<PatientAllergen> allergens) {
-            return (boolean) DB.transaction(new Callable<Boolean>() {
+        public SaveResult storeAllergens(final Collection<PatientAllergen> allergens) {
+            return (SaveResult) DB.transaction(new Callable<SaveResult>() {
                 @Override
-                public Boolean call() throws Exception {
-                    boolean res = true;
+                public SaveResult call() throws Exception {
+                    SaveResult res = SaveResult.OK;
                     for (PatientAllergen allergen : allergens) {
-                        res &= storeAllergen(allergen);
+                        final SaveResult r = storeAllergen(allergen);
+                        if (r == SaveResult.ALLERGY && res != SaveResult.ERROR)
+                            res = SaveResult.ALLERGY;
+                        if (r == SaveResult.ERROR)
+                            res = SaveResult.ERROR;
                     }
                     return res;
                 }

@@ -11,9 +11,11 @@ import android.widget.TextView;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import java.util.Collection;
+
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.allergies.AllergenListeners;
 import es.usc.citius.servando.calendula.activities.AllergiesActivity;
+import es.usc.citius.servando.calendula.allergies.AllergenListeners;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 
 /**
