@@ -35,6 +35,7 @@ public class PatientAllergen {
     public static final String COLUMN_IDENTIFIER = "Identifier";
     public static final String COLUMN_NAME = "Name";
     public static final String COLUMN_PATIENT = "Patient";
+    public static final String COLUMN_GROUP = "Group";
 
 
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
@@ -52,6 +53,9 @@ public class PatientAllergen {
     @DatabaseField(columnName = COLUMN_PATIENT, foreign = true, foreignAutoRefresh = true, uniqueCombo = true)
     private Patient patient;
 
+    @DatabaseField(columnName = COLUMN_GROUP)
+    private String group;
+
     public PatientAllergen() {
     }
 
@@ -62,11 +66,17 @@ public class PatientAllergen {
         this.patient = patient;
     }
 
+
     public PatientAllergen(AllergenVO allergenVO, Patient patient) {
         this.name = allergenVO.getName();
         this.type = allergenVO.getType();
         this.identifier = allergenVO.getIdentifier();
         this.patient = patient;
+    }
+
+    public PatientAllergen(AllergenVO allergenVO, Patient patient, String group) {
+        this(allergenVO, patient);
+        this.group = group;
     }
 
 
@@ -110,6 +120,14 @@ public class PatientAllergen {
         this.patient = patient;
     }
 
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
     @Override
     public String toString() {
         return "PatientAllergen{" +
@@ -118,6 +136,7 @@ public class PatientAllergen {
                 ", type=" + type +
                 ", identifier=" + identifier +
                 ", patient=" + patient +
+                ", group=" + group +
                 '}';
     }
 

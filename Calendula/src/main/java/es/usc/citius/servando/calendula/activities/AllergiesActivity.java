@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityManagerCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -310,19 +309,20 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
             List<PatientAllergen> pa = new ArrayList<>();
             Patient p = DB.patients().getActive(AllergiesActivity.this);
             for (IItem i : items[0]) {
-                AllergenVO vo = null;
                 switch (i.getType()) {
                     case R.id.fastadapter_allergen_group_sub_item:
-                        vo = ((AllergenGroupSubItem) i).getVo();
+                        final AllergenGroupSubItem item = (AllergenGroupSubItem) i;
+                        pa.add(new PatientAllergen(item.getVo(), p, item.getParent().getTitle()));
                         break;
                     case R.id.fastadapter_allergen_item:
-                        vo = ((AllergenItem) i).getVo();
+                        final AllergenItem item1 = (AllergenItem) i;
+                        pa.add(new PatientAllergen(item1.getVo(), p));
                         break;
                     default:
                         Log.wtf(TAG, "Invalid item type in adapter: " + i);
                         break;
                 }
-                pa.add(new PatientAllergen(vo, p));
+
             }
             final SaveResult r = store.storeAllergens(pa);
             return new Result(r == SaveResult.OK || r == SaveResult.ALLERGY, r == SaveResult.ALLERGY);

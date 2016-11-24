@@ -84,6 +84,10 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
         return this.title.compareTo(o.title);
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView title;
