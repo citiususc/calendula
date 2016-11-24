@@ -1,5 +1,6 @@
 package es.usc.citius.servando.calendula.adapters.items.allergylist;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -26,12 +27,13 @@ public class AllergyGroupItem extends AbstractExpandableItem<AllergyGroupItem, A
     private static final String TAG = "AllergyGroupItem";
     private final String title;
     private String subtitle;
+    private Context context;
     private ViewHolder holder;
 
 
-    public AllergyGroupItem(String title, String subtitle) {
+    public AllergyGroupItem(String title, Context ctx) {
         this.title = title;
-        this.subtitle = subtitle;
+        this.context = ctx;
     }
 
     public void setSubtitle(String subtitle) {
@@ -55,14 +57,14 @@ public class AllergyGroupItem extends AbstractExpandableItem<AllergyGroupItem, A
 
     @Override
     public boolean isAutoExpanding() {
-        return false;
+        return true;
     }
 
     @Override
     public void bindView(ViewHolder holder, List<Object> payloads) {
         super.bindView(holder, payloads);
         holder.title.setText(this.title);
-        holder.subtitle.setText(this.subtitle);
+        holder.subtitle.setText(context.getString(R.string.allergies_group_elements_number, getSubItems().size()));
 //        UIUtils.setBackground(holder.itemView, FastAdapterUIUtils.getSelectableBackground(holder.itemView.getContext(), Color.CYAN, true));
         final CommunityMaterial.Icon icon = AllergyGroupItem.this.isExpanded() ? CommunityMaterial.Icon.cmd_minus : CommunityMaterial.Icon.cmd_plus;
         holder.imageButton.setImageDrawable(new IconicsDrawable(holder.imageButton.getContext())

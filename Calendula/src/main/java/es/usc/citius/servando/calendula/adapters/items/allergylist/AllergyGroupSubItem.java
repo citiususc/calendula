@@ -10,7 +10,6 @@ import com.mikepenz.fastadapter.commons.items.AbstractExpandableItem;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 
 /**
