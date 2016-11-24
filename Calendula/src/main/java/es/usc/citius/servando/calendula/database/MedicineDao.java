@@ -78,6 +78,15 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
         CalendulaApp.eventBus().post(PersistenceEvents.MEDICINE_EVENT);
     }
 
+    @Override
+    public void saveAndFireEvent(Medicine model) {
+        save(model);
+        PersistenceEvents.ModelCreateOrUpdateEvent e = new PersistenceEvents.ModelCreateOrUpdateEvent(Medicine.class);
+        e.model = model;
+        CalendulaApp.eventBus().post(e);
+
+    }
+
     public void deleteCascade(final Medicine m, boolean fireEvent) {
 
         DB.transaction(new Callable<Object>() {

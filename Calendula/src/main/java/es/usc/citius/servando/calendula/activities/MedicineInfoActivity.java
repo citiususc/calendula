@@ -111,10 +111,7 @@ public class MedicineInfoActivity extends CalendulaActivity {
 
         toolbarLayout.setContentScrimColor(activePatient.color());
         toolbarLayout.setBackgroundColor(activePatient.color());
-
-        toolbarTitle.setText("Info | " + medicine.name());
-        ((TextView)findViewById(R.id.medicine_name)).setText(medicine.name());
-        medIcon.setImageDrawable(IconUtils.icon(this,medicine.presentation().icon(), R.color.white));
+        updateMedDetails();
         // Setup the tabLayout
         setupTabLayout();
 
@@ -140,6 +137,12 @@ public class MedicineInfoActivity extends CalendulaActivity {
 
         CalendulaApp.eventBus().register(this);
    }
+
+    private void updateMedDetails() {
+        toolbarTitle.setText("Info | " + medicine.name());
+        ((TextView)findViewById(R.id.medicine_name)).setText(medicine.name());
+        medIcon.setImageDrawable(IconUtils.icon(this,medicine.presentation().icon(), R.color.white));
+    }
 
 
     @Override
@@ -268,16 +271,28 @@ public class MedicineInfoActivity extends CalendulaActivity {
     public void onEvent(Object evt) {
         if (evt instanceof PersistenceEvents.ModelCreateOrUpdateEvent) {
             Class<?> cls = ((PersistenceEvents.ModelCreateOrUpdateEvent) evt).clazz;
-            if(cls.equals(Medicine.class)){
-                SnackbarManager.show(Snackbar.with(getApplicationContext())
-                                .type(SnackbarType.MULTI_LINE)
-                                .color(getResources().getColor(R.color.android_green_dark))
-                                .textColor(getResources().getColor(R.color.white))
-                                .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
-                                .text("¡Medicamento vinculado!")
-                        , this);
-                ((MedInfoFragment) getViewPagerFragment(0)).notifyDataChange();
-                ((AlertListFragment) getViewPagerFragment(1)).notifyDataChange();
+            Object model = ((PersistenceEvents.ModelCreateOrUpdateEvent) evt).model;
+            if(cls.equals(Medicine.class) && model!=null){
+
+                Medicine med = (Medicine) model;
+
+                if(med.getId() == medicine.getId()) {
+
+                    if(medicine.cn() == null && med.cn() != null) {
+                        SnackbarManager.show(Snackbar.with(getApplicationContext())
+                                        .type(SnackbarType.MULTI_LINE)
+                                        .color(getResources().getColor(R.color.android_green_dark))
+                                        .textColor(getResources().getColor(R.color.white))
+                                        .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
+                                        .text("¡Medicamento vinculado!")
+                                , this);
+                    }
+                    ((MedInfoFragment) getViewPagerFragment(0)).notifyDataChange();
+                    ((AlertListFragment) getViewPagerFragment(1)).notifyDataChange();
+                    DB.medicines().refresh(medicine);
+                    updateMedDetails();
+
+                }
             }
 
         }

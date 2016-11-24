@@ -37,7 +37,7 @@ public class PersistenceEvents {
 
     public static class ModelCreateOrUpdateEvent {
         public Class<?> clazz;
-
+        public Object model;
         public ModelCreateOrUpdateEvent(Class<?> clazz) {
             this.clazz = clazz;
         }
