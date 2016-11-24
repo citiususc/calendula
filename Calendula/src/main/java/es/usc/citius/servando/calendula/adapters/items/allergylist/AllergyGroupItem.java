@@ -1,4 +1,4 @@
-package es.usc.citius.servando.calendula.adapters.items;
+package es.usc.citius.servando.calendula.adapters.items.allergylist;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -20,16 +20,16 @@ import es.usc.citius.servando.calendula.R;
  * Created by alvaro.brey.vilas on 23/11/16.
  */
 
-public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem, AllergenGroupItem.ViewHolder, AllergenGroupSubItem> implements Comparable<AllergenGroupItem> {
+public class AllergyGroupItem extends AbstractExpandableItem<AllergyGroupItem, AllergyGroupItem.ViewHolder, AllergyGroupSubItem> implements Comparable<AllergyGroupItem> {
 
 
-    private static final String TAG = "AllergenGroupItem";
+    private static final String TAG = "AllergyGroupItem";
     private final String title;
     private String subtitle;
     private ViewHolder holder;
 
 
-    public AllergenGroupItem(String title, String subtitle) {
+    public AllergyGroupItem(String title, String subtitle) {
         this.title = title;
         this.subtitle = subtitle;
     }
@@ -40,7 +40,7 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
 
     @Override
     public int getType() {
-        return R.id.fastadapter_allergen_group_item;
+        return R.id.fastadapter_allergy_group_item;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
         holder.title.setText(this.title);
         holder.subtitle.setText(this.subtitle);
 //        UIUtils.setBackground(holder.itemView, FastAdapterUIUtils.getSelectableBackground(holder.itemView.getContext(), Color.CYAN, true));
-        final CommunityMaterial.Icon icon = AllergenGroupItem.this.isExpanded() ? CommunityMaterial.Icon.cmd_minus : CommunityMaterial.Icon.cmd_plus;
+        final CommunityMaterial.Icon icon = AllergyGroupItem.this.isExpanded() ? CommunityMaterial.Icon.cmd_minus : CommunityMaterial.Icon.cmd_plus;
         holder.imageButton.setImageDrawable(new IconicsDrawable(holder.imageButton.getContext())
                 .icon(icon)
                 .colorRes(R.color.agenda_item_title)
@@ -80,7 +80,7 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
     }
 
     @Override
-    public int compareTo(AllergenGroupItem o) {
+    public int compareTo(AllergyGroupItem o) {
         return this.title.compareTo(o.title);
     }
 
@@ -102,7 +102,7 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
         }
     }
 
-    public static class GroupExpandClickEvent extends ClickEventHook<AllergenGroupItem> {
+    public static class GroupExpandClickEvent extends ClickEventHook<AllergyGroupItem> {
         @Override
         public View onBind(@NonNull RecyclerView.ViewHolder viewHolder) {
             if (viewHolder instanceof ViewHolder) {
@@ -112,7 +112,7 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
         }
 
         @Override
-        public void onClick(View v, int position, FastAdapter<AllergenGroupItem> fastAdapter, AllergenGroupItem item) {
+        public void onClick(View v, int position, FastAdapter<AllergyGroupItem> fastAdapter, AllergyGroupItem item) {
             if (item.isExpanded()) {
                 fastAdapter.collapse(position);
                 ((ImageButton) v).setImageDrawable(new IconicsDrawable(v.getContext())

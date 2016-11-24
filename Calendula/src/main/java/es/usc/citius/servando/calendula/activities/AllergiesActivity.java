@@ -1,12 +1,12 @@
 package es.usc.citius.servando.calendula.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +28,7 @@ import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
+import com.mikepenz.fastadapter.listeners.ClickEventHook;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -40,13 +41,12 @@ import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.adapters.AllergiesAdapter;
-import es.usc.citius.servando.calendula.adapters.items.AllergenGroupItem;
-import es.usc.citius.servando.calendula.adapters.items.AllergenGroupSubItem;
-import es.usc.citius.servando.calendula.adapters.items.AllergenItem;
+import es.usc.citius.servando.calendula.adapters.items.allergensearch.AllergenGroupItem;
+import es.usc.citius.servando.calendula.adapters.items.allergensearch.AllergenGroupSubItem;
+import es.usc.citius.servando.calendula.adapters.items.allergensearch.AllergenItem;
+import es.usc.citius.servando.calendula.adapters.items.allergylist.AllergyItem;
 import es.usc.citius.servando.calendula.allergies.AllergenConversionUtil;
 import es.usc.citius.servando.calendula.allergies.AllergenFacade;
-import es.usc.citius.servando.calendula.allergies.AllergenListeners;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
 import es.usc.citius.servando.calendula.database.DB;
@@ -61,7 +61,7 @@ import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 
-public class AllergiesActivity extends CalendulaActivity implements AllergenListeners.DeleteAllergyActionListener {
+public class AllergiesActivity extends CalendulaActivity {
 
 
     private static final String TAG = "AllergiesActivity";
@@ -71,7 +71,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
     private EditText searchEditText;
     private RecyclerView searchList;
     private FastItemAdapter<AbstractItem> searchAdapter;
-    private AllergiesAdapter allergiesAdapter;
+    private FastItemAdapter allergiesAdapter;
     private RecyclerView allergiesRecycler;
     private AllergiesStore store;
     private TextView allergiesPlaceholder;
@@ -106,7 +106,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         store = new AllergiesStore();
 
         //setup recycler
-        setupRecyclerView();
+        setupAllergiesList();
         //setup FAB
         addButton = (AddFloatingActionButton) findViewById(R.id.add_button);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -129,12 +129,26 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
 
     }
 
-    private void setupRecyclerView() {
+    private void setupAllergiesList() {
         allergiesRecycler = (RecyclerView) findViewById(R.id.allergies_recycler);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         allergiesRecycler.setLayoutManager(llm);
-        allergiesAdapter = new AllergiesAdapter(store, this, this);
+        allergiesAdapter = new FastItemAdapter<>();
+        allergiesAdapter.withSelectable(false);
+        allergiesAdapter.withItemEvent(new ClickEventHook<AllergyItem>() {
+            @Override
+            public View onBind(@NonNull RecyclerView.ViewHolder viewHolder) {
+                if (viewHolder instanceof AllergyItem.ViewHolder)
+                    return ((AllergyItem.ViewHolder) viewHolder).deleteButton;
+                return null;
+            }
+
+            @Override
+            public void onClick(View v, int position, FastAdapter<AllergyItem> fastAdapter, AllergyItem item) {
+                showDeleteConfirmationDialog(item);
+            }
+        });
         allergiesRecycler.setAdapter(allergiesAdapter);
     }
 
@@ -256,7 +270,6 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         hideSearchView();
     }
 
-
     private void hideAllergiesView(boolean hide) {
         final int visibility = hide ? View.GONE : View.VISIBLE;
         allergiesRecycler.setVisibility(visibility);
@@ -271,10 +284,12 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         class Result {
             boolean saved;
             boolean allergies;
+            List<AbstractItem> allergyItems;
 
-            private Result(boolean saved, boolean allergies) {
+            public Result(boolean saved, boolean allergies, List<AbstractItem> allergyItems) {
                 this.saved = saved;
                 this.allergies = allergies;
+                this.allergyItems = allergyItems;
             }
         }
 
@@ -282,7 +297,8 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         protected void onPostExecute(Result res) {
             progressBar.setVisibility(View.GONE);
             if (res.saved) {
-                allergiesAdapter.notifyDataSetChanged();
+                if (!res.allergyItems.isEmpty())
+                    allergiesAdapter.set(res.allergyItems);
                 if (res.allergies)
                     showNewAllergyConflictDialog();
                 hideAllergiesView(false);
@@ -325,7 +341,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
 
             }
             final SaveResult r = store.storeAllergens(pa);
-            return new Result(r == SaveResult.OK || r == SaveResult.ALLERGY, r == SaveResult.ALLERGY);
+            return new Result(r == SaveResult.OK || r == SaveResult.ALLERGY, r == SaveResult.ALLERGY, getAllergyItems());
         }
     }
 
@@ -410,7 +426,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         }
     }
 
-    private class LoadAllergiesTask extends AsyncTask<Void, Void, Void> {
+    private class LoadAllergiesTask extends AsyncTask<Void, Void, List<AbstractItem>> {
 
         @Override
         protected void onPreExecute() {
@@ -420,21 +436,31 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            allergiesAdapter.notifyDataSetChanged();
+        protected void onPostExecute(List<AbstractItem> items) {
+            allergiesAdapter.add(items);
             progressBar.setVisibility(View.GONE);
             checkPlaceholder();
             hideAllergiesView(false);
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected List<AbstractItem> doInBackground(Void... params) {
             store.load(AllergiesActivity.this);
-            return null;
+            List<AbstractItem> items = getAllergyItems();
+            return items;
         }
     }
 
-    private class DeleteAllergyTask extends AsyncTask<PatientAllergen, Void, Integer> {
+    private List<AbstractItem> getAllergyItems() {
+        final List<PatientAllergen> allergies = store.getAllergies();
+        List<AbstractItem> items = new ArrayList<>(allergies.size());
+        for (PatientAllergen allergen : allergies) {
+            items.add(new AllergyItem(allergen, AllergiesActivity.this));
+        }
+        return items;
+    }
+
+    private class DeleteAllergyTask extends AsyncTask<AllergyItem, Void, Integer> {
 
         @Override
         protected void onPreExecute() {
@@ -446,7 +472,6 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         protected void onPostExecute(Integer index) {
             if (index >= 0) {
                 checkPlaceholder();
-                doSearch();
                 allergiesAdapter.remove(index);
             } else {
                 Snack.show(R.string.delete_allergen_error, AllergiesActivity.this);
@@ -457,12 +482,13 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         }
 
         @Override
-        protected Integer doInBackground(PatientAllergen... params) {
+        protected Integer doInBackground(AllergyItem... params) {
             if (params.length != 1) {
                 Log.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + params.length);
                 throw new IllegalArgumentException("Invalid argument length");
             }
-            int index = store.deleteAllergen(params[0]);
+            int index = allergiesAdapter.getAdapterPosition(params[0]);
+            store.deleteAllergen(params[0].getAllergen());
             return index;
         }
     }
@@ -552,10 +578,9 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
         return dao;
     }
 
-    private void showDeleteConfirmationDialog(final PatientAllergen a) {
+    private void showDeleteConfirmationDialog(final AllergyItem a) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final Activity ac = this;
-        builder.setMessage(String.format(getString(R.string.remove_allergy_message_short), a.getName()))
+        builder.setMessage(String.format(getString(R.string.remove_allergy_message_short), a.getAllergen().getName()))
                 .setCancelable(true)
                 .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -623,12 +648,6 @@ public class AllergiesActivity extends CalendulaActivity implements AllergenList
             });
         }
         return !conflicts.isEmpty();
-    }
-
-    @Override
-    public void onDeleteAction(PatientAllergen allergen) {
-        Log.d(TAG, "onDeleteAction: deleting allergy " + allergen);
-        showDeleteConfirmationDialog(allergen);
     }
 
     private class ReloadDataTask extends AsyncTask<Void, Void, Void> {

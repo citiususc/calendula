@@ -1,4 +1,4 @@
-package es.usc.citius.servando.calendula.adapters.items;
+package es.usc.citius.servando.calendula.adapters.items.allergensearch;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
