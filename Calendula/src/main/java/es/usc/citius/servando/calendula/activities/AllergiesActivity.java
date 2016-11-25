@@ -36,9 +36,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
@@ -605,19 +609,41 @@ public class AllergiesActivity extends CalendulaActivity implements AllergyGroup
             final List<AllergenVO> patientAllergies = store.getAllergiesVO();
             allergenVOs.removeAll(patientAllergies);
 
+            //find words for groups
             final Map<String, List<AllergenVO>> groups = new ArrayMap<>();
-            groups.put("Lactosa", new ArrayList<AllergenVO>());
-
             final List<AllergenVO> toRemove = new ArrayList<>();
+//            String lookRegex = "\\b" + filter;
+//            Pattern look = Pattern.compile(lookRegex, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+            String getRegex = ".*\\b(" + filter.trim() + "\\w*).*";
+            Log.d(TAG, "doInBackground: regex is " + getRegex);
+            Pattern search = Pattern.compile(getRegex, Pattern.CASE_INSENSITIVE);
+            for (AllergenVO allergenVO : allergenVOs) {
+                String name = allergenVO.getName();
+                final Matcher matcher = search.matcher(name);
+                if (matcher.matches()) {
+                    String groupname = matcher.group().trim().toLowerCase();
+                    groupname = Character.toUpperCase(groupname.charAt(0)) + groupname.substring(1);
 
-            // TODO: 23/11/16 generate groups dynamically
-            for (AllergenVO vo : allergenVOs) {
-                if (vo.getName().contains("Lactosa")) {
-                    groups.get("Lactosa").add(vo);
-                    toRemove.add(vo);
+                    if (groups.keySet().contains(groupname)) {
+                        groups.get(groupname).add(allergenVO);
+                    } else {
+                        groups.put(groupname, new ArrayList<>(Collections.singletonList(allergenVO)));
+                    }
+                    toRemove.add(allergenVO);
                 }
             }
 
+            // delete groups with only one element
+            final Set<String> keySet = new HashSet<>(groups.keySet());
+            for (String k : keySet) {
+                final List<AllergenVO> members = groups.get(k);
+                if (members.size() == 1) {
+                    groups.remove(k);
+                    toRemove.remove(members.get(0));
+                }
+            }
+
+            // sort elements into groups
             allergenVOs.removeAll(toRemove);
             List<AbstractItem> items = new ArrayList<>();
             for (String s : groups.keySet()) {
