@@ -1,17 +1,16 @@
 package es.usc.citius.servando.calendula.adapters.items.allergylist;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.commons.items.AbstractExpandableItem;
-import com.mikepenz.fastadapter.listeners.ClickEventHook;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 
 import java.util.List;
 
@@ -26,18 +25,15 @@ public class AllergyGroupItem extends AbstractExpandableItem<AllergyGroupItem, A
 
     private static final String TAG = "AllergyGroupItem";
     private final String title;
-    private String subtitle;
     private Context context;
+    private AllergyGroupListener listener;
     private ViewHolder holder;
 
 
-    public AllergyGroupItem(String title, Context ctx) {
+    public AllergyGroupItem(String title, Context ctx, AllergyGroupListener listener) {
         this.title = title;
         this.context = ctx;
-    }
-
-    public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
+        this.listener = listener;
     }
 
     @Override
@@ -47,7 +43,7 @@ public class AllergyGroupItem extends AbstractExpandableItem<AllergyGroupItem, A
 
     @Override
     public int getLayoutRes() {
-        return R.layout.allergen_search_group_list_item;
+        return R.layout.allergen_group_list_item;
     }
 
     @Override
@@ -57,21 +53,44 @@ public class AllergyGroupItem extends AbstractExpandableItem<AllergyGroupItem, A
 
     @Override
     public boolean isAutoExpanding() {
-        return true;
+        return false;
     }
 
     @Override
-    public void bindView(ViewHolder holder, List<Object> payloads) {
+    public void bindView(final ViewHolder holder, List<Object> payloads) {
         super.bindView(holder, payloads);
+        this.holder = holder;
         holder.title.setText(this.title);
         holder.subtitle.setText(context.getString(R.string.allergies_group_elements_number, getSubItems().size()));
 //        UIUtils.setBackground(holder.itemView, FastAdapterUIUtils.getSelectableBackground(holder.itemView.getContext(), Color.CYAN, true));
-        final CommunityMaterial.Icon icon = AllergyGroupItem.this.isExpanded() ? CommunityMaterial.Icon.cmd_minus : CommunityMaterial.Icon.cmd_plus;
-        holder.imageButton.setImageDrawable(new IconicsDrawable(holder.imageButton.getContext())
+        final MaterialDesignIconic.Icon icon = MaterialDesignIconic.Icon.gmi_chevron_down;
+        holder.dropButton.setImageDrawable(new IconicsDrawable(holder.dropButton.getContext())
                 .icon(icon)
+                //.color(0xFF222222)
                 .colorRes(R.color.agenda_item_title)
                 .paddingDp(10)
                 .sizeDp(38));
+        holder.dropButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AllergyGroupItem k = AllergyGroupItem.this;
+                boolean expand = !k.isExpanded();
+                listener.expandButton(k, expand);
+                float rotate = expand ? 180 : 0;
+                ViewCompat.animate(holder.dropButton).rotation(rotate);
+            }
+        });
+        holder.deleteButton.setImageDrawable(new IconicsDrawable(holder.deleteButton.getContext())
+                .icon(CommunityMaterial.Icon.cmd_delete)
+                .colorRes(R.color.agenda_item_title)
+                .paddingDp(10)
+                .sizeDp(38));
+        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.deleteButton(AllergyGroupItem.this);
+            }
+        });
     }
 
     @Override
@@ -79,6 +98,7 @@ public class AllergyGroupItem extends AbstractExpandableItem<AllergyGroupItem, A
         super.unbindView(holder);
         holder.title.setText(null);
         holder.subtitle.setText(null);
+        this.holder = null;
     }
 
     @Override
@@ -90,47 +110,28 @@ public class AllergyGroupItem extends AbstractExpandableItem<AllergyGroupItem, A
         return title;
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView title;
         protected TextView subtitle;
-        protected ImageButton imageButton;
+        public ImageButton dropButton;
+        public ImageButton deleteButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.text1);
             subtitle = (TextView) itemView.findViewById(R.id.text2);
-            imageButton = (ImageButton) itemView.findViewById(R.id.group_button);
+            dropButton = (ImageButton) itemView.findViewById(R.id.group_button);
+            deleteButton = (ImageButton) itemView.findViewById(R.id.delete_button);
         }
     }
 
-    public static class GroupExpandClickEvent extends ClickEventHook<AllergyGroupItem> {
-        @Override
-        public View onBind(@NonNull RecyclerView.ViewHolder viewHolder) {
-            if (viewHolder instanceof ViewHolder) {
-                return ((ViewHolder) viewHolder).imageButton;
-            }
-            return null;
-        }
+    public interface AllergyGroupListener {
 
-        @Override
-        public void onClick(View v, int position, FastAdapter<AllergyGroupItem> fastAdapter, AllergyGroupItem item) {
-            if (item.isExpanded()) {
-                fastAdapter.collapse(position);
-                ((ImageButton) v).setImageDrawable(new IconicsDrawable(v.getContext())
-                        .icon(CommunityMaterial.Icon.cmd_plus)
-                        .colorRes(R.color.agenda_item_title)
-                        .paddingDp(10)
-                        .sizeDp(38));
-            } else {
-                fastAdapter.expand(position);
-                ((ImageButton) v).setImageDrawable(new IconicsDrawable(v.getContext())
-                        .icon(CommunityMaterial.Icon.cmd_minus)
-                        .colorRes(R.color.agenda_item_title)
-                        .paddingDp(10)
-                        .sizeDp(38));
-            }
-        }
+        public void expandButton(AllergyGroupItem item, boolean expanded);
+
+        public void deleteButton(AllergyGroupItem item);
     }
+
 
 }

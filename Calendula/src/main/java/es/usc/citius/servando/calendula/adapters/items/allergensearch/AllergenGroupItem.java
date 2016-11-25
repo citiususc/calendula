@@ -1,20 +1,22 @@
 package es.usc.citius.servando.calendula.adapters.items.allergensearch;
 
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.commons.items.AbstractExpandableItem;
 import com.mikepenz.fastadapter.listeners.ClickEventHook;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 
 /**
  * Created by alvaro.brey.vilas on 23/11/16.
@@ -26,7 +28,6 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
     private static final String TAG = "AllergyGroupItem";
     private final String title;
     private String subtitle;
-    private ViewHolder holder;
 
 
     public AllergenGroupItem(String title, String subtitle) {
@@ -64,7 +65,7 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
         holder.title.setText(this.title);
         holder.subtitle.setText(this.subtitle);
 //        UIUtils.setBackground(holder.itemView, FastAdapterUIUtils.getSelectableBackground(holder.itemView.getContext(), Color.CYAN, true));
-        final CommunityMaterial.Icon icon = AllergenGroupItem.this.isExpanded() ? CommunityMaterial.Icon.cmd_minus : CommunityMaterial.Icon.cmd_plus;
+        final MaterialDesignIconic.Icon icon = MaterialDesignIconic.Icon.gmi_chevron_down;
         holder.imageButton.setImageDrawable(new IconicsDrawable(holder.imageButton.getContext())
                 .icon(icon)
                 .colorRes(R.color.agenda_item_title)
@@ -115,18 +116,10 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
         public void onClick(View v, int position, FastAdapter<AllergenGroupItem> fastAdapter, AllergenGroupItem item) {
             if (item.isExpanded()) {
                 fastAdapter.collapse(position);
-                ((ImageButton) v).setImageDrawable(new IconicsDrawable(v.getContext())
-                        .icon(CommunityMaterial.Icon.cmd_plus)
-                        .colorRes(R.color.agenda_item_title)
-                        .paddingDp(10)
-                        .sizeDp(38));
+                ViewCompat.animate(v).rotation(0);
             } else {
                 fastAdapter.expand(position);
-                ((ImageButton) v).setImageDrawable(new IconicsDrawable(v.getContext())
-                        .icon(CommunityMaterial.Icon.cmd_minus)
-                        .colorRes(R.color.agenda_item_title)
-                        .paddingDp(10)
-                        .sizeDp(38));
+                ViewCompat.animate(v).rotation(180);
             }
         }
     }

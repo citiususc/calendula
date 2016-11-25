@@ -64,7 +64,7 @@ import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 
-public class AllergiesActivity extends CalendulaActivity {
+public class AllergiesActivity extends CalendulaActivity implements AllergyGroupItem.AllergyGroupListener {
 
 
     private static final String TAG = "AllergiesActivity";
@@ -182,16 +182,18 @@ public class AllergiesActivity extends CalendulaActivity {
         allergiesAdapter.withSelectable(false);
         allergiesAdapter.withItemEvent(new ClickEventHook<AllergyItem>() {
             @Override
+            public void onClick(View v, int position, FastAdapter<AllergyItem> fastAdapter, AllergyItem item) {
+                if (v != null)
+                    showDeleteConfirmationDialog(item);
+            }
+
+            @Override
             public View onBind(@NonNull RecyclerView.ViewHolder viewHolder) {
                 if (viewHolder instanceof AllergyItem.ViewHolder)
                     return ((AllergyItem.ViewHolder) viewHolder).deleteButton;
                 return null;
             }
 
-            @Override
-            public void onClick(View v, int position, FastAdapter<AllergyItem> fastAdapter, AllergyItem item) {
-                showDeleteConfirmationDialog(item);
-            }
         });
         allergiesRecycler.setAdapter(allergiesAdapter);
     }
@@ -300,7 +302,7 @@ public class AllergiesActivity extends CalendulaActivity {
         }
         allergies.removeAll(toRemove);
         for (String key : groups.keySet()) {
-            AllergyGroupItem g = new AllergyGroupItem(key, this);
+            AllergyGroupItem g = new AllergyGroupItem(key, this, this);
             g.withSubItems(groups.get(key));
             items.add(g);
         }
@@ -414,6 +416,25 @@ public class AllergiesActivity extends CalendulaActivity {
         alert.show();
     }
 
+    private void showDeleteConfirmationDialog(final AllergyGroupItem a) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(String.format(getString(R.string.remove_allergy_message_short), a.getTitle()))
+                .setCancelable(true)
+                .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        new DeleteAllergyGroupTask().execute(a);
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
     private void showNewAllergyConflictDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.title_allergies_detected_dialog)
@@ -465,6 +486,21 @@ public class AllergiesActivity extends CalendulaActivity {
             });
         }
         return !conflicts.isEmpty();
+    }
+
+    @Override
+    public void expandButton(AllergyGroupItem item, boolean expanded) {
+        Log.d(TAG, "expandButton() called with: item = [" + item + "], expanded = [" + expanded + "]");
+        final int pos = allergiesAdapter.getAdapterPosition(item);
+        if (expanded)
+            allergiesAdapter.expand(pos);
+        else
+            allergiesAdapter.collapse(pos);
+    }
+
+    @Override
+    public void deleteButton(AllergyGroupItem item) {
+        showDeleteConfirmationDialog(item);
     }
 
     public enum SaveResult {
@@ -682,6 +718,49 @@ public class AllergiesActivity extends CalendulaActivity {
         }
     }
 
+    private class DeleteAllergyGroupTask extends AsyncTask<AllergyGroupItem, Void, Integer> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(Integer index) {
+            if (index >= 0) {
+                store.reload();
+                checkPlaceholder();
+                allergiesAdapter.collapse(index);
+                allergiesAdapter.remove(index);
+            } else {
+                Snack.show(R.string.delete_allergen_error, AllergiesActivity.this);
+            }
+            progressBar.setVisibility(View.GONE);
+            checkPlaceholder();
+            hideAllergiesView(false);
+        }
+
+        @Override
+        protected Integer doInBackground(AllergyGroupItem... params) {
+            Log.d(TAG, "doInBackground() called with: params = [" + params + "]");
+            if (params.length != 1) {
+                Log.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + params.length);
+                throw new IllegalArgumentException("Invalid argument length");
+            }
+            int index = allergiesAdapter.getAdapterPosition(params[0]);
+
+            final List<AllergyGroupSubItem> subItems = params[0].getSubItems();
+            final List<PatientAllergen> allergens = new ArrayList<>(subItems.size());
+            for (AllergyGroupSubItem subItem : subItems) {
+                allergens.add(subItem.getAllergen());
+            }
+
+            int k = store.deleteAllergens(allergens);
+            return k >= 0 ? index : k;
+        }
+    }
+
     public class AllergiesStore {
 
 
@@ -752,9 +831,24 @@ public class AllergiesActivity extends CalendulaActivity {
                 return index;
             } catch (SQLException e) {
                 Log.e(TAG, "Couldn't delete allergen " + a, e);
-                return -1;
+                return -2;
             }
 
+        }
+
+        public int deleteAllergens(final List<PatientAllergen> a) {
+            return (int) DB.transaction(new Callable<Integer>() {
+                @Override
+                public Integer call() throws Exception {
+                    int res = 0;
+                    for (PatientAllergen patientAllergen : a) {
+                        res = deleteAllergen(patientAllergen);
+                        if (res == -2)
+                            break;
+                    }
+                    return res;
+                }
+            });
         }
 
         public List<PatientAllergen> getAllergies() {
