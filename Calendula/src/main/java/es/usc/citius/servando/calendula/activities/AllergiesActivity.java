@@ -66,6 +66,7 @@ import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert.AllergyAlertInfo;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.Snack;
+import es.usc.citius.servando.calendula.util.StringUtils;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 
 public class AllergiesActivity extends CalendulaActivity implements AllergyGroupItem.AllergyGroupListener {
@@ -88,6 +89,29 @@ public class AllergiesActivity extends CalendulaActivity implements AllergyGroup
     private FloatingActionButton selectFab;
     private LinearLayout selectLayout;
     private TextView selectText;
+
+    // TODO: 25/11/16 load this from database/config file/something
+    static class AllergyGroup {
+        String name;
+        String[] templates;
+
+        public AllergyGroup(String name, String[] templates) {
+            this.templates = templates;
+            this.name = name;
+        }
+    }
+
+    private static final List<AllergyGroup> groups;
+
+    static {
+        groups = new ArrayList<>();
+        groups.add(new AllergyGroup("Lactosa", new String[]{"lactosa", "lácteo", "lacteo", "lácteos", "lacteos", "leche"}));
+        groups.add(new AllergyGroup("Calcio", new String[]{"calcio", "cálcico", "calcico"}));
+        groups.add(new AllergyGroup("Sodio", new String[]{"sodio", "sódico", "trisodio", "disodio"}));
+        groups.add(new AllergyGroup("Ibuprofeno",new String[]{"ibuprofeno"}));
+    }
+
+
     private FastAdapter.OnClickListener<AbstractItem> cl = new FastAdapter.OnClickListener<AbstractItem>() {
         @Override
         public boolean onClick(View v, IAdapter<AbstractItem> adapter, AbstractItem item, int position) {
@@ -610,38 +634,34 @@ public class AllergiesActivity extends CalendulaActivity implements AllergyGroup
             allergenVOs.removeAll(patientAllergies);
 
             //find words for groups
+            final Map<String, Pattern> groupPatterns = new ArrayMap<>();
+            for (AllergyGroup group : groups) {
+                String regex = "\\b(" + StringUtils.join(group.templates, "|") + ")\\b";
+                Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+                groupPatterns.put(group.name, p);
+            }
+
+
             final Map<String, List<AllergenVO>> groups = new ArrayMap<>();
             final List<AllergenVO> toRemove = new ArrayList<>();
-//            String lookRegex = "\\b" + filter;
-//            Pattern look = Pattern.compile(lookRegex, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
-            String getRegex = ".*\\b(" + filter.trim() + "\\w*).*";
-            Log.d(TAG, "doInBackground: regex is " + getRegex);
-            Pattern search = Pattern.compile(getRegex, Pattern.CASE_INSENSITIVE);
-            for (AllergenVO allergenVO : allergenVOs) {
-                String name = allergenVO.getName();
-                final Matcher matcher = search.matcher(name);
-                if (matcher.matches()) {
-                    String groupname = matcher.group().trim().toLowerCase();
-                    groupname = Character.toUpperCase(groupname.charAt(0)) + groupname.substring(1);
 
-                    if (groups.keySet().contains(groupname)) {
-                        groups.get(groupname).add(allergenVO);
-                    } else {
-                        groups.put(groupname, new ArrayList<>(Collections.singletonList(allergenVO)));
+            for (AllergenVO vo : allergenVOs) {
+                for (String k : groupPatterns.keySet()) {
+                    Pattern p = groupPatterns.get(k);
+                    if (p.matcher(vo.getName()).find()) {
+                        if (groups.keySet().contains(k)) {
+                            groups.get(k).add(vo);
+                        } else {
+                            ArrayList<AllergenVO> vos = new ArrayList<>();
+                            vos.add(vo);
+                            groups.put(k, vos);
+                        }
+                        toRemove.add(vo);
+                        break;
                     }
-                    toRemove.add(allergenVO);
                 }
             }
 
-            // delete groups with only one element
-            final Set<String> keySet = new HashSet<>(groups.keySet());
-            for (String k : keySet) {
-                final List<AllergenVO> members = groups.get(k);
-                if (members.size() == 1) {
-                    groups.remove(k);
-                    toRemove.remove(members.get(0));
-                }
-            }
 
             // sort elements into groups
             allergenVOs.removeAll(toRemove);
