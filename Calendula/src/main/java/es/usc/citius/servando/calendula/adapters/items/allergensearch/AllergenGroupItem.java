@@ -8,7 +8,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.IExpandable;
 import com.mikepenz.fastadapter.commons.items.AbstractExpandableItem;
+import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.listeners.ClickEventHook;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
@@ -103,7 +105,19 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
         }
     }
 
-    public static class GroupExpandClickEvent extends ClickEventHook<AllergenGroupItem> {
+    public static class GroupExpandClickEvent extends ClickEventHook<AbstractItem> {
+        @Override
+        public void onClick(View view, int i, FastAdapter<AbstractItem> fastAdapter, AbstractItem item) {
+            IExpandable it = (IExpandable) item;
+            if (it.isExpanded()) {
+                fastAdapter.collapse(i);
+                ViewCompat.animate(view).rotation(0);
+            } else {
+                fastAdapter.expand(i);
+                ViewCompat.animate(view).rotation(180);
+            }
+        }
+
         @Override
         public View onBind(@NonNull RecyclerView.ViewHolder viewHolder) {
             if (viewHolder instanceof ViewHolder) {
@@ -112,16 +126,6 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
             return null;
         }
 
-        @Override
-        public void onClick(View v, int position, FastAdapter<AllergenGroupItem> fastAdapter, AllergenGroupItem item) {
-            if (item.isExpanded()) {
-                fastAdapter.collapse(position);
-                ViewCompat.animate(v).rotation(0);
-            } else {
-                fastAdapter.expand(position);
-                ViewCompat.animate(v).rotation(180);
-            }
-        }
     }
 
 }

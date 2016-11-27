@@ -26,14 +26,11 @@ public class AllergyGroupItem extends AbstractExpandableItem<AllergyGroupItem, A
     private static final String TAG = "AllergyGroupItem";
     private final String title;
     private Context context;
-    private AllergyGroupListener listener;
-    private ViewHolder holder;
 
 
-    public AllergyGroupItem(String title, Context ctx, AllergyGroupListener listener) {
+    public AllergyGroupItem(String title, Context ctx) {
         this.title = title;
         this.context = ctx;
-        this.listener = listener;
     }
 
     @Override
@@ -59,7 +56,6 @@ public class AllergyGroupItem extends AbstractExpandableItem<AllergyGroupItem, A
     @Override
     public void bindView(final ViewHolder holder, List<Object> payloads) {
         super.bindView(holder, payloads);
-        this.holder = holder;
         holder.title.setText(this.title);
         holder.subtitle.setText(context.getString(R.string.allergies_group_elements_number, getSubItems().size()));
 //        UIUtils.setBackground(holder.itemView, FastAdapterUIUtils.getSelectableBackground(holder.itemView.getContext(), Color.CYAN, true));
@@ -70,27 +66,11 @@ public class AllergyGroupItem extends AbstractExpandableItem<AllergyGroupItem, A
                 .colorRes(R.color.agenda_item_title)
                 .paddingDp(10)
                 .sizeDp(38));
-        holder.dropButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AllergyGroupItem k = AllergyGroupItem.this;
-                boolean expand = !k.isExpanded();
-                listener.expandButton(k, expand);
-                float rotate = expand ? 180 : 0;
-                ViewCompat.animate(holder.dropButton).rotation(rotate);
-            }
-        });
         holder.deleteButton.setImageDrawable(new IconicsDrawable(holder.deleteButton.getContext())
                 .icon(CommunityMaterial.Icon.cmd_delete)
                 .colorRes(R.color.agenda_item_title)
                 .paddingDp(10)
                 .sizeDp(38));
-        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.deleteButton(AllergyGroupItem.this);
-            }
-        });
     }
 
     @Override
@@ -98,7 +78,6 @@ public class AllergyGroupItem extends AbstractExpandableItem<AllergyGroupItem, A
         super.unbindView(holder);
         holder.title.setText(null);
         holder.subtitle.setText(null);
-        this.holder = null;
     }
 
     @Override
@@ -125,13 +104,5 @@ public class AllergyGroupItem extends AbstractExpandableItem<AllergyGroupItem, A
             deleteButton = (ImageButton) itemView.findViewById(R.id.delete_button);
         }
     }
-
-    public interface AllergyGroupListener {
-
-        public void expandButton(AllergyGroupItem item, boolean expanded);
-
-        public void deleteButton(AllergyGroupItem item);
-    }
-
 
 }

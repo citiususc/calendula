@@ -7,7 +7,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,12 +38,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import es.usc.citius.servando.calendula.CalendulaActivity;
@@ -69,7 +68,7 @@ import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.StringUtils;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 
-public class AllergiesActivity extends CalendulaActivity implements AllergyGroupItem.AllergyGroupListener {
+public class AllergiesActivity extends CalendulaActivity {
 
 
     private static final String TAG = "AllergiesActivity";
@@ -108,7 +107,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergyGroup
         groups.add(new AllergyGroup("Lactosa", new String[]{"lactosa", "lácteo", "lacteo", "lácteos", "lacteos", "leche"}));
         groups.add(new AllergyGroup("Calcio", new String[]{"calcio", "cálcico", "calcico"}));
         groups.add(new AllergyGroup("Sodio", new String[]{"sodio", "sódico", "trisodio", "disodio"}));
-        groups.add(new AllergyGroup("Ibuprofeno",new String[]{"ibuprofeno"}));
+        groups.add(new AllergyGroup("Ibuprofeno", new String[]{"ibuprofeno"}));
     }
 
 
@@ -208,20 +207,57 @@ public class AllergiesActivity extends CalendulaActivity implements AllergyGroup
         allergiesRecycler.setLayoutManager(llm);
         allergiesAdapter = new FastItemAdapter<>();
         allergiesAdapter.withSelectable(false);
-        allergiesAdapter.withItemEvent(new ClickEventHook<AllergyItem>() {
-            @Override
-            public void onClick(View v, int position, FastAdapter<AllergyItem> fastAdapter, AllergyItem item) {
-                if (v != null)
-                    showDeleteConfirmationDialog(item);
-            }
+        allergiesAdapter.withItemEvent(new ClickEventHook<AbstractItem>() {
 
+            @Nullable
             @Override
-            public View onBind(@NonNull RecyclerView.ViewHolder viewHolder) {
-                if (viewHolder instanceof AllergyItem.ViewHolder)
-                    return ((AllergyItem.ViewHolder) viewHolder).deleteButton;
+            public List<View> onBindMany(@NonNull RecyclerView.ViewHolder viewHolder) {
+                List<View> vl = new ArrayList<>();
+                if (viewHolder instanceof AllergyGroupItem.ViewHolder) {
+                    AllergyGroupItem.ViewHolder vh = (AllergyGroupItem.ViewHolder) viewHolder;
+                    vl.add(vh.deleteButton);
+                    vl.add(vh.dropButton);
+                    return vl;
+                } else if (viewHolder instanceof AllergyItem.ViewHolder) {
+                    vl.add(((AllergyItem.ViewHolder) viewHolder).deleteButton);
+                    return vl;
+                }
                 return null;
             }
 
+            @Override
+            public void onClick(View view, int i, FastAdapter fastAdapter, AbstractItem item) {
+                Log.d(TAG, "onEvent() called with: view = [" + view + ", i = [" + i + "], fastAdapter = [" + fastAdapter + "], item = [" + item + "]");
+                switch (view.getId()) {
+                    case R.id.delete_button:
+                        // check if group or item
+                        switch (item.getType()) {
+                            case R.id.fastadapter_allergy_group_item:
+                                showDeleteConfirmationDialog((AllergyGroupItem) item);
+                                break;
+                            case R.id.fastadapter_allergy_item:
+                                showDeleteConfirmationDialog((AllergyItem) item);
+                                break;
+                            default:
+                                Log.w(TAG, "onClick: Unexpected item type: " + item);
+                                break;
+                        }
+                        break;
+                    case R.id.group_button:
+                        AllergyGroupItem g = (AllergyGroupItem) item;
+                        boolean expand = !g.isExpanded();
+                        float angle = expand ? 180 : 0;
+                        ViewCompat.animate(view).rotation(angle);
+                        if (expand)
+                            allergiesAdapter.expand(i);
+                        else
+                            allergiesAdapter.collapse(i);
+                        break;
+                    default:
+                        Log.w(TAG, "onClick: Unexpected view type on click hook: " + view);
+                        break;
+                }
+            }
         });
         allergiesRecycler.setAdapter(allergiesAdapter);
     }
@@ -330,7 +366,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergyGroup
         }
         allergies.removeAll(toRemove);
         for (String key : groups.keySet()) {
-            AllergyGroupItem g = new AllergyGroupItem(key, this, this);
+            AllergyGroupItem g = new AllergyGroupItem(key, this);
             g.withSubItems(groups.get(key));
             items.add(g);
         }
@@ -514,21 +550,6 @@ public class AllergiesActivity extends CalendulaActivity implements AllergyGroup
             });
         }
         return !conflicts.isEmpty();
-    }
-
-    @Override
-    public void expandButton(AllergyGroupItem item, boolean expanded) {
-        Log.d(TAG, "expandButton() called with: item = [" + item + "], expanded = [" + expanded + "]");
-        final int pos = allergiesAdapter.getAdapterPosition(item);
-        if (expanded)
-            allergiesAdapter.expand(pos);
-        else
-            allergiesAdapter.collapse(pos);
-    }
-
-    @Override
-    public void deleteButton(AllergyGroupItem item) {
-        showDeleteConfirmationDialog(item);
     }
 
     public enum SaveResult {
@@ -803,7 +824,7 @@ public class AllergiesActivity extends CalendulaActivity implements AllergyGroup
             }
 
             int k = store.deleteAllergens(allergens);
-            return k >= 0 ? index : k;
+            return k >= -1 ? index : k;
         }
     }
 
