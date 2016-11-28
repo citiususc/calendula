@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
@@ -303,7 +304,12 @@ public class AllergiesActivity extends CalendulaActivity {
                     if (searchAdapter.getItemCount() > 0) {
                         searchAdapter.clear();
                     }
-                    checkSearchPlaceholder();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            checkSearchPlaceholder();
+                        }
+                    }, 200);
                 }
             }
         });
@@ -753,7 +759,12 @@ public class AllergiesActivity extends CalendulaActivity {
                 Snack.show(R.string.delete_allergen_error, AllergiesActivity.this);
             }
             progressBar.setVisibility(View.GONE);
-            checkPlaceholder();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    checkPlaceholder();
+                }
+            }, 200);
             hideAllergiesView(false);
         }
 
@@ -788,7 +799,12 @@ public class AllergiesActivity extends CalendulaActivity {
                 Snack.show(R.string.delete_allergen_error, AllergiesActivity.this);
             }
             progressBar.setVisibility(View.GONE);
-            checkPlaceholder();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    checkPlaceholder();
+                }
+            }, 200);
             hideAllergiesView(false);
         }
 
