@@ -159,7 +159,8 @@ public class AllergiesActivity extends CalendulaActivity {
 
         //retrieve allergy groups
         groups = DB.allergyGroups().findAll();
-        Collections.sort(groups);
+        if (groups != null && !groups.isEmpty())
+            Collections.sort(groups);
 
         //setup recycler
         setupAllergiesList();
@@ -644,54 +645,56 @@ public class AllergiesActivity extends CalendulaActivity {
             final List<AllergenVO> patientAllergies = store.getAllergiesVO();
             allergenVOs.removeAll(patientAllergies);
 
-            //find words for groups
-            final Map<String, Pattern> groupPatterns = new ArrayMap<>();
-            for (AllergyGroup group : groups) {
-                String regex = "\\b(" + group.getExpression() + ")\\b";
-                Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
-                groupPatterns.put(group.getName(), p);
-            }
-
-
-            final Map<String, List<AllergenVO>> groups = new ArrayMap<>();
-            final List<AllergenVO> toRemove = new ArrayList<>();
-
-            for (AllergenVO vo : allergenVOs) {
-                for (String k : groupPatterns.keySet()) {
-                    Pattern p = groupPatterns.get(k);
-                    if (p.matcher(vo.getName()).find()) {
-                        if (groups.keySet().contains(k)) {
-                            groups.get(k).add(vo);
-                        } else {
-                            ArrayList<AllergenVO> vos = new ArrayList<>();
-                            vos.add(vo);
-                            groups.put(k, vos);
-                        }
-                        toRemove.add(vo);
-                        break;
-                    }
-                }
-            }
-
-
-            // sort elements into groups
-            allergenVOs.removeAll(toRemove);
             List<AbstractItem> items = new ArrayList<>();
-            for (String s : groups.keySet()) {
-                final List<AllergenVO> subs = groups.get(s);
-                if (!subs.isEmpty()) {
-                    AllergenGroupItem g = new AllergenGroupItem(s, "");
-                    List<AllergenGroupSubItem> sub = new ArrayList<>();
-                    for (AllergenVO vo : subs) {
-                        final AllergenGroupSubItem e = new AllergenGroupSubItem(vo, AllergiesActivity.this);
-                        e.setParent(g);
-                        sub.add(e);
+
+            if (groups != null && !groups.isEmpty()) {
+                //find words for groups
+                final Map<String, Pattern> groupPatterns = new ArrayMap<>();
+                for (AllergyGroup group : groups) {
+                    String regex = "\\b(" + group.getExpression() + ")\\b";
+                    Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+                    groupPatterns.put(group.getName(), p);
+                }
+
+                final Map<String, List<AllergenVO>> groups = new ArrayMap<>();
+                final List<AllergenVO> toRemove = new ArrayList<>();
+
+                for (AllergenVO vo : allergenVOs) {
+                    for (String k : groupPatterns.keySet()) {
+                        Pattern p = groupPatterns.get(k);
+                        if (p.matcher(vo.getName()).find()) {
+                            if (groups.keySet().contains(k)) {
+                                groups.get(k).add(vo);
+                            } else {
+                                ArrayList<AllergenVO> vos = new ArrayList<>();
+                                vos.add(vo);
+                                groups.put(k, vos);
+                            }
+                            toRemove.add(vo);
+                            break;
+                        }
                     }
-                    g.setSubtitle(getString(R.string.allergies_group_elements_number, sub.size()));
-                    g.withSubItems(sub);
-                    items.add(g);
+                }
+
+                // sort elements into groups
+                allergenVOs.removeAll(toRemove);
+                for (String s : groups.keySet()) {
+                    final List<AllergenVO> subs = groups.get(s);
+                    if (!subs.isEmpty()) {
+                        AllergenGroupItem g = new AllergenGroupItem(s, "");
+                        List<AllergenGroupSubItem> sub = new ArrayList<>();
+                        for (AllergenVO vo : subs) {
+                            final AllergenGroupSubItem e = new AllergenGroupSubItem(vo, AllergiesActivity.this);
+                            e.setParent(g);
+                            sub.add(e);
+                        }
+                        g.setSubtitle(getString(R.string.allergies_group_elements_number, sub.size()));
+                        g.withSubItems(sub);
+                        items.add(g);
+                    }
                 }
             }
+
             for (AllergenVO vo : allergenVOs) {
                 items.add(new AllergenItem(vo, AllergiesActivity.this));
             }
