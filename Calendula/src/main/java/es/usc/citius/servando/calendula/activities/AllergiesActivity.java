@@ -324,7 +324,7 @@ public class AllergiesActivity extends CalendulaActivity {
         selectFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectLayout.setVisibility(View.GONE);
+                hideSearchView();
                 new SaveAllergiesTask().execute(getSelected());
             }
         });
@@ -436,10 +436,17 @@ public class AllergiesActivity extends CalendulaActivity {
         searchEditText.requestFocus();
         KeyboardUtils.showKeyboard(this);
         searchView.setVisibility(View.VISIBLE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                searchList.setVisibility(View.VISIBLE);
+            }
+        }, 200);
     }
 
     private void hideSearchView() {
         addButton.setVisibility(View.VISIBLE);
+        searchList.setVisibility(View.INVISIBLE);
         searchView.setVisibility(View.GONE);
         KeyboardUtils.hideKeyboard(this);
     }
@@ -632,6 +639,9 @@ public class AllergiesActivity extends CalendulaActivity {
                 }
                 if (res.allergies)
                     showNewAllergyConflictDialog();
+                searchAdapter.clear();
+                searchAdapter.notifyDataSetChanged();
+                searchList.invalidate();
                 hideAllergiesView(false);
                 Snack.show(getString(R.string.message_allergy_add_multiple_success), AllergiesActivity.this);
             } else {
