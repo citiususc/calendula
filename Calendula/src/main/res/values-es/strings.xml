@@ -474,5 +474,23 @@
     <string name="notification_error_msg">Parece que ha habido un problema con la notificacion. Por favor, revisa tu agenda para ver si hay medicacion pendiente.</string>
     <string name="notification_error_title">Ups...</string>
     <string name="error_duplicate_medicine">Este medicamento ya está en el botiquín.</string>
+    <string name="message_allergies_database_required">La gestión de alertas sólo está disponible actualmente para la base de datos AEMPS. Quieres activarla?</string>
+    <string name="message_allergies_detected_dialog">Algunas de las medicinas de tu botiquín contienen el alérgeno que acabas de añadir. Por favor, revisa sus prospectos cuidadosamente.</string>
+    <string name="message_allergy_add_failure">Ocurrió un error al intentar guardar tus preferencias de alergias.</string>
+    <string name="message_allergy_add_multiple_success">Tu información de alergias ha sido guardada.</string>
+    <string name="message_allergy_add_success">Tu alergia a %1$s ha sido guardada.</string>
+    <string name="message_medicine_alert">Este medicamento contiene elementos a los que eres alérgico. Por tu seguridad, no se podrán programar pautas para este medicamento.</string>
+    <string name="remove_allergy_message_short">¿Eliminar la alergia a %1$s?</string>
+    <string name="allergies_group_elements_number">%1$d elementos</string>
+    <string name="allergies_placeholder">¡Todavía no se han añadido alergias!</string>
+    <string name="allergies_search_placeholder">Empieza a escribir tu alergia para recibir sugerencias.</string>
+    <string name="allergies_search_placeholder_no_result">No hay resultados para la búsqueda actual</string>
+    <string name="allergies_selected_number">%1$d seleccionados</string>
+    <string name="title_add_allergies">Añadir una alergia</string>
+    <string name="title_medicine_allergy_alert">Alergias detectadas para este medicamento</string>
+    <string name="title_allergies_database_required">Se requiere una base de datos</string>
+    <string name="title_allergies_detected_dialog">Atención</string>
+    <string name="excipient">Excipiente</string>
+    <string name="active_ingredient">Principio activo</string>
 
 </resources>
