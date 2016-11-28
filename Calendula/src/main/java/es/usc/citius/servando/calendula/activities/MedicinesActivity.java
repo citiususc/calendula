@@ -71,6 +71,7 @@ import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
+import es.usc.citius.servando.calendula.persistence.alerts.DrivingCautionAlert;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
@@ -107,6 +108,9 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     int color;
 
     PrescriptionDBMgr dbMgr;
+
+    private String intentAction;
+    private String intentSearchText = null;
 
 
     private final static String TAG = MedicinesActivity.class.getSimpleName();
@@ -180,12 +184,17 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         title.setBackgroundColor(color);
         searchView.setBackgroundColor(color);
 
-        hideSearchView();
+        if(intentSearchText != null){
+            showSearchView(intentSearchText);
+        }
+
     }
 
 
     private void processIntent() {
         mMedicineId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, -1);
+        intentAction = getIntent().getStringExtra(CalendulaApp.INTENT_EXTRA_ACTION);
+        intentSearchText = getIntent().getStringExtra("search_text");
     }
 
 
@@ -278,7 +287,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             }
             removeOldAlerts(m);
             DB.medicines().saveAndFireEvent(m);
-            Snack.show(getString(R.string.medicine_edited_message), this);
+            Toast.makeText(this, getString(R.string.medicine_edited_message), Toast.LENGTH_SHORT).show();
             finish();
         } catch (RuntimeException | SQLException e) {
             Snack.show(R.string.medicine_save_error_message, this);
@@ -328,6 +337,14 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                     if (allergies != null) {
                         createAllergyAlerts(m, allergies);
                     }
+
+                    if(m.isBoundToPrescription()){
+                        Prescription p = DB.drugDB().prescriptions().findByCn(m.cn());
+                        if(p.getAffectsDriving()){
+                            AlertManager.createAlert(new DrivingCautionAlert(m));
+                        }
+                    }
+
                     DB.medicines().fireEvent();
                     return null;
                 }
@@ -345,13 +362,13 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     private void createAllergyAlerts(final Medicine m, final List<AllergenVO> allergies) throws RuntimeException {
 
         AllergyPatientAlert alert = new AllergyPatientAlert(m, allergies);
-        AlertManager.createAlert(alert, MedicinesActivity.this);
+        AlertManager.createAlert(alert);
 
     }
 
     @Override
     public void onMedicineDeleted(Medicine m) {
-        Snack.show(getString(R.string.medicine_deleted_message), this);
+        Toast.makeText(this, getString(R.string.medicine_deleted_message), Toast.LENGTH_SHORT).show();
         DB.medicines().deleteCascade(m, true);
         finish();
     }
@@ -391,6 +408,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             Fragment f = new MedicineCreateOrEditFragment();
             Bundle args = new Bundle();
             args.putLong(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, mMedicineId);
+            args.putString(CalendulaApp.INTENT_EXTRA_ACTION, intentAction);
             f.setArguments(args);
             return f;
         }

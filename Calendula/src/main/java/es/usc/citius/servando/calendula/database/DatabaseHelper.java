@@ -101,7 +101,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 12;
 
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
@@ -210,10 +210,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 case 12:
                     DrugModelMigrationHelper.migrateDrugModel(db, connectionSource);
                     getMedicinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN Database TEXT;");
+                    getMedicinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN Stock REAL DEFAULT -1;");
                     TableUtils.createTable(connectionSource, PatientAllergen.class);
-                    TableUtils.createTable(connectionSource, PatientAlert.class);
-                    getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN " + Schedule.COLUMN_STATE + " TEXT;");
                     TableUtils.createTable(connectionSource, AllergyGroup.class);
+                    getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN " + Schedule.COLUMN_STATE + " TEXT;");
+                    TableUtils.createTable(connectionSource, PatientAlert.class);
             }
 
         } catch (Exception e) {

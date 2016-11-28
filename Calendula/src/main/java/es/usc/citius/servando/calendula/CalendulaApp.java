@@ -52,6 +52,7 @@ import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.PresentationsTypeface;
 import es.usc.citius.servando.calendula.util.Settings;
 
@@ -117,9 +118,9 @@ public class CalendulaApp extends Application {
     public void onCreate() {
         super.onCreate();
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        PreferenceUtils.init(getApplicationContext());
         // initialize SQLite engine
         initializeDatabase();
-
         if (!prefs.getBoolean("DEFAULT_DATA_INSERTED", false)) {
             DefaultDataGenerator.fillDBWithDummyData(getApplicationContext());
             prefs.edit().putBoolean("DEFAULT_DATA_INSERTED", true).commit();

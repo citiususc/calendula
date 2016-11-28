@@ -258,6 +258,10 @@
     <string name="medicine_no_name_error_message">Indica un nombre, por favor</string>
     <string name="medicine_no_presentation_error_message">Selecciona una presentación, por favor</string>
     <string name="medicine_unselected">Aún sin seleccionar</string>
+    <string name="remove_schedule_message">Eliminar la pauta de %1$s?</string>
+    <string name="remove_medicine_dialog_title">Eliminar medicina</string>
+    <string name="remove_schedule_dialog_title">Eliminar pauta</string>
+    <string name="remove_medicine_message_long">Hay pautas de %1$s que se perderán tras esta acción. Deseas eliminar esta medicina de todas formas?</string>
 
     <!--App Tutorial-->
     <string name="tutorial_welcome_title">¡Bienvenido a Calendula!</string>

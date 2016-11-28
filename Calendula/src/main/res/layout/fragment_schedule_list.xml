@@ -29,6 +29,8 @@
         android:scrollbars="none"
         android:background="#fcfcfc"
         android:dividerHeight="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="96dp"
         android:id="@+id/schedule_list" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

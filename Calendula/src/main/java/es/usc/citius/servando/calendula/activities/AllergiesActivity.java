@@ -573,7 +573,7 @@ public class AllergiesActivity extends CalendulaActivity {
                         } else {
                             AlertManager.createAlert(new AllergyPatientAlert(conflict, new ArrayList<AllergenVO>() {{
                                 add(allergen);
-                            }}), AllergiesActivity.this);
+                            }}));
                         }
                     }
                     return null;

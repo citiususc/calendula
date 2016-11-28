@@ -232,9 +232,13 @@
     <string name="reminder_delayed_message">Routine delayed </string>
     <string name="reminder_cancelled_message">Reminder cancelled</string>
     <string name="remove_routine_message_long">The routine %1$s has associated schedules that will be lost if you delete it. Do you want to remove it anyway?</string>
+    <string name="remove_medicine_message_long">%1$s has associated schedules that will be lost if you delete it. Do you want to remove it anyway?</string>
     <string name="remove_routine_message_short">Remove %1$s routine?</string>
     <string name="remove_medicine_message_short">Remove %1$s?</string>
     <string name="remove_routine_dialog_title">Remove routine</string>
+    <string name="remove_medicine_dialog_title">Remove medicine</string>
+    <string name="remove_schedule_dialog_title">Remove schedule</string>
+    <string name="remove_schedule_message">Remove the schedule of %1$s?</string>
 
     <string name="dialog_yes_option">Yes</string>
     <string name="dialog_no_option">No</string>

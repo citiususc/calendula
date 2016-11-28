@@ -269,13 +269,14 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
                 for (DailyScheduleItem item : dailyScheduleItems) {
                     item.setTakenToday(true);
-                    item.save();
+                    DB.dailyScheduleItems().saveAndUpdateStock(item, false, context);
                 }
 
                 actionsView.animate().alpha(0).scaleX(0.5f).scaleY(0.5f).setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         updateItem(getAdapterPosition());
+                        DB.medicines().fireEvent();
                     }
                 });
 

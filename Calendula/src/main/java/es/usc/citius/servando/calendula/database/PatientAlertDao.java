@@ -80,4 +80,17 @@ public class PatientAlertDao extends GenericDao<PatientAlert, Long> {
         }
     }
 
+    public List<PatientAlert> findByMedicineAndType(Medicine m, String type) {
+        try {
+            final PreparedQuery<PatientAlert> q = dao.queryBuilder().where()
+                    .eq(PatientAlert.COLUMN_MEDICINE, m)
+                    .and().eq(PatientAlert.COLUMN_TYPE, type)
+                    .prepare();
+            return dao.query(q);
+        } catch (SQLException e) {
+            Log.e(TAG, "findByMedicineAndType: ", e);
+            throw new RuntimeException("Cannot retrieve alerts: ", e);
+        }
+    }
+
 }

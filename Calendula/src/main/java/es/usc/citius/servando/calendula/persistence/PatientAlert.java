@@ -126,6 +126,10 @@ public class PatientAlert<P extends PatientAlert<P,T>, T> {
         throw new RuntimeException("This method must be overridden by subclasses");
     }
 
+    public Class<?> viewProviderType(){
+        return null;
+    }
+
     public P map(){
         try {
             P result = (P) Class.forName(getType()).newInstance();

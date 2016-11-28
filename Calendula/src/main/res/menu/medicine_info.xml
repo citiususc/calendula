@@ -16,21 +16,13 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<preference-headers>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- These settings headers are only used on tablets. -->
+    <item
+        android:id="@+id/action_edit"
+        android:orderInCategory="100"
+        android:title="Expand"
+        app:showAsAction="always" />
 
-    <!--<header-->
-        <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$GeneralPreferenceFragment"-->
-        <!--android:title="@string/pref_header_general" />-->
-
-    <!--<header-->
-        <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$NotificationPreferenceFragment"-->
-        <!--android:title="@string/pref_header_notifications" />-->
-
-    <!--<header-->
-        <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$StockPreferenceFragment"-->
-        <!--android:title="@string/pref_header_stock" />-->
-
-
-</preference-headers>
+</menu>

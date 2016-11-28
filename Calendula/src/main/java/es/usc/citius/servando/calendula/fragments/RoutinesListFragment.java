@@ -20,12 +20,11 @@ package es.usc.citius.servando.calendula.fragments;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +35,10 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -47,6 +50,7 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
+import es.usc.citius.servando.calendula.util.IconUtils;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -142,37 +146,41 @@ public class RoutinesListFragment extends Fragment {
     }
 
     void showDeleteConfirmationDialog(final Routine r) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         String message;
-
-
         if (r.scheduleItems().size() > 0) {
             message = String.format(getString(R.string.remove_routine_message_long), r.name());
-            //message = "The routine " + r.name() + " has associated schedules that will be lost if you delete it. Do you want to remove it anyway?";
         } else {
-            //message = "Remove " + r.name() + " routine?";
             message = String.format(getString(R.string.remove_routine_message_short), r.name());
         }
 
-        builder.setMessage(message)
-                .setCancelable(true)
+        new MaterialStyledDialog.Builder(getActivity())
+                .setTitle("")
+                .setStyle(Style.HEADER_WITH_ICON)
+                .setIcon(IconUtils.icon(getActivity(), CommunityMaterial.Icon.cmd_clock, R.color.white, 100))
+                .setHeaderColor(R.color.android_red)
+                .withDialogAnimation(true)
                 .setTitle(getString(R.string.remove_routine_dialog_title))
-                .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // cancel routine alarm and delete it
+                .setDescription(message)
+                .setCancelable(true)
+                .setNeutralText(getString(R.string.dialog_no_option))
+                .setPositiveText(getString(R.string.dialog_yes_option))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         AlarmScheduler.instance().onDeleteRoutine(r, getActivity());
                         DB.routines().deleteCascade(r, true);
                         notifyDataChange();
                     }
                 })
-                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         dialog.cancel();
                     }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
+                })
+                .show();
+
     }
 
     public void notifyDataChange() {
