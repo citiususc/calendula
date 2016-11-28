@@ -47,6 +47,7 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionActiveIngredient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionExcipient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PresentationForm;
+import es.usc.citius.servando.calendula.persistence.AllergyGroup;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.HtmlCacheEntry;
 import es.usc.citius.servando.calendula.persistence.Medicine;
@@ -93,7 +94,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             PrescriptionActiveIngredient.class,
             PrescriptionExcipient.class,
             PatientAllergen.class,
-            PatientAlert.class
+            PatientAlert.class,
+            AllergyGroup.class,
     };
 
     // name of the database file for our application
@@ -211,6 +213,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                     TableUtils.createTable(connectionSource, PatientAllergen.class);
                     TableUtils.createTable(connectionSource, PatientAlert.class);
                     getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN " + Schedule.COLUMN_STATE + " TEXT;");
+                    TableUtils.createTable(connectionSource, AllergyGroup.class);
             }
 
         } catch (Exception e) {

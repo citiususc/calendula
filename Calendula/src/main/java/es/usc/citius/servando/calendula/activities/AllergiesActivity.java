@@ -57,6 +57,7 @@ import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.database.PatientAllergenDao;
+import es.usc.citius.servando.calendula.persistence.AllergyGroup;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
@@ -65,7 +66,6 @@ import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert.AllergyAlertInfo;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.Snack;
-import es.usc.citius.servando.calendula.util.StringUtils;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 
 public class AllergiesActivity extends CalendulaActivity {
@@ -89,27 +89,7 @@ public class AllergiesActivity extends CalendulaActivity {
     private LinearLayout selectLayout;
     private TextView selectText;
 
-    // TODO: 25/11/16 load this from database/config file/something
-    static class AllergyGroup {
-        String name;
-        String[] templates;
-
-        public AllergyGroup(String name, String[] templates) {
-            this.templates = templates;
-            this.name = name;
-        }
-    }
-
-    private static final List<AllergyGroup> groups;
-
-    static {
-        groups = new ArrayList<>();
-        groups.add(new AllergyGroup("Lactosa", new String[]{"lactosa", "lácteo", "lacteo", "lácteos", "lacteos", "leche"}));
-        groups.add(new AllergyGroup("Calcio", new String[]{"calcio", "cálcico", "calcico"}));
-        groups.add(new AllergyGroup("Sodio", new String[]{"sodio", "sódico", "trisodio", "disodio"}));
-        groups.add(new AllergyGroup("Ibuprofeno", new String[]{"ibuprofeno"}));
-    }
-
+    private List<AllergyGroup> groups;
 
     private FastAdapter.OnClickListener<AbstractItem> cl = new FastAdapter.OnClickListener<AbstractItem>() {
         @Override
@@ -175,6 +155,10 @@ public class AllergiesActivity extends CalendulaActivity {
 
         //initialize allergies store
         store = new AllergiesStore();
+
+        //retrieve allergy groups
+        groups = DB.allergyGroups().findAll();
+        Collections.sort(groups);
 
         //setup recycler
         setupAllergiesList();
@@ -657,9 +641,9 @@ public class AllergiesActivity extends CalendulaActivity {
             //find words for groups
             final Map<String, Pattern> groupPatterns = new ArrayMap<>();
             for (AllergyGroup group : groups) {
-                String regex = "\\b(" + StringUtils.join(group.templates, "|") + ")\\b";
+                String regex = "\\b(" + group.getExpression() + ")\\b";
                 Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
-                groupPatterns.put(group.name, p);
+                groupPatterns.put(group.getName(), p);
             }
 
 
