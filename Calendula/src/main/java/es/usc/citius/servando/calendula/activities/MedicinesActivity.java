@@ -252,7 +252,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         if(m.isBoundToPrescription()){
             Prescription p = DB.drugDB().prescriptions().findByCn(m.cn());
             if(p.getAffectsDriving()){
-                AlertManager.createAlert(new DrivingCautionAlert(m), this);
+                AlertManager.createAlert(new DrivingCautionAlert(m));
             }
         }
         CalendulaApp.eventBus().post(new PersistenceEvents.MedicineAddedEvent(m.getId()));

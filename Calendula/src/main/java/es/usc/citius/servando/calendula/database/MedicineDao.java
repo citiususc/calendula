@@ -19,10 +19,13 @@
 package es.usc.citius.servando.calendula.database;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
+
+import org.joda.time.LocalDate;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -30,10 +33,16 @@ import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
+import es.usc.citius.servando.calendula.events.StockRunningOutEvent;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
+import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.Schedule;
+import es.usc.citius.servando.calendula.persistence.alerts.StockRunningOutAlert;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
+import es.usc.citius.servando.calendula.util.alerts.AlertManager;
+import es.usc.citius.servando.calendula.util.medicine.StockUtils;
 
 /**
  * Created by joseangel.pineiro
@@ -76,6 +85,38 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
     @Override
     public void fireEvent() {
         CalendulaApp.eventBus().post(PersistenceEvents.MEDICINE_EVENT);
+    }
+
+
+    @Override
+    public void save(Medicine m) {
+
+        if(m.stockManagementEnabled() && m.getId() != null){
+
+            Medicine original = findById(m.getId());
+            boolean addedOrRemoved = !original.stock().equals(m.stock());
+            super.save(m);
+
+            if(addedOrRemoved ){
+                Long days = StockUtils.getEstimatedStockDays(m);
+                SharedPreferences preferences = PreferenceUtils.instance().preferences();
+                int stock_alert_days = Integer.parseInt(preferences.getString("stock_alert_days", "-1"));
+                List<PatientAlert> alerts = DB.alerts().findByMedicineAndType(m, StockRunningOutAlert.class.getCanonicalName());
+                if(days!=null && days < stock_alert_days) {
+                    if(alerts.isEmpty()) {
+                        AlertManager.createAlert(new StockRunningOutAlert(m, LocalDate.now()));
+                        CalendulaApp.eventBus().post(new StockRunningOutEvent(m, days));
+                    }
+                }else if(days == null || days > stock_alert_days){
+                    for(PatientAlert a : alerts){
+                        DB.alerts().remove(a);
+                    }
+                }
+            }
+        }else{
+            super.save(m);
+        }
+
     }
 
     @Override

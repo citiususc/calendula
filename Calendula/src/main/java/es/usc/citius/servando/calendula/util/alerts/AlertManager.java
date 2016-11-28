@@ -1,6 +1,5 @@
 package es.usc.citius.servando.calendula.util.alerts;
 
-import android.content.Context;
 import android.util.Log;
 
 import org.joda.time.DateTime;
@@ -28,8 +27,8 @@ public class AlertManager {
 
     private static final String TAG = "AlertManager";
 
-    public static void createAlert(final PatientAlert alert, final Context ctx) {
-        Log.d(TAG, "createAlert() called with: alert = [" + alert + "], ctx = [" + ctx + "]");
+    public static void createAlert(final PatientAlert alert) {
+        Log.d(TAG, "createAlert() called with: alert = [" + alert + "]");
         DB.alerts().save(alert);
 
         switch (alert.getLevel()) {

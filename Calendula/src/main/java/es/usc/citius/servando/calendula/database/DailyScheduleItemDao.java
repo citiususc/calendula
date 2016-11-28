@@ -19,8 +19,6 @@
 package es.usc.citius.servando.calendula.database;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
@@ -35,17 +33,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import es.usc.citius.servando.calendula.CalendulaApp;
-import es.usc.citius.servando.calendula.events.StockRunningOutEvent;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
-import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
-import es.usc.citius.servando.calendula.persistence.alerts.StockRunningOutAlert;
-import es.usc.citius.servando.calendula.util.alerts.AlertManager;
-import es.usc.citius.servando.calendula.util.medicine.StockUtils;
 
 /**
  * Created by joseangel.pineiro on 3/26/15.
@@ -230,22 +222,6 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
 
                     if(fireEvent){
                         DB.medicines().fireEvent();
-                    }
-
-                    if(amount < 0){
-                        Long days = StockUtils.getEstimatedStockDays(m);
-                        if(days!=null) {
-                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
-                            int stock_alert_days = Integer.parseInt(preferences.getString("stock_alert_days", "-1"));
-
-                            if(days < stock_alert_days) {
-                                List<PatientAlert> alerts = DB.alerts().findByMedicineAndType(m, StockRunningOutAlert.class.getCanonicalName());
-                                if(alerts.isEmpty()) {
-                                    AlertManager.createAlert(new StockRunningOutAlert(m, LocalDate.now()),c);
-                                    CalendulaApp.eventBus().post(new StockRunningOutEvent(m, days));
-                                }
-                            }
-                        }
                     }
                 }catch (Exception e){
                     Log.e("DSIDAO", "An error occurred updating stock", e);
