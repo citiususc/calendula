@@ -507,6 +507,8 @@
     <string name="allergies_selected_number">%1$d selected</string>
     <string name="message_allergy_add_multiple_success">Your allergy information has been saved.</string>
     <string name="remove_allergy_group_message_short">Are you sure you want to delete all allergies from group \"%1$s\"?</string>
+    <string name="title_allergies_database_required">Database required</string>
+    <string name="message_allergies_database_required">Allergy management is currently only supported for AEMPS medication database. Do you want to activate it?</string>
 
 
 </resources>

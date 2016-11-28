@@ -3,10 +3,13 @@ package es.usc.citius.servando.calendula.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
@@ -183,6 +186,7 @@ public class AllergiesActivity extends CalendulaActivity {
         //load allergies, set placeholder if needed
         new LoadAllergiesTask().execute();
 
+        askForDatabase();
 
     }
 
@@ -507,6 +511,35 @@ public class AllergiesActivity extends CalendulaActivity {
             hideSearchView();
         } else {
             finish();
+        }
+    }
+
+    public void askForDatabase() {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean validDB = prefs.getString("prescriptions_database", getString(R.string.database_none_id)).equals(getString(R.string.database_aemps_id));
+
+        if (!validDB) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.title_allergies_database_required);
+            builder.setCancelable(false);
+            builder.setMessage(R.string.message_allergies_database_required)
+                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent i = new Intent(AllergiesActivity.this, SettingsActivity.class);
+                            i.putExtra("show_database_dialog", true);
+                            finish();
+                            startActivity(i);
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            finish();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
     }
 
