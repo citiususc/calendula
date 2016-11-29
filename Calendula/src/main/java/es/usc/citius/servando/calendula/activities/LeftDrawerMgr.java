@@ -250,10 +250,10 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
     @Override
     public boolean onItemLongClick(View view, int i, IDrawerItem iDrawerItem) {
         int identifier = iDrawerItem.getIdentifier();
-        if(identifier == PHARMACIES){
-            home.enableOrDisablePharmacyMode();
-            return true;
-        }
+        //  if(identifier == PHARMACIES){
+        //    home.enableOrDisablePharmacyMode();
+        //    return true;
+        //  }
         return false;
     }
 
