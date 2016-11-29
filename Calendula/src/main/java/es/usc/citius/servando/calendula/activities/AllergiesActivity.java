@@ -1,8 +1,6 @@
 package es.usc.citius.servando.calendula.activities;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -26,9 +24,14 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.j256.ormlite.dao.Dao;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
@@ -68,6 +71,7 @@ import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert.AllergyAlertInfo;
+import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
@@ -464,51 +468,67 @@ public class AllergiesActivity extends CalendulaActivity {
     }
 
     private void showDeleteConfirmationDialog(final AllergyItem a) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(String.format(getString(R.string.remove_allergy_message_short), a.getAllergen().getName()))
-                .setCancelable(true)
-                .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        new DeleteAllergyTask().execute(a);
-                        dialog.dismiss();
-                    }
-                })
-                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
+        showDeleteConfirmationDialog(getString(R.string.remove_allergy_message_short, a.getAllergen().getName()), new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                new DeleteAllergyTask().execute(a);
+                dialog.dismiss();
+            }
+        }, new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                dialog.cancel();
+            }
+        });
     }
 
     private void showDeleteConfirmationDialog(final AllergyGroupItem a) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(String.format(getString(R.string.remove_allergy_message_short), a.getTitle()))
+        showDeleteConfirmationDialog(getString(R.string.remove_allergy_message_short, a.getTitle()), new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                new DeleteAllergyGroupTask().execute(a);
+                dialog.dismiss();
+            }
+        }, new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                dialog.cancel();
+            }
+        });
+    }
+
+    private void showDeleteConfirmationDialog(String message, MaterialDialog.SingleButtonCallback onPositive, MaterialDialog.SingleButtonCallback onNegative) {
+        new MaterialStyledDialog.Builder(this)
+                .setStyle(Style.HEADER_WITH_ICON)
+                .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_delete, R.color.white, 100))
+                .setHeaderColor(R.color.android_red)
+                .withDialogAnimation(true)
+                .setDescription(message)
                 .setCancelable(true)
-                .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        new DeleteAllergyGroupTask().execute(a);
-                        dialog.dismiss();
-                    }
-                })
-                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
+                .setNegativeText(getString(R.string.dialog_no_option))
+                .setPositiveText(getString(R.string.dialog_yes_option))
+                .onPositive(onPositive)
+                .onNegative(onNegative)
+                .show();
     }
 
     private void showNewAllergyConflictDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.title_allergies_detected_dialog)
-                .setMessage(R.string.message_allergies_detected_dialog)
-                .setCancelable(true)
-                .setPositiveButton(getString(R.string.ok), null);
-        AlertDialog alert = builder.create();
-        alert.show();
+        new MaterialStyledDialog.Builder(this)
+                .setStyle(Style.HEADER_WITH_ICON)
+                .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_exclamation, R.color.white, 100))
+                .setHeaderColor(R.color.android_red)
+                .withDialogAnimation(true)
+                .setTitle(R.string.title_allergies_detected_dialog)
+                .setDescription(R.string.message_allergies_detected_dialog)
+                .setCancelable(false)
+                .setPositiveText(getString(R.string.ok))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 
     @Override
@@ -527,26 +547,33 @@ public class AllergiesActivity extends CalendulaActivity {
         boolean validDB = prefs.getString("prescriptions_database", getString(R.string.database_none_id)).equals(getString(R.string.database_aemps_id));
 
         if (!validDB) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.title_allergies_database_required);
-            builder.setCancelable(false);
-            builder.setMessage(R.string.message_allergies_database_required)
-                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+            new MaterialStyledDialog.Builder(this)
+                    .setStyle(Style.HEADER_WITH_ICON)
+                    .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_database, R.color.white, 100))
+                    .setHeaderColor(R.color.android_blue)
+                    .withDialogAnimation(true)
+                    .setTitle(R.string.title_allergies_database_required)
+                    .setDescription(R.string.message_allergies_database_required)
+                    .setCancelable(false)
+                    .setPositiveText(getString(R.string.ok))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             Intent i = new Intent(AllergiesActivity.this, SettingsActivity.class);
                             i.putExtra("show_database_dialog", true);
                             finish();
                             startActivity(i);
                         }
                     })
-                    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    .setNegativeText(R.string.cancel)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             dialog.cancel();
                             finish();
                         }
-                    });
-            AlertDialog alert = builder.create();
-            alert.show();
+                    })
+                    .show();
         }
     }
 
