@@ -18,10 +18,12 @@
 
 package es.usc.citius.servando.calendula;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -41,6 +43,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -77,6 +80,7 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.PermissionUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.medicine.StockUtils;
 
@@ -86,6 +90,8 @@ public class HomePagerActivity extends CalendulaActivity implements
         ScheduleListFragment.OnScheduleSelectedListener {
 
     private static final String TAG = "HomePagerActivity";
+
+    public static final int REQ_CODE_EXTERNAL_STORAGE = 10;
 
     private HomePageAdapter mSectionsPagerAdapter;
 
@@ -125,6 +131,7 @@ public class HomePagerActivity extends CalendulaActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupToolbar(null, Color.TRANSPARENT);
@@ -583,5 +590,31 @@ public class HomePagerActivity extends CalendulaActivity implements
             pendingEvents.add(evt);
         }
     }
+
+    /*
+    public void askForWEEPermissionsIfNeeded() {
+        String p = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        if(!PermissionUtils.hasAskedForPermission(this, p) && PermissionUtils.shouldAskForPermission(this, p)){
+            PermissionUtils.requestPermissions(this, new String[]{p}, REQ_CODE_EXTERNAL_STORAGE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQ_CODE_EXTERNAL_STORAGE: {
+                PermissionUtils.markedPermissionAsAsked(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(HomePagerActivity.this, "Granted   !", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(HomePagerActivity.this, "Refused   !", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
+
+    }
+    */
 
 }
