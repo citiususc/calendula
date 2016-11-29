@@ -340,7 +340,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                 prospectIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ProspectUtils.openProspect(p, MedicinesActivity.this, false);
+                        ProspectUtils.openProspect(p, MedicinesActivity.this, true);
                     }
                 });
 
