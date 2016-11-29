@@ -277,7 +277,7 @@
         <item>Feeling very good</item>
     </string-array>
 
-    <string name="search_med_hint">Search…</string>
+    <string name="search_med_hint">Search by name or CN…</string>
     <string name="download_prospect_message">%1$s leaflet will be downloaded now. Once downloaded it will be available for reference even if you are not connected to internet.</string>
     <string name="download_prospect_title">Download leaflet</string>
     <string name="download_prospect_not_available_message">Sorry, there is no leaflet available for this medicine.</string>
@@ -486,6 +486,10 @@
     <string name="notification_error_msg">It seems there was a problem with the notification. Please, take a look at your agenda to see if there is something pending.</string>
     <string name="notification_error_title">Oops...</string>
     <string name="error_duplicate_medicine">This medicine is already in your medkit.</string>
+
+    <string name="add_custom_med_button_text">Add \"%1$s\" to the med kit</string>
+    <string name="medicine_search_not_found_msg">Sorry, we didn\'t find anything with that name</string>
+    <string name="medicine_search_empty_list_msg">Type a drug name or code to start searching...</string>
 
 
 </resources>

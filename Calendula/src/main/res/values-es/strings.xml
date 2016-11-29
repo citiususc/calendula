@@ -292,7 +292,7 @@
         <item>Me siento muy bien</item>
     </string-array>
 
-    <string name="search_med_hint">Buscar…</string>
+    <string name="search_med_hint">Busca por nombre o CN…</string>
     <string name="search_no_results_found">No se encontraron medicamentos</string>
     <string name="pref_header_prescriptions">Búsqueda de medicamentos</string>
     <string name="pref_enable_prescriptions_db">Habilitar asistente</string>
@@ -476,5 +476,9 @@
     <string name="notification_error_msg">Parece que ha habido un problema con la notificacion. Por favor, revisa tu agenda para ver si hay medicacion pendiente.</string>
     <string name="notification_error_title">Ups...</string>
     <string name="error_duplicate_medicine">Este medicamento ya está en el botiquín.</string>
+
+    <string name="add_custom_med_button_text">Añadir \"%1$s\" al botiquin</string>
+    <string name="medicine_search_not_found_msg">Lo sentimos, no hemos podido encontrar nada con ese nombre</string>
+    <string name="medicine_search_empty_list_msg">Escribe un nombre o un código de medicamento para comenzar a buscar...</string>
 
 </resources>

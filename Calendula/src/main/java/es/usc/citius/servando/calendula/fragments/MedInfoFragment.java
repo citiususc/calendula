@@ -204,7 +204,6 @@ public class MedInfoFragment extends Fragment{
         String originalName = p.getName();
         String doseFirstPart = dose.contains(" ") ? dose.split(" ")[0] : dose;
 
-
         if(doseFirstPart != null && originalName.contains(doseFirstPart)){
             int index = originalName.indexOf(doseFirstPart);
             return originalName.substring(0, index);

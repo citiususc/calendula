@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula.drugdb;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
 
@@ -31,8 +30,8 @@ import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
-import es.usc.citius.servando.calendula.util.Strings;
 
 /**
  * Created by joseangel.pineiro on 9/8/15.
@@ -73,7 +72,7 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
             return Presentation.POMADE;
         } else if (n.contains("pulverizacion nasal") || n.contains("pulverización nasal") || n.contains("spray")) {
             return Presentation.SPRAY;
-        } else if (n.contains("jarabe")) {
+        } else if (n.contains("jarabe") || n.contains("frasco")) {
             return Presentation.SYRUP;
         }else if (n.contains("parche")) {
                 return Presentation.PATCHES;
@@ -92,17 +91,15 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
 
     @Override
     public String shortName(Prescription p) {
-        try {
-            String[] parts = p.getName().split(" ");
-            String s = parts[0].toLowerCase();
-            if ((s.contains("acido") || s.contains("ácido")) && parts.length > 1) {
-                return Strings.toCamelCase(s + " " + parts[1], " ");
-            }
-            return Strings.toProperCase(s);
+        String dose = p.getDose().trim();
+        String originalName = p.getName();
+        String doseFirstPart = dose.contains(" ") ? dose.split(" ")[0] : dose;
 
-        } catch (Exception e) {
-            return p.getName();
+        if(doseFirstPart != null && originalName.contains(doseFirstPart)){
+            int index = originalName.indexOf(doseFirstPart);
+            return originalName.substring(0, index);
         }
+        return originalName;
     }
 
     @Override

@@ -19,100 +19,141 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/touchable_white">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="6dp"
+                android:paddingTop="6dp"
+                android:paddingRight="6dp"
+    >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="72dp"
-        android:orientation="vertical"
-        android:paddingBottom="10dp"
-        android:layout_marginRight="72dp">
+    <RelativeLayout
 
-        <TextView
-            android:id="@+id/text1"
+        android:layout_width="match_parent"
+        android:background="@drawable/shape_list_item"
+        android:descendantFocusability="blocksDescendants"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/data"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="marquee"
-            android:fontFamily="sans-serif"
-            android:gravity="center_vertical"
-            android:paddingBottom="2dp"
-            android:paddingRight="5dp"
-            android:paddingTop="5dp"
-            android:singleLine="true"
-            android:text="Medicine name"
-            android:textColor="@color/android_blue_darker"
-            android:textSize="20dp"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginLeft="60dp"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:layout_marginRight="56dp">
+
+            <TextView
+                android:id="@+id/text1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:fontFamily="sans-serif"
+                android:gravity="center_vertical"
+                android:paddingBottom="2dp"
+                android:paddingRight="5dp"
+                android:paddingTop="5dp"
+                android:singleLine="false"
+                android:text="Medicine name that needs two rows"
+                android:textColor="#333"
+                android:textSize="16dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="10dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/text2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:ellipsize="marquee"
+                android:fontFamily="sans-serif"
+                android:gravity="center_vertical"
+                android:paddingBottom="2dp"
+                android:paddingTop="0dp"
+                android:singleLine="true"
+                android:text="100 microgramos"
+                android:textColor="#999"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text3"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:ellipsize="marquee"
+                android:fontFamily="sans-serif"
+                android:gravity="center_vertical"
+                android:paddingBottom="2dp"
+                android:paddingTop="0dp"
+                android:singleLine="false"
+                android:text="50 frascos de 100 ml, comprimidos recubiertos con película EFG"
+                android:textColor="#000"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/text4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1px"
+                android:layout_marginRight="16dp"
+                android:fontFamily="sans-serif-light"
+                android:gravity="top"
+                android:paddingBottom="2dp"
+                android:paddingTop="5dp"
+                android:singleLine="false"
+                android:text="Med description large name Med description large name Med description large name"
+                android:textAllCaps="false"
+                android:textColor="#222"
+                android:textSize="14dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/presentation_image"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:padding="7dp"
+            android:scaleType="fitCenter"
+            android:layout_alignParentTop="true"
+            />
 
         <TextView
-            android:id="@+id/text2"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginRight="16dp"
-            android:ellipsize="marquee"
-            android:fontFamily="sans-serif"
-            android:gravity="center_vertical"
-            android:paddingBottom="2dp"
-            android:paddingTop="0dp"
-            android:singleLine="true"
-            android:text="100 microgramos"
-            android:textColor="#000"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/text3"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginRight="16dp"
-            android:ellipsize="marquee"
-            android:fontFamily="sans-serif"
-            android:gravity="center_vertical"
-            android:paddingBottom="2dp"
-            android:paddingTop="0dp"
-            android:singleLine="true"
-            android:text="50 frascos de 100 ml"
-            android:textColor="#000"
-            android:textSize="15dp" />
-
-        <TextView
-            android:id="@+id/text4"
-            android:layout_width="match_parent"
+            android:layout_width="56dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="1px"
-            android:layout_marginRight="16dp"
-            android:fontFamily="sans-serif-light"
-            android:gravity="top"
-            android:paddingBottom="2dp"
-            android:paddingTop="5dp"
-            android:singleLine="false"
-            android:text="Med description large name Med description large name Med description large name"
-            android:textAllCaps="false"
-            android:textColor="@color/android_blue_darker"
-            android:textSize="14dp"
-            android:visibility="visible" />
-    </LinearLayout>
+            android:text="123456"
+            android:id="@+id/prescription_cn"
+            android:textColor="#fff"
+            android:padding="3dp"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:layout_alignParentRight="true"
+            android:gravity="center_horizontal"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentTop="false"
+            android:layout_alignTop="@+id/data"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentStart="false"
+            android:background="@drawable/medicine_search_cn_bg"
+            android:layout_marginRight="10dp"/>
 
-    <ImageView
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:id="@+id/prospect_icon"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/abc_ic_star_black_36dp"
-        android:layout_marginTop="5dp"
-        android:padding="10dp"
-        android:scaleType="fitCenter"/>
+        <ImageButton
+            android:layout_width="56dp"
+            android:layout_height="50dp"
+            android:id="@+id/prospect_icon"
+            android:layout_alignParentRight="false"
+            android:src="@drawable/abc_ic_star_black_36dp"
+            android:padding="4dp"
+            android:scaleType="fitCenter"
+            android:visibility="visible"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentBottom="false"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_alignStart="@+id/prescription_cn"
+            android:layout_below="@+id/prescription_cn"/>
 
-    <ImageView
-        android:id="@+id/presentation_image"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:padding="10dp"
-        android:scaleType="fitCenter"
-        android:layout_marginTop="5dp"/>
+    </RelativeLayout>
 
 
 </RelativeLayout>

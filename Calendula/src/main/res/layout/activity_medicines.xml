@@ -63,20 +63,6 @@
         android:textColor="#fff"
         android:textSize="24sp" />
 
-    <!--<com.melnykov.fab.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"-->
-        <!--android:id="@+id/add_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentEnd="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_gravity="bottom|right"-->
-        <!--android:layout_marginRight="38dp"-->
-        <!--android:layout_marginTop="83dp"-->
-        <!--android:src="@drawable/ic_done_white_36dp"-->
-       <!--fab:fab_colorNormal="#efefef"-->
-       <!--fab:fab_colorPressed="#b7b7b7"-->
-       <!--fab:fab_colorRipple="#b1b1b1" />-->
-
     <com.getbase.floatingactionbutton.FloatingActionButton
         xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/add_button"
@@ -109,9 +95,9 @@
         android:id="@+id/search_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/android_blue_darker"
+        android:background="#ececec"
         android:focusableInTouchMode="true"
-        android:visibility="gone">
+        android:visibility="visible">
 
 
         <EditText
@@ -119,40 +105,79 @@
             android:layout_width="fill_parent"
             android:layout_height="56dp"
             android:layout_alignBottom="@+id/imageView"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="72dp"
+            android:layout_marginLeft="60dp"
             android:background="@null"
             android:gravity="center_vertical"
             android:hint="@string/search_med_hint"
+            android:singleLine="true"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
+            android:imeOptions="actionDone"
             android:textColor="#fff"
             android:textColorHint="#ececec"
             android:textCursorDrawable="@null"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:capitalize="words"
+            android:layout_toLeftOf="@+id/close_search_button"
+            android:layout_toStartOf="@+id/close_search_button"/>
 
         <ListView
             android:id="@+id/search_list"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_below="@+id/search_edit_text"
-            android:background="#fff" />
+            android:background="#f2f2f2" />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:orientation="vertical"
+                      android:id="@android:id/empty"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:gravity="center_horizontal"
+                      android:layout_below="@+id/search_edit_text"
+                      android:paddingTop="80dp"
+                      android:background="#fff">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/med_list_empty_icon"
+                android:src="@drawable/ic_intro_alarm"
+                android:alpha="0.3"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/medicine_search_empty_list_msg"
+                android:id="@+id/textView10"
+                android:padding="30dp"
+                android:alpha="0.9"
+                android:textAlignment="center"
+                android:textColor="#aaa"
+                android:textSize="16dp"
+                android:gravity="center_horizontal"/>
+
+        </LinearLayout>
 
 
-        <ImageView
-            android:id="@+id/imageView"
+        <ImageButton
+            android:id="@+id/back_button"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:padding="15dp"
+            android:divider="@null"
+            android:dividerHeight="0dp"
             android:src="@drawable/ic_search_white_48dp" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/close_search_button"
             android:layout_width="56dp"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_height="56dp"
             android:layout_alignParentRight="true"
             android:padding="15dp"
@@ -163,9 +188,21 @@
             android:layout_width="fill_parent"
             android:layout_height="5dp"
             android:layout_below="@+id/search_edit_text"
-            android:alpha="0.7"
+            android:alpha="0.3"
             android:scaleType="fitXY"
             android:src="@drawable/daily_view_list_item_tab_shadow_top" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_custom_med_button_text"
+            android:id="@+id/add_custom_med_btn"
+            android:background="@drawable/shape_list_item"
+            android:layout_below="@+id/search_edit_text"
+            android:layout_centerHorizontal="true"
+            android:padding="10dp"
+            android:textAllCaps="false"
+            android:layout_marginTop="10dp"/>
 
     </RelativeLayout>
 
