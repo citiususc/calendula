@@ -79,9 +79,8 @@ public class CalendulaActivity extends AppCompatActivity{
 
     protected Drawable getNavigationIcon(int iconColor){
         return new IconicsDrawable(this, GoogleMaterial.Icon.gmd_arrow_back)
-                .sizeDp(24)
-                .paddingDp(2)
-                .color(iconColor);
+                .color(iconColor)
+                .actionBar();
     }
 
     @Override

@@ -3,6 +3,8 @@ package es.usc.citius.servando.calendula.drugdb.model.database;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -41,9 +43,25 @@ public class PrescriptionDAO extends GenericDao<Prescription, Long> {
         return count() <= 0;
     }
 
-    public List<Prescription> findByName(final String name, final int limit) {
-        Log.d("Prescription", "Query by name: " + name);
-        return like(Prescription.COLUMN_NAME, name + "%", (long) limit);
+    /**
+     * Fin prescriptions by name or cn, ordering by the position of the match
+     * @param match String to search by
+     * @param limit maximum number of results
+     * @return The list of prescriptions that match
+     */
+    public List<Prescription> findByNameOrCn(final String match, final int limit) {
+        try {
+            Log.d("Prescription", "Query by name: " + match);
+            QueryBuilder<Prescription, Long> qb = dao.queryBuilder();
+            Where w = qb.where();
+            w.or(w.like(Prescription.COLUMN_NAME, "%" + match + "%"), w.like(Prescription.COLUMN_CODE, match + "%"));
+            qb.orderByRaw(" (CASE WHEN " + Prescription.COLUMN_NAME +" LIKE \"" + match + "%\" THEN 1 ELSE 2 END),name");
+            qb.limit((long)limit);
+            qb.setWhere(w);
+            return qb.query();
+        } catch (SQLException e) {
+            throw  new RuntimeException(e);
+        }
     }
 
     public Prescription findByCn(final String code) {

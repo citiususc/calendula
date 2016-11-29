@@ -277,7 +277,7 @@
         <item>Feeling very good</item>
     </string-array>
 
-    <string name="search_med_hint">Search…</string>
+    <string name="search_med_hint">Search by name or CN…</string>
     <string name="download_prospect_message">%1$s leaflet will be downloaded now. Once downloaded it will be available for reference even if you are not connected to internet.</string>
     <string name="download_prospect_title">Download leaflet</string>
     <string name="download_prospect_not_available_message">Sorry, there is no leaflet available for this medicine.</string>
@@ -513,6 +513,11 @@
     <string name="remove_allergy_group_message_short">Are you sure you want to delete all allergies from group \"%1$s\"?</string>
     <string name="title_allergies_database_required">Database required</string>
     <string name="message_allergies_database_required">Allergy management is currently only supported for AEMPS medication database. Do you want to activate it?</string>
+
+    <string name="add_custom_med_button_text">Add \"%1$s\" to the med kit</string>
+    <string name="medicine_search_not_found_msg">Sorry, we didn\'t find anything with that name</string>
+    <string name="medicine_search_empty_list_msg">Type a drug name or code to start searching...</string>
+    <string name="search_hint">Search…</string>
 
 
 </resources>

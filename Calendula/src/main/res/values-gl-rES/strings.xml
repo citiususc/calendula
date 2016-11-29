@@ -284,7 +284,7 @@
         <item>Me siento muy bien</item>
     </string-array>
 
-    <string name="search_med_hint">Buscar…</string>
+    <string name="search_med_hint">Busca por nome ou CN…</string>
     <string name="search_no_results_found">Non se atoparon medicamentos</string>
     <string name="pref_header_prescriptions">Busca de medicamentos</string>
     <string name="pref_enable_prescriptions_db">Habilitar asistente</string>
@@ -423,5 +423,6 @@
     <string name="title_allergies_detected_dialog">Atención</string>
     <string name="excipient">Excipiente</string>
     <string name="active_ingredient">Principio activo</string>
+    <string name="search_hint">Buscar…</string>
 </resources>
 

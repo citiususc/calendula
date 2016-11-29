@@ -67,7 +67,7 @@
             android:layout_marginLeft="72dp"
             android:background="@null"
             android:gravity="center_vertical"
-            android:hint="@string/search_med_hint"
+            android:hint="@string/search_hint"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
             android:textColor="#fff"

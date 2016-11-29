@@ -37,12 +37,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -77,6 +72,7 @@ import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.Snack;
+import es.usc.citius.servando.calendula.util.Strings;
 import es.usc.citius.servando.calendula.util.medicine.StockUtils;
 
 /**
@@ -96,10 +92,9 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     Prescription mPrescription;
 
     Boolean showConfirmButton = true;
-    AutoCompleteTextView mNameTextView;
+    TextView mNameTextView;
     TextView mPresentationTv;
-    TextView mDescriptionTv;
-    ImageView searchButton;
+
     Presentation selectedPresentation;
     HorizontalScrollView presentationScroll;
     ScrollView verticalScrollView;
@@ -150,48 +145,35 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         View rootView = inflater.inflate(R.layout.fragment_create_or_edit_medicine, container, false);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
+        pColor = DB.patients().getActive(getActivity()).color();
         setupIcons(rootView);
         verticalScrollView = (ScrollView) rootView.findViewById(R.id.scrollView);
-        mNameTextView = (AutoCompleteTextView) rootView.findViewById(R.id.medicine_edit_name);
+        mNameTextView = (TextView) rootView.findViewById(R.id.medicine_edit_name);
         mPresentationTv = (TextView) rootView.findViewById(R.id.textView3);
-        mDescriptionTv = (TextView) rootView.findViewById(R.id.medicine_edit_description);
-        searchButton = (ImageView) rootView.findViewById(R.id.search_button);
         mStockUnits = (TextView) rootView.findViewById(R.id.stock_units);
         mStockEstimation = (TextView) rootView.findViewById(R.id.stock_estimated_duration);
         stockSwitch = (Switch) rootView.findViewById(R.id.stock_switch);
         addBtn = ((ImageButton)rootView.findViewById(R.id.btn_stock_add));
         rmBtn = ((ImageButton)rootView.findViewById(R.id.btn_stock_remove));
-        mNameTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
-                Prescription p = (Prescription) parent.getItemAtPosition(pos);
-                String shortName = dbMgr.shortName(p);
-                mNameTextView.setText(shortName);
-                mDescriptionTv.setText(p.getName());
-                hideKeyboard();
-                // save referenced prescription to med
-                cn = String.valueOf(p.getCode());
-                new ComputeEstimatedStockEndTask().execute();
-
+            public void onClick(View view) {
+                 CharSequence text = mNameTextView.getText();
+                ((MedicinesActivity) getActivity()).showSearchView(text != null ? text.toString() : null);
             }
         });
 
-        pColor = DB.patients().getActive(getActivity()).color();
+        mNameTextView.setCompoundDrawables(null, null,new IconicsDrawable(getActivity())
+                .icon(CommunityMaterial.Icon.cmd_arrow_top_right)
+                .color(pColor)
+                .sizeDp(30).paddingDp(5) , null);
 
-        mDescriptionTv.setTextColor(pColor);
-        mPresentationTv.setTextColor(pColor);
+
 
         String none = getString(R.string.database_none_id);
         String settingUp = getString(R.string.database_setting_up);
         String value = prefs.getString("prescriptions_database", none);
         enableSearch = !value.equals(none) && !value.equals(settingUp);
-        if (enableSearch) {
-            enableSearchButton();
-        } else {
-            searchButton.setVisibility(View.GONE);
-        }
-
         presentationScroll = (HorizontalScrollView) rootView.findViewById(R.id.med_presentation_scroll);
 
         Log.d(getTag(), "Arguments:  " + (getArguments() != null) + ", savedState: " + (savedInstanceState != null));
@@ -227,7 +209,6 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
                 if (mPrescription != null && !dbMgr.shortName(mPrescription).toLowerCase().equals(name.toLowerCase())) {
                     mPrescription = null;
-                    mDescriptionTv.setText("");
                 }
 
             }
@@ -242,17 +223,6 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         }
 
         return rootView;
-    }
-
-    private void enableSearchButton() {
-        searchButton.setVisibility(View.VISIBLE);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Editable editable = mNameTextView.getText();
-                ((MedicinesActivity) getActivity()).showSearchView(editable != null ? editable.toString() : null);
-            }
-        });
     }
 
     private void setupStockViews(){
@@ -514,7 +484,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         }
 
         if (selectedPresentation != null) {
-            mPresentationTv.setText(selectedPresentation.getName(getResources()));
+            mPresentationTv.setText(": " + selectedPresentation.getName(getResources()));
             updateStockText();
         }
     }
@@ -541,7 +511,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         Log.d(getTag(), "Medicine set: " + r.name());
         mMedicine = r;
         mNameTextView.setText(mMedicine.name());
-        mPresentationTv.setText(mMedicine.presentation().getName(getResources()));
+        mPresentationTv.setText(": " + mMedicine.presentation().getName(getResources()));
         selectedPresentation = mMedicine.presentation();
         selectPresentation(mMedicine.presentation());
 
@@ -549,23 +519,26 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             Prescription p = DB.drugDB().prescriptions().findByCn(r.cn());
             if (p != null) {
                 mPrescription = p;
-                mDescriptionTv.setText(p.getName());
+//                mDescriptionTv.setText(p.getName());
                 new ComputeEstimatedStockEndTask().execute();
             }
         }
     }
 
     public void setPrescription(Prescription p) {
-        mNameTextView.setText(dbMgr.shortName(p));
-        mDescriptionTv.setText(p.getName());
+        mNameTextView.setText(Strings.toProperCase(dbMgr.shortName(p)));
         mPrescription = p;
-
         Presentation pr = DBRegistry.instance().current().expected(p);
         if (pr != null) {
-            mPresentationTv.setText(pr.getName(getResources()));
+            mPresentationTv.setText(": " + pr.getName(getResources()));
             selectedPresentation = pr;
             selectPresentation(pr);
         }
+    }
+
+    public void setMedicineName(String medName) {
+        mNameTextView.setText(medName);
+        mPrescription = null;
     }
 
     private void selectPresentation(Presentation p) {
@@ -577,8 +550,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             int viewId = getPresentationViewId(p);
             View view = getView().findViewById(viewId);
             view.setBackgroundResource(R.drawable.presentation_circle_background);
-
-            mPresentationTv.setText(p.getName(getResources()));
+            mPresentationTv.setText(": " + p.getName(getResources()));
             scrollToMedPresentation(view);
         }
     }
@@ -586,7 +558,6 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     public void clear() {
         mMedicine = null;
         mNameTextView.setText("");
-//        mConfirmButton.setText(getString(R.string.create_medicine_button_text));
     }
 
 
@@ -603,7 +574,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                 if (selectedPresentation != null) {
                     mMedicine.setPresentation(selectedPresentation);
                 }
-                if (mPrescription != null) { //  && mPrescription.shortName().toLowerCase().equals(mMedicine.name().toLowerCase())
+                if (mPrescription != null) {
                     mMedicine.setCn(String.valueOf(mPrescription.getCode()));
                     mMedicine.setDatabase(DBRegistry.instance().current().id());
                 } else if (mPrescription == null) {
@@ -622,7 +593,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                 }
 
                 Medicine m = new Medicine(name);
-                if (mPrescription != null && mPrescription.shortName().toLowerCase().equals(m.name().toLowerCase())) {
+                if (mPrescription != null) {
                     m.setCn(String.valueOf(mPrescription.getCode()));
                     m.setDatabase(DBRegistry.instance().current().id());
                 }
@@ -778,9 +749,9 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             String value = sharedPreferences.getString("prescriptions_database", none);
             enableSearch = !value.equals(none) && !value.equals(settingUp);
             if (enableSearch) {
-                enableSearchButton();
+//                enableSearchButton();
             } else {
-                searchButton.setVisibility(View.GONE);
+//                searchButton.setVisibility(View.GONE);
             }
         }
     }
@@ -820,77 +791,6 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         void onMedicineCreated(Medicine r);
 
         void onMedicineDeleted(Medicine r);
-    }
-
-    public class AutoCompleteAdapter extends ArrayAdapter<Prescription> implements Filterable {
-        private List<Prescription> mData;
-
-        public AutoCompleteAdapter(Context context, int textViewResourceId) {
-            super(context, textViewResourceId);
-            mData = new ArrayList<Prescription>();
-        }
-
-        @Override
-        public int getCount() {
-            return mData.size();
-        }
-
-        @Override
-        public Prescription getItem(int index) {
-            return mData.get(index);
-        }
-
-        @Override
-        public View getView(int position, View item, ViewGroup parent) {
-
-            if (item == null) {
-                final LayoutInflater inflater = getActivity().getLayoutInflater();
-                item = inflater.inflate(R.layout.med_drop_down_item, null);
-            }
-
-            Prescription p = mData.get(position);
-            ((TextView) item.findViewById(R.id.text1)).setText(p.shortName()); //  + (p.generic?" (G)":"")
-            ((TextView) item.findViewById(R.id.text2)).setText(mData.get(position).getName());
-            ((TextView) item.findViewById(R.id.text3)).setText("(" + p.getDose() + ")");
-            return item;
-        }
-
-        @Override
-        public Filter getFilter() {
-            Filter myFilter = new Filter() {
-                @Override
-                protected FilterResults performFiltering(CharSequence constraint) {
-                    FilterResults filterResults = new FilterResults();
-                    if (constraint != null) {
-                        // A class that queries a web API, parses the data and returns an ArrayList<Style>
-                        try {
-                            List<Prescription> prescriptions = DB.drugDB().prescriptions().findByName(constraint.toString(), 20);
-                            /*List<String> names = new ArrayList<String>();
-                            for(Prescription p : prescriptions)
-                                names.add(p.name);
-                                */
-                            mData = prescriptions;//Fetcher.fetchNames(constraint.toString());
-                        } catch (Exception e) {
-                            Log.e("myException", e.getMessage());
-                        }
-                        // Now assign the values and count to the FilterResults object
-                        filterResults.values = mData;
-                        filterResults.count = mData.size();
-                    }
-                    return filterResults;
-                }
-
-                @Override
-                protected void publishResults(CharSequence contraint, FilterResults results) {
-                    if (results != null && results.count > 0) {
-                        notifyDataSetChanged();
-                    } else {
-                        notifyDataSetInvalidated();
-                    }
-                }
-            };
-            return myFilter;
-        }
     }
 
     public class ComputeEstimatedStockEndTask extends AsyncTask<Void, Void, Boolean> {
