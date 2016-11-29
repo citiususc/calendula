@@ -478,7 +478,7 @@
     <string name="notification_error_msg">Parece que ha habido un problema con la notificacion. Por favor, revisa tu agenda para ver si hay medicacion pendiente.</string>
     <string name="notification_error_title">Ups...</string>
     <string name="error_duplicate_medicine">Este medicamento ya está en el botiquín.</string>
-    <string name="message_allergies_database_required">La gestión de alertas sólo está disponible actualmente para la base de datos AEMPS. Quieres activarla?</string>
+    <string name="message_allergies_database_required">La gestión de alertas sólo está disponible actualmente para la base de datos AEMPS. ¿Quieres activarla?</string>
     <string name="message_allergies_detected_dialog">Algunas de las medicinas de tu botiquín contienen el alérgeno que acabas de añadir. Por favor, revisa sus prospectos cuidadosamente.</string>
     <string name="message_allergy_add_failure">Ocurrió un error al intentar guardar tus preferencias de alergias.</string>
     <string name="message_allergy_add_multiple_success">Tu información de alergias ha sido guardada.</string>
