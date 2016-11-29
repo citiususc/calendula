@@ -13,8 +13,8 @@ import com.mikepenz.fastadapter.IExpandable;
 import com.mikepenz.fastadapter.commons.items.AbstractExpandableItem;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.listeners.ClickEventHook;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 
 import java.util.List;
 
@@ -72,9 +72,8 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
         holder.title.setText(titleSpannable != null ? titleSpannable : title);
         holder.subtitle.setText(this.subtitle);
 //        UIUtils.setBackground(holder.itemView, FastAdapterUIUtils.getSelectableBackground(holder.itemView.getContext(), Color.CYAN, true));
-        final MaterialDesignIconic.Icon icon = MaterialDesignIconic.Icon.gmi_chevron_down;
         holder.imageButton.setImageDrawable(new IconicsDrawable(holder.imageButton.getContext())
-                .icon(icon)
+                .icon(GoogleMaterial.Icon.gmd_chevron_down)
                 .colorRes(R.color.agenda_item_title)
                 .paddingDp(10)
                 .sizeDp(38));

@@ -1,7 +1,6 @@
 package es.usc.citius.servando.calendula.adapters.items.allergylist;
 
 import android.content.Context;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
@@ -9,8 +8,8 @@ import android.widget.TextView;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fastadapter.commons.items.AbstractExpandableItem;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 
 import java.util.List;
 
@@ -59,9 +58,8 @@ public class AllergyGroupItem extends AbstractExpandableItem<AllergyGroupItem, A
         holder.title.setText(this.title);
         holder.subtitle.setText(context.getString(R.string.allergies_group_elements_number, getSubItems().size()));
 //        UIUtils.setBackground(holder.itemView, FastAdapterUIUtils.getSelectableBackground(holder.itemView.getContext(), Color.CYAN, true));
-        final MaterialDesignIconic.Icon icon = MaterialDesignIconic.Icon.gmi_chevron_down;
         holder.dropButton.setImageDrawable(new IconicsDrawable(holder.dropButton.getContext())
-                .icon(icon)
+                .icon(GoogleMaterial.Icon.gmd_chevron_down)
                 //.color(0xFF222222)
                 .colorRes(R.color.agenda_item_title)
                 .paddingDp(10)
