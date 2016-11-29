@@ -34,4 +34,8 @@
         <item name="android:windowContentTransitions">true</item>
         <item name="siv_insetForeground">#01ffffff</item>
     </style>
+
+    <style name="BlueProgressBar" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/android_blue</item>
+    </style>
 </resources>

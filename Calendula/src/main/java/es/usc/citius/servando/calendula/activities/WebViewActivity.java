@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.util.Log;
 import android.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -210,14 +212,12 @@ public class WebViewActivity extends CalendulaActivity {
     }
 
     private void showProgressDialog(String loadingMsg) {
-        loadingDialog = new MaterialStyledDialog.Builder(this)
-                .setTitle("")
+        final MaterialStyledDialog.Builder builder = new MaterialStyledDialog.Builder(this)
                 .setStyle(Style.HEADER_WITH_ICON)
                 .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_file_document, R.color.white, 100))
                 .setHeaderColor(R.color.android_blue)
+                .withIconAnimation(false)
                 .withDialogAnimation(false)
-                .setTitle(loadingMsg)
-                .setDescription(" ")
                 .setCancelable(false)
                 .setNegativeText(R.string.cancel)
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -227,8 +227,16 @@ public class WebViewActivity extends CalendulaActivity {
                         loadingDialog.dismiss();
                         finish();
                     }
-                })
-                .show();
+                });
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.dialog_loading_view, null);
+        TextView customText = (TextView) customView.findViewById(R.id.loading_description);
+        customText.setText(loadingMsg);
+
+        builder.setCustomView(customView);
+
+        loadingDialog = builder.show();
     }
 
     private boolean isCached() {
