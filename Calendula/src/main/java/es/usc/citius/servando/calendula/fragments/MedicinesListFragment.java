@@ -20,20 +20,12 @@ package es.usc.citius.servando.calendula.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DownloadManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,11 +35,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
-import java.io.File;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
@@ -57,19 +49,21 @@ import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.util.Snack;
+import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
  */
 public class MedicinesListFragment extends Fragment {
 
-    public static final String PROSPECT_URL = "http://www.aemps.gob.es/cima/pdfs/es/p/#ID#/P_#ID#.pdf";
+    public static final String PARAM_DOWNLOAD_ID = "medicinesListFragment_download_id";
+
+    private static final String TAG = "MedicinesListFragment";
 
     List<Medicine> mMedicines;
     OnMedicineSelectedListener mMedicineSelectedCallback;
     ArrayAdapter adapter;
     ListView listview;
-    String prospectDowloadCn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,16 +82,11 @@ public class MedicinesListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().registerReceiver(onComplete,
-                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-        getActivity().registerReceiver(onNotificationClick,
-                new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
+
     }
 
     @Override
     public void onDestroy() {
-        getActivity().unregisterReceiver(onComplete);
-        getActivity().unregisterReceiver(onNotificationClick);
         super.onDestroy();
     }
 
@@ -135,7 +124,7 @@ public class MedicinesListFragment extends Fragment {
         ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
         icon.setImageDrawable(new IconicsDrawable(getContext())
                 .icon(medicine.presentation().icon())
-                        //.color(Color.WHITE)
+                //.color(Color.WHITE)
                 .colorRes(R.color.agenda_item_title)
                 .paddingDp(8)
                 .sizeDp(40));
@@ -226,69 +215,19 @@ public class MedicinesListFragment extends Fragment {
         return item;
     }
 
-    private void openProspect(Prescription p) {
-        File f = new File(
-                getActivity().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
-                        + "/prospects/"
-                        + p.pid
-                        + ".pdf");
-        File file = new File(f.getAbsolutePath());
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(file), "application/pdf");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
+
+    void onClickProspect(Medicine medicine, final Prescription p) {
+        if (p != null) {
+            openProspect(p);
+        } else {
+            Toast.makeText(getActivity(), R.string.download_prospect_not_available_message, Toast.LENGTH_SHORT).show();
+            Log.d("MedicinesList", "Prospect url not available");
+        }
     }
 
 
-    void onClickProspect(Medicine medicine, final Prescription p) {
-        try {
-            if (p != null) {
-
-                if (p.isProspectDownloaded(getActivity())) {
-                    openProspect(p);
-                } else {
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                    boolean downloadProspectMessageShown = prefs.getBoolean("prospect_download_message_shown", false);
-//                    if (downloadProspectMessageShown) {
-//                        downloadProspect(p);
-//                    } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle(getString(R.string.download_prospect_title));
-                    builder.setMessage(getString(R.string.download_prospect_message, p.shortName()))
-                            .setCancelable(true)
-                            .setPositiveButton(getString(R.string.download_prospect_continue), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    downloadProspect(p);
-                                }
-                            })
-                            .setNegativeButton(getString(R.string.download_prospect_cancel), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                    prefs.edit().putBoolean("prospect_download_message_shown", true).commit();
-//                    }
-                }
-
-            } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(getString(R.string.download_prospect_message))
-                        .setCancelable(true)
-                        .setPositiveButton(getString(R.string.download_prospect_continue), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
-                        });
-                AlertDialog alert = builder.create();
-                alert.show();
-                Log.d("MedicinesList", "Prospect url not available");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+    public void openProspect(Prescription p) {
+        ProspectUtils.openProspect(p,getActivity(), true);
     }
 
     public void showDrivingAdvice(final Prescription p) {
@@ -300,11 +239,8 @@ public class MedicinesListFragment extends Fragment {
             builder.setPositiveButton(getString(R.string.driving_warning_show_prospect), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if (p.isProspectDownloaded(getActivity())) {
-                        openProspect(p);
-                    } else {
-                        downloadProspect(p);
-                    }
+                    openProspect(p);
+
                 }
             });
         }
@@ -359,26 +295,6 @@ public class MedicinesListFragment extends Fragment {
     }
 
 
-    public void downloadProspect(Prescription p) {
-
-        final String uri = PROSPECT_URL.replaceAll("#ID#", p.pid);
-        File prospects = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/prospects/");
-        prospects.mkdirs();
-        DownloadManager.Request r = new DownloadManager.Request(Uri.parse(uri));
-
-        Log.d("MedicinesListF", "Downloading prospect from  [" + uri + "]");
-
-        r.setDestinationInExternalFilesDir(getActivity(), Environment.DIRECTORY_DOWNLOADS, "prospects/" + p.pid + ".pdf");
-        r.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
-        r.setVisibleInDownloadsUi(false);
-        r.setTitle(p.shortName() + " prospect");
-        // Start download
-        prospectDowloadCn = p.cn;
-        DownloadManager dm = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
-        dm.enqueue(r);
-    }
-
-
     //
     // Container Activity must implement this interface
     //
@@ -387,27 +303,6 @@ public class MedicinesListFragment extends Fragment {
 
         void onCreateMedicine();
     }
-
-
-    BroadcastReceiver onComplete = new BroadcastReceiver() {
-        public void onReceive(Context ctxt, Intent intent) {
-            adapter.notifyDataSetChanged();
-            Snack.show(getString(R.string.prescriptions_download_complete), getActivity());
-            if (prospectDowloadCn != null) {
-                Prescription p = Prescription.findByCn(prospectDowloadCn);
-                if (p != null) {
-                    openProspect(p);
-                }
-                prospectDowloadCn = null;
-            }
-        }
-    };
-
-    BroadcastReceiver onNotificationClick = new BroadcastReceiver() {
-        public void onReceive(Context ctxt, Intent intent) {
-
-        }
-    };
 
 
     @Override

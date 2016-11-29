@@ -86,11 +86,27 @@
                 android:layout_height="fill_parent"
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/agenda_zoom_meds_time"
-                android:textColor="#ffffff"
-                android:textSize="23sp"
+                android:textColor="#ccffffff"
+                android:textSize="24sp"
                 android:visibility="visible"
+                android:layout_marginBottom="70dp"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.45"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/user_friendly_time"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="hace 5 minutos"
+                android:layout_marginBottom="70dp"
+                android:textColor="#ffffff"
+                android:textSize="20dp"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.45"
+                android:paddingTop="60dp"
+                android:textStyle="bold"
                 android:gravity="center"/>
 
             <RelativeLayout
@@ -104,9 +120,11 @@
                 android:paddingTop="10dp"
                 >
 
+
+
                 <LinearLayout
                     android:id="@+id/linearLayout"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"

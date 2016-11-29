@@ -58,12 +58,18 @@ public class RingtonePreference extends android.preference.RingtonePreference {
 
     public RingtonePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        getEntriesAndValues();
-        adapter = new SimpleListAdapter(getContext(), R.layout.ringtone_list_item, titles);
     }
+
+    public void performClick(){
+        onClick();
+    }
+
 
     @Override
     protected void onClick() {
+
+        getEntriesAndValues();
+        adapter = new SimpleListAdapter(getContext(), R.layout.ringtone_list_item, titles);
 
         ListView list = new ListView(getContext());
         list.setAdapter(adapter);

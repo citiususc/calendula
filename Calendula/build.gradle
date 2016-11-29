@@ -59,8 +59,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 25
-        versionName "2.4-beta.1"
+        versionCode 29
+        versionName "2.4-beta.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -95,7 +95,7 @@ android {
         beta {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
-            versionNameSuffix "-beta" + "-build" + getDate()
+            versionNameSuffix "-build" + getDate()
         }
     }
     productFlavors {}
@@ -184,6 +184,10 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.heinrichreimersoftware:material-intro:1.5.8'
 
-}
+    // html parsing
+    compile 'org.jsoup:jsoup:1.7.2'
 
-apply plugin: 'com.google.gms.google-services'
+    // jobs
+    compile 'com.evernote:android-job:1.1.3'
+
+}

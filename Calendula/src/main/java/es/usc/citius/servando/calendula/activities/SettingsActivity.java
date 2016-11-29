@@ -18,10 +18,15 @@
 
 package es.usc.citius.servando.calendula.activities;
 
+import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.media.Ringtone;
@@ -30,6 +35,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -54,6 +60,7 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
+import es.usc.citius.servando.calendula.util.PermissionUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 /**
@@ -76,7 +83,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
+    public static final int REQ_CODE_EXTERNAL_STORAGE = 20;
+
     static Context ctx;
+    static Activity activity;
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -87,10 +97,19 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             String stringValue = value.toString();
 
             if (preference instanceof es.usc.citius.servando.calendula.util.RingtonePreference) {
-                Uri ringtoneUri = Uri.parse(stringValue);
-                Ringtone ringtone = RingtoneManager.getRingtone(ctx, ringtoneUri);
-                String name = ringtone!=null ? ringtone.getTitle(ctx) :ctx.getString(R.string.pref_notification_tone_sum);
-                preference.setSummary(name);
+                String p = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+                if(PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(activity, p)){
+                    preference.setSummary("");
+                }else{
+                    Uri ringtoneUri = Uri.parse(stringValue);
+                    Ringtone ringtone = RingtoneManager.getRingtone(ctx, ringtoneUri);
+                    String name = ringtone!=null ? ringtone.getTitle(ctx) :ctx.getString(R.string.pref_notification_tone_sum);
+                    preference.setSummary(name);
+                }
+
+
+
+
             } else if (preference instanceof ListPreference) {
                 // For list preferences, look up the correct display value in
                 // the preference's 'entries' list.
@@ -176,6 +195,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         root.addView(toolbar, 0); // insert at top
 
+        activity = this;
         ctx = getBaseContext();
         setupSimplePreferencesScreen();
 
@@ -222,6 +242,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         bindPreferenceSummaryToValue(findPreference("alarm_repeat_frequency"));
         bindPreferenceSummaryToValue(findPreference("alarm_reminder_window"));
         bindPreferenceSummaryToValue(findPreference("pref_notification_tone"));
+        //bindPreferenceSummaryToValue(findPreference("check_window_margin"));
 
         findPreference("enable_prescriptions_db").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -241,12 +262,49 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             }
         });
 
+        findPreference("alarm_insistent").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                boolean val = (boolean) o;
+                String p = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+                if(val && PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(activity,p)) {
+                    if(PermissionUtils.shouldAskForPermission(activity,p))
+                        PermissionUtils.requestPermissions(activity, new String[]{p}, REQ_CODE_EXTERNAL_STORAGE);
+                    else
+                        showStupidUserDialog();
+                    return false;
+                }
+                return true;
+            }
+        });
 
         if(!CalendulaApp.isPharmaModeEnabled(this)){
             Preference alarmPk = findPreference("alarm_pickup_notifications");
             PreferenceScreen preferenceScreen = getPreferenceScreen();
             preferenceScreen.removePreference(alarmPk);
         }
+
+    }
+
+    private void showStupidUserDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        // "Remove " + m.name() + "?"
+        builder.setMessage(getString(R.string.permission_dialog_go_to_settings))
+                .setCancelable(true)
+                .setPositiveButton(getString(R.string.permission_dialog_ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        PermissionUtils.goToAppSettings(activity);
+                    }
+                })
+                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+            });
+        AlertDialog alert = builder.create();
+        alert.show();
+
 
     }
 
@@ -357,6 +415,22 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 dialog.dismiss();
             }
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQ_CODE_EXTERNAL_STORAGE: {
+                PermissionUtils.markedPermissionAsAsked(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    CheckBoxPreference ins = (CheckBoxPreference)findPreference("alarm_insistent");
+                    ins.setChecked(true);
+                }
+                return;
+            }
+        }
+
     }
 
 }

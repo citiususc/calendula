@@ -40,11 +40,15 @@ public class AlarmIntentParams implements Parcelable {
     public static final String DATE_FORMAT = "dd/MM/YYYY";
     public static final String TIME_FORMAT = "kk:mm";
 
+    public static final int AUTO = 0; // auto generated, default
+    public static final int USER = 1; // generated due to an user action (i.e. delay an intake)
+
     public int action = -1;
     public long routineId = -1;
     public long scheduleId = -1;
     public String scheduleTime = "";
     public String  date = "";
+    public int actionType = AUTO;
 
     public AlarmIntentParams() {
     }
@@ -59,6 +63,7 @@ public class AlarmIntentParams implements Parcelable {
         out.writeLong(scheduleId);
         out.writeString(scheduleTime);
         out.writeString(date);
+        out.writeInt(actionType);
     }
 
     public static final Parcelable.Creator<AlarmIntentParams> CREATOR = new Parcelable.Creator<AlarmIntentParams>() {
@@ -77,6 +82,7 @@ public class AlarmIntentParams implements Parcelable {
         scheduleId = in.readLong();
         scheduleTime = in.readString();
         date = in.readString();
+        actionType = in.readInt();
     }
 
     public static AlarmIntentParams forRoutine(Long routineId, LocalDate date, boolean delayed){
@@ -96,6 +102,19 @@ public class AlarmIntentParams implements Parcelable {
         params.date = date.toString(DATE_FORMAT);
         Log.d(TAG, "forSchedule: " + params.toString());
         return params;
+    }
+
+
+    public static AlarmIntentParams forRoutine(Long routineId, LocalDate date, boolean delayed, int actionType){
+        AlarmIntentParams p = forRoutine(routineId,date,delayed);
+        p.actionType = actionType;
+        return p;
+    }
+
+    public static AlarmIntentParams forSchedule(Long scheduleId, LocalTime time, LocalDate date, boolean delayed, int actionType){
+        AlarmIntentParams p = forSchedule(scheduleId,time,date,delayed);
+        p.actionType = actionType;
+        return p;
     }
 
     public static AlarmIntentParams forDailyUpdate() {
@@ -139,13 +158,14 @@ public class AlarmIntentParams implements Parcelable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AlarmIntentParams params = (AlarmIntentParams) o;
+        AlarmIntentParams that = (AlarmIntentParams) o;
 
-        if (action != params.action) return false;
-        if (routineId != params.routineId) return false;
-        if (scheduleId != params.scheduleId) return false;
-        if (!scheduleTime.equals(params.scheduleTime)) return false;
-        return date.equals(params.date);
+        if (action != that.action) return false;
+        if (routineId != that.routineId) return false;
+        if (scheduleId != that.scheduleId) return false;
+        if (actionType != that.actionType) return false;
+        if (scheduleTime != null ? !scheduleTime.equals(that.scheduleTime) : that.scheduleTime != null) return false;
+        return date != null ? date.equals(that.date) : that.date == null;
 
     }
 
@@ -154,8 +174,9 @@ public class AlarmIntentParams implements Parcelable {
         int result = action;
         result = 31 * result + (int) (routineId ^ (routineId >>> 32));
         result = 31 * result + (int) (scheduleId ^ (scheduleId >>> 32));
-        result = 31 * result + scheduleTime.hashCode();
-        result = 31 * result + date.hashCode();
+        result = 31 * result + (scheduleTime != null ? scheduleTime.hashCode() : 0);
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + actionType;
         return result;
     }
 }

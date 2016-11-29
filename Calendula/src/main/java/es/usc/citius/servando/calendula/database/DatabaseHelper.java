@@ -36,8 +36,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import es.usc.citius.servando.calendula.database.migrationHelpers.LocalDateMigrationHelper;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
+import es.usc.citius.servando.calendula.persistence.HtmlCacheEntry;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
@@ -67,13 +69,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             HomogeneousGroup.class,
             PickupInfo.class,
             // v9
-            Patient.class
+            Patient.class,
+            // v10
+            HtmlCacheEntry.class
     };
 
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 11;
 
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
@@ -121,7 +125,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
-    private Patient createDefaultPatient() throws SQLException{
+    private Patient createDefaultPatient() throws SQLException {
         // Create a default patient
         Patient p = new Patient();
         p.setName("Usuario");
@@ -140,13 +144,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.i(DatabaseHelper.class.getName(), "onUpgrade");
             Log.d(DatabaseHelper.class.getName(), "OldVersion: " + oldVersion + ", newVersion: " + newVersion);
 
-            if (oldVersion < 6)
-            {
+            if (oldVersion < 6) {
                 oldVersion = 6;
             }
 
-            switch (oldVersion + 1)
-            {
+            switch (oldVersion + 1) {
 
                 case 7:
                     // migrate to iCal
@@ -174,19 +176,32 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 case 9:
                     TableUtils.createTable(connectionSource, Patient.class);
                     migrateToMultiPatient();
-            }
+                case 10:
+                    TableUtils.createTable(connectionSource, HtmlCacheEntry.class);
+                case 11:
+                    //delete all html cache entries and change datatypes (bugfix)
+                    TableUtils.dropTable(connectionSource, HtmlCacheEntry.class, true);
+                    TableUtils.createTable(connectionSource, HtmlCacheEntry.class);
+                    LocalDateMigrationHelper.migrateLocalDates(this);
 
+            }
 
         } catch (Exception e) {
             Log.e(DatabaseHelper.class.getName(), "Can't upgrade databases", e);
-            throw new RuntimeException(e);
+            try {
+                Log.d(DatabaseHelper.class.getName(), "Will try to recreate db...");
+                dropAndCreateAllTables();
+                createDefaultPatient();
+            }catch (Exception ex){
+                throw new RuntimeException(e);
+            }
         }
     }
 
     /**
      * Method that migrate models to multi-user
      */
-    private void migrateToMultiPatient() throws SQLException{
+    private void migrateToMultiPatient() throws SQLException {
 
         // add patient column to routines, schedules and medicines
         getRoutinesDao().executeRaw("ALTER TABLE Routines ADD COLUMN Patient INTEGER;");
@@ -200,25 +215,29 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         // prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).commit();
 
         // Assign all routines to the default patient
-        UpdateBuilder<Routine,Long> rUpdateBuilder = getRoutinesDao().updateBuilder();
-        rUpdateBuilder.updateColumnValue(Routine.COLUMN_PATIENT,p.id());
+        UpdateBuilder<Routine, Long> rUpdateBuilder = getRoutinesDao().updateBuilder();
+        rUpdateBuilder.updateColumnValue(Routine.COLUMN_PATIENT, p.id());
         rUpdateBuilder.update();
 
         // Assign all schedules to the default patient
-        UpdateBuilder<Schedule,Long> sUpdateBuilder = getSchedulesDao().updateBuilder();
-        sUpdateBuilder.updateColumnValue(Schedule.COLUMN_PATIENT,p.id());
+        UpdateBuilder<Schedule, Long> sUpdateBuilder = getSchedulesDao().updateBuilder();
+        sUpdateBuilder.updateColumnValue(Schedule.COLUMN_PATIENT, p.id());
         sUpdateBuilder.update();
 
         // Assign all medicines to the default patient
-        UpdateBuilder<Medicine,Long> mUpdateBuilder = getMedicinesDao().updateBuilder();
-        mUpdateBuilder.updateColumnValue(Medicine.COLUMN_PATIENT,p.id());
+        UpdateBuilder<Medicine, Long> mUpdateBuilder = getMedicinesDao().updateBuilder();
+        mUpdateBuilder.updateColumnValue(Medicine.COLUMN_PATIENT, p.id());
         mUpdateBuilder.update();
 
         // Assign all DailyScheduleItems to the default patient, for today
-        UpdateBuilder<DailyScheduleItem,Long> siUpdateBuilder = getDailyScheduleItemsDao().updateBuilder();
-        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_PATIENT,p.id());
-        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_DATE,LocalDate.now());
+        UpdateBuilder<DailyScheduleItem, Long> siUpdateBuilder = getDailyScheduleItemsDao().updateBuilder();
+        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_PATIENT, p.id());
         siUpdateBuilder.update();
+
+        // date formatter changes on v11, so we can no use LocalDatePersister here
+        String now = LocalDate.now().toString("ddMMYYYY");
+        String updateDateSql = "UPDATE DailyScheduleItems SET " + DailyScheduleItem.COLUMN_DATE + " = '" +now + "'";
+        getDailyScheduleItemsDao().executeRaw(updateDateSql);
 
     }
 
