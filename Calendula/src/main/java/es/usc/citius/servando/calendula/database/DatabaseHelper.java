@@ -47,11 +47,13 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionActiveIngredient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionExcipient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PresentationForm;
+import es.usc.citius.servando.calendula.persistence.AllergyGroup;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.HtmlCacheEntry;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
+import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Routine;
@@ -91,7 +93,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             PresentationForm.class,
             PrescriptionActiveIngredient.class,
             PrescriptionExcipient.class,
-            PatientAlert.class
+            PatientAllergen.class,
+            PatientAlert.class,
+            AllergyGroup.class,
     };
 
     // name of the database file for our application
@@ -207,8 +211,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                     DrugModelMigrationHelper.migrateDrugModel(db, connectionSource);
                     getMedicinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN Database TEXT;");
                     getMedicinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN Stock REAL DEFAULT -1;");
-                    TableUtils.createTable(connectionSource, PatientAlert.class);
+                    TableUtils.createTable(connectionSource, PatientAllergen.class);
+                    TableUtils.createTable(connectionSource, AllergyGroup.class);
                     getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN " + Schedule.COLUMN_STATE + " TEXT;");
+                    TableUtils.createTable(connectionSource, PatientAlert.class);
             }
 
         } catch (Exception e) {

@@ -191,8 +191,13 @@
 
         <activity
             android:name=".activities.WebViewActivity"
-            android:label="@string/title_activity_webview"
-            android:configChanges="orientation|screenSize"/>
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_webview"/>
+
+        <activity
+            android:name=".activities.AllergiesActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_allergies" />
     </application>
 
 </manifest>

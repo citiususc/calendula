@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="@dimen/status_bar_height"
+                tools:context="es.usc.citius.servando.calendula.activities.WebViewActivity">
+
+    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+                                       android:id="@+id/toolbar"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="56dp"
+                                       android:background="@color/dark_grey_home"
+                                       app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                                       app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <ImageView
+        android:id="@+id/tabs_shadow"
+        android:layout_width="fill_parent"
+        android:layout_height="5dp"
+        android:layout_below="@+id/toolbar"
+        android:alpha="0.7"
+        android:scaleType="fitXY"
+        android:src="@drawable/daily_view_list_item_tab_shadow_top"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/allergies_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="@drawable/touchable_white"
+        android:clipToPadding="false"
+        android:paddingBottom="96dp"
+        />
+
+    <TextView
+        android:id="@+id/textview_no_allergies_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:gravity="center"
+        android:text="@string/allergies_placeholder"
+        android:visibility="gone"
+        />
+
+    <RelativeLayout
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/android_blue_darker"
+        android:focusableInTouchMode="true"
+        android:visibility="gone">
+
+
+        <EditText
+            android:id="@+id/search_edit_text"
+            android:layout_width="fill_parent"
+            android:layout_height="56dp"
+            android:layout_alignBottom="@+id/imageView"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="72dp"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/search_hint"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textColor="#fff"
+            android:textColorHint="#ececec"
+            android:textCursorDrawable="@null"
+            android:textSize="20dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/search_edit_text"
+            android:background="@color/white"
+            >
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/search_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"/>
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/allergies_search_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/search_edit_text"
+            android:gravity="top|center_horizontal"
+            android:paddingTop="48dp"
+            android:text="@string/allergies_search_placeholder"
+            />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:padding="15dp"
+            android:src="@drawable/ic_arrow_back_white_48dp"/>
+
+        <ImageView
+            android:id="@+id/close_search_button"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_alignParentRight="true"
+            android:padding="15dp"
+            android:src="@drawable/ic_cancel_white_48dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/search_shadow"
+            android:layout_width="fill_parent"
+            android:layout_height="5dp"
+            android:layout_below="@+id/search_edit_text"
+            android:alpha="0.7"
+            android:scaleType="fitXY"
+            android:src="@drawable/daily_view_list_item_tab_shadow_top"/>
+
+        <LinearLayout
+            android:id="@+id/allergies_selected_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+
+            <TextView
+                android:id="@+id/allergies_selected_message"
+                style="@style/menu_labels_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3.5dp"/>
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/accept_selection_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                fab:fab_colorNormal="@color/md_light_green_800"
+                fab:fab_colorPressed="@color/md_light_green_500"
+                fab:fab_icon="@drawable/ic_done_white_48dp"
+                fab:fab_labelStyle="@style/menu_labels_style"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <com.getbase.floatingactionbutton.AddFloatingActionButton
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
+        fab:fab_colorNormal="#efefef"
+        fab:fab_colorPressed="#b7b7b7"
+        fab:fab_icon="@drawable/ic_done_black_48dp"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        fab:fab_plusIconColor="@color/black"
+        />
+
+    <ProgressBar
+        android:id="@+id/main_progress_bar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+
+</RelativeLayout>

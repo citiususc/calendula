@@ -27,6 +27,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 
 /**
@@ -63,6 +64,19 @@ public class PatientAlertDao extends GenericDao<PatientAlert, Long> {
         } catch (SQLException e) {
             Log.e(TAG, "findByMedicineAndLevel: ", e);
             throw new RuntimeException("Cannot retrieve alerts: ", e);
+        }
+    }
+    public List<PatientAlert> findByPatientMedicineAndType(Patient p, Medicine m, String className) {
+
+        try {
+            final PreparedQuery<PatientAlert> query = this.queryBuilder().where()
+                    .eq(PatientAlert.COLUMN_TYPE, className).and()
+                    .eq(PatientAlert.COLUMN_PATIENT, p).and()
+                    .eq(PatientAlert.COLUMN_MEDICINE, m).prepare();
+            return query(query);
+        } catch (SQLException e) {
+            Log.e(TAG, "findByPatientMedicineAndType: ", e);
+            return null;
         }
     }
 

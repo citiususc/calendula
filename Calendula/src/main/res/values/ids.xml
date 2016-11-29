@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="fastadapter_allergen_item" type="id">8714684613</item>
+    <item name="fastadapter_allergen_group_item" type="id">65498121548</item>
+    <item name="fastadapter_allergen_group_sub_item" type="id">65498778987</item>
+    <item name="fastadapter_allergy_group_item" type="id">6879168457</item>
+    <item name="fastadapter_allergy_group_sub_item" type="id">6879148791</item>
+    <item name="fastadapter_allergy_item" type="id">89888798744</item>
+</resources>

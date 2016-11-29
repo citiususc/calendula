@@ -222,4 +222,17 @@ public class Medicine implements Comparable<Medicine> {
     public boolean stockManagementEnabled() {
         return stock != -1;
     }
+
+    @Override
+    public String toString() {
+        return "Medicine{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", presentation=" + presentation +
+                ", cn='" + cn + '\'' +
+                ", homogeneousGroup=" + homogeneousGroup +
+                ", patient=" + patient +
+                ", database='" + database + '\'' +
+                '}';
+    }
 }

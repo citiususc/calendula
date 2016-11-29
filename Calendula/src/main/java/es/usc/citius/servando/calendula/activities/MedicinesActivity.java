@@ -19,9 +19,11 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -48,16 +50,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.allergies.AllergenFacade;
+import es.usc.citius.servando.calendula.allergies.AllergenVO;
+import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
@@ -66,16 +77,18 @@ import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
+import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.DrivingCautionAlert;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
+import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
+import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 public class MedicinesActivity extends CalendulaActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
 
-    private static final String TAG = "MedicinesActivity";
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -110,6 +123,9 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
     private String intentAction;
     private String intentSearchText = null;
+
+
+    private final static String TAG = MedicinesActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,9 +241,9 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         searchView.setBackgroundColor(color);
         searchList.setDivider(null);
         searchList.setDividerHeight(0);
-        if(mMedicineId == -1 || intentSearchText != null ){
+        if (mMedicineId == -1 || intentSearchText != null) {
             showSearchView(intentSearchText);
-        }else{
+        } else {
             hideSearchView();
         }
     }
@@ -291,26 +307,125 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         imm.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
     }
 
-
-    @Override
-    public void onMedicineEdited(Medicine m) {
-        DB.medicines().saveAndFireEvent(m);
-        Toast.makeText(this, getString(R.string.medicine_edited_message), Toast.LENGTH_SHORT).show();
-        finish();
+    private void showAllergyDialog(final MaterialDialog.SingleButtonCallback onOk) {
+        new MaterialStyledDialog.Builder(this)
+                .setStyle(Style.HEADER_WITH_ICON)
+                .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_exclamation, R.color.white, 100))
+                .setHeaderColor(R.color.android_red)
+                .withDialogAnimation(true)
+                .setTitle(R.string.title_medicine_allergy_alert)
+                .setDescription(R.string.message_medicine_alert)
+                .setCancelable(true)
+                .setNegativeText(R.string.cancel)
+                .setPositiveText(getString(R.string.ok))
+                .onPositive(onOk)
+                .show();
     }
 
     @Override
-    public void onMedicineCreated(Medicine m) {
-        DB.medicines().saveAndFireEvent(m);
-        if(m.isBoundToPrescription()){
-            Prescription p = DB.drugDB().prescriptions().findByCn(m.cn());
-            if(p.getAffectsDriving()){
-                AlertManager.createAlert(new DrivingCautionAlert(m));
+    public void onMedicineEdited(final Medicine m) {
+        // check for allergies
+        if (m.isBoundToPrescription()) {
+            final List<AllergenVO> vos = AllergenFacade.checkAllergies(this, DB.drugDB().prescriptions().findByCn(m.cn()));
+            if (!vos.isEmpty()) {
+                showAllergyDialog(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        updateMedicine(m, vos);
+                    }
+                });
+            } else {
+                updateMedicine(m, null);
             }
+        } else {
+            updateMedicine(m, null);
         }
-        CalendulaApp.eventBus().post(new PersistenceEvents.MedicineAddedEvent(m.getId()));
-        Toast.makeText(this, getString(R.string.medicine_created_message), Toast.LENGTH_SHORT).show();
-        finish();
+    }
+
+    private void updateMedicine(final Medicine m, final List<AllergenVO> allergies) {
+        try {
+            if (allergies != null) {
+                createAllergyAlerts(m, allergies);
+            }
+            removeOldAlerts(m);
+            DB.medicines().saveAndFireEvent(m);
+            Toast.makeText(this, getString(R.string.medicine_edited_message), Toast.LENGTH_SHORT).show();
+            finish();
+        } catch (RuntimeException | SQLException e) {
+            Snack.show(R.string.medicine_save_error_message, this);
+        }
+    }
+
+    /**
+     * Removes obsolete alerts for a medicine that is going to be updated.
+     * This MUST be called before calling the persistence method.
+     *
+     * @param m the medicine
+     */
+    private void removeOldAlerts(final Medicine m) throws SQLException {
+        Medicine old = DB.medicines().findById(m.getId());
+        if (!m.cn().equals(old.cn())) { // if prescription didn't change, don't check for alerts
+            AllergyAlertUtil.removeAllergyAlerts(m);
+        }
+    }
+
+    @Override
+    public void onMedicineCreated(final Medicine m) {
+
+        // check for allergies
+        if (m.isBoundToPrescription()) {
+            final List<AllergenVO> vos = AllergenFacade.checkAllergies(this, DB.drugDB().prescriptions().findByCn(m.cn()));
+            if (!vos.isEmpty()) {
+                showAllergyDialog(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        createMedicine(m, vos);
+                    }
+                });
+            } else {
+                createMedicine(m, null);
+            }
+        } else {
+            createMedicine(m, null);
+        }
+    }
+
+    private void createMedicine(final Medicine m, final List<AllergenVO> allergies) {
+        try {
+            DB.transaction(new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    DB.medicines().save(m);
+                    if (allergies != null) {
+                        createAllergyAlerts(m, allergies);
+                    }
+
+                    if (m.isBoundToPrescription()) {
+                        Prescription p = DB.drugDB().prescriptions().findByCn(m.cn());
+                        if (p.getAffectsDriving()) {
+                            AlertManager.createAlert(new DrivingCautionAlert(m));
+                        }
+                    }
+
+                    DB.medicines().fireEvent();
+                    return null;
+                }
+            });
+
+            CalendulaApp.eventBus().post(new PersistenceEvents.MedicineAddedEvent(m.getId()));
+            Toast.makeText(this, getString(R.string.medicine_created_message), Toast.LENGTH_SHORT).show();
+            finish();
+        } catch (RuntimeException e) {
+            Snack.show(R.string.medicine_save_error_message, this);
+            Log.e(TAG, "createMedicine: ", e);
+        }
+    }
+
+    private void createAllergyAlerts(final Medicine m, final List<AllergenVO> allergies) throws RuntimeException {
+
+        AllergyPatientAlert alert = new AllergyPatientAlert(m, allergies);
+        AlertManager.createAlert(alert);
+
     }
 
     @Override
@@ -322,7 +437,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
     @Override
     public void onBackPressed() {
-        if (searchView.getVisibility() == View.VISIBLE && mMedicineId!=-1) {
+        if (searchView.getVisibility() == View.VISIBLE && mMedicineId != -1) {
             hideSearchView();
         } else {
             super.onBackPressed();
@@ -408,7 +523,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
                 final Prescription p = mData.get(position);
 
-                String name =  dbMgr.shortName(p);
+                String name = dbMgr.shortName(p);
                 String match = searchEditText.getText().toString().trim();
                 Presentation pres = dbMgr.expected(p);
 
@@ -420,10 +535,10 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                 ImageView prView = ((ImageView) item.findViewById(R.id.presentation_image));
 
                 cnView.setTextColor(cnColor);
-                nameView.setText(Strings.getHighlighted(name,match,hColor));
+                nameView.setText(Strings.getHighlighted(name, match, hColor));
                 doseView.setText(p.getDose());
                 contentView.setText(p.getContent());
-                cnView.setText(Strings.getHighlighted(p.getCode(),match,cnHColor));
+                cnView.setText(Strings.getHighlighted(p.getCode(), match, cnHColor));
                 prospectIcon.setImageDrawable(icProspect);
 
                 prospectIcon.setOnClickListener(new View.OnClickListener() {
@@ -435,7 +550,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
                 prView.setImageDrawable(new IconicsDrawable(getContext())
                         .icon(pres == null ? CommunityMaterial.Icon.cmd_help : Presentation.iconFor(pres))
-                        .color(ScreenUtils.equivalentNoAlpha(color,0.8f))
+                        .color(ScreenUtils.equivalentNoAlpha(color, 0.8f))
                         .paddingDp(10)
                         .sizeDp(72));
             }
@@ -459,7 +574,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                             filterResults.values = null;
                             filterResults.count = 0;
                         }
-                    }else{
+                    } else {
                         mData = new ArrayList<>();
                         filterResults.values = mData;
                         filterResults.count = 0;
@@ -473,15 +588,15 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                 @Override
                 protected void publishResults(CharSequence constraint, FilterResults results) {
                     notifyDataSetChanged();
-                    if(results.count == 0){
-                        if(constraint.length() >= minCharsToSearch && !TextUtils.isEmpty(constraint)) {
+                    if (results.count == 0) {
+                        if (constraint.length() >= minCharsToSearch && !TextUtils.isEmpty(constraint)) {
                             addCustomMedBtn.setText(getString(R.string.add_custom_med_button_text, constraint));
                             addCustomMedBtn.setVisibility(View.VISIBLE);
                             emptyListText.setText(getString(R.string.medicine_search_not_found_msg));
-                        }else{
+                        } else {
                             emptyListText.setText(getString(R.string.medicine_search_empty_list_msg));
                         }
-                    }else{
+                    } else {
                         addCustomMedBtn.setVisibility(View.GONE);
                     }
                 }

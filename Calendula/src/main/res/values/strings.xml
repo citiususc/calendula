@@ -483,13 +483,41 @@
     <string name="action_open_with_browser">Open with browser</string>
     <string name="title_share_link">Share with…</string>
     <string name="title_about">About</string>
+
+    <string name="home_menu_allergies">Allergies</string>
+    <string name="title_activity_allergies">Allergies</string>
+    <string name="title_add_allergies">Add an allergy</string>
+    <string name="message_allergy_add_success">Your allergy to %1$s has been saved.</string>
+    <string name="message_allergy_add_failure">There was an error while trying to save your allergy preferences.</string>
+    <string name="remove_allergy_message_short">Remove allergy %1$s?</string>
+    <string name="excipient">Excipient</string>
+    <string name="active_ingredient">Active ingredient</string>
+    <string name="delete_allergen_error">Failed to delete allergy information.</string>
+    <string name="allergies_placeholder">No allergies have been added yet!</string>
+    <string name="allergies_search_placeholder">Start writing your allergy to receive suggestions.</string>
+    <string name="allergies_search_placeholder_no_result">No results for current search</string>
+
     <string name="notification_error_msg">It seems there was a problem with the notification. Please, take a look at your agenda to see if there is something pending.</string>
     <string name="notification_error_title">Oops...</string>
+    <string name="title_medicine_allergy_alert">Allergies detected for this medicine.</string>
+    <string name="message_medicine_alert">This medicine contains ingredients to which you have an allergy. For your safety, you will not be able to schedule this medicine.</string>
+    <string name="medicine_save_error_message">There was an error while saving your medicine.</string>
+    <string name="select_medicine_error">There was an error when selecting this medicine.</string>
+    <string name="message_schedule_medicine_allergy">This medicine cannot be scheduled because you have an allergy to some of its components.</string>
+    <string name="title_allergies_detected_dialog">Warning</string>
+    <string name="message_allergies_detected_dialog">Some of the medicines in your medkit contain the allergen you\'ve just added. Please review their prospects carefully.</string>
     <string name="error_duplicate_medicine">This medicine is already in your medkit.</string>
+    <string name="allergies_group_elements_number">%1$d elements</string>
+    <string name="allergies_selected_number">%1$d selected</string>
+    <string name="message_allergy_add_multiple_success">Your allergy information has been saved.</string>
+    <string name="remove_allergy_group_message_short">Are you sure you want to delete all allergies from group \"%1$s\"?</string>
+    <string name="title_allergies_database_required">Database required</string>
+    <string name="message_allergies_database_required">Allergy management is currently only supported for AEMPS medication database. Do you want to activate it?</string>
 
     <string name="add_custom_med_button_text">Add \"%1$s\" to the med kit</string>
     <string name="medicine_search_not_found_msg">Sorry, we didn\'t find anything with that name</string>
     <string name="medicine_search_empty_list_msg">Type a drug name or code to start searching...</string>
+    <string name="search_hint">Search…</string>
 
 
 </resources>
