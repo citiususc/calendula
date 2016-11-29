@@ -377,6 +377,10 @@ public class AllergiesActivity extends CalendulaActivity {
 
     private void clearSearch() {
         searchAdapter.clear();
+        searchAdapter.deselect();
+        searchAdapter.notifyDataSetChanged();
+        selectText.setText(getString(R.string.allergies_selected_number, 0));
+        selectLayout.setVisibility(View.GONE);
         searchEditText.setText("");
     }
 
@@ -666,8 +670,7 @@ public class AllergiesActivity extends CalendulaActivity {
                 }
                 if (res.allergies)
                     showNewAllergyConflictDialog();
-                searchAdapter.clear();
-                searchAdapter.notifyDataSetChanged();
+                clearSearch();
                 searchList.invalidate();
                 hideAllergiesView(false);
                 Snack.show(getString(R.string.message_allergy_add_multiple_success), AllergiesActivity.this);
