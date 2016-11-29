@@ -472,4 +472,7 @@
     <string name="notification_error_msg">Parece que ha habido un problema con la notificacion. Por favor, revisa tu agenda para ver si hay medicacion pendiente.</string>
     <string name="notification_error_title">Ups...</string>
 
+    <string name="permission_dialog_go_to_settings">No hemos podido realizar esta acción porque has rechazado una solicitud anterior de acceso al almacenamiento. Puedes conceder ese permiso de nuevo en la vista de información de la aplicación.</string>
+    <string name="permission_dialog_ok">Ir a información</string>
+
 </resources>

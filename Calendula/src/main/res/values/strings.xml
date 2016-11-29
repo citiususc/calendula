@@ -482,6 +482,9 @@
     <string name="notification_error_msg">It seems there was a problem with the notification. Please, take a look at your agenda to see if there is something pending.</string>
     <string name="notification_error_title">Oops...</string>
 
+    <string name="permission_dialog_go_to_settings">We couldn\'t perform this action because you have denied our previous request to access storage. You can grant the permission again in the app info view.</string>
+    <string name="permission_dialog_ok">Go to app info</string>
+
 
 </resources>
 
