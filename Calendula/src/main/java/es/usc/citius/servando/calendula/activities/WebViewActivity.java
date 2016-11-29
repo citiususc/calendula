@@ -188,81 +188,12 @@ public class WebViewActivity extends CalendulaActivity {
         //enable download cache if requested
         String cachedData = null;
         if (needsHtmlAccess(request)) {
-            if (!isCached()) {
-                webView.addJavascriptInterface(new SimpleJSCacheInterface(this), "HtmlCache");
-            } else {
-                cachedData = HtmlCacheManager.getInstance().get(originalUrl);
-            }
+            webView.addJavascriptInterface(new SimpleJSCacheInterface(this), "HtmlCache");
+        } else {
+            cachedData = HtmlCacheManager.getInstance().get(originalUrl);
         }
 
-        final String customCssSheet = isJavaScriptInsecure ? null : request.getCustomCss();
-
-        webView.setWebViewClient(
-                new WebViewClient() {
-
-                    @Override
-                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                        //use webview only for the requested URL or suburls, unless external links are enabled
-                        if (url.contains(originalUrl) || request.isExternalLinksEnabled()) {
-                            return super.shouldOverrideUrlLoading(view, url);
-                        } else {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-                            return true;
-                        }
-                    }
-
-                    @Override
-                    public void onPageFinished(WebView view, String url) {
-
-                        if (view.getTitle().matches(HTTP_ERROR_REGEXP)) {
-                            Log.e(TAG, "Received HTTP error, page title is: " + view.getTitle());
-                            showErrorToast(request.getNotFoundErrorMessage());
-                            hideLoading();
-                            WebViewActivity.this.finish();
-                        } else {
-                            if (customCssSheet != null && !isCached()) {
-                                injectCSS(customCssSheet, request.getCustomCssOverrides());
-                                //if JavaScript is not enabled explicitly, turn it off after CSS injection
-                                webView.getSettings().setJavaScriptEnabled(request.isJavaScriptEnabled());
-                            }
-                            // setup javascript interface if the request needs access to html
-                            if (needsHtmlAccess(request)) {
-                                webView.getSettings().setJavaScriptEnabled(true);
-                                webView.loadUrl("javascript:window.HtmlCache.writeToCache" +
-                                        "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
-                                webView.getSettings().setJavaScriptEnabled(request.isJavaScriptEnabled());
-                            } else {
-                                webView.setVisibility(View.VISIBLE);
-                                hideLoading();
-                            }
-                            Log.d(TAG, "Finished loading URL: " + url);
-                        }
-                    }
-
-                    @Override
-                    public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                        Log.e(TAG, "Received error when trying to load page");
-                        showErrorToast(request.getConnectionErrorMessage());
-                        hideLoading();
-                        finish();
-                    }
-
-                    @Override
-                    public void onReceivedHttpError(WebView view, WebResourceRequest r, WebResourceResponse errorResponse) {
-                        Log.e(TAG, "Received HTTP Error when trying to load page");
-                        showErrorToast(request.getNotFoundErrorMessage());
-                        hideLoading();
-                        finish();
-                    }
-
-                    @Override
-                    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                        Log.e(TAG, "Received SSL Error when trying to load page");
-                        showErrorToast(request.getConnectionErrorMessage());
-                        hideLoading();
-                        finish();
-                    }
-                });
+        webView.setWebViewClient(new CustomWebViewClient(request));
 
         if (cachedData != null) {
             Log.d(TAG, "setupWebView: Loading page from cache");
@@ -656,6 +587,87 @@ public class WebViewActivity extends CalendulaActivity {
         }
     }
 
+    private class CustomWebViewClient extends WebViewClient {
+
+        protected final WebViewRequest request;
+        protected final String originalUrl;
+        protected final String customCssSheet;
+
+        public CustomWebViewClient(WebViewRequest request) {
+            this.request = request;
+            this.originalUrl = request.getUrl();
+            this.customCssSheet = isJavaScriptInsecure ? null : request.getCustomCss();
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            //use webview only for the requested URL or suburls, unless external links are enabled
+            if (url.contains(originalUrl) || request.isExternalLinksEnabled()) {
+                return super.shouldOverrideUrlLoading(view, url);
+            } else {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                return true;
+            }
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+
+            if (view.getTitle().matches(HTTP_ERROR_REGEXP)) {
+                Log.e(TAG, "Received HTTP error, page title is: " + view.getTitle());
+                showErrorToast(request.getNotFoundErrorMessage());
+                hideLoading();
+                WebViewActivity.this.finish();
+            } else {
+                // setup javascript interface if the request needs access to html
+                if (needsHtmlAccess(request)) {
+                    webView.getSettings().setJavaScriptEnabled(true);
+                    webView.loadUrl("javascript:window.HtmlCache.writeToCache" +
+                            "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');");
+                } else {
+                    if (customCssSheet != null) {
+                        webView.getSettings().setJavaScriptEnabled(true);
+                        injectCSS(customCssSheet, request.getCustomCssOverrides());
+                        //if JavaScript is not enabled explicitly, turn it off after CSS injection
+                        webView.getSettings().setJavaScriptEnabled(request.isJavaScriptEnabled());
+                    }
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            webView.setVisibility(View.VISIBLE);
+                            hideLoading();
+                        }
+                    }, 200);
+                    Log.d(TAG, "Finished loading URL: " + url);
+                }
+            }
+        }
+
+        @Override
+        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+            Log.e(TAG, "Received error when trying to load page");
+            showErrorToast(request.getConnectionErrorMessage());
+            hideLoading();
+            finish();
+        }
+
+        @Override
+        public void onReceivedHttpError(WebView view, WebResourceRequest r, WebResourceResponse errorResponse) {
+            Log.e(TAG, "Received HTTP Error when trying to load page");
+            showErrorToast(request.getNotFoundErrorMessage());
+            hideLoading();
+            finish();
+        }
+
+        @Override
+        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            Log.e(TAG, "Received SSL Error when trying to load page");
+            showErrorToast(request.getConnectionErrorMessage());
+            hideLoading();
+            finish();
+        }
+    }
+
     /**
      * Whether a request needs html access after loading, that is, whether is must be
      * cached or processed and it has not been cached yet
@@ -685,27 +697,19 @@ public class WebViewActivity extends CalendulaActivity {
         public void writeToCache(String html) {
 
             final Duration ttl = request.getCacheTTL(); //can  be null
-
+            String processed = null;
             // if there is a postprocessor enabled
             if (request.needsPostprocessing()) {
                 // instantiate postprocessor
                 try {
                     HtmlPostprocessor processor = (HtmlPostprocessor) Class.forName(request.postProcessorClassname).newInstance();
                     // get processed html
-                    final String processed = processor.process(html);
+                    processed = processor.process(html);
                     // save it to cache if needed
                     if (request.cacheType.equals(WebViewRequest.CacheType.DOWNLOAD_CACHE)) {
                         HtmlCacheManager.getInstance().put(url, processed, ttl);
                     }
-                    // ... and finally load new content
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            request.postProcessorClassname = null;
-                            webView.loadData(processed, "text/html; charset=UTF-8", null);
-                            webView.clearHistory();
-                        }
-                    });
+
                 } catch (Exception e) {
                     Log.e(TAG, "Error trying to post process content", e);
                 }
@@ -715,16 +719,38 @@ public class WebViewActivity extends CalendulaActivity {
                 HtmlCacheManager.getInstance().put(url, html, ttl);
             }
 
-            // dismiss the loading dialog
+            final String finalHtml = processed != null ? processed : html;
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (loadingDialog != null) {
-                        webView.setVisibility(View.VISIBLE);
-                        hideLoading();
-                    }
+                    webView.setWebViewClient(new CustomWebViewClient(request) {
+                                                 @Override
+                                                 public void onPageFinished(WebView view, String url) {
+                                                     if (customCssSheet != null) {
+                                                         webView.getSettings().setJavaScriptEnabled(true);
+                                                         injectCSS(customCssSheet, request.getCustomCssOverrides());
+                                                         //if JavaScript is not enabled explicitly, turn it off after CSS injection
+                                                         webView.getSettings().setJavaScriptEnabled(request.isJavaScriptEnabled());
+                                                     }
+                                                     handler.postDelayed(new Runnable() {
+                                                         @Override
+                                                         public void run() {
+                                                             webView.setVisibility(View.VISIBLE);
+                                                             webView.getSettings().setJavaScriptEnabled(request.isJavaScriptEnabled());
+                                                             hideLoading();
+                                                         }
+                                                     }, 200);
+                                                 }
+                                             }
+                    );
+                    webView.loadData(finalHtml, "text/html; charset=UTF-8", null);
+                    webView.clearHistory();
                 }
             });
+
+
+            // dismiss the loading dialog
+
         }
     }
 
