@@ -2,6 +2,7 @@ package es.usc.citius.servando.calendula.adapters.items.allergensearch;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ public class AllergenGroupSubItem extends AbstractExpandableItem<AllergenGroupIt
     private String subtitle;
     private ViewHolder holder;
     private AllergenGroupItem parent;
+    private SpannableStringBuilder titleSpannable;
 
     public AllergenGroupSubItem(AllergenVO vo, Context context) {
         this.vo = vo;
@@ -35,6 +37,10 @@ public class AllergenGroupSubItem extends AbstractExpandableItem<AllergenGroupIt
                 subtitle = context.getString(R.string.excipient);
                 break;
         }
+    }
+
+    public void setTitleSpannable(SpannableStringBuilder titleSpannable) {
+        this.titleSpannable = titleSpannable;
     }
 
     @Override
@@ -64,7 +70,7 @@ public class AllergenGroupSubItem extends AbstractExpandableItem<AllergenGroupIt
     @Override
     public void bindView(ViewHolder holder, List<Object> payloads) {
         super.bindView(holder, payloads);
-        holder.title.setText(title);
+        holder.title.setText(titleSpannable != null ? titleSpannable : title);
         holder.subtitle.setText(subtitle);
         this.holder = holder;
     }

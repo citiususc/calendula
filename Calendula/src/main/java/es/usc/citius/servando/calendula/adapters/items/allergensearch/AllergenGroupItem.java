@@ -3,6 +3,7 @@ package es.usc.citius.servando.calendula.adapters.items.allergensearch;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -18,7 +19,6 @@ import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 
 /**
  * Created by alvaro.brey.vilas on 23/11/16.
@@ -28,7 +28,8 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
 
 
     private static final String TAG = "AllergyGroupItem";
-    private final String title;
+    private String title;
+    private SpannableStringBuilder titleSpannable;
     private String subtitle;
 
 
@@ -39,6 +40,10 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
 
     public void setSubtitle(String subtitle) {
         this.subtitle = subtitle;
+    }
+
+    public void setTitleSpannable(SpannableStringBuilder titleSpannable) {
+        this.titleSpannable = titleSpannable;
     }
 
     @Override
@@ -64,7 +69,7 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
     @Override
     public void bindView(ViewHolder holder, List<Object> payloads) {
         super.bindView(holder, payloads);
-        holder.title.setText(this.title);
+        holder.title.setText(titleSpannable != null ? titleSpannable : title);
         holder.subtitle.setText(this.subtitle);
 //        UIUtils.setBackground(holder.itemView, FastAdapterUIUtils.getSelectableBackground(holder.itemView.getContext(), Color.CYAN, true));
         final MaterialDesignIconic.Icon icon = MaterialDesignIconic.Icon.gmi_chevron_down;

@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -74,6 +75,7 @@ import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert.A
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.Snack;
+import es.usc.citius.servando.calendula.util.Strings;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 
 public class AllergiesActivity extends CalendulaActivity {
@@ -720,6 +722,7 @@ public class AllergiesActivity extends CalendulaActivity {
 
             List<AbstractItem> items = new ArrayList<>();
 
+            final int highlightColor = ContextCompat.getColor(AllergiesActivity.this, R.color.black);
             if (groups != null && !groups.isEmpty()) {
                 //find words for groups
                 final Map<String, Pattern> groupPatterns = new ArrayMap<>();
@@ -759,9 +762,11 @@ public class AllergiesActivity extends CalendulaActivity {
                         for (AllergenVO vo : subs) {
                             final AllergenGroupSubItem e = new AllergenGroupSubItem(vo, AllergiesActivity.this);
                             e.setParent(g);
+                            e.setTitleSpannable(Strings.getHighlighted(vo.getName(), filter, highlightColor));
                             sub.add(e);
                         }
                         g.setSubtitle(getString(R.string.allergies_group_elements_number, sub.size()));
+                        g.setTitleSpannable(Strings.getHighlighted(s, filter, highlightColor));
                         g.withSubItems(sub);
                         items.add(g);
                     }
@@ -769,7 +774,9 @@ public class AllergiesActivity extends CalendulaActivity {
             }
 
             for (AllergenVO vo : allergenVOs) {
-                items.add(new AllergenItem(vo, AllergiesActivity.this));
+                final AllergenItem e = new AllergenItem(vo, AllergiesActivity.this);
+                e.setTitleSpannable(Strings.getHighlighted(e.getTitle(), filter, highlightColor));
+                items.add(e);
             }
             Collections.sort(items, new Comparator<AbstractItem>() {
                 @Override
