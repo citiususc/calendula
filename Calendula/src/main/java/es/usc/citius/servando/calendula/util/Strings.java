@@ -18,6 +18,11 @@
 
 package es.usc.citius.servando.calendula.util;
 
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+
 /**
  * Created by joseangel.pineiro on 3/2/15.
  */
@@ -33,9 +38,18 @@ public class Strings {
     }
 
     public static String toProperCase(String s) {
-        if (s.length() > 1)
-            return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
-        else return s;
+        final StringBuilder result = new StringBuilder(s.length());
+        String[] words = s.toLowerCase().split("\\s");
+        for(int i=0,l=words.length;i<l;++i) {
+            if(i>0) result.append(" ");
+            String word = words[i];
+            if(word.length()>1)
+                result.append(Character.toUpperCase(word.charAt(0))).append(words[i].substring(1));
+            else
+                result.append(word);
+
+        }
+        return result.toString();
     }
 
     public static String firstPart(String str) {
@@ -50,5 +64,19 @@ public class Strings {
         } catch (Exception e) {
             return str;
         }
+    }
+
+    public static SpannableStringBuilder getHighlighted(String text, String match, int color){
+        final SpannableStringBuilder sb = new SpannableStringBuilder(Strings.toProperCase(text));
+        String t = text.toLowerCase(), m = match.toLowerCase();
+        int start = t.indexOf(m);
+        if(start >= 0) {
+            int end = start + match.length();
+            final ForegroundColorSpan fcs = new ForegroundColorSpan(color);
+            final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
+            sb.setSpan(fcs, start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            sb.setSpan(bss, start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        }
+        return sb;
     }
 }
