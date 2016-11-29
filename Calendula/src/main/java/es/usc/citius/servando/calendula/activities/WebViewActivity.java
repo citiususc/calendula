@@ -190,7 +190,7 @@ public class WebViewActivity extends CalendulaActivity {
 
         //enable download cache if requested
         String cachedData = null;
-        if (!isJavaScriptInsecure && request.getCacheType().equals(WebViewRequest.CacheType.DOWNLOAD_CACHE)) {
+        if (!isJavaScriptInsecure && needsHtmlAccess(request)) {
             if (!isCached()) {
                 webView.addJavascriptInterface(new SimpleJSCacheInterface(this), "HtmlCache");
             } else {
