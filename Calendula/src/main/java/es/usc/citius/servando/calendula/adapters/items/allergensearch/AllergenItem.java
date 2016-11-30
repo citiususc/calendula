@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.adapters.items.allergensearch;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.view.View;
@@ -10,6 +11,8 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
 
@@ -21,26 +24,9 @@ public class AllergenItem extends AbstractItem<AllergenItem, AllergenItem.ViewHo
 
     private String allergenType;
     private AllergenVO vo;
-    private ViewHolder holder;
 
-    protected String title;
+    private String title;
     private SpannableStringBuilder titleSpannable;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitleSpannable(SpannableStringBuilder titleSpannable) {
-        this.titleSpannable = titleSpannable;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public AllergenVO getVo() {
-        return vo;
-    }
 
     public AllergenItem(AllergenVO vo, Context context) {
         this.title = vo.getName();
@@ -56,6 +42,19 @@ public class AllergenItem extends AbstractItem<AllergenItem, AllergenItem.ViewHo
     }
 
     @Override
+    public int compareTo(@NonNull AllergenItem o) {
+        return this.title.compareTo(o.title);
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    @Override
     public int getType() {
         return R.id.fastadapter_allergen_item;
     }
@@ -65,19 +64,8 @@ public class AllergenItem extends AbstractItem<AllergenItem, AllergenItem.ViewHo
         return R.layout.allergen_search_list_item;
     }
 
-    @Override
-    public void bindView(ViewHolder viewHolder, List<Object> payloads) {
-        super.bindView(viewHolder, payloads);
-        this.holder = viewHolder;
-        viewHolder.title.setText(titleSpannable != null ? titleSpannable : title);
-        viewHolder.subtitle.setText(allergenType);
-    }
-
-    //reset the view here (this is an optional method, but recommended)
-    @Override
-    public void unbindView(ViewHolder holder) {
-        super.unbindView(holder);
-        holder.title.setText(null);
+    public AllergenVO getVo() {
+        return vo;
     }
 
     @Override
@@ -86,20 +74,33 @@ public class AllergenItem extends AbstractItem<AllergenItem, AllergenItem.ViewHo
     }
 
     @Override
-    public int compareTo(AllergenItem o) {
-        return this.title.compareTo(o.title);
+    public void bindView(ViewHolder viewHolder, List<Object> payloads) {
+        super.bindView(viewHolder, payloads);
+        viewHolder.title.setText(titleSpannable != null ? titleSpannable : title);
+        viewHolder.subtitle.setText(allergenType);
     }
 
+    @Override
+    public void unbindView(ViewHolder holder) {
+        super.unbindView(holder);
+        holder.title.setText(null);
+        holder.subtitle.setText(null);
+    }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    public void setTitleSpannable(SpannableStringBuilder titleSpannable) {
+        this.titleSpannable = titleSpannable;
+    }
 
-        protected final TextView subtitle;
-        protected TextView title;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.text1)
+        TextView subtitle;
+        @BindView(R.id.text2)
+        TextView title;
 
         public ViewHolder(View view) {
             super(view);
-            this.title = (TextView) view.findViewById(R.id.text1);
-            this.subtitle = (TextView) view.findViewById(R.id.text2);
+            ButterKnife.bind(this, view);
         }
     }
 }

@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.adapters.items.allergylist;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
@@ -12,6 +13,8 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 
@@ -21,21 +24,10 @@ import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 
 public class AllergyItem extends AbstractItem<AllergyItem, AllergyItem.ViewHolder> implements Comparable<AllergyItem> {
 
+    private String title;
     private String allergenType;
     private PatientAllergen allergen;
     private ViewHolder holder;
-
-    protected String title;
-
-    public String getTitle() {
-        return title;
-    }
-
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
 
     public AllergyItem(PatientAllergen vo, Context context) {
         this.title = vo.getName();
@@ -51,6 +43,15 @@ public class AllergyItem extends AbstractItem<AllergyItem, AllergyItem.ViewHolde
     }
 
     @Override
+    public int compareTo(@NonNull AllergyItem o) {
+        return this.title.compareTo(o.title);
+    }
+
+    public PatientAllergen getAllergen() {
+        return allergen;
+    }
+
+    @Override
     public int getType() {
         return R.id.fastadapter_allergy_item;
     }
@@ -58,6 +59,11 @@ public class AllergyItem extends AbstractItem<AllergyItem, AllergyItem.ViewHolde
     @Override
     public int getLayoutRes() {
         return R.layout.allergen_list_item;
+    }
+
+    @Override
+    public boolean isSelectable() {
+        return false;
     }
 
     @Override
@@ -80,32 +86,22 @@ public class AllergyItem extends AbstractItem<AllergyItem, AllergyItem.ViewHolde
         holder.title.setText(null);
     }
 
-    @Override
-    public boolean isSelectable() {
-        return false;
+    public void setTitle(String title) {
+        this.title = title;
     }
-
-    public PatientAllergen getAllergen() {
-        return allergen;
-    }
-
-    @Override
-    public int compareTo(AllergyItem o) {
-        return this.title.compareTo(o.title);
-    }
-
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        protected final TextView subtitle;
-        protected TextView title;
+        @BindView(R.id.delete_button)
         public ImageButton deleteButton;
+        @BindView(R.id.text1)
+        TextView title;
+        @BindView(R.id.text2)
+        TextView subtitle;
 
         public ViewHolder(View view) {
             super(view);
-            this.title = (TextView) view.findViewById(R.id.text1);
-            this.subtitle = (TextView) view.findViewById(R.id.text2);
-            this.deleteButton = (ImageButton) view.findViewById(R.id.delete_button);
+            ButterKnife.bind(this, view);
         }
     }
 }

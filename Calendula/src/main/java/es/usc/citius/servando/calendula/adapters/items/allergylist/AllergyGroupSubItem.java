@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.adapters.items.allergylist;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -9,6 +10,8 @@ import com.mikepenz.fastadapter.commons.items.AbstractExpandableItem;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 
@@ -38,6 +41,30 @@ public class AllergyGroupSubItem extends AbstractExpandableItem<AllergyGroupItem
     }
 
     @Override
+    public void bindView(ViewHolder holder, List<Object> payloads) {
+        super.bindView(holder, payloads);
+        holder.title.setText(title);
+        holder.subtitle.setText(subtitle);
+        this.holder = holder;
+    }
+
+    @Override
+    public void unbindView(ViewHolder holder) {
+        super.unbindView(holder);
+        holder.title.setText(null);
+        holder.subtitle.setText(null);
+    }
+
+    @Override
+    public int compareTo(@NonNull AllergyGroupSubItem o) {
+        return this.title.compareTo(o.title);
+    }
+
+    public PatientAllergen getAllergen() {
+        return allergen;
+    }
+
+    @Override
     public AllergyGroupItem getParent() {
         return parent;
     }
@@ -61,48 +88,16 @@ public class AllergyGroupSubItem extends AbstractExpandableItem<AllergyGroupItem
         return R.layout.allergen_search_group_sub_list_item;
     }
 
-    public PatientAllergen getAllergen() {
-        return allergen;
-    }
-
-    @Override
-    public void bindView(ViewHolder holder, List<Object> payloads) {
-        super.bindView(holder, payloads);
-        holder.title.setText(title);
-        holder.subtitle.setText(subtitle);
-        this.holder = holder;
-    }
-
-    @Override
-    public void unbindView(ViewHolder holder) {
-        super.unbindView(holder);
-        holder.title.setText(null);
-        holder.subtitle.setText(null);
-    }
-
-    @Override
-    public int compareTo(AllergyGroupSubItem o) {
-        return this.title.compareTo(o.title);
-    }
-
-
-//    public void triggerBackgroundUpdate(boolean selected) {
-//        if (holder != null && holder.itemView != null)
-//            if (selected) {
-//                holder.itemView.setBackgroundColor(Color.CYAN);
-//            } else {
-//                holder.itemView.setBackgroundResource(R.drawable.touchable_white);
-//            }
-//    }
-
     static class ViewHolder extends RecyclerView.ViewHolder {
-        protected TextView title;
-        protected TextView subtitle;
+
+        @BindView(R.id.text1)
+        TextView title;
+        @BindView(R.id.text2)
+        TextView subtitle;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.text1);
-            subtitle = (TextView) itemView.findViewById(R.id.text2);
+            ButterKnife.bind(this, itemView);
         }
     }
 

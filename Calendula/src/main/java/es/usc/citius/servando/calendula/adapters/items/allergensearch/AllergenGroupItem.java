@@ -18,6 +18,8 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.R;
 
 /**
@@ -27,6 +29,7 @@ import es.usc.citius.servando.calendula.R;
 public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem, AllergenGroupItem.ViewHolder, AllergenGroupSubItem> implements Comparable<AllergenGroupItem> {
 
 
+    @SuppressWarnings("unused")
     private static final String TAG = "AllergyGroupItem";
     private String title;
     private SpannableStringBuilder titleSpannable;
@@ -36,34 +39,6 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
     public AllergenGroupItem(String title, String subtitle) {
         this.title = title;
         this.subtitle = subtitle;
-    }
-
-    public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
-    }
-
-    public void setTitleSpannable(SpannableStringBuilder titleSpannable) {
-        this.titleSpannable = titleSpannable;
-    }
-
-    @Override
-    public int getType() {
-        return R.id.fastadapter_allergen_group_item;
-    }
-
-    @Override
-    public int getLayoutRes() {
-        return R.layout.allergen_search_group_list_item;
-    }
-
-    @Override
-    public boolean isSelectable() {
-        return false;
-    }
-
-    @Override
-    public boolean isAutoExpanding() {
-        return false;
     }
 
     @Override
@@ -84,10 +59,11 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
         super.unbindView(holder);
         holder.title.setText(null);
         holder.subtitle.setText(null);
+        holder.imageButton.setRotation(0);
     }
 
     @Override
-    public int compareTo(AllergenGroupItem o) {
+    public int compareTo(@NonNull AllergenGroupItem o) {
         return this.title.compareTo(o.title);
     }
 
@@ -95,18 +71,32 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
         return title;
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getType() {
+        return R.id.fastadapter_allergen_group_item;
+    }
 
-        protected TextView title;
-        protected TextView subtitle;
-        protected ImageButton imageButton;
+    @Override
+    public int getLayoutRes() {
+        return R.layout.allergen_search_group_list_item;
+    }
 
-        public ViewHolder(View itemView) {
-            super(itemView);
-            title = (TextView) itemView.findViewById(R.id.text1);
-            subtitle = (TextView) itemView.findViewById(R.id.text2);
-            imageButton = (ImageButton) itemView.findViewById(R.id.group_button);
-        }
+    @Override
+    public boolean isAutoExpanding() {
+        return false;
+    }
+
+    @Override
+    public boolean isSelectable() {
+        return false;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
+
+    public void setTitleSpannable(SpannableStringBuilder titleSpannable) {
+        this.titleSpannable = titleSpannable;
     }
 
     public static class GroupExpandClickEvent extends ClickEventHook<AbstractItem> {
@@ -130,6 +120,21 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
             return null;
         }
 
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.text1)
+        TextView title;
+        @BindView(R.id.text2)
+        TextView subtitle;
+        @BindView(R.id.group_button)
+        ImageButton imageButton;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
     }
 
 }
