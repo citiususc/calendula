@@ -60,7 +60,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 29
-        versionName "2.4-beta.5"
+        versionName "2.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
