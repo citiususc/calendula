@@ -126,6 +126,10 @@ dependencies {
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.android.support:design:24.2.1'
 
+    // view/resource binding
+    compile 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+
     // round image view
     compile 'com.makeramen:roundedimageview:1.5.0'
 
