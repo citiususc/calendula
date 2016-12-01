@@ -36,6 +36,7 @@ import java.util.Locale;
 import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
+import es.usc.citius.servando.calendula.util.Settings;
 
 /**
  * Created by castrelo on 4/10/14.
@@ -138,7 +139,26 @@ public class CalendulaApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ModuleManager.getInstance().runDefaultModules(getApplicationContext());
+        //load settings
+        final Context applicationContext = getApplicationContext();
+        try {
+            Settings.instance().load(applicationContext);
+        } catch (Exception e) {
+            Log.e(TAG, "onCreate: An exception happened when loading settings file");
+        }
+
+        try {
+            final String config = Settings.instance().get("MODULE_CONFIG");
+            if (config != null)
+                ModuleManager.getInstance().runModules(config, applicationContext);
+            else
+                ModuleManager.getInstance().runDefaultModules(applicationContext);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            Log.e(TAG, "onCreate: Error loading module configuration", e);
+            Log.w(TAG, "onCreate: Loading default module configuration instead");
+            ModuleManager.getInstance().runDefaultModules(applicationContext);
+        }
+
     }
 
     @Override

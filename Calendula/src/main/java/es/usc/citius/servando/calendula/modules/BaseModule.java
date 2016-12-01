@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.evernote.android.job.JobManager;
 import com.mikepenz.iconics.Iconics;
@@ -26,7 +25,6 @@ import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.PresentationsTypeface;
-import es.usc.citius.servando.calendula.util.Settings;
 
 /**
  * Created by alvaro.brey.vilas on 30/11/16.
@@ -70,12 +68,6 @@ public class BaseModule extends CalendulaModule {
         //register custom fonts like this (or also provide a font definition file)
         Iconics.registerFont(new PresentationsTypeface());
 
-        //load settings
-        try {
-            Settings.instance().load(ctx);
-        } catch (Exception e) {
-            Log.w(TAG, "onCreate: An exception happened when loading settings file");
-        }
         updatePreferences(ctx);
 
         //initialize job engine

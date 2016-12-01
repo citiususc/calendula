@@ -63,6 +63,15 @@ public class ModuleManager {
 
     public void runDefaultModules(Context ctx) {
         final List<CalendulaModule> modules = ModuleRegistry.getDefaultModules();
+        Log.d(TAG, "runModules: Loading default module configuration");
+        run(modules, ctx);
+    }
+
+    public void runModules(final String configName, Context ctx) {
+        final List<CalendulaModule> modules = ModuleRegistry.getModulesForConfig(configName);
+        Log.d(TAG, "runModules: Loading module configuration: " + configName);
+        if (modules == null)
+            throw new IllegalArgumentException("Module config " + configName + "does not exist or is empty");
         run(modules, ctx);
     }
 
