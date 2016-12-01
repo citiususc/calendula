@@ -9,6 +9,6 @@ public class SettingsKeys {
     private SettingsKeys() {
     }
 
-    public static final String DATABASE_LOCATION = "db.uri";
+    public static final String DATABASE_LOCATION = "db.url";
     public static final String MODULE_CONFIG = "modules.config";
 }
