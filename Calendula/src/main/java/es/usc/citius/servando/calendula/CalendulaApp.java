@@ -37,6 +37,7 @@ import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.util.Settings;
+import es.usc.citius.servando.calendula.util.SettingsKeys;
 
 /**
  * Created by castrelo on 4/10/14.
@@ -148,7 +149,7 @@ public class CalendulaApp extends Application {
         }
 
         try {
-            final String config = Settings.instance().get("MODULE_CONFIG");
+            final String config = Settings.instance().get(SettingsKeys.MODULE_CONFIG);
             if (config != null)
                 ModuleManager.getInstance().runModules(config, applicationContext);
             else
