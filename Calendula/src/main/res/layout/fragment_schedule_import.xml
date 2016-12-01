@@ -182,7 +182,8 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="5dp"
             android:id="@+id/linearLayout"
-            >
+                android:baselineAligned="false"
+                >
 
           <RelativeLayout
               android:layout_width="0dp"
@@ -256,8 +257,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:id="@+id/timetable_divider"
-            android:layout_below="@id/schedule_timetable_container"
+                android:layout_below="@id/schedule_timetable_container"
             android:background="@color/android_blue"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
@@ -362,8 +362,7 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_below="@+id/hourly_interval_top"
-            android:id="@+id/hourly_interval_bottom"
-            android:layout_height="40dp"
+                android:layout_height="40dp"
             android:gravity="center"
             >
 
@@ -421,8 +420,7 @@
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:id="@+id/repeat_content"
-            android:layout_height="wrap_content"
+                android:layout_height="wrap_content"
             android:layout_below="@+id/repeat_label"
             >
 
@@ -552,8 +550,7 @@
               android:visibility="invisible"
               android:layout_height="1dp"
               android:spinnerMode="dialog"
-              android:id="@+id/cycles_spinner"
-              />
+                  />
 
         </LinearLayout>
         <ImageButton
@@ -635,7 +632,8 @@
               android:layout_alignParentEnd="false"
               android:textColor="@color/android_blue_dark"
               android:gravity="start"
-              />
+                  android:layout_alignParentRight="false"
+                  />
 
           <TextView
               android:layout_width="80dp"
@@ -667,7 +665,8 @@
               android:layout_alignParentEnd="false"
               android:textColor="@color/android_blue_dark"
               android:gravity="start"
-              />
+                  android:layout_alignParentRight="false"
+                  />
 
 
           <ImageButton

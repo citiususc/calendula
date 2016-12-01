@@ -133,7 +133,6 @@
 
 
     <ImageView
-        android:id="@+id/imageView"
         android:layout_width="26dp"
         android:layout_height="100dp"
         android:layout_alignBottom="@+id/med_presentation"
@@ -144,7 +143,6 @@
         android:src="@drawable/ic_arrow_right_black_48dp" />
 
     <ImageView
-        android:id="@+id/imageView"
         android:layout_width="26dp"
         android:layout_height="100dp"
         android:layout_alignBottom="@+id/med_presentation"

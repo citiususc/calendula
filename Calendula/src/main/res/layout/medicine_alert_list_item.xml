@@ -63,8 +63,7 @@
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="1px"
-        android:id="@+id/imageView12"
-        android:layout_alignParentBottom="false"
+            android:layout_alignParentBottom="false"
         android:layout_below="@+id/alert_description"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/alert_icon"

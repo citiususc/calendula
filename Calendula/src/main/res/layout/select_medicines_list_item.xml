@@ -96,7 +96,9 @@
             android:gravity="center"
             android:text="Atrovent"
             android:textColor="#111"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+                android:layout_toRightOf="@+id/imageButton"
+                />
 
     </RelativeLayout>
 

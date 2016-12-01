@@ -57,8 +57,7 @@
 
 
     <LinearLayout
-        android:id="@+id/picker_progress"
-        android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
 
         android:layout_height="wrap_content"
         android:layout_below="@id/pickers_layout"
@@ -89,8 +88,7 @@
             ppv:ppvStrokeWidth="1dp" />
 
         <TextView
-            android:id="@+id/text_progress_2"
-            android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"

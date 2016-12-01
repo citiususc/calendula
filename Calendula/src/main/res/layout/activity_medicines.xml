@@ -184,8 +184,7 @@
             android:src="@drawable/ic_cancel_white_48dp" />
 
         <ImageView
-            android:id="@+id/search_shadow"
-            android:layout_width="fill_parent"
+                android:layout_width="fill_parent"
             android:layout_height="5dp"
             android:layout_below="@+id/search_edit_text"
             android:alpha="0.3"

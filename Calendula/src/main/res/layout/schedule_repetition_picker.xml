@@ -26,12 +26,6 @@
     android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="0px"
-        android:layout_height="0px"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
-
-    <LinearLayout
         android:id="@+id/pickers_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,8 +36,7 @@
         android:visibility="gone">
 
         <NumberPicker
-            android:id="@+id/interval_picker"
-            android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_margin="0dp"
             android:layout_marginLeft="0dp"
@@ -51,8 +44,7 @@
             android:layout_marginTop="0dp" />
 
         <NumberPicker
-            android:id="@+id/interval_units_picker"
-            android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_margin="0dp"
             android:layout_marginLeft="0dp"

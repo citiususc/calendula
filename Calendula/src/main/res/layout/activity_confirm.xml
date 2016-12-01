@@ -68,8 +68,7 @@
                     android:background="#37474f"/>
 
                 <ImageView
-                    android:id="@+id/imageView9"
-                    android:layout_width="fill_parent"
+                        android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_alignBottom="@+id/imageView5"
                     android:layout_alignTop="@+id/imageView5"
@@ -110,8 +109,7 @@
                 android:gravity="center"/>
 
             <RelativeLayout
-                android:id="@+id/relativeLayout"
-                android:layout_width="fill_parent"
+                    android:layout_width="fill_parent"
                 android:layout_height="80dp"
                 android:layout_gravity="bottom"
                 android:paddingLeft="26dp"

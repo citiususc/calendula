@@ -17,11 +17,10 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="es.usc.citius.servando.calendula.activities.ReminderActivity">
+    >
 
     <RelativeLayout
         android:id="@+id/zoom_avatar_container"
@@ -32,8 +31,7 @@
         <ImageView
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:id="@+id/zoom_patient_avatar"
-            android:src="@drawable/avatar1"
+                android:src="@drawable/avatar1"
             android:layout_marginTop="10dp"
             />
 
@@ -51,8 +49,7 @@
             android:layout_marginTop="10dp"/>
 
         <TextView
-            android:id="@+id/zoom_patient_name"
-            android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:text="Ángel"
             android:textColor="#444"
@@ -113,12 +110,6 @@
         android:padding="10dp"
         android:layout_above="@+id/delay_button">
 
-        <LinearLayout
-            android:id="@+id/reminder_list"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"></LinearLayout>
-
     </ScrollView>
 
     <Spinner
@@ -134,8 +125,7 @@
         android:visibility="visible" />
 
     <Button
-        android:id="@+id/reminder_done_button"
-        style="@style/delay_button"
+            style="@style/delay_button"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"

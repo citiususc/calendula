@@ -21,71 +21,34 @@
 
     <string name="app_name">Calendula</string>
     <string name="title_home">Accueil</string>
-    <string name="title_daily_agenda">Aujourd\'hui</string>
     <string name="action_settings">Paramètres</string>
     <string name="action_remove">Supprimer</string>
-    <string name="action_remove_all">Tout supprimer</string>
 
-    <string name="action_exit">Sortir</string>
     <string name="home_menu_routines">ROUTINES</string>
     <string name="home_menu_medicines">MÉDICAMENTS</string>
-    <string name="home_menu_schedules">TRAITEMENTS</string>
     <string name="home_menu_pharmacies">PHARMACIES</string>
     <string name="home_menu_plantrip">PLAN DE VOYAGE</string>
-    <string name="action_bar_title_today">Aujourd\'hui</string>
-    <string name="action_bar_title_home">Accueil</string>
     <string name="medicine">médicament</string>
-    <string-array name="home_action_list">
-        <item>Calendula</item>
-        <item>Routines</item>
-        <item>Médicaments</item>
-        <item>Traitements</item>
-    </string-array>
 
 
-    <string name="drawer_top_option">Top</string>
-    <string name="drawer_bottom_option">Bottom</string>
-    <string name="drawer_menu_option">Menu</string>
-    <string name="drawer_services_option">Outils</string>
     <string name="drawer_help_option">Aide</string>
     <string name="drawer_settings_option">Paramètres</string>
-
-    <string-array name="home_drawer_actions">
-        <item>@string/drawer_top_option</item>
-        <item>Accueil</item>
-        <item>@string/drawer_menu_option</item>
-        <item>Routines</item>
-        <item>@string/title_activity_medicines</item>
-        <item>Traitements</item>
-        <item>@string/drawer_services_option</item>
-        <item>Pharmacies</item>
-        <item>Plan de voyage</item>
-        <item>@string/drawer_bottom_option</item>
-    </string-array>
 
     <string name="title_activity_routines">Routines</string>
     <string name="title_edit_routine_activity">Modifier la routine</string>
     <string name="title_create_routine_activity">Créer une routine</string>
     <string name="title_activity_medicines">Boîte à pharmacie</string>
-    <string name="title_edit_medicine_activity">Modifier le médicament</string>
-    <string name="title_create_medicine_activity">Nouveau médicament</string>
     <string name="title_edit_schedule_activity">Modifier le traitement</string>
     <string name="title_create_schedule_activity">Créer un traitement</string>
     <string name="routine_name">Nom de la routine</string>
     <string name="routine_time">Heure</string>
-    <string name="edit_routine_button_text">Sauvegarder les changements</string>
     <string name="create_routine_button_text">Créer une routine</string>
     <string name="create_new_routine">Créer une nouvelle routine…</string>
-    <string name="add_routine_button">AJOUTER LA ROUTINE</string>
     <string name="medicine_name">Nom</string>
     <string name="medicine_presentation">Forme</string>
-    <string name="edit_medicine_button_text">Sauvegarder les changements</string>
     <string name="create_medicine_button_text">Créer un médicament</string>
-    <string name="add_medicine_button">AJOUTER LE MÉDICAMENT</string>
     <string name="no_stock_info_msg">Sans information de stock</string>
     <string name="title_activity_schedules">Traitements</string>
-    <string name="prev">Précedent</string>
-    <string name="next">Suivant</string>
     <string name="delay">Remettre à plus tard</string>
     <string name="done">OK</string>
     <string name="cancel">Annuler</string>
@@ -94,8 +57,6 @@
 
     <!-- Schedule creation -->
     <string name="summary_title">Vérifiez et confirmez</string>
-    <string name="title_activity_schedule_list">Traitements</string>
-    <string name="add_schedule_button">AJOUTER UN TRAITEMENT</string>
     <string name="summary">Résumé</string>
 
     <!-- Med presentations -->
@@ -110,7 +71,6 @@
     <string name="unknown">Inconnu</string>
     <string name="effervescent">Effervescent</string>
     <string name="schedule">Traitement</string>
-    <string name="schedule_type">Type de traitement</string>
 
     <!-- Med presentation units -->
     <string name="injections_units">injection</string>
@@ -162,23 +122,6 @@
     <string name="routine_dinner">Souper</string>
 
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="message_notification_title_template">%1$s</string>
-    <string name="message_notification_placeholder_text_template">%1$s</string>
-    <string name="action_take_now">Prendre maintenant</string>
-    <string name="action_delay">Remettre à plus tard</string>
-    <string name="title_activity_start">StartActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_reminder">ReminderActivity</string>
-    <string name="title_activity_agenda_detail">AgendaDetailActivity</string>
-
-
-    <string name="drawer_open">Ouvrir menu</string>
-    <string name="drawer_close">Fermer menu</string>
-    <string name="toolbar_menu_title">Menu</string>
-
     <!-- Day Names -->
     <string-array name="day_names">
         <item>Lun</item>
@@ -189,12 +132,6 @@
         <item>Sam</item>
         <item>Dim</item>
     </string-array>
-    <string name="action_sign_in">Se connecter ou créer un compte</string>
-    <string name="action_sign_in_short">Se connecter</string>
-    <string name="error_field_required">Champ obligatoire</string>
-    <string name="error_incorrect_password">Mot de passe incorrect</string>
-    <string name="error_invalid_email">E-mail invalide</string>
-    <string name="error_invalid_password">Mot de passe trop court</string>
     <string name="pref_default_display_name">Calendula</string>
     <string name="pref_header_general">Général</string>
     <string name="pref_header_notifications">Notifications</string>
@@ -207,19 +144,13 @@
     <string name="pref_notification_tone">Sonnerie</string>
     <string name="pref_notification_tone_sum">Par défaut</string>
 
-    <string name="prompt_email">E-mail</string>
-    <string name="prompt_password">Mot de passe (optionnel)</string>
-    <string name="splash_quote">Gérez votre thérapie facilement</string>
-    <string name="title_activity_login">Entrer</string>
     <string name="title_activity_settings">Options</string>
     <string name="title_select_dose_dialog">Ajoutez une dose</string>
     <string name="schedule_timetable_time_column">HEURE</string>
     <string name="schedule_timetable_dose_column">DOSE</string>
-    <string name="hourly_repeat_dose">Dose</string>
     <string name="take">Prendre</string>
     <string name="first_intake">Première dose à </string>
 
-    <string name="schedule_day_selector_take">Jours:</string>
     <string name="schedule_day_selector_mo">LU</string>
     <string name="schedule_day_selector_tu">MA</string>
     <string name="schedule_day_selector_we">ME</string>
@@ -234,16 +165,10 @@
     <string name="create_schedule_incomplete_doses">Les doses doivent être plus grandes que zéro</string>
     <string name="create_schedule_unselected_med">Sélectionnez un médicament pour pouvoir créer le traitement</string>
     <string name="home_no_pending_meds_message">Il n\'y a pas de médicaments prévus pour le reste de la journée</string>
-    <string name="work_in_progress">Cette fonctionnalité sera disponible dans de nouvelles versions. Merci !</string>
     <string name="medicine_created_message">Médicament ajouté à la boîte à pharmacie</string>
     <string name="medicine_deleted_message">Médicament supprimé !</string>
     <string name="medicine_edited_message">Médicament mis à jour !</string>
-    <string name="routine_created_message">Routine créée !</string>
-    <string name="routine_deleted_message">Routine supprimée !</string>
-    <string name="routine_edited_message">Routine mise à jour !</string>
     <string name="schedule_created_message">Traitement créé !</string>
-    <string name="schedule_no_day_specified_message">Vous devez au moins indiquer un jour</string>
-    <string name="reminder_delayed_message">Rappel remis à plus tard</string>
     <string name="reminder_cancelled_message">Rappel annulé</string>
     <string name="remove_routine_message_long">La routine %1$s a des traitements associés qui se perdront si vous la supprimez. Souhaitez-vous la supprimer de toute façon ?</string>
     <string name="remove_routine_message_short">Supprimer la routine %1$s ?</string>
@@ -256,20 +181,8 @@
     <string name="medicine_unselected">Pas encore sélectionné</string>
 
     <!--App Tutorial-->
-    <string name="tutorial_welcome_title">Bienvenu à Calendula!</string>la t
-    <string name="tutorial_welcome_text">Calendula vous aidera a contrôler votre traitement facilement. Sur cet écran vous pourrez voir les médicaments à prendre aujourd\'hui.</string>
-    <string name="tutorial_homeinfo_title">Explorez !</string>
-    <string name="tutorial_homeinfo_text">Via le menu vous avez accès aux différentes options de Calendula. Vous pouvez aussi accéder aux options les plus courantes en glissant sur la droite !</string>
-    <string name="tutorial_routine_title">Prennez de bonnes habitudes</string>
-    <string name="tutorial_routine_text">Les routines vous permettent de simplifier la prise de médicaments en l\'associant à vos activités quotidiennes. Ajoutez ici les heures auxquelles vous devez prendre un médicament (déjeuner, dîner…)</string>
-    <string name="tutorial_meds_title">Gérez vos médicaments</string>
-    <string name="tutorial_meds_text">Cherchez vos médicaments et ajoutez-les à la boîte à pharmacie. Ainsi vous pourrez consulter la notice en cas de doute !</string>
-    <string name="tutorial_schedule_title">Contrôlez vos traitements !</string>
-    <string name="tutorial_schedule_text">Les traitements nous permettent de vous avertir lorsqu\'il est l\'heure de prendre vos médicaments. Ajoutez vos horaires et les doses pour ne plus jamais oublier une prise !</string>
-    <string name="tutorial_next">Continuer</string>
+    la t
     <string name="tutorial_understood">OK</string>
-    <string name="tutorial_notifications_title">Confirmez !</string>
-    <string name="tutorial_notifications_text">Prenez vos médicaments et confirmez que vous l\'avez fait. Si vous ne confirmez pas, nous continuerons à vous le rappeler. Vous pouvez changer la configuration des rappels dans le menu paramètres.</string>
     <string name="notification_repeat_message">L\'alarme se répétera à %1$s</string>
     <string name="notification_cancel_now">Annuler maintenant</string>
     <string name="notification_delay">Remettre à plus tard</string>
@@ -285,62 +198,32 @@
     </string-array>
 
     <string name="search_med_hint">Chercher…</string>
-    <string name="search_no_results_found">Aucun médicament n\'a été trouvé</string>
     <string name="pref_header_prescriptions">Recherche de médicaments</string>
-    <string name="pref_enable_prescriptions_db">Activer l\'assistant</string>
     <string name="medicine_edit_name_hint">Écrivez ici…</string>
 
-    <string name="download_prospect_message">La notice de %1$s va se télécharger maintenant. Une fois le téléchargement terminé, vous pourrez la consulter même lorsque vous n\'êtes pas connecté à internet.</string>
-    <string name="download_prospect_title">Télécharger la notice</string>
-    <string name="download_prospect_not_available_message">Désolé, la notice de ce médicament n\'est pas disponible.</string>
-    <string name="download_prospect_continue">Télécharger</string>
-    <string name="download_prospect_cancel">Annuler</string>
-
-    <string name="enable_prescriptions_progress_messgae">L\'information des médicaments sera prête dans quelques secondes.</string>
     <string name="enable_prescriptions_dialog_message">Vous pourrez ajouter plus facilement vos médicaments et consulter leurs notices en activant l\'assistant de recherche. Si vous changez d\'avis, vous pourrez le désactiver dans le menu paramètres.</string>
     <string name="enable_prescriptions_dialog_title">Assistant de recherche</string>
-    <string name="enable_prescriptions_finish_message">C\'est prêt! Vous pouvez commencer votre recherche</string>
     <string name="enable_prescriptions_dialog_yes">Activer (Recommandé)</string>
     <string name="enable_prescriptions_dialog_no">Annuler</string>
-    <string name="prescriptions_download_complete">Notice disponible!</string>
 
     <string name="driving_warning">L\'usage de ce médicament pourrait avoir des effets sur l\'aptitude à conduire des véhicules. \n\nS\'il vous plaît, lisez attentivement la notice d\'emballage ou demandez conseil à votre pharmacien avant de conduire. \n\nMerci beaucoup. </string>
     <string name="driving_warning_title">Soyez prudent</string>
     <string name="driving_warning_show_prospect">Voir notice</string>
     <string name="driving_warning_gotit">OK</string>
-    <string name="repeat_every">Se répète tous les</string>
-    <string name="repeat_specific_days">Jours spécifiques</string>
     <string name="repeat_every_tostr">tous les %1$s %2$s</string>
-    <string name="from_hour"> depuis</string>
-    <string name="schedule_freq_days">jours</string>
-    <string name="schedule_freq_weeks">semaines</string>
-    <string name="schedule_freq_months">mois</string>
     <string name="label_schedule_repeat_today">Commence</string>
     <string name="schedules_stop_after">Arrêter après %1$s doses</string>
     <string name="button_schedule_repeat_today">Aujourd\'hui</string>
     <string name="label_schedule_repeat_until">Termine</string>
     <string name="button_schedule_repeat_until">Jamais</string>
     <string name="schedule_limits_date_format">\'Le\' dd MMMM YYYY</string>
-    <string name="schedule_week_days_connector">les</string>
     <string name="schedule_repeat_period">Période + pause</string>
-
-    <string-array name="schedule_repeat_units">
-        <item>Jours</item>
-        <item>Semaines</item>
-        <item>Mois</item>
-    </string-array>
 
     <string-array name="schedule_repeat_types">
         <item>Tous les jours</item>
         <item>Quelques jours</item>
         <item>Intervalle</item>
         <!--<item>Personnalisé</item>-->
-    </string-array>
-
-    <string-array name="schedule_repeat_frequencies">
-        <item>Tous les jours</item>
-        <item>Toutes les semaines</item>
-        <item>Tous les mois</item>
     </string-array>
 
     <string-array name="schedule_repeat_frequency_units">
@@ -382,8 +265,6 @@
     <string name="schedule_type_period_description">Ex: 21 jours + 7 jours de pause</string>
     <string name="schedule_type_common_periods">Cycles courants</string>
     <string name="dialog_interval_title">Intervalle</string>
-    <string name="schedule_help_type">Pour commencer, choisissez un type de traitement</string>
-    <string name="medicine_description"></string>
 
 
     <string name="all_meds_taken">Tous les médicaments pris!</string>
@@ -393,9 +274,7 @@
 
     <string name="message_generic_pageloaderror">There was an error loading the page</string>
     <string name="title_prospect_webview">Prospect view</string>
-    <string name="title_activity_webview" translatable="false">WebViewActivity</string>
     <string name="message_generic_pleasewait">Please wait for a few seconds…</string>
-    <string name="title_generic_loading">Loading</string>
     <string name="message_prospect_loading">The leaflet will be ready soon…</string>
     <string name="message_prospect_connection_error">The leaflet could not be loaded</string>
     <string name="message_prospect_not_found_error">Sorry, but it there is no leaflet available for this med</string>

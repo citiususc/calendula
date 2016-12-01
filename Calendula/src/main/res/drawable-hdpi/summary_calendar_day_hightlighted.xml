@@ -21,9 +21,7 @@
 <item>
     <shape android:shape="oval">
         <solid android:color="@color/android_blue" />
-        <stroke
-            android:color="#fff"
-            android:width="6dip"></stroke>
+        <stroke android:color="#fff" android:width="6dip" />
     </shape>
 </item>
 </selector>

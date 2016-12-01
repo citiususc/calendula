@@ -35,7 +35,6 @@
     <color name="android_red">#FF4444</color>
     <color name="android_red_dark">#CC0000</color>
     <color name="android_red_light">#55FF4444</color>
-    <color name="android_red_lighter">#22FF4444</color>
     <color name="android_blue">#33B5E5</color>
     <color name="android_blue_dark">#0099CC</color>
     <color name="android_blue_darker">#0077aa</color>
@@ -44,7 +43,6 @@
     <color name="android_blue_light">#5533B5E5</color>
     <color name="white_80">#EEFFFFFF</color>
     <color name="white_50">#55FFFFFF</color>
-    <color name="white_20">#22FFFFFF</color>
     <color name="black_20">#22000000</color>
     <color name="black_40">#44000000</color>
     <color name="black_80">#88000000</color>
@@ -54,23 +52,13 @@
     <color name="android_orange_darker">#884411</color>
     <color name="list_item_active">#88ececec</color>
     <color name="list_item_inactive">#33ececec</color>
-    <color name="daily_view_bg_color">#aaefefef</color>
-    <color name="daily_view_content_bg_color">#fff</color>
 
 
     <!-- Other colors -->
-    <color name="splash_background">#ffb74d</color>
     <color name="white">#FFFFFF</color>
     <color name="dark_grey_home">#272727</color>
-    <color name="dark_grey_home_statusbar">#151515</color>
-    <color name="grey">#484848</color>
-    <color name="toolbar_dark_background">#0077aa</color>
-    <color name="green_hour_expanded_left">#2299CC00</color>
-    <color name="green_hour_expanded_right">#CC99CC00</color>
     <color name="list_item_active_background">#11fefefe</color>
     <color name="click_highlight">#2233B5E5</color>
-    <color name="drawerbg_default">#272727</color>
-    <color name="drawerbg">#3c3c3c</color>
 
     <color name="fab_light_normal">#efefef</color>
     <color name="fab_light_pressed">#b7b7b7</color>
@@ -78,10 +66,7 @@
     <color name="fab_dark_pressed">#373737</color>
 
     <!-- List items -->
-    <color name="list_item_selector_normal">#00111111</color>
     <color name="drawer_item_disabled">#22222222</color>
-    <color name="list_item_selector_pressed">#3333B5E5</color>
-    <color name="home_background_color">@color/dark_grey_home</color>
     <color name="dark_grey_text">#5e5e5e</color>
     <color name="light_grey">#55ABABAB</color>
     <color name="light_grey_pressed">#99989898</color>
@@ -91,10 +76,7 @@
     <!-- #ececec -->
     <!--<color name="actionbar_background_color">#161616</color>-->
     <color name="med_presentation_circle_bg">#aaefefef</color>
-    <color name="black_overlay">#66000000</color>
 
-    <color name="actionbar_background_color">#0099CC</color>
-    <color name="activity_background_color">#EFEFEF</color>
     <!--#006699-->
 
     <!-- CALENDAR -->

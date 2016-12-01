@@ -92,8 +92,7 @@
                 android:textSize="15dp" />
 
             <TextView
-                android:id="@+id/text4"
-                android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="1px"
                 android:layout_marginRight="16dp"
@@ -136,7 +135,9 @@
             android:layout_marginTop="10dp"
             android:layout_alignParentStart="false"
             android:background="@drawable/medicine_search_cn_bg"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+                android:layout_alignParentLeft="false"
+                />
 
         <ImageButton
             android:layout_width="56dp"
@@ -151,7 +152,9 @@
             android:layout_alignParentBottom="false"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_alignStart="@+id/prescription_cn"
-            android:layout_below="@+id/prescription_cn"/>
+            android:layout_below="@+id/prescription_cn"
+                android:layout_alignLeft="@+id/prescription_cn"
+                />
 
     </RelativeLayout>
 

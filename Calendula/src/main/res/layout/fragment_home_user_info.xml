@@ -101,7 +101,9 @@
             android:layout_marginBottom="70dp"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+                android:layout_alignParentRight="false"
+                >
 
             <TextView
                 android:id="@+id/month_text"
@@ -137,7 +139,9 @@
                 android:text="12"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white"
-                android:textSize="35sp"/>
+                android:textSize="35sp"
+                    android:layout_toLeftOf="@+id/profile_username"
+                    />
 
 
         </LinearLayout>

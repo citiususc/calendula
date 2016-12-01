@@ -51,7 +51,6 @@
 
 
     <!-- just defines top layer "Animation" -->
-    <style name="Animation" />
 
     <!-- the animations must have been defined in your "anim" folder, of course -->
     <style name="Animation.Splash" parent="android:style/Animation.Activity">
@@ -82,51 +81,12 @@
     </style>
 
 
-    <style name="home_button">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="ok_button">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:height">@dimen/normal_button_height</item>
-    </style>
-
-    <style name="username_text">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:textSize">18dp</item>
-    </style>
-
     <style name="next_button">
         <item name="android:textColor">@color/white</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">15sp</item>
         <item name="android:height">@dimen/normal_button_height</item>
         <item name="android:background">@color/android_blue_dark</item>
-    </style>
-
-    <style name="dark_text_big">
-        <item name="android:textColor">@color/android_blue</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">25dp</item>
-    </style>
-
-
-    <style name="prev_button">
-        <item name="android:textColor">@color/white_50</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:height">@dimen/normal_button_height</item>
-        <item name="android:background">@color/transparent</item>
-    </style>
-
-    <style name="confirm_button">
-        <item name="android:textColor">@color/android_green</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">15dp</item>
-        <item name="android:height">@dimen/normal_button_height</item>
-        <item name="android:background">@color/transparent</item>
     </style>
 
 
@@ -146,20 +106,6 @@
         <item name="android:background">@drawable/delay_button_selector</item>
     </style>
 
-    <style name="done_button">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">15dp</item>
-        <item name="android:height">@dimen/normal_button_height</item>
-        <item name="android:background">@drawable/done_button_selector</item>
-    </style>
-
-
-    <style name="DropDownItemTextStyle">
-        <item name="android:background">@color/actionbar_background_color</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">18dp</item>
-    </style>
 
     <style name="schedule_day_unselected">
         <item name="android:layout_width">0dp</item>
@@ -183,85 +129,12 @@
     </style>
 
 
-    <style name="reminder_check_button">
-        <item name="android:background">@drawable/reminder_check_button_bgc</item>
-        <item name="android:textOn"></item>
-        <item name="android:textOff"></item>
-        <item name="android:disabledAlpha">?android:attr/disabledAlpha</item>
-    </style>
-
-    <style name="reminder_item">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">80dp</item>
-        <item name="android:layout_marginBottom">5dp</item>
-    </style>
-
-
-    <style name="CustomShowcaseTheme" parent="ShowcaseView.Light">
-        <item name="sv_backgroundColor">#dd141414</item>
-        <item name="sv_showcaseColor">@color/android_blue</item>
-        <item name="sv_detailTextColor">@color/android_blue</item>
-        <item name="sv_buttonText">@string/tutorial_understood</item>
-        <item name="sv_tintButtonColor">true</item>
-        <item name="sv_titleTextAppearance">@style/CustomTitle</item>
-        <item name="sv_detailTextAppearance">@style/CustomDetail</item>
-    </style>
-
-    <style name="CustomShowcaseTheme2" parent="ShowcaseView.Light">
-        <item name="sv_backgroundColor">#dd141414</item>
-        <item name="sv_showcaseColor">@color/android_blue</item>
-        <item name="sv_detailTextColor">@color/android_blue</item>
-        <item name="sv_buttonText">@string/tutorial_next</item>
-        <item name="sv_tintButtonColor">true</item>
-        <item name="sv_titleTextAppearance">@style/CustomTitle</item>
-        <item name="sv_detailTextAppearance">@style/CustomDetail</item>
-    </style>
-
-    <style name="CustomShowcaseTheme3" parent="ShowcaseView.Light">
-        <item name="sv_backgroundColor">#dd141414</item>
-        <item name="sv_showcaseColor">@color/android_blue</item>
-        <item name="sv_detailTextColor">@color/android_blue</item>
-        <item name="sv_buttonText">@string/tutorial_next</item>
-        <item name="sv_tintButtonColor">true</item>
-        <item name="sv_titleTextAppearance">@style/CustomTitle3</item>
-        <item name="sv_detailTextAppearance">@style/CustomDetail3</item>
-    </style>
-
-    <style name="CustomTitle3" parent="TextAppearance.ShowcaseView.Title">
-        <item name="android:textColor">@color/android_blue</item>
-        <item name="android:textSize">23sp</item>
-    </style>
-
-    <style name="CustomDetail3" parent="TextAppearance.ShowcaseView.Detail">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">15sp</item>
-    </style>
-
-    <style name="CustomTitle" parent="TextAppearance.ShowcaseView.Title">
-        <item name="android:textColor">@color/android_blue</item>
-        <item name="android:textSize">24sp</item>
-    </style>
-
-    <style name="CustomDetail" parent="TextAppearance.ShowcaseView.Detail">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">18sp</item>
-    </style>
-
-
     <style name="whiteTextWithShadow">
         <item name="android:textColor">#ffffffff</item>
         <item name="android:shadowColor">#55111111</item>
         <item name="android:shadowDx">2</item>
         <item name="android:shadowDy">2</item>
         <item name="android:shadowRadius">3</item>
-    </style>
-
-    <style name="whiteTextWithSpreadShadow">
-        <item name="android:textColor">#ffffffff</item>
-        <item name="android:shadowColor">#55666666</item>
-        <item name="android:shadowDx">1</item>
-        <item name="android:shadowDy">1</item>
-        <item name="android:shadowRadius">5</item>
     </style>
 
     <style name="BetterPickersDialogFragment.Calendula">

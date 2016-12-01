@@ -31,7 +31,7 @@
     <string name="scan_schedule_ends_msg">Esta pauta dura %1$s días. Compruebe las fechas de inicio y fin</string>
 
 
-    <string name="scan_reading_qr">Reading QR...</string>
+    <string name="scan_reading_qr">Reading QR…</string>
     <string name="scan_new_schedule">New schedule!</string>
     <string name="scan_existing_schedule">Existing schedule (it will be updated)</string>
     <string name="scan_schedule_changed">This schedule has changed:</string>
@@ -39,18 +39,16 @@
     <string name="scan_schedules_to_create">%1$s schedules will be created</string>
     <string name="scan_schedules_to_update">%1$s schedules will be updated</string>
 
-    <string name="best_days_messge">Acude a la farmacia uno de los siguientes días y así podrás recoger %1$s medicamentos a la vez:</string>
     <string name="best_single_day_messge">Acude a la farmacia %1$s y así podrás recoger %2$s medicamentos a la vez:</string>
     <string name="best_single_day_messge_one_med">Acude a la farmacia %1$s para recoger:</string>
     <string name="best_single_day_messge_after_pending">Después, podrías acudir de nuevo el %1$s y así recoger %2$s medicamentos a la vez:</string>
     <string name="best_single_day_messge_after_pending_one_med">Después, podrías acudir de nuevo %1$s y recoger:</string>
     <string name="pending_meds_msg">Hay medicación en la farmacia pendiente de retirar. Por favor, acude en cuanto sea posible:</string>
-    <string name="calendar_date_tomorrow">mañana</string>
+    <string name="calendar_date_tomorrow">tomorrow</string>
 
 
     <string name="best_date_format">\'de\' EEEE dd \'de\' MMMM</string>
     <string name="best_date_recommendation_title">Recomendación</string>
-    <string name="best_date_meds">Medicamentos</string>
 
     <string name="best_date_reminder">Recordatorio</string>
 

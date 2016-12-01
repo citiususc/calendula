@@ -20,17 +20,15 @@
 <resources>
 
     <!-- Prescription databases -->
-    <string name="database_none_id">None</string>
+    <string name="database_none_id" translatable="false">None</string>
     <string name="database_none_display">None</string>
-    <string name="database_aemps_id">AEMPS</string>
+    <string name="database_aemps_id" translatable="false">AEMPS</string>
     <string name="database_aemps_display">AEMPS Database</string>
-    <string name="database_aemps_desc">Base de datos de la Agencia Española de Medicmentos y productos sanitarios</string>
-    <string name="database_us_id">US</string>
-    <string name="database_us_display">US Database</string>
+    <string name="database_aemps_desc">Agencia Española de Medicmentos y productos sanitarios database</string>
+    <string name="database_us_id" translatable="false">US</string>
     <!--<string name="database_uk_id">UK</string>-->
     <!--<string name="database_uk_display">UK Database</string>-->
-    <string name="database_setting_up">Setting up...</string>
-    <string name="no_dose_info">No dose info</string>
+    <string name="database_setting_up">Setting up…</string>
     <!-- // Prescription databases -->
 
 </resources>

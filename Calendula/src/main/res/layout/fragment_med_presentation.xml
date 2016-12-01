@@ -193,8 +193,7 @@
     </HorizontalScrollView>
 
     <ImageView
-        android:id="@+id/imageView3l"
-        android:layout_width="1dp"
+            android:layout_width="1dp"
         android:layout_height="1dp"
         android:layout_margin="0dp"
         android:adjustViewBounds="false"
@@ -204,8 +203,7 @@
         android:visibility="gone" />
 
     <ImageView
-        android:id="@+id/imageView3r"
-        android:layout_width="1dp"
+            android:layout_width="1dp"
         android:layout_height="1dp"
         android:layout_alignParentRight="true"
         android:layout_margin="0dp"
@@ -216,8 +214,7 @@
         android:visibility="gone" />
 
     <ImageView
-        android:id="@+id/imageView4t"
-        android:layout_width="1dp"
+            android:layout_width="1dp"
         android:layout_height="1dp"
         android:layout_margin="0dp"
         android:layout_marginLeft="50dp"
@@ -228,8 +225,7 @@
         android:visibility="gone" />
 
     <ImageView
-        android:id="@+id/imageView4b"
-        android:layout_width="1dp"
+            android:layout_width="1dp"
         android:layout_height="1dp"
         android:layout_alignParentBottom="false"
         android:layout_margin="0dp"

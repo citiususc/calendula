@@ -44,8 +44,7 @@
         <ImageView
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:id="@+id/imageView10"
-            android:src="@drawable/ic_intro_alarm"
+                android:src="@drawable/ic_intro_alarm"
             android:alpha="0.3"/>
 
         <TextView

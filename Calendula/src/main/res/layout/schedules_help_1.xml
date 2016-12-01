@@ -113,8 +113,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/schedule_type_routines_title"
-        android:id="@+id/textView12"
-        android:layout_alignParentTop="false"
+            android:layout_alignParentTop="false"
         android:layout_alignParentLeft="false"
         android:layout_alignParentStart="false"
         android:layout_marginTop="100dp"
@@ -154,8 +153,7 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:id="@+id/imageView10"
-            android:src="@drawable/ic_intro_schedules"
+                android:src="@drawable/ic_intro_schedules"
             />
 
         <TextView

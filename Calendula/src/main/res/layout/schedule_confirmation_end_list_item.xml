@@ -46,8 +46,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text=""
-        android:id="@+id/med_daily_schedule"
-        android:layout_marginLeft="16dp"
+            android:layout_marginLeft="16dp"
         android:padding="2dp"
         android:textColor="@color/android_blue_dark" />
 </LinearLayout>

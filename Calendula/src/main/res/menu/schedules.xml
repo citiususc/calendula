@@ -25,8 +25,8 @@
         android:title="@string/action_remove"
         app:showAsAction="never" />
 
-    <item android:id="@+id/action_read_from_qr"
-          android:titleCondensed="Automática"
+    <item
+            android:titleCondensed="Automática"
           android:title="Automática"
           app:showAsAction="never"
           android:checkable="true" />

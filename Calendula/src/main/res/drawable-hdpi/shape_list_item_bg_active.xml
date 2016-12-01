@@ -26,7 +26,7 @@
     <!--android:angle="90">-->
     <!--</gradient>-->
 
-    <solid android:color="@color/list_item_active_background"></solid>
+    <solid android:color="@color/list_item_active_background" />
 
     <corners android:radius="2dip" />
 

@@ -69,8 +69,7 @@
                         android:background="#37474f"/>
 
                     <ImageView
-                        android:id="@+id/imageView9"
-                        android:layout_width="fill_parent"
+                            android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:layout_alignBottom="@+id/imageView5"
                         android:layout_alignTop="@+id/imageView5"
@@ -82,8 +81,7 @@
                 </FrameLayout>
 
                 <RelativeLayout
-                    android:id="@+id/relativeLayout"
-                    android:layout_width="fill_parent"
+                        android:layout_width="fill_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
                     android:background="#eceff1"
@@ -256,8 +254,7 @@
         android:visibility="gone">
 
         <TextView
-            android:id="@+id/collapsed_title"
-            android:layout_width="fill_parent"
+                android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:fontFamily="sans-serif-condensed"
             android:gravity="center"

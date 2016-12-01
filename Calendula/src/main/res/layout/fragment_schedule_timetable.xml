@@ -158,7 +158,9 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                        android:baselineAligned="false"
+                        >
 
                     <RelativeLayout
                         android:layout_width="0dp"
@@ -223,8 +225,7 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/timetable_divider"
-                    android:layout_width="match_parent"
+                        android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_below="@id/schedule_timetable_container"
                     android:layout_marginLeft="20dp"
@@ -322,8 +323,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/hourly_interval_bottom"
-                    android:layout_width="fill_parent"
+                        android:layout_width="fill_parent"
                     android:layout_height="40dp"
                     android:layout_below="@+id/hourly_interval_top"
                     android:gravity="center"
@@ -378,8 +378,7 @@
                     android:visibility="visible" />
 
                 <RelativeLayout
-                    android:id="@+id/repeat_content"
-                    android:layout_width="fill_parent"
+                        android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/repeat_label">
 
@@ -495,8 +494,7 @@
                         android:textStyle="bold" />
 
                     <Spinner
-                        android:id="@+id/cycles_spinner"
-                        android:layout_width="1dp"
+                            android:layout_width="1dp"
                         android:layout_height="1dp"
                         android:spinnerMode="dialog"
                         android:visibility="invisible" />
@@ -575,7 +573,9 @@
                         android:gravity="start"
                         android:text="@string/button_schedule_repeat_today"
                         android:textColor="@color/android_blue_dark"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"
+                            android:layout_alignParentRight="false"
+                            />
 
                     <TextView
                         android:id="@+id/textView5"
@@ -605,7 +605,9 @@
                         android:text="@string/button_schedule_repeat_until"
                         android:textColor="@color/android_blue_dark"
                         android:textSize="15dp"
-                        android:visibility="visible" />
+                        android:visibility="visible"
+                            android:layout_alignParentRight="false"
+                            />
 
 
                     <ImageButton

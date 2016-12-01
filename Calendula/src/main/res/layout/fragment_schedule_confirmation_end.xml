@@ -42,7 +42,9 @@
             android:layout_marginTop="26dp"
             android:layout_toEndOf="@+id/imageView7"
             android:layout_marginLeft="10dp"
-            android:gravity="center_vertical|left" />
+            android:gravity="center_vertical|left"
+                android:layout_toRightOf="@+id/imageView7"
+                />
 
         <LinearLayout
             android:id="@+id/new_schedules"
@@ -94,8 +96,7 @@
         <ImageView
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:id="@+id/imageView8"
-            android:layout_marginLeft="16dp"
+                android:layout_marginLeft="16dp"
             android:layout_marginTop="26dp"
             android:src="@drawable/ic_edit_black_48dp"
             android:layout_below="@+id/new_schedules"

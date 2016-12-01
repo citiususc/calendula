@@ -50,8 +50,7 @@
 
                 <FrameLayout
                     android:fitsSystemWindows="true"
-                    android:id="@+id/header_info"
-                    android:layout_width="fill_parent"
+                        android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     app:layout_collapseMode="parallax"
                     app:layout_collapseParallaxMultiplier="0.7"

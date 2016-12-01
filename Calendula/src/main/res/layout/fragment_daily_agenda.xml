@@ -16,9 +16,7 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout
-    android:id="@+id/daily_agenda_fragment_root"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -53,16 +51,14 @@
 
 
     <FrameLayout
-        android:id="@+id/zoom_container"
-        android:layout_width="fill_parent"
+            android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@drawable/transparent_black_overlay_transition"
         android:padding="15dp"
         android:visibility="invisible">
 
         <FrameLayout
-            android:id="@+id/content_wrapper"
-            android:layout_width="fill_parent"
+                android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginTop="@dimen/status_bar_height"
             android:background="@drawable/reminder_view_bg"
@@ -70,8 +66,7 @@
             android:visibility="visible">
 
             <FrameLayout
-                android:id="@+id/content"
-                android:layout_width="fill_parent"
+                    android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="@drawable/shape_list_item"
                 android:visibility="invisible">
