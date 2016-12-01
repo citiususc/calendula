@@ -402,6 +402,9 @@
     <string name="action_open_with_browser">Abrir no navegador</string>
     <string name="title_share_link">Compartir con…</string>
     <string name="title_about">Acerca de</string>
+
+    <string name="permission_dialog_go_to_settings">Non puidemos realizar esta acción debido a que rexeitaches unha solicitude anterior de acceso ó almacenamento. Podes conceder ese permiso de novo na vista de información da aplicación.</string>
+    <string name="permission_dialog_ok">Ir a información</string>
     <string name="home_menu_allergies">Alerxias</string>
     <string name="title_activity_allergies">Alerxias</string>
     <string name="error_duplicate_medicine">Este medicamento xa se atopa no botiquín.</string>

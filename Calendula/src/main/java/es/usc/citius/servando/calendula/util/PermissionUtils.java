@@ -70,14 +70,14 @@ public class PermissionUtils {
     public static boolean hasAskedForPermission(Activity activity, String permission) {
         return PreferenceManager
                 .getDefaultSharedPreferences(activity)
-                .getBoolean("asked-for"+permission, false);
+                .getBoolean("asked-for" + permission, false);
     }
 
     public static void markedPermissionAsAsked(Activity activity, String permission) {
         PreferenceManager
                 .getDefaultSharedPreferences(activity)
                 .edit()
-                .putBoolean("asked-for"+permission, true)
+                .putBoolean("asked-for" + permission, true)
                 .commit();
     }
 }

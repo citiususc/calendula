@@ -519,6 +519,9 @@
     <string name="medicine_search_empty_list_msg">Type a drug name or code to start searching...</string>
     <string name="search_hint">Search…</string>
 
+    <string name="permission_dialog_go_to_settings">We couldn\'t perform this action because you have denied our previous request to access storage. You can grant the permission again in the app info view.</string>
+    <string name="permission_dialog_ok">Go to app info</string>
+
 
 </resources>
 

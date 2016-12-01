@@ -18,12 +18,17 @@
 
 package es.usc.citius.servando.calendula.activities;
 
+import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.media.Ringtone;
@@ -32,6 +37,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -57,6 +63,7 @@ import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.DownloadDatabaseDialogHelper;
 import es.usc.citius.servando.calendula.drugdb.SetupDBService;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
+import es.usc.citius.servando.calendula.util.PermissionUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.view.CustomListPreference;
 
@@ -81,7 +88,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
     private static final String TAG = "SettingsActivity";
 
+    public static final int REQ_CODE_EXTERNAL_STORAGE = 20;
+
     static Context ctx;
+    static Activity activity;
     static Context appCtx;
     static String lastValidDatabase;
     static String NONE;
@@ -128,10 +138,19 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             final String stringValue = value.toString();
 
             if (preference instanceof es.usc.citius.servando.calendula.util.RingtonePreference) {
-                Uri ringtoneUri = Uri.parse(stringValue);
-                Ringtone ringtone = RingtoneManager.getRingtone(ctx, ringtoneUri);
-                String name = ringtone!=null ? ringtone.getTitle(ctx) :ctx.getString(R.string.pref_notification_tone_sum);
-                preference.setSummary(name);
+                String p = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+                if(PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(activity, p)){
+                    preference.setSummary("");
+                }else{
+                    Uri ringtoneUri = Uri.parse(stringValue);
+                    Ringtone ringtone = RingtoneManager.getRingtone(ctx, ringtoneUri);
+                    String name = ringtone!=null ? ringtone.getTitle(ctx) :ctx.getString(R.string.pref_notification_tone_sum);
+                    preference.setSummary(name);
+                }
+
+
+
+
             } else if (preference instanceof ListPreference) {
                 if(preference.getKey().equals("prescriptions_database")){
                     //Toast.makeText(ctx, "Value: " + stringValue + ", settingUp:" + settingUp, Toast.LENGTH_SHORT).show();
@@ -267,6 +286,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         });
 
         root.addView(toolbar, 0); // insert at top
+
+        activity = this;
+        ctx = getBaseContext();
         ctx = SettingsActivity.this;
         appCtx = getApplicationContext();
         setupSimplePreferencesScreen();
@@ -322,19 +344,54 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
         // their values. When their values change, their summaries are updated
         // to reflect the new value, per the Android Design guidelines.
-        bindPreferenceSummaryToValue(findPreference("display_name"), true);
-        bindPreferenceSummaryToValue(findPreference("alarm_repeat_frequency"), true);
-        bindPreferenceSummaryToValue(findPreference("alarm_reminder_window"), true);
-        bindPreferenceSummaryToValue(findPreference("pref_notification_tone"), true);
+        bindPreferenceSummaryToValue(findPreference("display_name"),true);
+        bindPreferenceSummaryToValue(findPreference("alarm_repeat_frequency"),true);
+        bindPreferenceSummaryToValue(findPreference("alarm_reminder_window"),true);
+        bindPreferenceSummaryToValue(findPreference("pref_notification_tone"),true);
         bindPreferenceSummaryToValue(findPreference("prescriptions_database"), true);
         bindPreferenceSummaryToValue(findPreference("stock_alert_days"), true);
+
+        findPreference("alarm_insistent").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                boolean val = (boolean) o;
+                String p = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+                if(val && PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(activity,p)) {
+                    if(PermissionUtils.shouldAskForPermission(activity,p))
+                        PermissionUtils.requestPermissions(activity, new String[]{p}, REQ_CODE_EXTERNAL_STORAGE);
+                    else
+                        showStupidUserDialog();
+                    return false;
+                }
+                return true;
+            }
+        });
 
         if(!CalendulaApp.isPharmaModeEnabled(this)){
             Preference alarmPk = findPreference("alarm_pickup_notifications");
             PreferenceScreen preferenceScreen = getPreferenceScreen();
             preferenceScreen.removePreference(alarmPk);
         }
+    }
 
+    private void showStupidUserDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        // "Remove " + m.name() + "?"
+        builder.setMessage(getString(R.string.permission_dialog_go_to_settings))
+                .setCancelable(true)
+                .setPositiveButton(getString(R.string.permission_dialog_ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        PermissionUtils.goToAppSettings(activity);
+                    }
+                })
+                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+            });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     /**
@@ -376,62 +433,26 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
     }
 
-//    /**
-//     * This fragment shows general preferences only. It is used when the
-//     * activity is showing a two-pane settings UI.
-//     */
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//    public static class GeneralPreferenceFragment extends PreferenceFragment {
-//        @Override
-//        public void onCreate(Bundle savedInstanceState) {
-//            super.onCreate(savedInstanceState);
-//            addPreferencesFromResource(R.xml.pref_general);
-//
-//            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-//            // to their values. When their values change, their summaries are
-//            // updated to reflect the new value, per the Android Design
-//            // guidelines.
-//            bindPreferenceSummaryToValue(findPreference("example_text"), true);
-//            bindPreferenceSummaryToValue(findPreference("example_list"), true);
-//        }
-//    }
-//
-//    /**
-//     * This fragment shows general preferences only. It is used when the
-//     * activity is showing a two-pane settings UI.
-//     */
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//    public static class StockPreferenceFragment extends PreferenceFragment {
-//        @Override
-//        public void onCreate(Bundle savedInstanceState) {
-//            super.onCreate(savedInstanceState);
-//            addPreferencesFromResource(R.xml.pref_stock);
-//        }
-//    }
-//
-//    /**
-//     * This fragment shows notification preferences only. It is used when the
-//     * activity is showing a two-pane settings UI.
-//     */
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-//    public static class NotificationPreferenceFragment extends PreferenceFragment {
-//        @Override
-//        public void onCreate(Bundle savedInstanceState) {
-//            super.onCreate(savedInstanceState);
-//            addPreferencesFromResource(R.xml.pref_notification);
-//
-//            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-//            // to their values. When their values change, their summaries are
-//            // updated to reflect the new value, per the Android Design
-//            // guidelines.
-//            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"), true);
-//        }
-//    }
-
     @Override
     protected void onDestroy() {
         unregisterReceiver(onDBSetupComplete);
         super.onDestroy();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQ_CODE_EXTERNAL_STORAGE: {
+                PermissionUtils.markedPermissionAsAsked(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    CheckBoxPreference ins = (CheckBoxPreference)findPreference("alarm_insistent");
+                    ins.setChecked(true);
+                }
+                return;
+            }
+        }
+
     }
 
 }

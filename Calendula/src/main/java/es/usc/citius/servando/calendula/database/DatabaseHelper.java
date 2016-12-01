@@ -219,7 +219,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
         } catch (Exception e) {
             Log.e(DatabaseHelper.class.getName(), "Can't upgrade databases", e);
-            throw new RuntimeException(e);
+            try {
+                Log.d(DatabaseHelper.class.getName(), "Will try to recreate db...");
+                dropAndCreateAllTables();
+                createDefaultPatient();
+            }catch (Exception ex){
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -261,7 +267,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
         // date formatter changes on v11, so we can no use LocalDatePersister here
         String now = LocalDate.now().toString("ddMMYYYY");
-        String updateDateSql = "UPDATE DailyScheduleItems SET " + DailyScheduleItem.COLUMN_DATE + " = '" + now + "'";
+        String updateDateSql = "UPDATE DailyScheduleItems SET " + DailyScheduleItem.COLUMN_DATE + " = '" +now + "'";
         getDailyScheduleItemsDao().executeRaw(updateDateSql);
 
     }

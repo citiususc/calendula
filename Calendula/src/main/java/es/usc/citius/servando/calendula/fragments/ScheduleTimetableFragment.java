@@ -76,6 +76,7 @@ import es.usc.citius.servando.calendula.fragments.dosePickers.DosePickerFragment
 import es.usc.citius.servando.calendula.fragments.dosePickers.LiquidDosePickerFragment;
 import es.usc.citius.servando.calendula.fragments.dosePickers.PillDosePickerFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Routine;
@@ -153,6 +154,8 @@ public class ScheduleTimetableFragment extends Fragment
 
     int color;
 
+    private Patient patient;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,9 +173,8 @@ public class ScheduleTimetableFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_schedule_timetable, container, false);
-
-        color = DB.patients().getActive(getActivity()).color();
-
+        patient = DB.patients().getActive(getActivity());
+        color = patient.color();
         scrollView = (ScrollView) rootView.findViewById(R.id.schedule_scroll);
         timetableContainer =
                 (LinearLayout) rootView.findViewById(R.id.schedule_timetable_container);
@@ -1079,7 +1081,7 @@ public class ScheduleTimetableFragment extends Fragment
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String selected = (String) adapterView.getItemAtPosition(i);
-                Routine r = Routine.findByName(selected);
+                Routine r = DB.routines().findByPatientAndName(selected, patient);
                 ScheduleItem item = ((ScheduleItem) routineSpinner.getTag());
 
                 if (r != null) {

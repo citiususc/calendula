@@ -502,4 +502,7 @@
     <string name="medicine_search_empty_list_msg">Escribe un nombre o un código de medicamento para comenzar a buscar...</string>
     <string name="search_hint">Buscar…</string>
 
+    <string name="permission_dialog_go_to_settings">No hemos podido realizar esta acción porque has rechazado una solicitud anterior de acceso al almacenamiento. Puedes conceder ese permiso de nuevo en la vista de información de la aplicación.</string>
+    <string name="permission_dialog_ok">Ir a información</string>
+
 </resources>

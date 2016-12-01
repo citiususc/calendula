@@ -22,6 +22,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 
 import org.joda.time.LocalTime;
 
@@ -92,6 +94,19 @@ public class RoutineDao extends GenericDao<Routine, Long> {
         }
     }
 
+    public Routine findByPatientAndName(String name, Patient p) {
+        try {
+            QueryBuilder<Routine, Long> qb = dao.queryBuilder();
+            Where w = qb.where();
+            w.and(w.eq(Routine.COLUMN_NAME, name),w.eq(Routine.COLUMN_PATIENT, p));
+            qb.setWhere(w);
+            return qb.queryForFirst();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding routine", e);
+        }
+    }
+
+
     public List<Routine> findInHour(int hour) {
         try {
             LocalTime time = new LocalTime(hour, 0);
@@ -129,6 +144,4 @@ public class RoutineDao extends GenericDao<Routine, Long> {
             fireEvent();
         }
     }
-
-
 }
