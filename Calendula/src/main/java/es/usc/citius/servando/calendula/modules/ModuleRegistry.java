@@ -13,25 +13,41 @@ public class ModuleRegistry {
 
     public static final String TAG = "ModuleRegistry";
 
-    private static final Class<?>[] DEFAULT_MODULES = new Class<?>[]{
-            BaseModule.class // Base module is required. Do not remove!
-    };
+    public static List<CalendulaModule> getDefaultModules() {
+        return getModulesForConfig(ModuleConfig.DEFAULT);
+    }
 
-    private static List<CalendulaModule> modules = null;
+    public static List<CalendulaModule> getModulesForConfig(String configName) {
+        return getModulesForConfig(ModuleConfig.valueOf(configName));
+    }
 
-    public static List<CalendulaModule> getModules() {
-        if (modules == null) {
-            modules = new ArrayList<>();
-            for (Class<?> moduleClass : DEFAULT_MODULES) {
-                try {
-                    modules.add((CalendulaModule) moduleClass.newInstance());
-                } catch (Exception e) {
-                    Log.e(TAG, "getModules: An error occurred when trying to instantiate module", e);
-                    throw new RuntimeException(e);
-                }
+    public static List<CalendulaModule> getModulesForConfig(ModuleConfig config) {
+        List<CalendulaModule> modules = new ArrayList<>();
+        for (Class<?> moduleClass : config.modList) {
+            try {
+                modules.add((CalendulaModule) moduleClass.newInstance());
+            } catch (Exception e) {
+                Log.e(TAG, "getModulesForConfig: An error occurred when trying to instantiate module", e);
+                throw new RuntimeException(e);
             }
-            Log.d(TAG, "getModules: " + modules.size() + " modules instantiated successfully");
         }
+        Log.d(TAG, "getModulesForConfig: " + modules.size() + " modules instantiated successfully");
         return modules;
+    }
+
+    public enum ModuleConfig {
+        DEFAULT(ModuleLists.DEFAULT_MODULES);
+
+        private Class<?>[] modList;
+
+        ModuleConfig(Class<?>[] modules) {
+            this.modList = modules;
+        }
+    }
+
+    private static class ModuleLists {
+        private static final Class<?>[] DEFAULT_MODULES = new Class<?>[]{
+                BaseModule.class // Base module is required. Do not remove!
+        };
     }
 }

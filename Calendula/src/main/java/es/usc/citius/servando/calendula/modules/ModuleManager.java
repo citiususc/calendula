@@ -62,7 +62,7 @@ public class ModuleManager {
     }
 
     public void runDefaultModules(Context ctx) {
-        final List<CalendulaModule> modules = ModuleRegistry.getModules();
+        final List<CalendulaModule> modules = ModuleRegistry.getDefaultModules();
         run(modules, ctx);
     }
 
