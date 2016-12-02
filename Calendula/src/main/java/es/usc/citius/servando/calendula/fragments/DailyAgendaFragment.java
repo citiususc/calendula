@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.fragments;
@@ -399,7 +399,6 @@ public class DailyAgendaFragment extends Fragment{
     public void refreshPosition(int position) {
         if(position == -1){
             notifyDataChange();
-            return;
         }else if(position >= 0 && position < items.size()) {
             rvAdapter.updatePosition(position);
         }

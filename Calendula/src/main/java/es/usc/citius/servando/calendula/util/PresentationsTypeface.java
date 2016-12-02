@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.util;
@@ -47,7 +47,7 @@ public class PresentationsTypeface implements ITypeface {
     @Override
     public HashMap<String, Character> getCharacters() {
         if (mChars == null) {
-            HashMap<String, Character> aChars = new HashMap<String, Character>();
+            HashMap<String, Character> aChars = new HashMap<>();
             for (Icon v : Icon.values()) {
                 aChars.put(v.name(), v.character);
             }

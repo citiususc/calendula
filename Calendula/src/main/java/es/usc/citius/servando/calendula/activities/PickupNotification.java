@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.activities;
@@ -87,7 +87,6 @@ public class PickupNotification {
         //style.setSummaryText("Notification Summary");
 
         final String ticker = title;
-        final String text = title;
 
         PendingIntent defaultIntent = PendingIntent.getActivity(
                 context,

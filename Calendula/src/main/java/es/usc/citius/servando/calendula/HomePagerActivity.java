@@ -13,17 +13,15 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -43,7 +41,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -80,7 +77,6 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
-import es.usc.citius.servando.calendula.util.PermissionUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.medicine.StockUtils;
 
@@ -461,12 +457,12 @@ public class HomePagerActivity extends CalendulaActivity implements
         SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         if(CalendulaApp.isPharmaModeEnabled(getApplicationContext())){
-            prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, false).commit();
+            prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, false).apply();
             Snack.show("Acabas de deshabilitar el modo farmacia!", this);
             fabMgr.onPharmacyModeChanged(false);
             drawerMgr.onPharmacyModeChanged(false);
         }else {
-            prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, true).commit();
+            prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, true).apply();
             Snack.show("Acabas de habilitar el modo farmacia!", this);
             fabMgr.onPharmacyModeChanged(false);
             drawerMgr.onPharmacyModeChanged(false);

@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula;
@@ -198,7 +198,6 @@ public class FabMenuMgr implements View.OnClickListener{
                 launchActivity(MedicinesActivity.class);
                 break;
             case 3:
-                return;
         }
     }
 
@@ -222,7 +221,6 @@ public class FabMenuMgr implements View.OnClickListener{
         activity.startActivity(i);
         activity.overridePendingTransition(0, 0);
         fabMenu.collapse();
-        return;
     }
 
     public int getFabColor(int page) {

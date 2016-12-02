@@ -13,13 +13,12 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.activities;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -261,7 +260,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.medicines, menu);
         removeItem = menu.findItem(R.id.action_remove);
-        removeItem.setVisible(mMedicineId != -1 ? true : false);
+        removeItem.setVisible(mMedicineId != -1);
         return true;
     }
 
@@ -559,7 +558,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
         @Override
         public Filter getFilter() {
-            Filter myFilter = new Filter() {
+            return new Filter() {
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint) {
                     FilterResults filterResults = new FilterResults();
@@ -601,7 +600,6 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                     }
                 }
             };
-            return myFilter;
         }
     }
 }

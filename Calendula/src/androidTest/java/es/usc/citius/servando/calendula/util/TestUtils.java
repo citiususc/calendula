@@ -11,7 +11,7 @@ public class TestUtils {
         Espresso.closeSoftKeyboard();
         try {
             Thread.sleep(500);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
     }
 
@@ -19,7 +19,7 @@ public class TestUtils {
         Espresso.closeSoftKeyboard();
         try {
             Thread.sleep(ms);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
         }
     }
 }

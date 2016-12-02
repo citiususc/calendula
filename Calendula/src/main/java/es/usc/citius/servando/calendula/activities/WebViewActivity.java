@@ -1,3 +1,21 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ */
+
 package es.usc.citius.servando.calendula.activities;
 
 import android.content.Context;
@@ -277,7 +295,7 @@ public class WebViewActivity extends CalendulaActivity {
         Log.d(TAG, "Enabling cache with max size " + CACHE_MAX_SIZE + " bytes");
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setAppCacheMaxSize(CACHE_MAX_SIZE);
-        webView.getSettings().setAppCachePath("/data/data/" + getPackageName() + "/cache");
+        webView.getSettings().setAppCachePath(getFilesDir().getPath()+ "data/" + getPackageName() + "/cache");
         webView.getSettings().setAllowFileAccess(true);
         webView.getSettings().setAppCacheEnabled(true);
         webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
@@ -510,7 +528,7 @@ public class WebViewActivity extends CalendulaActivity {
         /**
          * Enable/disable JavaScript for the webpage. Default is <code>false</code>.
          *
-         * @param javaScriptEnabled
+         * @param javaScriptEnabled <code>true</code> if Javascript should be enabled
          */
         public void setJavaScriptEnabled(boolean javaScriptEnabled) {
             this.javaScriptEnabled = javaScriptEnabled;
@@ -525,7 +543,7 @@ public class WebViewActivity extends CalendulaActivity {
          * Name of a class that implements the HtmlPostprocessor interface, for accessing and modifying the
          * html before it is displayed. Default is <code>false</code>.
          *
-         * @param processor
+         * @param processor the processor
          */
         public void setPostProcessorClassname(String processor) {
             this.postProcessorClassname = processor;
@@ -543,7 +561,7 @@ public class WebViewActivity extends CalendulaActivity {
          * Set a custom CSS sheet to be injected into the page. If <code>null</code>, no CSS will be loaded.
          * Injecting the CSS <b>requires JavaScript</b> and will override setJavaScriptEnabled during the injection.
          *
-         * @param filename
+         * @param filename the filename
          */
         public void setCustomCss(String filename, Map<String, String> overrides) {
             this.customCss = filename;
@@ -558,7 +576,7 @@ public class WebViewActivity extends CalendulaActivity {
          * Set if external links should be opened in the webview (<code>true</code>) or should launch an action intent (<code>false</code>).
          * Default value is <code>false</code>.
          *
-         * @param externalLinksEnabled
+         * @param externalLinksEnabled if external links should be enabled
          */
         public void setExternalLinksEnabled(boolean externalLinksEnabled) {
             this.externalLinksEnabled = externalLinksEnabled;
@@ -574,7 +592,7 @@ public class WebViewActivity extends CalendulaActivity {
          * - <code>APP_CACHE</code>: HTML5 App Cache
          * - <code>DOWNLOAD_CACHE</code>: Cache full HTML document in database. Warning! Locally linked resources will be lost.
          *
-         * @param cacheType
+         * @param cacheType the cache type
          */
         public void setCacheType(CacheType cacheType) {
             this.cacheType = cacheType;
@@ -588,7 +606,7 @@ public class WebViewActivity extends CalendulaActivity {
          * Set TTL for download cache. Only works if CacheType.DOWNLOAD_CACHE is set.
          * If <code>null</code>, a default TTL will be used.
          *
-         * @param cacheTTL
+         * @param cacheTTL the ttl
          */
         public void setCacheTTL(Duration cacheTTL) {
             this.cacheTTL = cacheTTL;
@@ -680,7 +698,7 @@ public class WebViewActivity extends CalendulaActivity {
      * Whether a request needs html access after loading, that is, whether is must be
      * cached or processed and it has not been cached yet
      *
-     * @param request
+     * @param request the request
      */
     public boolean needsHtmlAccess(WebViewRequest request) {
 

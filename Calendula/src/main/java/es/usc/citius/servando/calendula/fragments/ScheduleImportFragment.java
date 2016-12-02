@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.fragments;
@@ -997,7 +997,7 @@ public class ScheduleImportFragment extends Fragment
         String[] routineNames = getUpdatedRoutineNames();
         timetableContainer.removeAllViews();
 
-        List<ScheduleItem> scheduleItems = new ArrayList<ScheduleItem>();
+        List<ScheduleItem> scheduleItems = new ArrayList<>();
 
         boolean enableDelete = timesPerDay > 1;
 
@@ -1065,7 +1065,7 @@ public class ScheduleImportFragment extends Fragment
     void updateRoutineSelectionAdapter(final View entryView, Spinner routineSpinner,
                                        String[] routineNames) {
         ArrayAdapter<String> routineAdapter =
-                new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,
+                new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item,
                         routineNames);
         routineAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         routineSpinner.setAdapter(routineAdapter);

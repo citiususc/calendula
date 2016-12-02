@@ -13,11 +13,12 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +34,7 @@ import es.usc.citius.servando.calendula.util.ScreenUtils;
 /**
  * Created by joseangel.pineiro on 10/30/15.
  */
+@SuppressLint("Registered")
 public class CalendulaActivity extends AppCompatActivity{
 
     protected Toolbar toolbar;

@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.activities;
@@ -234,7 +234,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                     s.setMedicine(ScheduleHelper.instance().getSelectedMed());
                     final Patient patient = s.patient();
 
-                    List<Long> routinesTaken = new ArrayList<Long>();
+                    List<Long> routinesTaken = new ArrayList<>();
 
                     if (!s.repeatsHourly()) {
                         // remove days if changed
@@ -357,7 +357,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.schedules, menu);
         removeItem = menu.findItem(R.id.action_remove);
-        removeItem.setVisible(mScheduleId != -1 ? true : false);
+        removeItem.setVisible(mScheduleId != -1);
         return true;
     }
 

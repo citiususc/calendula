@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.adapters;
@@ -77,7 +77,7 @@ public class AlertViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int type) {
 
-        Integer viewType = new Integer(type);
+        Integer viewType = type;
         Log.d(TAG, "onCreateViewHolder() called with: viewType = [" + viewType + "]");
         if(viewType == DEFAULT_ALERT) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.medicine_alert_list_item, parent, false);
@@ -165,7 +165,7 @@ public class AlertViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public void registerViewProvider(AlertViewProvider provider, Class<?> cls){
 
-        Integer type = new Integer(cls.hashCode());
+        Integer type = cls.hashCode();
         this.alertTypeMap.put(provider.getClass(), type);
         this.providerMap.put(type, provider);
     }

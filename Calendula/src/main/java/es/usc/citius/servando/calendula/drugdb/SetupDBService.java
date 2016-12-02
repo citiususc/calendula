@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.drugdb;
@@ -90,7 +90,7 @@ public class SetupDBService extends IntentService {
             SharedPreferences.Editor edit = settings.edit();
             edit.putString("last_valid_database", dbPref);
             edit.putString("prescriptions_database", dbPref);
-            edit.commit();
+            edit.apply();
 
         } catch (Exception e) {
             Log.e(TAG, "Error while saving prescription data", e);
@@ -98,7 +98,7 @@ public class SetupDBService extends IntentService {
             SharedPreferences.Editor edit = settings.edit();
             edit.putString("last_valid_database", getString(R.string.database_none_id));
             edit.putString("prescriptions_database",getString(R.string.database_none_id));
-            edit.commit();
+            edit.apply();
         }
 
         // clear all allocated spaces

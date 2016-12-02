@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.fragments;
@@ -113,7 +113,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
             public void onClick(View v) {
 
                 float density = getResources().getDisplayMetrics().densityDpi;
-                Log.d("RoutineCreateOrEditFragment", "Density: " + density);
+                Log.d("RoutineCOEFragment", "Density: " + density);
                 if (density >= DisplayMetrics.DENSITY_XHIGH) {
                     RadialTimePickerDialog timePickerDialog = RadialTimePickerDialog
                             .newInstance(RoutineCreateOrEditFragment.this, hour, minute, true);

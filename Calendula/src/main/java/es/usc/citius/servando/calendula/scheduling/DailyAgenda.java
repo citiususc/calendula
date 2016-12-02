@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.scheduling;
@@ -85,7 +85,7 @@ public class DailyAgenda {
                         // Save last date to prefs
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putLong(PREF_LAST_DATE, now.getMillis());
-                        editor.commit();
+                        editor.apply();
                         return null;
                     }
                 });

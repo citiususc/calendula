@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.activities;
@@ -85,22 +85,26 @@ public class UpdateFromFileActivity extends ActionBarActivity {
             String scheme = uri.getScheme();
             String name = null;
 
-            if (scheme.equals("file")) {
-                List<String> pathSegments = uri.getPathSegments();
-                if (pathSegments.size() > 0) {
-                    name = pathSegments.get(pathSegments.size() - 1);
-                }
-            } else if (scheme.equals("content")) {
-                Cursor cursor = getContentResolver().query(uri, new String[] {
-                        MediaStore.MediaColumns.DISPLAY_NAME
-                }, null, null, null);
-                cursor.moveToFirst();
-                int nameIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
-                if (nameIndex >= 0) {
-                    name = cursor.getString(nameIndex);
-                }
-            } else {
-                return null;
+            switch (scheme) {
+                case "file":
+                    List<String> pathSegments = uri.getPathSegments();
+                    if (pathSegments.size() > 0) {
+                        name = pathSegments.get(pathSegments.size() - 1);
+                    }
+                    break;
+                case "content":
+                    Cursor cursor = getContentResolver().query(uri, new String[]{
+                            MediaStore.MediaColumns.DISPLAY_NAME
+                    }, null, null, null);
+                    cursor.moveToFirst();
+                    int nameIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
+                    if (nameIndex >= 0) {
+                        name = cursor.getString(nameIndex);
+                    }
+                    cursor.close();
+                    break;
+                default:
+                    return null;
             }
 
             if (name == null) {
@@ -138,7 +142,7 @@ public class UpdateFromFileActivity extends ActionBarActivity {
             if (is != null) {
                 try {
                     is.close();
-                } catch (Exception e1) {
+                } catch (Exception ignored) {
                 }
             }
 

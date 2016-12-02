@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.activities;
@@ -154,7 +154,7 @@ public class MedicineInfoActivity extends CalendulaActivity {
     private void processIntent() {
 
         long medId = getIntent() != null ? getIntent().getLongExtra("medicine_id", -1) : -1;
-        showAlerts = getIntent() != null ? getIntent().getBooleanExtra("show_alerts", false) : false;
+        showAlerts = getIntent() != null && getIntent().getBooleanExtra("show_alerts", false);
 
         if(medId != -1 ){
             medicine = DB.medicines().findById(medId);

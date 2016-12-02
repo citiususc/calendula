@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.persistence;
@@ -113,7 +113,7 @@ public class AllergyGroup implements Comparable<AllergyGroup> {
     @Override
     public int compareTo(AllergyGroup o) {
         if (this.precedence != o.precedence)
-            return Integer.valueOf(this.precedence).compareTo(Integer.valueOf(o.precedence));
+            return Integer.valueOf(this.precedence).compareTo(o.precedence);
         else
             return this.name.compareTo(o.name);
     }

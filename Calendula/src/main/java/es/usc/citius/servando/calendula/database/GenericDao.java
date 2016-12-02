@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.database;
@@ -48,7 +48,7 @@ import java.util.concurrent.Callable;
 /**
  * Created by joseangel.pineiro
  */
-public abstract class GenericDao<T extends Object, I> implements Dao<T, I> {
+public abstract class GenericDao<T, I> implements Dao<T, I> {
 
     protected Dao<T, I> dao;
     protected DatabaseHelper dbHelper;

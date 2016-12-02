@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.activities;
@@ -182,7 +182,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             PatientLinkWrapper p = new Gson().fromJson(qrData, PatientLinkWrapper.class);
             Snack.show("Usuario vinculado correctamente!", this, Snackbar.SnackbarDuration.LENGTH_LONG);
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(PatientDetailActivity.this);
-            prefs.edit().putString("remote_token" + patientId, p.token).commit();
+            prefs.edit().putString("remote_token" + patientId, p.token).apply();
             Log.d("PatDetail", p.toString());
         }
     }
@@ -196,7 +196,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
                     public void onClick(DialogInterface dialog, int id) {
                         token = null;
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(PatientDetailActivity.this);
-                        prefs.edit().remove("remote_token" + patientId).commit();
+                        prefs.edit().remove("remote_token" + patientId).apply();
                         linkButton.setText("Vincular");
                     }
                 })

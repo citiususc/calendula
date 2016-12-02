@@ -1,3 +1,21 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2016 CITIUS - USC
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ */
+
 package es.usc.citius.servando.calendula.modules;
 
 import android.app.AlarmManager;
@@ -54,7 +72,7 @@ public class BaseModule extends CalendulaModule {
         initializeDatabase(ctx);
         if (!prefs.getBoolean("DEFAULT_DATA_INSERTED", false)) {
             DefaultDataGenerator.fillDBWithDummyData(ctx);
-            prefs.edit().putBoolean("DEFAULT_DATA_INSERTED", true).commit();
+            prefs.edit().putBoolean("DEFAULT_DATA_INSERTED", true).apply();
         }
 
         // initialize daily agenda
@@ -81,7 +99,7 @@ public class BaseModule extends CalendulaModule {
         try {
             if (DB.patients().countOf() == 1) {
                 Patient p = DB.patients().getDefault();
-                prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).commit();
+                prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).apply();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,7 +130,7 @@ public class BaseModule extends CalendulaModule {
                     .putString("prescriptions_database", DBRegistry.instance().defaultDBMgr().id());
         }
         editor.remove("enable_prescriptions_db");
-        editor.commit();
+        editor.apply();
     }
 
 

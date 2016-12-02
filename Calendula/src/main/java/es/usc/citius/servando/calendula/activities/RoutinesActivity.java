@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.activities;
@@ -93,7 +93,7 @@ public class RoutinesActivity extends CalendulaActivity implements RoutineCreate
         // Inflate the menu; this adds items to the action bar if it is present.telt
         getMenuInflater().inflate(R.menu.routines, menu);
         removeItem = menu.findItem(R.id.action_remove);
-        removeItem.setVisible(mRoutineId != -1 ? true : false);
+        removeItem.setVisible(mRoutineId != -1);
         return true;
     }
 

@@ -73,7 +73,7 @@ public class RoutinesActivityEditTest extends ActivityInstrumentationTestCase2<R
         // close Soft Keyboard
         TestUtils.closeKeyboard();
         // set routine time (not possible vía UI)
-        setTimepickerTime(20, 00);
+        setTimepickerTime(20, 0);
         // open time picker
         onView(withId(R.id.button2)).perform(click());
         // check its open

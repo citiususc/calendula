@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.util;
@@ -39,7 +39,7 @@ public class DailyAgendaItemStub {
     public String title = "";
     public LocalTime time;
     public LocalDate date;
-    public Long id = -1l;
+    public Long id = -1L;
     public Patient patient;
 
     public boolean isSpacer = false;
@@ -66,7 +66,7 @@ public class DailyAgendaItemStub {
         public String medName;
         public String minute;
         public String displayDose;
-        public Long scheduleItemId = -1l;
+        public Long scheduleItemId = -1L;
         public Presentation presentation;
 
         @Override

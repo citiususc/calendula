@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.activities;
@@ -198,7 +198,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
                     SharedPreferences.Editor edit = settings.edit();
                     edit.putString("prescriptions_database", accepted ? SETTING_UP : lastValidDatabase);
-                    edit.commit();
+                    edit.apply();
                     if(accepted){
                         settingUp = true;
                         preference.setEnabled(false);
@@ -214,7 +214,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 SharedPreferences.Editor edit = settings.edit();
                 edit.putString("prescriptions_database",settings.getString("last_valid_database", NONE));
                 //edit.putString("last_valid_database", settings.getString("last_valid_database", NONE));
-                edit.commit();
+                edit.apply();
                 lastValidDatabase = NONE;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -449,7 +449,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     CheckBoxPreference ins = (CheckBoxPreference)findPreference("alarm_insistent");
                     ins.setChecked(true);
                 }
-                return;
             }
         }
 

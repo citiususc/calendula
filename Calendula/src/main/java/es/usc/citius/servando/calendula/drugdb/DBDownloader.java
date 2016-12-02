@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.drugdb;
@@ -41,7 +41,7 @@ public class DBDownloader {
 
     public static  String DOWNLOAD_URL = null;
     private static final String TAG = DBDownloader.class.getSimpleName();
-    private static String downloadSuffix = ".db";
+    private static final String downloadSuffix = ".db";
 
     private static long downloadId = -1;
 

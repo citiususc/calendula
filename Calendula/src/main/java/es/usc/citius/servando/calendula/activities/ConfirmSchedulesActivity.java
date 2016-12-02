@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.activities;
@@ -350,7 +350,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                                                 PickupInfo pickupInfo = new PickupInfo();
                                                 pickupInfo.setTo(df.parseLocalDate(pkw.t));//.plusMonths(19));
                                                 pickupInfo.setFrom(df.parseLocalDate(pkw.f));//.plusMonths(19));
-                                                pickupInfo.taken(pkw.tk == 1 ? true : false);
+                                                pickupInfo.taken(pkw.tk == 1);
                                                 pickupInfo.setMedicine(m);
                                                 DB.pickups().save(pickupInfo);
                                             }
@@ -427,7 +427,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
         s.setCycle(current.getCycleDays(), current.getCycleRest());
         s.setStartTime(current.startTime());
 
-        List<Long> routinesTaken = new ArrayList<Long>();
+        List<Long> routinesTaken = new ArrayList<>();
 
         if (!s.repeatsHourly()) {
             for (ScheduleItem item : s.items()) {
@@ -632,14 +632,14 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                     if (sCount > 0) {
                         return sCount;
                     } else {
-                        return 0l;
+                        return 0L;
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Error processing QR", e);
-                    return -1l;
+                    return -1L;
                 }
             } else {
-                return -1l;
+                return -1L;
             }
         }
 

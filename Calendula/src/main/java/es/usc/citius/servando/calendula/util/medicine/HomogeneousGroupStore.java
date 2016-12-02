@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.util.medicine;
@@ -78,7 +78,7 @@ public class HomogeneousGroupStore {
 //                    br.close();
 //                    // update preferences version
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-                    prefs.edit().putInt(PopulatePrescriptionDBService.DB_VERSION_KEY, newVersionCode).commit();
+                    prefs.edit().putInt(PopulatePrescriptionDBService.DB_VERSION_KEY, newVersionCode).apply();
                     return null;
                 }
             });

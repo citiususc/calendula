@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.fragments;
@@ -116,7 +116,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     private String mIntentAction;
 
     private static ArrayList<View> getViewsByTag(ViewGroup root, String tag) {
-        ArrayList<View> views = new ArrayList<View>();
+        ArrayList<View> views = new ArrayList<>();
         final int childCount = root.getChildCount();
         for (int i = 0; i < childCount; i++) {
             final View child = root.getChildAt(i);
@@ -726,7 +726,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                 showSoftInput();
             }
         }
-        prefs.edit().putBoolean("show_use_prescriptions_advice", true).commit();
+        prefs.edit().putBoolean("show_use_prescriptions_advice", true).apply();
 
     }
 

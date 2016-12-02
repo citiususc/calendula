@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.util;
@@ -127,8 +127,8 @@ public class RingtonePreference extends android.preference.RingtonePreference {
     void getEntriesAndValues() {
         RingtoneManager manager = new RingtoneManager(getContext());
         manager.setType(RingtoneManager.TYPE_RINGTONE);
-        List<CharSequence> _titles = new ArrayList<CharSequence>();
-        List<CharSequence> _values = new ArrayList<CharSequence>();
+        List<CharSequence> _titles = new ArrayList<>();
+        List<CharSequence> _values = new ArrayList<>();
 
         Cursor cursor = manager.getCursor();
         while (cursor.moveToNext()) {

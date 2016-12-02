@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.fragments;
@@ -38,7 +38,6 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.makeramen.RoundedImageView;
 import com.squareup.picasso.Picasso;
@@ -224,7 +223,7 @@ public class HomeProfileMgr {
         }
         currentBgFileIdx = rand;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        preferences.edit().putInt("profile_background_idx", rand).commit();
+        preferences.edit().putInt("profile_background_idx", rand).apply();
         return "home_bg_" + rand + ".jpg";
 
     }
@@ -241,7 +240,7 @@ public class HomeProfileMgr {
                     public void onClick(DialogInterface dialog, int which) {
                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
                         Snack.show("Mood saved!", context);
-                        preferences.edit().putInt("last_mood", which).commit();
+                        preferences.edit().putInt("last_mood", which).apply();
                         updateModButton();
                     }
                 }).show();

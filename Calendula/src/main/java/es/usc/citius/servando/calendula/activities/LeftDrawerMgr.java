@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.activities;
@@ -317,7 +317,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
             launchActivity(intent);
             return true;
         } else {
-            Long id = Long.valueOf(profile.getIdentifier());
+            Long id = (long) profile.getIdentifier();
             Patient p = DB.patients().findById(id);
             boolean isActive = DB.patients().isActive(p, home);
             if (isActive) {
@@ -362,7 +362,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
         ArrayList<IProfile> toRemove = new ArrayList<>();
         if (patients.size() != profiles.size()) {
             for (IProfile pr : profiles) {
-                Long id = Long.valueOf(pr.getIdentifier());
+                Long id = (long) pr.getIdentifier();
                 boolean remove = true;
                 for (Patient pat : patients) {
                     if (pat.id().equals(id)) {

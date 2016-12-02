@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.activities;
@@ -59,7 +59,7 @@ public class SchedulesHelpActivity extends IntroActivity{
     protected void onResume() {
         super.onResume();
         SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        prefs.edit().putBoolean("PREFERENCE_SCHEDULE_HELP_SHOWN", true).commit();
+        prefs.edit().putBoolean("PREFERENCE_SCHEDULE_HELP_SHOWN", true).apply();
     }
 
 }

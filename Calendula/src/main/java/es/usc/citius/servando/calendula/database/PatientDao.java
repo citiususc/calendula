@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
 package es.usc.citius.servando.calendula.database;
@@ -91,14 +91,14 @@ public class PatientDao extends GenericDao<Patient, Long> {
     public void setActive(Patient patient, Context ctx) {
         PreferenceManager.getDefaultSharedPreferences(ctx).edit()
         .putLong(PREFERENCE_ACTIVE_PATIENT,patient.id())
-        .commit();
+        .apply();
         CalendulaApp.eventBus().post(new PersistenceEvents.ActiveUserChangeEvent(patient));
     }
     public void setActiveById(Long id, Context ctx) {
         Patient patient = findById(id);
         PreferenceManager.getDefaultSharedPreferences(ctx).edit()
                 .putLong(PREFERENCE_ACTIVE_PATIENT, patient.id())
-                .commit();
+                .apply();
         CalendulaApp.eventBus().post(new PersistenceEvents.ActiveUserChangeEvent(patient));
     }
 
