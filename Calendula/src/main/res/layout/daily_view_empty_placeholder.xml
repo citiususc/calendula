@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2016 CITIUS - USC
   ~
@@ -17,31 +16,31 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout android:id="@+id/top"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="visible">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/top"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="visible">
 
     <ImageView
         android:id="@+id/bg"
         android:layout_width="130dp"
         android:layout_height="130dp"
-        android:src="@drawable/circle_white"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:alpha="0.07"/>
+        android:alpha="0.07"
+        android:src="@drawable/circle_white" />
 
 
     <ImageView
         android:id="@+id/imageView_ok"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:src="@drawable/alldone"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="80dp"
-        android:alpha="0.8"/>
+        android:alpha="0.8"
+        android:src="@drawable/alldone" />
 
     <TextView
         android:id="@+id/textView3"
@@ -49,7 +48,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="false"
         android:layout_alignParentStart="false"
+        android:layout_below="@+id/imageView_ok"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center"
         android:paddingBottom="15dp"
@@ -59,12 +60,10 @@
         android:text="@string/home_no_pending_meds_message"
         android:textAllCaps="false"
         android:textColor="@color/agenda_item_title"
+        android:textIsSelectable="false"
         android:textSize="19sp"
         android:textStyle="bold"
-        android:visibility="visible"
-        android:layout_below="@+id/imageView_ok"
-        android:layout_marginTop="25dp"
-        android:textIsSelectable="false"/>
+        android:visibility="visible" />
 
 </RelativeLayout>
 

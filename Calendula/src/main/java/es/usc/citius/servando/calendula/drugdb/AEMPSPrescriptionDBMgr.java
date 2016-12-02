@@ -74,8 +74,8 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
             return Presentation.SPRAY;
         } else if (n.contains("jarabe") || n.contains("frasco")) {
             return Presentation.SYRUP;
-        }else if (n.contains("parche")) {
-                return Presentation.PATCHES;
+        } else if (n.contains("parche")) {
+            return Presentation.PATCHES;
         } else if (n.contains("suspension oral")) {
             if (!n.contains("polvo") && !n.contains("granulado")) {
                 return Presentation.SYRUP;
@@ -95,7 +95,7 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
         String originalName = p.getName();
         String doseFirstPart = dose.contains(" ") ? dose.split(" ")[0] : dose;
 
-        if(doseFirstPart != null && originalName.contains(doseFirstPart)){
+        if (doseFirstPart != null && originalName.contains(doseFirstPart)) {
             int index = originalName.indexOf(doseFirstPart);
             return originalName.substring(0, index);
         }
@@ -121,8 +121,11 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
 
                 br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
                 // count file lines (for progress updating)
-                while (br.readLine() != null) { lines++;} br.close();
-                progressUpdateBy = lines/20;
+                while (br.readLine() != null) {
+                    lines++;
+                }
+                br.close();
+                progressUpdateBy = lines / 20;
                 updateProgress(l, 0);
 
                 br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
@@ -143,7 +146,7 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
         });
     }
 
-    private void updateProgress(SetupProgressListener l, int progress){
-        if(l!=null) l.onProgressUpdate(progress);
+    private void updateProgress(SetupProgressListener l, int progress) {
+        if (l != null) l.onProgressUpdate(progress);
     }
 }

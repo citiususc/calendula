@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2016 CITIUS - USC
   ~
@@ -153,7 +152,7 @@
     <string name="schedule_timetable_time_column">HORA</string>
     <string name="schedule_timetable_dose_column">DOSIS</string>
     <string name="take">Tomar</string>
-  <string name="first_intake">Primera toma a las </string>
+    <string name="first_intake">Primera toma a las </string>
 
     <string name="schedule_day_selector_mo">LU</string>
     <string name="schedule_day_selector_tu">MA</string>
@@ -239,8 +238,8 @@
         <item>meses</item>
     </string-array>
     <string name="schedule_custom_rule_text">&lt;u> %1$s &lt;/u></string>
-  <string name="every">cada</string>
-  <string name="summary_show_calendar">Ver calendario</string>
+    <string name="every">cada</string>
+    <string name="summary_show_calendar">Ver calendario</string>
 
     <string-array name="calendar_weekday_names">
         <item>NONE</item>
@@ -254,24 +253,24 @@
     </string-array>
 
 
-  <string name="hours">horas</string>
-  <string name="schedule_help_timesbyday">Por favor, indica el número de veces al día que se repite la pauta</string>
-  <string name="schedule_help_timetable">Ahora, asocia cada toma a tus rutinas e indica la dósis para cada una</string>
-  <string name="schedule_help_repeat">Indica cómo se repite la pauta. Si se repite todos los días no tienes que hacer nada.</string>
-  <string name="schedule_help_duration">Para acabar, puedes indicar cuando empieza y acaba esta pauta. Puedes dejarlo como está para que se repita indefinidamente.</string>
-  <string name="schedule_help_cycle">Indica el ciclo de repetición (período + descanso)</string>
-  <string name="schedule_help_hourly">Por favor, indica el período de repetición, la dósis, y la hora de la primera toma</string>
-  <string name="schedule_help_no_type_selected">Por favor, selecciona un tipo de pauta para poder continuar</string>
-  <string name="schedule_type_routines_title">Vinculada a rutinas</string>
-  <string name="schedule_type_hourly_title">Intervalo horario</string>
-  <string name="schedule_type_period_title">Ciclo de toma/descanso</string>
-  <string name="cycle_period_cero_message">El período de toma y descanso debe ser mayor de cero</string>
+    <string name="hours">horas</string>
+    <string name="schedule_help_timesbyday">Por favor, indica el número de veces al día que se repite la pauta</string>
+    <string name="schedule_help_timetable">Ahora, asocia cada toma a tus rutinas e indica la dósis para cada una</string>
+    <string name="schedule_help_repeat">Indica cómo se repite la pauta. Si se repite todos los días no tienes que hacer nada.</string>
+    <string name="schedule_help_duration">Para acabar, puedes indicar cuando empieza y acaba esta pauta. Puedes dejarlo como está para que se repita indefinidamente.</string>
+    <string name="schedule_help_cycle">Indica el ciclo de repetición (período + descanso)</string>
+    <string name="schedule_help_hourly">Por favor, indica el período de repetición, la dósis, y la hora de la primera toma</string>
+    <string name="schedule_help_no_type_selected">Por favor, selecciona un tipo de pauta para poder continuar</string>
+    <string name="schedule_type_routines_title">Vinculada a rutinas</string>
+    <string name="schedule_type_hourly_title">Intervalo horario</string>
+    <string name="schedule_type_period_title">Ciclo de toma/descanso</string>
+    <string name="cycle_period_cero_message">El período de toma y descanso debe ser mayor de cero</string>
 
-  <string name="schedule_type_routines_description">Ex: Cada 3 días, con desayuno comida y cena</string>
-  <string name="schedule_type_hourly_description">Ex: Cada 8 horas</string>
-  <string name="schedule_type_period_description">Ex: 21 días + 7 de descanso</string>
-  <string name="schedule_type_common_periods">Ciclos habituales</string>
-  <string name="dialog_interval_title">Intervalo</string>
+    <string name="schedule_type_routines_description">Ex: Cada 3 días, con desayuno comida y cena</string>
+    <string name="schedule_type_hourly_description">Ex: Cada 8 horas</string>
+    <string name="schedule_type_period_description">Ex: 21 días + 7 de descanso</string>
+    <string name="schedule_type_common_periods">Ciclos habituales</string>
+    <string name="dialog_interval_title">Intervalo</string>
     <string name="confirm_prescription_x_of_y">Prescripción %1$s de %2$s</string>
 
     <string name="title_activity_calendar">Calendario</string>

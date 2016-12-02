@@ -77,7 +77,7 @@ public class NotificationEventReceiver extends BroadcastReceiver {
                 if (scheduleId != -1 && scheduleTime != null) {
                     LocalTime t = DateTimeFormat.forPattern("kk:mm").parseLocalTime(scheduleTime);
                     AlarmScheduler.instance().onIntakeCancelled(Schedule.findById(scheduleId), t, date, context);
-                    Toast.makeText(context,context.getString(R.string.reminder_cancelled_message),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, context.getString(R.string.reminder_cancelled_message), Toast.LENGTH_SHORT).show();
                 }
                 break;
 
@@ -95,7 +95,7 @@ public class NotificationEventReceiver extends BroadcastReceiver {
                 if (scheduleId != -1 && scheduleTime != null) {
                     LocalTime t = DateTimeFormat.forPattern("kk:mm").parseLocalTime(scheduleTime);
                     AlarmScheduler.instance().onIntakeConfirmAll(Schedule.findById(scheduleId), t, date, context);
-                    Toast.makeText(context,context.getString(R.string.all_meds_taken),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, context.getString(R.string.all_meds_taken), Toast.LENGTH_SHORT).show();
                 }
                 break;
 

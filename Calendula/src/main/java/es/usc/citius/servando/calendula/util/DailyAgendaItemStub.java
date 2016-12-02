@@ -57,7 +57,19 @@ public class DailyAgendaItemStub {
         return date.toDateTime(time);
     }
 
-    public static class DailyAgendaItemStubElement  implements Comparable<DailyAgendaItemStubElement> {
+    @Override
+    public String toString() {
+        return "DailyAgendaItemStub{" +
+                ", isRoutine=" + isRoutine +
+                ", hasEvents=" + hasEvents +
+                ", count=" + (meds != null ? meds.size() : 0) +
+                ", title='" + title + '\'' +
+                ", time=" + time.toString("kk:mm") +
+                ", date=" + date.toString("dd/MM") +
+                '}';
+    }
+
+    public static class DailyAgendaItemStubElement implements Comparable<DailyAgendaItemStubElement> {
 
         public int res;
         public double dose;
@@ -76,18 +88,6 @@ public class DailyAgendaItemStub {
             if (result == 0) result = medName.compareTo(other.medName);
             return result;
         }
-    }
-
-    @Override
-    public String toString() {
-        return "DailyAgendaItemStub{" +
-                ", isRoutine=" + isRoutine +
-                ", hasEvents=" + hasEvents +
-                ", count=" + (meds != null ? meds.size() : 0) +
-                ", title='" + title + '\'' +
-                ", time=" + time.toString("kk:mm") +
-                ", date=" + date.toString("dd/MM") +
-                '}';
     }
 
 }

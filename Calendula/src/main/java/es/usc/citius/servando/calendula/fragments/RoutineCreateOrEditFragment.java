@@ -143,18 +143,6 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
             outState.putLong(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, mRoutine.getId());
     }
 
-    private void setRoutine(Routine r) {
-        Log.d(getTag(), "Routine set: " + r.name());
-        mRoutine = r;
-        mNameTextView.setText(mRoutine.name());
-        updateTime();
-    }
-
-
-    void updateTime() {
-        timeButton.setText(new LocalTime(hour, minute).toString("kk:mm"));
-    }
-
     public void onEdit() {
 
         String name = mNameTextView.getText().toString();
@@ -186,7 +174,6 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
             Snack.show(R.string.medicine_no_name_error_message, getActivity());
         }
     }
-
 
     public void showDeleteConfirmationDialog(final Routine r) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -246,6 +233,17 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
     @Override
     public void onDialogTimeSet(int ref, int hour, int minute) {
         onTimeSet(null, hour, minute);
+    }
+
+    void updateTime() {
+        timeButton.setText(new LocalTime(hour, minute).toString("kk:mm"));
+    }
+
+    private void setRoutine(Routine r) {
+        Log.d(getTag(), "Routine set: " + r.name());
+        mRoutine = r;
+        mNameTextView.setText(mRoutine.name());
+        updateTime();
     }
 
     // Container Activity must implement this interface

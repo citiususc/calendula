@@ -52,17 +52,11 @@ import es.usc.citius.servando.calendula.util.ScheduleHelper;
 @DatabaseTable(tableName = "Schedules")
 public class Schedule {
 
-    public enum ScheduleState {
-        ENABLED, DISABLED, BLOCKED, SILENCED
-    }
-
     public static final int SCHEDULE_TYPE_EVERYDAY = 0; // DEFAULT
     public static final int SCHEDULE_TYPE_SOMEDAYS = 1;
     public static final int SCHEDULE_TYPE_INTERVAL = 2;
-
     public static final int SCHEDULE_TYPE_HOURLY = 4;
     public static final int SCHEDULE_TYPE_CYCLE = 5;
-
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_MEDICINE = "Medicine";
     public static final String COLUMN_DAYS = "Days";
@@ -72,48 +66,66 @@ public class Schedule {
     public static final String COLUMN_DOSE = "Dose";
     public static final String COLUMN_TYPE = "Type";
     public static final String COLUMN_CYCLE = "Cycle";
-
     public static final String COLUMN_SCANNED = "Scanned";
-
     public static final String COLUMN_PATIENT = "Patient";
-
     public static final String COLUMN_STATE = "State";
-
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
-
     @DatabaseField(columnName = COLUMN_MEDICINE, foreign = true, foreignAutoRefresh = true)
     private Medicine medicine;
-
     @DatabaseField(columnName = COLUMN_DAYS, persisterClass = BooleanArrayPersister.class)
     private boolean[] days = noWeekDays();
-
     @DatabaseField(columnName = COLUMN_RRULE, persisterClass = RRulePersister.class)
     private RepetitionRule rrule;
-
     @DatabaseField(columnName = COLUMN_START, persisterClass = LocalDatePersister.class)
     private LocalDate start;
-
     @DatabaseField(columnName = COLUMN_START_TIME, persisterClass = LocalTimePersister.class)
     private LocalTime startTime;
-
     @DatabaseField(columnName = COLUMN_DOSE)
     private float dose = 1f;
-
     @DatabaseField(columnName = COLUMN_TYPE)
     private int type = SCHEDULE_TYPE_EVERYDAY;
-
     @DatabaseField(columnName = COLUMN_CYCLE)
     private String cycle;
-
     @DatabaseField(columnName = COLUMN_SCANNED)
     private boolean scanned;
-
     @DatabaseField(columnName = COLUMN_PATIENT, foreign = true, foreignAutoRefresh = true)
     private Patient patient;
-
     @DatabaseField(columnName = COLUMN_STATE)
     private ScheduleState state;
+
+    public Schedule() {
+        rrule = new RepetitionRule(null);
+    }
+
+    public Schedule(Medicine medicine) {
+        this.medicine = medicine;
+    }
+
+    public Schedule(Medicine medicine, boolean[] days) {
+        this.medicine = medicine;
+        setDays(days);
+    }
+
+    public static List<Schedule> findAll() {
+        return DB.schedules().findAll();
+    }
+
+    public static List<Schedule> findByMedicine(Medicine med) {
+        return DB.schedules().findByMedicine(med);
+    }
+
+    public static Schedule findById(long id) {
+        return DB.schedules().findById(id);
+    }
+
+    public static final boolean[] noWeekDays() {
+        return new boolean[]{false, false, false, false, false, false, false};
+    }
+
+    public static final boolean[] allWeekDays() {
+        return new boolean[]{true, true, true, true, true, true, true};
+    }
 
     public RepetitionRule rule() {
         return rrule;
@@ -132,19 +144,6 @@ public class Schedule {
             throw new RuntimeException("Invalid schedule type");
         }
         this.type = type;
-    }
-
-    public Schedule() {
-        rrule = new RepetitionRule(null);
-    }
-
-    public Schedule(Medicine medicine) {
-        this.medicine = medicine;
-    }
-
-    public Schedule(Medicine medicine, boolean[] days) {
-        this.medicine = medicine;
-        setDays(days);
     }
 
     public Long getId() {
@@ -191,6 +190,10 @@ public class Schedule {
         return start;
     }
 
+    // *************************************
+    // DB queries
+    // *************************************
+
     public void setStart(LocalDate start) {
         this.start = start;
     }
@@ -206,23 +209,6 @@ public class Schedule {
     public void setPatient(Patient patient) {
         this.patient = patient;
     }
-
-    // *************************************
-    // DB queries
-    // *************************************
-
-    public static List<Schedule> findAll() {
-        return DB.schedules().findAll();
-    }
-
-    public static List<Schedule> findByMedicine(Medicine med) {
-        return DB.schedules().findByMedicine(med);
-    }
-
-    public static Schedule findById(long id) {
-        return DB.schedules().findById(id);
-    }
-
 
     public void setDose(float dose) {
         this.dose = dose;
@@ -241,11 +227,6 @@ public class Schedule {
             return occurrences.size() > 0;
         }
     }
-
-    private boolean cycleEnabledForDate(LocalDate date) {
-        return ScheduleHelper.cycleEnabledForDate(date, start, getCycleDays(), getCycleRest());
-    }
-
 
     public String toReadableString(Context ctx) {
 
@@ -356,14 +337,6 @@ public class Schedule {
                 '}';
     }
 
-    public static final boolean[] noWeekDays() {
-        return new boolean[]{false, false, false, false, false, false, false};
-    }
-
-    public static final boolean[] allWeekDays() {
-        return new boolean[]{true, true, true, true, true, true, true};
-    }
-
     public String displayDose() {
         int integerPart = (int) dose;
         double fraction = dose - integerPart;
@@ -425,6 +398,14 @@ public class Schedule {
 
     public void setState(ScheduleState state) {
         this.state = state;
+    }
+
+    private boolean cycleEnabledForDate(LocalDate date) {
+        return ScheduleHelper.cycleEnabledForDate(date, start, getCycleDays(), getCycleRest());
+    }
+
+    public enum ScheduleState {
+        ENABLED, DISABLED, BLOCKED, SILENCED
     }
 }
 

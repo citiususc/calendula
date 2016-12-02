@@ -17,8 +17,8 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/medicines_list_item_container"
@@ -31,7 +31,7 @@
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="72dp"
-            android:background="#efefef"/>
+            android:background="#efefef" />
 
 
         <LinearLayout
@@ -45,19 +45,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="top"
+                android:paddingLeft="20dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#222"
-                android:textSize="16sp"
-                android:paddingLeft="20dp"/>
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/text2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:paddingLeft="20dp"
                 android:textColor="@color/agenda_item_title"
-                android:textSize="13sp"
-                android:paddingLeft="20dp"/>
+                android:textSize="13sp" />
 
         </LinearLayout>
 

@@ -66,7 +66,6 @@ public class ScheduleListFragment extends Fragment {
     ListView listview;
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -85,6 +84,68 @@ public class ScheduleListFragment extends Fragment {
     public void notifyDataChange() {
         Log.d(getTag(), "Schedules - Notify data change");
         new ReloadItemsTask().execute();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        Log.d(getTag(), "Activity "
+                + activity.getClass().getName()
+                + ", "
+                + (activity instanceof OnScheduleSelectedListener));
+        // If the container activity has implemented
+        // the callback interface, set it as listener
+        if (activity instanceof OnScheduleSelectedListener) {
+            mScheduleSelectedCallback = (OnScheduleSelectedListener) activity;
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        CalendulaApp.eventBus().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        CalendulaApp.eventBus().unregister(this);
+        super.onStop();
+    }
+
+    // Method called from the event bus
+    @SuppressWarnings("unused")
+    public void onEvent(Object evt) {
+        if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
+            notifyDataChange();
+        }
+    }
+
+    void showDeleteConfirmationDialog(final Schedule s) {
+        new MaterialStyledDialog.Builder(getActivity())
+                .setStyle(Style.HEADER_WITH_ICON)
+                .setIcon(IconUtils.icon(getActivity(), CommunityMaterial.Icon.cmd_calendar, R.color.white, 100))
+                .setHeaderColor(R.color.android_red)
+                .withDialogAnimation(true)
+                .setTitle(getString(R.string.remove_schedule_dialog_title))
+                .setDescription(String.format(getString(R.string.remove_schedule_message), s.medicine().name()))
+                .setCancelable(true)
+                .setNeutralText(getString(R.string.dialog_no_option))
+                .setPositiveText(getString(R.string.dialog_yes_option))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        DB.schedules().deleteCascade(s, true);
+                        notifyDataChange();
+                    }
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 
     private View createScheduleListItem(LayoutInflater inflater, final Schedule schedule) {
@@ -114,10 +175,10 @@ public class ScheduleListFragment extends Fragment {
         IIcon i = schedule.repeatsHourly() ? CommunityMaterial.Icon.cmd_history : CommunityMaterial.Icon.cmd_clock;
 
         icon.setImageDrawable(new IconicsDrawable(getContext())
-                    .icon(i)
-                    .colorRes(R.color.agenda_item_title)
-                    .paddingDp(8)
-                    .sizeDp(40));
+                .icon(i)
+                .colorRes(R.color.agenda_item_title)
+                .paddingDp(8)
+                .sizeDp(40));
 
         ((TextView) item.findViewById(R.id.schedules_list_item_medname)).setText(
                 schedule.medicine().name() + auto);
@@ -149,48 +210,6 @@ public class ScheduleListFragment extends Fragment {
             }
         });
         return item;
-    }
-
-    void showDeleteConfirmationDialog(final Schedule s) {
-        new MaterialStyledDialog.Builder(getActivity())
-                .setStyle(Style.HEADER_WITH_ICON)
-                .setIcon(IconUtils.icon(getActivity(), CommunityMaterial.Icon.cmd_calendar, R.color.white, 100))
-                .setHeaderColor(R.color.android_red)
-                .withDialogAnimation(true)
-                .setTitle(getString(R.string.remove_schedule_dialog_title))
-                .setDescription(String.format(getString(R.string.remove_schedule_message), s.medicine().name()))
-                .setCancelable(true)
-                .setNeutralText(getString(R.string.dialog_no_option))
-                .setPositiveText(getString(R.string.dialog_yes_option))
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        DB.schedules().deleteCascade(s, true);
-                        notifyDataChange();
-                    }
-                })
-                .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.cancel();
-                    }
-                })
-                .show();
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        Log.d(getTag(), "Activity "
-                + activity.getClass().getName()
-                + ", "
-                + (activity instanceof OnScheduleSelectedListener));
-        // If the container activity has implemented
-        // the callback interface, set it as listener
-        if (activity instanceof OnScheduleSelectedListener) {
-            mScheduleSelectedCallback = (OnScheduleSelectedListener) activity;
-        }
     }
 
     // Container Activity must implement this interface
@@ -231,26 +250,6 @@ public class ScheduleListFragment extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
             return createScheduleListItem(layoutInflater, mSchedules.get(position));
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        CalendulaApp.eventBus().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        CalendulaApp.eventBus().unregister(this);
-        super.onStop();
-    }
-
-    // Method called from the event bus
-    @SuppressWarnings("unused")
-    public void onEvent(Object evt) {
-        if(evt instanceof PersistenceEvents.ActiveUserChangeEvent){
-            notifyDataChange();
         }
     }
 }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2016 CITIUS - USC
   ~
@@ -17,8 +16,7 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
@@ -51,43 +49,39 @@
                 app:contentScrim="#37474f"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:statusBarScrim="#00000000"
-                app:titleEnabled="false"
-                >
+                app:titleEnabled="false">
 
                 <FrameLayout
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:fitsSystemWindows="true"
                     app:layout_collapseMode="parallax"
-                    app:layout_collapseParallaxMultiplier="0.4"
-                    >
+                    app:layout_collapseParallaxMultiplier="0.4">
 
                     <ImageView
                         android:id="@+id/imageView5"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:background="#37474f"/>
+                        android:background="#37474f" />
 
                     <ImageView
-                            android:layout_width="fill_parent"
+                        android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:layout_alignBottom="@+id/imageView5"
                         android:layout_alignTop="@+id/imageView5"
                         android:alpha="0.3"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/clock"
-                        />
+                        android:src="@drawable/clock" />
 
                 </FrameLayout>
 
                 <RelativeLayout
-                        android:layout_width="fill_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
                     android:background="#eceff1"
                     android:paddingLeft="26dp"
-                    android:paddingRight="26dp"
-                    >
+                    android:paddingRight="26dp">
 
                     <TextView
                         android:id="@+id/routine_name"
@@ -99,19 +93,18 @@
                         android:textColor="@color/agenda_item_title"
                         android:textSize="20dp"
                         android:textStyle="bold"
-                        android:transitionName="title"/>
+                        android:transitionName="title" />
 
 
                 </RelativeLayout>
 
 
-                <android.support.v7.widget.Toolbar
+                <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/toolbar"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="top"
                     android:layout_marginTop="@dimen/status_bar_height"
-                    android:layout_height="wrap_content"
                     android:gravity="top"
                     android:minHeight="?attr/actionBarSize"
                     android:title="Patients"
@@ -126,8 +119,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="50dp"
-                        android:visibility="visible"
-                        />
+                        android:visibility="visible" />
 
                 </android.support.v7.widget.Toolbar>
 
@@ -160,12 +152,12 @@
 
                 <RelativeLayout
                     android:id="@+id/pickup_list_container"
-                    android:layout_below="@+id/calendar"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true">
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/calendar">
 
                     <TextView
                         android:id="@+id/bottom_sheet_title"
@@ -180,19 +172,19 @@
                         android:text="@string/title_pickups_bottom_sheet"
                         android:textColor="@color/agenda_item_title"
                         android:textSize="18dp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:id="@+id/pickup_list"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/bottom_sheet_title"
+                        android:layout_marginBottom="20dp"
                         android:orientation="vertical"
                         android:paddingBottom="10dp"
                         android:paddingLeft="18dp"
                         android:paddingRight="26dp"
-                        android:paddingTop="10dp"
-                        android:layout_marginBottom="20dp">
+                        android:paddingTop="10dp">
 
                         <!--<include layout="@layout/calendar_pickup_list_item"/>-->
 
@@ -206,7 +198,7 @@
                         android:layout_height="5dip"
                         android:alpha="0.5"
                         android:scaleType="fitXY"
-                        android:src="@drawable/daily_view_list_item_tab_shadow_bottom"/>
+                        android:src="@drawable/daily_view_list_item_tab_shadow_bottom" />
 
                     <Button
                         android:id="@+id/close_pickup_list"
@@ -218,13 +210,12 @@
                         android:layout_marginRight="16dp"
                         android:layout_marginTop="15dp"
                         android:text="Close"
-                        android:textSize="15dp"/>
+                        android:textSize="15dp" />
 
                 </RelativeLayout>
 
 
             </RelativeLayout>
-
 
 
             <!--<com.squareup.timessquare.CalendarPickerView-->
@@ -246,15 +237,15 @@
         android:id="@+id/collapsed_title_container"
         android:layout_width="fill_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="@dimen/tabs_margin_top"
         android:layout_gravity="bottom"
+        android:layout_marginTop="@dimen/tabs_margin_top"
         android:background="#eceff1"
         android:paddingLeft="26dp"
         android:paddingRight="26dp"
         android:visibility="gone">
 
         <TextView
-                android:layout_width="fill_parent"
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:fontFamily="sans-serif-condensed"
             android:gravity="center"
@@ -262,7 +253,7 @@
             android:textColor="@color/agenda_item_title"
             android:textSize="20dp"
             android:textStyle="bold"
-            android:transitionName="title"/>
+            android:transitionName="title" />
 
 
     </RelativeLayout>
@@ -271,8 +262,7 @@
         android:id="@+id/toolbar_title"
         android:layout_width="fill_parent"
         android:layout_height="56dp"
-        android:layout_marginTop="@dimen/status_bar_height"
-        >
+        android:layout_marginTop="@dimen/status_bar_height">
 
 
         <TextView
@@ -286,7 +276,7 @@
             android:paddingTop="5dp"
             android:textColor="#fff"
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/patient_avatar_title"
@@ -301,118 +291,38 @@
             android:scaleType="fitCenter"
             android:src="@drawable/avatar1"
             android:transitionName="avatar_transition"
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
 
     </RelativeLayout>
 
 
+</RelativeLayout><!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:descendantFocusability="beforeDescendants"--><!--android:focusableInTouchMode="true"--><!--android:paddingTop="@dimen/status_bar_height">-->
+
+    <!--<android.support.v7.widget.Toolbar--><!--android:id="@+id/toolbar"--><!--android:background="@color/android_green_dark"--><!--android:layout_width="match_parent"--><!--android:layout_height="56dp"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"--><!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />-->
+
+    <!--<com.squareup.timessquare.CalendarPickerView--><!--android:paddingLeft="20dp"--><!--android:paddingRight="20dp"--><!--android:scrollbars="none"--><!--android:layout_below="@+id/toolbar"--><!--android:id="@+id/calendar_view"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--app:tsquare_titleTextColor="#222"--><!--app:tsquare_headerTextColor="@color/android_blue"--><!--/>-->
+
+    <!--<RelativeLayout--><!--android:layout_width="fill_parent"--><!--android:layout_height="wrap_content"--><!--android:layout_alignParentBottom="true"--><!--android:layout_alignParentLeft="true"--><!--android:layout_alignParentStart="true"--><!--android:id="@+id/pickup_list_container">-->
 
 
-</RelativeLayout>
-    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:descendantFocusability="beforeDescendants"-->
-    <!--android:focusableInTouchMode="true"-->
-    <!--android:paddingTop="@dimen/status_bar_height">-->
+    <!--<TextView--><!--android:layout_width="fill_parent"--><!--android:layout_height="wrap_content"--><!--android:text="@string/title_pickups_bottom_sheet"--><!--android:id="@+id/bottom_sheet_title"--><!--android:layout_alignParentTop="true"--><!--android:background="#f7f7f7"--><!--android:layout_marginTop="5dp"--><!--android:textColor="@color/android_green_dark"--><!--android:textStyle="bold"--><!--android:textSize="18dp"--><!--android:paddingLeft="18dp"--><!--android:paddingRight="16dp"--><!--android:paddingTop="16dp"--><!--android:fontFamily="sans-serif-light" />-->
 
-    <!--<android.support.v7.widget.Toolbar-->
-    <!--android:id="@+id/toolbar"-->
-    <!--android:background="@color/android_green_dark"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="56dp"-->
-    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-    <!--app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
-    <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />-->
-
-    <!--<com.squareup.timessquare.CalendarPickerView-->
-    <!--android:paddingLeft="20dp"-->
-    <!--android:paddingRight="20dp"-->
-    <!--android:scrollbars="none"-->
-    <!--android:layout_below="@+id/toolbar"-->
-    <!--android:id="@+id/calendar_view"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--app:tsquare_titleTextColor="#222"-->
-    <!--app:tsquare_headerTextColor="@color/android_blue"-->
-    <!--/>-->
-
-    <!--<RelativeLayout-->
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:layout_alignParentLeft="true"-->
-    <!--android:layout_alignParentStart="true"-->
-    <!--android:id="@+id/pickup_list_container">-->
-
-
-    <!--<TextView-->
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="@string/title_pickups_bottom_sheet"-->
-    <!--android:id="@+id/bottom_sheet_title"-->
-    <!--android:layout_alignParentTop="true"-->
-    <!--android:background="#f7f7f7"-->
-    <!--android:layout_marginTop="5dp"-->
-    <!--android:textColor="@color/android_green_dark"-->
-    <!--android:textStyle="bold"-->
-    <!--android:textSize="18dp"-->
-    <!--android:paddingLeft="18dp"-->
-    <!--android:paddingRight="16dp"-->
-    <!--android:paddingTop="16dp"-->
-    <!--android:fontFamily="sans-serif-light" />-->
-
-    <!--<LinearLayout-->
-    <!--android:id="@+id/pickup_list"-->
-    <!--android:paddingLeft="18dp"-->
-    <!--android:paddingRight="26dp"-->
-    <!--android:paddingTop="10dp"-->
-    <!--android:paddingBottom="10dp"-->
-    <!--android:orientation="vertical"-->
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="#f7f7f7"-->
-    <!--android:layout_below="@+id/bottom_sheet_title">-->
+    <!--<LinearLayout--><!--android:id="@+id/pickup_list"--><!--android:paddingLeft="18dp"--><!--android:paddingRight="26dp"--><!--android:paddingTop="10dp"--><!--android:paddingBottom="10dp"--><!--android:orientation="vertical"--><!--android:layout_width="fill_parent"--><!--android:layout_height="wrap_content"--><!--android:background="#f7f7f7"--><!--android:layout_below="@+id/bottom_sheet_title">-->
 
     <!--<include layout="@layout/calendar_pickup_list_item" />-->
 
     <!--<include layout="@layout/calendar_pickup_list_item" />-->
 
-    <!--<include layout="@layout/calendar_pickup_list_item" />-->
-    <!--</LinearLayout>-->
+    <!--<include layout="@layout/calendar_pickup_list_item" />--><!--</LinearLayout>-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="5dip"-->
-    <!--android:id="@+id/imageView4"-->
-    <!--android:src="@drawable/daily_view_list_item_tab_shadow_bottom"-->
-    <!--android:scaleType="fitXY"-->
-    <!--android:alpha="0.5" />-->
+    <!--<ImageView--><!--android:layout_width="fill_parent"--><!--android:layout_height="5dip"--><!--android:id="@+id/imageView4"--><!--android:src="@drawable/daily_view_list_item_tab_shadow_bottom"--><!--android:scaleType="fitXY"--><!--android:alpha="0.5" />-->
 
-    <!--<Button-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="40dp"-->
-    <!--android:layout_alignParentTop="true"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:text="Close"-->
-    <!--android:id="@+id/close_pickup_list"-->
-    <!--android:layout_marginRight="16dp"-->
-    <!--android:layout_marginTop="15dp"-->
-    <!--style="?android:attr/borderlessButtonStyle"-->
-    <!--android:textSize="15dp" />-->
+    <!--<Button--><!--android:layout_width="wrap_content"--><!--android:layout_height="40dp"--><!--android:layout_alignParentTop="true"--><!--android:layout_alignParentRight="true"--><!--android:text="Close"--><!--android:id="@+id/close_pickup_list"--><!--android:layout_marginRight="16dp"--><!--android:layout_marginTop="15dp"--><!--style="?android:attr/borderlessButtonStyle"--><!--android:textSize="15dp" />-->
 
     <!--</RelativeLayout>-->
 
-    <!--<ImageView-->
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="5dp"-->
-    <!--android:id="@+id/tabs_shadow"-->
-    <!--android:src="@drawable/daily_view_list_item_tab_shadow_top"-->
-    <!--android:layout_below="@+id/toolbar"-->
-    <!--android:scaleType="fitXY"-->
-    <!--android:alpha="0.5" />-->
+    <!--<ImageView--><!--android:layout_width="fill_parent"--><!--android:layout_height="5dp"--><!--android:id="@+id/tabs_shadow"--><!--android:src="@drawable/daily_view_list_item_tab_shadow_top"--><!--android:layout_below="@+id/toolbar"--><!--android:scaleType="fitXY"--><!--android:alpha="0.5" />-->
 
 
     <!--</RelativeLayout>-->

@@ -34,60 +34,60 @@ public class DownloadDatabaseDialogHelper {
 
     public static final String TAG = "DDDialogHelper.class";
 
-    public interface DownloadDatabaseDialogCallback{
-        void onDownloadAcceptedOrCancelled(boolean accepted);
+    public static void showDownloadDatabaseDialog(final Context dialogCtx, final String database, final DownloadDatabaseDialogCallback callback) {
+
+        Log.d(TAG, "ShowDownloadDatabase");
+        final Context appContext = dialogCtx.getApplicationContext();
+        AlertDialog.Builder builder = new AlertDialog.Builder(dialogCtx);
+        builder.setTitle("Setup med database");
+        builder.setCancelable(false);
+        builder.setMessage("The database will be downloaded and configured. This may take a few seconds, but you can continue using the application in the meantime.")
+                .setCancelable(false)
+                .setPositiveButton("Download and setup", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(dialogCtx, "Downloading medicines info...", Toast.LENGTH_SHORT).show();
+                        if (callback != null) {
+                            callback.onDownloadAcceptedOrCancelled(true);
+                        }
+                        DBDownloader.DBDownloadListener l = new DBDownloader.DBDownloadListener() {
+                            @Override
+                            public void onComplete(boolean success, String path) {
+                                Log.d("DOWNLOAD", "Success: " + success + ", path: " + path);
+                                if (success) {
+                                    SetupDBService.startSetup(appContext, path, database);
+                                } else {
+                                    Intent bcIntent = new Intent();
+                                    bcIntent.setAction(SetupDBService.ACTION_COMPLETE);
+                                    appContext.sendBroadcast(bcIntent);
+                                }
+                            }
+                        };
+                        try {
+                            PrescriptionDBMgr mgr = DBRegistry.instance().db(database);
+                            if (mgr != null)
+                                DBDownloader.download(appContext, mgr, l);
+                            else
+                                Toast.makeText(dialogCtx, "Database not available :(", Toast.LENGTH_SHORT).show();
+                        } catch (IllegalArgumentException e) {
+                            e.printStackTrace();
+                            Toast.makeText(dialogCtx, "Database not available :(", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton(dialogCtx.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        if (callback != null) {
+                            callback.onDownloadAcceptedOrCancelled(false);
+                        }
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
-    public static void showDownloadDatabaseDialog(final Context dialogCtx, final String database, final DownloadDatabaseDialogCallback callback){
-
-            Log.d(TAG, "ShowDownloadDatabase");
-            final Context appContext = dialogCtx.getApplicationContext();
-            AlertDialog.Builder builder = new AlertDialog.Builder(dialogCtx);
-            builder.setTitle("Setup med database");
-            builder.setCancelable(false);
-            builder.setMessage("The database will be downloaded and configured. This may take a few seconds, but you can continue using the application in the meantime.")
-                    .setCancelable(false)
-                    .setPositiveButton("Download and setup", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            Toast.makeText(dialogCtx, "Downloading medicines info...", Toast.LENGTH_SHORT).show();
-                            if(callback != null){
-                                callback.onDownloadAcceptedOrCancelled(true);
-                            }
-                            DBDownloader.DBDownloadListener l = new DBDownloader.DBDownloadListener() {
-                                @Override
-                                public void onComplete(boolean success, String path) {
-                                    Log.d("DOWNLOAD", "Success: " + success + ", path: " + path);
-                                    if (success) {
-                                        SetupDBService.startSetup(appContext, path, database);
-                                    }else{
-                                        Intent bcIntent = new Intent();
-                                        bcIntent.setAction(SetupDBService.ACTION_COMPLETE);
-                                        appContext.sendBroadcast(bcIntent);
-                                    }
-                                }
-                            };
-                            try {
-                                PrescriptionDBMgr mgr = DBRegistry.instance().db(database);
-                                if (mgr != null)
-                                    DBDownloader.download(appContext,mgr, l);
-                                else
-                                    Toast.makeText(dialogCtx, "Database not available :(", Toast.LENGTH_SHORT).show();
-                            } catch (IllegalArgumentException e) {
-                                e.printStackTrace();
-                                Toast.makeText(dialogCtx, "Database not available :(", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    })
-                    .setNegativeButton(dialogCtx.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                            if (callback != null) {
-                                callback.onDownloadAcceptedOrCancelled(false);
-                            }
-                        }
-                    });
-            AlertDialog alert = builder.create();
-            alert.show();
+    public interface DownloadDatabaseDialogCallback {
+        void onDownloadAcceptedOrCancelled(boolean accepted);
     }
 
 }

@@ -34,7 +34,7 @@ import es.usc.citius.servando.calendula.activities.WebViewActivity;
 /**
  * Give AEMPS leaflets a better look for WebView
  */
-public class LeafletHtmlPostProcessor implements WebViewActivity.HtmlPostprocessor{
+public class LeafletHtmlPostProcessor implements WebViewActivity.HtmlPostprocessor {
 
     @Override
     public String process(String html) {
@@ -47,7 +47,7 @@ public class LeafletHtmlPostProcessor implements WebViewActivity.HtmlPostprocess
         Whitelist wl = Whitelist.relaxed();
         wl.addTags("div", "span", "p", "h1", "h2", "h3", "ul", "ol", "li", "a", "img");
         wl.preserveRelativeLinks(true);
-        wl.addAttributes("img","src");
+        wl.addAttributes("img", "src");
         wl.addAttributes("a", "href");
 
         // perform cleaning
@@ -55,13 +55,13 @@ public class LeafletHtmlPostProcessor implements WebViewActivity.HtmlPostprocess
         cleaned.outputSettings().escapeMode(Entities.EscapeMode.xhtml);
 
         // Remove empty elements
-        Set<String> removable = new HashSet<>(Arrays.asList("div", "span", "strong","p", "h1", "h2", "h3", "ul", "ol", "li","a"));
+        Set<String> removable = new HashSet<>(Arrays.asList("div", "span", "strong", "p", "h1", "h2", "h3", "ul", "ol", "li", "a"));
         cleaned.select("p:matchesOwn((?is) )").remove();
         // For each element in the cleaned document
-        for(Element el: cleaned.getAllElements()) {
-            if(el.children().isEmpty() && (!el.hasText() || el.text().replaceAll("\u00a0","").trim().equals(""))) {
+        for (Element el : cleaned.getAllElements()) {
+            if (el.children().isEmpty() && (!el.hasText() || el.text().replaceAll("\u00a0", "").trim().equals(""))) {
                 // Element is empty, check if should be removed
-                if(removable.contains(el.tagName())) el.remove();
+                if (removable.contains(el.tagName())) el.remove();
             }
         }
         // return html for  display

@@ -19,7 +19,6 @@
 package es.usc.citius.servando.calendula.util;
 
 
-
 import android.support.v4.util.Pair;
 import android.util.Log;
 
@@ -51,6 +50,7 @@ public class PickupUtils {
     List<PickupInfo> urgentMeds;
     Map<LocalDate, List<PickupInfo>> pickupsMap = new HashMap<>();
     Pair<LocalDate, List<PickupInfo>> bestDay;
+    HashMap<Long, Patient> colorCache = new HashMap<>();
 
     public PickupUtils(List<PickupInfo> pickups) {
         this.pickups = pickups;
@@ -68,14 +68,15 @@ public class PickupUtils {
     /**
      * Get urgent meds, that are meds we can take within a margin of one or two days
      * before the next intake is delayed
+     *
      * @return the meds
      */
     public List<PickupInfo> urgentMeds() {
-        if(urgentMeds == null) {
+        if (urgentMeds == null) {
             urgentMeds = new ArrayList<>();
             LocalDate now = LocalDate.now();
             for (PickupInfo p : pickups) {
-                if (!p.taken() && p.to().isAfter(now) && p.from().plusDays(MAX_DAYS-3).isBefore(now)) {
+                if (!p.taken() && p.to().isAfter(now) && p.from().plusDays(MAX_DAYS - 3).isBefore(now)) {
                     urgentMeds.add(p);
                 }
             }
@@ -83,10 +84,9 @@ public class PickupUtils {
         return urgentMeds;
     }
 
+    public Pair<LocalDate, List<PickupInfo>> getBestDay() {
 
-    public Pair<LocalDate, List<PickupInfo>> getBestDay(){
-
-        if(this.bestDay != null){
+        if (this.bestDay != null) {
             return this.bestDay;
         }
 
@@ -110,7 +110,7 @@ public class PickupUtils {
 
             for (int i = 0; i < 10; i++) {
                 LocalDate d = first.plusDays(i);
-                if(!d.isAfter(today) && d.getDayOfWeek() != DateTimeConstants.SUNDAY){
+                if (!d.isAfter(today) && d.getDayOfWeek() != DateTimeConstants.SUNDAY) {
                     // only take care of days after today that are not sundays
                     continue;
                 }
@@ -119,11 +119,11 @@ public class PickupUtils {
                 for (PickupInfo p : pickups) {
                     // get the pickup take secure interval
                     DateTime iStart = p.from().toDateTimeAtStartOfDay();
-                    DateTime iEnd = p.from().plusDays(MAX_DAYS-1).toDateTimeAtStartOfDay();
+                    DateTime iEnd = p.from().plusDays(MAX_DAYS - 1).toDateTimeAtStartOfDay();
                     Interval interval = new Interval(iStart, iEnd);
                     // add the pickup to the daily list if we can take it
                     if (!p.taken() && interval.contains(d.toDateTimeAtStartOfDay())) {
-                        if(!bestDays.containsKey(d)){
+                        if (!bestDays.containsKey(d)) {
                             bestDays.put(d, new ArrayList<PickupInfo>());
                         }
                         bestDays.get(d).add(p);
@@ -137,18 +137,18 @@ public class PickupUtils {
             Set<LocalDate> localDates = bestDays.keySet();
             ArrayList<LocalDate> sorted = new ArrayList<>(localDates);
             Collections.sort(sorted);
-            for(LocalDate day : sorted){
+            for (LocalDate day : sorted) {
                 List<PickupInfo> pks = bestDays.get(day);
                 Log.d("PickupUtils", day.toString("dd/MM/YYYY") + ": " + pks.size());
-                if(pks.size() >= bestDayCount){
+                if (pks.size() >= bestDayCount) {
                     bestDayCount = pks.size();
                     bestOption = day;
-                    if(bestOption.getDayOfWeek() == DateTimeConstants.SUNDAY){
+                    if (bestOption.getDayOfWeek() == DateTimeConstants.SUNDAY) {
                         bestOption = bestOption.minusDays(1);
                     }
                 }
             }
-            if(bestOption!=null) {
+            if (bestOption != null) {
                 this.bestDay = new Pair<>(bestOption, bestDays.get(bestOption));
                 return this.bestDay;
             }
@@ -157,11 +157,9 @@ public class PickupUtils {
         return null;
     }
 
-    HashMap<Long, Patient> colorCache = new HashMap<>();
-
-    public Patient getPatient(PickupInfo p){
+    public Patient getPatient(PickupInfo p) {
         Long id = p.medicine().getId();
-        if(!colorCache.containsKey(id)){
+        if (!colorCache.containsKey(id)) {
             Medicine m = DB.medicines().findById(p.medicine().getId());
             Patient patient = DB.patients().findById(m.patient().id());
             colorCache.put(id, patient);

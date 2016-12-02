@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2016 CITIUS - USC
   ~
@@ -17,7 +16,11 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/agenda_item_title"/>
-    <corners android:radius="3dip"/>
-    <padding android:left="0dip" android:top="0dip" android:right="0dip" android:bottom="0dip" />
+    <solid android:color="@color/agenda_item_title" />
+    <corners android:radius="3dip" />
+    <padding
+        android:bottom="0dip"
+        android:left="0dip"
+        android:right="0dip"
+        android:top="0dip" />
 </shape>

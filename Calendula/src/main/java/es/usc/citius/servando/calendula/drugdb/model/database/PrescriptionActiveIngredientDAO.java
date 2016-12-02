@@ -1,4 +1,3 @@
-
 /*
  *    Calendula - An assistant for personal medication management.
  *    Copyright (C) 2016 CITIUS - USC

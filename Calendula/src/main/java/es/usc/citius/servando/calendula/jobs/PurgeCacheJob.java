@@ -42,15 +42,6 @@ public class PurgeCacheJob extends Job {
     PurgeCacheJob() {
     }
 
-    @NonNull
-    @Override
-    protected Result onRunJob(Params params) {
-        Log.d(TAG, "onRunJob: Job started");
-        Integer purged = HtmlCacheManager.getInstance().purgeCache();
-        Log.d(TAG, "onRunJob: Purged " + purged + " entries");
-        return Result.SUCCESS;
-    }
-
     public static void scheduleJob() {
         // if there's already exactly one purge job running, leave it be
         int jobs = JobManager.instance().getAllJobsForTag(PurgeCacheJob.TAG).size();
@@ -70,6 +61,15 @@ public class PurgeCacheJob extends Job {
                     .build()
                     .schedule();
         }
+    }
+
+    @NonNull
+    @Override
+    protected Result onRunJob(Params params) {
+        Log.d(TAG, "onRunJob: Job started");
+        Integer purged = HtmlCacheManager.getInstance().purgeCache();
+        Log.d(TAG, "onRunJob: Purged " + purged + " entries");
+        return Result.SUCCESS;
     }
 
 }

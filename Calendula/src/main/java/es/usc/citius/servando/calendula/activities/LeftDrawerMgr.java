@@ -249,14 +249,6 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
         return true;
     }
 
-    private void addCalendarItem() {
-        drawer.addItemAtPosition(new PrimaryDrawerItem()
-                .withName("Dispensación")
-                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_calendar_check, R.color.black).alpha(110))
-                .withEnabled(true)
-                .withIdentifier(CALENDAR), 7);
-    }
-
     @Override
     public boolean onItemLongClick(View view, int i, IDrawerItem iDrawerItem) {
         int identifier = iDrawerItem.getIdentifier();
@@ -284,11 +276,6 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
         item.withBadgeStyle(bs);
         item.withBadge(" ");
         drawer.updateItem(item);
-    }
-
-    private void launchActivity(Intent i) {
-        home.startActivity(i);
-        home.overridePendingTransition(0, 0);
     }
 
     public void onPagerPositionChange(int pagerPosition) {
@@ -332,10 +319,6 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
         return false;
     }
 
-    private void showAbout() {
-        launchActivity(new Intent(home, AboutActivity.class));
-    }
-
     public void updateHeaderBackground(Patient p) {
         currentPatient = p;
         //int colors[] = AvatarMgr.colorsFor(home.getResources(), p.avatar());
@@ -343,7 +326,6 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
         ColorDrawable color = (ColorDrawable) layers.findDrawableByLayerId(R.id.color_layer);
         color.setColor(ScreenUtils.equivalentNoAlpha(p.color(), 1f));
     }
-
 
     public Drawer drawer() {
         return drawer;
@@ -399,5 +381,22 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                 .withIcon(AvatarMgr.res(p.avatar()));
 
         headerResult.addProfiles(profile);
+    }
+
+    private void addCalendarItem() {
+        drawer.addItemAtPosition(new PrimaryDrawerItem()
+                .withName("Dispensación")
+                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_calendar_check, R.color.black).alpha(110))
+                .withEnabled(true)
+                .withIdentifier(CALENDAR), 7);
+    }
+
+    private void launchActivity(Intent i) {
+        home.startActivity(i);
+        home.overridePendingTransition(0, 0);
+    }
+
+    private void showAbout() {
+        launchActivity(new Intent(home, AboutActivity.class));
     }
 }

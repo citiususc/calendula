@@ -51,9 +51,9 @@ public class DefaultDosePickerFragment extends DosePickerFragment {
     protected void setInitialValue(double initialDose) {
         Bundle args = getArguments();
         Presentation p = (Presentation) args.getSerializable("presentation");
-        p = p!=null ? p : Presentation.UNKNOWN;
+        p = p != null ? p : Presentation.UNKNOWN;
         unitsText.setText(p.units(getResources()));
-        text.setText(""+initialDose);
+        text.setText("" + initialDose);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class DefaultDosePickerFragment extends DosePickerFragment {
     @Override
     protected void onCancel() {
         super.onCancel();
-        closeKeyboard(getActivity(),text.getWindowToken());
+        closeKeyboard(getActivity(), text.getWindowToken());
     }
 
     @Override

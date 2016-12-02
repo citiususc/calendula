@@ -38,15 +38,17 @@ import es.usc.citius.servando.calendula.database.DB;
 public class SetupDBService extends IntentService {
 
     public static final String TAG = "SetupDBService.class";
-    public static int NOTIFICATION_ID = "SetupDBService".hashCode();
-
+    public static final String ACTION_COMPLETE = "es.usc.citius.servando.calendula.persistence.medDatabases.action.DONE";
     private static final String ACTION_SETUP = "es.usc.citius.servando.calendula.persistence.medDatabases.action.SETUP";
     private static final String EXTRA_DB_PATH = "es.usc.citius.servando.calendula.persistence.medDatabases.extra.DB_PATH";
     private static final String EXTRA_DB_PREFERENCE_VALUE = "es.usc.citius.servando.calendula.persistence.medDatabases.extra.DB_PREFERENCE_VALUE";
-    public static final String ACTION_COMPLETE = "es.usc.citius.servando.calendula.persistence.medDatabases.action.DONE";
-
+    public static int NOTIFICATION_ID = "SetupDBService".hashCode();
     NotificationCompat.Builder mBuilder;
     NotificationManager mNotifyManager;
+
+    public SetupDBService() {
+        super("SetupDBService");
+    }
 
     public static void startSetup(Context context, String dbPath, String dbPreferenceValue) {
         context = context.getApplicationContext();
@@ -55,10 +57,6 @@ public class SetupDBService extends IntentService {
         intent.putExtra(EXTRA_DB_PATH, dbPath);
         intent.putExtra(EXTRA_DB_PREFERENCE_VALUE, dbPreferenceValue);
         context.startService(intent);
-    }
-
-    public SetupDBService() {
-        super("SetupDBService");
     }
 
     @Override
@@ -81,7 +79,7 @@ public class SetupDBService extends IntentService {
             mgr.setup(SetupDBService.this, dbPath, new PrescriptionDBMgr.SetupProgressListener() {
                 @Override
                 public void onProgressUpdate(int progress) {
-                    Log.d(TAG, "Setting up db " +  progress +  "%");
+                    Log.d(TAG, "Setting up db " + progress + "%");
                     showNotification(100, progress);
                 }
             });
@@ -97,7 +95,7 @@ public class SetupDBService extends IntentService {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(SetupDBService.this);
             SharedPreferences.Editor edit = settings.edit();
             edit.putString("last_valid_database", getString(R.string.database_none_id));
-            edit.putString("prescriptions_database",getString(R.string.database_none_id));
+            edit.putString("prescriptions_database", getString(R.string.database_none_id));
             edit.apply();
         }
 
@@ -114,7 +112,7 @@ public class SetupDBService extends IntentService {
     }
 
 
-    private void showNotification(int max, int prog){
+    private void showNotification(int max, int prog) {
 
         Intent activity = new Intent(this, MedicinesActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, activity, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -133,7 +131,7 @@ public class SetupDBService extends IntentService {
         mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 
-    private void onComplete(){
+    private void onComplete() {
         mBuilder.setContentTitle("Database setup complete");
         mBuilder.setContentText("Tap to add a new med");
         mBuilder.setProgress(100, 100, false);

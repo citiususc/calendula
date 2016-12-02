@@ -89,19 +89,17 @@ import es.usc.citius.servando.calendula.util.view.ArcTranslateAnimation;
 
 public class ConfirmActivity extends CalendulaActivity {
 
+    public static final int DEFAULT_CHECK_MARGIN = 3;
     private static final String TAG = "ConfirmActivity";
-
     boolean isRoutine;
     boolean stateChanged = false;
     int position = -1;
     int color;
-
     Patient patient;
     Routine routine;
     Schedule schedule;
     LocalTime time;
     LocalDate date;
-
     RecyclerView listView;
     ImageView avatar;
     TextView title;
@@ -110,36 +108,191 @@ public class ConfirmActivity extends CalendulaActivity {
     TextView hour;
     TextView minute;
     TextView friendlyTime;
-
     TextView takeMadsMessage;
-
     IconicsDrawable uncheckedIcon;
     IconicsDrawable checkedIcon;
-
     FloatingActionButton fab;
-
     String action;
     AppBarLayout appBarLayout;
     ConfirmItemAdapter itemAdapter;
     CollapsingToolbarLayout toolbarLayout;
-
     View toolbarTitle;
-
     List<DailyScheduleItem> items = new ArrayList<>();
-
     DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("kk:mm");
     DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/YYYY");
-
     boolean isToday;
     boolean isInWindow;
     boolean isDistant;
-
     View chekAllOverlay;
     ImageView checkAllImage;
-
     String relativeTime = "";
 
-    public static final int DEFAULT_CHECK_MARGIN = 3;
+    /*
+     * Returns the intake margin interval
+     */
+    public Pair<DateTime, DateTime> getCheckMarginInterval(DateTime intakeTime) {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String checkMarginStr = prefs.getString("check_window_margin", "" + DEFAULT_CHECK_MARGIN);
+        int checkMargin = Integer.parseInt(checkMarginStr);
+
+        DateTime start = intakeTime.minusMinutes(30);
+        DateTime end = intakeTime.plusHours(checkMargin);
+        return new Pair<>(start, end);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.confirm, menu);
+
+        MenuItem item = menu.findItem(R.id.action_delay);
+
+        if (!isInWindow) {
+            item.setVisible(false);
+        } else {
+            item.setIcon(new IconicsDrawable(this)
+                    .icon(CommunityMaterial.Icon.cmd_history)
+                    .color(Color.WHITE)
+                    .sizeDp(24));
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                supportFinishAfterTransition();
+                return true;
+            case R.id.action_delay:
+                showDelayDialog();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void showDelayDialog() {
+        final int[] values = this.getResources().getIntArray(R.array.delays_array_values);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.notification_delay)
+                .setItems(R.array.delays_array, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        int minutes = values[which];
+                        if (isRoutine) {
+                            AlarmScheduler.instance().onUserDelayRoutine(routine, date, ConfirmActivity.this, minutes);
+                        } else {
+                            AlarmScheduler.instance().onUserDelayHourlySchedule(schedule, time, date, ConfirmActivity.this, minutes);
+                        }
+
+                        String msg = ConfirmActivity.this.getString(R.string.alarm_delayed_message, minutes);
+                        Toast.makeText(ConfirmActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        supportFinishAfterTransition();
+                    }
+                });
+        builder.create().show();
+    }
+
+    public String getDisplayableDose(String dose, Medicine m) {
+        return dose + " " + m.presentation().units(getResources());
+
+    }
+
+    public void showEnsureConfirmDialog(final DialogInterface.OnClickListener listener, boolean uncheck) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        DateTime t = date.toDateTime(time);
+
+        String title = t.isAfterNow() ? getString(R.string.intake_not_available) :
+                getString(R.string.meds_from) + " " + date.toString("EEEE dd") + " " + getString(R.string.at_time_connector) + " " + time.toString(timeFormatter);
+
+        String msg = t.isAfterNow() ? getString(R.string.confirm_future_intake_warning, relativeTime)
+                : uncheck ? getString(R.string.unconfirm_past_intake_warning, relativeTime)
+                : getString(R.string.confirm_past_intake_warning);
+
+
+        builder.setMessage(msg)
+                .setCancelable(true)
+                .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_history, R.color.black, 36))
+                .setTitle(title);
+
+        if (t.isAfterNow()) {
+            builder.setNegativeButton(getString(R.string.tutorial_understood), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            });
+        } else {
+            builder.setPositiveButton(uncheck ? getString(R.string.meds_unconfirm_ok) : getString(R.string.meds_confirm_ok), listener)
+                    .setNegativeButton(uncheck ? getString(R.string.meds_unconfirm_cancel) : getString(R.string.meds_confirm_cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+        }
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    void onClickFab() {
+        boolean somethingChecked = false;
+        for (DailyScheduleItem item : items) {
+            if (!item.takenToday()) {
+                item.setTakenToday(true);
+                DB.dailyScheduleItems().saveAndUpdateStock(item, true, ConfirmActivity.this);
+                somethingChecked = true;
+            }
+
+        }
+
+        if (somethingChecked) {
+            itemAdapter.notifyDataSetChanged();
+            stateChanged = true;
+            fab.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    animateAllChecked();
+                }
+            }, 100);
+            onAllChecked();
+        } else {
+            supportFinishAfterTransition();
+        }
+    }
+
+    void moveArrowsDown(int duration) {
+        checkAllImage.animate()
+                .translationY(ScreenUtils.dpToPx(getResources(), 150f))
+                .setDuration(duration)
+                .setInterpolator(new OvershootInterpolator())
+                .start();
+    }
+
+    void showRippleByApi(int x, int y) {
+
+        int duration = 500;
+        int arrowDuration = 400;
+
+        chekAllOverlay.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, duration + 300);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            showRipple(x, y, duration);
+        } else {
+            chekAllOverlay.setVisibility(View.VISIBLE);
+            chekAllOverlay.animate().alpha(1).setDuration(duration).start();
+        }
+        moveArrowsDown(arrowDuration);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +307,7 @@ public class ConfirmActivity extends CalendulaActivity {
         DateTime dt = date.toDateTime(time);
         DateTime now = DateTime.now();
         Pair<DateTime, DateTime> interval = getCheckMarginInterval(dt);
-        isDistant = !new Interval(interval.first,interval.second).contains(now);
+        isDistant = !new Interval(interval.first, interval.second).contains(now);
 
         color = AvatarMgr.colorsFor(getResources(), patient.avatar())[0];
         color = Color.parseColor("#263238");
@@ -169,7 +322,7 @@ public class ConfirmActivity extends CalendulaActivity {
         title = (TextView) findViewById(R.id.routine_name);
         takeMadsMessage = (TextView) findViewById(R.id.textView3);
         chekAllOverlay = findViewById(R.id.check_overlay);
-        checkAllImage =(ImageView) findViewById(R.id.check_all_image);
+        checkAllImage = (ImageView) findViewById(R.id.check_all_image);
 
         avatarTitle = (ImageView) findViewById(R.id.patient_avatar_title);
         titleTitle = (TextView) findViewById(R.id.routine_name_title);
@@ -182,16 +335,16 @@ public class ConfirmActivity extends CalendulaActivity {
         avatarTitle.setImageResource(AvatarMgr.res(patient.avatar()));
         titleTitle.setText(patient.name());
         title.setText((isRoutine ? routine.name() : schedule.toReadableString(this)));
-        takeMadsMessage.setText( isInWindow ? getString(R.string.agenda_zoom_meds_time) : getString(R.string.meds_from) + " " + date.toString("EEEE dd") );
+        takeMadsMessage.setText(isInWindow ? getString(R.string.agenda_zoom_meds_time) : getString(R.string.meds_from) + " " + date.toString("EEEE dd"));
 
 
-        relativeTime = DateUtils.getRelativeTimeSpanString(dt.getMillis(), now.getMillis(),5*DateUtils.MINUTE_IN_MILLIS, DateUtils.FORMAT_ABBREV_ALL).toString();
+        relativeTime = DateUtils.getRelativeTimeSpanString(dt.getMillis(), now.getMillis(), 5 * DateUtils.MINUTE_IN_MILLIS, DateUtils.FORMAT_ABBREV_ALL).toString();
 
         hour.setText(time.toString("kk:"));
         minute.setText(time.toString("mm"));
-        friendlyTime.setText(relativeTime.substring(0,1).toUpperCase()+ relativeTime.substring(1));
+        friendlyTime.setText(relativeTime.substring(0, 1).toUpperCase() + relativeTime.substring(1));
 
-        if(isDistant){
+        if (isDistant) {
             fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.android_orange_dark)));
         }
 
@@ -219,7 +372,7 @@ public class ConfirmActivity extends CalendulaActivity {
                         break;
                     }
                 }
-                if(somethingToCheck) {
+                if (somethingToCheck) {
                     if (isDistant) {
                         showEnsureConfirmDialog(new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -229,7 +382,7 @@ public class ConfirmActivity extends CalendulaActivity {
                     } else {
                         onClickFab();
                     }
-                }else{
+                } else {
                     Snack.show(getResources().getString(R.string.all_meds_taken), ConfirmActivity.this);
                 }
             }
@@ -241,10 +394,10 @@ public class ConfirmActivity extends CalendulaActivity {
         toolbarLayout.setContentScrimColor(patient.color());
         setupListView();
 
-        if("delay".equals(action)){
-            if(isRoutine && routine!=null) {
+        if ("delay".equals(action)) {
+            if (isRoutine && routine != null) {
                 ReminderNotification.cancel(this, ReminderNotification.routineNotificationId(routine.getId().intValue()));
-            } else if(schedule !=null){
+            } else if (schedule != null) {
                 ReminderNotification.cancel(this, ReminderNotification.scheduleNotificationId(schedule.getId().intValue()));
             }
             showDelayDialog();
@@ -252,61 +405,55 @@ public class ConfirmActivity extends CalendulaActivity {
         }
     }
 
-    /*
-     * Returns the intake margin interval
-     */
-    public Pair<DateTime,DateTime> getCheckMarginInterval(DateTime intakeTime){
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String checkMarginStr = prefs.getString("check_window_margin", ""+DEFAULT_CHECK_MARGIN);
-        int checkMargin = Integer.parseInt(checkMarginStr);
-
-        DateTime start = intakeTime.minusMinutes(30);
-        DateTime end = intakeTime.plusHours(checkMargin);
-        return new Pair<>(start,end);
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Toast.makeText(this, "Is distant: " + isDistant + " (" + date.toDateTime(time).toString("dd/MM/YYYY, kk:mm")+")", Toast.LENGTH_LONG).show();
     }
 
-    void onClickFab(){
-        boolean somethingChecked = false;
-        for (DailyScheduleItem item : items) {
-            if(!item.takenToday()) {
-                item.setTakenToday(true);
-                DB.dailyScheduleItems().saveAndUpdateStock(item,true,ConfirmActivity.this);
-                somethingChecked = true;
-            }
+    protected void onDailyAgendaItemCheck(final ImageButton v) {
+        int total = items.size();
+        int checked = 0;
 
+        for (DailyScheduleItem i : items) {
+            if (i.takenToday())
+                checked++;
         }
 
-        if(somethingChecked) {
-            itemAdapter.notifyDataSetChanged();
-            stateChanged = true;
-            fab.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    animateAllChecked();
-                }
-            }, 100);
+        if (checked == total) {
             onAllChecked();
-        }else{
-            supportFinishAfterTransition();
+        } else {
+            if (isRoutine) {
+                AlarmScheduler.instance().onDelayRoutine(routine, date, ConfirmActivity.this);
+            } else {
+                AlarmScheduler.instance().onDelayHourlySchedule(schedule, time, date, ConfirmActivity.this);
+            }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        if (stateChanged) {
+            CalendulaApp.eventBus().post(new ConfirmStateChangeEvent(position));
+        }
+        super.onDestroy();
     }
 
     private void animateAllChecked() {
 
         int width = appBarLayout.getWidth();
         int middle = width / 2;
-        int fabCentered = middle - fab.getWidth()/2;
-        int translationX = (int)fab.getX() - fabCentered;
+        int fabCentered = middle - fab.getWidth() / 2;
+        int translationX = (int) fab.getX() - fabCentered;
         int translationY = ScreenUtils.dpToPx(getResources(), 150);
 
         final int rippleX = middle;
-        final int rippleY = (int) (fab.getY()+fab.getHeight()/2) - translationY;
+        final int rippleY = (int) (fab.getY() + fab.getHeight() / 2) - translationY;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-            Animation arcAnimation = new ArcTranslateAnimation(0, -translationX , 0, -translationY);
+            Animation arcAnimation = new ArcTranslateAnimation(0, -translationX, 0, -translationY);
             arcAnimation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
@@ -327,50 +474,19 @@ public class ConfirmActivity extends CalendulaActivity {
             arcAnimation.setFillAfter(true);
             fab.startAnimation(arcAnimation);
 
-        }else {
+        } else {
             ViewPropertyAnimator animator = fab.animate().translationX(-translationX).setDuration(300);
             animator.setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    showRippleByApi(rippleX,rippleY);
+                    showRippleByApi(rippleX, rippleY);
                 }
             });
             animator.start();
         }
     }
 
-    void moveArrowsDown(int duration){
-        checkAllImage.animate()
-                .translationY(ScreenUtils.dpToPx(getResources(), 150f))
-                .setDuration(duration)
-                .setInterpolator(new OvershootInterpolator())
-                .start();
-    }
-
-    void showRippleByApi(int x , int y){
-
-        int duration = 500;
-        int arrowDuration = 400;
-
-        chekAllOverlay.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                finish();
-            }
-        },duration+300);
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            showRipple(x, y, duration);
-        } else {
-            chekAllOverlay.setVisibility(View.VISIBLE);
-            chekAllOverlay.animate().alpha(1).setDuration(duration).start();
-        }
-        moveArrowsDown(arrowDuration);
-    }
-
-
-    private void showRipple(int x , int y, int duration){
+    private void showRipple(int x, int y, int duration) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             Log.d(TAG, "Ripple x,y [" + x + ", " + y + "]");
             chekAllOverlay.setVisibility(View.INVISIBLE);
@@ -383,12 +499,6 @@ public class ConfirmActivity extends CalendulaActivity {
             chekAllOverlay.setVisibility(View.VISIBLE);
             anim.setDuration(duration).start();
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //Toast.makeText(this, "Is distant: " + isDistant + " (" + date.toDateTime(time).toString("dd/MM/YYYY, kk:mm")+")", Toast.LENGTH_LONG).show();
     }
 
     private void setupListView() {
@@ -408,133 +518,54 @@ public class ConfirmActivity extends CalendulaActivity {
         String dateStr = i.getStringExtra("date");
         String timeStr = i.getStringExtra("schedule_time");
 
-        String actionType = i.getIntExtra("actionType", AlarmIntentParams.AUTO) == AlarmIntentParams.USER? "user" : "auto";
+        String actionType = i.getIntExtra("actionType", AlarmIntentParams.AUTO) == AlarmIntentParams.USER ? "user" : "auto";
 
         action = i.getStringExtra("action");
         position = i.getIntExtra("position", -1);
 
-        if(dateStr!=null) {
+        if (dateStr != null) {
             date = LocalDate.parse(dateStr, dateFormatter);
-        }else{
+        } else {
             // this should never happen, but, just in case, redirect to home and show error
             Intent intent = new Intent(this, HomePagerActivity.class);
-            intent.putExtra("invalid_notification_error",true);
+            intent.putExtra("invalid_notification_error", true);
             startActivity(intent);
             finish();
         }
 
         Log.d("Confirm", timeStr + ", " + dateStr + ", " + routineId + ", " + scheduleId + ", " + date);
 
-        if( routineId != -1){
+        if (routineId != -1) {
             isRoutine = true;
             routine = Routine.findById(routineId);
             time = routine.time();
             patient = routine.patient();
-        }else{
+        } else {
             time = LocalTime.parse(timeStr, timeFormatter);
             schedule = Schedule.findById(scheduleId);
             patient = schedule.patient();
         }
     }
 
-    private void loadItems(){
-        if(isRoutine){
+    private void loadItems() {
+        if (isRoutine) {
             List<ScheduleItem> rsi = routine.scheduleItems();
             Log.d("Confirm", rsi.size() + " items");
-            for(ScheduleItem si : rsi){
+            for (ScheduleItem si : rsi) {
                 DailyScheduleItem item = DB.dailyScheduleItems().findByScheduleItemAndDate(si, date);
-                if(item != null)
+                if (item != null)
                     items.add(item);
             }
-        }else{
+        } else {
             items.add(DB.dailyScheduleItems().findBy(schedule, date, time));
         }
 
-        for(DailyScheduleItem i : items){
+        for (DailyScheduleItem i : items) {
             Log.d("Confirm", i != null ? i.toString() : "Null");
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.confirm, menu);
-
-        MenuItem item = menu.findItem(R.id.action_delay);
-
-        if(!isInWindow){
-            item.setVisible(false);
-        }else{
-            item.setIcon(new IconicsDrawable(this)
-                    .icon(CommunityMaterial.Icon.cmd_history)
-                    .color(Color.WHITE)
-                    .sizeDp(24));
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                supportFinishAfterTransition();
-                return true;
-            case R.id.action_delay:
-                showDelayDialog();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
-    public void showDelayDialog() {
-        final int[] values = this.getResources().getIntArray(R.array.delays_array_values);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.notification_delay)
-                .setItems(R.array.delays_array, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        int minutes = values[which];
-                        if(isRoutine) {
-                            AlarmScheduler.instance().onUserDelayRoutine(routine, date, ConfirmActivity.this, minutes);
-                        }
-                        else{
-                            AlarmScheduler.instance().onUserDelayHourlySchedule(schedule, time, date, ConfirmActivity.this, minutes);
-                        }
-
-                        String msg =ConfirmActivity.this.getString(R.string.alarm_delayed_message, minutes);
-                        Toast.makeText(ConfirmActivity.this, msg, Toast.LENGTH_SHORT).show();
-                        supportFinishAfterTransition();
-                    }
-                });
-        builder.create().show();
-    }
-
-
-    protected void onDailyAgendaItemCheck(final ImageButton v) {
-        int total = items.size();
-        int checked = 0;
-
-        for(DailyScheduleItem i : items){
-            if(i.takenToday())
-                checked++;
-        }
-
-        if (checked == total) {
-            onAllChecked();
-        } else {
-            if (isRoutine) {
-                AlarmScheduler.instance().onDelayRoutine(routine, date, ConfirmActivity.this);
-            } else {
-                AlarmScheduler.instance().onDelayHourlySchedule(schedule, time, date, ConfirmActivity.this);
-            }
-        }
-    }
-
-
-    private void onAllChecked(){
+    private void onAllChecked() {
         if (isRoutine) {
             AlarmScheduler.instance().onIntakeCompleted(routine, date, this);
         } else {
@@ -542,9 +573,8 @@ public class ConfirmActivity extends CalendulaActivity {
         }
     }
 
-
     private Drawable getCheckedIcon(int color) {
-        if(checkedIcon == null) {
+        if (checkedIcon == null) {
             checkedIcon = new IconicsDrawable(this, CommunityMaterial.Icon.cmd_checkbox_marked_circle_outline) //cmd_checkbox_marked_outline
                     .sizeDp(30)
                     .paddingDp(0)
@@ -563,80 +593,16 @@ public class ConfirmActivity extends CalendulaActivity {
         return uncheckedIcon;
     }
 
-    public String getDisplayableDose(String dose, Medicine m) {
-        return dose + " " + m.presentation().units(getResources());
-
-    }
-
-
-
-    @Override
-    protected void onDestroy() {
-
-        if(stateChanged){
-            CalendulaApp.eventBus().post(new ConfirmStateChangeEvent(position));
-        }
-        super.onDestroy();
-    }
-
     public static class ConfirmStateChangeEvent {
         public int position = -1;
+
         public ConfirmStateChangeEvent(int position) {
             this.position = position;
         }
     }
 
+    private class ConfirmItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private class ConfirmItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-
-
-        public class ConfirmItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-            TextView med;
-            TextView dose;
-            TextView status;
-            ImageButton check;
-            ImageView icon;
-
-            DailyScheduleItem dailyScheduleItem;
-
-            public ConfirmItemViewHolder(View itemView) {
-                super(itemView);
-                med  = (TextView) itemView.findViewById(R.id.med_item_name);
-                dose = (TextView) itemView.findViewById(R.id.med_item_dose);
-                status = (TextView) itemView.findViewById(R.id.med_item_status);
-                check = (ImageButton) itemView.findViewById(R.id.check_button);
-                icon = (ImageView) itemView.findViewById(R.id.imageView);
-                itemView.setOnClickListener(this);
-                check.setOnClickListener(this);
-            }
-
-            @Override
-            public void onClick(View view) {
-                final boolean taken = dailyScheduleItem.takenToday();
-                if(isDistant){
-                    showEnsureConfirmDialog(new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dailyScheduleItem.setTakenToday(!taken);
-                            DB.dailyScheduleItems().saveAndUpdateStock(dailyScheduleItem,true, ConfirmActivity.this);
-                            stateChanged = true;
-                            onDailyAgendaItemCheck(check);
-                            notifyItemChanged(getAdapterPosition());
-                        }
-                    }, taken);
-                }else{
-
-                    dailyScheduleItem.setTakenToday(!taken);
-                    DB.dailyScheduleItems().saveAndUpdateStock(dailyScheduleItem,true,ConfirmActivity.this);
-                    stateChanged = true;
-                    onDailyAgendaItemCheck(check);
-                    notifyItemChanged(getAdapterPosition());
-                }
-
-
-            }
-        }
 
         ConfirmItemViewHolder h;
         DailyScheduleItem i;
@@ -658,14 +624,14 @@ public class ConfirmActivity extends CalendulaActivity {
             h = (ConfirmItemViewHolder) holder;
             i = items.get(position);
             si = i.scheduleItem();
-            sid = i.boundToSchedule() ?  i.schedule().getId() : si.schedule().getId();
+            sid = i.boundToSchedule() ? i.schedule().getId() : si.schedule().getId();
             s = DB.schedules().findById(sid);
             m = s.medicine();
             p = m.presentation();
 
             String status = getString(R.string.med_not_taken);
-            if(i.timeTaken() != null){
-                status = (i.takenToday() ? getString(R.string.med_taken_at) : getString(R.string.med_cancelled_at)) +  " " + i.timeTaken().toString("kk:mm") + "h";
+            if (i.timeTaken() != null) {
+                status = (i.takenToday() ? getString(R.string.med_taken_at) : getString(R.string.med_cancelled_at)) + " " + i.timeTaken().toString("kk:mm") + "h";
             }
 
             h.med.setText(m.name());
@@ -675,7 +641,12 @@ public class ConfirmActivity extends CalendulaActivity {
             updateCheckedStatus();
         }
 
-        void updateCheckedStatus(){
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+
+        void updateCheckedStatus() {
             Drawable medDrawable = new IconicsDrawable(ConfirmActivity.this)
                     .icon(p.icon())
                     .color(i.takenToday() ? Color.parseColor("#81c784") : Color.parseColor("#11000000"))
@@ -690,47 +661,53 @@ public class ConfirmActivity extends CalendulaActivity {
             h.icon.setImageDrawable(medDrawable);
         }
 
-        @Override
-        public int getItemCount() {
-            return items.size();
-        }
-    }
+        public class ConfirmItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    public void showEnsureConfirmDialog(final DialogInterface.OnClickListener listener, boolean uncheck) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        DateTime t = date.toDateTime(time);
+            TextView med;
+            TextView dose;
+            TextView status;
+            ImageButton check;
+            ImageView icon;
 
-        String title = t.isAfterNow() ? getString(R.string.intake_not_available) :
-                getString(R.string.meds_from) + " " + date.toString("EEEE dd") + " " +  getString(R.string.at_time_connector) + " " + time.toString(timeFormatter);
+            DailyScheduleItem dailyScheduleItem;
 
-        String msg = t.isAfterNow() ? getString(R.string.confirm_future_intake_warning,relativeTime)
-                : uncheck ? getString(R.string.unconfirm_past_intake_warning, relativeTime)
-                : getString(R.string.confirm_past_intake_warning);
+            public ConfirmItemViewHolder(View itemView) {
+                super(itemView);
+                med = (TextView) itemView.findViewById(R.id.med_item_name);
+                dose = (TextView) itemView.findViewById(R.id.med_item_dose);
+                status = (TextView) itemView.findViewById(R.id.med_item_status);
+                check = (ImageButton) itemView.findViewById(R.id.check_button);
+                icon = (ImageView) itemView.findViewById(R.id.imageView);
+                itemView.setOnClickListener(this);
+                check.setOnClickListener(this);
+            }
 
-
-
-        builder.setMessage(msg)
-                .setCancelable(true)
-                .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_history,R.color.black, 36))
-                .setTitle(title);
-
-        if(t.isAfterNow()){
-            builder.setNegativeButton(getString(R.string.tutorial_understood), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    dialog.cancel();
-                }
-            });
-        }else{
-            builder.setPositiveButton(uncheck ? getString(R.string.meds_unconfirm_ok) : getString(R.string.meds_confirm_ok), listener)
-                    .setNegativeButton(uncheck ? getString(R.string.meds_unconfirm_cancel) : getString(R.string.meds_confirm_cancel), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
+            @Override
+            public void onClick(View view) {
+                final boolean taken = dailyScheduleItem.takenToday();
+                if (isDistant) {
+                    showEnsureConfirmDialog(new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dailyScheduleItem.setTakenToday(!taken);
+                            DB.dailyScheduleItems().saveAndUpdateStock(dailyScheduleItem, true, ConfirmActivity.this);
+                            stateChanged = true;
+                            onDailyAgendaItemCheck(check);
+                            notifyItemChanged(getAdapterPosition());
                         }
-                    });
-        }
+                    }, taken);
+                } else {
 
-        AlertDialog alert = builder.create();
-        alert.show();
+                    dailyScheduleItem.setTakenToday(!taken);
+                    DB.dailyScheduleItems().saveAndUpdateStock(dailyScheduleItem, true, ConfirmActivity.this);
+                    stateChanged = true;
+                    onDailyAgendaItemCheck(check);
+                    notifyItemChanged(getAdapterPosition());
+                }
+
+
+            }
+        }
     }
 
 

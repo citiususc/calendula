@@ -68,7 +68,7 @@ import es.usc.citius.servando.calendula.util.IconUtils;
 /**
  * Daily agenda fragment
  */
-public class DailyAgendaFragment extends Fragment{
+public class DailyAgendaFragment extends Fragment {
 
     final String TAG = "DailyAgendaFragment";
 
@@ -115,100 +115,6 @@ public class DailyAgendaFragment extends Fragment{
 
     }
 
-    private void setupRecyclerView() {
-        llm = new LinearLayoutManager(getContext());
-        rv.setLayoutManager(llm);
-        rvAdapter = new DailyAgendaRecyclerAdapter(items, rv, llm, getActivity());
-        rv.setAdapter(rvAdapter);
-        rv.setItemAnimator(new DefaultItemAnimator());
-
-        rvListener = new DailyAgendaRecyclerAdapter.EventListener() {
-
-            DateTime firstTime = null;
-
-            @Override
-            public void onItemClick(View v, DailyAgendaItemStub item, int position) {
-                showConfirmActivity(v, item, position);
-            }
-
-            @Override
-            public void onBeforeToggleCollapse(boolean expanded, boolean somethingVisible) {
-
-                int firstPosition = llm.findFirstVisibleItemPosition();
-                firstTime = firstPosition >= 0 && firstPosition < items.size() ? items.get(firstPosition).dateTime() : null;
-
-                Log.d(TAG, "OnBeforeCollapse, somethingVisible is " + somethingVisible);
-
-                if(expanded) {
-                    showOrHideEmptyView(false);
-                } else if(!expanded && somethingVisible){
-                    showOrHideEmptyView(false);
-                }else{
-                    showOrHideEmptyView(true);
-                }
-            }
-
-            @Override
-            public void onAfterToggleCollapse(boolean expanded, boolean somethingVisible) {
-
-                if(expanded && firstTime != null){
-                    scrollTo(firstTime);
-                }
-                firstTime = null;
-            }
-
-        };
-
-        rvAdapter.setListener(rvListener);
-    }
-
-
-    private void setupEmptyView() {
-        int color = HomeProfileMgr.colorForCurrent(getActivity());
-        Drawable icon = new IconicsDrawable(getContext())
-                .icon(emptyViewIcon)
-                .color(color)
-                .sizeDp(90)
-                .paddingDp(0);
-        ((ImageView) emptyView.findViewById(R.id.imageView_ok)).setImageDrawable(icon);
-    }
-
-
-    private void showConfirmActivity(View view, DailyAgendaItemStub item, int position) {
-
-        Intent i = new Intent(getContext(), ConfirmActivity.class);
-        i.putExtra("position", position);
-        i.putExtra("date", item.date.toString("dd/MM/YYYY"));
-
-        if(item.isRoutine) {
-            i.putExtra("routine_id", item.id);
-        }else{
-            i.putExtra("schedule_id", item.id);
-            i.putExtra("schedule_time", item.time.toString("kk:mm"));
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-            View v1 = view.findViewById(R.id.patient_avatar);
-            View v2 = view.findViewById(R.id.linearLayout);
-            View v3 = view.findViewById(R.id.routines_list_item_name);
-
-            if(v1!=null && v2!=null && v3!=null) {
-                ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        getActivity(),
-                        new Pair<>(v1, "avatar_transition"),
-                        new Pair<>(v2, "time"),
-                        new Pair<>(v3, "title")
-                );
-                ActivityCompat.startActivity(getActivity(), i, activityOptions.toBundle());
-            }else{
-                startActivity(i);
-            }
-        } else {
-            startActivity(i);
-        }
-    }
-
     public List<DailyAgendaItemStub> buildItems() {
 
         List<DailyAgendaItemStub> stubs = new ArrayList<>();
@@ -219,16 +125,15 @@ public class DailyAgendaFragment extends Fragment{
         DateTime min = DateTime.now().withTimeAtStartOfDay();
 
         // create stubs for hourly schedule items
-        for(DailyScheduleItem dailyScheduleItem : daily){
-            if(dailyScheduleItem.boundToSchedule())
-            {
+        for (DailyScheduleItem dailyScheduleItem : daily) {
+            if (dailyScheduleItem.boundToSchedule()) {
                 Schedule schedule = dailyScheduleItem.schedule();
                 Medicine medicine = schedule.medicine();
                 LocalTime time = dailyScheduleItem.time();
                 LocalDate date = dailyScheduleItem.date();
 
                 // create a stub for this item
-                DailyAgendaItemStub stub = new DailyAgendaItemStub(date,time);
+                DailyAgendaItemStub stub = new DailyAgendaItemStub(date, time);
                 stub.isRoutine = false;
                 stub.meds = new ArrayList<>();
                 stub.hasEvents = true;
@@ -251,10 +156,10 @@ public class DailyAgendaFragment extends Fragment{
                 stubs.add(stub);
 
                 DateTime candidate = stub.date.toDateTime(stub.time);
-                if(candidate.isAfter(max)){
+                if (candidate.isAfter(max)) {
                     max = candidate;
                 }
-                if(candidate.isBefore(min)){
+                if (candidate.isBefore(min)) {
                     min = candidate;
                 }
 
@@ -263,8 +168,8 @@ public class DailyAgendaFragment extends Fragment{
 
         final Map<LocalDate, Map<Routine, DailyAgendaItemStub>> dateStubs = new HashMap<>();
         // create stubs for routine items
-        for (Routine  routine: DB.routines().findAll()) {
-            for (ScheduleItem  scheduleItem : routine.scheduleItems()) {
+        for (Routine routine : DB.routines().findAll()) {
+            for (ScheduleItem scheduleItem : routine.scheduleItems()) {
                 // get item from daily agenda if exists
                 List<DailyScheduleItem> dailyScheduleItems = DB.dailyScheduleItems().findAllByScheduleItem(scheduleItem);
 
@@ -303,7 +208,7 @@ public class DailyAgendaFragment extends Fragment{
                         if (candidate.isAfter(max)) {
                             max = candidate;
                         }
-                        if(candidate.isBefore(min)){
+                        if (candidate.isBefore(min)) {
                             min = candidate;
                         }
 
@@ -329,9 +234,9 @@ public class DailyAgendaFragment extends Fragment{
             }
         }
 
-        for(LocalDate date : dateStubs.keySet()){
+        for (LocalDate date : dateStubs.keySet()) {
             Map<Routine, DailyAgendaItemStub> routineStubs = dateStubs.get(date);
-            for(Routine r : routineStubs.keySet()){
+            for (Routine r : routineStubs.keySet()) {
                 stubs.add(routineStubs.get(r));
             }
         }
@@ -342,27 +247,28 @@ public class DailyAgendaFragment extends Fragment{
         return stubs;
     }
 
-    public void addEmptyHours(List<DailyAgendaItemStub> stubs, DateTime min, DateTime max){
+    public void addEmptyHours(List<DailyAgendaItemStub> stubs, DateTime min, DateTime max) {
 
         min = min.withTimeAtStartOfDay();
         max = max.withTimeAtStartOfDay().plusDays(1); // end of the day
 
         // add empty hours if there is not an item with the same hour
-        for(DateTime start = min; start.isBefore(max); start = start.plusHours(1)){
+        for (DateTime start = min; start.isBefore(max); start = start.plusHours(1)) {
 
             boolean exact = false;
             for (DailyAgendaItemStub item : items) {
-                if(start.equals(item.dateTime())){
-                    exact = true; break;
+                if (start.equals(item.dateTime())) {
+                    exact = true;
+                    break;
                 }
             }
 
             Interval hour = new Interval(start, start.plusHours(1));
-            if(!exact || hour.contains(DateTime.now())) {
+            if (!exact || hour.contains(DateTime.now())) {
                 stubs.add(new DailyAgendaItemStub(start.toLocalDate(), start.toLocalTime()));
             }
 
-            if(start.getHourOfDay() == 0){
+            if (start.getHourOfDay() == 0) {
                 DailyAgendaItemStub spacer = new DailyAgendaItemStub(start.toLocalDate(), start.toLocalTime());
                 spacer.isSpacer = true;
                 stubs.add(spacer);
@@ -371,11 +277,10 @@ public class DailyAgendaFragment extends Fragment{
     }
 
     public void showOrHideEmptyView(boolean show) {
-        if(show) {
+        if (show) {
             emptyView.setVisibility(View.VISIBLE);
             //emptyView.animate().alpha(1);
-        }
-        else {
+        } else {
             emptyView.setVisibility(View.GONE);
 //            emptyView.animate().alpha(0).setListener(new AnimatorListenerAdapter() {
 //                @Override
@@ -391,32 +296,30 @@ public class DailyAgendaFragment extends Fragment{
         rvAdapter.toggleCollapseMode();
     }
 
-
     public void refresh() {
         rvAdapter.notifyDataSetChanged();
     }
 
     public void refreshPosition(int position) {
-        if(position == -1){
+        if (position == -1) {
             notifyDataChange();
-        }else if(position >= 0 && position < items.size()) {
+        } else if (position >= 0 && position < items.size()) {
             rvAdapter.updatePosition(position);
         }
     }
 
-    public void scrollTo(DateTime time){
+    public void scrollTo(DateTime time) {
         int position = 0;
-        for(DailyAgendaItemStub stub : items){
-            if( stub.dateTime().isAfter(time)){
+        for (DailyAgendaItemStub stub : items) {
+            if (stub.dateTime().isAfter(time)) {
                 break;
             }
             position++;
         }
 
-        if(position > 0)
-            llm.scrollToPositionWithOffset(position-1, 50);
+        if (position > 0)
+            llm.scrollToPositionWithOffset(position - 1, 50);
     }
-
 
     public boolean isExpanded() {
         return rvAdapter.isExpanded();
@@ -436,7 +339,7 @@ public class DailyAgendaFragment extends Fragment{
                     showOrHideEmptyView(!rvAdapter.isShowingSomething());
                 }
             }, 100);
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, "Error onPostExecute", e);
         }
     }
@@ -445,33 +348,10 @@ public class DailyAgendaFragment extends Fragment{
         notifyDataChange();
     }
 
-    private static class DailyAgendaItemStubComparator implements Comparator<DailyAgendaItemStub> {
-
-        static final DailyAgendaItemStubComparator instance = new DailyAgendaItemStubComparator();
-
-        private DailyAgendaItemStubComparator(){}
-
-        @Override
-        public int compare(DailyAgendaItemStub a, DailyAgendaItemStub b) {
-
-            DateTime aT = a.date.toDateTime(a.time);
-            DateTime bT = b.date.toDateTime(b.time);
-
-            if(aT.compareTo(bT) == 0 && a.isSpacer) {
-                return -1;
-            } else if(aT.compareTo(bT) == 0 && b.isSpacer){
-                return 1;
-            }else if(aT.compareTo(bT) == 0){
-                return a.hasEvents ? -1 : 1;
-            }
-            return aT.compareTo(bT);
-        }
-    }
-
     // Method called from the event bus
     @SuppressWarnings("unused")
     public void onEvent(final Object evt) {
-        if(evt instanceof HomeProfileMgr.BackgroundUpdatedEvent){
+        if (evt instanceof HomeProfileMgr.BackgroundUpdatedEvent) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -482,6 +362,97 @@ public class DailyAgendaFragment extends Fragment{
         }
     }
 
+    private void setupRecyclerView() {
+        llm = new LinearLayoutManager(getContext());
+        rv.setLayoutManager(llm);
+        rvAdapter = new DailyAgendaRecyclerAdapter(items, rv, llm, getActivity());
+        rv.setAdapter(rvAdapter);
+        rv.setItemAnimator(new DefaultItemAnimator());
+
+        rvListener = new DailyAgendaRecyclerAdapter.EventListener() {
+
+            DateTime firstTime = null;
+
+            @Override
+            public void onItemClick(View v, DailyAgendaItemStub item, int position) {
+                showConfirmActivity(v, item, position);
+            }
+
+            @Override
+            public void onBeforeToggleCollapse(boolean expanded, boolean somethingVisible) {
+
+                int firstPosition = llm.findFirstVisibleItemPosition();
+                firstTime = firstPosition >= 0 && firstPosition < items.size() ? items.get(firstPosition).dateTime() : null;
+
+                Log.d(TAG, "OnBeforeCollapse, somethingVisible is " + somethingVisible);
+
+                if (expanded) {
+                    showOrHideEmptyView(false);
+                } else if (!expanded && somethingVisible) {
+                    showOrHideEmptyView(false);
+                } else {
+                    showOrHideEmptyView(true);
+                }
+            }
+
+            @Override
+            public void onAfterToggleCollapse(boolean expanded, boolean somethingVisible) {
+
+                if (expanded && firstTime != null) {
+                    scrollTo(firstTime);
+                }
+                firstTime = null;
+            }
+
+        };
+
+        rvAdapter.setListener(rvListener);
+    }
+
+    private void setupEmptyView() {
+        int color = HomeProfileMgr.colorForCurrent(getActivity());
+        Drawable icon = new IconicsDrawable(getContext())
+                .icon(emptyViewIcon)
+                .color(color)
+                .sizeDp(90)
+                .paddingDp(0);
+        ((ImageView) emptyView.findViewById(R.id.imageView_ok)).setImageDrawable(icon);
+    }
+
+    private void showConfirmActivity(View view, DailyAgendaItemStub item, int position) {
+
+        Intent i = new Intent(getContext(), ConfirmActivity.class);
+        i.putExtra("position", position);
+        i.putExtra("date", item.date.toString("dd/MM/YYYY"));
+
+        if (item.isRoutine) {
+            i.putExtra("routine_id", item.id);
+        } else {
+            i.putExtra("schedule_id", item.id);
+            i.putExtra("schedule_time", item.time.toString("kk:mm"));
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            View v1 = view.findViewById(R.id.patient_avatar);
+            View v2 = view.findViewById(R.id.linearLayout);
+            View v3 = view.findViewById(R.id.routines_list_item_name);
+
+            if (v1 != null && v2 != null && v3 != null) {
+                ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        getActivity(),
+                        new Pair<>(v1, "avatar_transition"),
+                        new Pair<>(v2, "time"),
+                        new Pair<>(v3, "title")
+                );
+                ActivityCompat.startActivity(getActivity(), i, activityOptions.toBundle());
+            } else {
+                startActivity(i);
+            }
+        } else {
+            startActivity(i);
+        }
+    }
 
     private void onBackgroundChange(int color) {
         Drawable icon = new IconicsDrawable(getContext())
@@ -490,5 +461,29 @@ public class DailyAgendaFragment extends Fragment{
                 .sizeDp(90)
                 .paddingDp(0);
         ((ImageView) emptyView.findViewById(R.id.imageView_ok)).setImageDrawable(icon);
+    }
+
+    private static class DailyAgendaItemStubComparator implements Comparator<DailyAgendaItemStub> {
+
+        static final DailyAgendaItemStubComparator instance = new DailyAgendaItemStubComparator();
+
+        private DailyAgendaItemStubComparator() {
+        }
+
+        @Override
+        public int compare(DailyAgendaItemStub a, DailyAgendaItemStub b) {
+
+            DateTime aT = a.date.toDateTime(a.time);
+            DateTime bT = b.date.toDateTime(b.time);
+
+            if (aT.compareTo(bT) == 0 && a.isSpacer) {
+                return -1;
+            } else if (aT.compareTo(bT) == 0 && b.isSpacer) {
+                return 1;
+            } else if (aT.compareTo(bT) == 0) {
+                return a.hasEvents ? -1 : 1;
+            }
+            return aT.compareTo(bT);
+        }
     }
 }

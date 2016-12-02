@@ -82,8 +82,27 @@ public class ScheduleConfirmationEndFragment extends Fragment {
         return rootView;
     }
 
-    private void updateCounts(){
-        Map<Schedule,PrescriptionWrapper> schedules = ((ConfirmSchedulesActivity)getActivity()).getScheduleInfo();
+    public String getMedicineName(PrescriptionWrapper p) {
+        String name = "";
+        if (p.cn != null) {
+            Prescription prescription = DB.drugDB().prescriptions().findByCn(p.cn);
+            name = prescription.shortName();
+        } else if (p.isGroup) {
+            name = Strings.firstPart(p.group.getName());
+        }
+        return name;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && getView() != null) {
+            updateCounts();
+        }
+    }
+
+    private void updateCounts() {
+        Map<Schedule, PrescriptionWrapper> schedules = ((ConfirmSchedulesActivity) getActivity()).getScheduleInfo();
         int totalSchedules = schedules.size();
         int newSchedules = getNewSchedules(new ArrayList<>(schedules.keySet()));
         int updated = totalSchedules - newSchedules;
@@ -91,60 +110,40 @@ public class ScheduleConfirmationEndFragment extends Fragment {
         createdSchedulesList.removeAllViews();
         updatedSchedulesList.removeAllViews();
 
-        createdSchedulesTitle.setText(getString(R.string.scan_schedules_to_create,newSchedules));
-        updatedSchedulesTitle.setText(getString(R.string.scan_schedules_to_update,updated));
+        createdSchedulesTitle.setText(getString(R.string.scan_schedules_to_create, newSchedules));
+        updatedSchedulesTitle.setText(getString(R.string.scan_schedules_to_update, updated));
 
         LayoutInflater li = getActivity().getLayoutInflater();
 
-        for(Schedule s : schedules.keySet()){
-            if(s.getId()==null){
-                View v = getScheduleView(s,schedules.get(s),li);
+        for (Schedule s : schedules.keySet()) {
+            if (s.getId() == null) {
+                View v = getScheduleView(s, schedules.get(s), li);
                 createdSchedulesList.addView(v);
             }
         }
 
-        for(Schedule s : schedules.keySet()){
-            if(s.getId()!=null){
-                View v = getScheduleView(s,schedules.get(s),li);
+        for (Schedule s : schedules.keySet()) {
+            if (s.getId() != null) {
+                View v = getScheduleView(s, schedules.get(s), li);
                 updatedSchedulesList.addView(v);
             }
         }
     }
 
-    private View getScheduleView(Schedule s, PrescriptionWrapper p, LayoutInflater li){
+    private View getScheduleView(Schedule s, PrescriptionWrapper p, LayoutInflater li) {
         View v = li.inflate(R.layout.schedule_confirmation_end_list_item, null);
-        ((TextView)v.findViewById(R.id.med_name)).setText(getMedicineName(p));
-        ((TextView)v.findViewById(R.id.med_schedule)).setText(s.toReadableString(getActivity()));
+        ((TextView) v.findViewById(R.id.med_name)).setText(getMedicineName(p));
+        ((TextView) v.findViewById(R.id.med_schedule)).setText(s.toReadableString(getActivity()));
         return v;
     }
 
-    public String getMedicineName(PrescriptionWrapper p){
-        String name = "";
-        if(p.cn != null){
-            Prescription prescription = DB.drugDB().prescriptions().findByCn(p.cn);
-            name = prescription.shortName();
-        }else if(p.isGroup){
-            name = Strings.firstPart(p.group.getName());
-        }
-        return name;
-    }
-
-
     private int getNewSchedules(List<Schedule> schedules) {
         int count = 0;
-        for(Schedule s : schedules){
-            if(s.getId() == null){
+        for (Schedule s : schedules) {
+            if (s.getId() == null) {
                 count++;
             }
         }
         return count;
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser && getView() != null) {
-            updateCounts();
-        }
     }
 }

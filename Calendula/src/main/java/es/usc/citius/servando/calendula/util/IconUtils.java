@@ -50,33 +50,33 @@ public class IconUtils {
 
     );
 
-    public static IconicsDrawable icon(Context ctx, IIcon ic, int color){
+    public static IconicsDrawable icon(Context ctx, IIcon ic, int color) {
         return new IconicsDrawable(ctx, ic)
                 .sizeDp(48)
                 .paddingDp(2)
                 .colorRes(color);
     }
 
-    public static IconicsDrawable icon(Context ctx, IIcon ic, int color, int size){
+    public static IconicsDrawable icon(Context ctx, IIcon ic, int color, int size) {
         return new IconicsDrawable(ctx, ic)
                 .sizeDp(size)
                 .paddingDp(0)
                 .colorRes(color);
     }
 
-    public static IconicsDrawable icon(Context ctx, IIcon ic, int color, int size, int padding){
+    public static IconicsDrawable icon(Context ctx, IIcon ic, int color, int size, int padding) {
         return new IconicsDrawable(ctx, ic)
                 .sizeDp(size)
                 .paddingDp(padding)
                 .colorRes(color);
     }
 
-    public static Drawable alertLevelIcon(int level, Context context){
+    public static Drawable alertLevelIcon(int level, Context context) {
 
         IIcon ic;
         int color;
 
-        switch (level){
+        switch (level) {
             case PatientAlert.Level.HIGH:
                 ic = CommunityMaterial.Icon.cmd_message_alert;
                 color = R.color.android_red_dark;
@@ -98,7 +98,7 @@ public class IconUtils {
                 .paddingDp(4);
     }
 
-    public static IIcon randomNiceIcon(){
+    public static IIcon randomNiceIcon() {
         return niceIcons.get(random.nextInt(niceIcons.size()));
     }
 }

@@ -73,7 +73,7 @@ public class MedicinesListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_medicines_list, container, false);
-        handler =new Handler();
+        handler = new Handler();
         listview = (ListView) rootView.findViewById(R.id.medicines_list);
         View empty = rootView.findViewById(android.R.id.empty);
         listview.setEmptyView(empty);
@@ -100,110 +100,6 @@ public class MedicinesListFragment extends Fragment {
         new ReloadItemsTask().execute();
     }
 
-    private class ReloadItemsTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            mMedicines = DB.medicines().findAllForActivePatient(getContext());
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            adapter.clear();
-            for (Medicine m : mMedicines) {
-                adapter.add(m);
-            }
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    private View createMedicineListItem(LayoutInflater inflater, final Medicine medicine) {
-
-        View item = inflater.inflate(R.layout.medicines_list_item, null);
-        ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
-        TextView name = (TextView) item.findViewById(R.id.medicines_list_item_name);
-        ImageView alertIcon = (ImageView) item.findViewById(R.id.imageView);
-        name.setText(medicine.name());
-        icon.setImageDrawable(new IconicsDrawable(getContext())
-                .icon(medicine.presentation().icon())
-                .colorRes(R.color.agenda_item_title)
-                .paddingDp(8)
-                .sizeDp(40));
-
-        View overlay = item.findViewById(R.id.medicines_list_item_container);
-        overlay.setTag(medicine);
-
-        String nextPickup = medicine.nextPickup();
-        TextView stockInfo = (TextView) item.findViewById(R.id.stock_info);
-        if (nextPickup != null) {
-            stockInfo.setText("Próxima e-Receta: " + nextPickup);
-        }
-
-        if(medicine.stock() >= 0){
-            stockInfo.setText("Quedan " + medicine.stock().intValue() + " " + medicine.presentation().units(getResources())+"s");
-        }
-
-        String cn = medicine.cn();
-        final Prescription p = cn != null ? DB.drugDB().prescriptions().findByCn(medicine.cn()) : null;
-
-        List<PatientAlert> alerts = DB.alerts().findBy(PatientAlert.COLUMN_MEDICINE, medicine);
-        boolean hasAlerts = !alerts.isEmpty();
-
-        if (!hasAlerts) {
-            item.findViewById(R.id.imageView).setVisibility(View.GONE);
-        } else {
-            int level = PatientAlert.Level.LOW;
-            for(PatientAlert a : alerts){
-                if(a.getLevel() > level){
-                    level = a.getLevel();
-                }
-            }
-            alertIcon.setImageDrawable(IconUtils.alertLevelIcon(level,getActivity()));
-
-            item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openMedicineInfoActivity(medicine, true);
-                }
-            });
-        }
-
-        View.OnClickListener clickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Medicine m = (Medicine) view.getTag();
-                if (mMedicineSelectedCallback != null && m != null) {
-                    Log.d(getTag(), "Click at " + m.name());
-                    mMedicineSelectedCallback.onMedicineSelected(m);
-                } else {
-                    Log.d(getTag(), "No callback set");
-                }
-            }
-        };
-
-        overlay.setOnClickListener(clickListener);
-        overlay.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (view.getTag() != null)
-                    showDeleteConfirmationDialog((Medicine) view.getTag());
-                return true;
-            }
-        });
-        return item;
-    }
-
-    void openMedicineInfoActivity(Medicine medicine, boolean showAlerts){
-        Intent i = new Intent(getActivity(), MedicineInfoActivity.class);
-        i.putExtra("medicine_id", medicine.getId());
-        i.putExtra("show_alerts", showAlerts);
-        getActivity().startActivity(i);
-    }
-
-
     public void openProspect(Prescription p) {
         ProspectUtils.openProspect(p, getActivity(), true);
     }
@@ -227,6 +123,51 @@ public class MedicinesListFragment extends Fragment {
             }
         });
         builder.show();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // If the container activity has implemented the callback interface, set it as listener
+        if (activity instanceof OnMedicineSelectedListener) {
+            mMedicineSelectedCallback = (OnMedicineSelectedListener) activity;
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        CalendulaApp.eventBus().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        CalendulaApp.eventBus().unregister(this);
+        super.onStop();
+    }
+
+    // Method called from the event bus
+    @SuppressWarnings("unused")
+    public void onEvent(Object evt) {
+        if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
+            notifyDataChange();
+        } else if (evt instanceof PersistenceEvents.ModelCreateOrUpdateEvent) {
+            if (((PersistenceEvents.ModelCreateOrUpdateEvent) evt).clazz.equals(Medicine.class)) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        notifyDataChange();
+                    }
+                });
+            }
+        }
+    }
+
+    void openMedicineInfoActivity(Medicine medicine, boolean showAlerts) {
+        Intent i = new Intent(getActivity(), MedicineInfoActivity.class);
+        i.putExtra("medicine_id", medicine.getId());
+        i.putExtra("show_alerts", showAlerts);
+        getActivity().startActivity(i);
     }
 
     void showDeleteConfirmationDialog(final Medicine m) {
@@ -264,26 +205,80 @@ public class MedicinesListFragment extends Fragment {
 
     }
 
-    private class MedicinesListAdapter extends ArrayAdapter<Medicine> {
+    private View createMedicineListItem(LayoutInflater inflater, final Medicine medicine) {
 
-        public MedicinesListAdapter(Context context, int layoutResourceId, List<Medicine> items) {
-            super(context, layoutResourceId, items);
+        View item = inflater.inflate(R.layout.medicines_list_item, null);
+        ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
+        TextView name = (TextView) item.findViewById(R.id.medicines_list_item_name);
+        ImageView alertIcon = (ImageView) item.findViewById(R.id.imageView);
+        name.setText(medicine.name());
+        icon.setImageDrawable(new IconicsDrawable(getContext())
+                .icon(medicine.presentation().icon())
+                .colorRes(R.color.agenda_item_title)
+                .paddingDp(8)
+                .sizeDp(40));
+
+        View overlay = item.findViewById(R.id.medicines_list_item_container);
+        overlay.setTag(medicine);
+
+        String nextPickup = medicine.nextPickup();
+        TextView stockInfo = (TextView) item.findViewById(R.id.stock_info);
+        if (nextPickup != null) {
+            stockInfo.setText("Próxima e-Receta: " + nextPickup);
         }
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-            return createMedicineListItem(layoutInflater, mMedicines.get(position));
+        if (medicine.stock() >= 0) {
+            stockInfo.setText("Quedan " + medicine.stock().intValue() + " " + medicine.presentation().units(getResources()) + "s");
         }
-    }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        // If the container activity has implemented the callback interface, set it as listener
-        if (activity instanceof OnMedicineSelectedListener) {
-            mMedicineSelectedCallback = (OnMedicineSelectedListener) activity;
+        String cn = medicine.cn();
+        final Prescription p = cn != null ? DB.drugDB().prescriptions().findByCn(medicine.cn()) : null;
+
+        List<PatientAlert> alerts = DB.alerts().findBy(PatientAlert.COLUMN_MEDICINE, medicine);
+        boolean hasAlerts = !alerts.isEmpty();
+
+        if (!hasAlerts) {
+            item.findViewById(R.id.imageView).setVisibility(View.GONE);
+        } else {
+            int level = PatientAlert.Level.LOW;
+            for (PatientAlert a : alerts) {
+                if (a.getLevel() > level) {
+                    level = a.getLevel();
+                }
+            }
+            alertIcon.setImageDrawable(IconUtils.alertLevelIcon(level, getActivity()));
+
+            item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openMedicineInfoActivity(medicine, true);
+                }
+            });
         }
+
+        View.OnClickListener clickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Medicine m = (Medicine) view.getTag();
+                if (mMedicineSelectedCallback != null && m != null) {
+                    Log.d(getTag(), "Click at " + m.name());
+                    mMedicineSelectedCallback.onMedicineSelected(m);
+                } else {
+                    Log.d(getTag(), "No callback set");
+                }
+            }
+        };
+
+        overlay.setOnClickListener(clickListener);
+        overlay.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (view.getTag() != null)
+                    showDeleteConfirmationDialog((Medicine) view.getTag());
+                return true;
+            }
+        });
+        return item;
     }
 
 
@@ -296,33 +291,36 @@ public class MedicinesListFragment extends Fragment {
         void onCreateMedicine();
     }
 
+    private class ReloadItemsTask extends AsyncTask<Void, Void, Void> {
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        CalendulaApp.eventBus().register(this);
-    }
+        @Override
+        protected Void doInBackground(Void... params) {
+            mMedicines = DB.medicines().findAllForActivePatient(getContext());
 
-    @Override
-    public void onStop() {
-        CalendulaApp.eventBus().unregister(this);
-        super.onStop();
-    }
+            return null;
+        }
 
-    // Method called from the event bus
-    @SuppressWarnings("unused")
-    public void onEvent(Object evt) {
-        if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
-            notifyDataChange();
-        }else if (evt instanceof PersistenceEvents.ModelCreateOrUpdateEvent){
-            if(((PersistenceEvents.ModelCreateOrUpdateEvent) evt).clazz.equals(Medicine.class)){
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        notifyDataChange();
-                    }
-                });
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            adapter.clear();
+            for (Medicine m : mMedicines) {
+                adapter.add(m);
             }
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    private class MedicinesListAdapter extends ArrayAdapter<Medicine> {
+
+        public MedicinesListAdapter(Context context, int layoutResourceId, List<Medicine> items) {
+            super(context, layoutResourceId, items);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
+            return createMedicineListItem(layoutInflater, mMedicines.get(position));
         }
     }
 

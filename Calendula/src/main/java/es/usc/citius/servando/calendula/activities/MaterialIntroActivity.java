@@ -27,10 +27,10 @@ import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
 
 import es.usc.citius.servando.calendula.R;
 
-public class MaterialIntroActivity extends IntroActivity{
+public class MaterialIntroActivity extends IntroActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
 
         setFullscreen(true);
         super.onCreate(savedInstanceState);
@@ -78,7 +78,7 @@ public class MaterialIntroActivity extends IntroActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         prefs.edit().putBoolean("PREFERENCE_INTRO_SHOWN", true).apply();
     }
 }

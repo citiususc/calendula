@@ -67,7 +67,10 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     public static final String TAG = "DatabaseHelper";
-
+    // name of the database file for our application
+    private static final String DATABASE_NAME = DB.DB_NAME;
+    // any time you make changes to your database objects, you may have to increase the database version
+    private static final int DATABASE_VERSION = 12;
     // List of persisted classes to simplify table creation
     public Class<?>[] persistedClasses = new Class<?>[]{
             Routine.class,
@@ -97,12 +100,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             PatientAlert.class,
             AllergyGroup.class,
     };
-
-    // name of the database file for our application
-    private static final String DATABASE_NAME = DB.DB_NAME;
-    // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 12;
-
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
     // the DAO object we use to access the Routines table
@@ -147,15 +144,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
             throw new RuntimeException(e);
         }
-    }
-
-    private Patient createDefaultPatient() throws SQLException {
-        // Create a default patient
-        Patient p = new Patient();
-        p.setName("Calendula");
-        p.setDefault(true);
-        getPatientDao().create(p);
-        return p;
     }
 
     /**
@@ -223,99 +211,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 Log.d(DatabaseHelper.class.getName(), "Will try to recreate db...");
                 dropAndCreateAllTables();
                 createDefaultPatient();
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    /**
-     * Method that migrate models to multi-user
-     */
-    private void migrateToMultiPatient() throws SQLException {
-
-        // add patient column to routines, schedules and medicines
-        getRoutinesDao().executeRaw("ALTER TABLE Routines ADD COLUMN Patient INTEGER;");
-        getRoutinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN Patient INTEGER;");
-        getRoutinesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Patient INTEGER;");
-        getRoutinesDao().executeRaw("ALTER TABLE DailyScheduleItems ADD COLUMN Patient INTEGER;");
-        getRoutinesDao().executeRaw("ALTER TABLE DailyScheduleItems ADD COLUMN Date TEXT;");
-
-        Patient p = createDefaultPatient();
-        // SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences();
-        // prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).commit();
-
-        // Assign all routines to the default patient
-        UpdateBuilder<Routine, Long> rUpdateBuilder = getRoutinesDao().updateBuilder();
-        rUpdateBuilder.updateColumnValue(Routine.COLUMN_PATIENT, p.id());
-        rUpdateBuilder.update();
-
-        // Assign all schedules to the default patient
-        UpdateBuilder<Schedule, Long> sUpdateBuilder = getSchedulesDao().updateBuilder();
-        sUpdateBuilder.updateColumnValue(Schedule.COLUMN_PATIENT, p.id());
-        sUpdateBuilder.update();
-
-        // Assign all medicines to the default patient
-        UpdateBuilder<Medicine, Long> mUpdateBuilder = getMedicinesDao().updateBuilder();
-        mUpdateBuilder.updateColumnValue(Medicine.COLUMN_PATIENT, p.id());
-        mUpdateBuilder.update();
-
-        // Assign all DailyScheduleItems to the default patient, for today
-        UpdateBuilder<DailyScheduleItem, Long> siUpdateBuilder = getDailyScheduleItemsDao().updateBuilder();
-        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_PATIENT, p.id());
-        siUpdateBuilder.update();
-
-        // date formatter changes on v11, so we can no use LocalDatePersister here
-        String now = LocalDate.now().toString("ddMMYYYY");
-        String updateDateSql = "UPDATE DailyScheduleItems SET " + DailyScheduleItem.COLUMN_DATE + " = '" +now + "'";
-        getDailyScheduleItemsDao().executeRaw(updateDateSql);
-
-    }
-
-    /**
-     * Method that migrate schedules to the iCal format
-     */
-    private void migrateToICal() throws SQLException {
-
-        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Rrule TEXT;");
-        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Start TEXT;");
-        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Starttime TEXT;");
-        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Dose REAL;");
-        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Type INTEGER;");
-        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Cycle TEXT;");
-
-        getDailyScheduleItemsDao().executeRaw(
-                "ALTER TABLE DailyScheduleItems ADD COLUMN Schedule INTEGER;");
-        getDailyScheduleItemsDao().executeRaw(
-                "ALTER TABLE DailyScheduleItems ADD COLUMN Time TEXT;");
-
-        // update schedules
-        TransactionManager.callInTransaction(getConnectionSource(), new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                // iterate over schedules and replace days[] with rrule
-                List<Schedule> schedules = getSchedulesDao().queryForAll();
-                Log.d(TAG, "Upgrade " + schedules.size() + " schedules");
-                for (Schedule s : schedules) {
-                    if (s.rule() == null) {
-                        s.setRepetition(new RepetitionRule(RepetitionRule.DEFAULT_ICAL_VALUE));
-                    }
-                    s.setDays(s.getLegacyDays());
-
-                    if (s.allDaysSelected()) {
-                        s.setType(Schedule.SCHEDULE_TYPE_EVERYDAY);
-                    } else {
-                        s.setType(Schedule.SCHEDULE_TYPE_SOMEDAYS);
-                    }
-                    s.setStart(LocalDate.now());
-                    s.save();
-                }
-
-                return null;
-            }
-        });
-
-
     }
 
     /**
@@ -395,7 +294,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return homogeneousGroupsDao;
     }
 
-
     /**
      * Returns the Database Access Object (DAO) for our PickupInfo class. It will create it or just give the cached
      * value.
@@ -458,6 +356,104 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void close() {
         super.close();
         medicinesDao = null;
+    }
+
+    private Patient createDefaultPatient() throws SQLException {
+        // Create a default patient
+        Patient p = new Patient();
+        p.setName("Calendula");
+        p.setDefault(true);
+        getPatientDao().create(p);
+        return p;
+    }
+
+    /**
+     * Method that migrate models to multi-user
+     */
+    private void migrateToMultiPatient() throws SQLException {
+
+        // add patient column to routines, schedules and medicines
+        getRoutinesDao().executeRaw("ALTER TABLE Routines ADD COLUMN Patient INTEGER;");
+        getRoutinesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN Patient INTEGER;");
+        getRoutinesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Patient INTEGER;");
+        getRoutinesDao().executeRaw("ALTER TABLE DailyScheduleItems ADD COLUMN Patient INTEGER;");
+        getRoutinesDao().executeRaw("ALTER TABLE DailyScheduleItems ADD COLUMN Date TEXT;");
+
+        Patient p = createDefaultPatient();
+        // SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences();
+        // prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).commit();
+
+        // Assign all routines to the default patient
+        UpdateBuilder<Routine, Long> rUpdateBuilder = getRoutinesDao().updateBuilder();
+        rUpdateBuilder.updateColumnValue(Routine.COLUMN_PATIENT, p.id());
+        rUpdateBuilder.update();
+
+        // Assign all schedules to the default patient
+        UpdateBuilder<Schedule, Long> sUpdateBuilder = getSchedulesDao().updateBuilder();
+        sUpdateBuilder.updateColumnValue(Schedule.COLUMN_PATIENT, p.id());
+        sUpdateBuilder.update();
+
+        // Assign all medicines to the default patient
+        UpdateBuilder<Medicine, Long> mUpdateBuilder = getMedicinesDao().updateBuilder();
+        mUpdateBuilder.updateColumnValue(Medicine.COLUMN_PATIENT, p.id());
+        mUpdateBuilder.update();
+
+        // Assign all DailyScheduleItems to the default patient, for today
+        UpdateBuilder<DailyScheduleItem, Long> siUpdateBuilder = getDailyScheduleItemsDao().updateBuilder();
+        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_PATIENT, p.id());
+        siUpdateBuilder.update();
+
+        // date formatter changes on v11, so we can no use LocalDatePersister here
+        String now = LocalDate.now().toString("ddMMYYYY");
+        String updateDateSql = "UPDATE DailyScheduleItems SET " + DailyScheduleItem.COLUMN_DATE + " = '" + now + "'";
+        getDailyScheduleItemsDao().executeRaw(updateDateSql);
+
+    }
+
+    /**
+     * Method that migrate schedules to the iCal format
+     */
+    private void migrateToICal() throws SQLException {
+
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Rrule TEXT;");
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Start TEXT;");
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Starttime TEXT;");
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Dose REAL;");
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Type INTEGER;");
+        getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN Cycle TEXT;");
+
+        getDailyScheduleItemsDao().executeRaw(
+                "ALTER TABLE DailyScheduleItems ADD COLUMN Schedule INTEGER;");
+        getDailyScheduleItemsDao().executeRaw(
+                "ALTER TABLE DailyScheduleItems ADD COLUMN Time TEXT;");
+
+        // update schedules
+        TransactionManager.callInTransaction(getConnectionSource(), new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                // iterate over schedules and replace days[] with rrule
+                List<Schedule> schedules = getSchedulesDao().queryForAll();
+                Log.d(TAG, "Upgrade " + schedules.size() + " schedules");
+                for (Schedule s : schedules) {
+                    if (s.rule() == null) {
+                        s.setRepetition(new RepetitionRule(RepetitionRule.DEFAULT_ICAL_VALUE));
+                    }
+                    s.setDays(s.getLegacyDays());
+
+                    if (s.allDaysSelected()) {
+                        s.setType(Schedule.SCHEDULE_TYPE_EVERYDAY);
+                    } else {
+                        s.setType(Schedule.SCHEDULE_TYPE_SOMEDAYS);
+                    }
+                    s.setStart(LocalDate.now());
+                    s.save();
+                }
+
+                return null;
+            }
+        });
+
+
     }
 
 }

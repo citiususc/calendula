@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2016 CITIUS - USC
   ~
@@ -18,35 +17,35 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Ibuprofeno"
         android:id="@+id/med_name"
-        android:textSize="18dp"
-        android:textColor="#666" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Ibuprofeno"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Every day"
+        android:textColor="#666"
+        android:textSize="18dp" />
+
+    <TextView
         android:id="@+id/med_schedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:padding="2dp"
-        android:textColor="#111"  />
+        android:text="Every day"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#111" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text=""
-            android:layout_marginLeft="16dp"
+        android:layout_marginLeft="16dp"
         android:padding="2dp"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/android_blue_dark" />
 </LinearLayout>

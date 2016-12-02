@@ -25,8 +25,8 @@
     <!--app:showAsAction="never" />-->
     <item
         android:id="@+id/action_best_day"
-        android:title="Best day"
         android:icon="@drawable/ic_event_available_white_48dp"
         android:orderInCategory="100"
+        android:title="Best day"
         app:showAsAction="always" />
 </menu>

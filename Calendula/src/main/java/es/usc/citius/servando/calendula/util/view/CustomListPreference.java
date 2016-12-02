@@ -35,7 +35,7 @@ public class CustomListPreference extends ListPreference {
         super(context);
     }
 
-    public void show(){
+    public void show() {
         showDialog(null);
     }
 

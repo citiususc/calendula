@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2016 CITIUS - USC
   ~
@@ -17,17 +16,16 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v7.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
-    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="?attr/actionBarSize"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    app:navigationContentDescription="@string/abc_action_bar_up_description"
     android:background="@color/dark_grey_home"
+    android:minHeight="?attr/actionBarSize"
+    android:paddingTop="@dimen/status_bar_height"
+    app:navigationContentDescription="@string/abc_action_bar_up_description"
     app:navigationIcon="?attr/homeAsUpIndicator"
-    app:title="@string/drawer_settings_option"
-    android:paddingTop="@dimen/status_bar_height"/>
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    app:title="@string/drawer_settings_option" />

@@ -62,32 +62,6 @@ public class AlertManager {
 
     }
 
-    private static void blockSchedulesForMedicine(final Medicine medicine) {
-
-        DB.transaction(new Callable<Object>() {
-            @Override
-            public Object call() throws Exception {
-                final List<Schedule> schedules = DB.schedules().findByMedicine(medicine);
-                Log.d(TAG, "blockSchedulesForMedicine: Found " + schedules.size() + " schedules to block.");
-                for (Schedule schedule : schedules) {
-                    blockSchedule(schedule);
-                }
-                return null;
-            }
-        });
-
-    }
-
-    private static void blockSchedule(final Schedule schedule) {
-        schedule.setState(Schedule.ScheduleState.BLOCKED);
-        schedule.save();
-        for (ScheduleItem i : schedule.items()) {
-            DB.dailyScheduleItems().removeAllFrom(i);
-        }
-        DB.dailyScheduleItems().removeAllFrom(schedule);
-        CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
-    }
-
     public static void removeAlert(final PatientAlert alert) {
 
         DB.alerts().remove(alert);
@@ -125,9 +99,35 @@ public class AlertManager {
         } else {
             for (DateTime time : schedule.hourlyItemsToday()) {
                 LocalTime timeToday = time.toLocalTime();
-                DailyAgenda.instance().addItem(schedule.patient() , schedule, timeToday);
+                DailyAgenda.instance().addItem(schedule.patient(), schedule, timeToday);
             }
         }
+        CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
+    }
+
+    private static void blockSchedulesForMedicine(final Medicine medicine) {
+
+        DB.transaction(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                final List<Schedule> schedules = DB.schedules().findByMedicine(medicine);
+                Log.d(TAG, "blockSchedulesForMedicine: Found " + schedules.size() + " schedules to block.");
+                for (Schedule schedule : schedules) {
+                    blockSchedule(schedule);
+                }
+                return null;
+            }
+        });
+
+    }
+
+    private static void blockSchedule(final Schedule schedule) {
+        schedule.setState(Schedule.ScheduleState.BLOCKED);
+        schedule.save();
+        for (ScheduleItem i : schedule.items()) {
+            DB.dailyScheduleItems().removeAllFrom(i);
+        }
+        DB.dailyScheduleItems().removeAllFrom(schedule);
         CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
     }
 

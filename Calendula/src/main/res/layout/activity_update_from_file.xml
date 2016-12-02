@@ -21,24 +21,24 @@
     android:layout_height="match_parent"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
-                android:gravity="center">
+    android:gravity="center">
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/imageView"
         android:scaleType="centerCrop"
         android:src="@color/android_blue_dark" />
 
     <TextView
+        android:id="@+id/text"
         android:layout_width="fill_parent"
         android:layout_height="50dip"
-        android:text="@string/scan_reading_qr"
-        android:id="@+id/text"
+        android:layout_centerInParent="true"
         android:gravity="center"
+        android:text="@string/scan_reading_qr"
         android:textColor="#fff"
         android:textSize="20dp"
-        android:textStyle="bold"
-        android:layout_centerInParent="true"/>
+        android:textStyle="bold" />
 
 </RelativeLayout>

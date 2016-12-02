@@ -80,27 +80,19 @@ public class WebViewActivity extends CalendulaActivity {
     private static final String TAG = "WebViewActivity";
 
     private static final String HTTP_ERROR_REGEXP = "^.*?(404|403|[nN]ot [fF]ound).*$";
-
-    private WebView webView;
-
-    private String url;
-
-    // switch to disable JavaScript in API<17
-    private boolean isJavaScriptInsecure = false;
-
     // reference to the request params
     WebViewRequest request;
-
     // handler to access activity methods from javascript interface
     Handler handler;
+    MaterialStyledDialog loadingDialog;
+    View toolbarSahdow;
+    int color;
 
     //ProgressDialog progressDialog;
-
-    MaterialStyledDialog loadingDialog;
-
-    View toolbarSahdow;
-
-    int color;
+    private WebView webView;
+    private String url;
+    // switch to disable JavaScript in API<17
+    private boolean isJavaScriptInsecure = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,6 +160,71 @@ public class WebViewActivity extends CalendulaActivity {
 
 
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_webview, menu);
+
+        IconicsDrawable icon = new IconicsDrawable(this, CommunityMaterial.Icon.cmd_share_variant)
+                .sizeDp(48)
+                .paddingDp(6)
+                .color(Color.WHITE);
+
+        menu.getItem(0).setIcon(icon);
+
+        IconicsDrawable icon2 = new IconicsDrawable(this, CommunityMaterial.Icon.cmd_web)
+                .sizeDp(48)
+                .paddingDp(6)
+                .color(Color.WHITE);
+
+        menu.getItem(1).setIcon(icon2);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_share_link:
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.putExtra(Intent.EXTRA_TEXT,
+                        url);
+                i.putExtra(Intent.EXTRA_SUBJECT, webView.getTitle());
+                i.setType("text/plain");
+                startActivity(Intent.createChooser(i, getString(R.string.title_share_link)));
+                return true;
+            case R.id.action_open_with_browser:
+                Intent i1 = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(i1);
+                return true;
+            default:
+                onBackPressed();
+                return true;
+        }
+    }
+
+    /**
+     * Whether a request needs html access after loading, that is, whether is must be
+     * cached or processed and it has not been cached yet
+     *
+     * @param request the request
+     */
+    public boolean needsHtmlAccess(WebViewRequest request) {
+
+        if (isCached()) {
+            return false;
+        } else if (request.needsPostprocessing()) {
+            return true;
+        }
+        return !isJavaScriptInsecure &&
+                request.cacheType.equals(WebViewRequest.CacheType.DOWNLOAD_CACHE);
     }
 
     private void setupWebView(final WebViewRequest request) {
@@ -295,7 +352,7 @@ public class WebViewActivity extends CalendulaActivity {
         Log.d(TAG, "Enabling cache with max size " + CACHE_MAX_SIZE + " bytes");
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setAppCacheMaxSize(CACHE_MAX_SIZE);
-        webView.getSettings().setAppCachePath(getFilesDir().getPath()+ "data/" + getPackageName() + "/cache");
+        webView.getSettings().setAppCachePath(getFilesDir().getPath() + "data/" + getPackageName() + "/cache");
         webView.getSettings().setAllowFileAccess(true);
         webView.getSettings().setAppCacheEnabled(true);
         webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
@@ -306,54 +363,13 @@ public class WebViewActivity extends CalendulaActivity {
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onBackPressed() {
-        finish();
+    /**
+     * Interface that must be implemented in order to access the page html
+     * and make changes before it is displayed
+     */
+    public interface HtmlPostprocessor {
+        String process(String html);
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_webview, menu);
-
-        IconicsDrawable icon = new IconicsDrawable(this, CommunityMaterial.Icon.cmd_share_variant)
-                .sizeDp(48)
-                .paddingDp(6)
-                .color(Color.WHITE);
-
-        menu.getItem(0).setIcon(icon);
-
-        IconicsDrawable icon2 = new IconicsDrawable(this, CommunityMaterial.Icon.cmd_web)
-                .sizeDp(48)
-                .paddingDp(6)
-                .color(Color.WHITE);
-
-        menu.getItem(1).setIcon(icon2);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_share_link:
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.putExtra(Intent.EXTRA_TEXT,
-                        url);
-                i.putExtra(Intent.EXTRA_SUBJECT, webView.getTitle());
-                i.setType("text/plain");
-                startActivity(Intent.createChooser(i, getString(R.string.title_share_link)));
-                return true;
-            case R.id.action_open_with_browser:
-                Intent i1 = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(i1);
-                return true;
-            default:
-                onBackPressed();
-                return true;
-        }
-    }
-
 
     /**
      * Encapsulates a request for a {@link WebViewActivity}.
@@ -361,6 +377,17 @@ public class WebViewActivity extends CalendulaActivity {
      */
     public static class WebViewRequest implements Parcelable {
 
+        public static final Creator<WebViewRequest> CREATOR = new Creator<WebViewRequest>() {
+            @Override
+            public WebViewRequest createFromParcel(Parcel in) {
+                return new WebViewRequest(in);
+            }
+
+            @Override
+            public WebViewRequest[] newArray(int size) {
+                return new WebViewRequest[size];
+            }
+        };
         private final String url;
         private String title = null;
         private String loadingMessage = null;
@@ -373,13 +400,6 @@ public class WebViewActivity extends CalendulaActivity {
         private String customCss = null;
         private Map<String, String> customCssOverrides = null;
         private Duration cacheTTL;
-
-
-        public enum CacheType {
-            NO_CACHE,
-            APP_CACHE,
-            DOWNLOAD_CACHE
-        }
 
         public WebViewRequest(String url) {
             this.url = url;
@@ -453,18 +473,6 @@ public class WebViewActivity extends CalendulaActivity {
             return 0;
         }
 
-        public static final Creator<WebViewRequest> CREATOR = new Creator<WebViewRequest>() {
-            @Override
-            public WebViewRequest createFromParcel(Parcel in) {
-                return new WebViewRequest(in);
-            }
-
-            @Override
-            public WebViewRequest[] newArray(int size) {
-                return new WebViewRequest[size];
-            }
-        };
-
         public String getUrl() {
             return url;
         }
@@ -499,10 +507,6 @@ public class WebViewActivity extends CalendulaActivity {
             return connectionErrorMessage;
         }
 
-        public String getNotFoundErrorMessage() {
-            return notFoundErrorMessage;
-        }
-
         /**
          * Set a custom error message in case the page can't be loaded for connection reasons. A default message will be used if <code>null</code>.
          *
@@ -510,6 +514,10 @@ public class WebViewActivity extends CalendulaActivity {
          */
         public void setConnectionErrorMessage(String errorMessage) {
             this.connectionErrorMessage = errorMessage;
+        }
+
+        public String getNotFoundErrorMessage() {
+            return notFoundErrorMessage;
         }
 
         /**
@@ -533,7 +541,6 @@ public class WebViewActivity extends CalendulaActivity {
         public void setJavaScriptEnabled(boolean javaScriptEnabled) {
             this.javaScriptEnabled = javaScriptEnabled;
         }
-
 
         public boolean needsPostprocessing() {
             return this.postProcessorClassname != null;
@@ -610,6 +617,12 @@ public class WebViewActivity extends CalendulaActivity {
          */
         public void setCacheTTL(Duration cacheTTL) {
             this.cacheTTL = cacheTTL;
+        }
+
+        public enum CacheType {
+            NO_CACHE,
+            APP_CACHE,
+            DOWNLOAD_CACHE
         }
     }
 
@@ -694,24 +707,6 @@ public class WebViewActivity extends CalendulaActivity {
         }
     }
 
-    /**
-     * Whether a request needs html access after loading, that is, whether is must be
-     * cached or processed and it has not been cached yet
-     *
-     * @param request the request
-     */
-    public boolean needsHtmlAccess(WebViewRequest request) {
-
-        if (isCached()) {
-            return false;
-        } else if (request.needsPostprocessing()) {
-            return true;
-        }
-        return !isJavaScriptInsecure &&
-                request.cacheType.equals(WebViewRequest.CacheType.DOWNLOAD_CACHE);
-    }
-
-
     private class SimpleJSCacheInterface {
         private Context ctx;
 
@@ -778,13 +773,5 @@ public class WebViewActivity extends CalendulaActivity {
             // dismiss the loading dialog
 
         }
-    }
-
-    /**
-     * Interface that must be implemented in order to access the page html
-     * and make changes before it is displayed
-     */
-    public interface HtmlPostprocessor {
-        String process(String html);
     }
 }

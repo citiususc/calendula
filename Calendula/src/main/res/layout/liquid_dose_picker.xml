@@ -19,30 +19,28 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
     <TextView
-        android:text="ML"
+        android:id="@+id/seek_bar_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/seek_bar_text"
-        android:textSize="30sp"
         android:layout_centerInParent="true"
-        android:layout_margin="20dp"/>
+        android:layout_margin="20dp"
+        android:text="ML"
+        android:textSize="30sp" />
 
     <SeekBar
+        android:id="@+id/seekBar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBar"
         android:layout_below="@id/seek_bar_text"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"/>
-
-
+        android:layout_marginRight="20dp" />
 
 
 </RelativeLayout>

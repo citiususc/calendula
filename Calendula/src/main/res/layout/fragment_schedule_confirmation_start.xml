@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2016 CITIUS - USC
   ~
@@ -24,51 +23,50 @@
 
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:id="@+id/imageView"
-        android:src="@drawable/ic_visibility_black_48dp"
+        android:layout_marginTop="100dp"
         android:alpha="0.8"
-        android:layout_marginTop="100dp" />
+        android:src="@drawable/ic_visibility_black_48dp" />
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/textView"
         android:layout_below="@+id/imageView"
         android:layout_centerHorizontal="true"
-        android:padding="30dp"
         android:gravity="center"
-        android:textColor="#666"
-        android:text="@string/scan_review_text" />
+        android:padding="30dp"
+        android:text="@string/scan_review_text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#666" />
 
     <Button
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/scan_review_prescriptions_start"
-        android:id="@+id/button"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_marginBottom="20dp"
-        android:layout_marginRight="20dp" />
+        android:layout_marginRight="20dp"
+        android:text="@string/scan_review_prescriptions_start" />
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/scan_review_prescriptions_title"
-        android:id="@+id/textView2"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/button"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:gravity="center"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="20dp"
-        android:textStyle="bold"
+        android:layout_toLeftOf="@+id/button"
+        android:layout_toStartOf="@+id/button"
+        android:gravity="center"
+        android:text="@string/scan_review_prescriptions_title"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#222"
-            android:layout_toLeftOf="@+id/button"
-            />
+        android:textStyle="bold" />
 
 </RelativeLayout>

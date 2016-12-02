@@ -57,7 +57,7 @@
 
 
     <LinearLayout
-            android:layout_width="wrap_content"
+        android:layout_width="wrap_content"
 
         android:layout_height="wrap_content"
         android:layout_below="@id/pickers_layout"
@@ -88,7 +88,7 @@
             ppv:ppvStrokeWidth="1dp" />
 
         <TextView
-                android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"

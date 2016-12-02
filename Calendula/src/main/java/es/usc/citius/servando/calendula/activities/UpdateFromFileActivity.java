@@ -48,21 +48,21 @@ public class UpdateFromFileActivity extends ActionBarActivity {
             getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
         }
 
-        try{
+        try {
             String fileContents = readFile();
             Log.d(TAG, "Text from file: " + fileContents);
 
-            if(fileContents!=null){
+            if (fileContents != null) {
                 Intent intent = new Intent(getApplicationContext(), ConfirmSchedulesActivity.class);
                 Bundle b = new Bundle();
                 b.putString("qr_data", fileContents);
                 intent.putExtras(b);
                 startActivity(intent);
-            }else{
-                Toast.makeText(this,"El fichero de actualización no es válido!", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "El fichero de actualización no es válido!", Toast.LENGTH_LONG).show();
             }
             finish();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             finish();
         }
@@ -70,7 +70,7 @@ public class UpdateFromFileActivity extends ActionBarActivity {
     }
 
 
-    private String readFile(){
+    private String readFile() {
         Intent intent = getIntent();
         InputStream is = null;
         String fullPath = null;

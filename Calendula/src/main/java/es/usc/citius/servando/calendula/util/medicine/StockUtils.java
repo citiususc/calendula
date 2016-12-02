@@ -50,70 +50,69 @@ public class StockUtils {
 
     private static final String TAG = "StockUtils";
 
-    public static String getReadableStockDuration(LocalDate estimatedEnd){
+    public static String getReadableStockDuration(LocalDate estimatedEnd) {
         String response;
-        if(estimatedEnd != null){
+        if (estimatedEnd != null) {
             Log.d(TAG, "updateStockText: esitmado " + estimatedEnd.toString("dd/MM"));
             long days = new Duration(DateTime.now().withTimeAtStartOfDay(), estimatedEnd.toDateTimeAtStartOfDay()).getStandardDays();
-            if(days < 21){
+            if (days < 21) {
                 response = "Suficiente para " + days + " días con la pauta actual";
-            }else{
-                response = "Suficiente para " + (int)(days/7) + " semanas y " + (days%7) + " días con la pauta actual";
+            } else {
+                response = "Suficiente para " + (int) (days / 7) + " semanas y " + (days % 7) + " días con la pauta actual";
             }
-        }else{
+        } else {
             response = "Suficiente para más de tres meses";
         }
         return response;
 
     }
 
-    public static  LocalDate getEstimatedStockEnd(Medicine m) {
+    public static LocalDate getEstimatedStockEnd(Medicine m) {
         return getEstimatedStockEnd(DB.schedules().findByMedicine(m), m.stock());
     }
 
 
-    public static Long getEstimatedStockDays(Medicine m){
+    public static Long getEstimatedStockDays(Medicine m) {
         LocalDate estimatedEnd = getEstimatedStockEnd(m);
-        if(estimatedEnd!=null) {
+        if (estimatedEnd != null) {
             return new Duration(DateTime.now().withTimeAtStartOfDay(), estimatedEnd.toDateTimeAtStartOfDay()).getStandardDays();
         }
         return null;
     }
 
 
-
-    public static  LocalDate getEstimatedStockEnd(List<Schedule> schedules , float stock) {
+    public static LocalDate getEstimatedStockEnd(List<Schedule> schedules, float stock) {
         LocalDate current = LocalDate.now();
         LocalDate end = LocalDate.now().plusMonths(3);
-        Duration duration = new Duration(current.toDateTimeAtStartOfDay(),end.toDateTimeAtStartOfDay());
+        Duration duration = new Duration(current.toDateTimeAtStartOfDay(), end.toDateTimeAtStartOfDay());
 
         float virtualStock = stock;
 
-        Log.d(TAG, "getEstimatedStockEnd: virtual stock " + virtualStock );
+        Log.d(TAG, "getEstimatedStockEnd: virtual stock " + virtualStock);
 
-        for(int i = 0; i < duration.getStandardDays(); i++){
-            for(Schedule s : schedules){
-                if(s.enabledForDate(current)){
-                    if(s.repeatsHourly()){
+        for (int i = 0; i < duration.getStandardDays(); i++) {
+            for (Schedule s : schedules) {
+                if (s.enabledForDate(current)) {
+                    if (s.repeatsHourly()) {
                         virtualStock = virtualStock - (s.hourlyItemsAt(current.toDateTimeAtStartOfDay()).size() * s.dose());
-                    }else{
+                    } else {
                         List<ScheduleItem> items = s.items();
-                        for(ScheduleItem item : items){
+                        for (ScheduleItem item : items) {
                             virtualStock = virtualStock - item.dose();
                         }
                     }
                 }
                 Log.d(TAG, "getEstimatedStockEnd: virtual stock " + virtualStock + " on " + current.toString("dd/MM"));
             }
-            if(virtualStock < 0){
-                return  current;
+            if (virtualStock < 0) {
+                return current;
             }
             current = current.plusDays(1);
         }
         return null;
     }
 
-    public static void showStockRunningOutDialog(final Context context, final Medicine m, Long days){
+    public static void showStockRunningOutDialog(final Context context, final Medicine m, Long days) {
 
         String msg = "Quedan " + m.stock().intValue() + " " + m.presentation().units(context.getResources()) + " de " + m.name() + ", y ";
         msg += "se acabarán en " + days + " días con la pauta actual.";
@@ -133,13 +132,15 @@ public class StockUtils {
                         Intent i = new Intent(context, MedicinesActivity.class);
                         i.putExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, m.getId());
                         context.startActivity(i);
-                    }})
+                    }
+                })
                 .setNeutralText("Entendido")
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            dialog.dismiss();
-                    }})
+                        dialog.dismiss();
+                    }
+                })
                 .show();
 
     }

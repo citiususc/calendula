@@ -42,12 +42,9 @@ public class HtmlCacheManager {
 
 
     public static final Long DEFAULT_TTL_MILLIS = Duration.standardMinutes(5).getMillis(); //5 minutes
-
-    private static HtmlCacheManager theInstance = null;
-
-    private Dao<HtmlCacheEntry, Long> dao = null;
-
     private final static String TAG = "HtmlCacheManager";
+    private static HtmlCacheManager theInstance = null;
+    private Dao<HtmlCacheEntry, Long> dao = null;
 
     private HtmlCacheManager() {
     }
@@ -59,47 +56,11 @@ public class HtmlCacheManager {
         return theInstance;
     }
 
-    private HtmlCacheEntry retrieve(final int hashCode) {
-        final Dao<HtmlCacheEntry, Long> dao = getDao();
-        try {
-            List<HtmlCacheEntry> htmlCacheEntries = dao.queryForEq(HtmlCacheEntry.COLUMN_HASHCODE, hashCode);
-            if (htmlCacheEntries.isEmpty()) {
-                return null;
-            } else if (htmlCacheEntries.size() > 1) {
-                Log.w(TAG, "Inconsistent state of cache: hashcode" + hashCode + " is not unique. Deleting all copies.");
-                for (HtmlCacheEntry entry : htmlCacheEntries) {
-                    remove(entry);
-                }
-                return null;
-            } else {
-                if (checkTtl(htmlCacheEntries.get(0))) {
-                    return htmlCacheEntries.get(0);
-                } else {
-                    Log.d(TAG, "retrieve: Deleting invalid entry with hashCode: " + hashCode);
-                    remove(htmlCacheEntries.get(0));
-                    return null;
-                }
-            }
-        } catch (SQLException e) {
-            Log.e(TAG, "retrieve: ", e);
-            return null;
-        }
-    }
-
-
-    private boolean checkTtl(HtmlCacheEntry entry) {
-        final Date timestamp = entry.getTimestamp();
-        long diff = DateTime.now().getMillis() - timestamp.getTime();
-
-        return diff < entry.getTtl();
-    }
-
     public boolean isCached(final String url) {
         final int hashCode = url.hashCode();
         HtmlCacheEntry entry = retrieve(hashCode);
         return entry != null;
     }
-
 
     public String get(final String url) {
         final int hashCode = url.hashCode();
@@ -139,25 +100,6 @@ public class HtmlCacheManager {
         }
     }
 
-    private boolean remove(HtmlCacheEntry entry) {
-        try {
-            return getDao().delete(entry) == 1;
-        } catch (SQLException e) {
-            Log.e(TAG, "remove: ", e);
-            return false;
-        }
-    }
-
-    private void clearCache() {
-        try {
-            for (HtmlCacheEntry entry : getDao().queryForAll()) {
-                remove(entry);
-            }
-        } catch (SQLException e) {
-            Log.e(TAG, "clearCache: ", e);
-        }
-    }
-
     /**
      * Removes all invalid entries from cache.
      *
@@ -186,6 +128,59 @@ public class HtmlCacheManager {
             return count;
         } catch (Exception e) {
             return -1;
+        }
+    }
+
+    private HtmlCacheEntry retrieve(final int hashCode) {
+        final Dao<HtmlCacheEntry, Long> dao = getDao();
+        try {
+            List<HtmlCacheEntry> htmlCacheEntries = dao.queryForEq(HtmlCacheEntry.COLUMN_HASHCODE, hashCode);
+            if (htmlCacheEntries.isEmpty()) {
+                return null;
+            } else if (htmlCacheEntries.size() > 1) {
+                Log.w(TAG, "Inconsistent state of cache: hashcode" + hashCode + " is not unique. Deleting all copies.");
+                for (HtmlCacheEntry entry : htmlCacheEntries) {
+                    remove(entry);
+                }
+                return null;
+            } else {
+                if (checkTtl(htmlCacheEntries.get(0))) {
+                    return htmlCacheEntries.get(0);
+                } else {
+                    Log.d(TAG, "retrieve: Deleting invalid entry with hashCode: " + hashCode);
+                    remove(htmlCacheEntries.get(0));
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            Log.e(TAG, "retrieve: ", e);
+            return null;
+        }
+    }
+
+    private boolean checkTtl(HtmlCacheEntry entry) {
+        final Date timestamp = entry.getTimestamp();
+        long diff = DateTime.now().getMillis() - timestamp.getTime();
+
+        return diff < entry.getTtl();
+    }
+
+    private boolean remove(HtmlCacheEntry entry) {
+        try {
+            return getDao().delete(entry) == 1;
+        } catch (SQLException e) {
+            Log.e(TAG, "remove: ", e);
+            return false;
+        }
+    }
+
+    private void clearCache() {
+        try {
+            for (HtmlCacheEntry entry : getDao().queryForAll()) {
+                remove(entry);
+            }
+        } catch (SQLException e) {
+            Log.e(TAG, "clearCache: ", e);
         }
     }
 

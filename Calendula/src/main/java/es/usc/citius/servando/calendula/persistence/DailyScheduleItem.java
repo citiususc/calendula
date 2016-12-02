@@ -83,6 +83,18 @@ public class DailyScheduleItem {
         this.date = LocalDate.now();
     }
 
+    public static DailyScheduleItem findById(long id) {
+        return DB.dailyScheduleItems().findById(id);
+    }
+
+    public static List<DailyScheduleItem> findAll() {
+        return DB.dailyScheduleItems().findAll();
+    }
+
+    public static DailyScheduleItem findByScheduleItem(ScheduleItem item) {
+        return DB.dailyScheduleItems().findByScheduleItem(item);
+    }
+
     public Long getId() {
         return id;
     }
@@ -158,19 +170,6 @@ public class DailyScheduleItem {
                 ", time=" + time +
                 ", date=" + date +
                 '}';
-    }
-
-    public static DailyScheduleItem findById(long id) {
-        return DB.dailyScheduleItems().findById(id);
-    }
-
-
-    public static List<DailyScheduleItem> findAll() {
-        return DB.dailyScheduleItems().findAll();
-    }
-
-    public static DailyScheduleItem findByScheduleItem(ScheduleItem item) {
-        return DB.dailyScheduleItems().findByScheduleItem(item);
     }
 
     public void save() {

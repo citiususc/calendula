@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2016 CITIUS - USC
   ~
@@ -47,7 +46,6 @@
         <item name="colorAccent">@color/android_blue_darker</item>
 
     </style>
-
 
 
     <!-- just defines top layer "Animation" -->
@@ -193,11 +191,11 @@
     </style>
 
     <!--<style >-->
-        <!--<item name="android:textColor">@color/white</item>-->
-        <!--<item name="android:textStyle">bold</item>-->
-        <!--<item name="android:textSize">15dp</item>-->
-        <!--<item name="android:height">@dimen/normal_button_height</item>-->
-        <!--<item name="android:background">@color/transparent</item>-->
+    <!--<item name="android:textColor">@color/white</item>-->
+    <!--<item name="android:textStyle">bold</item>-->
+    <!--<item name="android:textSize">15dp</item>-->
+    <!--<item name="android:height">@dimen/normal_button_height</item>-->
+    <!--<item name="android:background">@color/transparent</item>-->
     <!--</style>-->
 
 
@@ -216,7 +214,7 @@
     </style>
 
 
-    <style name="AppTheme.light_button" >
+    <style name="AppTheme.light_button">
         <item name="android:background">@drawable/shape_list_item</item>
     </style>
 

@@ -30,7 +30,7 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
 /**
- * 
+ *
  */
 public class AdherenceSummaryItem {
 

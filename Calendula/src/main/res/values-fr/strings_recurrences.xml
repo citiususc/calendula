@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2016 CITIUS - USC
   ~
@@ -30,7 +29,7 @@
     <plurals name="recurrence_interval_daily">
         <!-- Singular form [CHAR LIMIT=30] -->
 
-<!-- EN QUANTITY=ONE PONDRIA UNICAMENTE "Tous les jours" sin cifra, LO MISMO PARA SEMANA, MES Y AÑO -->
+        <!-- EN QUANTITY=ONE PONDRIA UNICAMENTE "Tous les jours" sin cifra, LO MISMO PARA SEMANA, MES Y AÑO -->
 
         <item quantity="one">Tous les <xliff:g id="count">%d</xliff:g> jours</item>
         <!-- Plural form [CHAR LIMIT=30] -->

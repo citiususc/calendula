@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2016 CITIUS - USC
   ~
@@ -32,8 +31,8 @@
             android:layout_height="1px"
 
             android:layout_alignParentBottom="true"
-            android:background="#efefef"
-            android:layout_marginLeft="72dp"/>
+            android:layout_marginLeft="72dp"
+            android:background="#efefef" />
 
 
         <ImageButton
@@ -46,15 +45,14 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:background="@null"
-            android:scaleType="fitStart"
-            />
+            android:scaleType="fitStart" />
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_margin="16dp"
             android:layout_toRightOf="@+id/imageButton"
-            android:layout_margin="16dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/medicines_list_item_name"
@@ -65,11 +63,11 @@
                 android:layout_toLeftOf="@+id/drive_icon"
                 android:layout_toRightOf="@+id/imageButton"
                 android:layout_toStartOf="@+id/drive_icon"
+                android:gravity="top"
                 android:text="Atrovent with another thing here"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#222"
-                android:textSize="18sp"
-                android:gravity="top"/>
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/stock_info"
@@ -78,10 +76,10 @@
                 android:layout_alignLeft="@+id/medicines_list_item_name"
                 android:layout_alignStart="@+id/medicines_list_item_name"
                 android:layout_below="@+id/medicines_list_item_name"
+                android:layout_marginTop="2dp"
                 android:text="@string/no_stock_info_msg"
                 android:textColor="@color/agenda_item_title"
-                android:textSize="15dp"
-                android:layout_marginTop="2dp"/>
+                android:textSize="15dp" />
 
         </LinearLayout>
 
@@ -96,8 +94,8 @@
             android:layout_marginTop="16dp"
             android:alpha="0.9"
             android:background="@drawable/simple_highlight_click_selector"
-            android:src="@drawable/icprospect"
-            android:padding="0dp"/>
+            android:padding="0dp"
+            android:src="@drawable/icprospect" />
 
     </RelativeLayout>
 

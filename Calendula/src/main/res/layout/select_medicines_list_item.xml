@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2016 CITIUS - USC
   ~
@@ -49,8 +48,7 @@
             android:background="@drawable/select_medicines_selected_background"
             android:visibility="invisible" />
 
-        <com.makeramen.RoundedImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imageView2"
             android:layout_width="55dp"
             android:layout_height="55dp"
@@ -92,13 +90,12 @@
             android:layout_height="fill_parent"
             android:layout_marginLeft="16dp"
             android:layout_toEndOf="@+id/imageButton"
+            android:layout_toRightOf="@+id/imageButton"
             android:fontFamily="sans-serif-light"
             android:gravity="center"
             android:text="Atrovent"
             android:textColor="#111"
-            android:textSize="20sp"
-                android:layout_toRightOf="@+id/imageButton"
-                />
+            android:textSize="20sp" />
 
     </RelativeLayout>
 

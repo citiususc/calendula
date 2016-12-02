@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2016 CITIUS - USC
   ~
@@ -18,34 +17,34 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
-            android:src="@drawable/ic_intro_multipat"/>
+        android:src="@drawable/ic_intro_multipat" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginTop="30dp"
         android:text="@string/intro_multipat_title"
-            android:layout_marginTop="30dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#fff"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/intro_multipat_text"
-        android:id="@+id/textView10"
-        android:padding="20dp"
         android:alpha="0.9"
+        android:padding="20dp"
+        android:text="@string/intro_multipat_text"
         android:textAlignment="center"
-        android:textColor="#fff"/>
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#fff" />
 
 </LinearLayout>

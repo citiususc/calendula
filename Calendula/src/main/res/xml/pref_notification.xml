@@ -53,13 +53,13 @@
         android:title="@string/pref_title_reminder_window" />
 
     <!--<ListPreference-->
-        <!--android:defaultValue="3"-->
-        <!--android:entries="@array/pref_check_window_margin_titles"-->
-        <!--android:entryValues="@array/pref_check_window_margin_values"-->
-        <!--android:key="check_window_margin"-->
-        <!--android:negativeButtonText="@null"-->
-        <!--android:positiveButtonText="@null"-->
-        <!--android:title="@string/pref_check_window_margin" />-->
+    <!--android:defaultValue="3"-->
+    <!--android:entries="@array/pref_check_window_margin_titles"-->
+    <!--android:entryValues="@array/pref_check_window_margin_values"-->
+    <!--android:key="check_window_margin"-->
+    <!--android:negativeButtonText="@null"-->
+    <!--android:positiveButtonText="@null"-->
+    <!--android:title="@string/pref_check_window_margin" />-->
 
     <CheckBoxPreference
         android:defaultValue="false"
@@ -75,9 +75,9 @@
         android:title="@string/pref_notification_tone" />
 
     <CheckBoxPreference
+        android:defaultValue="true"
         android:key="alarm_pickup_notifications"
-        android:title="@string/pref_title_pickup_notification"
-        android:defaultValue="true" />
+        android:title="@string/pref_title_pickup_notification" />
 
 
 </PreferenceScreen>

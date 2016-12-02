@@ -64,6 +64,32 @@ public class BaseModule extends CalendulaModule {
         return ID;
     }
 
+    public void initializeDatabase(Context ctx) {
+        DB.init(ctx);
+        DBRegistry.init(ctx);
+        try {
+            if (DB.patients().countOf() == 1) {
+                Patient p = DB.patients().getDefault();
+                prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).apply();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void setupUpdateDailyAgendaAlarm(Context ctx) {
+        // intent our receiver will receive
+        Intent intent = new Intent(ctx, AlarmReceiver.class);
+        AlarmIntentParams params = AlarmIntentParams.forDailyUpdate();
+        AlarmScheduler.setAlarmParams(intent, params);
+        PendingIntent dailyAlarm = PendingIntent.getBroadcast(ctx, params.hashCode(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, new LocalTime(0, 0).toDateTimeToday().getMillis(), AlarmManager.INTERVAL_DAY, dailyAlarm);
+        }
+    }
+
     @Override
     void onApplicationStartup(Context ctx) {
         prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -91,32 +117,6 @@ public class BaseModule extends CalendulaModule {
         //initialize job engine
         JobManager.create(ctx).addJobCreator(new CalendulaJobCreator());
         PurgeCacheJob.scheduleJob();
-    }
-
-    public void initializeDatabase(Context ctx) {
-        DB.init(ctx);
-        DBRegistry.init(ctx);
-        try {
-            if (DB.patients().countOf() == 1) {
-                Patient p = DB.patients().getDefault();
-                prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).apply();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void setupUpdateDailyAgendaAlarm(Context ctx) {
-        // intent our receiver will receive
-        Intent intent = new Intent(ctx, AlarmReceiver.class);
-        AlarmIntentParams params = AlarmIntentParams.forDailyUpdate();
-        AlarmScheduler.setAlarmParams(intent, params);
-        PendingIntent dailyAlarm = PendingIntent.getBroadcast(ctx, params.hashCode(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, new LocalTime(0, 0).toDateTimeToday().getMillis(), AlarmManager.INTERVAL_DAY, dailyAlarm);
-        }
     }
 
     private void updatePreferences(Context ctx) {

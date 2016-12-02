@@ -480,5 +480,4 @@ public abstract class GenericDao<T, I> implements Dao<T, I> {
     }
 
 
-
 }

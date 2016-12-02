@@ -40,51 +40,17 @@ import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 
 /**
-* Migrate local dates from ddMMYYYY to YYYYMMdd to make them sortable
+ * Migrate local dates from ddMMYYYY to YYYYMMdd to make them sortable
  * Local dates are present on DailyScheduleItem, Schedule, and PickupInfo
-*/
+ */
 public class LocalDateMigrationHelper {
 
     private static final String TAG = "LocalDateMigration";
 
-    @DatabaseTable(tableName = "Schedules")
-    public static class ScheduleStub{
-        @DatabaseField(columnName = Schedule.COLUMN_ID, generatedId = true)
-        public Long id;
-        @DatabaseField(columnName = Schedule.COLUMN_START, persisterClass = OldLocalDatePersister.class)
-        public LocalDate start;
-        // no args constructor
-        public ScheduleStub(){}
-    }
-
-    @DatabaseTable(tableName = "DailyScheduleItems")
-    public static class DailyScheduleItemStub{
-        @DatabaseField(columnName = DailyScheduleItem.COLUMN_ID, generatedId = true)
-        public Long id;
-        @DatabaseField(columnName = DailyScheduleItem.COLUMN_DATE, persisterClass = OldLocalDatePersister.class)
-        public LocalDate date;
-        // no args constructor
-        public DailyScheduleItemStub(){}
-    }
-
-    @DatabaseTable(tableName = "Pickups")
-    public static class PickupInfoStub{
-        @DatabaseField(columnName = PickupInfo.COLUMN_ID, generatedId = true)
-        public Long id;
-
-        @DatabaseField(columnName = PickupInfo.COLUMN_FROM, persisterClass = OldLocalDatePersister.class)
-        public LocalDate from;
-
-        @DatabaseField(columnName = PickupInfo.COLUMN_TO, persisterClass = OldLocalDatePersister.class)
-        public LocalDate to;
-        // no args constructor
-        public PickupInfoStub(){}
-    }
-
     public static void migrateLocalDates(DatabaseHelper helper) throws SQLException {
         // get stub DAOs
         Dao<ScheduleStub, Long> schedulesDao = helper.getDao(ScheduleStub.class);
-        Dao<DailyScheduleItemStub, Long> dailyItemsDao= helper.getDao(DailyScheduleItemStub.class);
+        Dao<DailyScheduleItemStub, Long> dailyItemsDao = helper.getDao(DailyScheduleItemStub.class);
         Dao<PickupInfoStub, Long> pickupsDao = helper.getDao(PickupInfoStub.class);
         Log.d(TAG, "Migrating local dates...");
         // update Schedule table local dates
@@ -94,17 +60,57 @@ public class LocalDateMigrationHelper {
         }
         Log.d(TAG, "Schedules table: done.");
         // update DailyScheduleItem table local dates
-        List<DailyScheduleItemStub> dailyStubs= dailyItemsDao.queryForAll();
+        List<DailyScheduleItemStub> dailyStubs = dailyItemsDao.queryForAll();
         for (DailyScheduleItemStub d : dailyStubs) {
             dailyItemsDao.update(d);
         }
         Log.d(TAG, "DailyScheduleItems table: done.");
         // update PickupInfo  table local dates
-        List<PickupInfoStub> pickups= pickupsDao.queryForAll();
+        List<PickupInfoStub> pickups = pickupsDao.queryForAll();
         for (PickupInfoStub p : pickups) {
             pickupsDao.update(p);
         }
         Log.d(TAG, "PickupsInfo table: done.");
+    }
+
+    @DatabaseTable(tableName = "Schedules")
+    public static class ScheduleStub {
+        @DatabaseField(columnName = Schedule.COLUMN_ID, generatedId = true)
+        public Long id;
+        @DatabaseField(columnName = Schedule.COLUMN_START, persisterClass = OldLocalDatePersister.class)
+        public LocalDate start;
+
+        // no args constructor
+        public ScheduleStub() {
+        }
+    }
+
+    @DatabaseTable(tableName = "DailyScheduleItems")
+    public static class DailyScheduleItemStub {
+        @DatabaseField(columnName = DailyScheduleItem.COLUMN_ID, generatedId = true)
+        public Long id;
+        @DatabaseField(columnName = DailyScheduleItem.COLUMN_DATE, persisterClass = OldLocalDatePersister.class)
+        public LocalDate date;
+
+        // no args constructor
+        public DailyScheduleItemStub() {
+        }
+    }
+
+    @DatabaseTable(tableName = "Pickups")
+    public static class PickupInfoStub {
+        @DatabaseField(columnName = PickupInfo.COLUMN_ID, generatedId = true)
+        public Long id;
+
+        @DatabaseField(columnName = PickupInfo.COLUMN_FROM, persisterClass = OldLocalDatePersister.class)
+        public LocalDate from;
+
+        @DatabaseField(columnName = PickupInfo.COLUMN_TO, persisterClass = OldLocalDatePersister.class)
+        public LocalDate to;
+
+        // no args constructor
+        public PickupInfoStub() {
+        }
     }
 
     /**
@@ -113,11 +119,16 @@ public class LocalDateMigrationHelper {
      */
     public static class OldLocalDatePersister extends BaseDataType {
 
+        private static final OldLocalDatePersister singleton = new OldLocalDatePersister();
         String readFormat = "ddMMYYYY";
         String writeFormat = "YYYYMMdd";
 
         public OldLocalDatePersister() {
             super(SqlType.STRING, new Class<?>[]{LocalDate.class});
+        }
+
+        public static OldLocalDatePersister getSingleton() {
+            return singleton;
         }
 
         @Override
@@ -138,12 +149,6 @@ public class LocalDateMigrationHelper {
         @Override
         public Object javaToSqlArg(FieldType fieldType, Object javaObject) throws SQLException {
             return ((LocalDate) javaObject).toString(writeFormat);
-        }
-
-        private static final OldLocalDatePersister singleton = new OldLocalDatePersister();
-
-        public static OldLocalDatePersister getSingleton() {
-            return singleton;
         }
     }
 }

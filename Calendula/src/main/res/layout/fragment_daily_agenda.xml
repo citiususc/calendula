@@ -29,14 +29,13 @@
 
 
         <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv"
-                android:layout_gravity="fill_vertical"
-                android:fillViewport="true"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:clickable="true"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                />
+            android:id="@+id/rv"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="fill_vertical"
+            android:clickable="true"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </FrameLayout>
 
@@ -46,19 +45,20 @@
         android:layout_height="fill_parent"
         android:background="#eeffffff"
         android:visibility="gone">
-        <include layout="@layout/daily_view_empty_placeholder"/>
+
+        <include layout="@layout/daily_view_empty_placeholder" />
     </FrameLayout>
 
 
     <FrameLayout
-            android:layout_width="fill_parent"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@drawable/transparent_black_overlay_transition"
         android:padding="15dp"
         android:visibility="invisible">
 
         <FrameLayout
-                android:layout_width="fill_parent"
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginTop="@dimen/status_bar_height"
             android:background="@drawable/reminder_view_bg"
@@ -66,7 +66,7 @@
             android:visibility="visible">
 
             <FrameLayout
-                    android:layout_width="fill_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="@drawable/shape_list_item"
                 android:visibility="invisible">
@@ -74,7 +74,7 @@
                 <include
                     layout="@layout/activity_agenda_zoom"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"/>
+                    android:layout_height="fill_parent" />
 
             </FrameLayout>
         </FrameLayout>

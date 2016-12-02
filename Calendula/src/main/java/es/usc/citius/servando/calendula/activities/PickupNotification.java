@@ -111,7 +111,7 @@ public class PickupNotification {
                 .setStyle(style)
                 .setPriority(Notification.PRIORITY_DEFAULT)
                 .setVibrate(new long[]{1000, 200, 500, 200, 100, 200, 1000})
-                        //.setSound(ringtoneUri != null ? ringtoneUri : Settings.System.DEFAULT_NOTIFICATION_URI)
+                //.setSound(ringtoneUri != null ? ringtoneUri : Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setAutoCancel(true);
 
         Notification n = builder.build();
@@ -120,17 +120,6 @@ public class PickupNotification {
         n.ledOnMS = 1000;
         n.ledOffMS = 2000;
         notify(context, n);
-    }
-
-    @TargetApi(Build.VERSION_CODES.ECLAIR)
-    private static void notify(final Context context, final Notification notification) {
-        final NotificationManager nm = (NotificationManager) context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
-            nm.notify(NOTIFICATION_TAG, 0, notification);
-        } else {
-            nm.notify(NOTIFICATION_TAG.hashCode(), notification);
-        }
     }
 
     /**
@@ -144,6 +133,17 @@ public class PickupNotification {
             nm.cancel(NOTIFICATION_TAG, 0);
         } else {
             nm.cancel(NOTIFICATION_TAG.hashCode());
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.ECLAIR)
+    private static void notify(final Context context, final Notification notification) {
+        final NotificationManager nm = (NotificationManager) context
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
+            nm.notify(NOTIFICATION_TAG, 0, notification);
+        } else {
+            nm.notify(NOTIFICATION_TAG.hashCode(), notification);
         }
     }
 }

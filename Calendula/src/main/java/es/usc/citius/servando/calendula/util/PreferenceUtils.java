@@ -30,21 +30,21 @@ public class PreferenceUtils {
     private static PreferenceUtils instance;
     private final Context context;
 
-    private PreferenceUtils(Context context){
+    private PreferenceUtils(Context context) {
         this.context = context;
     }
 
-    public static void init(Context context){
+    public static void init(Context context) {
         instance = new PreferenceUtils(context);
     }
 
-    public static PreferenceUtils instance(){
-        if(instance == null)
+    public static PreferenceUtils instance() {
+        if (instance == null)
             throw new RuntimeException("PreferenceUtil must be initialized before using calling init(context)");
         return instance;
     }
 
-    public SharedPreferences preferences(){
+    public SharedPreferences preferences() {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
 

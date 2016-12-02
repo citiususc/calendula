@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2016 CITIUS - USC
   ~
@@ -33,8 +32,7 @@
 
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="72dp"
-            android:background="#efefef"
-            />
+            android:background="#efefef" />
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -52,15 +50,16 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_margin="16dp"
             android:layout_toRightOf="@+id/imageButton"
-            android:layout_margin="16dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/schedules_list_item_medname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/imageButton"
+                android:layout_margin="0dp"
                 android:layout_marginLeft="26dp"
                 android:layout_toEndOf="@+id/imageButton"
                 android:layout_toRightOf="@+id/imageButton"
@@ -68,8 +67,7 @@
                 android:text="Atrovent"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#222"
-                android:textSize="18sp"
-                android:layout_margin="0dp"/>
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/schedules_list_item_times"
@@ -78,13 +76,13 @@
                 android:layout_alignLeft="@+id/schedules_list_item_days"
                 android:layout_alignStart="@+id/schedules_list_item_days"
                 android:layout_below="@+id/schedules_list_item_days"
+                android:layout_margin="0dp"
                 android:gravity="top"
+                android:paddingTop="2dp"
                 android:text="Three times a day"
                 android:textColor="#222"
-                android:layout_margin="0dp"
-                android:paddingTop="2dp"
                 android:textSize="15dp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/schedules_list_item_days"
@@ -92,15 +90,14 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/schedules_list_item_medname"
                 android:layout_below="@+id/schedules_list_item_medname"
+                android:layout_margin="0dp"
                 android:layout_marginTop="0dp"
+                android:paddingTop="2dp"
                 android:text="Every day"
                 android:textColor="@color/agenda_item_title"
-                android:textSize="15dp"
-                android:layout_margin="0dp"
-                android:paddingTop="2dp"/>
+                android:textSize="15dp" />
 
         </LinearLayout>
-
 
 
         <ImageView
@@ -111,9 +108,8 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
-            android:visibility="visible"
             android:background="@drawable/circle_white"
-            />
+            android:visibility="visible" />
 
     </RelativeLayout>
 

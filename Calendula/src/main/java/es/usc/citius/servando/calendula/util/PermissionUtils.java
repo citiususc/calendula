@@ -21,6 +21,7 @@ package es.usc.citius.servando.calendula.util;
 /**
  *
  */
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -33,7 +34,7 @@ import android.support.v4.app.Fragment;
 /**
  * Android Permission Utility class. A collection of static convenience methods
  * for checking if Android Runtime permissions are required.
- *
+ * <p>
  * https://gist.github.com/mtsahakis/bd54dc595f8cf170eb1bce17f31722b5
  */
 public class PermissionUtils {

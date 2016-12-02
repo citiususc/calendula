@@ -88,8 +88,7 @@ public class PickupInfoDao extends GenericDao<PickupInfo, Long> {
     }
 
     public PickupInfo exists(PickupInfo pickupInfo) {
-        try
-        {
+        try {
             QueryBuilder<PickupInfo, Long> qb = dao.queryBuilder();
             Where w = qb.where();
             w.and(
@@ -100,14 +99,13 @@ public class PickupInfoDao extends GenericDao<PickupInfo, Long> {
             qb.setWhere(w);
             return qb.queryForFirst();
 
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new RuntimeException("Error finding scanned schedule", e);
         }
     }
 
     public List<PickupInfo> findByPatient(Patient p) {
-        try{
+        try {
 
             QueryBuilder<Medicine, Long> mqb = DB.medicines().queryBuilder();
             mqb.where().eq(Medicine.COLUMN_PATIENT, p);
@@ -118,20 +116,17 @@ public class PickupInfoDao extends GenericDao<PickupInfo, Long> {
 
             return qb.query();
 
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new RuntimeException("Error finding scanned pickups", e);
         }
     }
 
     public void removeByMed(Medicine med) {
-        try
-        {
+        try {
             DeleteBuilder<PickupInfo, Long> qb = dao.deleteBuilder();
             qb.setWhere(qb.where().eq(PickupInfo.COLUMN_MEDICINE, med));
             qb.delete();
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new RuntimeException("Error deleting pickups by medicine", e);
         }
     }

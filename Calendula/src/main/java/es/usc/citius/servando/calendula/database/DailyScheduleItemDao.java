@@ -202,14 +202,14 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
         // ensure checked status has changed
         boolean updateStock = original.takenToday() != model.takenToday();
 
-        if(updateStock) {
+        if (updateStock) {
             Schedule s = model.boundToSchedule() ? model.schedule() : model.scheduleItem().schedule();
             DB.schedules().refresh(s);
             Medicine m = s.medicine();
             DB.medicines().refresh(m);
 
-            if(m.stockManagementEnabled()) {
-                try{
+            if (m.stockManagementEnabled()) {
+                try {
                     float amount;
                     if (s.repeatsHourly()) {
                         amount = model.takenToday() ? -s.dose() : s.dose();
@@ -220,10 +220,10 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
                     m.setStock(m.stock() + amount);
                     DB.medicines().save(m);
 
-                    if(fireEvent){
+                    if (fireEvent) {
                         DB.medicines().fireEvent();
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     Log.e("DSIDAO", "An error occurred updating stock", e);
                 }
             }

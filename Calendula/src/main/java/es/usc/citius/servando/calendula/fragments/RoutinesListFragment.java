@@ -98,51 +98,29 @@ public class RoutinesListFragment extends Fragment {
         }
     }
 
-    private View createRoutineListItem(LayoutInflater inflater, final Routine routine) {
+    public void notifyDataChange() {
+        Log.d(getTag(), "Routines - Notify data change");
+        new ReloadItemsTask().execute();
+    }
 
-        int hour = routine.time().getHourOfDay();
-        int minute = routine.time().getMinuteOfHour();
+    @Override
+    public void onStart() {
+        super.onStart();
+        CalendulaApp.eventBus().register(this);
+    }
 
-        String strHour = String.valueOf(hour >= 10 ? hour : "0" + hour);
-        String strMinute = ":" + String.valueOf(minute >= 10 ? minute : "0" + minute);
+    @Override
+    public void onStop() {
+        CalendulaApp.eventBus().unregister(this);
+        super.onStop();
+    }
 
-        View item = inflater.inflate(R.layout.routines_list_item, null);
-
-        ((TextView) item.findViewById(R.id.routines_list_item_hour)).setText(strHour);
-        ((TextView) item.findViewById(R.id.routines_list_item_minute)).setText(strMinute);
-        ((TextView) item.findViewById(R.id.routines_list_item_name)).setText(routine.name());
-        ((ImageButton) item.findViewById(R.id.imageButton2)).setImageDrawable(ic);
-
-        int items = routine.scheduleItems().size();
-
-        ((TextView) item.findViewById(R.id.routines_list_item_subtitle)).setText((items > 0 ? (""+items) : "Sin ") + " pautas asociadas");
-        View overlay = item.findViewById(R.id.routine_list_item_container);
-        overlay.setTag(routine);
-
-        View.OnClickListener clickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Routine r = (Routine) view.getTag();
-                if (mRoutineSelectedCallback != null && r != null) {
-                    Log.d(getTag(), "Click at " + r.name());
-                    mRoutineSelectedCallback.onRoutineSelected(r);
-                } else {
-                    Log.d(getTag(), "No callback set");
-                }
-
-            }
-        };
-
-        overlay.setOnClickListener(clickListener);
-        overlay.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (view.getTag() != null)
-                    showDeleteConfirmationDialog((Routine) view.getTag());
-                return true;
-            }
-        });
-        return item;
+    // Method called from the event bus
+    @SuppressWarnings("unused")
+    public void onEvent(Object evt) {
+        if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
+            notifyDataChange();
+        }
     }
 
     void showDeleteConfirmationDialog(final Routine r) {
@@ -183,14 +161,58 @@ public class RoutinesListFragment extends Fragment {
 
     }
 
-    public void notifyDataChange() {
-        Log.d(getTag(), "Routines - Notify data change");
-        new ReloadItemsTask().execute();
+    private View createRoutineListItem(LayoutInflater inflater, final Routine routine) {
+
+        int hour = routine.time().getHourOfDay();
+        int minute = routine.time().getMinuteOfHour();
+
+        String strHour = String.valueOf(hour >= 10 ? hour : "0" + hour);
+        String strMinute = ":" + String.valueOf(minute >= 10 ? minute : "0" + minute);
+
+        View item = inflater.inflate(R.layout.routines_list_item, null);
+
+        ((TextView) item.findViewById(R.id.routines_list_item_hour)).setText(strHour);
+        ((TextView) item.findViewById(R.id.routines_list_item_minute)).setText(strMinute);
+        ((TextView) item.findViewById(R.id.routines_list_item_name)).setText(routine.name());
+        ((ImageButton) item.findViewById(R.id.imageButton2)).setImageDrawable(ic);
+
+        int items = routine.scheduleItems().size();
+
+        ((TextView) item.findViewById(R.id.routines_list_item_subtitle)).setText((items > 0 ? ("" + items) : "Sin ") + " pautas asociadas");
+        View overlay = item.findViewById(R.id.routine_list_item_container);
+        overlay.setTag(routine);
+
+        View.OnClickListener clickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Routine r = (Routine) view.getTag();
+                if (mRoutineSelectedCallback != null && r != null) {
+                    Log.d(getTag(), "Click at " + r.name());
+                    mRoutineSelectedCallback.onRoutineSelected(r);
+                } else {
+                    Log.d(getTag(), "No callback set");
+                }
+
+            }
+        };
+
+        overlay.setOnClickListener(clickListener);
+        overlay.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (view.getTag() != null)
+                    showDeleteConfirmationDialog((Routine) view.getTag());
+                return true;
+            }
+        });
+        return item;
     }
+
 
     // Container Activity must implement this interface
     public interface OnRoutineSelectedListener {
         void onRoutineSelected(Routine r);
+
         void onCreateRoutine();
     }
 
@@ -225,27 +247,6 @@ public class RoutinesListFragment extends Fragment {
                 adapter.add(r);
             }
             adapter.notifyDataSetChanged();
-        }
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        CalendulaApp.eventBus().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        CalendulaApp.eventBus().unregister(this);
-        super.onStop();
-    }
-
-    // Method called from the event bus
-    @SuppressWarnings("unused")
-    public void onEvent(Object evt) {
-        if(evt instanceof PersistenceEvents.ActiveUserChangeEvent){
-            notifyDataChange();
         }
     }
 

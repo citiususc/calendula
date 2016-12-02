@@ -67,7 +67,7 @@ public class RoutineDao extends GenericDao<Routine, Long> {
     @Override
     public List<Routine> findAll() {
         try {
-            return dao.queryBuilder().orderBy(Routine.COLUMN_TIME,true).query();
+            return dao.queryBuilder().orderBy(Routine.COLUMN_TIME, true).query();
         } catch (SQLException e) {
             throw new RuntimeException("Error finding models", e);
         }
@@ -98,7 +98,7 @@ public class RoutineDao extends GenericDao<Routine, Long> {
         try {
             QueryBuilder<Routine, Long> qb = dao.queryBuilder();
             Where w = qb.where();
-            w.and(w.eq(Routine.COLUMN_NAME, name),w.eq(Routine.COLUMN_PATIENT, p));
+            w.and(w.eq(Routine.COLUMN_NAME, name), w.eq(Routine.COLUMN_PATIENT, p));
             qb.setWhere(w);
             return qb.queryForFirst();
         } catch (SQLException e) {

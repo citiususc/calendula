@@ -24,9 +24,8 @@ package es.usc.citius.servando.calendula.util;
 
 public class SettingsKeys {
 
-    private SettingsKeys() {
-    }
-
     public static final String DATABASE_LOCATION = "db.url";
     public static final String MODULE_CONFIG = "modules.config";
+    private SettingsKeys() {
+    }
 }

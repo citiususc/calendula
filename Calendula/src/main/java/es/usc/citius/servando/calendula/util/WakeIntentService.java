@@ -17,6 +17,7 @@
  */
 
 package es.usc.citius.servando.calendula.util;
+
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
@@ -91,7 +92,7 @@ public abstract class WakeIntentService extends IntentService {
                 PowerManager.WakeLock wakeLock = getLock(this);
                 if (wakeLock.isHeld())
                     wakeLock.release();
-            }catch (Exception e){
+            } catch (Exception e) {
                 // do nothing
             }
         }

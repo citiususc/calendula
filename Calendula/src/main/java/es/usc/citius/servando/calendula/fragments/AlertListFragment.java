@@ -49,7 +49,7 @@ import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 /**
  * Alert Lis Fragment
  */
-public class AlertListFragment extends Fragment{
+public class AlertListFragment extends Fragment {
 
     final String TAG = "AlertListFragment";
 
@@ -76,8 +76,8 @@ public class AlertListFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments() != null){
-            m = DB.medicines().findById(getArguments().getLong("medicine_id",-1));
+        if (getArguments() != null) {
+            m = DB.medicines().findById(getArguments().getLong("medicine_id", -1));
         }
         items = new ArrayList<>();
     }
@@ -98,41 +98,10 @@ public class AlertListFragment extends Fragment{
         notifyDataChange();
     }
 
-    private void setupRecyclerView() {
-        llm = new LinearLayoutManager(getContext());
-        rv.setLayoutManager(llm);
-        rvAdapter = new AlertViewRecyclerAdapter(items, rv, llm, getActivity());
-        // register alert view providers on the adapter
-        rvAdapter.registerViewProvider(new StockRunningOutAlert.StockAlertViewProvider(), StockRunningOutAlert.StockAlertViewProvider.class);
-        rvAdapter.registerViewProvider(new DrivingCautionAlert.DrivingAlertViewProvider(), DrivingCautionAlert.DrivingAlertViewProvider.class);
-        rv.setAdapter(rvAdapter);
-        rv.setItemAnimator(new DefaultItemAnimator());
-        rvListener = new AlertViewRecyclerAdapter.EventListener() {
-            @Override
-            public void onItemClick(View v, DailyAgendaItemStub item, int position) {
-
-            }
-        };
-        rvAdapter.setListener(rvListener);
-    }
-
-
-    private void setupEmptyView() {
-        Drawable icon = new IconicsDrawable(getContext())
-                .icon(CommunityMaterial.Icon.cmd_emoticon_cool)
-                .colorRes(R.color.agenda_item_title)
-                .sizeDp(90)
-                .paddingDp(0);
-        ((ImageView) emptyView.findViewById(R.id.imageView_ok)).setImageDrawable(icon);
-        ((TextView) emptyView.findViewById(R.id.textView3)).setText("No se han detectado alertas para este medicamento");
-    }
-
-
-
     public List<PatientAlert> buildItems() {
         List<PatientAlert> typed = new ArrayList<>();
         List<PatientAlert> original = DB.alerts().findBy(PatientAlert.COLUMN_MEDICINE, m);
-        for(PatientAlert a : original){
+        for (PatientAlert a : original) {
             typed.add(a.map());
         }
         Log.d(TAG, "buildItems: Alerts: " + typed.size());
@@ -156,18 +125,45 @@ public class AlertListFragment extends Fragment{
                     showOrHideEmptyView(items.isEmpty());
                 }
             }, 100);
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, "Error onPostExecute", e);
         }
     }
 
     public void showOrHideEmptyView(boolean show) {
-        if(show) {
+        if (show) {
             emptyView.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             emptyView.setVisibility(View.GONE);
         }
+    }
+
+    private void setupRecyclerView() {
+        llm = new LinearLayoutManager(getContext());
+        rv.setLayoutManager(llm);
+        rvAdapter = new AlertViewRecyclerAdapter(items, rv, llm, getActivity());
+        // register alert view providers on the adapter
+        rvAdapter.registerViewProvider(new StockRunningOutAlert.StockAlertViewProvider(), StockRunningOutAlert.StockAlertViewProvider.class);
+        rvAdapter.registerViewProvider(new DrivingCautionAlert.DrivingAlertViewProvider(), DrivingCautionAlert.DrivingAlertViewProvider.class);
+        rv.setAdapter(rvAdapter);
+        rv.setItemAnimator(new DefaultItemAnimator());
+        rvListener = new AlertViewRecyclerAdapter.EventListener() {
+            @Override
+            public void onItemClick(View v, DailyAgendaItemStub item, int position) {
+
+            }
+        };
+        rvAdapter.setListener(rvListener);
+    }
+
+    private void setupEmptyView() {
+        Drawable icon = new IconicsDrawable(getContext())
+                .icon(CommunityMaterial.Icon.cmd_emoticon_cool)
+                .colorRes(R.color.agenda_item_title)
+                .sizeDp(90)
+                .paddingDp(0);
+        ((ImageView) emptyView.findViewById(R.id.imageView_ok)).setImageDrawable(icon);
+        ((TextView) emptyView.findViewById(R.id.textView3)).setText("No se han detectado alertas para este medicamento");
     }
 
 }

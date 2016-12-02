@@ -60,10 +60,41 @@ public class RingtonePreference extends android.preference.RingtonePreference {
         super(context, attrs);
     }
 
-    public void performClick(){
+    public void performClick() {
         onClick();
     }
 
+    void stopRingtone() {
+        if (ringtone != null && ringtone.isPlaying()) {
+            ringtone.stop();
+        }
+    }
+
+    void getEntriesAndValues() {
+        RingtoneManager manager = new RingtoneManager(getContext());
+        manager.setType(RingtoneManager.TYPE_RINGTONE);
+        List<CharSequence> _titles = new ArrayList<>();
+        List<CharSequence> _values = new ArrayList<>();
+
+        Cursor cursor = manager.getCursor();
+        while (cursor.moveToNext()) {
+            String title = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
+            String id = cursor.getString(RingtoneManager.ID_COLUMN_INDEX);
+            String uri = cursor.getString(RingtoneManager.URI_COLUMN_INDEX) + "/" + id;
+
+            Log.d("TAG", title + ", " + uri + ", " + id);
+
+            _titles.add(title);
+            _values.add(uri);
+        }
+        titles = _titles.toArray(new String[_titles.size()]);
+        values = _values.toArray(new String[_values.size()]);
+
+        Uri value = onRestoreRingtone();
+        if (value != null) {
+            selectedIndex = _values.indexOf(value.toString());
+        }
+    }
 
     @Override
     protected void onClick() {
@@ -116,38 +147,6 @@ public class RingtonePreference extends android.preference.RingtonePreference {
             }
         }).show();
 
-    }
-
-    void stopRingtone() {
-        if (ringtone != null && ringtone.isPlaying()) {
-            ringtone.stop();
-        }
-    }
-
-    void getEntriesAndValues() {
-        RingtoneManager manager = new RingtoneManager(getContext());
-        manager.setType(RingtoneManager.TYPE_RINGTONE);
-        List<CharSequence> _titles = new ArrayList<>();
-        List<CharSequence> _values = new ArrayList<>();
-
-        Cursor cursor = manager.getCursor();
-        while (cursor.moveToNext()) {
-            String title = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
-            String id = cursor.getString(RingtoneManager.ID_COLUMN_INDEX);
-            String uri = cursor.getString(RingtoneManager.URI_COLUMN_INDEX) + "/" + id;
-
-            Log.d("TAG", title + ", " + uri + ", " + id);
-
-            _titles.add(title);
-            _values.add(uri);
-        }
-        titles = _titles.toArray(new String[_titles.size()]);
-        values = _values.toArray(new String[_values.size()]);
-
-        Uri value = onRestoreRingtone();
-        if (value != null) {
-            selectedIndex = _values.indexOf(value.toString());
-        }
     }
 
     public class SimpleListAdapter extends ArrayAdapter<String> {

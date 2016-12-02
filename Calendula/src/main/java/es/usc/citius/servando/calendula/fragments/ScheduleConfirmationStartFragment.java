@@ -49,7 +49,7 @@ public class ScheduleConfirmationStartFragment extends Fragment {
         rootView.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((ConfirmSchedulesActivity)getActivity()).next();
+                ((ConfirmSchedulesActivity) getActivity()).next();
             }
         });
         return rootView;

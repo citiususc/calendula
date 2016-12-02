@@ -52,11 +52,12 @@ public class StockRunningOutAlert extends PatientAlert<StockRunningOutAlert, Sto
     }
 
     /**
-     *  Create an instance of an stock alert
-     * @param m Medicine whose stock is running out
+     * Create an instance of an stock alert
+     *
+     * @param m    Medicine whose stock is running out
      * @param date Date the alert is created
      */
-    public StockRunningOutAlert(Medicine m, LocalDate date){
+    public StockRunningOutAlert(Medicine m, LocalDate date) {
         super();
         setPatient(m.patient());
         setMedicine(m);
@@ -80,14 +81,15 @@ public class StockRunningOutAlert extends PatientAlert<StockRunningOutAlert, Sto
     /**
      * Envelope for details of stock alert instances
      */
-    public static class StockAlertInfo{
+    public static class StockAlertInfo {
 
         /**
          * Date of the stock alert
          */
         private LocalDate date;
 
-        public StockAlertInfo(){}
+        public StockAlertInfo() {
+        }
 
         public StockAlertInfo(LocalDate date) {
             this.date = date;
@@ -126,7 +128,7 @@ public class StockRunningOutAlert extends PatientAlert<StockRunningOutAlert, Sto
             // setup ui
             viewHolder.alertIcon.setImageDrawable(IconUtils.alertLevelIcon(alert.getLevel(), c));
             viewHolder.title.setText("Se está agotando");
-            viewHolder.description.setText("Quedan " + stock +  " " + m.presentation().units(c.getResources()) + (stock != 1 ? "s" : ""));
+            viewHolder.description.setText("Quedan " + stock + " " + m.presentation().units(c.getResources()) + (stock != 1 ? "s" : ""));
             viewHolder.duration.setText("Suficiente para " + StockUtils.getEstimatedStockDays(m) + " días con la pauta actual");
             viewHolder.manageStockBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -139,7 +141,7 @@ public class StockRunningOutAlert extends PatientAlert<StockRunningOutAlert, Sto
             });
         }
 
-        public static class StockAlertViewHolder extends RecyclerView.ViewHolder{
+        public static class StockAlertViewHolder extends RecyclerView.ViewHolder {
 
             Context context;
             PatientAlert alert;
@@ -163,7 +165,6 @@ public class StockRunningOutAlert extends PatientAlert<StockRunningOutAlert, Sto
         }
 
     }
-
 
 
 }

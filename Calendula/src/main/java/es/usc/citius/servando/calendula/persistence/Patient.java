@@ -91,7 +91,7 @@ public class Patient {
         this.color = color;
     }
 
-    public int color(){
+    public int color() {
         return color;
     }
 

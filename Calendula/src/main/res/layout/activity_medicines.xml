@@ -21,7 +21,7 @@
     android:layout_height="match_parent"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
-                android:paddingTop="@dimen/status_bar_height">
+    android:paddingTop="@dimen/status_bar_height">
 
     <es.usc.citius.servando.calendula.util.view.NonSwipeableViewPager xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/pager"
@@ -30,8 +30,7 @@
         android:layout_below="@+id/textView2"
         tools:context=".RoutinesActivity" />
 
-    <android.support.v7.widget.Toolbar
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -63,8 +62,7 @@
         android:textColor="#fff"
         android:textSize="24sp" />
 
-    <com.getbase.floatingactionbutton.FloatingActionButton
-        xmlns:fab="http://schemas.android.com/apk/res-auto"
+    <com.getbase.floatingactionbutton.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -73,10 +71,9 @@
         android:layout_gravity="bottom|right"
         android:layout_marginRight="38dp"
         android:layout_marginTop="78dp"
-        fab:fab_icon="@drawable/ic_done_black_48dp"
         fab:fab_colorNormal="#efefef"
         fab:fab_colorPressed="#b7b7b7"
-        />
+        fab:fab_icon="@drawable/ic_done_black_48dp" />
 
     <TextView
         android:id="@+id/textView"
@@ -109,20 +106,20 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="60dp"
+            android:layout_toLeftOf="@+id/close_search_button"
+            android:layout_toStartOf="@+id/close_search_button"
             android:background="@null"
+            android:capitalize="words"
             android:gravity="center_vertical"
             android:hint="@string/search_med_hint"
-            android:singleLine="true"
+            android:imeOptions="actionDone"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            android:imeOptions="actionDone"
+            android:singleLine="true"
             android:textColor="#fff"
             android:textColorHint="#ececec"
             android:textCursorDrawable="@null"
-            android:textSize="20dp"
-            android:capitalize="words"
-            android:layout_toLeftOf="@+id/close_search_button"
-            android:layout_toStartOf="@+id/close_search_button"/>
+            android:textSize="20dp" />
 
         <ListView
             android:id="@+id/search_list"
@@ -132,34 +129,34 @@
             android:background="#f2f2f2" />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                      android:orientation="vertical"
-                      android:id="@android:id/empty"
-                      android:layout_width="match_parent"
-                      android:layout_height="match_parent"
-                      android:gravity="center_horizontal"
-                      android:layout_below="@+id/search_edit_text"
-                      android:paddingTop="80dp"
-                      android:background="#fff">
+            android:id="@android:id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/search_edit_text"
+            android:background="#fff"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="80dp">
 
             <ImageView
+                android:id="@+id/med_list_empty_icon"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:id="@+id/med_list_empty_icon"
-                android:src="@drawable/ic_intro_alarm"
-                android:alpha="0.3"/>
+                android:alpha="0.3"
+                android:src="@drawable/ic_intro_alarm" />
 
             <TextView
+                android:id="@+id/textView10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/medicine_search_empty_list_msg"
-                android:id="@+id/textView10"
-                android:padding="30dp"
                 android:alpha="0.9"
+                android:gravity="center_horizontal"
+                android:padding="30dp"
+                android:text="@string/medicine_search_empty_list_msg"
                 android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#aaa"
-                android:textSize="16dp"
-                android:gravity="center_horizontal"/>
+                android:textSize="16dp" />
 
         </LinearLayout>
 
@@ -169,22 +166,22 @@
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:padding="15dp"
             android:divider="@null"
             android:dividerHeight="0dp"
+            android:padding="15dp"
             android:src="@drawable/ic_search_white_48dp" />
 
         <ImageButton
             android:id="@+id/close_search_button"
-            android:layout_width="56dp"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_alignParentRight="true"
             android:padding="15dp"
             android:src="@drawable/ic_cancel_white_48dp" />
 
         <ImageView
-                android:layout_width="fill_parent"
+            android:layout_width="fill_parent"
             android:layout_height="5dp"
             android:layout_below="@+id/search_edit_text"
             android:alpha="0.3"
@@ -192,16 +189,16 @@
             android:src="@drawable/daily_view_list_item_tab_shadow_top" />
 
         <Button
+            android:id="@+id/add_custom_med_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add_custom_med_button_text"
-            android:id="@+id/add_custom_med_btn"
-            android:background="@drawable/shape_list_item"
             android:layout_below="@+id/search_edit_text"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_list_item"
             android:padding="10dp"
-            android:textAllCaps="false"
-            android:layout_marginTop="10dp"/>
+            android:text="@string/add_custom_med_button_text"
+            android:textAllCaps="false" />
 
     </RelativeLayout>
 

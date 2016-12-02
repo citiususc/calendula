@@ -65,105 +65,6 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
     List<Patient> patients = Collections.emptyList();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patients);
-        setupStatusBar(getResources().getColor(R.color.dark_grey_home));
-        setupToolbar("Pacientes", getResources().getColor(R.color.dark_grey_home));
-        subscribeToEvents();
-
-        //patients = DB.patients().findAll();
-        fab = (FloatingActionButton) findViewById(R.id.add_button);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PatientsActivity.this, PatientDetailActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        gridView = (GridView) findViewById(R.id.grid);
-        adapter = new PatientAdapter(this);
-        gridView.setAdapter(adapter);
-        gridView.setOnItemClickListener(this);
-        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Patient p = (Patient) parent.getItemAtPosition(position);
-                if(!p.isDefault())
-                    showRemovePatientDialog(p);
-                else
-                    showRemoveDefaultPatientMsgDialog(p);
-                return true;
-            }
-        });
-    }
-
-
-    private void showRemoveDefaultPatientMsgDialog(final Patient p) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Este es el paciente por defecto, y por lo tanto no puede ser eliminado. Deseas eliminar todas sus pautas, medicamentos y rutinas?")
-                .setCancelable(true)
-                .setPositiveButton("Si, eliminar todo", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        DB.patients().removeAllStuff(p);
-                        Snack.show("Hecho!", PatientsActivity.this);
-                    }
-                })
-                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-
-    private void showRemovePatientDialog(final Patient p) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Deseas eliminar el paciente " + p.name() + "?")
-                .setCancelable(true)
-                .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                        if (DB.patients().isActive(p, getApplicationContext())) {
-                            DB.patients().setActive(DB.patients().getDefault(), getApplicationContext());
-                        }
-                        DB.patients().removeCascade(p);
-                        notifyDataChange();
-                    }
-                })
-                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        notifyDataChange();
-    }
-
-    private void notifyDataChange() {
-        patients = DB.patients().findAll();
-        adapter.notifyDataSetChanged();
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unsubscribeFromEvents();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_patients, menu);
@@ -184,7 +85,6 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
 
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -215,6 +115,102 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
     @SuppressWarnings("unused")
     public void onEvent(PersistenceEvents.ActiveUserChangeEvent event) {
         this.adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_patients);
+        setupStatusBar(getResources().getColor(R.color.dark_grey_home));
+        setupToolbar("Pacientes", getResources().getColor(R.color.dark_grey_home));
+        subscribeToEvents();
+
+        //patients = DB.patients().findAll();
+        fab = (FloatingActionButton) findViewById(R.id.add_button);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PatientsActivity.this, PatientDetailActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        gridView = (GridView) findViewById(R.id.grid);
+        adapter = new PatientAdapter(this);
+        gridView.setAdapter(adapter);
+        gridView.setOnItemClickListener(this);
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Patient p = (Patient) parent.getItemAtPosition(position);
+                if (!p.isDefault())
+                    showRemovePatientDialog(p);
+                else
+                    showRemoveDefaultPatientMsgDialog(p);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        notifyDataChange();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unsubscribeFromEvents();
+    }
+
+    private void showRemoveDefaultPatientMsgDialog(final Patient p) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Este es el paciente por defecto, y por lo tanto no puede ser eliminado. Deseas eliminar todas sus pautas, medicamentos y rutinas?")
+                .setCancelable(true)
+                .setPositiveButton("Si, eliminar todo", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        DB.patients().removeAllStuff(p);
+                        Snack.show("Hecho!", PatientsActivity.this);
+                    }
+                })
+                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void showRemovePatientDialog(final Patient p) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Deseas eliminar el paciente " + p.name() + "?")
+                .setCancelable(true)
+                .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        if (DB.patients().isActive(p, getApplicationContext())) {
+                            DB.patients().setActive(DB.patients().getDefault(), getApplicationContext());
+                        }
+                        DB.patients().removeCascade(p);
+                        notifyDataChange();
+                    }
+                })
+                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+
+    }
+
+    private void notifyDataChange() {
+        patients = DB.patients().findAll();
+        adapter.notifyDataSetChanged();
     }
 
     private class PatientAdapter extends BaseAdapter {
@@ -272,12 +268,12 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
                 activeIndicator.setVisibility(View.GONE);
             }
 
-            if(p.isDefault()){
+            if (p.isDefault()) {
                 lockIcon.setImageDrawable(new IconicsDrawable(getApplicationContext(), CommunityMaterial.Icon.cmd_lock)
                         .sizeDp(20)
                         .paddingDp(5)
                         .color(Color.WHITE));
-            }else{
+            } else {
                 lockIcon.setVisibility(View.GONE);
             }
 

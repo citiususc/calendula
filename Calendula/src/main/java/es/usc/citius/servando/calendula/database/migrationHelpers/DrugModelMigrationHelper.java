@@ -64,7 +64,7 @@ public class DrugModelMigrationHelper {
         db.execSQL("DROP TABLE IF EXISTS Groups;");
         // create new db tables
         Log.d(TAG, "Creating new drug model tables...");
-        for(Class<?> c : drugDbClasses){
+        for (Class<?> c : drugDbClasses) {
             TableUtils.createTable(connectionSource, c);
         }
 

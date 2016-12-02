@@ -42,15 +42,10 @@ public abstract class DosePickerFragment extends DialogFragment {
 
     private double initialDose = 1.0f;
 
-
-    protected abstract int getLayoutResource();
-
-    protected abstract void setupRootView(View root);
-
-    protected abstract void setInitialValue(double initialDose);
-
-    protected abstract double getSelectedDose();
-
+    public static void closeKeyboard(Context c, IBinder windowToken) {
+        InputMethodManager mgr = (InputMethodManager) c.getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromWindow(windowToken, 0);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,11 +67,6 @@ public abstract class DosePickerFragment extends DialogFragment {
 
     public void setOnDoseSelectedListener(OnDoseSelectedListener l) {
         mDoseSelectedListener = l;
-    }
-
-    // Container Activity must implement this interface
-    public interface OnDoseSelectedListener {
-        void onDoseSelected(double dose);
     }
 
     @Override
@@ -110,17 +100,25 @@ public abstract class DosePickerFragment extends DialogFragment {
                 }).create();
     }
 
+    protected abstract int getLayoutResource();
+
+    protected abstract void setupRootView(View root);
+
+    protected abstract void setInitialValue(double initialDose);
+
+    protected abstract double getSelectedDose();
+
     protected void onDone() {
         // do nothing by default
     }
 
-    protected void onCancel(){
+    protected void onCancel() {
         // do nothing by default
     }
 
-    public static void closeKeyboard(Context c, IBinder windowToken) {
-        InputMethodManager mgr = (InputMethodManager) c.getSystemService(Context.INPUT_METHOD_SERVICE);
-        mgr.hideSoftInputFromWindow(windowToken, 0);
+    // Container Activity must implement this interface
+    public interface OnDoseSelectedListener {
+        void onDoseSelected(double dose);
     }
 
 

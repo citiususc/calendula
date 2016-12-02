@@ -53,7 +53,7 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
             throw new RuntimeException("Invalid CSV. Input string must contain exactly 3 members. " + csvLine);
         }
 
-        if(TextUtils.isEmpty(values[1])){
+        if (TextUtils.isEmpty(values[1])) {
             return null;
         }
 
@@ -106,7 +106,7 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
 
     @Override
     public String shortName(Prescription p) {
-        if(p.getName().length() < 20)
+        if (p.getName().length() < 20)
             return p.getName();
         return p.getName().substring(0, 20) + "…";
 
@@ -131,8 +131,11 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
 
                 br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
                 // count file lines (for progress updating)
-                while (br.readLine() != null) { lines++;} br.close();
-                progressUpdateBy = lines/20;
+                while (br.readLine() != null) {
+                    lines++;
+                }
+                br.close();
+                progressUpdateBy = lines / 20;
                 updateProgress(l, 0);
 
                 br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
@@ -143,7 +146,7 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
                         l.onProgressUpdate(progress);
                     }
                     // exec line content as raw sql
-                    Prescription prescription = fromCsv(line,"\\|");
+                    Prescription prescription = fromCsv(line, "\\|");
                     DB.drugDB().prescriptions().save(prescription);
                     i++;
                 }
@@ -153,10 +156,9 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
         });
     }
 
-    private void updateProgress(SetupProgressListener l, int progress){
-        if(l!=null) l.onProgressUpdate(progress);
+    private void updateProgress(SetupProgressListener l, int progress) {
+        if (l != null) l.onProgressUpdate(progress);
     }
-
 
 
 }

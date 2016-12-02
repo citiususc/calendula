@@ -19,33 +19,34 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="6dp"
-                android:paddingTop="6dp"
-                android:paddingRight="6dp"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="6dp"
+    android:paddingRight="6dp"
+    android:paddingTop="6dp">
 
     <RelativeLayout
 
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/shape_list_item"
-        android:descendantFocusability="blocksDescendants"
-        android:layout_height="wrap_content">
+        android:descendantFocusability="blocksDescendants">
 
         <LinearLayout
             android:id="@+id/data"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="60dp"
+            android:layout_marginRight="56dp"
             android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:layout_marginRight="56dp">
+            android:paddingBottom="10dp">
 
             <TextView
                 android:id="@+id/text1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="2dp"
                 android:ellipsize="marquee"
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical"
@@ -56,9 +57,7 @@
                 android:text="Medicine name that needs two rows"
                 android:textColor="#333"
                 android:textSize="16dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginRight="10dp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/text2"
@@ -92,7 +91,7 @@
                 android:textSize="15dp" />
 
             <TextView
-                    android:layout_width="match_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="1px"
                 android:layout_marginRight="16dp"
@@ -113,48 +112,45 @@
             android:id="@+id/presentation_image"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:padding="7dp"
-            android:scaleType="fitCenter"
             android:layout_alignParentTop="true"
-            />
+            android:padding="7dp"
+            android:scaleType="fitCenter" />
 
         <TextView
+            android:id="@+id/prescription_cn"
             android:layout_width="56dp"
             android:layout_height="wrap_content"
-            android:text="123456"
-            android:id="@+id/prescription_cn"
-            android:textColor="#fff"
-            android:padding="3dp"
-            android:textSize="12dp"
-            android:textStyle="bold"
-            android:layout_alignParentRight="true"
-            android:gravity="center_horizontal"
             android:layout_alignParentBottom="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="false"
             android:layout_alignParentTop="false"
             android:layout_alignTop="@+id/data"
-            android:layout_marginTop="10dp"
-            android:layout_alignParentStart="false"
-            android:background="@drawable/medicine_search_cn_bg"
             android:layout_marginRight="10dp"
-                android:layout_alignParentLeft="false"
-                />
+            android:layout_marginTop="10dp"
+            android:background="@drawable/medicine_search_cn_bg"
+            android:gravity="center_horizontal"
+            android:padding="3dp"
+            android:text="123456"
+            android:textColor="#fff"
+            android:textSize="12dp"
+            android:textStyle="bold" />
 
         <ImageButton
+            android:id="@+id/prospect_icon"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="56dp"
             android:layout_height="50dp"
-            android:id="@+id/prospect_icon"
-            android:layout_alignParentRight="false"
-            android:src="@drawable/abc_ic_star_black_36dp"
-            android:padding="4dp"
-            android:scaleType="fitCenter"
-            android:visibility="visible"
-            android:layout_marginRight="10dp"
+            android:layout_alignLeft="@+id/prescription_cn"
             android:layout_alignParentBottom="false"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_alignParentRight="false"
             android:layout_alignStart="@+id/prescription_cn"
             android:layout_below="@+id/prescription_cn"
-                android:layout_alignLeft="@+id/prescription_cn"
-                />
+            android:layout_marginRight="10dp"
+            android:padding="4dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/abc_ic_star_black_36dp"
+            android:visibility="visible" />
 
     </RelativeLayout>
 

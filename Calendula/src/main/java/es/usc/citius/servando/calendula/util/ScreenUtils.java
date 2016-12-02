@@ -219,7 +219,7 @@ public class ScreenUtils {
         return ctx.getResources().getDimensionPixelSize(R.dimen.status_bar_height);
     }
 
-    public static int dpToPx(Resources r, float dp){
+    public static int dpToPx(Resources r, float dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
     }
 

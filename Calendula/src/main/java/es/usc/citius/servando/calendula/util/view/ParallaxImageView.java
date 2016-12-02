@@ -41,12 +41,12 @@ public class ParallaxImageView extends ImageView {
         super(context, attrs, defStyle);
     }
 
-    public void updateParallax(){
+    public void updateParallax() {
         int[] ls = new int[2];
         getLocationOnScreen(ls);
-        float top = (float)ls[1];
-        if(top > 0) {
-            mCurrentTranslation = -(int)(top*1.5);
+        float top = (float) ls[1];
+        if (top > 0) {
+            mCurrentTranslation = -(int) (top * 1.5);
             invalidate();
         }
     }

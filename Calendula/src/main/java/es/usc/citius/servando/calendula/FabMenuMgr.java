@@ -46,7 +46,7 @@ import es.usc.citius.servando.calendula.util.ScreenUtils;
 /**
  * Helper to manage the home screen floating action button behaviour
  */
-public class FabMenuMgr implements View.OnClickListener{
+public class FabMenuMgr implements View.OnClickListener {
 
 
     LeftDrawerMgr drawerMgr;
@@ -66,12 +66,12 @@ public class FabMenuMgr implements View.OnClickListener{
         this.drawerMgr = drawerMgr;
         this.scheduleActions = getScheduleActions();
 
-        final SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
 
         fabMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
             @Override
             public void onMenuExpanded() {
-                if(!prefs.getBoolean("PREFERENCE_SCHEDULE_HELP_SHOWN", false)){
+                if (!prefs.getBoolean("PREFERENCE_SCHEDULE_HELP_SHOWN", false)) {
                     activity.launchActivityDelayed(SchedulesHelpActivity.class, 600);
                 }
             }
@@ -84,30 +84,9 @@ public class FabMenuMgr implements View.OnClickListener{
 
     }
 
-    private List<FloatingActionButton> getScheduleActions() {
-        ArrayList<FloatingActionButton> actions = new ArrayList<>();
-
-        FloatingActionButton actionA = (FloatingActionButton) fabMenu.findViewById(R.id.action_a);
-        FloatingActionButton actionB = (FloatingActionButton) fabMenu.findViewById(R.id.action_b);
-        FloatingActionButton actionC = (FloatingActionButton) fabMenu.findViewById(R.id.action_c);
-
-        actions.add(actionA);
-        actions.add(actionB);
-        actions.add(actionC);
-        scanQrAction = (FloatingActionButton) fabMenu.findViewById(R.id.action_d);
-        if(CalendulaApp.isPharmaModeEnabled(activity)) {
-            scanQrAction.setVisibility(View.VISIBLE);
-            actions.add(scanQrAction);
-        }else{
-            scanQrAction.setVisibility(View.GONE);
-        }
-        return actions;
-    }
-
-
     public void init() {
 
-        for(FloatingActionButton f : scheduleActions){
+        for (FloatingActionButton f : scheduleActions) {
             f.setOnClickListener(this);
         }
 
@@ -121,7 +100,7 @@ public class FabMenuMgr implements View.OnClickListener{
         onViewPagerItemChange(0);
     }
 
-    public void onViewPagerItemChange(int currentPage){
+    public void onViewPagerItemChange(int currentPage) {
 
         this.currentPage = currentPage;
 
@@ -131,7 +110,7 @@ public class FabMenuMgr implements View.OnClickListener{
 //        fab.setColorNormalResId(getFabColor(currentPage));
 //        fab.setColorPressedResId(getFabPressedColor(currentPage));
 
-        switch (currentPage){
+        switch (currentPage) {
 
             case 0:
                 fabMenu.setVisibility(View.GONE);
@@ -139,7 +118,7 @@ public class FabMenuMgr implements View.OnClickListener{
                 break;
             case 1:
             case 2:
-                for(FloatingActionButton f : scheduleActions){
+                for (FloatingActionButton f : scheduleActions) {
                     f.setVisibility(View.GONE);
                 }
                 fabMenu.setVisibility(View.GONE);
@@ -148,7 +127,7 @@ public class FabMenuMgr implements View.OnClickListener{
                 break;
 
             case 3:
-                for(FloatingActionButton f : scheduleActions){
+                for (FloatingActionButton f : scheduleActions) {
                     f.setVisibility(View.VISIBLE);
                 }
                 fab.setVisibility(View.GONE);
@@ -157,7 +136,6 @@ public class FabMenuMgr implements View.OnClickListener{
                 break;
         }
     }
-
 
     @Override
     public void onClick(View view) {
@@ -187,42 +165,6 @@ public class FabMenuMgr implements View.OnClickListener{
 
     }
 
-    private void onClickAdd() {
-        switch (currentPage){
-            case 0:
-                return;
-            case 1:
-                launchActivity(RoutinesActivity.class);
-                break;
-            case 2:
-                launchActivity(MedicinesActivity.class);
-                break;
-            case 3:
-        }
-    }
-
-    private void launchActivity(Class<?> type){
-        activity.startActivity(new Intent(activity, type));
-        activity.overridePendingTransition(0, 0);
-    }
-
-    private void startSchedulesActivity(int scheduleType){
-        Intent i = new Intent(activity, ScheduleCreationActivity.class);
-        i.putExtra("scheduleType", scheduleType);
-        activity.startActivity(i);
-        activity.overridePendingTransition(0, 0);
-        fabMenu.collapse();
-    }
-
-    private void startScanActivity(){
-        Intent i = new Intent(activity, ScanActivity.class);
-        i.putExtra("after_scan_pkg", activity.getPackageName());
-        i.putExtra("after_scan_cls", ConfirmSchedulesActivity.class.getName());
-        activity.startActivity(i);
-        activity.overridePendingTransition(0, 0);
-        fabMenu.collapse();
-    }
-
     public int getFabColor(int page) {
         switch (page) {
             case 1:
@@ -249,23 +191,79 @@ public class FabMenuMgr implements View.OnClickListener{
         }
     }
 
-    public void onPatientUpdate(Patient p){
-        for(FloatingActionButton f: scheduleActions){
+    public void onPatientUpdate(Patient p) {
+        for (FloatingActionButton f : scheduleActions) {
             f.setColorNormal(p.color());
             f.setColorPressed(ScreenUtils.equivalentNoAlpha(p.color(), 0.7f));
         }
     }
 
-    public void onPharmacyModeChanged(boolean enabled){
-        if(enabled && !scheduleActions.contains(scanQrAction)){
+    public void onPharmacyModeChanged(boolean enabled) {
+        if (enabled && !scheduleActions.contains(scanQrAction)) {
             scheduleActions.add(scanQrAction);
             scanQrAction.setVisibility(View.VISIBLE);
-        }else if(!enabled && scheduleActions.contains(scanQrAction)){
+        } else if (!enabled && scheduleActions.contains(scanQrAction)) {
             scanQrAction.setVisibility(View.GONE);
             scheduleActions.remove(scanQrAction);
         }
         fabMenu.invalidate();
         onViewPagerItemChange(currentPage);
+    }
+
+    private List<FloatingActionButton> getScheduleActions() {
+        ArrayList<FloatingActionButton> actions = new ArrayList<>();
+
+        FloatingActionButton actionA = (FloatingActionButton) fabMenu.findViewById(R.id.action_a);
+        FloatingActionButton actionB = (FloatingActionButton) fabMenu.findViewById(R.id.action_b);
+        FloatingActionButton actionC = (FloatingActionButton) fabMenu.findViewById(R.id.action_c);
+
+        actions.add(actionA);
+        actions.add(actionB);
+        actions.add(actionC);
+        scanQrAction = (FloatingActionButton) fabMenu.findViewById(R.id.action_d);
+        if (CalendulaApp.isPharmaModeEnabled(activity)) {
+            scanQrAction.setVisibility(View.VISIBLE);
+            actions.add(scanQrAction);
+        } else {
+            scanQrAction.setVisibility(View.GONE);
+        }
+        return actions;
+    }
+
+    private void onClickAdd() {
+        switch (currentPage) {
+            case 0:
+                return;
+            case 1:
+                launchActivity(RoutinesActivity.class);
+                break;
+            case 2:
+                launchActivity(MedicinesActivity.class);
+                break;
+            case 3:
+        }
+    }
+
+    private void launchActivity(Class<?> type) {
+        activity.startActivity(new Intent(activity, type));
+        activity.overridePendingTransition(0, 0);
+    }
+
+    private void startSchedulesActivity(int scheduleType) {
+        Intent i = new Intent(activity, ScheduleCreationActivity.class);
+        i.putExtra("scheduleType", scheduleType);
+        activity.startActivity(i);
+        activity.overridePendingTransition(0, 0);
+        fabMenu.collapse();
+    }
+
+    private void startScanActivity() {
+        Intent i = new Intent(activity, ScanActivity.class);
+        i.putExtra("after_scan_pkg", activity.getPackageName());
+        i.putExtra("after_scan_cls", ConfirmSchedulesActivity.class.getName());
+        activity.startActivity(i);
+        activity.overridePendingTransition(0, 0);
+        fabMenu.collapse();
     }
 
 }

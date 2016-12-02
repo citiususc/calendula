@@ -92,29 +92,29 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
     @Override
     public void save(Medicine m) {
 
-        if(m.stockManagementEnabled() && m.getId() != null){
+        if (m.stockManagementEnabled() && m.getId() != null) {
 
             Medicine original = findById(m.getId());
             boolean addedOrRemoved = !original.stock().equals(m.stock());
             super.save(m);
 
-            if(addedOrRemoved ){
+            if (addedOrRemoved) {
                 Long days = StockUtils.getEstimatedStockDays(m);
                 SharedPreferences preferences = PreferenceUtils.instance().preferences();
                 int stock_alert_days = Integer.parseInt(preferences.getString("stock_alert_days", "-1"));
                 List<PatientAlert> alerts = DB.alerts().findByMedicineAndType(m, StockRunningOutAlert.class.getCanonicalName());
-                if(days!=null && days < stock_alert_days) {
-                    if(alerts.isEmpty()) {
+                if (days != null && days < stock_alert_days) {
+                    if (alerts.isEmpty()) {
                         AlertManager.createAlert(new StockRunningOutAlert(m, LocalDate.now()));
                         CalendulaApp.eventBus().post(new StockRunningOutEvent(m, days));
                     }
-                }else if(days == null || days > stock_alert_days){
-                    for(PatientAlert a : alerts){
+                } else if (days == null || days > stock_alert_days) {
+                    for (PatientAlert a : alerts) {
                         DB.alerts().remove(a);
                     }
                 }
             }
-        }else{
+        } else {
             super.save(m);
         }
 

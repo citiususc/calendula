@@ -51,7 +51,7 @@ public class DefaultDataGenerator {
         }
     }
 
-    public static void generateDefaultRoutines(Patient p, Context ctx){
+    public static void generateDefaultRoutines(Patient p, Context ctx) {
         Resources r = ctx.getResources();
         new Routine(p, new LocalTime(9, 0), r.getString(R.string.routine_breakfast)).save();
         new Routine(p, new LocalTime(13, 0), r.getString(R.string.routine_lunch)).save();

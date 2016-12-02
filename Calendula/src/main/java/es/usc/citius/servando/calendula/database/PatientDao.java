@@ -56,7 +56,7 @@ public class PatientDao extends GenericDao<Patient, Long> {
     @Override
     public void saveAndFireEvent(Patient p) {
 
-        Object event =  p.id() == null ? new PersistenceEvents.UserCreateEvent(p) : new PersistenceEvents.UserUpdateEvent(p);
+        Object event = p.id() == null ? new PersistenceEvents.UserCreateEvent(p) : new PersistenceEvents.UserUpdateEvent(p);
         save(p);
         CalendulaApp.eventBus().post(event);
 
@@ -64,22 +64,22 @@ public class PatientDao extends GenericDao<Patient, Long> {
 
     /// Mange active patient through preferences
 
-    public boolean isActive(Patient p, Context ctx){
-        Long activeId =  PreferenceManager.getDefaultSharedPreferences(ctx).getLong(PREFERENCE_ACTIVE_PATIENT,-1);
+    public boolean isActive(Patient p, Context ctx) {
+        Long activeId = PreferenceManager.getDefaultSharedPreferences(ctx).getLong(PREFERENCE_ACTIVE_PATIENT, -1);
         return activeId.equals(p.id());
     }
 
-    public Patient getActive(Context ctx){
-        long id =  PreferenceManager.getDefaultSharedPreferences(ctx).getLong(PREFERENCE_ACTIVE_PATIENT,-1);
+    public Patient getActive(Context ctx) {
+        long id = PreferenceManager.getDefaultSharedPreferences(ctx).getLong(PREFERENCE_ACTIVE_PATIENT, -1);
         Patient p;
-        if(id != -1){
+        if (id != -1) {
             p = findById(id);
-            if(p == null) {
+            if (p == null) {
                 p = getDefault();
-                setActive(p,ctx);
+                setActive(p, ctx);
             }
             return p;
-        }else{
+        } else {
             return getDefault();
         }
     }
@@ -90,10 +90,11 @@ public class PatientDao extends GenericDao<Patient, Long> {
 
     public void setActive(Patient patient, Context ctx) {
         PreferenceManager.getDefaultSharedPreferences(ctx).edit()
-        .putLong(PREFERENCE_ACTIVE_PATIENT,patient.id())
-        .apply();
+                .putLong(PREFERENCE_ACTIVE_PATIENT, patient.id())
+                .apply();
         CalendulaApp.eventBus().post(new PersistenceEvents.ActiveUserChangeEvent(patient));
     }
+
     public void setActiveById(Long id, Context ctx) {
         Patient patient = findById(id);
         PreferenceManager.getDefaultSharedPreferences(ctx).edit()
@@ -112,14 +113,14 @@ public class PatientDao extends GenericDao<Patient, Long> {
     }
 
     public void removeAllStuff(Patient p) {
-        for(Medicine m : DB.medicines().findAll()){
-            if(m.patient().id() == p.id()){
+        for (Medicine m : DB.medicines().findAll()) {
+            if (m.patient().id() == p.id()) {
                 // this also remove schedules
                 DB.medicines().deleteCascade(m, true);
             }
         }
         // remove routines
-        for(Routine r:  DB.routines().findAll()) {
+        for (Routine r : DB.routines().findAll()) {
             if (r.patient().id() == p.id()) {
                 DB.routines().remove(r);
             }

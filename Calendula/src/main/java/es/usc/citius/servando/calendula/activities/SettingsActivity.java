@@ -79,6 +79,7 @@ import es.usc.citius.servando.calendula.util.view.CustomListPreference;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+    public static final int REQ_CODE_EXTERNAL_STORAGE = 20;
     /**
      * Determines whether to always show the simplified settings UI, where
      * settings are presented in a single list. When false, settings are shown
@@ -87,47 +88,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
     private static final String TAG = "SettingsActivity";
-
-    public static final int REQ_CODE_EXTERNAL_STORAGE = 20;
-
     static Context ctx;
     static Activity activity;
     static Context appCtx;
     static String lastValidDatabase;
     static String NONE;
     static String SETTING_UP;
-
-    BroadcastReceiver onDBSetupComplete;
-
     static boolean settingUp = false;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        NONE = getString(R.string.database_none_id);
-        SETTING_UP = getString(R.string.database_setting_up);
-
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        lastValidDatabase = settings.getString("last_valid_database", NONE);
-
-        settingUp = SETTING_UP.equals(settings.getString("prescriptions_database",null));
-
-        Log.d(TAG, "sa onCreate: prescriptions_database: " + settings.getString("prescriptions_database",null));
-        Log.d(TAG, "sa onCreate: SETTING_UP: " + SETTING_UP);
-        Log.d(TAG, "sa onCreate: setting_up: " + settingUp);
-
-        onDBSetupComplete = new BroadcastReceiver() {
-            public void onReceive(Context ctxt, Intent intent) {
-                Preference p = findPreference("prescriptions_database");
-                p.setEnabled(true);
-                bindPreferenceSummaryToValue(p, false);
-                settingUp = false;
-
-            }
-        };
-        registerReceiver(onDBSetupComplete, new IntentFilter(SetupDBService.ACTION_COMPLETE));
-    }
-
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -139,44 +106,42 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
             if (preference instanceof es.usc.citius.servando.calendula.util.RingtonePreference) {
                 String p = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-                if(PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(activity, p)){
+                if (PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(activity, p)) {
                     preference.setSummary("");
-                }else{
+                } else {
                     Uri ringtoneUri = Uri.parse(stringValue);
                     Ringtone ringtone = RingtoneManager.getRingtone(ctx, ringtoneUri);
-                    String name = ringtone!=null ? ringtone.getTitle(ctx) :ctx.getString(R.string.pref_notification_tone_sum);
+                    String name = ringtone != null ? ringtone.getTitle(ctx) : ctx.getString(R.string.pref_notification_tone_sum);
                     preference.setSummary(name);
                 }
 
 
-
-
             } else if (preference instanceof ListPreference) {
-                if(preference.getKey().equals("prescriptions_database")){
+                if (preference.getKey().equals("prescriptions_database")) {
                     //Toast.makeText(ctx, "Value: " + stringValue + ", settingUp:" + settingUp, Toast.LENGTH_SHORT).show();
-                    if(!onUpdatePrescriptionsDatabasePreference((ListPreference) preference, stringValue)){
+                    if (!onUpdatePrescriptionsDatabasePreference((ListPreference) preference, stringValue)) {
                         //return false;
                     }
                     ListPreference listPreference = (ListPreference) preference;
                     int index = listPreference.findIndexOfValue(stringValue);
-                    if(stringValue.equals(SETTING_UP)) {
+                    if (stringValue.equals(SETTING_UP)) {
                         preference.setSummary(stringValue);
                         preference.setEnabled(false);
-                    }else{
+                    } else {
                         // Set the summary to reflect the new value.
-                        preference.setSummary(index>=0 ? listPreference.getEntries()[index] : "Unknown");
+                        preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : "Unknown");
                     }
-                }else {
+                } else {
                     // For list preferences, look up the correct display value in
                     // the preference's 'entries' list.
                     ListPreference listPreference = (ListPreference) preference;
                     int index = listPreference.findIndexOfValue(stringValue);
 
-                // Set the summary to reflect the new value.
-                preference.setSummary(
-                        index >= 0
-                                ? listPreference.getEntries()[index]
-                                : null);
+                    // Set the summary to reflect the new value.
+                    preference.setSummary(
+                            index >= 0
+                                    ? listPreference.getEntries()[index]
+                                    : null);
 
                 }
             } else {
@@ -188,10 +153,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             return true;
         }
     };
+    BroadcastReceiver onDBSetupComplete;
 
-    static boolean onUpdatePrescriptionsDatabasePreference(final ListPreference preference, final String stringValue){
+    static boolean onUpdatePrescriptionsDatabasePreference(final ListPreference preference, final String stringValue) {
         Log.d(TAG, "New value: " + stringValue);
-        if(!settingUp && !stringValue.equals(lastValidDatabase) && !NONE.equalsIgnoreCase(stringValue) && !SETTING_UP.equals(stringValue)) {
+        if (!settingUp && !stringValue.equals(lastValidDatabase) && !NONE.equalsIgnoreCase(stringValue) && !SETTING_UP.equals(stringValue)) {
             DownloadDatabaseDialogHelper.showDownloadDatabaseDialog(ctx, stringValue, new DownloadDatabaseDialogHelper.DownloadDatabaseDialogCallback() {
                 @Override
                 public void onDownloadAcceptedOrCancelled(boolean accepted) {
@@ -199,7 +165,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     SharedPreferences.Editor edit = settings.edit();
                     edit.putString("prescriptions_database", accepted ? SETTING_UP : lastValidDatabase);
                     edit.apply();
-                    if(accepted){
+                    if (accepted) {
                         settingUp = true;
                         preference.setEnabled(false);
                     }
@@ -207,12 +173,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 }
             });
             return false;
-        }else if(stringValue.equalsIgnoreCase(NONE)){
+        } else if (stringValue.equalsIgnoreCase(NONE)) {
             try {
                 DBRegistry.instance().clear();
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
                 SharedPreferences.Editor edit = settings.edit();
-                edit.putString("prescriptions_database",settings.getString("last_valid_database", NONE));
+                edit.putString("prescriptions_database", settings.getString("last_valid_database", NONE));
                 //edit.putString("last_valid_database", settings.getString("last_valid_database", NONE));
                 edit.apply();
                 lastValidDatabase = NONE;
@@ -260,11 +226,80 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         // Trigger the listener immediately with the preference's current value.
         //if(triggerListener) {
-            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                    PreferenceManager
-                            .getDefaultSharedPreferences(preference.getContext())
-                            .getString(preference.getKey(), ""));
+        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+                PreferenceManager
+                        .getDefaultSharedPreferences(preference.getContext())
+                        .getString(preference.getKey(), ""));
         //}
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean onIsMultiPane() {
+        return isXLargeTablet(this) && !isSimplePreferences(this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public void onBuildHeaders(List<Header> target) {
+        if (!isSimplePreferences(this)) {
+            loadHeadersFromResource(R.xml.pref_headers, target);
+        }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if ("alarm_repeat_frequency".equals(key)) {
+            Log.d("SettingsActivity", "Update " + key);
+            AlarmScheduler.instance().updateAllAlarms(this);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQ_CODE_EXTERNAL_STORAGE: {
+                PermissionUtils.markedPermissionAsAsked(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    CheckBoxPreference ins = (CheckBoxPreference) findPreference("alarm_insistent");
+                    ins.setChecked(true);
+                }
+            }
+        }
+
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        NONE = getString(R.string.database_none_id);
+        SETTING_UP = getString(R.string.database_setting_up);
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        lastValidDatabase = settings.getString("last_valid_database", NONE);
+
+        settingUp = SETTING_UP.equals(settings.getString("prescriptions_database", null));
+
+        Log.d(TAG, "sa onCreate: prescriptions_database: " + settings.getString("prescriptions_database", null));
+        Log.d(TAG, "sa onCreate: SETTING_UP: " + SETTING_UP);
+        Log.d(TAG, "sa onCreate: setting_up: " + settingUp);
+
+        onDBSetupComplete = new BroadcastReceiver() {
+            public void onReceive(Context ctxt, Intent intent) {
+                Preference p = findPreference("prescriptions_database");
+                p.setEnabled(true);
+                bindPreferenceSummaryToValue(p, false);
+                settingUp = false;
+
+            }
+        };
+        registerReceiver(onDBSetupComplete, new IntentFilter(SetupDBService.ACTION_COMPLETE));
     }
 
     @Override
@@ -273,7 +308,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         ScreenUtils.setStatusBarColor(this, getResources().getColor(R.color.dark_grey_home));
 
-        LinearLayout root = (LinearLayout)findViewById(android.R.id.list).getParent().getParent().getParent();
+        LinearLayout root = (LinearLayout) findViewById(android.R.id.list).getParent().getParent().getParent();
         Toolbar toolbar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.settings_toolbar, root, false);
         toolbar.setBackgroundColor(getResources().getColor(R.color.dark_grey_home));
         toolbar.setNavigationIcon(getNavigationIcon());
@@ -293,23 +328,41 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         appCtx = getApplicationContext();
         setupSimplePreferencesScreen();
 
-        if(getIntent()!=null && getIntent().getBooleanExtra("show_database_dialog",false)){
+        if (getIntent() != null && getIntent().getBooleanExtra("show_database_dialog", false)) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    ((CustomListPreference)findPreference("prescriptions_database")).show();
+                    ((CustomListPreference) findPreference("prescriptions_database")).show();
                 }
-            },500);
+            }, 500);
 
         }
 
     }
 
-    protected Drawable getNavigationIcon(){
+    protected Drawable getNavigationIcon() {
         return new IconicsDrawable(this, GoogleMaterial.Icon.gmd_arrow_back)
                 .sizeDp(24)
                 .paddingDp(2)
                 .colorRes(R.color.white);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(onDBSetupComplete);
+        super.onDestroy();
     }
 
     /**
@@ -344,10 +397,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
         // their values. When their values change, their summaries are updated
         // to reflect the new value, per the Android Design guidelines.
-        bindPreferenceSummaryToValue(findPreference("display_name"),true);
-        bindPreferenceSummaryToValue(findPreference("alarm_repeat_frequency"),true);
-        bindPreferenceSummaryToValue(findPreference("alarm_reminder_window"),true);
-        bindPreferenceSummaryToValue(findPreference("pref_notification_tone"),true);
+        bindPreferenceSummaryToValue(findPreference("display_name"), true);
+        bindPreferenceSummaryToValue(findPreference("alarm_repeat_frequency"), true);
+        bindPreferenceSummaryToValue(findPreference("alarm_reminder_window"), true);
+        bindPreferenceSummaryToValue(findPreference("pref_notification_tone"), true);
         bindPreferenceSummaryToValue(findPreference("prescriptions_database"), true);
         bindPreferenceSummaryToValue(findPreference("stock_alert_days"), true);
 
@@ -356,8 +409,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             public boolean onPreferenceChange(Preference preference, Object o) {
                 boolean val = (boolean) o;
                 String p = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-                if(val && PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(activity,p)) {
-                    if(PermissionUtils.shouldAskForPermission(activity,p))
+                if (val && PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(activity, p)) {
+                    if (PermissionUtils.shouldAskForPermission(activity, p))
                         PermissionUtils.requestPermissions(activity, new String[]{p}, REQ_CODE_EXTERNAL_STORAGE);
                     else
                         showStupidUserDialog();
@@ -367,7 +420,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             }
         });
 
-        if(!CalendulaApp.isPharmaModeEnabled(this)){
+        if (!CalendulaApp.isPharmaModeEnabled(this)) {
             Preference alarmPk = findPreference("alarm_pickup_notifications");
             PreferenceScreen preferenceScreen = getPreferenceScreen();
             preferenceScreen.removePreference(alarmPk);
@@ -389,69 +442,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
-            });
+                });
         AlertDialog alert = builder.create();
         alert.show();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean onIsMultiPane() {
-        return isXLargeTablet(this) && !isSimplePreferences(this);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public void onBuildHeaders(List<Header> target) {
-        if (!isSimplePreferences(this)) {
-            loadHeadersFromResource(R.xml.pref_headers, target);
-        }
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if ("alarm_repeat_frequency".equals(key)) {
-            Log.d("SettingsActivity", "Update " + key);
-            AlarmScheduler.instance().updateAllAlarms(this);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        unregisterReceiver(onDBSetupComplete);
-        super.onDestroy();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case REQ_CODE_EXTERNAL_STORAGE: {
-                PermissionUtils.markedPermissionAsAsked(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    CheckBoxPreference ins = (CheckBoxPreference)findPreference("alarm_insistent");
-                    ins.setChecked(true);
-                }
-            }
-        }
-
     }
 
 }

@@ -44,15 +44,14 @@ public class AlarmIntentService extends WakeIntentService {
         // get intent params with alarm info
         AlarmIntentParams params = AlarmScheduler.getAlarmParams(intent);
 
-        if(params == null)
-        {
+        if (params == null) {
             Log.w(TAG, "No extra params supplied");
             return;
         }
 
         Log.d(TAG, "Alarm received: " + params.toString());
 
-        if(params.action != CalendulaApp.ACTION_DAILY_ALARM) {
+        if (params.action != CalendulaApp.ACTION_DAILY_ALARM) {
             try {
                 params.date();
             } catch (Exception e) {
@@ -61,8 +60,7 @@ public class AlarmIntentService extends WakeIntentService {
             }
         }
 
-        switch (params.action)
-        {
+        switch (params.action) {
             case CalendulaApp.ACTION_ROUTINE_TIME:
             case CalendulaApp.ACTION_ROUTINE_DELAYED_TIME:
                 AlarmScheduler.instance().onAlarmReceived(params, this.getApplicationContext());

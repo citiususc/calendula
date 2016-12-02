@@ -62,27 +62,83 @@ import es.usc.citius.servando.calendula.util.IconUtils;
 public class MedicineInfoActivity extends CalendulaActivity {
 
     private static final String TAG = "MedicineInfoActivity";
-
-    private MedInfoPageAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
     AppBarLayout appBarLayout;
     CollapsingToolbarLayout toolbarLayout;
     TextView toolbarTitle;
     boolean appBarLayoutExpanded = true;
-    private Handler handler;
-
     Patient activePatient;
     Medicine medicine;
-
     PrescriptionDBMgr dbMgr;
-
     ImageView medIcon;
-    private boolean showAlerts = false;
     int alertLevel = -1;
+    private MedInfoPageAdapter mSectionsPagerAdapter;
+    /**
+     * The {@link ViewPager} that will host the section contents.
+     */
+    private ViewPager mViewPager;
+    private Handler handler;
+    private boolean showAlerts = false;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.medicine_info, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.getItem(0).setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_pencil, R.color.white, 24, 2));
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_edit:
+                Intent intent = new Intent(this, MedicinesActivity.class);
+                intent.putExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, medicine.getId());
+                startActivity(intent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    // Method called from the event bus
+    @SuppressWarnings("unused")
+    public void onEvent(Object evt) {
+        if (evt instanceof PersistenceEvents.ModelCreateOrUpdateEvent) {
+            Class<?> cls = ((PersistenceEvents.ModelCreateOrUpdateEvent) evt).clazz;
+            Object model = ((PersistenceEvents.ModelCreateOrUpdateEvent) evt).model;
+            if (cls.equals(Medicine.class) && model != null) {
+
+                Medicine med = (Medicine) model;
+
+                if (med.getId() == medicine.getId()) {
+
+                    if (medicine.cn() == null && med.cn() != null) {
+                        SnackbarManager.show(Snackbar.with(getApplicationContext())
+                                        .type(SnackbarType.MULTI_LINE)
+                                        .color(getResources().getColor(R.color.android_green_dark))
+                                        .textColor(getResources().getColor(R.color.white))
+                                        .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
+                                        .text("¡Medicamento vinculado!")
+                                , this);
+                    }
+                    ((MedInfoFragment) getViewPagerFragment(0)).notifyDataChange();
+                    ((AlertListFragment) getViewPagerFragment(1)).notifyDataChange();
+                    DB.medicines().refresh(medicine);
+                    updateMedDetails();
+
+                }
+            }
+
+        }
+    }
+
+    Fragment getViewPagerFragment(int position) {
+        String tag = FragmentUtils.makeViewPagerFragmentName(R.id.container, position);
+        return getSupportFragmentManager().findFragmentByTag(tag);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +156,7 @@ public class MedicineInfoActivity extends CalendulaActivity {
         mSectionsPagerAdapter = new MedInfoPageAdapter(getSupportFragmentManager(), medicine);
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        toolbarTitle = (TextView)findViewById(R.id.toolbar_title);
+        toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
         medIcon = (ImageView) findViewById(R.id.medicine_icon);
 
         // Set up the ViewPager with the sections adapter.
@@ -119,10 +175,10 @@ public class MedicineInfoActivity extends CalendulaActivity {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 verticalOffset = Math.abs(verticalOffset);
-                if(verticalOffset > 100){
+                if (verticalOffset > 100) {
                     // collapse
                     toolbarTitle.animate().alpha(1);
-                }else{
+                } else {
                     // expand
                     toolbarTitle.animate().alpha(0);
                 }
@@ -131,19 +187,12 @@ public class MedicineInfoActivity extends CalendulaActivity {
         appBarLayout.addOnOffsetChangedListener(mListener);
         toolbarTitle.animate().alpha(0);
 
-        if(showAlerts){
+        if (showAlerts) {
             mViewPager.setCurrentItem(1);
         }
 
         CalendulaApp.eventBus().register(this);
-   }
-
-    private void updateMedDetails() {
-        toolbarTitle.setText("Info | " + medicine.name());
-        ((TextView)findViewById(R.id.medicine_name)).setText(medicine.name());
-        medIcon.setImageDrawable(IconUtils.icon(this,medicine.presentation().icon(), R.color.white));
     }
-
 
     @Override
     protected void onDestroy() {
@@ -151,53 +200,9 @@ public class MedicineInfoActivity extends CalendulaActivity {
         CalendulaApp.eventBus().unregister(this);
     }
 
-    private void processIntent() {
-
-        long medId = getIntent() != null ? getIntent().getLongExtra("medicine_id", -1) : -1;
-        showAlerts = getIntent() != null && getIntent().getBooleanExtra("show_alerts", false);
-
-        if(medId != -1 ){
-            medicine = DB.medicines().findById(medId);
-        }
-        if(medicine == null){
-            Toast.makeText(MedicineInfoActivity.this, "Medicine not found", Toast.LENGTH_SHORT).show();
-            finish();
-        }
-
-        List<PatientAlert> alerts = DB.alerts().findBy(PatientAlert.COLUMN_MEDICINE, medicine);
-        for(PatientAlert a : alerts){
-            if(a.getLevel() > alertLevel){
-                alertLevel = a.getLevel();
-            }
-        }
-    }
-
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-    }
-
-    private void setupTabLayout(){
-
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-        tabLayout.setupWithViewPager(mViewPager);
-
-        IIcon[] icons = new IIcon[]{
-                CommunityMaterial.Icon.cmd_book_open,
-                CommunityMaterial.Icon.cmd_message_alert
-        } ;
-
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-
-            Drawable icon = new IconicsDrawable(this)
-                        .icon(icons[i])
-                        .alpha(80)
-                        .paddingDp(2)
-                        .color(Color.WHITE)
-                        .sizeDp(24);
-
-            tabLayout.getTabAt(i).setIcon(icon);
-        }
     }
 
     @Override
@@ -210,29 +215,54 @@ public class MedicineInfoActivity extends CalendulaActivity {
         super.onPause();
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.medicine_info, menu);
-        return true;
+    private void updateMedDetails() {
+        toolbarTitle.setText("Info | " + medicine.name());
+        ((TextView) findViewById(R.id.medicine_name)).setText(medicine.name());
+        medIcon.setImageDrawable(IconUtils.icon(this, medicine.presentation().icon(), R.color.white));
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.getItem(0).setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_pencil, R.color.white, 24, 2));
-        return super.onPrepareOptionsMenu(menu);
-    }
+    private void processIntent() {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_edit:
-                Intent intent = new Intent(this, MedicinesActivity.class);
-                intent.putExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, medicine.getId());
-                startActivity(intent);
-                return true;
+        long medId = getIntent() != null ? getIntent().getLongExtra("medicine_id", -1) : -1;
+        showAlerts = getIntent() != null && getIntent().getBooleanExtra("show_alerts", false);
+
+        if (medId != -1) {
+            medicine = DB.medicines().findById(medId);
         }
-        return super.onOptionsItemSelected(item);
+        if (medicine == null) {
+            Toast.makeText(MedicineInfoActivity.this, "Medicine not found", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+        List<PatientAlert> alerts = DB.alerts().findBy(PatientAlert.COLUMN_MEDICINE, medicine);
+        for (PatientAlert a : alerts) {
+            if (a.getLevel() > alertLevel) {
+                alertLevel = a.getLevel();
+            }
+        }
+    }
+
+    private void setupTabLayout() {
+
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(mViewPager);
+
+        IIcon[] icons = new IIcon[]{
+                CommunityMaterial.Icon.cmd_book_open,
+                CommunityMaterial.Icon.cmd_message_alert
+        };
+
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+
+            Drawable icon = new IconicsDrawable(this)
+                    .icon(icons[i])
+                    .alpha(80)
+                    .paddingDp(2)
+                    .color(Color.WHITE)
+                    .sizeDp(24);
+
+            tabLayout.getTabAt(i).setIcon(icon);
+        }
     }
 
     private ViewPager.OnPageChangeListener getPageChangeListener() {
@@ -244,10 +274,10 @@ public class MedicineInfoActivity extends CalendulaActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if(medicine!= null){
-                    if(position == 0){
+                if (medicine != null) {
+                    if (position == 0) {
                         toolbarTitle.setText("Info | " + medicine.name());
-                    }else if(position ==1){
+                    } else if (position == 1) {
                         toolbarTitle.setText("Avisos | " + medicine.name());
                     }
 
@@ -259,43 +289,6 @@ public class MedicineInfoActivity extends CalendulaActivity {
 
             }
         };
-    }
-
-    Fragment getViewPagerFragment(int position) {
-        String tag = FragmentUtils.makeViewPagerFragmentName(R.id.container, position);
-        return getSupportFragmentManager().findFragmentByTag(tag);
-    }
-
-    // Method called from the event bus
-    @SuppressWarnings("unused")
-    public void onEvent(Object evt) {
-        if (evt instanceof PersistenceEvents.ModelCreateOrUpdateEvent) {
-            Class<?> cls = ((PersistenceEvents.ModelCreateOrUpdateEvent) evt).clazz;
-            Object model = ((PersistenceEvents.ModelCreateOrUpdateEvent) evt).model;
-            if(cls.equals(Medicine.class) && model!=null){
-
-                Medicine med = (Medicine) model;
-
-                if(med.getId() == medicine.getId()) {
-
-                    if(medicine.cn() == null && med.cn() != null) {
-                        SnackbarManager.show(Snackbar.with(getApplicationContext())
-                                        .type(SnackbarType.MULTI_LINE)
-                                        .color(getResources().getColor(R.color.android_green_dark))
-                                        .textColor(getResources().getColor(R.color.white))
-                                        .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
-                                        .text("¡Medicamento vinculado!")
-                                , this);
-                    }
-                    ((MedInfoFragment) getViewPagerFragment(0)).notifyDataChange();
-                    ((AlertListFragment) getViewPagerFragment(1)).notifyDataChange();
-                    DB.medicines().refresh(medicine);
-                    updateMedDetails();
-
-                }
-            }
-
-        }
     }
 
 }

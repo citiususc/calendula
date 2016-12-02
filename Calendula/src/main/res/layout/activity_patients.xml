@@ -17,22 +17,20 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="es.usc.citius.servando.calendula.activities.PatientsActivity"
-                android:paddingTop="@dimen/status_bar_height">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/status_bar_height"
+    tools:context="es.usc.citius.servando.calendula.activities.PatientsActivity">
 
-    <android.support.v7.widget.Toolbar
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/dark_grey_home"
         android:title="Patients"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        />
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <ImageView
         android:id="@+id/tabs_shadow"
@@ -47,28 +45,26 @@
         android:id="@+id/grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
         android:horizontalSpacing="10dp"
         android:numColumns="2"
-        android:verticalSpacing="10dp"
-        android:scrollbars="none"
-        android:layout_below="@+id/toolbar"
+        android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="15dp"/>
+        android:paddingTop="15dp"
+        android:scrollbars="none"
+        android:verticalSpacing="10dp" />
 
-    <com.getbase.floatingactionbutton.FloatingActionButton
-        xmlns:fab="http://schemas.android.com/apk/res-auto"
+    <com.getbase.floatingactionbutton.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/add_button"
-        android:layout_margin="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:transitionName="fab"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        fab:fab_icon="@drawable/ic_action_add"
+        android:layout_margin="16dp"
+        android:transitionName="fab"
         fab:fab_colorNormal="@color/fab_dark_normal"
         fab:fab_colorPressed="@color/fab_dark_pressed"
-        />
+        fab:fab_icon="@drawable/ic_action_add" />
 
 </RelativeLayout>

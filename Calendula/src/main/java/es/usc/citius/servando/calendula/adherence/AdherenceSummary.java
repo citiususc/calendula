@@ -30,11 +30,11 @@ public class AdherenceSummary {
 
     public List<AdherenceSummaryItem> items;
 
-    public AdherenceSummary(){
+    public AdherenceSummary() {
         items = new ArrayList<>();
     }
 
-    public AdherenceSummary with(List<DailyScheduleItem> ditems){
+    public AdherenceSummary with(List<DailyScheduleItem> ditems) {
         for (DailyScheduleItem i : ditems) {
             items.add(new AdherenceSummaryItem(i));
         }

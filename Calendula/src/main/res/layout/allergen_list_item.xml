@@ -64,16 +64,15 @@
             android:id="@+id/delete_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/simple_highlight_click_selector"
-            android:alpha="0.9"
-            android:layout_marginRight="16dp"
             android:layout_marginEnd="16dp"
-            />
+            android:layout_marginRight="16dp"
+            android:alpha="0.9"
+            android:background="@drawable/simple_highlight_click_selector" />
 
-     </RelativeLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>

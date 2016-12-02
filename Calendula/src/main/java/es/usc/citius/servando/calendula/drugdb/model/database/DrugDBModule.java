@@ -28,7 +28,7 @@ public class DrugDBModule {
 
 
     public static final String TAG = DrugDBModule.class.getSimpleName();
-
+    private static DrugDBModule instance = null;
     // Active ingredients DAO
     private final ActiveIngredientDAO ActiveIngredients;
     // Content unit DAO
@@ -48,16 +48,6 @@ public class DrugDBModule {
     // Presentation forms
     private final PresentationFormDAO PresentationForms;
 
-    private static DrugDBModule instance = null;
-
-    public static DrugDBModule getInstance() {
-        if (instance == null) {
-            instance = new DrugDBModule(DB.helper());
-        }
-        return instance;
-    }
-
-
     private DrugDBModule(final DatabaseHelper db) {
         ActiveIngredients = new ActiveIngredientDAO(db);
         ContentUnits = new ContentUnitDAO(db);
@@ -71,6 +61,12 @@ public class DrugDBModule {
         Log.v(TAG, "Drug DB Module initialized");
     }
 
+    public static DrugDBModule getInstance() {
+        if (instance == null) {
+            instance = new DrugDBModule(DB.helper());
+        }
+        return instance;
+    }
 
     public ActiveIngredientDAO activeIngredients() {
         return ActiveIngredients;

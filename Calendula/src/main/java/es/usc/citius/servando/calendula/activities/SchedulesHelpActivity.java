@@ -28,10 +28,10 @@ import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
 import es.usc.citius.servando.calendula.R;
 
 
-public class SchedulesHelpActivity extends IntroActivity{
+public class SchedulesHelpActivity extends IntroActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
 
         setFullscreen(true);
         super.onCreate(savedInstanceState);
@@ -58,7 +58,7 @@ public class SchedulesHelpActivity extends IntroActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         prefs.edit().putBoolean("PREFERENCE_SCHEDULE_HELP_SHOWN", true).apply();
     }
 

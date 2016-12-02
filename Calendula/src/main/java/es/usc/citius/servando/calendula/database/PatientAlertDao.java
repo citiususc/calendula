@@ -66,6 +66,7 @@ public class PatientAlertDao extends GenericDao<PatientAlert, Long> {
             throw new RuntimeException("Cannot retrieve alerts: ", e);
         }
     }
+
     public List<PatientAlert> findByPatientMedicineAndType(Patient p, Medicine m, String className) {
 
         try {

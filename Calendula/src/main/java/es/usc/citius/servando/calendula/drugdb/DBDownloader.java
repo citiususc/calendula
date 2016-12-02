@@ -39,10 +39,9 @@ import es.usc.citius.servando.calendula.util.SettingsKeys;
  */
 public class DBDownloader {
 
-    public static  String DOWNLOAD_URL = null;
     private static final String TAG = DBDownloader.class.getSimpleName();
     private static final String downloadSuffix = ".db";
-
+    public static String DOWNLOAD_URL = null;
     private static long downloadId = -1;
 
     public static void download(final Context ctx, PrescriptionDBMgr db, final DBDownloadListener l) {
@@ -111,11 +110,6 @@ public class DBDownloader {
         downloadId = manager.enqueue(request);
     }
 
-
-    public interface DBDownloadListener {
-        void onComplete(boolean success, String path);
-    }
-
     private static boolean validDownload(long downloadId, DownloadManager dMgr) {
         Log.d(TAG, "Checking download status for id: " + downloadId);
         //Verify if download is a success
@@ -134,6 +128,10 @@ public class DBDownloader {
             }
         }
         return false;
+    }
+
+    public interface DBDownloadListener {
+        void onComplete(boolean success, String path);
     }
 
 }

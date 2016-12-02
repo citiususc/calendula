@@ -40,10 +40,10 @@ public class Strings {
     public static String toProperCase(String s) {
         final StringBuilder result = new StringBuilder(s.length());
         String[] words = s.toLowerCase().split("\\s");
-        for(int i=0,l=words.length;i<l;++i) {
-            if(i>0) result.append(" ");
+        for (int i = 0, l = words.length; i < l; ++i) {
+            if (i > 0) result.append(" ");
             String word = words[i];
-            if(word.length()>1)
+            if (word.length() > 1)
                 result.append(Character.toUpperCase(word.charAt(0))).append(words[i].substring(1));
             else
                 result.append(word);
@@ -66,11 +66,11 @@ public class Strings {
         }
     }
 
-    public static SpannableStringBuilder getHighlighted(String text, String match, int color){
+    public static SpannableStringBuilder getHighlighted(String text, String match, int color) {
         final SpannableStringBuilder sb = new SpannableStringBuilder(Strings.toProperCase(text));
         String t = text.toLowerCase(), m = match.toLowerCase();
         int start = t.indexOf(m);
-        if(start >= 0) {
+        if (start >= 0) {
             int end = start + match.length();
             final ForegroundColorSpan fcs = new ForegroundColorSpan(color);
             final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);

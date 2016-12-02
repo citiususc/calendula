@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2016 CITIUS - USC
   ~
@@ -17,289 +16,274 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
     <android.support.design.widget.CoordinatorLayout
-    android:id="@+id/main_content"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="com.castrelo.materialapp.MainActivity">
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
+        android:id="@+id/main_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        tools:context="com.castrelo.materialapp.MainActivity">
 
-
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="280dp"
-            android:background="#00000000"
-            android:clipToPadding="true"
+            android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
-            app:contentScrim="#37474f"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:statusBarScrim="#00000000"
-            app:collapsedTitleGravity="top"
-            app:titleEnabled="false"
-            >
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-            <FrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:background="#00000000"
+                android:clipToPadding="true"
                 android:fitsSystemWindows="true"
-                app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.4"
-                >
+                app:collapsedTitleGravity="top"
+                app:contentScrim="#37474f"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:statusBarScrim="#00000000"
+                app:titleEnabled="false">
 
-                <ImageView
-                    android:id="@+id/imageView5"
+                <FrameLayout
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="#37474f"/>
+                    android:fitsSystemWindows="true"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0.4">
 
-                <ImageView
+                    <ImageView
+                        android:id="@+id/imageView5"
                         android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_alignBottom="@+id/imageView5"
-                    android:layout_alignTop="@+id/imageView5"
-                    android:alpha="0.3"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/clock"
-                    />
+                        android:layout_height="fill_parent"
+                        android:background="#37474f" />
 
-            </FrameLayout>
+                    <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_alignBottom="@+id/imageView5"
+                        android:layout_alignTop="@+id/imageView5"
+                        android:alpha="0.3"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/clock" />
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:fontFamily="sans-serif-condensed"
-                android:text="@string/agenda_zoom_meds_time"
-                android:textColor="#ccffffff"
-                android:textSize="24sp"
-                android:visibility="visible"
-                android:layout_marginBottom="70dp"
-                app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.45"
-                android:gravity="center"
-                />
-
-            <TextView
-                android:id="@+id/user_friendly_time"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:text="hace 5 minutos"
-                android:layout_marginBottom="70dp"
-                android:textColor="#ffffff"
-                android:textSize="20dp"
-                app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.45"
-                android:paddingTop="60dp"
-                android:textStyle="bold"
-                android:gravity="center"/>
-
-            <RelativeLayout
-                    android:layout_width="fill_parent"
-                android:layout_height="80dp"
-                android:layout_gravity="bottom"
-                android:paddingLeft="26dp"
-                android:background="#eceff1"
-                android:paddingRight="26dp"
-                android:paddingTop="10dp"
-                >
-
-
-
-                <LinearLayout
-                    android:id="@+id/linearLayout"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_toRightOf="@+id/patient_avatar"
-                    android:transitionName="time">
-
-                    <ImageButton
-                        android:id="@+id/imageButton2"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center_vertical"
-                        android:background="@null"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/ic_alarm_black_48dp"
-                        />
-
-                    <TextView
-                        android:id="@+id/routines_list_item_hour"
-                        android:layout_width="wrap_content"
-                        android:layout_height="25dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="5dp"
-                        android:gravity="bottom"
-                        android:text="08:"
-                        android:textColor="#111"
-                        android:textSize="20dp"/>
-
-                    <TextView
-                        android:id="@+id/routines_list_item_minute"
-                        android:layout_width="wrap_content"
-                        android:layout_height="25dp"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/routines_list_item_hour"
-                        android:gravity="bottom"
-                        android:text="00"
-                        android:textColor="#111"
-                        android:textSize="20dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="left"
-                        android:layout_toRightOf="@+id/routines_list_item_minute"
-                        android:gravity="bottom"
-                        android:text=" h"
-                        android:textColor="#111"
-                        android:textSize="20dp"
-                        android:visibility="gone"/>
-
-                </LinearLayout>
+                </FrameLayout>
 
                 <TextView
-                    android:id="@+id/routine_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/linearLayout"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/patient_avatar"
+                    android:id="@+id/textView3"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginBottom="70dp"
                     android:fontFamily="sans-serif-condensed"
-                    android:text="Almorzo"
-                    android:textColor="@color/agenda_item_title"
+                    android:gravity="center"
+                    android:text="@string/agenda_zoom_meds_time"
+                    android:textColor="#ccffffff"
+                    android:textSize="24sp"
+                    android:visibility="visible"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0.45" />
+
+                <TextView
+                    android:id="@+id/user_friendly_time"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginBottom="70dp"
+                    android:gravity="center"
+                    android:paddingTop="60dp"
+                    android:text="hace 5 minutos"
+                    android:textColor="#ffffff"
                     android:textSize="20dp"
                     android:textStyle="bold"
-                    android:transitionName="title"/>
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0.45" />
 
-                <ImageView
-                    android:id="@+id/patient_avatar"
-                    android:layout_width="60dp"
-                    android:layout_height="55dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="false"
-                    android:background="@null"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/avatar1"
-                    android:transitionName="avatar_transition"
-                    android:visibility="gone"/>
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="80dp"
+                    android:layout_gravity="bottom"
+                    android:background="#eceff1"
+                    android:paddingLeft="26dp"
+                    android:paddingRight="26dp"
+                    android:paddingTop="10dp">
 
 
-            </RelativeLayout>
+                    <LinearLayout
+                        android:id="@+id/linearLayout"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/patient_avatar"
+                        android:transitionName="time">
+
+                        <ImageButton
+                            android:id="@+id/imageButton2"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center_vertical"
+                            android:background="@null"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ic_alarm_black_48dp" />
+
+                        <TextView
+                            android:id="@+id/routines_list_item_hour"
+                            android:layout_width="wrap_content"
+                            android:layout_height="25dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="bottom"
+                            android:text="08:"
+                            android:textColor="#111"
+                            android:textSize="20dp" />
+
+                        <TextView
+                            android:id="@+id/routines_list_item_minute"
+                            android:layout_width="wrap_content"
+                            android:layout_height="25dp"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/routines_list_item_hour"
+                            android:gravity="bottom"
+                            android:text="00"
+                            android:textColor="#111"
+                            android:textSize="20dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="left"
+                            android:layout_toRightOf="@+id/routines_list_item_minute"
+                            android:gravity="bottom"
+                            android:text=" h"
+                            android:textColor="#111"
+                            android:textSize="20dp"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/routine_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/linearLayout"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@+id/patient_avatar"
+                        android:fontFamily="sans-serif-condensed"
+                        android:text="Almorzo"
+                        android:textColor="@color/agenda_item_title"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:transitionName="title" />
+
+                    <ImageView
+                        android:id="@+id/patient_avatar"
+                        android:layout_width="60dp"
+                        android:layout_height="55dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="false"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/avatar1"
+                        android:transitionName="avatar_transition"
+                        android:visibility="gone" />
 
 
+                </RelativeLayout>
 
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="65dp"
-                android:layout_marginTop="@dimen/status_bar_height"
-                android:gravity="top"
-                android:layout_gravity="top"
-                android:minHeight="65dp"
-                android:title="Patients"
-                app:layout_collapseMode="pin"
-                app:layout_scrollFlags="scroll|enterAlways|snap"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
+                <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:layout_gravity="top"
+                    android:layout_marginTop="@dimen/status_bar_height"
+                    android:gravity="top"
+                    android:minHeight="65dp"
+                    android:title="Patients"
+                    app:layout_collapseMode="pin"
+                    app:layout_scrollFlags="scroll|enterAlways|snap"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    app:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
 
-        </android.support.design.widget.CollapsingToolbarLayout>
+            </android.support.design.widget.CollapsingToolbarLayout>
 
 
-    </android.support.design.widget.AppBarLayout>
-
+        </android.support.design.widget.AppBarLayout>
 
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/listView"
-            android:layout_gravity="fill_vertical"
-            android:background="#ffffff"
-            android:fillViewport="true"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_gravity="fill_vertical"
+            android:background="#ffffff"
             android:dividerHeight="0dp"
-            android:paddingTop="30dp">
+            android:fillViewport="true"
+            android:paddingTop="30dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         </android.support.v7.widget.RecyclerView>
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/myFAB"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
-        android:src="@drawable/ic_done_black_48dp"
-        app:backgroundTint="#00c853"
-        app:elevation="4dp"
-        app:layout_anchor="@+id/appbar"
-        app:layout_anchorGravity="bottom|right|end"
-        app:layout_behavior="es.usc.citius.servando.calendula.util.view.FABBehavior"
-        app:layout_collapseMode="parallax"
-        />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/myFAB"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_done_black_48dp"
+            app:backgroundTint="#00c853"
+            app:elevation="4dp"
+            app:layout_anchor="@+id/appbar"
+            app:layout_anchorGravity="bottom|right|end"
+            app:layout_behavior="es.usc.citius.servando.calendula.util.view.FABBehavior"
+            app:layout_collapseMode="parallax" />
 
 
-</android.support.design.widget.CoordinatorLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
     <RelativeLayout
         android:id="@+id/toolbar_title"
         android:layout_width="fill_parent"
         android:layout_height="56dp"
-        android:layout_marginTop="@dimen/status_bar_height"
-        >
+        android:layout_marginTop="@dimen/status_bar_height">
 
 
         <TextView
             android:id="@+id/routine_name_title"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/patient_avatar_title"
             android:fontFamily="sans-serif-condensed"
+            android:gravity="center_vertical"
             android:text="Ángel"
             android:textColor="#fff"
             android:textSize="20dp"
-            android:textStyle="bold"
-            android:layout_centerVertical="true"
-            android:gravity="center_vertical"/>
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/patient_avatar_title"
-            android:transitionName="avatar_transition"
             android:layout_width="50dp"
             android:layout_height="45dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="false"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="50dp"
             android:background="@null"
             android:scaleType="fitCenter"
             android:src="@drawable/avatar1"
-            android:visibility="visible"
-            android:layout_marginLeft="50dp"
-            android:layout_centerVertical="true"/>
-
+            android:transitionName="avatar_transition"
+            android:visibility="visible" />
 
 
     </RelativeLayout>
@@ -312,11 +296,11 @@
         android:visibility="invisible">
 
         <ImageView
-            android:layout_gravity="top"
+            android:id="@+id/check_all_image"
             android:layout_width="fill_parent"
             android:layout_height="90dp"
-            android:id="@+id/check_all_image"
-            android:layout_marginTop="150dp"/>
+            android:layout_gravity="top"
+            android:layout_marginTop="150dp" />
     </FrameLayout>
 
 

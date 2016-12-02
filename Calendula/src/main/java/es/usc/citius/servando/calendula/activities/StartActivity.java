@@ -29,10 +29,9 @@ import es.usc.citius.servando.calendula.HomePagerActivity;
 public class StartActivity extends Activity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startActivity(new Intent(this,HomePagerActivity.class));
+        startActivity(new Intent(this, HomePagerActivity.class));
         finish();
     }
 }

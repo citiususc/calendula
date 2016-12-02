@@ -55,15 +55,13 @@ import es.usc.citius.servando.calendula.util.Snack;
 public class SelectMedicineListFragment extends Fragment {
 
 
+    private static String TAG = "SelectMedicineListFragm";
     List<Medicine> mMedicines;
     ArrayAdapter adapter;
     ListView listview;
     long selectedId = -1;
-
     ScheduleCreationActivity mActivity;
     int pColor;
-
-    private static String TAG = "SelectMedicineListFragm";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,6 +86,41 @@ public class SelectMedicineListFragment extends Fragment {
         adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
         listview.setAdapter(adapter);
         return rootView;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof ScheduleCreationActivity) {
+            mActivity = (ScheduleCreationActivity) activity;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        mActivity = null;
+        super.onDetach();
+    }
+
+    public void setSelectedMed(Long id) {
+        this.selectedId = id;
+        Medicine m = Medicine.findById(id);
+        if (m != null) {
+            mMedicines.clear();
+            mMedicines.addAll(DB.medicines().findAllForActivePatient(getContext()));
+            Collections.sort(mMedicines);
+            mActivity.onMedicineSelected(m, false);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    IconicsDrawable iconFor(Presentation p, boolean disabled) {
+        int color = disabled ? R.color.drawer_item_disabled : R.color.agenda_item_title;
+        return new IconicsDrawable(getContext())
+                .icon(Presentation.iconFor(p))
+                .colorRes(color)
+                .paddingDp(5)
+                .sizeDp(55);
     }
 
     private View createMedicineListItem(LayoutInflater inflater, final Medicine medicine) {
@@ -147,41 +180,6 @@ public class SelectMedicineListFragment extends Fragment {
         overlay.setOnClickListener(clickListener);
 
         return item;
-    }
-
-    IconicsDrawable iconFor(Presentation p, boolean disabled) {
-        int color = disabled ? R.color.drawer_item_disabled : R.color.agenda_item_title;
-        return new IconicsDrawable(getContext())
-                .icon(Presentation.iconFor(p))
-                .colorRes(color)
-                .paddingDp(5)
-                .sizeDp(55);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (activity instanceof ScheduleCreationActivity) {
-            mActivity = (ScheduleCreationActivity) activity;
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        mActivity = null;
-        super.onDetach();
-    }
-
-    public void setSelectedMed(Long id) {
-        this.selectedId = id;
-        Medicine m = Medicine.findById(id);
-        if (m != null) {
-            mMedicines.clear();
-            mMedicines.addAll(DB.medicines().findAllForActivePatient(getContext()));
-            Collections.sort(mMedicines);
-            mActivity.onMedicineSelected(m, false);
-            adapter.notifyDataSetChanged();
-        }
     }
 
     private class MedicinesListAdapter extends ArrayAdapter<Medicine> {

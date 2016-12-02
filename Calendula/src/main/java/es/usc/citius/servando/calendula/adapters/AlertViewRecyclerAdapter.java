@@ -49,7 +49,7 @@ public class AlertViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     private final int DEFAULT_ALERT = 1;
 
     HashMap<Class<?>, Integer> alertTypeMap = new HashMap<>();
-    HashMap<Integer,AlertViewProvider> providerMap = new HashMap<>();
+    HashMap<Integer, AlertViewProvider> providerMap = new HashMap<>();
 
     List<PatientAlert> items;
     private EventListener listener;
@@ -67,8 +67,8 @@ public class AlertViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public int getItemViewType(int position) {
         PatientAlert item = items.get(position);
-        Log.d(TAG, "getItemViewType() called with: " + "position = [" + position + "]: " +  item.viewProviderType());
-        if(item.viewProviderType() != null){
+        Log.d(TAG, "getItemViewType() called with: " + "position = [" + position + "]: " + item.viewProviderType());
+        if (item.viewProviderType() != null) {
             return getTypeForClass(item.viewProviderType());
         }
         return DEFAULT_ALERT;
@@ -79,10 +79,10 @@ public class AlertViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         Integer viewType = type;
         Log.d(TAG, "onCreateViewHolder() called with: viewType = [" + viewType + "]");
-        if(viewType == DEFAULT_ALERT) {
+        if (viewType == DEFAULT_ALERT) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.medicine_alert_list_item, parent, false);
             return new NormalItemViewHolder(v);
-        }else{
+        } else {
             return providerMap.get(viewType).onCreateViewHolder(parent);
         }
     }
@@ -94,10 +94,10 @@ public class AlertViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         Log.d(TAG, "onBindViewHolder() called with: " + item.viewProviderType());
         if (holder instanceof NormalItemViewHolder) {
             onBindNormalItemViewHolder((NormalItemViewHolder) holder, item, position);
-        }else  if(item.viewProviderType() != null){
+        } else if (item.viewProviderType() != null) {
             Log.d(TAG, "onBindViewHolder() provider type found");
             getProviderForClass(item.viewProviderType()).onBindViewHolder(holder, item);
-        }else{
+        } else {
             Log.d(TAG, "onBindViewHolder: unknown view holder type");
         }
     }
@@ -108,15 +108,42 @@ public class AlertViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         return items.size();
     }
 
-    private AlertViewProvider getProviderForClass(Class<?> type){
+    public void onBindNormalItemViewHolder(NormalItemViewHolder viewHolder, PatientAlert item, int i) {
+        viewHolder.alert = item;
+        // setup ui
+        PatientAlert alert = item.map();
+        viewHolder.alertIcon.setImageDrawable(IconUtils.alertLevelIcon(alert.getLevel(), viewHolder.context));
+        viewHolder.title.setText("Alert " + alert.getClass().getSimpleName());
+        viewHolder.description.setText("Description gose here");
+    }
+
+    public void registerViewProvider(AlertViewProvider provider, Class<?> cls) {
+
+        Integer type = cls.hashCode();
+        this.alertTypeMap.put(provider.getClass(), type);
+        this.providerMap.put(type, provider);
+    }
+
+    private AlertViewProvider getProviderForClass(Class<?> type) {
         return providerMap.get(getTypeForClass(type));
     }
 
-    private int getTypeForClass(Class<?> type){
+    private int getTypeForClass(Class<?> type) {
         return alertTypeMap.get(type);
     }
 
-    public class NormalItemViewHolder extends RecyclerView.ViewHolder implements OnClickListener{
+
+    public interface EventListener {
+        void onItemClick(View v, DailyAgendaItemStub item, int position);
+    }
+
+    public interface AlertViewProvider {
+        RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent);
+
+        void onBindViewHolder(RecyclerView.ViewHolder holder, PatientAlert item);
+    }
+
+    public class NormalItemViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
         Context context;
         PatientAlert alert;
@@ -140,34 +167,6 @@ public class AlertViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         public void onClick(View view) {
 
         }
-    }
-
-    public void onBindNormalItemViewHolder(NormalItemViewHolder viewHolder, PatientAlert item, int i) {
-        viewHolder.alert = item;
-        // setup ui
-        PatientAlert alert = item.map();
-        viewHolder.alertIcon.setImageDrawable(IconUtils.alertLevelIcon(alert.getLevel(), viewHolder.context));
-        viewHolder.title.setText("Alert " + alert.getClass().getSimpleName());
-        viewHolder.description.setText("Description gose here");
-    }
-
-
-
-
-    public interface EventListener {
-        void onItemClick(View v, DailyAgendaItemStub item, int position);
-    }
-
-    public interface AlertViewProvider {
-        RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent);
-        void onBindViewHolder(RecyclerView.ViewHolder holder, PatientAlert item);
-    }
-
-    public void registerViewProvider(AlertViewProvider provider, Class<?> cls){
-
-        Integer type = cls.hashCode();
-        this.alertTypeMap.put(provider.getClass(), type);
-        this.providerMap.put(type, provider);
     }
 
 }

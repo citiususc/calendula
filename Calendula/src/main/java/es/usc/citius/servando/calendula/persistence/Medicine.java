@@ -86,6 +86,28 @@ public class Medicine implements Comparable<Medicine> {
         this.presentation = presentation;
     }
 
+    public static List<Medicine> findAll() {
+        return DB.medicines().findAll();
+    }
+
+    public static Medicine findById(long id) {
+        return DB.medicines().findById(id);
+    }
+
+    public static Medicine findByName(String name) {
+        return DB.medicines().findOneBy(COLUMN_NAME, name);
+    }
+
+    public static Medicine fromPrescription(Prescription p) {
+        Medicine m = new Medicine();
+        m.setCn(String.valueOf(p.getCode()));
+        m.setName(p.shortName());
+        Presentation pre = DBRegistry.instance().current().expected(p);
+        m.setPresentation(pre != null ? pre : Presentation.PILLS);
+        m.setDatabase(DBRegistry.instance().current().id());
+        return m;
+    }
+
     public String cn() {
         return cn;
     }
@@ -134,6 +156,10 @@ public class Medicine implements Comparable<Medicine> {
         return patient;
     }
 
+    // *************************************
+    // DB queries
+    // *************************************
+
     public void setPatient(Patient patient) {
         this.patient = patient;
     }
@@ -151,39 +177,12 @@ public class Medicine implements Comparable<Medicine> {
         return name.compareTo(another.name);
     }
 
-    // *************************************
-    // DB queries
-    // *************************************
-
-    public static List<Medicine> findAll() {
-        return DB.medicines().findAll();
-    }
-
-    public static Medicine findById(long id) {
-        return DB.medicines().findById(id);
-    }
-
-    public static Medicine findByName(String name) {
-        return DB.medicines().findOneBy(COLUMN_NAME, name);
-    }
-
-
     public void deleteCascade() {
         DB.medicines().deleteCascade(this, false);
     }
 
     public void save() {
         DB.medicines().save(this);
-    }
-
-    public static Medicine fromPrescription(Prescription p) {
-        Medicine m = new Medicine();
-        m.setCn(String.valueOf(p.getCode()));
-        m.setName(p.shortName());
-        Presentation pre = DBRegistry.instance().current().expected(p);
-        m.setPresentation(pre != null ? pre : Presentation.PILLS);
-        m.setDatabase(DBRegistry.instance().current().id());
-        return m;
     }
 
     public LocalDate nextPickupDate() {

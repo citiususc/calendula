@@ -16,16 +16,13 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/profile_container"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="300dp"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
-    android:layout_alignParentTop="true"
-    >
-
+    android:layout_alignParentTop="true">
 
 
     <ImageView
@@ -33,15 +30,14 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
-        android:scaleType="centerCrop"
-        />
+        android:scaleType="centerCrop" />
 
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:src="@drawable/blur_mask"
+        android:alpha="0.9"
         android:scaleType="centerCrop"
-        android:alpha="0.9"/>
+        android:src="@drawable/blur_mask" />
 
     <ImageView
         android:id="@+id/bottom_shadow"
@@ -50,7 +46,7 @@
         android:layout_alignParentBottom="true"
         android:alpha="0.5"
         android:scaleType="fitXY"
-        android:src="@drawable/daily_view_list_item_tab_shadow_bottom"/>
+        android:src="@drawable/daily_view_list_item_tab_shadow_bottom" />
 
 
     <RelativeLayout
@@ -73,7 +69,7 @@
             android:fontFamily="sans-serif-light"
             android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="45sp"/>
+            android:textSize="45sp" />
 
 
         <TextView
@@ -89,7 +85,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -97,13 +93,12 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="false"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="false"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="70dp"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
-            android:orientation="vertical"
-                android:layout_alignParentRight="false"
-                >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/month_text"
@@ -121,7 +116,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white"
                 android:textSize="20sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/day_text"
@@ -132,6 +127,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="false"
                 android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/profile_username"
                 android:layout_toStartOf="@+id/profile_username"
                 android:fontFamily="sans-serif-light"
                 android:gravity="center|bottom"
@@ -139,16 +135,13 @@
                 android:text="12"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white"
-                android:textSize="35sp"
-                    android:layout_toLeftOf="@+id/profile_username"
-                    />
+                android:textSize="35sp" />
 
 
         </LinearLayout>
 
-        <com.makeramen.RoundedImageView
+        <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/mod_circle"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_alignParentBottom="true"
@@ -160,7 +153,7 @@
             app:riv_border_color="@color/white_50"
             app:riv_border_width="1px"
             app:riv_corner_radius="30dip"
-            app:riv_oval="true"/>
+            app:riv_oval="true" />
 
         <ImageView
             android:id="@+id/mood_button"
@@ -175,15 +168,10 @@
             android:padding="10dp"
             android:scaleType="fitCenter"
             android:src="@drawable/mood_3"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
 
     </RelativeLayout>
-
-
-
-
-
 
 
 </RelativeLayout>

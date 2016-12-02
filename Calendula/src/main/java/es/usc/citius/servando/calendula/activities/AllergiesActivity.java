@@ -174,6 +174,81 @@ public class AllergiesActivity extends CalendulaActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "onBackPressed: " + (searchView.getVisibility() == View.VISIBLE));
+        if (searchView.getVisibility() == View.VISIBLE) {
+            hideSearchView();
+        } else {
+            finish();
+        }
+    }
+
+    @OnClick(R.id.close_search_button)
+    void clearSearch() {
+        searchAdapter.clear();
+        searchAdapter.deselect();
+        searchAdapter.notifyDataSetChanged();
+        selectText.setText(getString(R.string.allergies_selected_number, 0));
+        selectLayout.setVisibility(View.GONE);
+        searchEditText.setText("");
+    }
+
+    @OnClick(R.id.accept_selection_button)
+    void saveAllergies() {
+        hideSearchView();
+        new SaveAllergiesTask().execute(getSelected());
+    }
+
+    @OnClick(R.id.add_button)
+    void showSearchView() {
+        addButton.setVisibility(View.GONE);
+        searchEditText.requestFocus();
+        KeyboardUtils.showKeyboard(this);
+        searchView.setVisibility(View.VISIBLE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                searchList.setVisibility(View.VISIBLE);
+            }
+        }, 200);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_allergies);
+        ButterKnife.bind(this);
+
+        //setup toolbar and status bar
+        color = DB.patients().getActive(this).color();
+        setupToolbar(getString(R.string.title_activity_allergies), color);
+        setupStatusBar(color);
+
+        //initialize allergies store
+        store = new AllergiesStore();
+
+        //retrieve allergy groups
+        groups = DB.allergyGroups().findAll();
+        if (groups != null && !groups.isEmpty())
+            Collections.sort(groups);
+
+        //setup recycler
+        setupAllergiesList();
+
+        progressBar.getIndeterminateDrawable().setColorFilter(DB.patients().getActive(this).color(),
+                android.graphics.PorterDuff.Mode.MULTIPLY);
+
+        //setup search view
+        setupSearchView();
+
+        //load allergies, set placeholder if needed
+        new LoadAllergiesTask().execute();
+
+        askForDatabase();
+
+    }
+
     private boolean checkConflictsAndCreateAlerts(final AllergenVO allergen) {
         final List<Medicine> conflicts = AllergenFacade.checkNewMedicineAllergies(this, allergen);
         if (!conflicts.isEmpty()) {
@@ -226,16 +301,6 @@ public class AllergiesActivity extends CalendulaActivity {
             }
             allergiesSearchPlaceholder.setVisibility(View.VISIBLE);
         }
-    }
-
-    @OnClick(R.id.close_search_button)
-    void clearSearch() {
-        searchAdapter.clear();
-        searchAdapter.deselect();
-        searchAdapter.notifyDataSetChanged();
-        selectText.setText(getString(R.string.allergies_selected_number, 0));
-        selectLayout.setVisibility(View.GONE);
-        searchEditText.setText("");
     }
 
     private void closeSearchView() {
@@ -327,57 +392,6 @@ public class AllergiesActivity extends CalendulaActivity {
         searchList.setVisibility(View.INVISIBLE);
         searchView.setVisibility(View.GONE);
         KeyboardUtils.hideKeyboard(this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        Log.d(TAG, "onBackPressed: " + (searchView.getVisibility() == View.VISIBLE));
-        if (searchView.getVisibility() == View.VISIBLE) {
-            hideSearchView();
-        } else {
-            finish();
-        }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_allergies);
-        ButterKnife.bind(this);
-
-        //setup toolbar and status bar
-        color = DB.patients().getActive(this).color();
-        setupToolbar(getString(R.string.title_activity_allergies), color);
-        setupStatusBar(color);
-
-        //initialize allergies store
-        store = new AllergiesStore();
-
-        //retrieve allergy groups
-        groups = DB.allergyGroups().findAll();
-        if (groups != null && !groups.isEmpty())
-            Collections.sort(groups);
-
-        //setup recycler
-        setupAllergiesList();
-
-        progressBar.getIndeterminateDrawable().setColorFilter(DB.patients().getActive(this).color(),
-                android.graphics.PorterDuff.Mode.MULTIPLY);
-
-        //setup search view
-        setupSearchView();
-
-        //load allergies, set placeholder if needed
-        new LoadAllergiesTask().execute();
-
-        askForDatabase();
-
-    }
-
-    @OnClick(R.id.accept_selection_button)
-    void saveAllergies() {
-        hideSearchView();
-        new SaveAllergiesTask().execute(getSelected());
     }
 
     private void setupAllergiesList() {
@@ -564,20 +578,6 @@ public class AllergiesActivity extends CalendulaActivity {
                     }
                 })
                 .show();
-    }
-
-    @OnClick(R.id.add_button)
-    void showSearchView() {
-        addButton.setVisibility(View.GONE);
-        searchEditText.requestFocus();
-        KeyboardUtils.showKeyboard(this);
-        searchView.setVisibility(View.VISIBLE);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                searchList.setVisibility(View.VISIBLE);
-            }
-        }, 200);
     }
 
     public enum SaveResult {
@@ -951,18 +951,6 @@ public class AllergiesActivity extends CalendulaActivity {
 
     private class SaveAllergiesTask extends AsyncTask<Collection<IItem>, Void, SaveAllergiesTask.Result> {
 
-        class Result {
-            final boolean saved;
-            final boolean allergies;
-            final List<AbstractItem> allergyItems;
-
-            public Result(boolean saved, boolean allergies, List<AbstractItem> allergyItems) {
-                this.saved = saved;
-                this.allergies = allergies;
-                this.allergyItems = allergyItems;
-            }
-        }
-
         @SafeVarargs
         @Override
         protected final Result doInBackground(Collection<IItem>... items) {
@@ -992,7 +980,6 @@ public class AllergiesActivity extends CalendulaActivity {
             return new Result(r == SaveResult.OK || r == SaveResult.ALLERGY, r == SaveResult.ALLERGY, getAllergyItems());
         }
 
-
         @Override
         protected void onPostExecute(Result res) {
             progressBar.setVisibility(View.GONE);
@@ -1018,6 +1005,18 @@ public class AllergiesActivity extends CalendulaActivity {
             hideAllergiesView(true);
             progressBar.setVisibility(View.VISIBLE);
             closeSearchView();
+        }
+
+        class Result {
+            final boolean saved;
+            final boolean allergies;
+            final List<AbstractItem> allergyItems;
+
+            public Result(boolean saved, boolean allergies, List<AbstractItem> allergyItems) {
+                this.saved = saved;
+                this.allergies = allergies;
+                this.allergyItems = allergyItems;
+            }
         }
 
 

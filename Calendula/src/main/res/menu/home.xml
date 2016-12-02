@@ -25,11 +25,11 @@
     <!--app:showAsAction="never" />-->
 
     <!--<item-->
-        <!--android:id="@+id/action_empty"-->
-        <!--android:icon="@drawable/abc_ic_clear_mtrl_alpha"-->
-        <!--android:orderInCategory="100"-->
-        <!--android:title="Show empty"-->
-        <!--app:showAsAction="always" />-->
+    <!--android:id="@+id/action_empty"-->
+    <!--android:icon="@drawable/abc_ic_clear_mtrl_alpha"-->
+    <!--android:orderInCategory="100"-->
+    <!--android:title="Show empty"-->
+    <!--app:showAsAction="always" />-->
 
     <item
         android:id="@+id/action_expand"
@@ -40,9 +40,9 @@
 
     <item
         android:id="@+id/action_calendar"
-        android:title="Show pickups"
         android:icon="@drawable/ic_event_white_48dp"
         android:orderInCategory="100"
+        android:title="Show pickups"
         app:showAsAction="always" />
 
     <item
@@ -53,9 +53,9 @@
         app:showAsAction="always" />
 
     <!--<item-->
-        <!--android:id="@+id/action_scan"-->
-        <!--android:title="Scan QR"-->
-        <!--android:icon="@drawable/ic_qrcode_white_48dp"-->
-        <!--android:orderInCategory="100"-->
-        <!--app:showAsAction="always" />-->
+    <!--android:id="@+id/action_scan"-->
+    <!--android:title="Scan QR"-->
+    <!--android:icon="@drawable/ic_qrcode_white_48dp"-->
+    <!--android:orderInCategory="100"-->
+    <!--app:showAsAction="always" />-->
 </menu>

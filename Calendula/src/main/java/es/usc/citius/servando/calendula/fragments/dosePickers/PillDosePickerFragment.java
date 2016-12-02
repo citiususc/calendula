@@ -43,6 +43,42 @@ public class PillDosePickerFragment extends DosePickerFragment {
     String[] fractions = new String[]{"0", "1/8", "1/4", "1/2", "3/4"};
     float[] fractionValues = new float[]{0, 0.125f, 0.25f, 0.5f, 0.75f};
 
+    void updateProgress() {
+        double integerPart = integersValues[integerPicker.getValue()];
+        double fraction = fractionValues[fractionPicker.getValue()];
+
+
+        progress1.setProgress(100);
+
+        if (fraction == 0.125) {
+            progress2.setProgress(12);
+            progress2.setText("1/8");
+
+        } else if (fraction == 0.25) {
+            progress2.setProgress(25);
+            progress2.setText("1/4");
+        } else if (fraction == 0.5) {
+            progress2.setProgress(50);
+            progress2.setText("1/2");
+        } else if (fraction == 0.75) {
+            progress2.setProgress(75);
+            progress2.setText("3/4");
+        } else {
+            progress2.setProgress(0);
+            progress2.setText("");
+        }
+
+        if (integerPart > 0) {
+            progress1.setProgress(100);
+            progress1.setText(((int) integerPart) + "");
+        } else {
+            progress1.setProgress(0);
+            progress1.setText("");
+        }
+
+
+    }
+
     @Override
     protected int getLayoutResource() {
         return R.layout.med_dose_picker;
@@ -117,50 +153,12 @@ public class PillDosePickerFragment extends DosePickerFragment {
         }
     }
 
-
     @Override
     protected double getSelectedDose() {
         double dose = integersValues[integerPicker.getValue()] + fractionValues[fractionPicker.getValue()];
         Log.d("VALUE ", integersValues[integerPicker.getValue()] + "." + fractionValues[fractionPicker.getValue()]);
         return dose;
     }
-
-    void updateProgress() {
-        double integerPart = integersValues[integerPicker.getValue()];
-        double fraction = fractionValues[fractionPicker.getValue()];
-
-
-        progress1.setProgress(100);
-
-        if (fraction == 0.125) {
-            progress2.setProgress(12);
-            progress2.setText("1/8");
-
-        } else if (fraction == 0.25) {
-            progress2.setProgress(25);
-            progress2.setText("1/4");
-        } else if (fraction == 0.5) {
-            progress2.setProgress(50);
-            progress2.setText("1/2");
-        } else if (fraction == 0.75) {
-            progress2.setProgress(75);
-            progress2.setText("3/4");
-        } else {
-            progress2.setProgress(0);
-            progress2.setText("");
-        }
-
-        if (integerPart > 0) {
-            progress1.setProgress(100);
-            progress1.setText(((int) integerPart) + "");
-        } else {
-            progress1.setProgress(0);
-            progress1.setText("");
-        }
-
-
-    }
-
 
 
 }

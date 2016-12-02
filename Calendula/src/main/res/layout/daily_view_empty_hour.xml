@@ -19,11 +19,11 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="45dp"
-    android:orientation="vertical"
-                android:background="#fff"
-                android:id="@+id/container">
+    android:background="#fff"
+    android:orientation="vertical">
 
     <ImageView
         android:layout_width="fill_parent"
@@ -32,15 +32,15 @@
         android:background="#efefef" />
 
     <ImageView
-            android:layout_width="fill_parent"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_centerInParent="true"
-        android:src="@drawable/clock_no_bg"
-        android:scaleType="centerCrop"
+        android:layout_marginBottom="1px"
         android:alpha="0"
-        android:paddingRight="-200dp"
         android:background="#FAFAFA"
-        android:layout_marginBottom="1px"/>
+        android:paddingRight="-200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/clock_no_bg" />
 
 
     <TextView
@@ -55,7 +55,6 @@
         android:textColor="#acacac"
         android:textSize="16sp"
         android:textStyle="normal" />
-
 
 
 </RelativeLayout>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2016 CITIUS - USC
   ~
@@ -18,17 +17,16 @@
   -->
 
 
-<android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nestedScrollView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#fff"
     android:fillViewport="true"
     android:fitsSystemWindows="true"
     android:paddingTop="10dp"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:background="#fff">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -36,80 +34,77 @@
 
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:paddingRight="16dp">
-
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp">
-
-            <ImageView
-                android:id="@+id/ic_med_large_name"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignTop="@+id/textView"
-                android:layout_marginLeft="16dp"
-                android:src="@drawable/ic_edit_black_48dp"
-                />
-
-            <TextView
-                android:id="@+id/med_large_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="72dp"
-                android:gravity="center_vertical"
-                android:text="Frenadol Granulado para solución oral"
-                android:textAllCaps="true"
-                android:textColor="#000"
-                android:textSize="19dp"
-                android:layout_toRightOf="@+id/ic_med_large_name"
-                android:textIsSelectable="false"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/med_large_name_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="false"
-                android:layout_marginLeft="72dp"
-                android:gravity="center_vertical"
-                android:fontFamily="sans-serif-condensed"
-                android:text="1tubo de 15 mg\n20mg/g"
-                android:textColor="@color/dark_grey_text"
-                android:textSize="18dp"
-                android:layout_toRightOf="@+id/ic_med_large_name"
-                android:layout_below="@+id/med_large_name"
-                />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Asociar medicamento"
-                android:background="@drawable/shape_list_item"
-                android:id="@+id/bind_medicine"
-                android:layout_below="@+id/med_large_name_description"
-                android:layout_alignLeft="@+id/med_large_name_description"
-                android:layout_marginTop="10dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"/>
-
-        </RelativeLayout>
 
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp">
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp">
+
+                <ImageView
+                    android:id="@+id/ic_med_large_name"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignTop="@+id/textView"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/ic_edit_black_48dp" />
+
+                <TextView
+                    android:id="@+id/med_large_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="72dp"
+                    android:layout_toRightOf="@+id/ic_med_large_name"
+                    android:gravity="center_vertical"
+                    android:text="Frenadol Granulado para solución oral"
+                    android:textAllCaps="true"
+                    android:textColor="#000"
+                    android:textIsSelectable="false"
+                    android:textSize="19dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/med_large_name_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="false"
+                    android:layout_below="@+id/med_large_name"
+                    android:layout_marginLeft="72dp"
+                    android:layout_toRightOf="@+id/ic_med_large_name"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center_vertical"
+                    android:text="1tubo de 15 mg\n20mg/g"
+                    android:textColor="@color/dark_grey_text"
+                    android:textSize="18dp" />
+
+                <Button
+                    android:id="@+id/bind_medicine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/med_large_name_description"
+                    android:layout_below="@+id/med_large_name_description"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_list_item"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="Asociar medicamento" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp">
 
                 <ImageView
                     android:id="@+id/ic_med_stock"
@@ -117,8 +112,7 @@
                     android:layout_height="30dp"
                     android:layout_alignTop="@+id/textView"
                     android:layout_marginLeft="16dp"
-                    android:src="@drawable/ic_edit_black_48dp"
-                    />
+                    android:src="@drawable/ic_edit_black_48dp" />
 
                 <TextView
                     android:id="@+id/med_stock"
@@ -127,14 +121,14 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="72dp"
+                    android:layout_toRightOf="@+id/ic_med_stock"
                     android:gravity="center_vertical"
                     android:text="20 comprimidos"
                     android:textAllCaps="false"
                     android:textColor="#000"
-                    android:textSize="19dp"
-                    android:layout_toRightOf="@+id/ic_med_stock"
                     android:textIsSelectable="false"
-                    android:textStyle="bold"/>
+                    android:textSize="19dp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/med_stock_readable"
@@ -142,14 +136,14 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="false"
+                    android:layout_below="@+id/ic_med_stock"
                     android:layout_marginLeft="72dp"
-                    android:gravity="center_vertical"
+                    android:layout_toRightOf="@+id/ic_med_stock"
                     android:fontFamily="sans-serif-condensed"
+                    android:gravity="center_vertical"
                     android:text="Suficiente para 2 semanas"
                     android:textColor="@color/dark_grey_text"
-                    android:textSize="18dp"
-                    android:layout_toRightOf="@+id/ic_med_stock"
-                    android:layout_below="@+id/ic_med_stock"/>
+                    android:textSize="18dp" />
 
             </RelativeLayout>
 
@@ -157,8 +151,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp">
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp">
 
                 <ImageView
                     android:id="@+id/ic_schedule_info"
@@ -166,8 +160,7 @@
                     android:layout_height="30dp"
                     android:layout_alignTop="@+id/textView"
                     android:layout_marginLeft="16dp"
-                    android:src="@drawable/ic_edit_black_48dp"
-                    />
+                    android:src="@drawable/ic_edit_black_48dp" />
 
                 <TextView
                     android:id="@+id/schedule_info"
@@ -176,98 +169,95 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="72dp"
+                    android:layout_toRightOf="@+id/ic_schedule_info"
                     android:gravity="center_vertical"
                     android:text="1 pauta activa"
                     android:textAllCaps="false"
                     android:textColor="#000"
-                    android:textSize="19dp"
-                    android:layout_toRightOf="@+id/ic_schedule_info"
                     android:textIsSelectable="false"
-                    android:textStyle="bold"/>
+                    android:textSize="19dp"
+                    android:textStyle="bold" />
 
             </RelativeLayout>
 
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:paddingBottom="15dp"
-            android:paddingTop="15dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp">
 
-            <ImageView
-                android:id="@+id/ic_prospect"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignTop="@+id/textView"
-                android:layout_marginLeft="16dp"
-                android:src="@drawable/ic_edit_black_48dp"
-                />
+                <ImageView
+                    android:id="@+id/ic_prospect"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignTop="@+id/textView"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/ic_edit_black_48dp" />
 
-            <TextView
-                android:id="@+id/prospect_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="72dp"
-                android:gravity="center_vertical"
-                android:text="Prospecto"
-                android:textAllCaps="false"
-                android:textColor="#000"
-                android:textSize="19dp"
-                android:layout_toRightOf="@+id/ic_prospect"
-                android:textIsSelectable="false"
-                android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/prospect_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="72dp"
+                    android:layout_toRightOf="@+id/ic_prospect"
+                    android:gravity="center_vertical"
+                    android:text="Prospecto"
+                    android:textAllCaps="false"
+                    android:textColor="#000"
+                    android:textIsSelectable="false"
+                    android:textSize="19dp"
+                    android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/med_leaflet_butn"
-                android:layout_width="fill_parent"
-                android:layout_height="100dp"
-                android:layout_marginRight="26dp"
-                android:layout_below="@+id/prospect_title"
-                android:layout_marginTop="10dp"
-                android:layout_alignLeft="@+id/prospect_title"
-                android:background="@drawable/shape_list_item"/>
+                <ImageButton
+                    android:id="@+id/med_leaflet_butn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="100dp"
+                    android:layout_alignLeft="@+id/prospect_title"
+                    android:layout_below="@+id/prospect_title"
+                    android:layout_marginRight="26dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_list_item" />
 
-            <ImageView
-                android:id="@+id/imageView13"
-                android:layout_width="60dp"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_height="60dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="false"
-                android:layout_marginLeft="82dp"
-                android:src="@drawable/ic_help_white_48dp"
-                android:gravity="center_vertical"
-                android:textColor="@color/dark_grey_text"
-                android:textSize="15dp"
-                android:layout_below="@+id/prospect_title"
-                android:layout_toRightOf="@+id/ic_prospect"
-                android:layout_marginTop="30dp"
-                android:scaleType="fitCenter"
-                />
+                <ImageView
+                    android:id="@+id/imageView13"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="false"
+                    android:layout_below="@+id/prospect_title"
+                    android:layout_marginLeft="82dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_toRightOf="@+id/ic_prospect"
+                    android:gravity="center_vertical"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_help_white_48dp"
+                    android:textColor="@color/dark_grey_text"
+                    android:textSize="15dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Prospecto oficial de la Agencia Española de Medicamentos y Productos sanitarios"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/med_leaflet_butn"
+                    android:layout_alignEnd="@+id/med_leaflet_butn"
+                    android:layout_alignRight="@+id/med_leaflet_butn"
+                    android:layout_alignTop="@+id/med_leaflet_butn"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_toRightOf="@+id/imageView13"
-                android:layout_marginLeft="10dp"
-                android:layout_alignBottom="@+id/med_leaflet_butn"
-                android:layout_alignTop="@+id/med_leaflet_butn"
-                android:gravity="center"
-                android:textSize="13dp"
-                android:textColor="#222"
-                android:layout_alignRight="@+id/med_leaflet_butn"
-                android:layout_alignEnd="@+id/med_leaflet_butn"
-                android:layout_marginRight="10dp"/>
+                    android:gravity="center"
+                    android:text="Prospecto oficial de la Agencia Española de Medicamentos y Productos sanitarios"
+                    android:textColor="#222"
+                    android:textSize="13dp" />
 
-        </RelativeLayout>
+            </RelativeLayout>
 
         </LinearLayout>
 
     </RelativeLayout>
-
 
 
 </android.support.v4.widget.NestedScrollView>

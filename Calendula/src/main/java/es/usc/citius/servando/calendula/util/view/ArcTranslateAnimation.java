@@ -112,14 +112,6 @@ public class ArcTranslateAnimation extends Animation {
     }
 
     @Override
-    protected void applyTransformation(float interpolatedTime, Transformation t) {
-        float dx = calcBezier(interpolatedTime, mStart.x, mControl.x, mEnd.x);
-        float dy = calcBezier(interpolatedTime, mStart.y, mControl.y, mEnd.y);
-
-        t.getMatrix().setTranslate(dx, dy);
-    }
-
-    @Override
     public void initialize(int width, int height, int parentWidth,
                            int parentHeight) {
         super.initialize(width, height, parentWidth, parentHeight);
@@ -135,6 +127,14 @@ public class ArcTranslateAnimation extends Animation {
         // use the cross of the
         // two tangents from p0,
         // p1)
+    }
+
+    @Override
+    protected void applyTransformation(float interpolatedTime, Transformation t) {
+        float dx = calcBezier(interpolatedTime, mStart.x, mControl.x, mEnd.x);
+        float dy = calcBezier(interpolatedTime, mStart.y, mControl.y, mEnd.y);
+
+        t.getMatrix().setTranslate(dx, dy);
     }
 
     /**

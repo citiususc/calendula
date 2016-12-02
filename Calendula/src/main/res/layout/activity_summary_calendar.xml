@@ -20,26 +20,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:layout_marginTop="@dimen/status_bar_height"
         android:background="@color/dark_grey_home"
         android:title="Calendar"
-        android:layout_marginTop="@dimen/status_bar_height"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        />
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <com.squareup.timessquare.CalendarPickerView
         android:id="@+id/calendar_view"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:scrollIndicators="none"/>
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:scrollIndicators="none" />
 
     <ImageView
         android:id="@+id/tabs_shadow"
@@ -48,6 +46,6 @@
         android:layout_below="@+id/toolbar"
         android:alpha="0.5"
         android:scaleType="fitXY"
-        android:src="@drawable/daily_view_list_item_tab_shadow_top"/>
+        android:src="@drawable/daily_view_list_item_tab_shadow_top" />
 
 </RelativeLayout>

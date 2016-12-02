@@ -18,14 +18,14 @@
 
 package es.usc.citius.servando.calendula.adapters.items.allergensearch;
 
-import com.mikepenz.fastadapter.items.AbstractItem;
-
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.TextView;
+
+import com.mikepenz.fastadapter.items.AbstractItem;
 
 import java.util.List;
 

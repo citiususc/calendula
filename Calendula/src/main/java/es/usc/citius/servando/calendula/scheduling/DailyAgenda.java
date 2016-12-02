@@ -51,6 +51,15 @@ public class DailyAgenda {
     private static final String PREF_LAST_DATE = "LastDate";
 
     private static final int NEXT_DAYS_TO_SHOW = 1; // show tomorrow
+    private static final DailyAgenda instance = new DailyAgenda();
+
+
+    private DailyAgenda() {
+    }
+
+    public static final DailyAgenda instance() {
+        return instance;
+    }
 
     public void setupForToday(Context ctx, final boolean force) {
 
@@ -69,7 +78,7 @@ public class DailyAgenda {
                 TransactionManager.callInTransaction(DB.helper().getConnectionSource(), new Callable<Object>() {
                     @Override
                     public Object call() throws Exception {
-                        if(!force) {
+                        if (!force) {
                             LocalDate yesterday = now.minusDays(1).toLocalDate();
                             LocalDate tomorrow = now.plusDays(1).toLocalDate();
 
@@ -77,7 +86,7 @@ public class DailyAgenda {
                             DB.dailyScheduleItems().removeOlderThan(yesterday);
                             // delete items beyond tomorrow (only possible when changing date)
                             DB.dailyScheduleItems().removeBeyond(tomorrow);
-                        }else{
+                        } else {
                             DB.dailyScheduleItems().removeAll();
                         }
                         // and add new ones
@@ -90,11 +99,11 @@ public class DailyAgenda {
                     }
                 });
             } catch (SQLException e) {
-                if(!force){
+                if (!force) {
                     Log.e(TAG, "Error setting up daily agenda. Retrying with force = true", e);
                     // setup with force, destroy current daily agenda but continues working
-                    setupForToday(ctx,true);
-                }else{
+                    setupForToday(ctx, true);
+                } else {
                     Log.e(TAG, "Error setting up daily agenda", e);
                 }
             }
@@ -106,17 +115,14 @@ public class DailyAgenda {
         }
     }
 
-
     public void createScheduleForDate(LocalDate date) {
 
         Log.d(TAG, "Adding DailyScheduleItem to daily schedule for date: " + date.toString("dd/MM"));
         int items = 0;
         // create a list with all day doses for schedules bound to routines
-        for (Routine r : Routine.findAll())
-        {
-            for (ScheduleItem s : r.scheduleItems())
-            {
-                if(s.schedule().enabledForDate(date)){
+        for (Routine r : Routine.findAll()) {
+            for (ScheduleItem s : r.scheduleItems()) {
+                if (s.schedule().enabledForDate(date)) {
                     // create a dailyScheduleItem and save it
                     DailyScheduleItem dsi = new DailyScheduleItem(s);
                     dsi.setPatient(s.schedule().patient());
@@ -127,11 +133,9 @@ public class DailyAgenda {
             }
         }
         // Do the same for hourly schedules
-        for (Schedule s : DB.schedules().findHourly())
-        {
+        for (Schedule s : DB.schedules().findHourly()) {
             // create an schedule item for each repetition today
-            for (DateTime time : s.hourlyItemsAt(date.toDateTimeAtStartOfDay()))
-            {
+            for (DateTime time : s.hourlyItemsAt(date.toDateTimeAtStartOfDay())) {
                 LocalTime timeToday = time.toLocalTime();
                 DailyScheduleItem dsi = new DailyScheduleItem(s, timeToday);
                 dsi.setPatient(s.patient());
@@ -142,35 +146,37 @@ public class DailyAgenda {
         Log.d(TAG, items + " items added to daily schedule");
     }
 
+    // SINGLETON
+
     public void createDailySchedule(DateTime d) {
 
         boolean todayCreated = DB.dailyScheduleItems().isDatePresent(d.toLocalDate());
 
-        if(!todayCreated){
+        if (!todayCreated) {
             createScheduleForDate(d.toLocalDate());
         }
 
-        for(int i = 1; i <= NEXT_DAYS_TO_SHOW; i++){
+        for (int i = 1; i <= NEXT_DAYS_TO_SHOW; i++) {
             LocalDate date = d.plusDays(i).toLocalDate();
-            if(!DB.dailyScheduleItems().isDatePresent(date)) {
+            if (!DB.dailyScheduleItems().isDatePresent(date)) {
                 createScheduleForDate(date);
             }
         }
     }
 
-    public void addItem(Patient p, ScheduleItem item, boolean taken){
+    public void addItem(Patient p, ScheduleItem item, boolean taken) {
         // add to daily schedule
         DailyScheduleItem dsi;
-        if(item.schedule().enabledForDate(LocalDate.now())) {
+        if (item.schedule().enabledForDate(LocalDate.now())) {
             dsi = new DailyScheduleItem(item);
             dsi.setPatient(p);
             dsi.setTakenToday(taken);
             dsi.save();
         }
 
-        for(int i = 1;  i <= NEXT_DAYS_TO_SHOW; i++){
+        for (int i = 1; i <= NEXT_DAYS_TO_SHOW; i++) {
             LocalDate date = LocalDate.now().plusDays(i);
-            if(item.schedule().enabledForDate(date)) {
+            if (item.schedule().enabledForDate(date)) {
                 dsi = new DailyScheduleItem(item);
                 dsi.setDate(LocalDate.now().plusDays(i));
                 dsi.setTakenToday(taken);
@@ -180,34 +186,23 @@ public class DailyAgenda {
         }
     }
 
-    public void addItem(Patient p, Schedule s, LocalTime time){
+    public void addItem(Patient p, Schedule s, LocalTime time) {
         // add to daily schedule
         DailyScheduleItem dsi;
-        if(s.enabledForDate(LocalDate.now())) {
+        if (s.enabledForDate(LocalDate.now())) {
             dsi = new DailyScheduleItem(s, time);
             dsi.setPatient(p);
             dsi.save();
         }
-        for(int i = 1;  i <= NEXT_DAYS_TO_SHOW; i++){
+        for (int i = 1; i <= NEXT_DAYS_TO_SHOW; i++) {
             LocalDate date = LocalDate.now().plusDays(i);
-            if(s.enabledForDate(date)) {
+            if (s.enabledForDate(date)) {
                 dsi = new DailyScheduleItem(s, time);
                 dsi.setPatient(p);
                 dsi.setDate(date);
                 dsi.save();
             }
         }
-    }
-
-    // SINGLETON
-
-    private static final DailyAgenda instance = new DailyAgenda();
-
-    private DailyAgenda() {
-    }
-
-    public static final DailyAgenda instance() {
-        return instance;
     }
 
     public class AgendaUpdatedEvent {

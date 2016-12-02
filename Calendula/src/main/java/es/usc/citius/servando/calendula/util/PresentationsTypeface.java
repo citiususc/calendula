@@ -139,6 +139,8 @@ public class PresentationsTypeface implements ITypeface {
         ic_patch('\ue909');
 
 
+        // remember the typeface so we can use it later
+        private static ITypeface typeface;
         char character;
 
         Icon(char character) {
@@ -156,9 +158,6 @@ public class PresentationsTypeface implements ITypeface {
         public String getName() {
             return name();
         }
-
-        // remember the typeface so we can use it later
-        private static ITypeface typeface;
 
         public ITypeface getTypeface() {
             if (typeface == null) {

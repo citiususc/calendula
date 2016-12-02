@@ -55,16 +55,43 @@ public enum Presentation {
         this.unitsString = unitsString;
     }
 
+    public static IIcon iconFor(Presentation p) {
+
+        switch (p) {
+            case CAPSULES:
+                return PresentationsTypeface.Icon.ic_capsule;
+            case DROPS:
+                return PresentationsTypeface.Icon.ic_drops;
+            case EFFERVESCENT:
+                return PresentationsTypeface.Icon.ic_effervescent;
+            case INHALER:
+                return PresentationsTypeface.Icon.ic_inhaler;
+            case INJECTIONS:
+                return PresentationsTypeface.Icon.ic_injection;
+            case PATCHES:
+                return PresentationsTypeface.Icon.ic_patch;
+            case POMADE:
+                return PresentationsTypeface.Icon.ic_cream;
+            case SPRAY:
+                return PresentationsTypeface.Icon.ic_spray;
+            case SYRUP:
+                return PresentationsTypeface.Icon.ic_syrup;
+            case PILLS:
+                return PresentationsTypeface.Icon.ic_pill;
+            default:
+                return CommunityMaterial.Icon.cmd_help_circle;
+
+        }
+
+
+    }
+
     public int getDrawable() {
         return drawable;
     }
 
     public String getName(Resources r) {
         return r.getString(nameString);
-    }
-
-    public String units(Resources r) {
-        return r.getString(unitsString);
     }
 
 //
@@ -103,38 +130,11 @@ public enum Presentation {
 //        return null;
 //    }
 
-    public IIcon icon(){
-        return iconFor(this);
+    public String units(Resources r) {
+        return r.getString(unitsString);
     }
 
-    public static IIcon iconFor(Presentation p){
-
-        switch (p){
-            case CAPSULES:
-                return PresentationsTypeface.Icon.ic_capsule;
-            case DROPS:
-                return PresentationsTypeface.Icon.ic_drops;
-            case EFFERVESCENT:
-                return PresentationsTypeface.Icon.ic_effervescent;
-            case INHALER:
-                return PresentationsTypeface.Icon.ic_inhaler;
-            case INJECTIONS:
-                return PresentationsTypeface.Icon.ic_injection;
-            case PATCHES:
-                return PresentationsTypeface.Icon.ic_patch;
-            case POMADE:
-                return PresentationsTypeface.Icon.ic_cream;
-            case SPRAY:
-                return PresentationsTypeface.Icon.ic_spray;
-            case SYRUP:
-                return PresentationsTypeface.Icon.ic_syrup;
-            case PILLS:
-                return PresentationsTypeface.Icon.ic_pill;
-            default:
-                return CommunityMaterial.Icon.cmd_help_circle;
-
-        }
-
-
+    public IIcon icon() {
+        return iconFor(this);
     }
 }

@@ -21,16 +21,16 @@
     <!-- These settings headers are only used on tablets. -->
 
     <!--<header-->
-        <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$GeneralPreferenceFragment"-->
-        <!--android:title="@string/pref_header_general" />-->
+    <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$GeneralPreferenceFragment"-->
+    <!--android:title="@string/pref_header_general" />-->
 
     <!--<header-->
-        <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$NotificationPreferenceFragment"-->
-        <!--android:title="@string/pref_header_notifications" />-->
+    <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$NotificationPreferenceFragment"-->
+    <!--android:title="@string/pref_header_notifications" />-->
 
     <!--<header-->
-        <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$StockPreferenceFragment"-->
-        <!--android:title="@string/pref_header_stock" />-->
+    <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$StockPreferenceFragment"-->
+    <!--android:title="@string/pref_header_stock" />-->
 
 
 </preference-headers>

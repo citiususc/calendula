@@ -54,7 +54,7 @@ import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 /**
  * Created by joseangel.pineiro
  */
-public class MedInfoFragment extends Fragment{
+public class MedInfoFragment extends Fragment {
 
     ImageView icProspect;
     ImageView icMedName;
@@ -86,8 +86,8 @@ public class MedInfoFragment extends Fragment{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dbMgr = DBRegistry.instance().current();
-        if(getArguments() != null){
-            m = DB.medicines().findById(getArguments().getLong("medicine_id",-1));
+        if (getArguments() != null) {
+            m = DB.medicines().findById(getArguments().getLong("medicine_id", -1));
         }
 
     }
@@ -111,10 +111,15 @@ public class MedInfoFragment extends Fragment{
         return rootView;
     }
 
+    public void notifyDataChange() {
+        DB.medicines().refresh(m);
+        setupView();
+    }
+
     private void setupView() {
         Context c = getActivity();
         int color = R.color.black;
-        icMedName.setImageDrawable(IconUtils.icon(c, CommunityMaterial.Icon.cmd_script,color , 24, 4));
+        icMedName.setImageDrawable(IconUtils.icon(c, CommunityMaterial.Icon.cmd_script, color, 24, 4));
         icProspect.setImageDrawable(IconUtils.icon(c, CommunityMaterial.Icon.cmd_information, color, 24, 4));
         icScheduleInfo.setImageDrawable(IconUtils.icon(c, CommunityMaterial.Icon.cmd_calendar, color, 24, 4));
         icMedStock.setImageDrawable(IconUtils.icon(c, CommunityMaterial.Icon.cmd_basket, color, 24, 4));
@@ -129,16 +134,16 @@ public class MedInfoFragment extends Fragment{
 
         String name = "";
         String desc = "";
-        if( m != null ){
-            if(m.isBoundToPrescription()){
+        if (m != null) {
+            if (m.isBoundToPrescription()) {
                 Prescription p = DB.drugDB().prescriptions().findByCn(m.cn());
-                if(p != null){
+                if (p != null) {
                     name += getNameWhyNot(p) + "\n";
                     desc += "CN - " + p.getCode() + "\n";
                     desc += "" + p.getContent() + "\n";
                     desc += "" + p.getDose();
                 }
-            }else{
+            } else {
                 desc = "Asocia un medicamento real para obtener más información";
                 name += m.name();
             }
@@ -149,15 +154,15 @@ public class MedInfoFragment extends Fragment{
 
         int scheduleCount = DB.schedules().findByMedicine(m).size();
 
-        if(scheduleCount == 0){
+        if (scheduleCount == 0) {
             scheduleInfo.setText("Sin pautas activas");
-        }else if(scheduleCount == 1){
+        } else if (scheduleCount == 1) {
             scheduleInfo.setText(scheduleCount + " pauta activa");
-        }else{
+        } else {
             scheduleInfo.setText(scheduleCount + " pautas activas");
         }
 
-        if(m.isBoundToPrescription()) {
+        if (m.isBoundToPrescription()) {
             showProspectBtn.setAlpha(1f);
             showProspectIcon.setAlpha(1f);
             bindMedBtn.setVisibility(View.GONE);
@@ -167,7 +172,7 @@ public class MedInfoFragment extends Fragment{
                     ProspectUtils.openProspect(DB.drugDB().prescriptions().findByCn(m.cn()), getActivity(), true);
                 }
             });
-        }else{
+        } else {
             showProspectBtn.setAlpha(0.8f);
             showProspectIcon.setAlpha(0.3f);
             bindMedBtn.setOnClickListener(new View.OnClickListener() {
@@ -181,39 +186,29 @@ public class MedInfoFragment extends Fragment{
             });
         }
 
-        if(m.stockManagementEnabled()){
+        if (m.stockManagementEnabled()) {
             stockInfo.setText(m.stock() + " " + m.presentation().units(getResources()));
             LocalDate d = StockUtils.getEstimatedStockEnd(m);
             String msg = StockUtils.getReadableStockDuration(d);
             stockInfoEnd.setText(msg);
-        }else{
+        } else {
             stockInfo.setText("Sin datos");
             stockInfoEnd.setText("No se ha indicado información de stock para este medicamento");
         }
 
 
-
-
-
     }
 
-
-    private String getNameWhyNot(Prescription p){
+    private String getNameWhyNot(Prescription p) {
 
         String dose = p.getDose();
         String originalName = p.getName();
         String doseFirstPart = dose.contains(" ") ? dose.split(" ")[0] : dose;
 
-        if(doseFirstPart != null && originalName.contains(doseFirstPart)){
+        if (doseFirstPart != null && originalName.contains(doseFirstPart)) {
             int index = originalName.indexOf(doseFirstPart);
             return originalName.substring(0, index);
         }
         return originalName;
-    }
-
-
-    public void notifyDataChange(){
-        DB.medicines().refresh(m);
-        setupView();
     }
 }

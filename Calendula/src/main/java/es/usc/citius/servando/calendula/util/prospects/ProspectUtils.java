@@ -31,8 +31,8 @@ import es.usc.citius.servando.calendula.activities.WebViewActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
-import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 /**

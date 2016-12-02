@@ -79,8 +79,7 @@ import es.usc.citius.servando.calendula.util.medicine.StockUtils;
  * Created by joseangel.pineiro on 12/4/13.
  */
 public class MedicineCreateOrEditFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener,
-        NumberPickerDialogFragment.NumberPickerDialogHandler
-{
+        NumberPickerDialogFragment.NumberPickerDialogHandler {
 
 
     private static final int DIALOG_STOCK_ADD = 1;
@@ -153,21 +152,20 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         mStockUnits = (TextView) rootView.findViewById(R.id.stock_units);
         mStockEstimation = (TextView) rootView.findViewById(R.id.stock_estimated_duration);
         stockSwitch = (Switch) rootView.findViewById(R.id.stock_switch);
-        addBtn = ((ImageButton)rootView.findViewById(R.id.btn_stock_add));
-        rmBtn = ((ImageButton)rootView.findViewById(R.id.btn_stock_remove));
+        addBtn = ((ImageButton) rootView.findViewById(R.id.btn_stock_add));
+        rmBtn = ((ImageButton) rootView.findViewById(R.id.btn_stock_remove));
         mNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 CharSequence text = mNameTextView.getText();
+                CharSequence text = mNameTextView.getText();
                 ((MedicinesActivity) getActivity()).showSearchView(text != null ? text.toString() : null);
             }
         });
 
-        mNameTextView.setCompoundDrawables(null, null,new IconicsDrawable(getActivity())
+        mNameTextView.setCompoundDrawables(null, null, new IconicsDrawable(getActivity())
                 .icon(CommunityMaterial.Icon.cmd_arrow_top_right)
                 .color(pColor)
-                .sizeDp(30).paddingDp(5) , null);
-
+                .sizeDp(30).paddingDp(5), null);
 
 
         String none = getString(R.string.database_none_id);
@@ -215,95 +213,14 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         });
 
         setupStockViews();
-        if(mIntentAction == null){
+        if (mIntentAction == null) {
             mNameTextView.requestFocus();
             askForPrescriptionUsage();
-        }else if ("add_stock".equals(mIntentAction)){
+        } else if ("add_stock".equals(mIntentAction)) {
             showStockDialog(DIALOG_STOCK_ADD);
         }
 
         return rootView;
-    }
-
-    private void setupStockViews(){
-        Context c = getActivity();
-        Drawable add = IconUtils.icon(c, CommunityMaterial.Icon.cmd_basket_fill, R.color.android_green, 24,6);
-        Drawable remove = IconUtils.icon(c, CommunityMaterial.Icon.cmd_basket_unfill, R.color.android_red, 24,6);
-
-        addBtn.setImageDrawable(add);
-        rmBtn.setImageDrawable(remove);
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showStockDialog(DIALOG_STOCK_ADD);
-            }
-        });
-
-        rmBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showStockDialog(DIALOG_STOCK_REMOVE);
-            }
-        });
-
-        stockSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                updateStockControlsVisibility();
-                if(isChecked){
-                    // user is enabling stock first time
-                    if(stock == -1 && mPrescription != null && mPrescription.getPackagingUnits() > 0){
-                        stock = mPrescription.getPackagingUnits();
-                        new ComputeEstimatedStockEndTask().execute();
-                    }
-
-                    verticalScrollView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            verticalScrollView.fullScroll(View.FOCUS_DOWN);
-                        }
-                    });
-                }
-            }
-        });
-
-        stock = mMedicine != null ? mMedicine.stock() : -1;
-
-        if(stock > -1){
-            stockSwitch.setChecked(true);
-        }
-
-        updateStockControlsVisibility();
-        updateStockText();
-    }
-
-    private void updateStockControlsVisibility() {
-        int visibility = stockSwitch.isChecked() ? View.VISIBLE : View.INVISIBLE;
-        mStockUnits.setVisibility(visibility);
-        mStockEstimation.setVisibility(stockSwitch.isChecked() & estimatedStockText !=null? View.VISIBLE : View.INVISIBLE);
-        addBtn.setVisibility(visibility);
-        rmBtn.setVisibility(visibility);
-    }
-
-    void updateStockText(){
-        String units = selectedPresentation != null ? selectedPresentation.units(getResources()) : Presentation.UNKNOWN.units(getResources());
-        String text = stock == -1 ? "No stock info" : (stock + " " + units + "(s)");
-        mStockEstimation.setVisibility(estimatedStockText != null ? View.VISIBLE: View.INVISIBLE);
-        mStockEstimation.setText(estimatedStockText != null ? estimatedStockText : "");
-        mStockUnits.setText(text);
-    }
-
-
-    void showStockDialog(int ref){
-        NumberPickerBuilder npb =
-                new NumberPickerBuilder()
-                        .setMinNumber(1)
-                        //.setLabelText(ref == DIALOG_STOCK_ADD ? "Increase stock by" : "Decrease stock by")
-                        .setDecimalVisibility(NumberPicker.VISIBLE)
-                        .setPlusMinusVisibility(NumberPicker.INVISIBLE)
-                        .setFragmentManager(getChildFragmentManager())
-                        .setTargetFragment(this).setReference(ref)
-                        .setStyleResId(R.style.BetterPickersDialogFragment_Calendula);
-        npb.show();
     }
 
     public void showDeleteConfirmationDialog(final Medicine m) {
@@ -373,6 +290,225 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             });
             return false;
         }
+    }
+
+    public void scrollToMedPresentation(View view) {
+        Log.d(getTag(), "Scroll to: " + view.getLeft());
+
+        int amount = view.getLeft();
+        if (amount < (0.8 * presentationScroll.getWidth())) {
+            amount -= 30;
+        }
+        presentationScroll.smoothScrollTo(amount, 0);
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mMedicine != null && mMedicine.getId() != null)
+            outState.putLong(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, mMedicine.getId());
+    }
+
+    public void setMedicne(Medicine r) {
+        Log.d(getTag(), "Medicine set: " + r.name());
+        mMedicine = r;
+        mNameTextView.setText(mMedicine.name());
+        mPresentationTv.setText(": " + mMedicine.presentation().getName(getResources()));
+        selectedPresentation = mMedicine.presentation();
+        selectPresentation(mMedicine.presentation());
+
+        if (r.cn() != null) {
+            Prescription p = DB.drugDB().prescriptions().findByCn(r.cn());
+            if (p != null) {
+                mPrescription = p;
+//                mDescriptionTv.setText(p.getName());
+                new ComputeEstimatedStockEndTask().execute();
+            }
+        }
+    }
+
+    public void setPrescription(Prescription p) {
+        mNameTextView.setText(Strings.toProperCase(dbMgr.shortName(p)));
+        mPrescription = p;
+        Presentation pr = DBRegistry.instance().current().expected(p);
+        if (pr != null) {
+            mPresentationTv.setText(": " + pr.getName(getResources()));
+            selectedPresentation = pr;
+            selectPresentation(pr);
+        }
+    }
+
+    public void setMedicineName(String medName) {
+        mNameTextView.setText(medName);
+        mPrescription = null;
+    }
+
+    public void clear() {
+        mMedicine = null;
+        mNameTextView.setText("");
+    }
+
+    public void onEdit() {
+
+        String name = mNameTextView.getText().toString();
+
+        if (name != null && name.length() > 0) {
+
+            // if editing
+            if (mMedicine != null) {
+                mMedicine.setName(name);
+                mMedicine.setStock(stockSwitch.isChecked() ? stock : -1);
+                if (selectedPresentation != null) {
+                    mMedicine.setPresentation(selectedPresentation);
+                }
+                if (mPrescription != null) {
+                    mMedicine.setCn(String.valueOf(mPrescription.getCode()));
+                    mMedicine.setDatabase(DBRegistry.instance().current().id());
+                } else if (mPrescription == null) {
+                    mMedicine.setCn(null);
+                }
+
+                if (mMedicineEditCallback != null && !checkIfDuplicate(mMedicine)) {
+                    mMedicineEditCallback.onMedicineEdited(mMedicine);
+                }
+            }
+            // if creating
+            else {
+
+                if (!validate()) {
+                    return;
+                }
+
+                Medicine m = new Medicine(name);
+                if (mPrescription != null) {
+                    m.setCn(String.valueOf(mPrescription.getCode()));
+                    m.setDatabase(DBRegistry.instance().current().id());
+                }
+                m.setStock(stockSwitch.isChecked() ? stock : -1);
+                m.setPresentation(selectedPresentation != null ? selectedPresentation : Presentation.UNKNOWN);
+                m.setPatient(DB.patients().getActive(getContext()));
+
+                if (mMedicineEditCallback != null && !checkIfDuplicate(m)) {
+                    mMedicineEditCallback.onMedicineCreated(m);
+                }
+            }
+        } else {
+            Snack.show(R.string.medicine_no_name_error_message, getActivity());
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        Log.d(getTag(), "Activity " + activity.getClass().getName() + ", " + (activity instanceof OnMedicineEditListener));
+        // If the container activity has implemented
+        // the callback interface, set it as listener
+        if (activity instanceof OnMedicineEditListener) {
+            mMedicineEditCallback = (OnMedicineEditListener) activity;
+        }
+        if (activity instanceof ScheduleCreationActivity) {
+            this.showConfirmButton = false;
+        }
+    }
+
+    public void askForPrescriptionUsage() {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        boolean adviceShown = prefs.getBoolean("show_use_prescriptions_advice", false);
+        boolean dbEnabled = !prefs.getString("prescriptions_database", getString(R.string.database_none_id)).equals(getString(R.string.database_none_id));
+
+        if (!adviceShown && !dbEnabled) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(getString(R.string.enable_prescriptions_dialog_title));
+            builder.setCancelable(false);
+            builder.setMessage(getString(R.string.enable_prescriptions_dialog_message))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.enable_prescriptions_dialog_yes), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent i = new Intent(getActivity(), SettingsActivity.class);
+                            i.putExtra("show_database_dialog", true);
+                            startActivity(i);
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.enable_prescriptions_dialog_no), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        } else {
+            if (mMedicine == null) {
+                showSoftInput();
+            }
+        }
+        prefs.edit().putBoolean("show_use_prescriptions_advice", true).apply();
+
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if ("prescriptions_database".equals(key)) {
+            String none = getString(R.string.database_none_id);
+            String settingUp = getString(R.string.database_setting_up);
+            String value = sharedPreferences.getString("prescriptions_database", none);
+            enableSearch = !value.equals(none) && !value.equals(settingUp);
+            if (enableSearch) {
+//                enableSearchButton();
+            } else {
+//                searchButton.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public void setupIcons(View root) {
+        Context c = getActivity();
+        int color = R.color.dark_grey_home;
+        int size = 24;
+        Drawable ic1 = IconUtils.icon(c, CommunityMaterial.Icon.cmd_pencil, color, size, 4);
+        Drawable ic2 = IconUtils.icon(c, CommunityMaterial.Icon.cmd_eye, color, size, 4);
+        Drawable ic3 = IconUtils.icon(c, CommunityMaterial.Icon.cmd_basket, color, size, 4);
+        ((ImageView) root.findViewById(R.id.ic_med_name)).setImageDrawable(ic1);
+        ((ImageView) root.findViewById(R.id.ic_med_presentation)).setImageDrawable(ic2);
+        ((ImageView) root.findViewById(R.id.ic_med_stock)).setImageDrawable(ic3);
+    }
+
+    @Override
+    public void onDialogNumberSet(int reference, int number, double decimal, boolean isNegative, double fullNumber) {
+
+        float amount = (float) fullNumber;
+        if (reference == DIALOG_STOCK_ADD) {
+            stock = (stock == -1) ? amount : (stock + amount);
+        } else if (reference == DIALOG_STOCK_REMOVE) {
+            if (amount >= stock)
+                stock = 0;
+            else
+                stock -= amount;
+        }
+        new ComputeEstimatedStockEndTask().execute();
+    }
+
+    void updateStockText() {
+        String units = selectedPresentation != null ? selectedPresentation.units(getResources()) : Presentation.UNKNOWN.units(getResources());
+        String text = stock == -1 ? "No stock info" : (stock + " " + units + "(s)");
+        mStockEstimation.setVisibility(estimatedStockText != null ? View.VISIBLE : View.INVISIBLE);
+        mStockEstimation.setText(estimatedStockText != null ? estimatedStockText : "");
+        mStockUnits.setText(text);
+    }
+
+    void showStockDialog(int ref) {
+        NumberPickerBuilder npb =
+                new NumberPickerBuilder()
+                        .setMinNumber(1)
+                        //.setLabelText(ref == DIALOG_STOCK_ADD ? "Increase stock by" : "Decrease stock by")
+                        .setDecimalVisibility(NumberPicker.VISIBLE)
+                        .setPlusMinusVisibility(NumberPicker.INVISIBLE)
+                        .setFragmentManager(getChildFragmentManager())
+                        .setTargetFragment(this).setReference(ref)
+                        .setStyleResId(R.style.BetterPickersDialogFragment_Calendula);
+        npb.show();
     }
 
     void setupMedPresentationChooser(final View rootView) {
@@ -489,56 +625,96 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         }
     }
 
-    public void scrollToMedPresentation(View view) {
-        Log.d(getTag(), "Scroll to: " + view.getLeft());
-
-        int amount = view.getLeft();
-        if (amount < (0.8 * presentationScroll.getWidth())) {
-            amount -= 30;
+    int getPresentationViewId(Presentation pres) {
+        switch (pres) {
+            case INJECTIONS:
+                return R.id.med_presentation_9;
+            case POMADE:
+                return R.id.med_presentation_10;
+            case CAPSULES:
+                return R.id.med_presentation_2;
+            case EFFERVESCENT:
+                return R.id.med_presentation_3;
+            case PILLS:
+                return R.id.med_presentation_4;
+            case SYRUP:
+                return R.id.med_presentation_5;
+            case DROPS:
+                return R.id.med_presentation_6;
+            case SPRAY:
+                return R.id.med_presentation_7;
+            case INHALER:
+                return R.id.med_presentation_8;
+            case PATCHES:
+                return R.id.med_presentation_11;
+            default:
+                return -1;
         }
-        presentationScroll.smoothScrollTo(amount, 0);
-
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (mMedicine != null && mMedicine.getId() != null)
-            outState.putLong(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, mMedicine.getId());
+
+    void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mNameTextView.getWindowToken(), 0);
     }
 
-    public void setMedicne(Medicine r) {
-        Log.d(getTag(), "Medicine set: " + r.name());
-        mMedicine = r;
-        mNameTextView.setText(mMedicine.name());
-        mPresentationTv.setText(": " + mMedicine.presentation().getName(getResources()));
-        selectedPresentation = mMedicine.presentation();
-        selectPresentation(mMedicine.presentation());
+    private void setupStockViews() {
+        Context c = getActivity();
+        Drawable add = IconUtils.icon(c, CommunityMaterial.Icon.cmd_basket_fill, R.color.android_green, 24, 6);
+        Drawable remove = IconUtils.icon(c, CommunityMaterial.Icon.cmd_basket_unfill, R.color.android_red, 24, 6);
 
-        if (r.cn() != null) {
-            Prescription p = DB.drugDB().prescriptions().findByCn(r.cn());
-            if (p != null) {
-                mPrescription = p;
-//                mDescriptionTv.setText(p.getName());
-                new ComputeEstimatedStockEndTask().execute();
+        addBtn.setImageDrawable(add);
+        rmBtn.setImageDrawable(remove);
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showStockDialog(DIALOG_STOCK_ADD);
             }
+        });
+
+        rmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showStockDialog(DIALOG_STOCK_REMOVE);
+            }
+        });
+
+        stockSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                updateStockControlsVisibility();
+                if (isChecked) {
+                    // user is enabling stock first time
+                    if (stock == -1 && mPrescription != null && mPrescription.getPackagingUnits() > 0) {
+                        stock = mPrescription.getPackagingUnits();
+                        new ComputeEstimatedStockEndTask().execute();
+                    }
+
+                    verticalScrollView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            verticalScrollView.fullScroll(View.FOCUS_DOWN);
+                        }
+                    });
+                }
+            }
+        });
+
+        stock = mMedicine != null ? mMedicine.stock() : -1;
+
+        if (stock > -1) {
+            stockSwitch.setChecked(true);
         }
+
+        updateStockControlsVisibility();
+        updateStockText();
     }
 
-    public void setPrescription(Prescription p) {
-        mNameTextView.setText(Strings.toProperCase(dbMgr.shortName(p)));
-        mPrescription = p;
-        Presentation pr = DBRegistry.instance().current().expected(p);
-        if (pr != null) {
-            mPresentationTv.setText(": " + pr.getName(getResources()));
-            selectedPresentation = pr;
-            selectPresentation(pr);
-        }
-    }
-
-    public void setMedicineName(String medName) {
-        mNameTextView.setText(medName);
-        mPrescription = null;
+    private void updateStockControlsVisibility() {
+        int visibility = stockSwitch.isChecked() ? View.VISIBLE : View.INVISIBLE;
+        mStockUnits.setVisibility(visibility);
+        mStockEstimation.setVisibility(stockSwitch.isChecked() & estimatedStockText != null ? View.VISIBLE : View.INVISIBLE);
+        addBtn.setVisibility(visibility);
+        rmBtn.setVisibility(visibility);
     }
 
     private void selectPresentation(Presentation p) {
@@ -554,62 +730,6 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             scrollToMedPresentation(view);
         }
     }
-
-    public void clear() {
-        mMedicine = null;
-        mNameTextView.setText("");
-    }
-
-
-    public void onEdit() {
-
-        String name = mNameTextView.getText().toString();
-
-        if (name != null && name.length() > 0) {
-
-            // if editing
-            if (mMedicine != null) {
-                mMedicine.setName(name);
-                mMedicine.setStock(stockSwitch.isChecked() ? stock : -1);
-                if (selectedPresentation != null) {
-                    mMedicine.setPresentation(selectedPresentation);
-                }
-                if (mPrescription != null) {
-                    mMedicine.setCn(String.valueOf(mPrescription.getCode()));
-                    mMedicine.setDatabase(DBRegistry.instance().current().id());
-                } else if (mPrescription == null) {
-                    mMedicine.setCn(null);
-                }
-
-                if (mMedicineEditCallback != null && !checkIfDuplicate(mMedicine)) {
-                    mMedicineEditCallback.onMedicineEdited(mMedicine);
-                }
-            }
-            // if creating
-            else {
-
-                if (!validate()) {
-                    return;
-                }
-
-                Medicine m = new Medicine(name);
-                if (mPrescription != null) {
-                    m.setCn(String.valueOf(mPrescription.getCode()));
-                    m.setDatabase(DBRegistry.instance().current().id());
-                }
-                m.setStock(stockSwitch.isChecked() ? stock : -1);
-                m.setPresentation(selectedPresentation != null ? selectedPresentation : Presentation.UNKNOWN);
-                m.setPatient(DB.patients().getActive(getContext()));
-
-                if (mMedicineEditCallback != null && !checkIfDuplicate(m)) {
-                    mMedicineEditCallback.onMedicineCreated(m);
-                }
-            }
-        } else {
-            Snack.show(R.string.medicine_no_name_error_message, getActivity());
-        }
-    }
-
 
     private boolean checkIfDuplicate(final Medicine m) {
         try {
@@ -646,90 +766,6 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         }
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        Log.d(getTag(), "Activity " + activity.getClass().getName() + ", " + (activity instanceof OnMedicineEditListener));
-        // If the container activity has implemented
-        // the callback interface, set it as listener
-        if (activity instanceof OnMedicineEditListener) {
-            mMedicineEditCallback = (OnMedicineEditListener) activity;
-        }
-        if (activity instanceof ScheduleCreationActivity) {
-            this.showConfirmButton = false;
-        }
-    }
-
-
-    int getPresentationViewId(Presentation pres) {
-        switch (pres) {
-            case INJECTIONS:
-                return R.id.med_presentation_9;
-            case POMADE:
-                return R.id.med_presentation_10;
-            case CAPSULES:
-                return R.id.med_presentation_2;
-            case EFFERVESCENT:
-                return R.id.med_presentation_3;
-            case PILLS:
-                return R.id.med_presentation_4;
-            case SYRUP:
-                return R.id.med_presentation_5;
-            case DROPS:
-                return R.id.med_presentation_6;
-            case SPRAY:
-                return R.id.med_presentation_7;
-            case INHALER:
-                return R.id.med_presentation_8;
-            case PATCHES:
-                return R.id.med_presentation_11;
-            default:
-                return -1;
-        }
-    }
-
-
-    void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mNameTextView.getWindowToken(), 0);
-    }
-
-    public void askForPrescriptionUsage() {
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        boolean adviceShown = prefs.getBoolean("show_use_prescriptions_advice", false);
-        boolean dbEnabled = !prefs.getString("prescriptions_database", getString(R.string.database_none_id)).equals(getString(R.string.database_none_id));
-
-        if (!adviceShown && !dbEnabled) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle(getString(R.string.enable_prescriptions_dialog_title));
-            builder.setCancelable(false);
-            builder.setMessage(getString(R.string.enable_prescriptions_dialog_message))
-                    .setCancelable(false)
-                    .setPositiveButton(getString(R.string.enable_prescriptions_dialog_yes), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            Intent i = new Intent(getActivity(), SettingsActivity.class);
-                            i.putExtra("show_database_dialog", true);
-                            startActivity(i);
-                        }
-                    })
-                    .setNegativeButton(getString(R.string.enable_prescriptions_dialog_no), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-            AlertDialog alert = builder.create();
-            alert.show();
-        } else {
-            if(mMedicine == null) {
-                showSoftInput();
-            }
-        }
-        prefs.edit().putBoolean("show_use_prescriptions_advice", true).apply();
-
-    }
-
     private void showSoftInput() {
         mNameTextView.postDelayed(new Runnable() {
             @Override
@@ -739,48 +775,6 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             }
         }, 10);
 
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if ("prescriptions_database".equals(key)) {
-            String none = getString(R.string.database_none_id);
-            String settingUp = getString(R.string.database_setting_up);
-            String value = sharedPreferences.getString("prescriptions_database", none);
-            enableSearch = !value.equals(none) && !value.equals(settingUp);
-            if (enableSearch) {
-//                enableSearchButton();
-            } else {
-//                searchButton.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    public void setupIcons(View root) {
-        Context c = getActivity();
-        int color = R.color.dark_grey_home;
-        int size = 24;
-        Drawable ic1 = IconUtils.icon(c, CommunityMaterial.Icon.cmd_pencil, color, size,4);
-        Drawable ic2 = IconUtils.icon(c, CommunityMaterial.Icon.cmd_eye, color, size,4);
-        Drawable ic3 = IconUtils.icon(c, CommunityMaterial.Icon.cmd_basket, color, size, 4);
-        ((ImageView)root.findViewById(R.id.ic_med_name)).setImageDrawable(ic1);
-        ((ImageView)root.findViewById(R.id.ic_med_presentation)).setImageDrawable(ic2);
-        ((ImageView)root.findViewById(R.id.ic_med_stock)).setImageDrawable(ic3);
-    }
-
-    @Override
-    public void onDialogNumberSet(int reference, int number, double decimal, boolean isNegative, double fullNumber) {
-
-        float amount = (float) fullNumber;
-        if(reference == DIALOG_STOCK_ADD){
-            stock = (stock == -1) ? amount : (stock + amount);
-        } else if(reference == DIALOG_STOCK_REMOVE){
-            if(amount>=stock)
-                stock=0;
-            else
-                stock-=amount;
-        }
-        new ComputeEstimatedStockEndTask().execute();
     }
 
 
@@ -799,10 +793,10 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            if(stock>=0 && mMedicine!=null){
+            if (stock >= 0 && mMedicine != null) {
                 Log.d(TAG, "updateStockText: medicina ok");
                 List<Schedule> schedules = DB.schedules().findByMedicine(mMedicine);
-                if(!schedules.isEmpty()) {
+                if (!schedules.isEmpty()) {
                     Log.d(TAG, "updateStockText: pautas " + schedules.size());
                     LocalDate estimatedEnd = StockUtils.getEstimatedStockEnd(schedules, stock);
                     text = StockUtils.getReadableStockDuration(estimatedEnd);
@@ -824,7 +818,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         @Override
         protected void onPostExecute(Boolean res) {
             super.onPostExecute(res);
-            if(res) {
+            if (res) {
                 estimatedStockText = text;
                 updateStockText();
             }

@@ -88,6 +88,9 @@ import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 public class MedicinesActivity extends CalendulaActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
 
+    private final static String TAG = MedicinesActivity.class.getSimpleName();
+//    RoutinesListFragment listFragment;
+//    RoutineCreateOrEditFragment editFragment;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -97,14 +100,10 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
-//    RoutinesListFragment listFragment;
-//    RoutineCreateOrEditFragment editFragment;
-
     /**
      * The {@link android.support.v4.view.ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
-
     Long mMedicineId;
     MenuItem removeItem;
     View searchView;
@@ -117,14 +116,120 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     ListView searchList;
     ArrayAdapter<Prescription> adapter;
     int color;
-
     PrescriptionDBMgr dbMgr;
-
     private String intentAction;
     private String intentSearchText = null;
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.medicines, menu);
+        removeItem = menu.findItem(R.id.action_remove);
+        removeItem.setVisible(mMedicineId != -1);
+        return true;
+    }
 
-    private final static String TAG = MedicinesActivity.class.getSimpleName();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_remove:
+                ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).showDeleteConfirmationDialog(Medicine.findById(mMedicineId));
+                return true;
+            default:
+                finish();
+                return true;
+        }
+    }
+
+    public void showSearchView(final String text) {
+        addButton.setVisibility(View.GONE);
+        searchView.setVisibility(View.VISIBLE);
+        searchEditText.requestFocus();
+        if (text != null) {
+            searchEditText.setText(text);
+            searchEditText.setSelection(text.length());
+            adapter.getFilter().filter(text);
+        }
+
+        searchEditText.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                keyboard.showSoftInput(searchEditText, 0);
+            }
+        }, 300);
+
+    }
+
+    public void hideSearchView() {
+        searchView.setBackgroundColor(color);
+        searchView.setVisibility(View.GONE);
+        addButton.setVisibility(View.VISIBLE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+    }
+
+    @Override
+    public void onMedicineEdited(final Medicine m) {
+        // check for allergies
+        if (m.isBoundToPrescription()) {
+            final List<AllergenVO> vos = AllergenFacade.checkAllergies(this, DB.drugDB().prescriptions().findByCn(m.cn()));
+            if (!vos.isEmpty()) {
+                showAllergyDialog(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        updateMedicine(m, vos);
+                    }
+                });
+            } else {
+                updateMedicine(m, null);
+            }
+        } else {
+            updateMedicine(m, null);
+        }
+    }
+
+    @Override
+    public void onMedicineCreated(final Medicine m) {
+
+        // check for allergies
+        if (m.isBoundToPrescription()) {
+            final List<AllergenVO> vos = AllergenFacade.checkAllergies(this, DB.drugDB().prescriptions().findByCn(m.cn()));
+            if (!vos.isEmpty()) {
+                showAllergyDialog(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        createMedicine(m, vos);
+                    }
+                });
+            } else {
+                createMedicine(m, null);
+            }
+        } else {
+            createMedicine(m, null);
+        }
+    }
+
+    @Override
+    public void onMedicineDeleted(Medicine m) {
+        Toast.makeText(this, getString(R.string.medicine_deleted_message), Toast.LENGTH_SHORT).show();
+        DB.medicines().deleteCascade(m, true);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (searchView.getVisibility() == View.VISIBLE && mMedicineId != -1) {
+            hideSearchView();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    Fragment getViewPagerFragment(int position) {
+        return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,63 +352,16 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
+    }
 
     private void processIntent() {
         mMedicineId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, -1);
         intentAction = getIntent().getStringExtra(CalendulaApp.INTENT_EXTRA_ACTION);
         intentSearchText = getIntent().getStringExtra("search_text");
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.medicines, menu);
-        removeItem = menu.findItem(R.id.action_remove);
-        removeItem.setVisible(mMedicineId != -1);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_remove:
-                ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).showDeleteConfirmationDialog(Medicine.findById(mMedicineId));
-                return true;
-            default:
-                finish();
-                return true;
-        }
-    }
-
-
-    public void showSearchView(final String text) {
-        addButton.setVisibility(View.GONE);
-        searchView.setVisibility(View.VISIBLE);
-        searchEditText.requestFocus();
-        if (text != null) {
-            searchEditText.setText(text);
-            searchEditText.setSelection(text.length());
-            adapter.getFilter().filter(text);
-        }
-
-        searchEditText.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                keyboard.showSoftInput(searchEditText, 0);
-            }
-        }, 300);
-
-    }
-
-    public void hideSearchView() {
-        searchView.setBackgroundColor(color);
-        searchView.setVisibility(View.GONE);
-        addButton.setVisibility(View.VISIBLE);
-        InputMethodManager imm = (InputMethodManager) getSystemService(
-                Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
     }
 
     private void showAllergyDialog(final MaterialDialog.SingleButtonCallback onOk) {
@@ -319,26 +377,6 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                 .setPositiveText(getString(R.string.ok))
                 .onPositive(onOk)
                 .show();
-    }
-
-    @Override
-    public void onMedicineEdited(final Medicine m) {
-        // check for allergies
-        if (m.isBoundToPrescription()) {
-            final List<AllergenVO> vos = AllergenFacade.checkAllergies(this, DB.drugDB().prescriptions().findByCn(m.cn()));
-            if (!vos.isEmpty()) {
-                showAllergyDialog(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        updateMedicine(m, vos);
-                    }
-                });
-            } else {
-                updateMedicine(m, null);
-            }
-        } else {
-            updateMedicine(m, null);
-        }
     }
 
     private void updateMedicine(final Medicine m, final List<AllergenVO> allergies) {
@@ -365,27 +403,6 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         Medicine old = DB.medicines().findById(m.getId());
         if (!m.cn().equals(old.cn())) { // if prescription didn't change, don't check for alerts
             AllergyAlertUtil.removeAllergyAlerts(m);
-        }
-    }
-
-    @Override
-    public void onMedicineCreated(final Medicine m) {
-
-        // check for allergies
-        if (m.isBoundToPrescription()) {
-            final List<AllergenVO> vos = AllergenFacade.checkAllergies(this, DB.drugDB().prescriptions().findByCn(m.cn()));
-            if (!vos.isEmpty()) {
-                showAllergyDialog(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        createMedicine(m, vos);
-                    }
-                });
-            } else {
-                createMedicine(m, null);
-            }
-        } else {
-            createMedicine(m, null);
         }
     }
 
@@ -427,32 +444,6 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
     }
 
-    @Override
-    public void onMedicineDeleted(Medicine m) {
-        Toast.makeText(this, getString(R.string.medicine_deleted_message), Toast.LENGTH_SHORT).show();
-        DB.medicines().deleteCascade(m, true);
-        finish();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (searchView.getVisibility() == View.VISIBLE && mMedicineId != -1) {
-            hideSearchView();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    Fragment getViewPagerFragment(int position) {
-        return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        overridePendingTransition(0, 0);
-    }
-
     /**
      * A {@link android.support.v4.app.FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -484,12 +475,12 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
     // Search adapter
     public class AutoCompleteAdapter extends ArrayAdapter<Prescription> implements Filterable {
-        private List<Prescription> mData;
         int minCharsToSearch = 2;
         int hColor = Color.parseColor("#000000");
         int cnColor = Color.WHITE;//ScreenUtils.equivalentNoAlpha(color,0.8f);
         int cnHColor = hColor;
         Drawable icProspect;
+        private List<Prescription> mData;
 
         public AutoCompleteAdapter(Context context, int textViewResourceId) {
             super(context, textViewResourceId);

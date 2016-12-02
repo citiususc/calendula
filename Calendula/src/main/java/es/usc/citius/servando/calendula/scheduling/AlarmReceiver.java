@@ -33,23 +33,23 @@ public class AlarmReceiver extends BroadcastReceiver {
     public static final String TAG = "AlarmReceiver.class";
 
     @Override
-    public void onReceive(Context context, Intent intent)
-    {
+    public void onReceive(Context context, Intent intent) {
 
-        if (CalendulaApp.disableReceivers) { return; }
+        if (CalendulaApp.disableReceivers) {
+            return;
+        }
 
         AlarmIntentParams params = AlarmScheduler.getAlarmParams(intent);
 
-        if(params == null)
-        {
+        if (params == null) {
             Log.w(TAG, "No extra params supplied");
             return;
-        }else{
+        } else {
             Log.d(TAG, "Received alarm: " + params.action);
         }
 
         Intent serviceIntent = new Intent(context, AlarmIntentService.class);
-        AlarmScheduler.setAlarmParams(serviceIntent,params);
+        AlarmScheduler.setAlarmParams(serviceIntent, params);
         context.startService(serviceIntent);
     }
 }

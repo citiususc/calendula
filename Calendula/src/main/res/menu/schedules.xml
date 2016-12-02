@@ -26,8 +26,8 @@
         app:showAsAction="never" />
 
     <item
-            android:titleCondensed="Automática"
-          android:title="Automática"
-          app:showAsAction="never"
-          android:checkable="true" />
+        android:checkable="true"
+        android:title="Automática"
+        android:titleCondensed="Automática"
+        app:showAsAction="never" />
 </menu>

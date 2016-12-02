@@ -21,20 +21,20 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/summaryTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/summary_title"
-        android:id="@+id/summaryTitle"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="20dp"
-        android:textSize="20dp"
-        android:textColor="@color/android_blue"
-        android:visibility="invisible"
-        android:layout_marginRight="20dp"
+        android:layout_alignParentTop="true"
         android:layout_marginLeft="20dp"
-        android:gravity="center" />
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="@string/summary_title"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/android_blue"
+        android:textSize="20dp"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/sched_summary_medname"
@@ -47,8 +47,8 @@
         android:gravity="center"
         android:text="@string/medicine_unselected"
         android:textColor="@color/android_blue_dark"
-        android:visibility="invisible"
-        android:textSize="18dp" />
+        android:textSize="18dp"
+        android:visibility="invisible" />
 
     <ImageView
         android:id="@+id/sched_summary_medicon"
@@ -57,8 +57,8 @@
         android:layout_below="@id/summaryTitle"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:visibility="invisible"
-        android:src="@drawable/ic_presentation_2" />
+        android:src="@drawable/ic_presentation_2"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/sched_summary_medi_days"
@@ -81,8 +81,8 @@
         android:text="Three times a day"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/android_blue"
-        android:visibility="invisible"
-        android:textSize="18dp" />
+        android:textSize="18dp"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/button_show_calendar"

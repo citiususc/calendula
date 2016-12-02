@@ -129,14 +129,6 @@ public class CalendulaApp extends Application {
         }
     }
 
-    private void forceLocale(Locale l) {
-        Locale locale = new Locale(l.getLanguage());
-        Locale.setDefault(locale);
-        Configuration config = getApplicationContext().getResources().getConfiguration();
-        config.locale = locale;
-        getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -166,5 +158,13 @@ public class CalendulaApp extends Application {
     public void onTerminate() {
         DB.dispose();
         super.onTerminate();
+    }
+
+    private void forceLocale(Locale l) {
+        Locale locale = new Locale(l.getLanguage());
+        Locale.setDefault(locale);
+        Configuration config = getApplicationContext().getResources().getConfiguration();
+        config.locale = locale;
+        getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
     }
 }

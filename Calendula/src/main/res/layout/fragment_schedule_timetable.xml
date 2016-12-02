@@ -158,9 +158,8 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="5dp"
-                    android:orientation="horizontal"
-                        android:baselineAligned="false"
-                        >
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
 
                     <RelativeLayout
                         android:layout_width="0dp"
@@ -225,7 +224,7 @@
                 </LinearLayout>
 
                 <ImageView
-                        android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_below="@id/schedule_timetable_container"
                     android:layout_marginLeft="20dp"
@@ -323,7 +322,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                        android:layout_width="fill_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="40dp"
                     android:layout_below="@+id/hourly_interval_top"
                     android:gravity="center"
@@ -378,7 +377,7 @@
                     android:visibility="visible" />
 
                 <RelativeLayout
-                        android:layout_width="fill_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/repeat_label">
 
@@ -494,7 +493,7 @@
                         android:textStyle="bold" />
 
                     <Spinner
-                            android:layout_width="1dp"
+                        android:layout_width="1dp"
                         android:layout_height="1dp"
                         android:spinnerMode="dialog"
                         android:visibility="invisible" />
@@ -567,15 +566,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_alignParentEnd="false"
+                        android:layout_alignParentRight="false"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="80dp"
                         android:layout_weight="1"
                         android:gravity="start"
                         android:text="@string/button_schedule_repeat_today"
                         android:textColor="@color/android_blue_dark"
-                        android:textSize="15dp"
-                            android:layout_alignParentRight="false"
-                            />
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/textView5"
@@ -597,6 +595,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_alignParentEnd="false"
+                        android:layout_alignParentRight="false"
                         android:layout_alignTop="@+id/textView5"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="80dp"
@@ -605,9 +604,7 @@
                         android:text="@string/button_schedule_repeat_until"
                         android:textColor="@color/android_blue_dark"
                         android:textSize="15dp"
-                        android:visibility="visible"
-                            android:layout_alignParentRight="false"
-                            />
+                        android:visibility="visible" />
 
 
                     <ImageButton

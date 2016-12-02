@@ -48,6 +48,24 @@ public class ScanActivity extends CalendulaActivity {
     String afterScanCls;
     Long patientId;
 
+    public static String[] byteArrayToHex(byte[] a) {
+        String[] arr = new String[a.length];
+        int i = 0;
+        for (byte b : a) {
+            arr[i++] = String.format("%02x", b & 0xff);
+
+        }
+        return arr;
+    }
+
+    public void doScan() {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+        integrator.setPrompt(getString(R.string.scan_qr));
+        //integrator.setResultDisplayDuration(500);
+        integrator.initiateScan();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +82,7 @@ public class ScanActivity extends CalendulaActivity {
 
         afterScanPkg = getIntent().getStringExtra("after_scan_pkg");
         afterScanCls = getIntent().getStringExtra("after_scan_cls");
-        patientId = getIntent().getLongExtra("patient_id",-1);
+        patientId = getIntent().getLongExtra("patient_id", -1);
     }
 
     @Override
@@ -73,34 +91,13 @@ public class ScanActivity extends CalendulaActivity {
         super.onDestroy();
     }
 
-    public void doScan() {
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-        integrator.setPrompt(getString(R.string.scan_qr));
-        //integrator.setResultDisplayDuration(500);
-        integrator.initiateScan();
-    }
-
-    public static String[] byteArrayToHex(byte[] a) {
-        String[] arr = new String[a.length];
-        int i = 0;
-        for (byte b : a) {
-            arr[i++] = String.format("%02x", b & 0xff);
-
-        }
-        return arr;
-    }
-
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
 
-
-        if (result != null && requestCode == IntentIntegrator.REQUEST_CODE && data !=null) {
+        if (result != null && requestCode == IntentIntegrator.REQUEST_CODE && data != null) {
 
             byte[] dataBytes = data.getByteArrayExtra("SCAN_RESULT_BYTE_SEGMENTS_0");
 

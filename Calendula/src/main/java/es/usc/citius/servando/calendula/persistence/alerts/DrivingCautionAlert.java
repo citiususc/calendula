@@ -48,9 +48,10 @@ public class DrivingCautionAlert extends PatientAlert<DrivingCautionAlert, Drivi
 
     /**
      * Creates an driving caution alert
+     *
      * @param m The medicine
      */
-    public DrivingCautionAlert(Medicine m){
+    public DrivingCautionAlert(Medicine m) {
         super();
         setPatient(m.patient());
         setMedicine(m);
@@ -60,7 +61,7 @@ public class DrivingCautionAlert extends PatientAlert<DrivingCautionAlert, Drivi
 
 
     @Override
-    public Class<?> getDetailsType(){
+    public Class<?> getDetailsType() {
         // we don't want to store more info for this alert
         return null;
     }
@@ -99,7 +100,7 @@ public class DrivingCautionAlert extends PatientAlert<DrivingCautionAlert, Drivi
             viewHolder.description.setText("Es posible que este medicamente afecte a su capacidad para conducir");
         }
 
-        public static class DrivingAlertViewHolder extends RecyclerView.ViewHolder{
+        public static class DrivingAlertViewHolder extends RecyclerView.ViewHolder {
 
             Context context;
             PatientAlert alert;
@@ -119,7 +120,6 @@ public class DrivingCautionAlert extends PatientAlert<DrivingCautionAlert, Drivi
         }
 
     }
-
 
 
 }
