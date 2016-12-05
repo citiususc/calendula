@@ -17,11 +17,11 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#fff">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#fff">
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/main_content"
@@ -62,7 +62,7 @@
                         android:id="@+id/imageView5"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:background="#37474f" />
+                        android:background="#37474f"/>
 
                     <ImageView
                         android:layout_width="fill_parent"
@@ -71,7 +71,7 @@
                         android:layout_alignTop="@+id/imageView5"
                         android:alpha="0.3"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/clock" />
+                        android:src="@drawable/clock"/>
 
                 </FrameLayout>
 
@@ -93,25 +93,25 @@
                         android:textColor="@color/agenda_item_title"
                         android:textSize="20dp"
                         android:textStyle="bold"
-                        android:transitionName="title" />
+                        android:transitionName="title"/>
 
 
                 </RelativeLayout>
 
 
                 <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_marginTop="@dimen/status_bar_height"
-                    android:gravity="top"
-                    android:minHeight="?attr/actionBarSize"
-                    android:title="Patients"
-                    app:layout_collapseMode="pin"
-                    app:layout_scrollFlags="scroll|enterAlways|snap"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                    app:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+                                                   android:id="@+id/toolbar"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="wrap_content"
+                                                   android:layout_gravity="top"
+                                                   android:layout_marginTop="@dimen/status_bar_height"
+                                                   android:gravity="top"
+                                                   android:minHeight="?attr/actionBarSize"
+                                                   android:title="Patients"
+                                                   app:layout_collapseMode="pin"
+                                                   app:layout_scrollFlags="scroll|enterAlways|snap"
+                                                   app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                                                   app:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
                     <Spinner
                         android:id="@+id/toolbar_spinner"
@@ -119,7 +119,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="50dp"
-                        android:visibility="visible" />
+                        android:visibility="visible"/>
 
                 </android.support.v7.widget.Toolbar>
 
@@ -172,7 +172,7 @@
                         android:text="@string/title_pickups_bottom_sheet"
                         android:textColor="@color/agenda_item_title"
                         android:textSize="18dp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <LinearLayout
                         android:id="@+id/pickup_list"
@@ -198,7 +198,7 @@
                         android:layout_height="5dip"
                         android:alpha="0.5"
                         android:scaleType="fitXY"
-                        android:src="@drawable/daily_view_list_item_tab_shadow_bottom" />
+                        android:src="@drawable/daily_view_list_item_tab_shadow_bottom"/>
 
                     <Button
                         android:id="@+id/close_pickup_list"
@@ -210,7 +210,7 @@
                         android:layout_marginRight="16dp"
                         android:layout_marginTop="15dp"
                         android:text="Close"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"/>
 
                 </RelativeLayout>
 
@@ -253,7 +253,7 @@
             android:textColor="@color/agenda_item_title"
             android:textSize="20dp"
             android:textStyle="bold"
-            android:transitionName="title" />
+            android:transitionName="title"/>
 
 
     </RelativeLayout>
@@ -276,7 +276,7 @@
             android:paddingTop="5dp"
             android:textColor="#fff"
             android:textSize="20dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
         <ImageView
             android:id="@+id/patient_avatar_title"
@@ -291,7 +291,7 @@
             android:scaleType="fitCenter"
             android:src="@drawable/avatar1"
             android:transitionName="avatar_transition"
-            android:visibility="visible" />
+            android:visibility="visible"/>
 
 
     </RelativeLayout>

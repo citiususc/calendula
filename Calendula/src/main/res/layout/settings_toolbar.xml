@@ -17,15 +17,15 @@
   -->
 
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/toolbar"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/dark_grey_home"
-    android:minHeight="?attr/actionBarSize"
-    android:paddingTop="@dimen/status_bar_height"
-    app:navigationContentDescription="@string/abc_action_bar_up_description"
-    app:navigationIcon="?attr/homeAsUpIndicator"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    app:title="@string/drawer_settings_option" />
+                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                   android:id="@+id/toolbar"
+                                   android:layout_width="match_parent"
+                                   android:layout_height="wrap_content"
+                                   android:background="@color/dark_grey_home"
+                                   android:minHeight="?attr/actionBarSize"
+                                   android:paddingTop="@dimen/status_bar_height"
+                                   app:navigationContentDescription="@string/abc_action_bar_up_description"
+                                   app:navigationIcon="?attr/homeAsUpIndicator"
+                                   app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                                   app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                                   app:title="@string/drawer_settings_option"/>

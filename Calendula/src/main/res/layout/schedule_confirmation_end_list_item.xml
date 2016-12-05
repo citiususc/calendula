@@ -17,9 +17,9 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical">
 
     <TextView
         android:id="@+id/med_name"
@@ -28,7 +28,7 @@
         android:text="Ibuprofeno"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#666"
-        android:textSize="18dp" />
+        android:textSize="18dp"/>
 
     <TextView
         android:id="@+id/med_schedule"
@@ -38,7 +38,7 @@
         android:padding="2dp"
         android:text="Every day"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#111" />
+        android:textColor="#111"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -47,5 +47,5 @@
         android:padding="2dp"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/android_blue_dark" />
+        android:textColor="@color/android_blue_dark"/>
 </LinearLayout>

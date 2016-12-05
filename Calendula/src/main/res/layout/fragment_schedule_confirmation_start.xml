@@ -17,9 +17,9 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#fff">
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#fff">
 
 
     <ImageView
@@ -28,7 +28,7 @@
         android:layout_height="60dp"
         android:layout_marginTop="100dp"
         android:alpha="0.8"
-        android:src="@drawable/ic_visibility_black_48dp" />
+        android:src="@drawable/ic_visibility_black_48dp"/>
 
     <TextView
         android:id="@+id/textView"
@@ -40,7 +40,7 @@
         android:padding="30dp"
         android:text="@string/scan_review_text"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#666" />
+        android:textColor="#666"/>
 
     <Button
         android:id="@+id/button"
@@ -51,7 +51,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="20dp"
         android:layout_marginRight="20dp"
-        android:text="@string/scan_review_prescriptions_start" />
+        android:text="@string/scan_review_prescriptions_start"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -67,6 +67,6 @@
         android:text="@string/scan_review_prescriptions_title"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#222"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
 </RelativeLayout>

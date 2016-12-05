@@ -17,8 +17,8 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/medicines_list_item_container"
@@ -31,7 +31,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:background="#efefef" />
+            android:background="#efefef"/>
 
 
         <ImageView
@@ -39,26 +39,26 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:alpha="0.7"
-            android:background="@drawable/touchable_white" />
+            android:background="@drawable/touchable_white"/>
 
         <ImageView
             android:id="@+id/selection_mask"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:background="@drawable/select_medicines_selected_background"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
         <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/imageView2"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="26dp"
-            android:scaleType="centerCrop"
-            android:src="@color/white_80"
-            app:riv_border_width="0dip"
-            app:riv_corner_radius="30dip"
-            app:riv_oval="true" />
+                                        android:id="@+id/imageView2"
+                                        android:layout_width="55dp"
+                                        android:layout_height="55dp"
+                                        android:layout_centerVertical="true"
+                                        android:layout_marginLeft="26dp"
+                                        android:scaleType="centerCrop"
+                                        android:src="@color/white_80"
+                                        app:riv_border_width="0dip"
+                                        app:riv_corner_radius="30dip"
+                                        app:riv_oval="true"/>
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -73,7 +73,7 @@
             android:background="@null"
             android:padding="10dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_presentation_3" />
+            android:src="@drawable/ic_presentation_3"/>
 
         <ImageView
             android:id="@+id/selection_indicator"
@@ -82,7 +82,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="26dp"
-            android:src="@drawable/ic_done_black_48dp" />
+            android:src="@drawable/ic_done_black_48dp"/>
 
         <TextView
             android:id="@+id/medicines_list_item_name"
@@ -95,7 +95,7 @@
             android:gravity="center"
             android:text="Atrovent"
             android:textColor="#111"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
     </RelativeLayout>
 

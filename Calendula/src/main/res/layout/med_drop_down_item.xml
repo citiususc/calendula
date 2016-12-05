@@ -19,11 +19,11 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="6dp"
-    android:paddingRight="6dp"
-    android:paddingTop="6dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:paddingTop="6dp">
 
     <RelativeLayout
 
@@ -57,7 +57,7 @@
                 android:text="Medicine name that needs two rows"
                 android:textColor="#333"
                 android:textSize="16dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/text2"
@@ -73,7 +73,7 @@
                 android:text="100 microgramos"
                 android:textColor="#999"
                 android:textSize="15dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/text3"
@@ -88,7 +88,7 @@
                 android:singleLine="false"
                 android:text="50 frascos de 100 ml, comprimidos recubiertos con película EFG"
                 android:textColor="#000"
-                android:textSize="15dp" />
+                android:textSize="15dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -104,7 +104,7 @@
                 android:textAllCaps="false"
                 android:textColor="#222"
                 android:textSize="14dp"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
         </LinearLayout>
 
@@ -114,7 +114,7 @@
             android:layout_height="56dp"
             android:layout_alignParentTop="true"
             android:padding="7dp"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"/>
 
         <TextView
             android:id="@+id/prescription_cn"
@@ -134,7 +134,7 @@
             android:text="123456"
             android:textColor="#fff"
             android:textSize="12dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
         <ImageButton
             android:id="@+id/prospect_icon"
@@ -150,7 +150,7 @@
             android:padding="4dp"
             android:scaleType="fitCenter"
             android:src="@drawable/abc_ic_star_black_36dp"
-            android:visibility="visible" />
+            android:visibility="visible"/>
 
     </RelativeLayout>
 

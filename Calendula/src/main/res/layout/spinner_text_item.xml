@@ -17,9 +17,9 @@
   -->
 
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:gravity="left"
-    android:padding="5dp"
-    android:textColor="@color/agenda_item_title"
-    android:textSize="22dp" />
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:gravity="left"
+          android:padding="5dp"
+          android:textColor="@color/agenda_item_title"
+          android:textSize="22dp"/>

@@ -17,13 +17,13 @@
   -->
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
+       android:shape="oval">
 
-    <solid android:color="@color/med_presentation_circle_bg" />
+    <solid android:color="@color/med_presentation_circle_bg"/>
 
     <size
         android:width="90dp"
-        android:height="90dp" />
+        android:height="90dp"/>
 </shape>
 
 

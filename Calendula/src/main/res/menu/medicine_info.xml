@@ -17,12 +17,12 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/action_edit"
         android:orderInCategory="100"
         android:title="Expand"
-        app:showAsAction="always" />
+        app:showAsAction="always"/>
 
 </menu>

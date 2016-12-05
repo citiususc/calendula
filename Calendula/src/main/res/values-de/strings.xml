@@ -231,9 +231,9 @@
         <item>Monate</item>
     </string-array>
 
-    <string name="recurrence_end_continously" />
+    <string name="recurrence_end_continously"/>
     <string name="recurrence_end_count_label">Für eine Anzahl von Einnahmen</string>
-    <string name="every_weekday" />
+    <string name="every_weekday"/>
     <string name="summary_show_calendar">Kalender anzeigen</string>
     <string name="hours">Stunden</string>
     <string name="schedule_help_no_type_selected">Bitte wählen Sie einen Plantyp aus um dann einen Plan zu erstellen</string>

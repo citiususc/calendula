@@ -17,9 +17,9 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:background="#fcfcfc">
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:background="#fcfcfc">
 
     <ListView
         android:id="@+id/medicines_list"
@@ -30,21 +30,21 @@
         android:divider="#fff"
         android:dividerHeight="0dp"
         android:paddingBottom="96dp"
-        android:scrollbars="none" />
+        android:scrollbars="none"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@android:id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+                  android:id="@android:id/empty"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:layout_marginTop="50dp"
+                  android:gravity="center_horizontal"
+                  android:orientation="vertical">
 
         <ImageView
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:alpha="0.3"
-            android:src="@drawable/ic_intro_pill" />
+            android:src="@drawable/ic_intro_pill"/>
 
         <TextView
             android:id="@+id/textView10"
@@ -57,7 +57,7 @@
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#aaa"
-            android:textSize="16dp" />
+            android:textSize="16dp"/>
 
     </LinearLayout>
 

@@ -17,8 +17,8 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/schedules_list_item_container"
@@ -32,7 +32,7 @@
 
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="72dp"
-            android:background="#efefef" />
+            android:background="#efefef"/>
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -45,7 +45,7 @@
             android:layout_marginTop="16dp"
             android:background="@null"
             android:scaleType="fitStart"
-            android:src="@drawable/ic_presentation_2" />
+            android:src="@drawable/ic_presentation_2"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -67,7 +67,7 @@
                 android:text="Atrovent"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#222"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/schedules_list_item_times"
@@ -82,7 +82,7 @@
                 android:text="Three times a day"
                 android:textColor="#222"
                 android:textSize="15dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/schedules_list_item_days"
@@ -95,7 +95,7 @@
                 android:paddingTop="2dp"
                 android:text="Every day"
                 android:textColor="@color/agenda_item_title"
-                android:textSize="15dp" />
+                android:textSize="15dp"/>
 
         </LinearLayout>
 
@@ -109,7 +109,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/circle_white"
-            android:visibility="visible" />
+            android:visibility="visible"/>
 
     </RelativeLayout>
 

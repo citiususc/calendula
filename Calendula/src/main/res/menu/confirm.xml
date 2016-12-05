@@ -17,7 +17,7 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <item
@@ -25,7 +25,7 @@
         android:icon="@drawable/ic_alarm_off_white_24dp"
         android:orderInCategory="100"
         android:title="Expand"
-        app:showAsAction="always" />
+        app:showAsAction="always"/>
 
     <!--<item-->
     <!--android:id="@+id/action_cancel"-->

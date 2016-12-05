@@ -18,11 +18,11 @@
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/color_layer">
-        <color android:color="@color/android_orange_lighter" />
+        <color android:color="@color/android_orange_lighter"/>
     </item>
     <item>
         <bitmap
             android:alpha="0.1"
-            android:src="@drawable/drawertopbg" />
+            android:src="@drawable/drawertopbg"/>
     </item>
 </layer-list>

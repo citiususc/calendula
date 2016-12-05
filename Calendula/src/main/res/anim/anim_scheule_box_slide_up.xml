@@ -20,10 +20,10 @@
     <translate
         android:duration="500"
         android:fromYDelta="50%"
-        android:toYDelta="0%" />
+        android:toYDelta="0%"/>
     <alpha
         android:duration="300"
         android:fromAlpha="0"
         android:interpolator="@android:anim/accelerate_interpolator"
-        android:toAlpha="1" />
+        android:toAlpha="1"/>
 </set>

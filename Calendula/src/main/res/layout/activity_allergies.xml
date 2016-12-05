@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="@dimen/status_bar_height"
-    tools:context="es.usc.citius.servando.calendula.activities.WebViewActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="@dimen/status_bar_height"
+                tools:context="es.usc.citius.servando.calendula.activities.WebViewActivity">
 
     <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/dark_grey_home"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+                                       android:id="@+id/toolbar"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="56dp"
+                                       android:background="@color/dark_grey_home"
+                                       app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                                       app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <ImageView
         android:id="@+id/tabs_shadow"
@@ -22,7 +22,7 @@
         android:layout_below="@+id/toolbar"
         android:alpha="0.7"
         android:scaleType="fitXY"
-        android:src="@drawable/daily_view_list_item_tab_shadow_top" />
+        android:src="@drawable/daily_view_list_item_tab_shadow_top"/>
 
 
     <android.support.v7.widget.RecyclerView
@@ -32,7 +32,7 @@
         android:layout_below="@+id/toolbar"
         android:background="@drawable/touchable_white"
         android:clipToPadding="false"
-        android:paddingBottom="96dp" />
+        android:paddingBottom="96dp"/>
 
     <TextView
         android:id="@+id/textview_no_allergies_placeholder"
@@ -41,7 +41,7 @@
         android:layout_below="@id/toolbar"
         android:gravity="center"
         android:text="@string/allergies_placeholder"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:id="@+id/search_view"
@@ -71,7 +71,7 @@
             android:textColor="#fff"
             android:textColorHint="#ececec"
             android:textCursorDrawable="@null"
-            android:textSize="20dp" />
+            android:textSize="20dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,7 +83,7 @@
                 android:id="@+id/search_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white" />
+                android:background="@color/white"/>
         </LinearLayout>
 
 
@@ -94,14 +94,14 @@
             android:layout_below="@id/search_edit_text"
             android:gravity="top|center_horizontal"
             android:paddingTop="48dp"
-            android:text="@string/allergies_search_placeholder" />
+            android:text="@string/allergies_search_placeholder"/>
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:padding="15dp"
-            android:src="@drawable/ic_arrow_back_white_48dp" />
+            android:src="@drawable/ic_arrow_back_white_48dp"/>
 
         <ImageView
             android:id="@+id/close_search_button"
@@ -110,7 +110,7 @@
             android:layout_alignParentRight="true"
             android:padding="15dp"
             android:src="@drawable/ic_cancel_white_48dp"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <ImageView
             android:layout_width="fill_parent"
@@ -118,7 +118,7 @@
             android:layout_below="@+id/search_edit_text"
             android:alpha="0.7"
             android:scaleType="fitXY"
-            android:src="@drawable/daily_view_list_item_tab_shadow_top" />
+            android:src="@drawable/daily_view_list_item_tab_shadow_top"/>
 
         <LinearLayout
             android:id="@+id/allergies_selected_layout"
@@ -136,17 +136,17 @@
                 style="@style/menu_labels_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="3.5dp" />
+                android:layout_marginBottom="3.5dp"/>
 
             <com.getbase.floatingactionbutton.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/accept_selection_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                fab:fab_colorNormal="@color/md_light_green_800"
-                fab:fab_colorPressed="@color/md_light_green_500"
-                fab:fab_icon="@drawable/ic_done_white_48dp"
-                fab:fab_labelStyle="@style/menu_labels_style" />
+                                                                   android:id="@+id/accept_selection_button"
+                                                                   android:layout_width="wrap_content"
+                                                                   android:layout_height="wrap_content"
+                                                                   android:layout_margin="10dp"
+                                                                   fab:fab_colorNormal="@color/md_light_green_800"
+                                                                   fab:fab_colorPressed="@color/md_light_green_500"
+                                                                   fab:fab_icon="@drawable/ic_done_white_48dp"
+                                                                   fab:fab_labelStyle="@style/menu_labels_style"/>
 
         </LinearLayout>
 
@@ -154,17 +154,17 @@
 
 
     <com.getbase.floatingactionbutton.AddFloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/add_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="10dp"
-        fab:fab_colorNormal="#efefef"
-        fab:fab_colorPressed="#b7b7b7"
-        fab:fab_icon="@drawable/ic_done_black_48dp"
-        fab:fab_labelStyle="@style/menu_labels_style"
-        fab:fab_plusIconColor="@color/black" />
+                                                              android:id="@+id/add_button"
+                                                              android:layout_width="wrap_content"
+                                                              android:layout_height="wrap_content"
+                                                              android:layout_alignParentBottom="true"
+                                                              android:layout_alignParentRight="true"
+                                                              android:layout_margin="10dp"
+                                                              fab:fab_colorNormal="#efefef"
+                                                              fab:fab_colorPressed="#b7b7b7"
+                                                              fab:fab_icon="@drawable/ic_done_black_48dp"
+                                                              fab:fab_labelStyle="@style/menu_labels_style"
+                                                              fab:fab_plusIconColor="@color/black"/>
 
     <ProgressBar
         android:id="@+id/main_progress_bar"
@@ -172,7 +172,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
 
 </RelativeLayout>

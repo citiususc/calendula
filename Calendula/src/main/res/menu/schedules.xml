@@ -17,17 +17,17 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/action_remove"
         android:orderInCategory="100"
         android:title="@string/action_remove"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 
     <item
         android:checkable="true"
         android:title="Automática"
         android:titleCondensed="Automática"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 </menu>

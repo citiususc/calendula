@@ -17,14 +17,14 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/main_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+                                                     android:id="@+id/main_content"
+                                                     android:layout_width="match_parent"
+                                                     android:layout_height="match_parent"
+                                                     android:fitsSystemWindows="true">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar"
@@ -63,7 +63,7 @@
                             android:layout_width="60dp"
                             android:layout_height="60dp"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="90dp" />
+                            android:layout_marginTop="90dp"/>
 
                         <TextView
                             android:id="@+id/medicine_name"
@@ -76,7 +76,7 @@
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#fff"
                             android:textSize="20dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"/>
                     </RelativeLayout>
                 </FrameLayout>
                 <!-- @dimen/fragment_tabs_margin_top -->
@@ -89,7 +89,7 @@
                     android:gravity="top"
                     app:layout_collapseMode="pin"
                     app:layout_scrollFlags="scroll|enterAlways|snap"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
 
                 <android.support.design.widget.TabLayout
@@ -102,7 +102,7 @@
                     app:tabIndicatorColor="#ffffff"
                     app:tabSelectedTextColor="#ffffff"
                     app:tabTextAppearance="@style/AppTabLayoutTextAppearance"
-                    app:tabTextColor="#77ffffff" />
+                    app:tabTextColor="#77ffffff"/>
 
 
             </android.support.design.widget.CollapsingToolbarLayout>
@@ -114,7 +114,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 
     </android.support.design.widget.CoordinatorLayout>
@@ -130,6 +130,6 @@
         android:layout_marginTop="@dimen/status_bar_height"
         android:height="@dimen/action_bar_height"
         android:gravity="center_vertical"
-        android:text="Calendula" />
+        android:text="Calendula"/>
 
 </RelativeLayout>

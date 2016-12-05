@@ -19,8 +19,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
-            <solid android:color="@color/android_blue" />
-            <corners android:bottomLeftRadius="300dp" android:bottomRightRadius="300dp" android:topLeftRadius="300dp" android:topRightRadius="300dp" />
+            <solid android:color="@color/android_blue"/>
+            <corners android:bottomLeftRadius="300dp" android:bottomRightRadius="300dp" android:topLeftRadius="300dp" android:topRightRadius="300dp"/>
         </shape>
     </item>
 </selector>

@@ -26,6 +26,7 @@ public class SettingsKeys {
 
     public static final String DATABASE_LOCATION = "db.url";
     public static final String MODULE_CONFIG = "modules.config";
+
     private SettingsKeys() {
     }
 }

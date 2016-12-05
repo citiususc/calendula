@@ -17,8 +17,8 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/medicines_list_item_container"
@@ -32,7 +32,7 @@
 
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="72dp"
-            android:background="#efefef" />
+            android:background="#efefef"/>
 
 
         <ImageButton
@@ -45,7 +45,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:background="@null"
-            android:scaleType="fitStart" />
+            android:scaleType="fitStart"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -67,7 +67,7 @@
                 android:text="Atrovent with another thing here"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#222"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/stock_info"
@@ -79,7 +79,7 @@
                 android:layout_marginTop="2dp"
                 android:text="@string/no_stock_info_msg"
                 android:textColor="@color/agenda_item_title"
-                android:textSize="15dp" />
+                android:textSize="15dp"/>
 
         </LinearLayout>
 
@@ -95,7 +95,7 @@
             android:alpha="0.9"
             android:background="@drawable/simple_highlight_click_selector"
             android:padding="0dp"
-            android:src="@drawable/icprospect" />
+            android:src="@drawable/icprospect"/>
 
     </RelativeLayout>
 

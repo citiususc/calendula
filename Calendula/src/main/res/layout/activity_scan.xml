@@ -17,13 +17,13 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/android_blue_dark"
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true"
-    android:paddingTop="@dimen/status_bar_height">
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/android_blue_dark"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true"
+                android:paddingTop="@dimen/status_bar_height">
 
     <ImageView
         android:id="@+id/imageView"
@@ -35,7 +35,7 @@
         android:background="@null"
         android:padding="10dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/qr_code_scan" />
+        android:src="@drawable/qr_code_scan"/>
 
     <Button
         android:id="@+id/button"
@@ -45,7 +45,7 @@
         android:layout_centerInParent="true"
         android:layout_marginBottom="50dp"
         android:text="@string/scan_qr"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/text"
@@ -56,6 +56,6 @@
         android:text="@string/scan_prescriptions_title"
         android:textColor="#fff"
         android:textSize="20dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
 </RelativeLayout>

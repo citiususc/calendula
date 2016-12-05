@@ -19,12 +19,12 @@
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/schedule_scroll"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#fff"
-    android:clickable="false"
-    android:fillViewport="false">
+            android:id="@+id/schedule_scroll"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#fff"
+            android:clickable="false"
+            android:fillViewport="false">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -44,7 +44,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/ic_edit_black_48dp" />
+                android:src="@drawable/ic_edit_black_48dp"/>
 
             <TextView
                 android:id="@+id/new_schedule_text"
@@ -58,7 +58,7 @@
                 android:layout_toRightOf="@+id/new_schedule_icon"
                 android:gravity="center_vertical"
                 android:text="@string/scan_new_schedule"
-                android:textColor="#111" />
+                android:textColor="#111"/>
 
         </RelativeLayout>
 
@@ -79,7 +79,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/ic_visibility_black_48dp" />
+                android:src="@drawable/ic_visibility_black_48dp"/>
 
             <TextView
                 android:id="@+id/textView8"
@@ -93,7 +93,7 @@
                 android:layout_toRightOf="@+id/imageView6"
                 android:gravity="center_vertical"
                 android:text="@string/scan_schedule_changed"
-                android:textColor="#111" />
+                android:textColor="#111"/>
 
             <LinearLayout
                 android:id="@+id/schedule_changes_list"
@@ -132,7 +132,7 @@
                     android:text="@string/schedule"
                     android:textColor="#bfbfbf"
                     android:textSize="15dp"
-                    android:visibility="visible" />
+                    android:visibility="visible"/>
 
                 <Spinner
                     android:id="@+id/schedules_spinner"
@@ -142,7 +142,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="5dp"
-                    android:spinnerMode="dialog" />
+                    android:spinnerMode="dialog"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -164,7 +164,7 @@
                     android:text="@string/doses_and_times"
                     android:textColor="#bfbfbf"
                     android:textSize="15dp"
-                    android:visibility="visible" />
+                    android:visibility="visible"/>
 
                 <LinearLayout
                     android:id="@+id/linearLayout"
@@ -190,7 +190,7 @@
                             android:text="@string/schedule_timetable_time_column"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textColor="@color/android_blue_dark"
-                            android:textSize="12dp" />
+                            android:textSize="12dp"/>
 
                         <ImageView
                             android:id="@+id/imageView"
@@ -198,7 +198,7 @@
                             android:layout_height="1dp"
                             android:layout_alignParentLeft="true"
                             android:layout_below="@+id/textView2"
-                            android:background="@color/android_blue" />
+                            android:background="@color/android_blue"/>
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -213,7 +213,7 @@
                             android:text="@string/schedule_timetable_dose_column"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textColor="@color/android_blue_dark"
-                            android:textSize="12dp" />
+                            android:textSize="12dp"/>
 
                         <ImageView
                             android:id="@+id/imageView1"
@@ -221,7 +221,7 @@
                             android:layout_height="1dp"
                             android:layout_alignParentLeft="true"
                             android:layout_below="@+id/textView3"
-                            android:background="@color/android_blue" />
+                            android:background="@color/android_blue"/>
 
                     </RelativeLayout>
 
@@ -247,7 +247,7 @@
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="10dp"
                     android:background="@color/android_blue"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -268,7 +268,7 @@
                     android:text="@string/schedule"
                     android:textColor="#bfbfbf"
                     android:textSize="15dp"
-                    android:visibility="visible" />
+                    android:visibility="visible"/>
 
                 <LinearLayout
                     android:id="@+id/hourly_interval_top"
@@ -287,7 +287,7 @@
                         android:text="@string/take"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="#444"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"/>
 
                     <Button
                         android:id="@+id/repeat_dose"
@@ -297,7 +297,7 @@
                         android:text="1"
                         android:textColor="@color/android_blue_dark"
                         android:textSize="18dp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="45dp"
@@ -308,7 +308,7 @@
                         android:text="@string/every"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="#444"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"/>
 
                     <Button
                         android:id="@+id/hourinterval_edit_text"
@@ -323,7 +323,7 @@
                         android:text="8"
                         android:textColor="@color/android_blue_dark"
                         android:textSize="18dp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="45dp"
@@ -334,7 +334,7 @@
                         android:gravity="center"
                         android:text="@string/hours"
                         android:textColor="#444"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -358,7 +358,7 @@
                         android:text="@string/first_intake"
                         android:textColor="@color/android_blue_dark"
                         android:textSize="18dp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
                 </LinearLayout>
 
 
@@ -390,7 +390,7 @@
                     android:text="@string/schedule_repeat_days"
                     android:textColor="#bfbfbf"
                     android:textSize="15dp"
-                    android:visibility="visible" />
+                    android:visibility="visible"/>
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
@@ -405,7 +405,7 @@
                         android:layout_marginBottom="0dp"
                         android:layout_marginLeft="0dp"
                         android:layout_marginRight="0dp"
-                        android:layout_marginTop="0dp" />
+                        android:layout_marginTop="0dp"/>
 
                     <include
 
@@ -417,7 +417,7 @@
                         android:layout_marginBottom="0dp"
                         android:layout_marginLeft="0dp"
                         android:layout_marginRight="0dp"
-                        android:layout_marginTop="5dp" />
+                        android:layout_marginTop="5dp"/>
 
                     <TextView
                         android:id="@+id/rule_text"
@@ -428,7 +428,7 @@
                         android:paddingLeft="26dp"
                         android:text="@string/schedule_custom_rule_text"
                         android:textColor="@color/android_blue_dark"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"/>
 
                 </RelativeLayout>
 
@@ -442,7 +442,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="0dp"
-                    android:spinnerMode="dialog" />
+                    android:spinnerMode="dialog"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -462,7 +462,7 @@
                     android:text="@string/schedule_repeat_period"
                     android:textColor="#bfbfbf"
                     android:textSize="15dp"
-                    android:visibility="visible" />
+                    android:visibility="visible"/>
 
                 <LinearLayout
                     android:id="@+id/hourly_interval_top"
@@ -480,7 +480,7 @@
                         android:text="27"
                         android:textColor="@color/android_blue_dark"
                         android:textSize="20dp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -491,7 +491,7 @@
                         android:text="+"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="#444"
-                        android:textSize="20dp" />
+                        android:textSize="20dp"/>
 
                     <Button
                         android:id="@+id/period_rest"
@@ -506,13 +506,13 @@
                         android:text="8"
                         android:textColor="@color/android_blue_dark"
                         android:textSize="20dp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <Spinner
                         android:layout_width="1dp"
                         android:layout_height="1dp"
                         android:spinnerMode="dialog"
-                        android:visibility="invisible" />
+                        android:visibility="invisible"/>
 
                 </LinearLayout>
 
@@ -525,7 +525,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_arrow_drop_down_black_48dp" />
+                    android:src="@drawable/ic_arrow_drop_down_black_48dp"/>
 
 
             </RelativeLayout>
@@ -550,7 +550,7 @@
                 android:text="@string/duration"
                 android:textColor="#bfbfbf"
                 android:textSize="15dp"
-                android:visibility="visible" />
+                android:visibility="visible"/>
 
             <RelativeLayout
                 android:layout_width="fill_parent"
@@ -574,7 +574,7 @@
                         android:text="@string/label_schedule_repeat_today"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="#444"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"/>
 
                     <Button
                         android:id="@+id/button_set_start"
@@ -589,7 +589,7 @@
                         android:gravity="start"
                         android:text="@string/button_schedule_repeat_today"
                         android:textColor="@color/android_blue_dark"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"/>
 
                     <TextView
                         android:id="@+id/textView5"
@@ -603,7 +603,7 @@
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="#444"
                         android:textSize="15dp"
-                        android:visibility="visible" />
+                        android:visibility="visible"/>
 
                     <Button
                         android:id="@+id/button_set_end"
@@ -620,7 +620,7 @@
                         android:text="@string/button_schedule_repeat_until"
                         android:textColor="@color/android_blue_dark"
                         android:textSize="15dp"
-                        android:visibility="visible" />
+                        android:visibility="visible"/>
 
 
                     <ImageButton
@@ -637,7 +637,7 @@
                         android:src="@drawable/ic_clear_black_48dp"
                         android:text="@string/button_schedule_repeat_today"
                         android:textColor="@color/android_blue_dark"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"/>
 
                     <ImageButton
                         android:id="@+id/button_clear_end"
@@ -655,7 +655,7 @@
                         android:text="@string/button_schedule_repeat_until"
                         android:textColor="@color/android_blue_dark"
                         android:textSize="15dp"
-                        android:visibility="visible" />
+                        android:visibility="visible"/>
 
 
                 </RelativeLayout>
@@ -679,7 +679,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="26dp"
                 android:layout_marginRight="26dp"
-                android:text="Continue" />
+                android:text="Continue"/>
 
         </RelativeLayout>
 

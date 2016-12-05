@@ -19,9 +19,9 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/textView"
@@ -36,7 +36,7 @@
         android:text="Small Text"
         android:textColor="#222"
         android:textSize="20sp"
-        tools:showIn="@layout/activity_calendar" />
+        tools:showIn="@layout/activity_calendar"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -50,7 +50,7 @@
         android:text="From 10/02/205 to 15/03/2015"
         android:textColor="#888"
         android:textSize="15sp"
-        tools:showIn="@layout/activity_calendar" />
+        tools:showIn="@layout/activity_calendar"/>
 
     <ImageView
         android:id="@+id/avatar"
@@ -58,7 +58,7 @@
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="10dp" />
+        android:layout_marginRight="10dp"/>
 
 </RelativeLayout>
 

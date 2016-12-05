@@ -238,7 +238,7 @@
 
     <string name="recurrence_end_continously">Indefinitely</string>
     <string name="recurrence_end_count_label">For a number of intakes</string>
-    <string name="every_weekday" />
+    <string name="every_weekday"/>
     <string name="summary_show_calendar">Show calendar</string>
     <string name="hours">hours</string>
     <string name="schedule_help_no_type_selected">Please, select a schedule type to keep on creating the schedule</string>

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="es.usc.citius.servando.calendula.activities.WebViewActivity">
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="es.usc.citius.servando.calendula.activities.WebViewActivity">
 
     <item
         android:id="@+id/action_share_link"
         android:icon="@android:drawable/ic_menu_share"
         android:orderInCategory="100"
         android:title="@string/action_share_link"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_open_with_browser"
         android:orderInCategory="100"
         android:title="@string/action_open_with_browser"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
 
 </menu>

@@ -19,8 +19,8 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,7 +47,7 @@
             android:layout_weight="0"
             android:background="@drawable/dayselector_circle"
             android:gravity="center"
-            android:text="@string/schedule_day_selector_mo" />
+            android:text="@string/schedule_day_selector_mo"/>
 
         <TextView
             android:id="@+id/day_tu"
@@ -58,7 +58,7 @@
             android:layout_weight="0"
             android:background="@drawable/dayselector_circle"
             android:gravity="center"
-            android:text="@string/schedule_day_selector_tu" />
+            android:text="@string/schedule_day_selector_tu"/>
 
         <TextView
             android:id="@+id/day_we"
@@ -69,7 +69,7 @@
             android:layout_weight="0"
             android:background="@drawable/dayselector_circle"
             android:gravity="center"
-            android:text="@string/schedule_day_selector_we" />
+            android:text="@string/schedule_day_selector_we"/>
 
         <TextView
             android:id="@+id/day_th"
@@ -80,7 +80,7 @@
             android:layout_weight="0"
             android:background="@drawable/dayselector_circle"
             android:gravity="center"
-            android:text="@string/schedule_day_selector_th" />
+            android:text="@string/schedule_day_selector_th"/>
 
         <TextView
             android:id="@+id/day_fr"
@@ -91,7 +91,7 @@
             android:layout_weight="0"
             android:background="@drawable/dayselector_circle"
             android:gravity="center"
-            android:text="@string/schedule_day_selector_fr" />
+            android:text="@string/schedule_day_selector_fr"/>
 
         <TextView
             android:id="@+id/day_sa"
@@ -102,7 +102,7 @@
             android:layout_weight="0"
             android:background="@drawable/dayselector_circle"
             android:gravity="center"
-            android:text="@string/schedule_day_selector_sa" />
+            android:text="@string/schedule_day_selector_sa"/>
 
         <TextView
             android:id="@+id/day_su"
@@ -113,7 +113,7 @@
             android:layout_weight="0"
             android:background="@drawable/dayselector_circle"
             android:gravity="center"
-            android:text="@string/schedule_day_selector_su" />
+            android:text="@string/schedule_day_selector_su"/>
 
         <!--<CheckBox-->
         <!--android:layout_width="0dp"-->

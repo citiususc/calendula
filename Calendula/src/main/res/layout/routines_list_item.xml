@@ -19,10 +19,10 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/routine_list_item_container"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/touchable_white">
+                android:id="@+id/routine_list_item_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/touchable_white">
 
     <ImageView
         android:layout_width="fill_parent"
@@ -30,7 +30,7 @@
 
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="72dp"
-        android:background="#efefef" />
+        android:background="#efefef"/>
 
     <ImageButton
         android:id="@+id/imageButton2"
@@ -41,7 +41,7 @@
         android:layout_marginTop="16dp"
         android:background="@null"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_alarm_black_48dp" />
+        android:src="@drawable/ic_alarm_black_48dp"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -61,7 +61,7 @@
             android:gravity="bottom"
             android:text="Breakfast"
             android:textColor="#222"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/routines_list_item_subtitle"
@@ -75,7 +75,7 @@
             android:paddingTop="2dp"
             android:text="2 schedules bound"
             android:textColor="@color/agenda_item_title"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
     </LinearLayout>
 
@@ -96,7 +96,7 @@
             android:text="08:"
             android:textColor="@color/agenda_item_title"
             android:textSize="20dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/routines_list_item_minute"
@@ -106,7 +106,7 @@
             android:layout_toRightOf="@+id/routines_list_item_hour"
             android:text="00"
             android:textColor="@color/agenda_item_title"
-            android:textSize="20dp" />
+            android:textSize="20dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -116,7 +116,7 @@
             android:text=" h"
             android:textColor="@color/agenda_item_title"
             android:textSize="20dp"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
     </LinearLayout>
 

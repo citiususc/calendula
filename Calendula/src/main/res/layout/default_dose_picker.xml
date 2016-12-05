@@ -19,11 +19,11 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_gravity="center_vertical"
-    android:gravity="center"
-    android:orientation="horizontal">
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
             android:text="1"
             android:textAlignment="gravity"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/units_text"
@@ -58,7 +58,7 @@
             android:layout_marginTop="25dp"
             android:text="@string/unknown_units"
             android:textAlignment="center"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
     </LinearLayout>
 </RelativeLayout>

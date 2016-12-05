@@ -34,7 +34,7 @@
             android:maxLines="1"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="@string/pref_title_display_name" />
+            android:title="@string/pref_title_display_name"/>
 
     </PreferenceCategory>
 
@@ -55,7 +55,7 @@
             android:key="prescriptions_database"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
-            android:title="@string/pref_available_databases_title" />
+            android:title="@string/pref_available_databases_title"/>
 
     </PreferenceCategory>
 

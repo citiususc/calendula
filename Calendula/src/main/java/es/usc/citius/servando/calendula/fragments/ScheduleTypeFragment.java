@@ -43,6 +43,7 @@ public class ScheduleTypeFragment extends Fragment {
     View optionRoutines;
     View optionHourly;
     View optionPeriod;
+
     public ScheduleTypeFragment() {
         // Required empty public constructor
     }

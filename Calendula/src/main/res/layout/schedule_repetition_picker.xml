@@ -19,11 +19,11 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_gravity="center_vertical"
-    android:gravity="center"
-    android:orientation="horizontal">
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:orientation="horizontal">
 
     <LinearLayout
         android:id="@+id/pickers_layout"
@@ -41,7 +41,7 @@
             android:layout_margin="0dp"
             android:layout_marginLeft="0dp"
             android:layout_marginRight="0dp"
-            android:layout_marginTop="0dp" />
+            android:layout_marginTop="0dp"/>
 
         <NumberPicker
             android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
             android:layout_margin="0dp"
             android:layout_marginLeft="0dp"
             android:layout_marginRight="0dp"
-            android:layout_marginTop="0dp" />
+            android:layout_marginTop="0dp"/>
 
 
     </LinearLayout>
@@ -72,7 +72,7 @@
             android:text="@string/every"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#222"
-            android:textSize="18dp" />
+            android:textSize="18dp"/>
 
         <Button
             android:id="@+id/interval_edit_text"
@@ -90,7 +90,7 @@
             android:text="2"
             android:textColor="@color/android_blue_dark"
             android:textSize="20dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
         <Spinner
             android:id="@+id/freq_spinner"
@@ -100,7 +100,7 @@
             android:layout_toEndOf="@+id/interval_edit_text"
             android:layout_toRightOf="@+id/interval_edit_text"
             android:gravity="center"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"/>
     </LinearLayout>
 
 </RelativeLayout>

@@ -25,6 +25,6 @@
         android:key="stock_alert_days"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
-        android:title="@string/pref_stock_alert_title" />
+        android:title="@string/pref_stock_alert_title"/>
 
 </PreferenceScreen>

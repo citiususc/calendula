@@ -17,8 +17,8 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/summaryTitle"
@@ -34,7 +34,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/android_blue"
         android:textSize="20dp"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/sched_summary_medname"
@@ -48,7 +48,7 @@
         android:text="@string/medicine_unselected"
         android:textColor="@color/android_blue_dark"
         android:textSize="18dp"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
 
     <ImageView
         android:id="@+id/sched_summary_medicon"
@@ -58,7 +58,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:src="@drawable/ic_presentation_2"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/sched_summary_medi_days"
@@ -69,7 +69,7 @@
         android:layout_marginTop="40dp"
         android:text="Every day"
         android:textColor="@color/dark_grey_text"
-        android:textSize="18dp" />
+        android:textSize="18dp"/>
 
     <TextView
         android:id="@+id/sched_summary_medi_dailyfreq"
@@ -82,7 +82,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/android_blue"
         android:textSize="18dp"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/button_show_calendar"
@@ -91,6 +91,6 @@
         android:layout_below="@+id/sched_summary_medi_dailyfreq"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="@string/summary_show_calendar" />
+        android:text="@string/summary_show_calendar"/>
 
 </RelativeLayout>

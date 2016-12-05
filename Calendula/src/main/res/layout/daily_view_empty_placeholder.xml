@@ -17,11 +17,11 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/top"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:visibility="visible">
+                android:id="@+id/top"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
 
     <ImageView
         android:id="@+id/bg"
@@ -30,7 +30,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:alpha="0.07"
-        android:src="@drawable/circle_white" />
+        android:src="@drawable/circle_white"/>
 
 
     <ImageView
@@ -40,7 +40,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="80dp"
         android:alpha="0.8"
-        android:src="@drawable/alldone" />
+        android:src="@drawable/alldone"/>
 
     <TextView
         android:id="@+id/textView3"
@@ -63,7 +63,7 @@
         android:textIsSelectable="false"
         android:textSize="19sp"
         android:textStyle="bold"
-        android:visibility="visible" />
+        android:visibility="visible"/>
 
 </RelativeLayout>
 

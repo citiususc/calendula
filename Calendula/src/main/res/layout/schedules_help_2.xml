@@ -17,27 +17,27 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:paddingBottom="20dp"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
 
 
     <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/imageView2"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="46dp"
-        android:alpha="0.3"
-        android:scaleType="centerCrop"
-        android:src="#55000000"
-        app:riv_border_width="0dip"
-        app:riv_corner_radius="30dip"
-        app:riv_oval="true" />
+                                    android:id="@+id/imageView2"
+                                    android:layout_width="55dp"
+                                    android:layout_height="55dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginLeft="46dp"
+                                    android:alpha="0.3"
+                                    android:scaleType="centerCrop"
+                                    android:src="#55000000"
+                                    app:riv_border_width="0dip"
+                                    app:riv_corner_radius="30dip"
+                                    app:riv_oval="true"/>
 
     <ImageView
         android:id="@+id/imageView11"
@@ -47,22 +47,22 @@
         android:layout_alignTop="@+id/imageView2"
         android:alpha="0.3"
         android:padding="10dp"
-        android:src="@drawable/ic_autorenew_white_48dp" />
+        android:src="@drawable/ic_autorenew_white_48dp"/>
 
 
     <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/imageView3"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="70dp"
-        android:layout_marginLeft="46dp"
-        android:scaleType="centerCrop"
-        android:src="#55000000"
-        app:riv_border_width="0dip"
-        app:riv_corner_radius="30dip"
-        app:riv_oval="true" />
+                                    android:id="@+id/imageView3"
+                                    android:layout_width="55dp"
+                                    android:layout_height="55dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginBottom="70dp"
+                                    android:layout_marginLeft="46dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="#55000000"
+                                    app:riv_border_width="0dip"
+                                    app:riv_corner_radius="30dip"
+                                    app:riv_oval="true"/>
 
     <ImageView
         android:layout_width="55dp"
@@ -70,23 +70,23 @@
         android:layout_alignLeft="@+id/imageView3"
         android:layout_alignTop="@+id/imageView3"
         android:padding="10dp"
-        android:src="@drawable/ic_history_white_48dp" />
+        android:src="@drawable/ic_history_white_48dp"/>
 
 
     <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/imageView4"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="140dp"
-        android:layout_marginLeft="46dp"
-        android:alpha="0.3"
-        android:scaleType="centerCrop"
-        android:src="#55000000"
-        app:riv_border_width="0dip"
-        app:riv_corner_radius="30dip"
-        app:riv_oval="true" />
+                                    android:id="@+id/imageView4"
+                                    android:layout_width="55dp"
+                                    android:layout_height="55dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginBottom="140dp"
+                                    android:layout_marginLeft="46dp"
+                                    android:alpha="0.3"
+                                    android:scaleType="centerCrop"
+                                    android:src="#55000000"
+                                    app:riv_border_width="0dip"
+                                    app:riv_corner_radius="30dip"
+                                    app:riv_oval="true"/>
 
     <ImageView
         android:layout_width="55dp"
@@ -95,7 +95,7 @@
         android:layout_alignTop="@+id/imageView4"
         android:alpha="0.3"
         android:padding="10dp"
-        android:src="@drawable/ic_alarm_white_48dp" />
+        android:src="@drawable/ic_alarm_white_48dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -110,7 +110,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#fff"
         android:textSize="20dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/textView13"
@@ -127,21 +127,21 @@
         android:text="@string/schedule_type_hourly_help"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#fff"
-        android:textSize="17dp" />
+        android:textSize="17dp"/>
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@android:id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+                  android:id="@android:id/empty"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:layout_marginTop="50dp"
+                  android:gravity="center_horizontal"
+                  android:orientation="vertical">
 
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/ic_intro_schedules" />
+            android:src="@drawable/ic_intro_schedules"/>
 
         <TextView
             android:id="@+id/textView10"
@@ -153,7 +153,7 @@
             android:text="@string/schedule_type_help_title"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#fff" />
+            android:textColor="#fff"/>
 
     </LinearLayout>
 

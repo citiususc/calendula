@@ -20,10 +20,10 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="2dp"
-    android:paddingTop="2dp">
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp">
 
 
     <ImageView
@@ -40,7 +40,7 @@
         android:padding="8dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_presentation_2"
-        android:visibility="visible" />
+        android:visibility="visible"/>
 
 
     <TextView
@@ -57,7 +57,7 @@
         android:paddingBottom="3dp"
         android:text="Ibuprofeno"
         android:textColor="#222"
-        android:textSize="16dp" />
+        android:textSize="16dp"/>
 
     <TextView
         android:id="@+id/med_item_dose"
@@ -71,7 +71,7 @@
         android:gravity="center_vertical"
         android:text="(1 capsule)"
         android:textColor="#000"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/ic_done"
@@ -83,7 +83,7 @@
         android:layout_marginRight="20dp"
         android:alpha="0.7"
         android:src="@drawable/ic_done_black_48dp"
-        android:visibility="visible" />
+        android:visibility="visible"/>
 
     <ImageView
         android:id="@+id/imageView2"
@@ -96,7 +96,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"
         android:background="#efefef"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
 </RelativeLayout>
 

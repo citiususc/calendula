@@ -17,9 +17,9 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#fff">
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#fff">
 
     <RelativeLayout
         android:id="@+id/bottom"
@@ -40,11 +40,11 @@
             android:layout_marginLeft="16dp"
             android:orientation="vertical">
 
-            <include layout="@layout/daily_view_intake_med" />
+            <include layout="@layout/daily_view_intake_med"/>
 
-            <include layout="@layout/daily_view_intake_med" />
+            <include layout="@layout/daily_view_intake_med"/>
 
-            <include layout="@layout/daily_view_intake_med" />
+            <include layout="@layout/daily_view_intake_med"/>
 
         </LinearLayout>
 
@@ -70,7 +70,7 @@
                 android:layout_marginBottom="0dp"
                 android:layout_marginLeft="0dp"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/ic_done_black_48dp" />
+                android:src="@drawable/ic_done_black_48dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -82,7 +82,7 @@
                 android:text="Tómate tus medicinas ahora"
                 android:textColor="#fff"
                 android:textSize="15dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -90,7 +90,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:background="#ececec"
-                android:visibility="visible" />
+                android:visibility="visible"/>
 
 
         </RelativeLayout>
@@ -107,7 +107,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginBottom="1px"
         android:background="#aaffffff"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:id="@+id/routine_list_item_container"
@@ -132,7 +132,7 @@
             android:paddingTop="8dp"
             android:scaleType="fitCenter"
             android:src="@drawable/arrow_down"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
 
         <TextView
@@ -151,7 +151,7 @@
             android:textColor="@color/agenda_item_title"
             android:textSize="20dp"
             android:textStyle="bold"
-            android:transitionName="title" />
+            android:transitionName="title"/>
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -170,7 +170,7 @@
                 android:layout_gravity="center_vertical"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_alarm_black_48dp" />
+                android:src="@drawable/ic_alarm_black_48dp"/>
 
             <TextView
                 android:id="@+id/routines_list_item_hour"
@@ -181,7 +181,7 @@
                 android:gravity="bottom"
                 android:text="08:"
                 android:textColor="#111"
-                android:textSize="20dp" />
+                android:textSize="20dp"/>
 
             <TextView
                 android:id="@+id/routines_list_item_minute"
@@ -192,7 +192,7 @@
                 android:gravity="bottom"
                 android:text="00"
                 android:textColor="#111"
-                android:textSize="20dp" />
+                android:textSize="20dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -204,7 +204,7 @@
                 android:text=" h"
                 android:textColor="#111"
                 android:textSize="20dp"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
         </LinearLayout>
 
@@ -213,7 +213,7 @@
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
             android:background="#ececec"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
 
     </RelativeLayout>
@@ -227,7 +227,7 @@
         android:layout_marginRight="5dp"
         android:layout_marginTop="10dp"
         android:background="#ececec"
-        android:visibility="visible" />
+        android:visibility="visible"/>
 
 
     <ImageView
@@ -238,7 +238,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="false"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="1px" />
+        android:layout_marginBottom="1px"/>
 
 
     <ImageView
@@ -255,6 +255,6 @@
         android:paddingTop="5dp"
         android:scaleType="fitCenter"
         android:transitionName="avatar_transition"
-        android:visibility="visible" />
+        android:visibility="visible"/>
 
 </RelativeLayout>

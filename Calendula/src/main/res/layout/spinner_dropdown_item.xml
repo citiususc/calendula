@@ -17,15 +17,15 @@
   -->
 
 <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/text1"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:ellipsize="marquee"
-    android:paddingBottom="15dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="15dp"
-    android:singleLine="true"
-    android:textAlignment="inherit"
-    android:textColor="@color/agenda_item_title"
-    android:textSize="22dp" />
+                 android:id="@android:id/text1"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:ellipsize="marquee"
+                 android:paddingBottom="15dp"
+                 android:paddingLeft="10dp"
+                 android:paddingRight="10dp"
+                 android:paddingTop="15dp"
+                 android:singleLine="true"
+                 android:textAlignment="inherit"
+                 android:textColor="@color/agenda_item_title"
+                 android:textSize="22dp"/>

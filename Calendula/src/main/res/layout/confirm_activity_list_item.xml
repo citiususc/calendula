@@ -17,10 +17,10 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/transparent"
-    android:paddingLeft="10dp">
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:paddingLeft="10dp">
 
 
     <ImageView
@@ -34,7 +34,7 @@
         android:padding="8dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_presentation_2"
-        android:visibility="visible" />
+        android:visibility="visible"/>
 
 
     <TextView
@@ -50,7 +50,7 @@
         android:text="Ibuprofeno"
         android:textColor="#222"
         android:textSize="19dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
 
     <TextView
@@ -65,7 +65,7 @@
         android:gravity="top"
         android:text="1 capsule"
         android:textColor="#111"
-        android:textSize="17dp" />
+        android:textSize="17dp"/>
 
     <TextView
         android:id="@+id/med_item_status"
@@ -79,7 +79,7 @@
         android:gravity="top"
         android:text="Not taken yet"
         android:textColor="#555"
-        android:textSize="13dp" />
+        android:textSize="13dp"/>
 
     <ImageButton
         android:id="@+id/check_button"
@@ -91,7 +91,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="26dp"
         android:src="@drawable/ic_done_black_48dp"
-        android:visibility="visible" />
+        android:visibility="visible"/>
 
     <ImageView
         android:id="@+id/imageView3"
@@ -101,6 +101,6 @@
         android:layout_alignParentBottom="false"
         android:layout_below="@+id/med_item_status"
         android:layout_marginTop="16dp"
-        android:background="#ececec" />
+        android:background="#ececec"/>
 
 </RelativeLayout>

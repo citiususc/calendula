@@ -17,26 +17,26 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true"
-    android:paddingTop="@dimen/status_bar_height">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true"
+                android:paddingTop="@dimen/status_bar_height">
 
     <es.usc.citius.servando.calendula.util.view.NonSwipeableViewPager xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/textView2"
-        tools:context=".RoutinesActivity" />
+                                                                      android:id="@+id/pager"
+                                                                      android:layout_width="match_parent"
+                                                                      android:layout_height="match_parent"
+                                                                      android:layout_below="@+id/textView2"
+                                                                      tools:context=".RoutinesActivity"/>
 
     <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/dark_grey_home"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+                                       android:id="@+id/toolbar"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="56dp"
+                                       android:background="@color/dark_grey_home"
+                                       app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                                       app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <ImageView
         android:id="@+id/tabs_shadow"
@@ -45,7 +45,7 @@
         android:layout_below="@+id/textView2"
         android:alpha="0.7"
         android:scaleType="fitXY"
-        android:src="@drawable/daily_view_list_item_tab_shadow_top" />
+        android:src="@drawable/daily_view_list_item_tab_shadow_top"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -60,20 +60,20 @@
         android:paddingTop="10dp"
         android:text="@string/create_medicine_button_text"
         android:textColor="#fff"
-        android:textSize="24sp" />
+        android:textSize="24sp"/>
 
     <com.getbase.floatingactionbutton.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/add_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="bottom|right"
-        android:layout_marginRight="38dp"
-        android:layout_marginTop="78dp"
-        fab:fab_colorNormal="#efefef"
-        fab:fab_colorPressed="#b7b7b7"
-        fab:fab_icon="@drawable/ic_done_black_48dp" />
+                                                           android:id="@+id/add_button"
+                                                           android:layout_width="wrap_content"
+                                                           android:layout_height="wrap_content"
+                                                           android:layout_alignParentEnd="true"
+                                                           android:layout_alignParentRight="true"
+                                                           android:layout_gravity="bottom|right"
+                                                           android:layout_marginRight="38dp"
+                                                           android:layout_marginTop="78dp"
+                                                           fab:fab_colorNormal="#efefef"
+                                                           fab:fab_colorPressed="#b7b7b7"
+                                                           fab:fab_icon="@drawable/ic_done_black_48dp"/>
 
     <TextView
         android:id="@+id/textView"
@@ -86,7 +86,7 @@
         android:paddingLeft="72dp"
         android:text="@string/title_activity_medicines"
         android:textColor="#fff"
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
     <RelativeLayout
         android:id="@+id/search_view"
@@ -119,31 +119,31 @@
             android:textColor="#fff"
             android:textColorHint="#ececec"
             android:textCursorDrawable="@null"
-            android:textSize="20dp" />
+            android:textSize="20dp"/>
 
         <ListView
             android:id="@+id/search_list"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_below="@+id/search_edit_text"
-            android:background="#f2f2f2" />
+            android:background="#f2f2f2"/>
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@android:id/empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/search_edit_text"
-            android:background="#fff"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingTop="80dp">
+                      android:id="@android:id/empty"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_below="@+id/search_edit_text"
+                      android:background="#fff"
+                      android:gravity="center_horizontal"
+                      android:orientation="vertical"
+                      android:paddingTop="80dp">
 
             <ImageView
                 android:id="@+id/med_list_empty_icon"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:alpha="0.3"
-                android:src="@drawable/ic_intro_alarm" />
+                android:src="@drawable/ic_intro_alarm"/>
 
             <TextView
                 android:id="@+id/textView10"
@@ -156,7 +156,7 @@
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#aaa"
-                android:textSize="16dp" />
+                android:textSize="16dp"/>
 
         </LinearLayout>
 
@@ -169,7 +169,7 @@
             android:divider="@null"
             android:dividerHeight="0dp"
             android:padding="15dp"
-            android:src="@drawable/ic_search_white_48dp" />
+            android:src="@drawable/ic_search_white_48dp"/>
 
         <ImageButton
             android:id="@+id/close_search_button"
@@ -178,7 +178,7 @@
             android:layout_height="56dp"
             android:layout_alignParentRight="true"
             android:padding="15dp"
-            android:src="@drawable/ic_cancel_white_48dp" />
+            android:src="@drawable/ic_cancel_white_48dp"/>
 
         <ImageView
             android:layout_width="fill_parent"
@@ -186,7 +186,7 @@
             android:layout_below="@+id/search_edit_text"
             android:alpha="0.3"
             android:scaleType="fitXY"
-            android:src="@drawable/daily_view_list_item_tab_shadow_top" />
+            android:src="@drawable/daily_view_list_item_tab_shadow_top"/>
 
         <Button
             android:id="@+id/add_custom_med_btn"
@@ -198,7 +198,7 @@
             android:background="@drawable/shape_list_item"
             android:padding="10dp"
             android:text="@string/add_custom_med_button_text"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"/>
 
     </RelativeLayout>
 

@@ -17,10 +17,10 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="#fff"
-    android:paddingRight="16dp">
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:paddingRight="16dp">
 
 
     <ImageView
@@ -29,7 +29,7 @@
         android:layout_height="36dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ic_event_available_black_48dp" />
+        android:src="@drawable/ic_event_available_black_48dp"/>
 
     <TextView
         android:id="@+id/alert_title"
@@ -44,7 +44,7 @@
         android:text="Se está agotando"
         android:textColor="#222"
         android:textSize="20dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/alert_description"
@@ -57,7 +57,7 @@
         android:text="Quedan 12 comprimidos"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#888"
-        android:textSize="14dp" />
+        android:textSize="14dp"/>
 
     <ImageView
         android:layout_width="fill_parent"
@@ -66,5 +66,5 @@
         android:layout_below="@+id/alert_description"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/alert_icon"
-        android:background="#eaeaea" />
+        android:background="#eaeaea"/>
 </RelativeLayout>

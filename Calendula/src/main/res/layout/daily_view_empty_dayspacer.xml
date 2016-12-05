@@ -19,15 +19,15 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:orientation="vertical">
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="vertical">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical">
 
         <es.usc.citius.servando.calendula.util.view.ParallaxImageView
             android:id="@+id/parallax_bg"
@@ -37,7 +37,7 @@
             android:background="@drawable/agenda_repeating_bg"
             android:cropToPadding="false"
             android:scaleType="centerCrop"
-            android:visibility="visible" />
+            android:visibility="visible"/>
 
     </LinearLayout>
 
@@ -46,7 +46,7 @@
         android:id="@+id/day_bg"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:alpha="0.7" />
+        android:alpha="0.7"/>
 
     <TextView
         android:id="@+id/day_text"
@@ -60,21 +60,21 @@
         android:text="martes, 20 Agosto"
         android:textColor="#FFFFFF"
         android:textSize="22sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="10dp"
         android:layout_alignParentBottom="true"
         android:alpha="0.3"
-        android:background="@drawable/daily_view_list_item_tab_shadow_bottom" />
+        android:background="@drawable/daily_view_list_item_tab_shadow_bottom"/>
 
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="10dp"
         android:layout_alignParentTop="true"
         android:alpha="0.3"
-        android:background="@drawable/daily_view_list_item_tab_shadow_top" />
+        android:background="@drawable/daily_view_list_item_tab_shadow_top"/>
 
 
 </RelativeLayout>

@@ -18,11 +18,11 @@
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@drawable/list_item_shadow" />
+    <item android:drawable="@drawable/list_item_shadow"/>
 
     <item
         android:bottom="1px"
         android:drawable="@drawable/shape_list_item_bg_active"
-        android:right="2px" />
+        android:right="2px"/>
 
 </layer-list>

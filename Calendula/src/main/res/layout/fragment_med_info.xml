@@ -18,15 +18,15 @@
 
 
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nestedScrollView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#fff"
-    android:fillViewport="true"
-    android:fitsSystemWindows="true"
-    android:paddingTop="10dp"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                                            android:id="@+id/nestedScrollView"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="#fff"
+                                            android:fillViewport="true"
+                                            android:fitsSystemWindows="true"
+                                            android:paddingTop="10dp"
+                                            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -52,7 +52,7 @@
                     android:layout_height="30dp"
                     android:layout_alignTop="@+id/textView"
                     android:layout_marginLeft="16dp"
-                    android:src="@drawable/ic_edit_black_48dp" />
+                    android:src="@drawable/ic_edit_black_48dp"/>
 
                 <TextView
                     android:id="@+id/med_large_name"
@@ -68,7 +68,7 @@
                     android:textColor="#000"
                     android:textIsSelectable="false"
                     android:textSize="19dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/med_large_name_description"
@@ -83,7 +83,7 @@
                     android:gravity="center_vertical"
                     android:text="1tubo de 15 mg\n20mg/g"
                     android:textColor="@color/dark_grey_text"
-                    android:textSize="18dp" />
+                    android:textSize="18dp"/>
 
                 <Button
                     android:id="@+id/bind_medicine"
@@ -95,7 +95,7 @@
                     android:background="@drawable/shape_list_item"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
-                    android:text="Asociar medicamento" />
+                    android:text="Asociar medicamento"/>
 
             </RelativeLayout>
 
@@ -112,7 +112,7 @@
                     android:layout_height="30dp"
                     android:layout_alignTop="@+id/textView"
                     android:layout_marginLeft="16dp"
-                    android:src="@drawable/ic_edit_black_48dp" />
+                    android:src="@drawable/ic_edit_black_48dp"/>
 
                 <TextView
                     android:id="@+id/med_stock"
@@ -128,7 +128,7 @@
                     android:textColor="#000"
                     android:textIsSelectable="false"
                     android:textSize="19dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/med_stock_readable"
@@ -143,7 +143,7 @@
                     android:gravity="center_vertical"
                     android:text="Suficiente para 2 semanas"
                     android:textColor="@color/dark_grey_text"
-                    android:textSize="18dp" />
+                    android:textSize="18dp"/>
 
             </RelativeLayout>
 
@@ -160,7 +160,7 @@
                     android:layout_height="30dp"
                     android:layout_alignTop="@+id/textView"
                     android:layout_marginLeft="16dp"
-                    android:src="@drawable/ic_edit_black_48dp" />
+                    android:src="@drawable/ic_edit_black_48dp"/>
 
                 <TextView
                     android:id="@+id/schedule_info"
@@ -176,7 +176,7 @@
                     android:textColor="#000"
                     android:textIsSelectable="false"
                     android:textSize="19dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
             </RelativeLayout>
 
@@ -193,7 +193,7 @@
                     android:layout_height="30dp"
                     android:layout_alignTop="@+id/textView"
                     android:layout_marginLeft="16dp"
-                    android:src="@drawable/ic_edit_black_48dp" />
+                    android:src="@drawable/ic_edit_black_48dp"/>
 
                 <TextView
                     android:id="@+id/prospect_title"
@@ -209,7 +209,7 @@
                     android:textColor="#000"
                     android:textIsSelectable="false"
                     android:textSize="19dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <ImageButton
                     android:id="@+id/med_leaflet_butn"
@@ -219,7 +219,7 @@
                     android:layout_below="@+id/prospect_title"
                     android:layout_marginRight="26dp"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/shape_list_item" />
+                    android:background="@drawable/shape_list_item"/>
 
                 <ImageView
                     android:id="@+id/imageView13"
@@ -236,7 +236,7 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_help_white_48dp"
                     android:textColor="@color/dark_grey_text"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -251,7 +251,7 @@
                     android:gravity="center"
                     android:text="Prospecto oficial de la Agencia Española de Medicamentos y Productos sanitarios"
                     android:textColor="#222"
-                    android:textSize="13dp" />
+                    android:textSize="13dp"/>
 
             </RelativeLayout>
 

@@ -19,9 +19,9 @@
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#fff">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#fff">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -43,7 +43,7 @@
             android:paddingRight="26dp"
             android:text="1 schedules will be created"
             android:textColor="#222"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <LinearLayout
             android:id="@+id/new_schedules"
@@ -67,7 +67,7 @@
             android:paddingRight="26dp"
             android:text="2 schedules will be updated"
             android:textColor="#222"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <LinearLayout
             android:id="@+id/updated_schedules"
@@ -89,7 +89,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="26dp"
             android:padding="2dp"
-            android:src="@drawable/ic_done_black_48dp" />
+            android:src="@drawable/ic_done_black_48dp"/>
 
         <ImageView
             android:layout_width="35dp"
@@ -98,7 +98,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="26dp"
             android:padding="4dp"
-            android:src="@drawable/ic_edit_black_48dp" />
+            android:src="@drawable/ic_edit_black_48dp"/>
 
 
     </RelativeLayout>
