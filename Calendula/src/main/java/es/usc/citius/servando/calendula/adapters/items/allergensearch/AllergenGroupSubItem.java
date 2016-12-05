@@ -20,12 +20,16 @@ package es.usc.citius.servando.calendula.adapters.items.allergensearch;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.TextView;
 
-import com.mikepenz.fastadapter.commons.items.AbstractExpandableItem;
+import com.mikepenz.fastadapter.ISubItem;
+import com.mikepenz.fastadapter.commons.utils.FastAdapterUIUtils;
+import com.mikepenz.fastadapter.items.AbstractItem;
+import com.mikepenz.materialize.util.UIUtils;
 
 import java.util.List;
 
@@ -38,7 +42,7 @@ import es.usc.citius.servando.calendula.allergies.AllergenVO;
  * Created by alvaro.brey.vilas on 23/11/16.
  */
 
-public class AllergenGroupSubItem extends AbstractExpandableItem<AllergenGroupItem, AllergenGroupSubItem.ViewHolder, AllergenGroupSubItem> implements Comparable<AllergenGroupSubItem> {
+public class AllergenGroupSubItem extends AbstractItem<AllergenGroupSubItem, AllergenGroupSubItem.ViewHolder> implements Comparable<AllergenGroupSubItem>, ISubItem<AllergenGroupSubItem, AllergenGroupItem> {
 
     private AllergenVO vo;
     private String title;
@@ -62,6 +66,8 @@ public class AllergenGroupSubItem extends AbstractExpandableItem<AllergenGroupIt
     @Override
     public void bindView(ViewHolder holder, List<Object> payloads) {
         super.bindView(holder, payloads);
+        final int selectedColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.med_presentation_circle_bg_lighter);
+        UIUtils.setBackground(holder.itemView, FastAdapterUIUtils.getSelectableBackground(holder.itemView.getContext(), selectedColor, true));
         holder.title.setText(titleSpannable != null ? titleSpannable : title);
         holder.subtitle.setText(subtitle);
     }
@@ -83,13 +89,15 @@ public class AllergenGroupSubItem extends AbstractExpandableItem<AllergenGroupIt
         return parent;
     }
 
-    public void setParent(AllergenGroupItem parent) {
+    @Override
+    public AllergenGroupSubItem withParent(AllergenGroupItem parent) {
         this.parent = parent;
+        return this;
     }
 
     @Override
     public boolean isSelectable() {
-        return false;
+        return true;
     }
 
     @Override

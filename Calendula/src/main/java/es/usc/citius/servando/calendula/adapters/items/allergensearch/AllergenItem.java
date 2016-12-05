@@ -19,13 +19,17 @@
 package es.usc.citius.servando.calendula.adapters.items.allergensearch;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.TextView;
 
+import com.mikepenz.fastadapter.commons.utils.FastAdapterUIUtils;
 import com.mikepenz.fastadapter.items.AbstractItem;
+import com.mikepenz.materialize.util.UIUtils;
 
 import java.util.List;
 
@@ -90,12 +94,14 @@ public class AllergenItem extends AbstractItem<AllergenItem, AllergenItem.ViewHo
 
     @Override
     public boolean isSelectable() {
-        return false;
+        return true;
     }
 
     @Override
     public void bindView(ViewHolder viewHolder, List<Object> payloads) {
         super.bindView(viewHolder, payloads);
+        final int selectedColor = ContextCompat.getColor(viewHolder.itemView.getContext(), R.color.med_presentation_circle_bg);
+        UIUtils.setBackground(viewHolder.itemView, FastAdapterUIUtils.getSelectableBackground(viewHolder.itemView.getContext(), selectedColor, true));
         viewHolder.title.setText(titleSpannable != null ? titleSpannable : title);
         viewHolder.subtitle.setText(allergenType);
     }

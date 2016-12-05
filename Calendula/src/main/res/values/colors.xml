@@ -75,6 +75,8 @@
     <!-- #ececec -->
     <!--<color name="actionbar_background_color">#161616</color>-->
     <color name="med_presentation_circle_bg">#aaefefef</color>
+    <color name="med_presentation_circle_bg_lighter">#bfffffff</color>
+
 
     <!--#006699-->
 

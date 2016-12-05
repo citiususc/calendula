@@ -66,6 +66,8 @@ public class AllergyGroupItem extends AbstractExpandableItem<AllergyGroupItem, A
                 .colorRes(R.color.agenda_item_title)
                 .paddingDp(10)
                 .sizeDp(38));
+        final float rotation = isExpanded() ? 180 : 0;
+        holder.itemView.setRotation(rotation);
         holder.deleteButton.setImageDrawable(new IconicsDrawable(holder.deleteButton.getContext())
                 .icon(CommunityMaterial.Icon.cmd_delete)
                 .colorRes(R.color.agenda_item_title)

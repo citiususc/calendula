@@ -19,6 +19,7 @@
 package es.usc.citius.servando.calendula.adapters.items.allergensearch;
 
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
@@ -29,10 +30,12 @@ import android.widget.TextView;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IExpandable;
 import com.mikepenz.fastadapter.commons.items.AbstractExpandableItem;
+import com.mikepenz.fastadapter.commons.utils.FastAdapterUIUtils;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.listeners.ClickEventHook;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.materialize.util.UIUtils;
 
 import java.util.List;
 
@@ -64,7 +67,10 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
         super.bindView(holder, payloads);
         holder.title.setText(titleSpannable != null ? titleSpannable : title);
         holder.subtitle.setText(this.subtitle);
-//        UIUtils.setBackground(holder.itemView, FastAdapterUIUtils.getSelectableBackground(holder.itemView.getContext(), Color.CYAN, true));
+        final float rotation = isExpanded() ? 180 : 0;
+        holder.imageButton.setRotation(rotation);
+        final int selectedColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.med_presentation_circle_bg);
+        UIUtils.setBackground(holder.itemView, FastAdapterUIUtils.getSelectableBackground(holder.itemView.getContext(), selectedColor, true));
         holder.imageButton.setImageDrawable(new IconicsDrawable(holder.imageButton.getContext())
                 .icon(GoogleMaterial.Icon.gmd_chevron_down)
                 .colorRes(R.color.agenda_item_title)
@@ -106,7 +112,7 @@ public class AllergenGroupItem extends AbstractExpandableItem<AllergenGroupItem,
 
     @Override
     public boolean isSelectable() {
-        return false;
+        return true;
     }
 
     public void setSubtitle(String subtitle) {

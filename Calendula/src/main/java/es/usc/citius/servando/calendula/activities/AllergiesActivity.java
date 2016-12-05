@@ -51,11 +51,12 @@ import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.j256.ormlite.dao.Dao;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fastadapter.FastAdapter;
-import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
+import com.mikepenz.fastadapter.ISelectionListener;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.listeners.ClickEventHook;
+import com.mikepenz.fastadapter_extensions.utilities.SubItemUtil;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -66,6 +67,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 
@@ -104,7 +106,7 @@ public class AllergiesActivity extends CalendulaActivity {
 
 
     private static final String TAG = "AllergiesActivity";
-    private final FastAdapter.OnClickListener<AbstractItem> cl = new CustomOnClickListener();
+    private final ISelectionListener<AbstractItem> selectionListener = new AllergySelectionListener();
     // main view
     @BindView(R.id.add_button)
     protected AddFloatingActionButton addButton;
@@ -357,22 +359,10 @@ public class AllergiesActivity extends CalendulaActivity {
 
     private Collection<IItem> getSelected() {
         Collection<IItem> selected = new ArrayList<>();
-        for (AbstractItem item : searchAdapter.getSelectedItems()) {
-            switch (item.getType()) {
-                case R.id.fastadapter_allergen_group_item:
-                    AllergenGroupItem i = (AllergenGroupItem) item;
-                    if (!i.isExpanded()) {
-                        selected.addAll(i.getSubItems());
-                    }
-                    break;
-                case R.id.fastadapter_allergen_item:
-                case R.id.fastadapter_allergen_group_sub_item:
-                    selected.add(item);
-                    break;
-                default:
-                    Log.wtf(TAG, "Invalid item in search adapter: " + item);
-                    break;
-            }
+        final Set<IItem> items = SubItemUtil.getSelectedItems(searchAdapter);
+        for (IItem item : items) {
+            if (item.getType() != R.id.fastadapter_allergen_group_item)
+                selected.add(item);
         }
         Log.d(TAG, "getSelected() returned: " + selected.size() + " elements");
         return selected;
@@ -466,8 +456,7 @@ public class AllergiesActivity extends CalendulaActivity {
         searchAdapter.withItemEvent(new AllergenGroupItem.GroupExpandClickEvent());
         searchAdapter.withSelectable(true);
         searchAdapter.withMultiSelect(true);
-        searchAdapter.withSelectWithItemUpdate(true);
-        searchAdapter.withOnClickListener(cl);
+        searchAdapter.withSelectionListener(selectionListener);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             searchView.setStateListAnimator(null);
         }
@@ -687,32 +676,39 @@ public class AllergiesActivity extends CalendulaActivity {
         }
     }
 
-    private class CustomOnClickListener implements FastAdapter.OnClickListener<AbstractItem> {
+    private class AllergySelectionListener implements ISelectionListener<AbstractItem> {
+
         @Override
-        public boolean onClick(View v, IAdapter<AbstractItem> adapter, AbstractItem item, int position) {
-
-            KeyboardUtils.hideKeyboard(AllergiesActivity.this);
-            boolean select = !item.isSelected();
-
-            //handle selection/deselection of groups and items
-            final int type = item.getType();
-            if (type != R.id.fastadapter_allergen_group_sub_item) {
-                final FastAdapter<AbstractItem> fa = adapter.getFastAdapter();
-                if (select) {
-                    fa.select(position);
-                } else {
-                    fa.deselect(position);
-                }
-
-                if (type == R.id.fastadapter_allergen_group_item) {
-                    AllergenGroupItem gi = (AllergenGroupItem) item;
-                    final boolean expanded = gi.isExpanded();
-                    for (AllergenGroupSubItem sub : gi.getSubItems()) {
-                        sub.withSetSelected(select);
+        public void onSelectionChanged(AbstractItem item, boolean selected) {
+            switch (item.getType()) {
+                case R.id.fastadapter_allergen_group_item:
+                    AllergenGroupItem i = (AllergenGroupItem) item;
+                    final int size = i.getSubItems().size();
+                    if (selected) {
+                        i.setSubtitle(getString(R.string.allergies_group_elements_selected, size, size));
+                    } else {
+                        i.setSubtitle(getString(R.string.allergies_group_elements_number, size));
                     }
-                    if (expanded)
-                        fa.notifyDataSetChanged();
-                }
+                    SubItemUtil.selectAllSubItems(searchAdapter, i, selected, true);
+                    break;
+                case R.id.fastadapter_allergen_group_sub_item:
+                    AllergenGroupItem t = ((AllergenGroupSubItem) item).getParent();
+                    final int count = SubItemUtil.countSelectedSubItems(searchAdapter, t);
+                    final int s = t.getSubItems().size();
+                    final int pos = searchAdapter.getAdapterPosition(t);
+                    if (count > 0) {
+                        t.setSubtitle(getString(R.string.allergies_group_elements_selected, s, count));
+                        if (!t.isSelected()) {
+                            t.withSetSelected(true);
+                        }
+                    } else {
+                        t.setSubtitle(getString(R.string.allergies_group_elements_number, s));
+                        if (t.isSelected()) {
+                            t.withSetSelected(false);
+                        }
+                    }
+                    searchAdapter.notifyItemChanged(pos);
+                    break;
             }
 
             //show selection confirmation
@@ -723,9 +719,6 @@ public class AllergiesActivity extends CalendulaActivity {
             } else {
                 selectLayout.setVisibility(View.GONE);
             }
-
-
-            return true;
         }
     }
 
@@ -887,7 +880,6 @@ public class AllergiesActivity extends CalendulaActivity {
                         List<AllergenGroupSubItem> sub = new ArrayList<>();
                         for (AllergenVO vo : subs) {
                             final AllergenGroupSubItem e = new AllergenGroupSubItem(vo, AllergiesActivity.this);
-                            e.setParent(g);
                             e.setTitleSpannable(Strings.getHighlighted(vo.getName(), filter, highlightColor));
                             sub.add(e);
                         }
