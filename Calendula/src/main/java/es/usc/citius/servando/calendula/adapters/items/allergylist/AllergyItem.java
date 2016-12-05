@@ -104,6 +104,10 @@ public class AllergyItem extends AbstractItem<AllergyItem, AllergyItem.ViewHolde
         holder.title.setText(null);
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }

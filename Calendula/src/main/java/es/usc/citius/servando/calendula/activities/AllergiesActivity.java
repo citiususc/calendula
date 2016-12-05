@@ -569,6 +569,25 @@ public class AllergiesActivity extends CalendulaActivity {
                 .show();
     }
 
+    private String getTitle(AbstractItem i) {
+        switch (i.getType()) {
+            case R.id.fastadapter_allergen_group_item:
+                return ((AllergenGroupItem) i).getTitle();
+            case R.id.fastadapter_allergen_group_sub_item:
+                return ((AllergenGroupSubItem) i).getTitle();
+            case R.id.fastadapter_allergen_item:
+                return ((AllergenItem) i).getTitle();
+            case R.id.fastadapter_allergy_group_item:
+                return ((AllergyGroupItem) i).getTitle();
+            case R.id.fastadapter_allergy_group_sub_item:
+                return ((AllergyGroupSubItem) i).getTitle();
+            case R.id.fastadapter_allergy_item:
+                return ((AllergyItem) i).getTitle();
+            default:
+                throw new RuntimeException("Unsupported item type");
+        }
+    }
+
     public enum SaveResult {
         OK, ERROR, ALLERGY
     }
@@ -885,6 +904,12 @@ public class AllergiesActivity extends CalendulaActivity {
                         }
                         g.setSubtitle(getString(R.string.allergies_group_elements_number, sub.size()));
                         g.setTitleSpannable(Strings.getHighlighted(s, filter, highlightColor));
+                        Collections.sort(sub, new Comparator<AllergenGroupSubItem>() {
+                            @Override
+                            public int compare(AllergenGroupSubItem o1, AllergenGroupSubItem o2) {
+                                return o1.getTitle().compareTo(o2.getTitle());
+                            }
+                        });
                         g.withSubItems(sub);
                         items.add(g);
                     }
@@ -899,16 +924,26 @@ public class AllergiesActivity extends CalendulaActivity {
             Collections.sort(items, new Comparator<AbstractItem>() {
                 @Override
                 public int compare(AbstractItem o1, AbstractItem o2) {
-                    final int o1Type = o1.getType();
-                    final int o2Type = o2.getType();
-                    if (o1Type != o2Type) {
-                        if (o1Type == R.id.fastadapter_allergen_group_item)
-                            return -1;
+                    final String f = filter.toLowerCase();
+                    final String t1 = getTitle(o1).toLowerCase().trim();
+                    boolean c1 = t1.contains(f);
+                    final String t2 = getTitle(o2).toLowerCase().trim();
+                    boolean c2 = t2.toLowerCase().trim().contains(f);
+
+                    if (c1 && !c2) {
+                        return -1;
+                    } else if (c2 && !c1) {
                         return 1;
+                    } else if (c1) { //if c1 is true, c2 is true at this point too
+                        int i1 = t1.toLowerCase().trim().indexOf(filter.toLowerCase());
+                        int i2 = t2.toLowerCase().trim().indexOf(filter.toLowerCase());
+                        if (i1 == i2) {
+                            return t1.compareTo(t2);
+                        } else {
+                            return i1 < i2 ? -1 : 1;
+                        }
                     } else {
-                        if (o1Type == R.id.fastadapter_allergen_group_item)
-                            return ((AllergenGroupItem) o1).compareTo((AllergenGroupItem) o2);
-                        return ((AllergenItem) o1).compareTo((AllergenItem) o2);
+                        return t1.compareTo(t2);
                     }
                 }
             });

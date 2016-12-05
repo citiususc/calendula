@@ -106,6 +106,10 @@ public class AllergyGroupSubItem extends AbstractExpandableItem<AllergyGroupItem
         return R.layout.allergen_search_group_sub_list_item;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.text1)

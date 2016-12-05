@@ -118,6 +118,10 @@ public class AllergenGroupSubItem extends AbstractItem<AllergenGroupSubItem, All
         this.titleSpannable = titleSpannable;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.text1)
         TextView title;
