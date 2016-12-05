@@ -42,6 +42,7 @@ import es.usc.citius.servando.calendula.adapters.AlertViewRecyclerAdapter;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
+import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.DrivingCautionAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.StockRunningOutAlert;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
@@ -51,18 +52,19 @@ import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
  */
 public class AlertListFragment extends Fragment {
 
+    private final static Class<?>[] alertViewProviders = new Class[]{
+            StockRunningOutAlert.StockAlertViewProvider.class,
+            DrivingCautionAlert.DrivingAlertViewProvider.class,
+            AllergyPatientAlert.AllergyAlertViewProvider.class
+    };
     final String TAG = "AlertListFragment";
-
     View emptyView;
     LinearLayoutManager llm;
-
     RecyclerView rv;
     AlertViewRecyclerAdapter rvAdapter;
     AlertViewRecyclerAdapter.EventListener rvListener;
-
     List<PatientAlert> items = new ArrayList<>();
     Medicine m;
-
 
     public static AlertListFragment newInstance(Medicine m) {
         AlertListFragment fragment = new AlertListFragment();
@@ -143,8 +145,14 @@ public class AlertListFragment extends Fragment {
         rv.setLayoutManager(llm);
         rvAdapter = new AlertViewRecyclerAdapter(items, rv, llm, getActivity());
         // register alert view providers on the adapter
-        rvAdapter.registerViewProvider(new StockRunningOutAlert.StockAlertViewProvider(), StockRunningOutAlert.StockAlertViewProvider.class);
-        rvAdapter.registerViewProvider(new DrivingCautionAlert.DrivingAlertViewProvider(), DrivingCautionAlert.DrivingAlertViewProvider.class);
+        for (Class<?> vp : alertViewProviders) {
+            try {
+                rvAdapter.registerViewProvider((AlertViewRecyclerAdapter.AlertViewProvider) vp.newInstance(), vp);
+            } catch (Exception e) {
+                Log.e(TAG, "setupRecyclerView: ", e);
+                throw new RuntimeException(e);
+            }
+        }
         rv.setAdapter(rvAdapter);
         rv.setItemAnimator(new DefaultItemAnimator());
         rvListener = new AlertViewRecyclerAdapter.EventListener() {

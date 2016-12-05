@@ -401,6 +401,8 @@
 
     <string name="permission_dialog_go_to_settings">We couldn\'t perform this action because you have denied our previous request to access storage. You can grant the permission again in the app info view.</string>
     <string name="permission_dialog_ok">Go to app info</string>
+    <string name="title_alert_allergy">There are allergy conflicts for this medicine</string>
+    <string name="description_alert_allergy">You have specified that you have an allergy to some of the elements that this medicine contains.<br/> Allergens:</string>
 
 
 </resources>
