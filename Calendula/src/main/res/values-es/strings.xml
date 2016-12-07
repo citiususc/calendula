@@ -424,5 +424,7 @@
     <string name="pref_header_stock">Control de stock</string>
     <string name="pref_stock_alert_title">Avisar cuando mis medicamentos se agoten</string>
     <string name="title_alert_allergy">Hay conflictos de alergias para este medicamento</string>
+    <string name="stock_depleted">No queda stock</string>
+    <string name="stock_depleted_msg">No queda stock para este medicamento.</string>
 
 </resources>

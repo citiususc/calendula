@@ -384,6 +384,8 @@
     <string name="title_alert_allergy">Hai conflitos de alerxia para este medicamento</string>
     <string name="title_pickups_bottom_sheet">Recollidas o %1$s</string>
     <string name="unconfirm_past_intake_warning">Confirmaches esta toma %1$s, tomaches a medicación?</string>
+    <string name="stock_depleted">Non queda stock</string>
+    <string name="stock_depleted_msg">Non queda stock para este medicamento.</string>
 
 </resources>
 

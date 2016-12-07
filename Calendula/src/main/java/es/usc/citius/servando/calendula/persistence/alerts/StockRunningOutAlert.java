@@ -127,10 +127,16 @@ public class StockRunningOutAlert extends PatientAlert<StockRunningOutAlert, Sto
             int stock = m.stock().intValue();
             // setup ui
             viewHolder.alertIcon.setImageDrawable(IconUtils.alertLevelIcon(alert.getLevel(), c));
-            viewHolder.title.setText(R.string.stock_running_out);
             final Context ctx = viewHolder.itemView.getContext();
-            viewHolder.description.setText(ctx.getString(R.string.stock_remaining_msg, stock, m.presentation().units(c.getResources())));
-            viewHolder.duration.setText(ctx.getString(R.string.stock_enough_for_days, StockUtils.getEstimatedStockDays(m)));
+            if (stock > 0) {
+                viewHolder.title.setText(R.string.stock_running_out);
+                viewHolder.duration.setText(ctx.getString(R.string.stock_enough_for_days, StockUtils.getEstimatedStockDays(m)));
+                viewHolder.description.setText(ctx.getString(R.string.stock_remaining_msg, stock, m.presentation().units(c.getResources())));
+            } else {
+                viewHolder.title.setText(R.string.stock_depleted);
+                viewHolder.description.setVisibility(View.GONE);
+                viewHolder.duration.setText(R.string.stock_depleted_msg);
+            }
             viewHolder.manageStockBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
