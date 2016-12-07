@@ -44,7 +44,7 @@
                 app:contentScrim="#1976D2"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:statusBarScrim="#00000000"
-                app:titleEnabled="false">
+                app:titleEnabled="true">
 
                 <FrameLayout
                     android:layout_width="fill_parent"
@@ -89,7 +89,7 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="85dp"
-                    android:layout_marginTop="@dimen/status_bar_height"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:background="#00000000"
                     android:gravity="top"
                     app:layout_collapseMode="pin"
@@ -136,8 +136,9 @@
         android:layout_marginTop="@dimen/status_bar_height"
         android:height="@dimen/action_bar_height"
         android:ellipsize="end"
-        android:gravity="center_vertical"
+        android:gravity="top"
         android:maxLines="1"
+        android:paddingTop="@dimen/activity_vertical_margin"
         android:scrollHorizontally="true"
         android:singleLine="true"/>
 

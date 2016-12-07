@@ -202,7 +202,6 @@
                                                    android:layout_width="match_parent"
                                                    android:layout_height="65dp"
                                                    android:layout_gravity="top"
-                                                   android:layout_marginTop="@dimen/status_bar_height"
                                                    android:gravity="top"
                                                    android:minHeight="65dp"
                                                    android:title="Patients"
