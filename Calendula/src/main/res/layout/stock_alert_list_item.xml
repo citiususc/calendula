@@ -41,7 +41,7 @@
         android:layout_toEndOf="@+id/alert_icon"
         android:layout_toRightOf="@+id/alert_icon"
         android:gravity="center_vertical"
-        android:text="Se está agotando"
+        android:text="@string/stock_running_out"
         android:textColor="#222"
         android:textSize="20dp"
         android:textStyle="bold"/>
@@ -54,7 +54,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/alert_icon"
-        android:text="Quedan 12 comprimidos"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#888"
         android:textSize="14dp"/>
@@ -68,7 +67,6 @@
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/alert_icon"
         android:paddingRight="16dp"
-        android:text="Suficiente para 5 días con la pauta actual"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/android_orange_dark"
         android:textSize="18dp"/>
@@ -82,7 +80,7 @@
         android:layout_below="@+id/stock_duration"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="5dp"
-        android:text="Recargar"/>
+        android:text="@string/add_more_stock"/>
 
     <ImageView
         android:layout_width="fill_parent"

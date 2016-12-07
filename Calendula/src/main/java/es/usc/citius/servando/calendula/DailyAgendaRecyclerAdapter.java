@@ -78,9 +78,11 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     private int emptyItemHeight;
     private boolean enableParallax = true;
     private EventListener listener;
+    private Context ctx;
 
     public DailyAgendaRecyclerAdapter(List<DailyAgendaItemStub> items, final RecyclerView rv, final LinearLayoutManager llm, Activity ctx) {
         this.items = items;
+        this.ctx = ctx.getApplicationContext();
         emptyItemHeight = ScreenUtils.dpToPx(ctx.getResources(), 45);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -162,11 +164,11 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             // TODO: get from strings
             String title;
             if (item.date.equals(LocalDate.now())) {
-                title = "Hoy";
+                title = ctx.getString(R.string.yesterday);
             } else if (item.date.equals(LocalDate.now().minusDays(1))) {
-                title = "Ayer";
+                title = ctx.getString(R.string.today);
             } else if (item.date.equals(LocalDate.now().plusDays(1))) {
-                title = "Mañana";
+                title = ctx.getString(R.string.tomorrow);
             } else {
                 title = item.date.toString("EEEE dd");
             }

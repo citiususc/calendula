@@ -28,7 +28,6 @@
                                        android:layout_width="match_parent"
                                        android:layout_height="56dp"
                                        android:background="@color/dark_grey_home"
-                                       android:title="Patients"
                                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                                        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 

@@ -41,7 +41,6 @@
         android:layout_toEndOf="@+id/alert_icon"
         android:layout_toRightOf="@+id/alert_icon"
         android:gravity="center_vertical"
-        android:text="Se está agotando"
         android:textColor="#222"
         android:textSize="20dp"
         android:textStyle="bold"/>
@@ -54,7 +53,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/alert_icon"
-        android:text="Quedan 12 comprimidos"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#888"
         android:textSize="14dp"/>

@@ -23,7 +23,7 @@
     <string name="database_none_display">None</string>
     <string name="database_aemps_id" translatable="false">AEMPS</string>
     <string name="database_aemps_display">AEMPS Database</string>
-    <string name="database_aemps_desc">Agencia Española de Medicmentos y productos sanitarios database</string>
+    <string name="database_aemps_desc">Agencia Española de Medicamentos y Productos Sanitarios database</string>
     <string name="database_us_id" translatable="false">US</string>
     <!--<string name="database_uk_id">UK</string>-->
     <!--<string name="database_uk_display">UK Database</string>-->

@@ -201,7 +201,7 @@
     <string name="enable_prescriptions_dialog_no">Abbrechen</string>
 
 
-    <string name="driving_warning">Dieses Medikament kann Ihre Fahrtüchtigkeit beeinflussen. \n\nLesen Sie den Beipackzetel sorgfältig oder fragen Sie Ihren Arzt oder Apotheker. \n\nDanke.</string>
+    <string name="driving_warning">Dieses Medikament kann Ihre Fahrtüchtigkeit beeinflussen.\nLesen Sie den Beipackzetel sorgfältig oder fragen Sie Ihren Arzt oder Apotheker.</string>
     <string name="driving_warning_title">Seien Sie vorsichtig</string>
     <string name="driving_warning_show_prospect">Lesen Sie den Beipackzettel</string>
     <string name="driving_warning_gotit">Verstanden</string>
@@ -284,9 +284,13 @@
     <string name="message_generic_pageloaderror">There was an error loading the page</string>
     <string name="title_prospect_webview">Prospect view</string>
     <string name="message_generic_pleasewait">Please wait for a few seconds…</string>
-    <string name="message_prospect_loading">The leaflet will be ready soon…</string>
     <string name="message_prospect_connection_error">The leaflet could not be loaded</string>
     <string name="message_prospect_not_found_error">Sorry, but it there is no leaflet available for this med</string>
+    <string name="default_user_name">Benutzer</string>
+    <string name="relation_user_possession_thing">%1$ss %2$s</string>
+    <string name="yesterday">Gestern</string>
+    <string name="today">Heute</string>
+    <string name="tomorrow">Morgen</string>
 
 
 </resources>

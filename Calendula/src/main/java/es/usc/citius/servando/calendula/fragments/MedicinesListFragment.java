@@ -228,7 +228,7 @@ public class MedicinesListFragment extends Fragment {
         }
 
         if (medicine.stock() >= 0) {
-            stockInfo.setText("Quedan " + medicine.stock().intValue() + " " + medicine.presentation().units(getResources()) + "s");
+            stockInfo.setText(getString(R.string.stock_remaining_msg, medicine.stock().intValue(), medicine.presentation().units(getResources())));
         }
 
         String cn = medicine.cn();

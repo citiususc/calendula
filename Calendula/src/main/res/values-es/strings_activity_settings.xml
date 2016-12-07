@@ -44,5 +44,11 @@
         <item>120</item>
     </string-array>
 
+    <string-array name="pref_stock">
+        <item>No avisar</item>
+        <item>En menos de 1 semana</item>
+        <item>En menos de 2 semanas</item>
+        <item>En menos de 3 semanas</item>
+    </string-array>
 
 </resources>

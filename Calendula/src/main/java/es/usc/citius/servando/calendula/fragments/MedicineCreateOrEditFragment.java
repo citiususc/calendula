@@ -799,7 +799,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                 if (!schedules.isEmpty()) {
                     Log.d(TAG, "updateStockText: pautas " + schedules.size());
                     LocalDate estimatedEnd = StockUtils.getEstimatedStockEnd(schedules, stock);
-                    text = StockUtils.getReadableStockDuration(estimatedEnd);
+                    text = StockUtils.getReadableStockDuration(estimatedEnd, getContext());
                     return true;
                 }
             }

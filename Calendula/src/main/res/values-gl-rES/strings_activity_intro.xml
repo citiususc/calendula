@@ -13,31 +13,31 @@
   ~    GNU General Public License for more details.
   ~
   ~    You should have received a copy of the GNU General Public License
-  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses>.
   -->
 
 <resources>
-    <string name="intro_title">¡Bienvenido a Calendula!</string>
-    <string name="intro_description">Tomar correctamente tu medicación no tiene por qué ser fácil, pero ahora al menos no será tan difícil
-        \n\nPor favor, ¡echa un vistazo a lo que tenemos para ti!</string>
+    <string name="intro_title">¡Benvido a Calendula!</string>
+    <string name="intro_description">Tomar correctamente a túa medicación non tén por que ser fácil, pero agora polo menos non será tan difícil
+        \n\nPor favor, ¡bota un ollo ao que temos para ti!</string>
 
     <string name="intro_routines_title">Rutinas</string>
     <string name="intro_routines_text">
-        Una rutina es un momento del día en que habitualmente debes tomar algún medicamento.
-        \n\n¿Tomas varios medicamentos con el desayuno? Define una rutina para esa hora y Calendula
-        agrupará todas tus tomas en un único aviso.
+        Unha rutina é un momento do día no que habitualmente debes tomar algún medicamento.
+        \n\n¿Tomas varios medicamentos co almorzo? Define unha rutina para esa hora e Calendula
+        agrupará todas  as túas tomas nun único aviso.
     </string>
 
     <string name="intro_meds_title">Botiquín</string>
     <string name="intro_meds_text">
-       Mantén el control de todos tus fármacos usando el botiquín, y accede de forma
-        fácil a sus prospectos en la Agencia Española de Medicamentos y Productos Sanitarios.
+       Mantén o control de todos os teus fármacos usando o botiquín, e accede de forma
+        fácil aos seus prospectos da Axencia Española de Medicamentos e Productos Sanitarios.
     </string>
 
     <string name="intro_schedules_title">Pautas</string>
     <string name="intro_schedules_text">
-        Define tu calendario de tomas usando nuestro editor de pautas. Puedes vincular tus tomas con tus rutinas,
-        definir pautas que se repiten diariamente o semanalmente, ¡y mucho más!
+        Define o teu calendario de tomas usando o noso editor de pautas. Podes vincular as túas tomas coas túas rutinas,
+        definir pautas que se repiten diariamente ou semanalmente, ¡e moito máis!
     </string>
 
     <string name="intro_reminders_title">Recordatorios</string>
@@ -46,10 +46,10 @@
         \n\nPersonaliza tus alarmas en el menú de opciones.
     </string>
 
-    <string name="intro_multipat_title">¡Varios pacientes!</string>
+    <string name="intro_multipat_title">Varios pacientes!</string>
     <string name="intro_multipat_text">
-        Calendula te permite gestionar la medicación de varios pacientes, con su propio botiquín, rutinas y pautas.
-        \n\nVerás todas sus tomas en la pantalla de inicio.
+        Calendula permíteche xestionar a medicación de varios pacientes, co seu propio botiquín, rutinas y pautas.
+        \n\nVerás todas a súas tomas na pantalla de inicio.
     </string>
 
 

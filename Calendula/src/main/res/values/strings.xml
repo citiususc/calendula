@@ -37,7 +37,7 @@
     <string name="title_edit_routine_activity">Edit routine</string>
     <string name="title_create_routine_activity">Create routine</string>
     <string name="title_activity_medicines">Medicines</string>
-    <string name="title_edit_schedule_activity">Edit schedule</string>
+    <string name="title_edit_schedule_activity" translatable="false">Edit schedule</string>
     <string name="title_create_schedule_activity">Create schedule</string>
     <string name="routine_name">Routine name</string>
     <string name="routine_time">Time</string>
@@ -206,7 +206,7 @@
     <string name="enable_prescriptions_dialog_no">Cancel</string>
 
 
-    <string name="driving_warning">Taking this medicine may have effects on your ability to drive. \n\nPlease carefully read the leaflet or ask your pharmacist before you get behind the wheel. \n\nThank you very much.</string>
+    <string name="driving_warning">Taking this medicine may have effects on your ability to drive.\nPlease carefully read the leaflet or ask your pharmacist before you get behind the wheel.</string>
     <string name="driving_warning_title">Be careful</string>
     <string name="driving_warning_show_prospect">Read leaflet</string>
     <string name="driving_warning_gotit">Understood</string>
@@ -298,8 +298,8 @@
 
     <string name="create_schedule_select_med_before_dose">Please, select a med first</string>
     <string name="title_activity_patients">Patients</string>
-    <string name="title_activity_patient_detail">PatientDetailActivity</string>
-    <string name="title_activity_about">AboutActivity</string>
+    <string name="title_activity_patient_detail" translatable="false">PatientDetailActivity</string>
+    <string name="title_activity_about" translatable="false">AboutActivity</string>
 
 
     <string name="schedule_type_help_title">
@@ -402,8 +402,39 @@
     <string name="permission_dialog_go_to_settings">We couldn\'t perform this action because you have denied our previous request to access storage. You can grant the permission again in the app info view.</string>
     <string name="permission_dialog_ok">Go to app info</string>
     <string name="title_alert_allergy">There are allergy conflicts for this medicine</string>
-    <string name="description_alert_allergy">You have specified that you have an allergy to some of the elements that this medicine contains.<br/> Allergens:</string>
 
+    <string name="description_alert_allergy">You have specified that you have an allergy to some of the elements that this medicine contains. Allergens:</string>
+    <string name="default_user_name">User</string>
+    <string name="relation_user_possession_thing">%1$s\'s %2$s</string>
+    <string name="schedules_for_med">%1$d associated schedules</string>
+    <string name="schedules_for_med_none">No associated schedules</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="message_delete_default_patient">This is the default patient, and cannot be deleted. Do you want to delete all of their schedules, medicines and routines?</string>
+    <string name="yes_delete_everything">Yes, delete everything</string>
+    <string name="default_user_data_deleted">User data deleted!</string>
+    <string name="create_default_routines">Create default routines</string>
+    <string name="stock_running_out">Running out of stock</string>
+    <string name="add_more_stock">Add more</string>
+    <string name="stock_remaining_msg">%1$d %2$s(s) remaining</string>
+    <string name="active_schedules_none">No active schedules</string>
+    <string name="active_schedules_one">1 active schedule</string>
+    <string name="active_schedules_number">%1$d active schedules</string>
+    <string name="message_link_real_prescription">Link to a real medicine to get more information</string>
+    <string name="stock_no_stock_info">There is no stock info for this medicine</string>
+    <string name="stock_no_data">No data</string>
+    <string name="message_med_linked_success">Medicine linked successfully!</string>
+    <string name="label_info_short">Info</string>
+    <string name="label_alerts_short">Alerts</string>
+    <string name="medicine_not_found_error">Medicine not found</string>
+    <string name="message_link_real_prescription_short">Link to medicine</string>
+    <string name="prospect">Leaflet</string>
+    <string name="button_official_prospect">Official leaflet</string>
+    <string name="stock_enough_for_days">Enough for %1$d days with current schedules</string>
+    <string name="stock_enough_for_months_days">Enough for %1$d months and %2$d days with current schedules</string>
+    <string name="stock_enough_for_upper_limit">Enough for more than three months with current schedules</string>
+    <string name="no_alerts_detected">No alerts detected for this medicine</string>
 
 </resources>
 

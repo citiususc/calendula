@@ -50,18 +50,18 @@ public class StockUtils {
 
     private static final String TAG = "StockUtils";
 
-    public static String getReadableStockDuration(LocalDate estimatedEnd) {
+    public static String getReadableStockDuration(LocalDate estimatedEnd, Context ctx) {
         String response;
         if (estimatedEnd != null) {
-            Log.d(TAG, "updateStockText: esitmado " + estimatedEnd.toString("dd/MM"));
+            Log.d(TAG, "updateStockText: estimado " + estimatedEnd.toString("dd/MM"));
             long days = new Duration(DateTime.now().withTimeAtStartOfDay(), estimatedEnd.toDateTimeAtStartOfDay()).getStandardDays();
             if (days < 21) {
-                response = "Suficiente para " + days + " días con la pauta actual";
+                response = ctx.getString(R.string.stock_enough_for_days, days);
             } else {
-                response = "Suficiente para " + (int) (days / 7) + " semanas y " + (days % 7) + " días con la pauta actual";
+                response = ctx.getString(R.string.stock_enough_for_months_days, (int) (days / 7), (days % 7));
             }
         } else {
-            response = "Suficiente para más de tres meses";
+            response = ctx.getString(R.string.stock_enough_for_upper_limit);
         }
         return response;
 

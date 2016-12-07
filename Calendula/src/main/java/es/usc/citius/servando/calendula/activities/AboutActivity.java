@@ -39,7 +39,7 @@ public class AboutActivity extends CalendulaActivity {
         if (savedInstanceState == null) {
 
             Fragment fragment = new LibsBuilder()
-                    .withAboutAppName("Calendula")
+                    .withAboutAppName(getString(R.string.app_name))
                     .withAboutIconShown(true)
                     .withAboutVersionShown(true)
                     .withLicenseShown(true)

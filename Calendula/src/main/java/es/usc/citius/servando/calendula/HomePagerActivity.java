@@ -541,16 +541,16 @@ public class HomePagerActivity extends CalendulaActivity implements
 
         switch (page) {
             case 1:
-                title = getString(R.string.title_activity_routines) + " de " + activePatient.name();
+                title = getString(R.string.relation_user_possession_thing, activePatient.name(), getString(R.string.title_activity_routines));
                 break;
             case 2:
-                title = getString(R.string.title_activity_medicines) + " de " + activePatient.name();
+                title = getString(R.string.relation_user_possession_thing, activePatient.name(), getString(R.string.title_activity_medicines));
                 break;
             case 3:
-                title = getString(R.string.title_activity_schedules) + " de " + activePatient.name();
+                title = getString(R.string.relation_user_possession_thing, activePatient.name(), getString(R.string.title_activity_schedules));
                 break;
             default:
-                title = "Calendula";
+                title = getString(R.string.app_name);
                 break;
         }
         toolbarTitle.setText(title);

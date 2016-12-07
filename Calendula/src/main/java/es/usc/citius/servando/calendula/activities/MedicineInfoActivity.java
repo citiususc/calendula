@@ -121,7 +121,7 @@ public class MedicineInfoActivity extends CalendulaActivity {
                                         .color(getResources().getColor(R.color.android_green_dark))
                                         .textColor(getResources().getColor(R.color.white))
                                         .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
-                                        .text("¡Medicamento vinculado!")
+                                        .text(R.string.message_med_linked_success)
                                 , this);
                     }
                     ((MedInfoFragment) getViewPagerFragment(0)).notifyDataChange();
@@ -216,7 +216,7 @@ public class MedicineInfoActivity extends CalendulaActivity {
     }
 
     private void updateMedDetails() {
-        toolbarTitle.setText("Info | " + medicine.name());
+        toolbarTitle.setText(getString(R.string.label_info_short) + " | " + medicine.name());
         ((TextView) findViewById(R.id.medicine_name)).setText(medicine.name());
         medIcon.setImageDrawable(IconUtils.icon(this, medicine.presentation().icon(), R.color.white));
     }
@@ -230,7 +230,7 @@ public class MedicineInfoActivity extends CalendulaActivity {
             medicine = DB.medicines().findById(medId);
         }
         if (medicine == null) {
-            Toast.makeText(MedicineInfoActivity.this, "Medicine not found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MedicineInfoActivity.this, R.string.medicine_not_found_error, Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -276,9 +276,9 @@ public class MedicineInfoActivity extends CalendulaActivity {
             public void onPageSelected(int position) {
                 if (medicine != null) {
                     if (position == 0) {
-                        toolbarTitle.setText("Info | " + medicine.name());
+                        toolbarTitle.setText(getString(R.string.label_info_short) + " | " + medicine.name());
                     } else if (position == 1) {
-                        toolbarTitle.setText("Avisos | " + medicine.name());
+                        toolbarTitle.setText(getString(R.string.label_alerts_short) + " | " + medicine.name());
                     }
 
                 }

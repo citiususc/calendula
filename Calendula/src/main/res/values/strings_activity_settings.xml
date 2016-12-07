@@ -83,15 +83,15 @@
         <!--<item>@string/database_uk_id</item>-->
     </string-array>
 
-    <string name="pref_available_databases_title">Search assistant database</string>
+    <string name="pref_available_databases_title">Medicine database</string>
 
     <string name="pref_header_stock">Stock control</string>
 
     <string-array name="pref_stock">
-        <item>No avisar</item>
-        <item>En menos de 1 semana</item>
-        <item>En menos de 2 semanas</item>
-        <item>En menos de 3 semanas</item>
+        <item>Do not warn me</item>
+        <item>In less than 1 week</item>
+        <item>In less than 2 weeks</item>
+        <item>In less than 3 weeks</item>
     </string-array>
 
     <string-array name="pref_stock_values">

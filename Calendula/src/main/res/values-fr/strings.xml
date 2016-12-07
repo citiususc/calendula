@@ -207,7 +207,7 @@
     <string name="enable_prescriptions_dialog_yes">Activer (Recommandé)</string>
     <string name="enable_prescriptions_dialog_no">Annuler</string>
 
-    <string name="driving_warning">L\'usage de ce médicament pourrait avoir des effets sur l\'aptitude à conduire des véhicules. \n\nS\'il vous plaît, lisez attentivement la notice d\'emballage ou demandez conseil à votre pharmacien avant de conduire. \n\nMerci beaucoup. </string>
+    <string name="driving_warning">L\'usage de ce médicament pourrait avoir des effets sur l\'aptitude à conduire des véhicules.\nS\'il vous plaît, lisez attentivement la notice d\'emballage ou demandez conseil à votre pharmacien avant de conduire.</string>
     <string name="driving_warning_title">Soyez prudent</string>
     <string name="driving_warning_show_prospect">Voir notice</string>
     <string name="driving_warning_gotit">OK</string>
@@ -272,9 +272,13 @@
     <string name="message_generic_pageloaderror">There was an error loading the page</string>
     <string name="title_prospect_webview">Prospect view</string>
     <string name="message_generic_pleasewait">Please wait for a few seconds…</string>
-    <string name="message_prospect_loading">The leaflet will be ready soon…</string>
     <string name="message_prospect_connection_error">The leaflet could not be loaded</string>
     <string name="message_prospect_not_found_error">Sorry, but it there is no leaflet available for this med</string>
+    <string name="default_user_name">Utilisateur</string>
+    <string name="relation_user_possession_thing">%2$s de %1$s</string>
+    <string name="yesterday">Hier</string>
+    <string name="today">Aujourd\'hui</string>
+    <string name="tomorrow">Demain</string>
 
 
 </resources>

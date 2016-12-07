@@ -171,7 +171,7 @@ public class AlertListFragment extends Fragment {
                 .sizeDp(90)
                 .paddingDp(0);
         ((ImageView) emptyView.findViewById(R.id.imageView_ok)).setImageDrawable(icon);
-        ((TextView) emptyView.findViewById(R.id.textView3)).setText("No se han detectado alertas para este medicamento");
+        ((TextView) emptyView.findViewById(R.id.textView3)).setText(R.string.no_alerts_detected);
     }
 
 }

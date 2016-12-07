@@ -63,7 +63,6 @@
                     android:layout_marginLeft="72dp"
                     android:layout_toRightOf="@+id/ic_med_large_name"
                     android:gravity="center_vertical"
-                    android:text="Frenadol Granulado para solución oral"
                     android:textAllCaps="true"
                     android:textColor="#000"
                     android:textIsSelectable="false"
@@ -81,7 +80,6 @@
                     android:layout_toRightOf="@+id/ic_med_large_name"
                     android:fontFamily="sans-serif-condensed"
                     android:gravity="center_vertical"
-                    android:text="1tubo de 15 mg\n20mg/g"
                     android:textColor="@color/dark_grey_text"
                     android:textSize="18dp"/>
 
@@ -95,7 +93,7 @@
                     android:background="@drawable/shape_list_item"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
-                    android:text="Asociar medicamento"/>
+                    android:text="@string/message_link_real_prescription_short"/>
 
             </RelativeLayout>
 
@@ -123,7 +121,6 @@
                     android:layout_marginLeft="72dp"
                     android:layout_toRightOf="@+id/ic_med_stock"
                     android:gravity="center_vertical"
-                    android:text="20 comprimidos"
                     android:textAllCaps="false"
                     android:textColor="#000"
                     android:textIsSelectable="false"
@@ -141,7 +138,6 @@
                     android:layout_toRightOf="@+id/ic_med_stock"
                     android:fontFamily="sans-serif-condensed"
                     android:gravity="center_vertical"
-                    android:text="Suficiente para 2 semanas"
                     android:textColor="@color/dark_grey_text"
                     android:textSize="18dp"/>
 
@@ -171,7 +167,6 @@
                     android:layout_marginLeft="72dp"
                     android:layout_toRightOf="@+id/ic_schedule_info"
                     android:gravity="center_vertical"
-                    android:text="1 pauta activa"
                     android:textAllCaps="false"
                     android:textColor="#000"
                     android:textIsSelectable="false"
@@ -204,7 +199,7 @@
                     android:layout_marginLeft="72dp"
                     android:layout_toRightOf="@+id/ic_prospect"
                     android:gravity="center_vertical"
-                    android:text="Prospecto"
+                    android:text="@string/prospect"
                     android:textAllCaps="false"
                     android:textColor="#000"
                     android:textIsSelectable="false"
@@ -249,7 +244,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_toRightOf="@+id/imageView13"
                     android:gravity="center"
-                    android:text="Prospecto oficial de la Agencia Española de Medicamentos y Productos sanitarios"
+                    android:text="@string/button_official_prospect"
                     android:textColor="#222"
                     android:textSize="13dp"/>
 

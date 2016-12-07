@@ -77,7 +77,6 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:scrollHorizontally="true"
-                            android:text="Medicine name 500 mg"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#fff"
                             android:textSize="20dp"

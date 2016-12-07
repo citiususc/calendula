@@ -182,10 +182,10 @@
     <string name="medicine_no_name_error_message">Indica un nombre, por favor</string>
     <string name="medicine_no_presentation_error_message">Selecciona una presentación, por favor</string>
     <string name="medicine_unselected">Aún sin seleccionar</string>
-    <string name="remove_schedule_message">Eliminar la pauta de %1$s?</string>
+    <string name="remove_schedule_message">¿Eliminar la pauta de %1$s?</string>
     <string name="remove_medicine_dialog_title">Eliminar medicina</string>
     <string name="remove_schedule_dialog_title">Eliminar pauta</string>
-    <string name="remove_medicine_message_long">Hay pautas de %1$s que se perderán tras esta acción. Deseas eliminar esta medicina de todas formas?</string>
+    <string name="remove_medicine_message_long">Hay pautas de %1$s que se perderán tras esta acción. ¿Deseas eliminar esta medicina de todas formas?</string>
 
     <!--App Tutorial-->
     <string name="tutorial_understood">Entendido</string>
@@ -212,7 +212,7 @@
     <string name="enable_prescriptions_dialog_yes">Activar (Recomendado)</string>
     <string name="enable_prescriptions_dialog_no">Cancelar</string>
 
-    <string name="driving_warning">El uso de este medicamento podría tener efectos sobre tu capacidad para conducir. \n\nPor favor, lee detenidamente las instrucciones de uso o consulta a tu farmacéutico antes de ponerte al volante.\n\nMuchas gracias.</string>
+    <string name="driving_warning">El uso de este medicamento podría tener efectos sobre tu capacidad para conducir.\nPor favor, lee detenidamente las instrucciones de uso o consulta a tu farmacéutico antes de ponerte al volante.</string>
     <string name="driving_warning_title">Ten prudencia</string>
     <string name="driving_warning_show_prospect">Ver prospecto</string>
     <string name="driving_warning_gotit">Entendido</string>
@@ -326,7 +326,7 @@
 
     <string name="title_activity_patients">Pacientes</string>
     <string name="intake_not_available">Toma no disponible</string>
-    <string name="confirm_future_intake_warning">Esta toma estará disponible %1$s, te avisaremos en ese momento!</string>
+    <string name="confirm_future_intake_warning">Esta toma estará disponible %1$s, ¡te avisaremos en ese momento!</string>
     <string name="confirm_past_intake_warning">Han pasado varias horas desde esta toma, ¿has tomado tu medicación y deseas confirmarla ahora?</string>
     <string name="meds_from">Medicinas del</string>
     <string name="at_time_connector">a las</string>
@@ -352,7 +352,7 @@
     <string name="home_menu_allergies">Alergias</string>
     <string name="title_activity_allergies">Alergias</string>
 
-    <string name="notification_error_msg">Parece que ha habido un problema con la notificacion. Por favor, revisa tu agenda para ver si hay medicacion pendiente.</string>
+    <string name="notification_error_msg">Parece que ha habido un problema con la notificación. Por favor, revisa tu agenda para ver si hay medicacion pendiente.</string>
     <string name="notification_error_title">Ups…</string>
     <string name="error_duplicate_medicine">Este medicamento ya está en el botiquín.</string>
     <string name="message_allergies_database_required">La gestión de alertas sólo está disponible actualmente para la base de datos AEMPS. ¿Quieres activarla?</string>
@@ -372,12 +372,57 @@
     <string name="excipient">Excipiente</string>
     <string name="active_ingredient">Principio activo</string>
 
-    <string name="add_custom_med_button_text">Añadir \"%1$s\" al botiquin</string>
+    <string name="add_custom_med_button_text">Añadir \"%1$s\" al botiquín</string>
     <string name="medicine_search_not_found_msg">Lo sentimos, no hemos podido encontrar nada con ese nombre</string>
     <string name="medicine_search_empty_list_msg">Escribe un nombre o un código de medicamento para comenzar a buscar…</string>
     <string name="search_hint">Buscar…</string>
 
     <string name="permission_dialog_go_to_settings">No hemos podido realizar esta acción porque has rechazado una solicitud anterior de acceso al almacenamiento. Puedes conceder ese permiso de nuevo en la vista de información de la aplicación.</string>
     <string name="permission_dialog_ok">Ir a información</string>
+    <string name="default_user_name">Usuario</string>
+    <string name="relation_user_possession_thing">%2$s de %1$s</string>
+    <string name="schedules_for_med">%1$d pautas asociadas</string>
+    <string name="schedules_for_med_none">Sin pautas asociadas</string>
+    <string name="yesterday">Ayer</string>
+    <string name="today">Hoy</string>
+    <string name="tomorrow">Mañana</string>
+    <string name="message_delete_default_patient">Este es el paciente por defecto, y por lo tanto no puede ser eliminado. ¿Deseas eliminar todas sus pautas, medicamentos y rutinas?</string>
+    <string name="yes_delete_everything">Sí, eliminar todo</string>
+    <string name="default_user_data_deleted">¡Datos del usuario borrados!</string>
+    <string name="create_default_routines">Crear rutinas por defecto</string>
+    <string name="stock_running_out">Se está agotando el stock</string>
+    <string name="add_more_stock">Recargar</string>
+    <string name="stock_remaining_msg">Quedan %1$d %2$s(s)</string>
+    <string name="active_schedules_none">Sin pautas activas</string>
+    <string name="active_schedules_one">1 pauta activa</string>
+    <string name="active_schedules_number">%1$d pautas activas</string>
+    <string name="database_aemps_desc">Base de datos de la Agencia Española de Medicamentos y Productos Sanitarios</string>
+    <string name="delete_allergen_error">Se produjo un error al borrar la información de alergias.</string>
+    <string name="message_link_real_prescription">Asocia un medicamento real para obtener más información</string>
+    <string name="stock_no_data">Sin datos</string>
+    <string name="stock_no_stock_info">No se ha indicado información de stock para este medicamento</string>
+    <string name="message_med_linked_success">¡Medicamento vinculado!</string>
+    <string name="label_alerts_short">Avisos</string>
+    <string name="medicine_not_found_error">Medicamento no encontrado</string>
+    <string name="message_link_real_prescription_short">Asociar medicamento</string>
+    <string name="prospect">Prospecto</string>
+    <string name="button_official_prospect">Prospecto oficial</string>
+    <string name="stock_enough_for_days">Suficiente para %1$d días con las pautas actuales</string>
+    <string name="stock_enough_for_months_days">Suficiente para %1$d meses y %2$d días con las pautas actuales</string>
+    <string name="stock_enough_for_upper_limit">Suficiente para más de tres meses con las pautas actuales</string>
+    <string name="no_alerts_detected">No se han detectado alertas para este medicamento</string>
+    <string name="allergies_group_elements_selected">%1$d elementos (%2$d seleccionados)</string>
+    <string name="database_aemps_display">Base de datos AEMPS</string>
+    <string name="database_none_display">Ninguna</string>
+    <string name="database_setting_up">Configurando…</string>
+    <string name="database_us_display">Base de datos US</string>
+    <string name="description_alert_allergy">Has especificado que eres alérgico a algunos de los contenidos de este medicamento. Alérgenos:</string>
+    <string name="label_info_short">Info</string>
+    <string name="medicine_save_error_message">Se produjo un error al guardar tu medicamento.</string>
+    <string name="message_schedule_medicine_allergy">Este medicamento no puede ser pautado porque eres alérgico a alguno de sus componentes.</string>
+    <string name="pref_available_databases_title">Base de datos de medicamentos</string>
+    <string name="pref_header_stock">Control de stock</string>
+    <string name="pref_stock_alert_title">Avisar cuando mis medicamentos se agoten</string>
+    <string name="title_alert_allergy">Hay conflictos de alergias para este medicamento</string>
 
 </resources>

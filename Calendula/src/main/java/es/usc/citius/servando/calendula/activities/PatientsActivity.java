@@ -98,7 +98,7 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patients);
         setupStatusBar(getResources().getColor(R.color.dark_grey_home));
-        setupToolbar("Pacientes", getResources().getColor(R.color.dark_grey_home));
+        setupToolbar(getString(R.string.title_activity_patients), getResources().getColor(R.color.dark_grey_home));
         subscribeToEvents();
 
         //patients = DB.patients().findAll();
@@ -142,12 +142,12 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
 
     private void showRemoveDefaultPatientMsgDialog(final Patient p) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Este es el paciente por defecto, y por lo tanto no puede ser eliminado. Deseas eliminar todas sus pautas, medicamentos y rutinas?")
+        builder.setMessage(R.string.message_delete_default_patient)
                 .setCancelable(true)
-                .setPositiveButton("Si, eliminar todo", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.yes_delete_everything, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         DB.patients().removeAllStuff(p);
-                        Snack.show("Hecho!", PatientsActivity.this);
+                        Snack.show(R.string.default_user_data_deleted, PatientsActivity.this);
                     }
                 })
                 .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {

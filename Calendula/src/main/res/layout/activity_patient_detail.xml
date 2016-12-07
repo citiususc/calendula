@@ -70,7 +70,6 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginTop="@dimen/status_bar_height"
-        android:title="Patients"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
@@ -108,7 +107,7 @@
         android:layout_below="@+id/patient_name"
         android:layout_marginTop="36dp"
         android:elegantTextHeight="false"
-        android:text="Crear rutinas por defecto"
+        android:text="@string/create_default_routines"
         android:textColor="@color/dark_grey_text"
         android:textSize="16sp"/>
 

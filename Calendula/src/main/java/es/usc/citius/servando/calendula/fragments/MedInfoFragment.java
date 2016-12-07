@@ -144,7 +144,7 @@ public class MedInfoFragment extends Fragment {
                     desc += "" + p.getDose();
                 }
             } else {
-                desc = "Asocia un medicamento real para obtener más información";
+                desc = getString(R.string.message_link_real_prescription);
                 name += m.name();
             }
         }
@@ -155,11 +155,11 @@ public class MedInfoFragment extends Fragment {
         int scheduleCount = DB.schedules().findByMedicine(m).size();
 
         if (scheduleCount == 0) {
-            scheduleInfo.setText("Sin pautas activas");
+            scheduleInfo.setText(R.string.active_schedules_none);
         } else if (scheduleCount == 1) {
-            scheduleInfo.setText(scheduleCount + " pauta activa");
+            scheduleInfo.setText(R.string.active_schedules_one);
         } else {
-            scheduleInfo.setText(scheduleCount + " pautas activas");
+            scheduleInfo.setText(getString(R.string.active_schedules_number, scheduleCount));
         }
 
         if (m.isBoundToPrescription()) {
@@ -187,13 +187,15 @@ public class MedInfoFragment extends Fragment {
         }
 
         if (m.stockManagementEnabled()) {
-            stockInfo.setText(m.stock() + " " + m.presentation().units(getResources()));
+            final Float s = m.stock();
+            final String stock = s.intValue() == s ? String.valueOf(s.intValue()) : String.valueOf(s);
+            stockInfo.setText(stock + " " + m.presentation().units(getResources()) + "(s)");
             LocalDate d = StockUtils.getEstimatedStockEnd(m);
-            String msg = StockUtils.getReadableStockDuration(d);
+            String msg = StockUtils.getReadableStockDuration(d, getContext());
             stockInfoEnd.setText(msg);
         } else {
-            stockInfo.setText("Sin datos");
-            stockInfoEnd.setText("No se ha indicado información de stock para este medicamento");
+            stockInfo.setText(R.string.stock_no_data);
+            stockInfoEnd.setText(R.string.stock_no_stock_info);
         }
 
 

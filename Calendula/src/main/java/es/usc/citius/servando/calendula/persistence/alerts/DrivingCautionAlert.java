@@ -96,8 +96,8 @@ public class DrivingCautionAlert extends PatientAlert<DrivingCautionAlert, Drivi
                     .paddingDp(4);
 
             viewHolder.alertIcon.setImageDrawable(icon);
-            viewHolder.title.setText("Sea prudente al volante");
-            viewHolder.description.setText("Es posible que este medicamente afecte a su capacidad para conducir");
+            viewHolder.title.setText(R.string.driving_warning_title);
+            viewHolder.description.setText(R.string.driving_warning);
         }
 
         public static class DrivingAlertViewHolder extends RecyclerView.ViewHolder {

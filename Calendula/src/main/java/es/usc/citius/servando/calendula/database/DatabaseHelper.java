@@ -36,6 +36,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.migrationHelpers.DrugModelMigrationHelper;
 import es.usc.citius.servando.calendula.database.migrationHelpers.LocalDateMigrationHelper;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.ActiveIngredient;
@@ -119,9 +120,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     // the DAO object we use to access the patients table
     private Dao<Patient, Long> patientDao = null;
 
+    private Context ctx;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        ctx = context;
     }
 
     /**
@@ -361,7 +364,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Patient createDefaultPatient() throws SQLException {
         // Create a default patient
         Patient p = new Patient();
-        p.setName("Calendula");
+        p.setName(ctx.getString(R.string.default_user_name));
         p.setDefault(true);
         getPatientDao().create(p);
         return p;
