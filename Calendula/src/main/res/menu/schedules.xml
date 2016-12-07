@@ -25,9 +25,9 @@
         android:title="@string/action_remove"
         app:showAsAction="never"/>
 
-    <item
-        android:checkable="true"
-        android:title="Automática"
-        android:titleCondensed="Automática"
-        app:showAsAction="never"/>
+    <!--<item-->
+    <!--android:checkable="true"-->
+    <!--android:title="Automática"-->
+    <!--android:titleCondensed="Automática"-->
+    <!--app:showAsAction="never"/>-->
 </menu>
