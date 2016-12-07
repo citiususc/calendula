@@ -49,12 +49,16 @@
         android:layout_height="30dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
-
         android:layout_marginTop="0dp"
+        android:layout_toLeftOf="@+id/ic_done"
         android:layout_toRightOf="@+id/imageView"
+        android:ellipsize="end"
         android:fontFamily="sans-serif-light"
         android:gravity="center_vertical"
+        android:maxLines="1"
         android:paddingBottom="3dp"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
         android:text="Ibuprofeno"
         android:textColor="#222"
         android:textSize="16dp"/>

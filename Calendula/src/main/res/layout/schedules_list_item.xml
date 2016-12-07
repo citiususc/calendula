@@ -51,6 +51,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:layout_toLeftOf="@+id/imageView"
             android:layout_toRightOf="@+id/imageButton"
             android:orientation="vertical">
 
@@ -58,13 +59,12 @@
                 android:id="@+id/schedules_list_item_medname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/imageButton"
                 android:layout_margin="0dp"
-                android:layout_marginLeft="26dp"
-                android:layout_toEndOf="@+id/imageButton"
-                android:layout_toRightOf="@+id/imageButton"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
-                android:text="Atrovent"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#222"
                 android:textSize="18sp"/>
