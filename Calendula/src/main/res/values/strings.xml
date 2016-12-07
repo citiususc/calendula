@@ -78,16 +78,16 @@
     <string name="schedule">Schedule</string>
 
     <!-- Med presentation units -->
-    <string name="injections_units">injections</string>
+    <string name="injections_units">injection</string>
     <string name="pills_units">pill</string>
     <string name="capsules_units">capsule</string>
-    <string name="inhaler_units">inhalations</string>
-    <string name="spray_units">applications</string>
+    <string name="inhaler_units">inhalation</string>
+    <string name="spray_units">application</string>
     <string name="drops_units">drop</string>
-    <string name="pomade_units">applications</string>
+    <string name="pomade_units">application</string>
     <string name="syrup_units">ml</string>
     <string name="patches_units">patch</string>
-    <string name="unknown_units">Units</string>
+    <string name="unknown_units">unit</string>
     <string name="effervescent_units">sachet</string>
 
     <string name="never">Never</string>

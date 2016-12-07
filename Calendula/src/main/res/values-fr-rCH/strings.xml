@@ -80,7 +80,7 @@
     <string name="pomade_units">application</string>
     <string name="drops_units">goutte</string>
     <string name="syrup_units">ml</string>
-    <string name="unknown_units">unités</string>
+    <string name="unknown_units">unité</string>
     <string name="effervescent_units">sachet</string>
 
     <string name="never">Jamais</string>

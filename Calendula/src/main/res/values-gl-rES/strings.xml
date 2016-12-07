@@ -72,7 +72,7 @@
     <string name="schedule">Pauta</string>
 
     <!-- Med presentation units -->
-    <string name="injections_units">inxeccións</string>
+    <string name="injections_units">inxección</string>
     <string name="pills_units">pastilla</string>
     <string name="capsules_units">cápsula</string>
     <string name="inhaler_units">inhalación</string>
@@ -80,7 +80,7 @@
     <string name="pomade_units">aplicación</string>
     <string name="drops_units">gota</string>
     <string name="syrup_units">ml</string>
-    <string name="unknown_units">Unidades</string>
+    <string name="unknown_units">unidade</string>
     <string name="effervescent_units">sobre</string>
 
     <string name="never">Nunca</string>
