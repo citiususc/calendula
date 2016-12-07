@@ -22,6 +22,8 @@ import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -61,6 +63,20 @@ public class PatientAlertDao extends GenericDao<PatientAlert, Long> {
                     .and().eq(PatientAlert.COLUMN_LEVEL, level)
                     .prepare();
             return dao.query(q);
+        } catch (SQLException e) {
+            Log.e(TAG, "findByMedicineAndLevel: ", e);
+            throw new RuntimeException("Cannot retrieve alerts: ", e);
+        }
+    }
+
+    public List<PatientAlert> findByMedicineSortByLevel(Medicine m) {
+        try {
+
+            final QueryBuilder<PatientAlert, Long> qb = dao.queryBuilder();
+            final Where<PatientAlert, Long> eq = qb.where().eq(PatientAlert.COLUMN_MEDICINE, m);
+            qb.setWhere(eq);
+            qb.orderBy(PatientAlert.COLUMN_LEVEL, false);
+            return dao.query(qb.prepare());
         } catch (SQLException e) {
             Log.e(TAG, "findByMedicineAndLevel: ", e);
             throw new RuntimeException("Cannot retrieve alerts: ", e);

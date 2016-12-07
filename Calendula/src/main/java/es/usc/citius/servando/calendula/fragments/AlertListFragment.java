@@ -102,7 +102,7 @@ public class AlertListFragment extends Fragment {
 
     public List<PatientAlert> buildItems() {
         List<PatientAlert> typed = new ArrayList<>();
-        List<PatientAlert> original = DB.alerts().findBy(PatientAlert.COLUMN_MEDICINE, m);
+        List<PatientAlert> original = DB.alerts().findByMedicineSortByLevel(m);
         for (PatientAlert a : original) {
             typed.add(a.map());
         }
