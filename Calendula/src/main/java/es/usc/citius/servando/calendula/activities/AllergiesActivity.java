@@ -107,6 +107,7 @@ public class AllergiesActivity extends CalendulaActivity {
 
     private static final String TAG = "AllergiesActivity";
     private final ISelectionListener<AbstractItem> selectionListener = new AllergySelectionListener();
+
     // main view
     @BindView(R.id.add_button)
     protected AddFloatingActionButton addButton;
@@ -132,6 +133,7 @@ public class AllergiesActivity extends CalendulaActivity {
     // general
     @BindView(R.id.main_progress_bar)
     protected ProgressBar progressBar;
+
     private int color;
     private Dao<PatientAllergen, Long> dao = null;
     private FastItemAdapter<AbstractItem> searchAdapter;
@@ -488,6 +490,7 @@ public class AllergiesActivity extends CalendulaActivity {
                     if (closeSearchButton.getVisibility() == View.VISIBLE)
                         closeSearchButton.setVisibility(View.GONE);
                     if (searchAdapter.getItemCount() > 0) {
+                        searchAdapter.deselect();
                         searchAdapter.clear();
                     }
                     new Handler().postDelayed(new Runnable() {
@@ -699,6 +702,7 @@ public class AllergiesActivity extends CalendulaActivity {
 
         @Override
         public void onSelectionChanged(AbstractItem item, boolean selected) {
+            KeyboardUtils.hideKeyboard(AllergiesActivity.this);
             switch (item.getType()) {
                 case R.id.fastadapter_allergen_group_item:
                     AllergenGroupItem i = (AllergenGroupItem) item;
@@ -834,6 +838,7 @@ public class AllergiesActivity extends CalendulaActivity {
 
         @Override
         protected void onPreExecute() {
+            searchAdapter.deselect();
             searchAdapter.clear();
             progressBar.setVisibility(View.VISIBLE);
         }
