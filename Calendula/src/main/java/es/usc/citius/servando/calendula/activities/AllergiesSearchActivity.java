@@ -39,6 +39,8 @@ import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
+import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.ISelectionListener;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
@@ -97,6 +99,8 @@ public class AllergiesSearchActivity extends CalendulaActivity {
     protected ProgressBar progressBar;
     @BindView(R.id.accept_selection_button)
     protected FloatingActionButton acceptFab;
+    @BindView(R.id.search_parent_layout)
+    protected View parent;
 
     private FastItemAdapter<AbstractItem> searchAdapter;
     private List<AllergyGroup> groups;
@@ -214,6 +218,13 @@ public class AllergiesSearchActivity extends CalendulaActivity {
         searchAdapter.withSelectable(true);
         searchAdapter.withMultiSelect(true);
         searchAdapter.withSelectionListener(selectionListener);
+        searchAdapter.withOnClickListener(new FastAdapter.OnClickListener<AbstractItem>() {
+            @Override
+            public boolean onClick(View v, IAdapter<AbstractItem> adapter, AbstractItem item, int position) {
+                KeyboardUtils.hideKeyboard(AllergiesSearchActivity.this);
+                return false;
+            }
+        });
 
         searchList.setAdapter(searchAdapter);
         searchList.setLayoutManager(llm);
