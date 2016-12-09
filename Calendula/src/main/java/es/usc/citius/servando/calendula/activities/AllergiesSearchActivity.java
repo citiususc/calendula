@@ -38,8 +38,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.mikepenz.fastadapter.FastAdapter;
-import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.ISelectionListener;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
@@ -51,7 +49,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
@@ -192,14 +189,26 @@ public class AllergiesSearchActivity extends CalendulaActivity {
     }
 
     private List<AbstractItem> getSelected() {
-        List<AbstractItem> selected = new ArrayList<>();
-        final Set<IItem> items = SubItemUtil.getSelectedItems(searchAdapter);
-        for (IItem item : items) {
-            if (item.getType() != R.id.fastadapter_allergen_group_item)
-                selected.add((AbstractItem) item);
+        final List<AbstractItem> items = new ArrayList<>();
+        for (AbstractItem item : searchAdapter.getAdapterItems()) {
+            switch (item.getType()) {
+                case R.id.fastadapter_allergen_item:
+                    if (item.isSelected()) {
+                        items.add(item);
+                    }
+                    break;
+                case R.id.fastadapter_allergen_group_item:
+                    final List<AllergenGroupSubItem> subItems = ((AllergenGroupItem) item).getSubItems();
+                    for (AllergenGroupSubItem subItem : subItems) {
+                        if (subItem.isSelected())
+                            items.add(subItem);
+                    }
+                    break;
+            }
         }
-        Log.d(TAG, "getSelected() returned: " + selected.size() + " elements");
-        return selected;
+
+        Log.d(TAG, "getSelected() returned: " + items.size() + " elements");
+        return items;
     }
 
     private void setupSearchView() {
@@ -214,13 +223,6 @@ public class AllergiesSearchActivity extends CalendulaActivity {
         searchAdapter.withSelectable(true);
         searchAdapter.withMultiSelect(true);
         searchAdapter.withSelectionListener(selectionListener);
-        searchAdapter.withOnClickListener(new FastAdapter.OnClickListener<AbstractItem>() {
-            @Override
-            public boolean onClick(View v, IAdapter<AbstractItem> adapter, AbstractItem item, int position) {
-                KeyboardUtils.hideKeyboard(AllergiesSearchActivity.this);
-                return false;
-            }
-        });
 
         searchList.setAdapter(searchAdapter);
         searchList.setLayoutManager(llm);
@@ -288,6 +290,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
 
         @Override
         public void onSelectionChanged(AbstractItem item, boolean selected) {
+            KeyboardUtils.hideKeyboard(AllergiesSearchActivity.this);
             switch (item.getType()) {
                 case R.id.fastadapter_allergen_group_item:
                     AllergenGroupItem i = (AllergenGroupItem) item;
@@ -334,8 +337,8 @@ public class AllergiesSearchActivity extends CalendulaActivity {
 
         @Override
         protected void onPreExecute() {
-            searchAdapter.deselect();
             searchAdapter.clear();
+            selectLayout.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
         }
 
