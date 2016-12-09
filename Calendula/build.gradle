@@ -55,7 +55,7 @@ def getDate() {
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion '25'
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 23
