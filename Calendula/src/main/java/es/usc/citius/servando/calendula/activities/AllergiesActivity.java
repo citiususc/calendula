@@ -225,8 +225,10 @@ public class AllergiesActivity extends CalendulaActivity {
         ButterKnife.bind(this);
 
         //setup toolbar and status bar
-        color = DB.patients().getActive(this).color();
-        setupToolbar(getString(R.string.title_activity_allergies), color);
+        final Patient patient = DB.patients().getActive(this);
+        color = patient.color();
+        final String name = patient.name();
+        setupToolbar(getString(R.string.relation_user_possession_thing, name, getString(R.string.title_activity_allergies)), color);
         setupStatusBar(color);
 
         //initialize allergies store
@@ -240,7 +242,7 @@ public class AllergiesActivity extends CalendulaActivity {
         //setup recycler
         setupAllergiesList();
 
-        progressBar.getIndeterminateDrawable().setColorFilter(DB.patients().getActive(this).color(),
+        progressBar.getIndeterminateDrawable().setColorFilter(color,
                 android.graphics.PorterDuff.Mode.MULTIPLY);
 
         //setup search view
