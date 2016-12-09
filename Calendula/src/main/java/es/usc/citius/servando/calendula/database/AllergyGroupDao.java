@@ -18,9 +18,13 @@
 
 package es.usc.citius.servando.calendula.database;
 
+import android.util.Log;
+
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import es.usc.citius.servando.calendula.persistence.AllergyGroup;
 
@@ -45,6 +49,17 @@ public class AllergyGroupDao extends GenericDao<AllergyGroup, Long> {
             return daoInstance;
         } catch (SQLException e) {
             throw new RuntimeException("Error creating patients dao", e);
+        }
+    }
+
+    public List<AllergyGroup> findAllOrderByPrecedence() {
+        final QueryBuilder<AllergyGroup, Long> qb = dao.queryBuilder();
+        qb.orderBy(AllergyGroup.COLUMN_PRECEDENCE, true);
+        try {
+            return dao.query(qb.prepare());
+        } catch (SQLException e) {
+            Log.e(TAG, "findAllOrderByPrecedence: ", e);
+            throw new RuntimeException("Error finding groups", e);
         }
     }
 

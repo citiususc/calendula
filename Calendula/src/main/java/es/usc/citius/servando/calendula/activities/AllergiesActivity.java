@@ -18,28 +18,21 @@
 
 package es.usc.citius.servando.calendula.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.util.ArrayMap;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -48,15 +41,13 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
-import com.j256.ormlite.dao.Dao;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fastadapter.FastAdapter;
-import com.mikepenz.fastadapter.IItem;
-import com.mikepenz.fastadapter.ISelectionListener;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.listeners.ClickEventHook;
-import com.mikepenz.fastadapter_extensions.utilities.SubItemUtil;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -67,28 +58,22 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.adapters.items.allergensearch.AllergenGroupItem;
-import es.usc.citius.servando.calendula.adapters.items.allergensearch.AllergenGroupSubItem;
-import es.usc.citius.servando.calendula.adapters.items.allergensearch.AllergenItem;
 import es.usc.citius.servando.calendula.adapters.items.allergylist.AllergyGroupItem;
 import es.usc.citius.servando.calendula.adapters.items.allergylist.AllergyGroupSubItem;
 import es.usc.citius.servando.calendula.adapters.items.allergylist.AllergyItem;
 import es.usc.citius.servando.calendula.allergies.AllergenConversionUtil;
 import es.usc.citius.servando.calendula.allergies.AllergenFacade;
+import es.usc.citius.servando.calendula.allergies.AllergenGroupWrapper;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.database.PatientAllergenDao;
-import es.usc.citius.servando.calendula.persistence.AllergyGroup;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
@@ -96,9 +81,7 @@ import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert.AllergyAlertInfo;
 import es.usc.citius.servando.calendula.util.IconUtils;
-import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.Snack;
-import es.usc.citius.servando.calendula.util.Strings;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 
 @SuppressWarnings("unchecked")
@@ -106,7 +89,6 @@ public class AllergiesActivity extends CalendulaActivity {
 
 
     private static final String TAG = "AllergiesActivity";
-    private final ISelectionListener<AbstractItem> selectionListener = new AllergySelectionListener();
 
     // main view
     @BindView(R.id.add_button)
@@ -115,32 +97,14 @@ public class AllergiesActivity extends CalendulaActivity {
     protected RecyclerView allergiesRecycler;
     @BindView(R.id.textview_no_allergies_placeholder)
     protected TextView allergiesPlaceholder;
-    // search view
-    @BindView(R.id.search_view)
-    protected View searchView;
-    @BindView(R.id.close_search_button)
-    protected View closeSearchButton;
-    @BindView(R.id.search_edit_text)
-    protected EditText searchEditText;
-    @BindView(R.id.search_list)
-    protected RecyclerView searchList;
-    @BindView(R.id.allergies_search_placeholder)
-    protected TextView allergiesSearchPlaceholder;
-    @BindView(R.id.allergies_selected_layout)
-    protected LinearLayout selectLayout;
-    @BindView(R.id.allergies_selected_message)
-    protected TextView selectText;
+
     // general
     @BindView(R.id.main_progress_bar)
     protected ProgressBar progressBar;
 
     private int color;
-    private Dao<PatientAllergen, Long> dao = null;
-    private FastItemAdapter<AbstractItem> searchAdapter;
     private FastItemAdapter allergiesAdapter;
     private AllergiesStore store;
-    private List<AllergyGroup> groups;
-    private AsyncTask searchTask = null;
 
     public void askForDatabase() {
 
@@ -178,44 +142,20 @@ public class AllergiesActivity extends CalendulaActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        Log.d(TAG, "onBackPressed: " + (searchView.getVisibility() == View.VISIBLE));
-        if (searchView.getVisibility() == View.VISIBLE) {
-            hideSearchView();
-        } else {
-            finish();
-        }
-    }
-
-    @OnClick(R.id.close_search_button)
-    void clearSearch() {
-        searchAdapter.clear();
-        searchAdapter.deselect();
-        searchAdapter.notifyDataSetChanged();
-        selectText.setText(getString(R.string.allergies_selected_number, 0));
-        selectLayout.setVisibility(View.GONE);
-        searchEditText.setText("");
-    }
-
-    @OnClick(R.id.accept_selection_button)
-    void saveAllergies() {
-        hideSearchView();
-        new SaveAllergiesTask().execute(getSelected());
-    }
-
     @OnClick(R.id.add_button)
     void showSearchView() {
-        addButton.setVisibility(View.GONE);
-        searchEditText.requestFocus();
-        KeyboardUtils.showKeyboard(this);
-        searchView.setVisibility(View.VISIBLE);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                searchList.setVisibility(View.VISIBLE);
-            }
-        }, 200);
+        Intent i = new Intent(this, AllergiesSearchActivity.class);
+        startActivityForResult(i, AllergiesSearchActivity.REQUEST_NEW_ALLERGIES);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == AllergiesSearchActivity.REQUEST_NEW_ALLERGIES && resultCode == Activity.RESULT_OK) {
+            final String gsonResult = data.getStringExtra("result");
+            final Collection<AllergenGroupWrapper> ws = new Gson().fromJson(gsonResult, new TypeToken<Collection<AllergenGroupWrapper>>() {
+            }.getType());
+            new SaveAllergiesTask().execute(ws);
+        }
     }
 
     @Override
@@ -234,19 +174,11 @@ public class AllergiesActivity extends CalendulaActivity {
         //initialize allergies store
         store = new AllergiesStore();
 
-        //retrieve allergy groups
-        groups = DB.allergyGroups().findAll();
-        if (groups != null && !groups.isEmpty())
-            Collections.sort(groups);
-
         //setup recycler
         setupAllergiesList();
 
         progressBar.getIndeterminateDrawable().setColorFilter(color,
                 android.graphics.PorterDuff.Mode.MULTIPLY);
-
-        //setup search view
-        setupSearchView();
 
         //load allergies, set placeholder if needed
         new LoadAllergiesTask().execute();
@@ -296,35 +228,6 @@ public class AllergiesActivity extends CalendulaActivity {
         }
     }
 
-    private void checkSearchPlaceholder() {
-        if (searchAdapter.getItemCount() > 0) {
-            allergiesSearchPlaceholder.setVisibility(View.GONE);
-        } else {
-            if (searchEditText.getText().toString().trim().length() > 3) {
-                allergiesSearchPlaceholder.setText(getText(R.string.allergies_search_placeholder_no_result));
-            } else {
-                allergiesSearchPlaceholder.setText(getText(R.string.allergies_search_placeholder));
-            }
-            allergiesSearchPlaceholder.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void closeSearchView() {
-        hideSearchView();
-        searchEditText.setText("");
-        searchAdapter.clear();
-    }
-
-    private void doSearch() {
-        String filter = searchEditText.getText().toString().trim();
-        if (filter.length() >= 3) {
-            if (searchTask != null)
-                searchTask.cancel(true);
-            searchTask = new DoSearchTask();
-            searchTask.execute(new String[]{filter});
-        }
-    }
-
     private List<AbstractItem> getAllergyItems() {
         final List<PatientAllergen> allergies = new ArrayList<>(store.getAllergies());
 
@@ -355,23 +258,6 @@ public class AllergiesActivity extends CalendulaActivity {
         return items;
     }
 
-    private Dao<PatientAllergen, Long> getDao() {
-        if (dao == null)
-            dao = new PatientAllergenDao(DB.helper()).getConcreteDao();
-        return dao;
-    }
-
-    private Collection<IItem> getSelected() {
-        Collection<IItem> selected = new ArrayList<>();
-        final Set<IItem> items = SubItemUtil.getSelectedItems(searchAdapter);
-        for (IItem item : items) {
-            if (item.getType() != R.id.fastadapter_allergen_group_item)
-                selected.add(item);
-        }
-        Log.d(TAG, "getSelected() returned: " + selected.size() + " elements");
-        return selected;
-    }
-
     private void hideAllergiesView(boolean hide) {
         final int visibility = hide ? View.GONE : View.VISIBLE;
         allergiesRecycler.setVisibility(visibility);
@@ -379,13 +265,6 @@ public class AllergiesActivity extends CalendulaActivity {
         if (!hide)
             checkPlaceholder();
 
-    }
-
-    private void hideSearchView() {
-        addButton.setVisibility(View.VISIBLE);
-        searchList.setVisibility(View.INVISIBLE);
-        searchView.setVisibility(View.GONE);
-        KeyboardUtils.hideKeyboard(this);
     }
 
     private void setupAllergiesList() {
@@ -447,67 +326,6 @@ public class AllergiesActivity extends CalendulaActivity {
             }
         });
         allergiesRecycler.setAdapter(allergiesAdapter);
-    }
-
-    private void setupSearchView() {
-        searchList.setItemAnimator(new DefaultItemAnimator());
-
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-
-        searchAdapter = new FastItemAdapter<>();
-        searchAdapter.withPositionBasedStateManagement(false);
-        searchAdapter.withItemEvent(new AllergenGroupItem.GroupExpandClickEvent());
-        searchAdapter.withSelectable(true);
-        searchAdapter.withMultiSelect(true);
-        searchAdapter.withSelectionListener(selectionListener);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            searchView.setStateListAnimator(null);
-        }
-        searchView.setAnimation(null);
-
-        searchList.setAdapter(searchAdapter);
-        searchList.setLayoutManager(llm);
-
-        searchEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                final String search = s.toString().trim();
-                if (search.length() > 0) {
-                    if (closeSearchButton.getVisibility() == View.GONE) {
-                        closeSearchButton.setVisibility(View.VISIBLE);
-                    }
-                    doSearch();
-                } else {
-                    if (closeSearchButton.getVisibility() == View.VISIBLE)
-                        closeSearchButton.setVisibility(View.GONE);
-                    if (searchAdapter.getItemCount() > 0) {
-                        searchAdapter.deselect();
-                        searchAdapter.clear();
-                    }
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            checkSearchPlaceholder();
-                        }
-                    }, 200);
-                }
-            }
-        });
-
-        searchView.setBackgroundColor(color);
-
-        hideSearchView();
     }
 
     private void showDeleteConfirmationDialog(final AllergyItem a) {
@@ -572,25 +390,6 @@ public class AllergiesActivity extends CalendulaActivity {
                     }
                 })
                 .show();
-    }
-
-    private String getTitle(AbstractItem i) {
-        switch (i.getType()) {
-            case R.id.fastadapter_allergen_group_item:
-                return ((AllergenGroupItem) i).getTitle();
-            case R.id.fastadapter_allergen_group_sub_item:
-                return ((AllergenGroupSubItem) i).getTitle();
-            case R.id.fastadapter_allergen_item:
-                return ((AllergenItem) i).getTitle();
-            case R.id.fastadapter_allergy_group_item:
-                return ((AllergyGroupItem) i).getTitle();
-            case R.id.fastadapter_allergy_group_sub_item:
-                return ((AllergyGroupSubItem) i).getTitle();
-            case R.id.fastadapter_allergy_item:
-                return ((AllergyItem) i).getTitle();
-            default:
-                throw new RuntimeException("Unsupported item type");
-        }
     }
 
     public enum SaveResult {
@@ -665,7 +464,7 @@ public class AllergiesActivity extends CalendulaActivity {
         public SaveResult storeAllergen(PatientAllergen allergen) {
             int rows;
             try {
-                rows = getDao().create(allergen);
+                rows = DB.patientAllergens().create(allergen);
             } catch (SQLException e) {
                 Log.e(TAG, "storeAllergen: couldn't create allergy", e);
                 return SaveResult.ERROR;
@@ -697,53 +496,6 @@ public class AllergiesActivity extends CalendulaActivity {
                     return res;
                 }
             });
-        }
-    }
-
-    private class AllergySelectionListener implements ISelectionListener<AbstractItem> {
-
-        @Override
-        public void onSelectionChanged(AbstractItem item, boolean selected) {
-            KeyboardUtils.hideKeyboard(AllergiesActivity.this);
-            switch (item.getType()) {
-                case R.id.fastadapter_allergen_group_item:
-                    AllergenGroupItem i = (AllergenGroupItem) item;
-                    final int size = i.getSubItems().size();
-                    if (selected) {
-                        i.setSubtitle(getString(R.string.allergies_group_elements_selected, size, size));
-                    } else {
-                        i.setSubtitle(getString(R.string.allergies_group_elements_number, size));
-                    }
-                    SubItemUtil.selectAllSubItems(searchAdapter, i, selected, true);
-                    break;
-                case R.id.fastadapter_allergen_group_sub_item:
-                    AllergenGroupItem t = ((AllergenGroupSubItem) item).getParent();
-                    final int count = SubItemUtil.countSelectedSubItems(searchAdapter, t);
-                    final int s = t.getSubItems().size();
-                    final int pos = searchAdapter.getAdapterPosition(t);
-                    if (count > 0) {
-                        t.setSubtitle(getString(R.string.allergies_group_elements_selected, s, count));
-                        if (!t.isSelected()) {
-                            t.withSetSelected(true);
-                        }
-                    } else {
-                        t.setSubtitle(getString(R.string.allergies_group_elements_number, s));
-                        if (t.isSelected()) {
-                            t.withSetSelected(false);
-                        }
-                    }
-                    searchAdapter.notifyItemChanged(pos);
-                    break;
-            }
-
-            //show selection confirmation
-            final int selectedNumber = getSelected().size();
-            if (selectedNumber > 0) {
-                selectLayout.setVisibility(View.VISIBLE);
-                selectText.setText(getString(R.string.allergies_selected_number, selectedNumber));
-            } else {
-                selectLayout.setVisibility(View.GONE);
-            }
         }
     }
 
@@ -836,129 +588,6 @@ public class AllergiesActivity extends CalendulaActivity {
         }
     }
 
-    private class DoSearchTask extends AsyncTask<String, Void, List<AbstractItem>> {
-
-        @Override
-        protected void onPreExecute() {
-            searchAdapter.deselect();
-            searchAdapter.clear();
-            progressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onPostExecute(List<AbstractItem> abstractItems) {
-            searchAdapter.add(abstractItems);
-            progressBar.setVisibility(View.GONE);
-            checkSearchPlaceholder();
-            searchTask = null;
-        }
-
-        @Override
-        protected List<AbstractItem> doInBackground(String... params) {
-            if (params.length != 1) {
-                Log.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + params.length);
-                throw new IllegalArgumentException("Invalid argument length");
-            }
-
-            final String filter = params[0];
-            final List<AllergenVO> allergenVOs = AllergenFacade.searchForAllergens(filter);
-            final List<AllergenVO> patientAllergies = store.getAllergiesVO();
-            allergenVOs.removeAll(patientAllergies);
-
-            List<AbstractItem> items = new ArrayList<>();
-
-            final int highlightColor = ContextCompat.getColor(AllergiesActivity.this, R.color.black);
-            if (groups != null && !groups.isEmpty()) {
-                //find words for groups
-                final Map<String, Pattern> groupPatterns = new ArrayMap<>();
-                for (AllergyGroup group : groups) {
-                    String regex = "\\b(" + group.getExpression() + ")\\b";
-                    Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
-                    groupPatterns.put(group.getName(), p);
-                }
-
-                final Map<String, List<AllergenVO>> groups = new ArrayMap<>();
-                final List<AllergenVO> toRemove = new ArrayList<>();
-
-                for (AllergenVO vo : allergenVOs) {
-                    for (String k : groupPatterns.keySet()) {
-                        Pattern p = groupPatterns.get(k);
-                        if (p.matcher(vo.getName()).find()) {
-                            if (groups.keySet().contains(k)) {
-                                groups.get(k).add(vo);
-                            } else {
-                                ArrayList<AllergenVO> vos = new ArrayList<>();
-                                vos.add(vo);
-                                groups.put(k, vos);
-                            }
-                            toRemove.add(vo);
-                            break;
-                        }
-                    }
-                }
-
-                // sort elements into groups
-                allergenVOs.removeAll(toRemove);
-                for (String s : groups.keySet()) {
-                    final List<AllergenVO> subs = groups.get(s);
-                    if (!subs.isEmpty()) {
-                        AllergenGroupItem g = new AllergenGroupItem(s, "");
-                        List<AllergenGroupSubItem> sub = new ArrayList<>();
-                        for (AllergenVO vo : subs) {
-                            final AllergenGroupSubItem e = new AllergenGroupSubItem(vo, AllergiesActivity.this);
-                            e.setTitleSpannable(Strings.getHighlighted(vo.getName(), filter, highlightColor));
-                            sub.add(e);
-                        }
-                        g.setSubtitle(getString(R.string.allergies_group_elements_number, sub.size()));
-                        g.setTitleSpannable(Strings.getHighlighted(s, filter, highlightColor));
-                        Collections.sort(sub, new Comparator<AllergenGroupSubItem>() {
-                            @Override
-                            public int compare(AllergenGroupSubItem o1, AllergenGroupSubItem o2) {
-                                return o1.getTitle().compareTo(o2.getTitle());
-                            }
-                        });
-                        g.withSubItems(sub);
-                        items.add(g);
-                    }
-                }
-            }
-
-            for (AllergenVO vo : allergenVOs) {
-                final AllergenItem e = new AllergenItem(vo, AllergiesActivity.this);
-                e.setTitleSpannable(Strings.getHighlighted(e.getTitle(), filter, highlightColor));
-                items.add(e);
-            }
-            Collections.sort(items, new Comparator<AbstractItem>() {
-                @Override
-                public int compare(AbstractItem o1, AbstractItem o2) {
-                    final String f = filter.toLowerCase();
-                    final String t1 = getTitle(o1).toLowerCase().trim();
-                    boolean c1 = t1.contains(f);
-                    final String t2 = getTitle(o2).toLowerCase().trim();
-                    boolean c2 = t2.toLowerCase().trim().contains(f);
-
-                    if (c1 && !c2) {
-                        return -1;
-                    } else if (c2 && !c1) {
-                        return 1;
-                    } else if (c1) { //if c1 is true, c2 is true at this point too
-                        int i1 = t1.toLowerCase().trim().indexOf(filter.toLowerCase());
-                        int i2 = t2.toLowerCase().trim().indexOf(filter.toLowerCase());
-                        if (i1 == i2) {
-                            return t1.compareTo(t2);
-                        } else {
-                            return i1 < i2 ? -1 : 1;
-                        }
-                    } else {
-                        return t1.compareTo(t2);
-                    }
-                }
-            });
-
-            return items;
-        }
-    }
-
     private class LoadAllergiesTask extends AsyncTask<Void, Void, List<AbstractItem>> {
 
         @Override
@@ -983,33 +612,25 @@ public class AllergiesActivity extends CalendulaActivity {
         }
     }
 
-    private class SaveAllergiesTask extends AsyncTask<Collection<IItem>, Void, SaveAllergiesTask.Result> {
+    private class SaveAllergiesTask extends AsyncTask<Collection<AllergenGroupWrapper>, Void, SaveAllergiesTask.Result> {
 
         @SafeVarargs
         @Override
-        protected final Result doInBackground(Collection<IItem>... items) {
+        protected final Result doInBackground(Collection<AllergenGroupWrapper>... items) {
             if (items.length != 1) {
                 Log.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + items.length);
                 throw new IllegalArgumentException("Invalid argument length");
             }
-            List<PatientAllergen> pa = new ArrayList<>();
+            final Collection<AllergenGroupWrapper> ws = items[0];
+            Collection<PatientAllergen> pa = new ArrayList<>(ws.size());
             Patient p = DB.patients().getActive(AllergiesActivity.this);
-            for (IItem i : items[0]) {
-                switch (i.getType()) {
-                    case R.id.fastadapter_allergen_group_sub_item:
-                        final AllergenGroupSubItem item = (AllergenGroupSubItem) i;
-                        pa.add(new PatientAllergen(item.getVo(), p, item.getParent().getTitle()));
-                        break;
-                    case R.id.fastadapter_allergen_item:
-                        final AllergenItem item1 = (AllergenItem) i;
-                        pa.add(new PatientAllergen(item1.getVo(), p));
-                        break;
-                    default:
-                        Log.wtf(TAG, "Invalid item type in adapter: " + i);
-                        break;
-                }
-
+            for (AllergenGroupWrapper w : ws) {
+                if (w.getGroup() != null)
+                    pa.add(new PatientAllergen(w.getVo(), p, w.getGroup()));
+                else
+                    pa.add(new PatientAllergen(w.getVo(), p));
             }
+
             final SaveResult r = store.storeAllergens(pa);
             return new Result(r == SaveResult.OK || r == SaveResult.ALLERGY, r == SaveResult.ALLERGY, getAllergyItems());
         }
@@ -1024,8 +645,6 @@ public class AllergiesActivity extends CalendulaActivity {
                 }
                 if (res.allergies)
                     showNewAllergyConflictDialog();
-                clearSearch();
-                searchList.invalidate();
                 hideAllergiesView(false);
                 Snack.show(getString(R.string.message_allergy_add_multiple_success), AllergiesActivity.this);
             } else {
@@ -1038,7 +657,6 @@ public class AllergiesActivity extends CalendulaActivity {
             super.onPreExecute();
             hideAllergiesView(true);
             progressBar.setVisibility(View.VISIBLE);
-            closeSearchView();
         }
 
         class Result {

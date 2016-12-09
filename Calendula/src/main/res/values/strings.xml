@@ -437,6 +437,7 @@
     <string name="no_alerts_detected">No alerts detected for this medicine</string>
     <string name="stock_depleted">Stock is depleted</string>
     <string name="stock_depleted_msg">There is no stock remaining for this medicine.</string>
+    <string name="title_activity_allergies_search">AllergiesSearchActivity</string>
 
 </resources>
 
