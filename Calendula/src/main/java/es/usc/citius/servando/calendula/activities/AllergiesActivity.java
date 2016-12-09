@@ -41,8 +41,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
@@ -151,10 +149,8 @@ public class AllergiesActivity extends CalendulaActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == AllergiesSearchActivity.REQUEST_NEW_ALLERGIES && resultCode == Activity.RESULT_OK) {
-            final String gsonResult = data.getStringExtra("result");
-            final Collection<AllergenGroupWrapper> ws = new Gson().fromJson(gsonResult, new TypeToken<Collection<AllergenGroupWrapper>>() {
-            }.getType());
-            new SaveAllergiesTask().execute(ws);
+            final ArrayList<AllergenGroupWrapper> result = data.getParcelableArrayListExtra("result");
+            new SaveAllergiesTask().execute(result);
         }
     }
 

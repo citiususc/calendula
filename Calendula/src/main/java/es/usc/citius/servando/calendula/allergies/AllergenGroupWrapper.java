@@ -18,11 +18,14 @@
 
 package es.usc.citius.servando.calendula.allergies;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by alvaro.brey.vilas on 9/12/16.
  */
 
-public class AllergenGroupWrapper {
+public class AllergenGroupWrapper implements Parcelable {
 
     private AllergenVO vo;
     private String group;
@@ -51,4 +54,33 @@ public class AllergenGroupWrapper {
     public void setGroup(String group) {
         this.group = group;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.vo, flags);
+        dest.writeString(this.group);
+    }
+
+    protected AllergenGroupWrapper(Parcel in) {
+        this.vo = in.readParcelable(AllergenVO.class.getClassLoader());
+        this.group = in.readString();
+    }
+
+    public static final Parcelable.Creator<AllergenGroupWrapper> CREATOR = new Parcelable.Creator<AllergenGroupWrapper>() {
+        @Override
+        public AllergenGroupWrapper createFromParcel(Parcel source) {
+            return new AllergenGroupWrapper(source);
+        }
+
+        @Override
+        public AllergenGroupWrapper[] newArray(int size) {
+            return new AllergenGroupWrapper[size];
+        }
+    };
 }

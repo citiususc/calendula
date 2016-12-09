@@ -38,7 +38,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
@@ -125,7 +124,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
         acceptFab.setEnabled(false);
         Intent returnIntent = new Intent();
         final List<AbstractItem> selected = getSelected();
-        List<AllergenGroupWrapper> vos = new ArrayList<>();
+        ArrayList<AllergenGroupWrapper> vos = new ArrayList<>();
         for (IItem i : selected) {
             switch (i.getType()) {
                 case R.id.fastadapter_allergen_group_sub_item:
@@ -142,8 +141,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
             }
 
         }
-        final String s = new Gson().toJson(vos);
-        returnIntent.putExtra("result", s);
+        returnIntent.putParcelableArrayListExtra("result", vos);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }

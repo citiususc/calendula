@@ -18,6 +18,9 @@
 
 package es.usc.citius.servando.calendula.allergies;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import es.usc.citius.servando.calendula.drugdb.model.persistence.ActiveIngredient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Excipient;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
@@ -26,7 +29,7 @@ import es.usc.citius.servando.calendula.persistence.PatientAllergen;
  * Created by alvaro.brey.vilas on 15/11/16.
  */
 
-public class AllergenVO {
+public class AllergenVO implements Parcelable {
 
     private AllergenType type;
     private String name;
@@ -81,6 +84,8 @@ public class AllergenVO {
         this.identifier = identifier;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -108,4 +113,35 @@ public class AllergenVO {
                 ", identifier='" + identifier + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.type == null ? -1 : this.type.ordinal());
+        dest.writeString(this.name);
+        dest.writeString(this.identifier);
+    }
+
+    protected AllergenVO(Parcel in) {
+        int tmpType = in.readInt();
+        this.type = tmpType == -1 ? null : AllergenType.values()[tmpType];
+        this.name = in.readString();
+        this.identifier = in.readString();
+    }
+
+    public static final Parcelable.Creator<AllergenVO> CREATOR = new Parcelable.Creator<AllergenVO>() {
+        @Override
+        public AllergenVO createFromParcel(Parcel source) {
+            return new AllergenVO(source);
+        }
+
+        @Override
+        public AllergenVO[] newArray(int size) {
+            return new AllergenVO[size];
+        }
+    };
 }
