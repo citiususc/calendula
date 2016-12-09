@@ -18,10 +18,15 @@
 
 package es.usc.citius.servando.calendula.util;
 
+import android.os.Build;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+
+import java.util.Collection;
 
 /**
  * Created by joseangel.pineiro on 3/2/15.
@@ -78,5 +83,26 @@ public class Strings {
             sb.setSpan(bss, start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         }
         return sb;
+    }
+
+    /**
+     * Calls appropriate version of Html.fromHtml depending on build sdk version
+     *
+     * @param html the html string
+     * @return the spanned
+     */
+    public static Spanned fromHtmlCompat(String html) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY);
+        }
+        return Html.fromHtml(html);
+    }
+
+    public static Spanned genBulletList(Collection<?> items) {
+        StringBuilder sb = new StringBuilder();
+        for (Object o : items) {
+            sb.append("&#8226; ").append(o.toString()).append("<br/>");
+        }
+        return fromHtmlCompat(sb.toString());
     }
 }

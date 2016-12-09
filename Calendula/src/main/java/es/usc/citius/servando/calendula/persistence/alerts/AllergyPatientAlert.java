@@ -22,6 +22,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ import android.widget.TextView;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -40,6 +42,7 @@ import es.usc.citius.servando.calendula.adapters.AlertViewRecyclerAdapter;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
+import es.usc.citius.servando.calendula.util.Strings;
 
 public class AllergyPatientAlert extends PatientAlert<AllergyPatientAlert, AllergyPatientAlert.AllergyAlertInfo> {
 
@@ -56,13 +59,13 @@ public class AllergyPatientAlert extends PatientAlert<AllergyPatientAlert, Aller
         setDetails(new AllergyAlertInfo(allergens));
     }
 
-    private static String genAllergenList(AllergyPatientAlert alert) {
+    private static Spanned genAllergenList(AllergyPatientAlert alert) {
         List<AllergenVO> vos = alert.getDetails().allergens;
-        StringBuilder sb = new StringBuilder();
+        List<String> titles = new ArrayList<>(vos.size());
         for (AllergenVO vo : vos) {
-            sb.append("&#8226; ").append(vo.getName()).append("<br/>");
+            titles.add(vo.getName());
         }
-        return sb.toString();
+        return Strings.genBulletList(titles);
     }
 
     @Override
@@ -118,7 +121,7 @@ public class AllergyPatientAlert extends PatientAlert<AllergyPatientAlert, Aller
             viewHolder.alertIcon.setImageDrawable(icon);
             viewHolder.title.setText(R.string.title_alert_allergy);
             viewHolder.description.setText(Html.fromHtml(viewHolder.description.getContext().getString(R.string.description_alert_allergy)));
-            viewHolder.allergens.setText(Html.fromHtml(genAllergenList((AllergyPatientAlert) alert)));
+            viewHolder.allergens.setText(genAllergenList((AllergyPatientAlert) alert));
         }
 
         public static class AllergyAlertViewHolder extends RecyclerView.ViewHolder {
