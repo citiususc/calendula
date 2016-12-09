@@ -19,7 +19,6 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/search_parent_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/android_blue_darker"
@@ -31,22 +30,25 @@
         android:id="@+id/search_edit_text"
         android:layout_width="fill_parent"
         android:layout_height="56dp"
-        android:layout_alignBottom="@+id/imageView"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="72dp"
+        android:layout_marginRight="72dp"
         android:background="@null"
         android:gravity="center_vertical"
         android:hint="@string/search_hint"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:maxLines="1"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:textColor="#fff"
         android:textColorHint="#ececec"
         android:textCursorDrawable="@null"
-        android:textSize="20dp"/>
+        android:textSize="20sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"

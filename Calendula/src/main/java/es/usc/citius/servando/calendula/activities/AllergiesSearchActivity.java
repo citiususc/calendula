@@ -99,8 +99,6 @@ public class AllergiesSearchActivity extends CalendulaActivity {
     protected ProgressBar progressBar;
     @BindView(R.id.accept_selection_button)
     protected FloatingActionButton acceptFab;
-    @BindView(R.id.search_parent_layout)
-    protected View parent;
 
     private FastItemAdapter<AbstractItem> searchAdapter;
     private List<AllergyGroup> groups;
