@@ -29,17 +29,16 @@
         android:dividerHeight="0dp"
         android:scrollbars="none"/>
 
-    <com.melnykov.fab.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
-                                           android:id="@+id/add_medicine_button"
-                                           android:layout_width="wrap_content"
-                                           android:layout_height="wrap_content"
-                                           android:layout_alignParentBottom="true"
-                                           android:layout_alignParentRight="true"
-                                           android:layout_gravity="bottom|right"
-                                           android:layout_margin="16dp"
-                                           android:src="@drawable/ic_action_add"
-                                           fab:fab_colorNormal="@color/fab_dark_normal"
-                                           fab:fab_colorPressed="@color/fab_dark_pressed"
-                                           fab:fab_colorRipple="@color/fab_dark_pressed"/>
+    <com.getbase.floatingactionbutton.AddFloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
+                                                              android:id="@+id/add_medicine_button"
+                                                              android:layout_width="wrap_content"
+                                                              android:layout_height="wrap_content"
+                                                              android:layout_alignParentBottom="true"
+                                                              android:layout_alignParentRight="true"
+                                                              android:layout_margin="10dp"
+                                                              fab:fab_colorNormal="#efefef"
+                                                              fab:fab_colorPressed="#b7b7b7"
+                                                              fab:fab_labelStyle="@style/menu_labels_style"
+                                                              fab:fab_plusIconColor="@color/black"/>
 
 </RelativeLayout>

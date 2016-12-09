@@ -127,7 +127,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
     int color1;
     int color2;
     Drawable iconClose;
-    Drawable iconSwich;
+    Drawable iconSwitch;
     CheckBox addRoutinesCheckBox;
     LinearLayout colorList;
     HorizontalScrollView colorScroll;
@@ -222,16 +222,12 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         }
     }
 
-    void setSwichFab() {
-        fab.setColorNormalResId(R.color.fab_dark_normal);
-        fab.setColorPressedResId(R.color.fab_dark_pressed);
-        fab.setIconDrawable(iconSwich);
+    void setSwitchFab() {
+        fab.setIconDrawable(iconSwitch);
 
     }
 
     void setCloseFab() {
-        fab.setColorNormalResId(R.color.fab_light_normal);
-        fab.setColorPressedResId(R.color.fab_light_pressed);
         fab.setIconDrawable(iconClose);
     }
 
@@ -299,13 +295,13 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
                 .paddingDp(5)
                 .colorRes(R.color.dark_grey_home);
 
-        iconSwich = new IconicsDrawable(this, CommunityMaterial.Icon.cmd_account_switch)
+        iconSwitch = new IconicsDrawable(this, CommunityMaterial.Icon.cmd_brush)
                 .sizeDp(24)
                 .paddingDp(2)
-                .colorRes(R.color.fab_light_normal);
+                .colorRes(R.color.dark_grey_home);
 
 
-        setSwichFab();
+        setSwitchFab();
         setupToolbar(patient.name(), Color.TRANSPARENT);
         setupStatusBar(Color.TRANSPARENT);
         setupAvatarList();
@@ -438,7 +434,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     gridContainer.setVisibility(View.GONE);
-                    setSwichFab();
+                    setSwitchFab();
                     super.onAnimationEnd(animation);
                 }
             });
