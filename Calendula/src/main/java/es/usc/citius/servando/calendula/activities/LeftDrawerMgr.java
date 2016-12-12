@@ -374,13 +374,14 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
 
     public void onPatientCreated(Patient p) {
 
-        IProfile profile = new ProfileDrawerItem()
-                .withIdentifier(p.id().intValue())
-                .withName(p.name())
-                .withEmail(p.name() + "@calendula")
-                .withIcon(AvatarMgr.res(p.avatar()));
-
+        IProfile profile = genProfile(p);
         headerResult.addProfiles(profile);
+    }
+
+    public void onPatientUpdated(Patient p) {
+        IProfile profile = genProfile(p);
+        headerResult.updateProfile(profile);
+
     }
 
     private void addCalendarItem() {
@@ -398,5 +399,13 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
 
     private void showAbout() {
         launchActivity(new Intent(home, AboutActivity.class));
+    }
+
+    private IProfile genProfile(Patient p) {
+        return new ProfileDrawerItem()
+                .withIdentifier(p.id().intValue())
+                .withName(p.name())
+                .withEmail(p.name() + "@calendula")
+                .withIcon(AvatarMgr.res(p.avatar()));
     }
 }

@@ -18,10 +18,10 @@ These instructions will get you a copy of the project up and running on your loc
 
 We use [Android Studio](https://developer.android.com/studio/index.html) (the official Android IDE) for development, so we recommend it as the IDE to use in your development environment. Once you install Android Studio, you can use the Android SDK Manager to obtain the SDK tools, platforms, and other components you will need to start developing. The most important are:
 
-* Android SDK Tools and Android SDK Platform-tools (upgrade to their last versions is usually a good idea).
-* Android SDK Build-Tools 24.0.1.
-* Android 7.0 (API Level 24) SDK Platform.
-* Android Support Repository
+ * Android SDK Tools and Android SDK Platform-tools (upgrade to their last versions is usually a good idea).
+ * Android SDK Build-Tools 24.0.1.
+ * Android 7.0 (API Level 24) SDK Platform.
+ * Android Support Repository
 
 You can also install other packages like emulators for running the app, if you don't have or don't want to use a real device. The minimum supported Android version is *4.0.1, Ice Cream Sandwich (API level 14).*
 
@@ -52,10 +52,10 @@ This tasks can also be done from Android Studio with a few clicks.
 ## App versions
 We only maintain the Calendula app at Google Play:
 
-* The latest version of the app available on Google Play reflects the code of the `master` branch.
-* Release branches are usually deployed through the *Google Play BETA channel* before they are made available to everyone. If you want to be a member of the testing community, join the testing group on Google Groups, and you will automatically receive the updates from the BETA channel like normal updates from Google Play.
+ * The latest version of the app available on Google Play reflects the code of the `master` branch.
+ * Release branches are usually deployed through the *Google Play BETA channel* before they are made available to everyone. If you want to be a member of the testing community, join the testing group on Google Groups, and you will automatically receive the updates from the BETA channel like normal updates from Google Play.
 
-> Join the  BETA channel: [https://groups.google.com/d/forum/calendula-dev](https://groups.google.com/d/forum/calendula-dev)
+> Join the  BETA channel: [https://groups.google.com/d/forum/calendula-testing](https://groups.google.com/d/forum/calendula-testing)
 
 Check out the [contributing guidelines](CONTRIBUTING.md) for more info about the branching model.
 
@@ -77,9 +77,10 @@ We use <a href="http://www.freepik.com/free-vector/people-avatars_761436.htm">th
 ## Future work ##
 
 We have a lot of development ideas, and we are open to newer ones. Below are some interesting features that could be very useful:
-* Information about nearby pharmacies, their locations and timetables
-* Trip assistant (how many pills I need for this weekend?)
-* Introducing [gamification](https://en.wikipedia.org/wiki/Gamification) concepts to improve adherence.
+
+ * Information about nearby pharmacies, their locations and timetables
+ * Trip assistant (how many pills I need for this weekend?)
+ * Introducing [gamification](https://en.wikipedia.org/wiki/Gamification) concepts to improve adherence. 
 
 
 ## Contributing ##
