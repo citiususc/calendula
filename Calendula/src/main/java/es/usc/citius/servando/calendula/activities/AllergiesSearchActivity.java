@@ -35,6 +35,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -95,6 +96,8 @@ public class AllergiesSearchActivity extends CalendulaActivity {
     protected ProgressBar progressBar;
     @BindView(R.id.accept_selection_button)
     protected FloatingActionButton acceptFab;
+    @BindView(R.id.search_layout)
+    protected RelativeLayout searchLayout;
 
     private FastItemAdapter<AbstractItem> searchAdapter;
     private List<AllergyGroup> groups;
@@ -154,6 +157,10 @@ public class AllergiesSearchActivity extends CalendulaActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_allergies_search);
         ButterKnife.bind(this);
+
+        int color = DB.patients().getActive(this).color();
+        searchLayout.setBackgroundColor(color);
+        setupStatusBar(color);
 
         //retrieve allergy groups
         groups = DB.allergyGroups().findAllOrderByPrecedence();
