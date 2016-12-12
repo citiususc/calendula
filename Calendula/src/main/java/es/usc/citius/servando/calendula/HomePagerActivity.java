@@ -274,6 +274,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                     } else if (evt instanceof PersistenceEvents.UserUpdateEvent) {
                         Patient p = ((PersistenceEvents.UserUpdateEvent) evt).patient;
                         ((DailyAgendaFragment) getViewPagerFragment(0)).onUserUpdate();
+                        drawerMgr.onPatientUpdated(p);
                         if (DB.patients().isActive(p, HomePagerActivity.this)) {
                             activePatient = p;
                             updateTitle(mViewPager.getCurrentItem());
