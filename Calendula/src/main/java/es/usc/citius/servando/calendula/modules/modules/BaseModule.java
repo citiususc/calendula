@@ -16,7 +16,7 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
-package es.usc.citius.servando.calendula.modules;
+package es.usc.citius.servando.calendula.modules.modules;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -36,6 +36,7 @@ import es.usc.citius.servando.calendula.database.PatientDao;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.jobs.CalendulaJobCreator;
 import es.usc.citius.servando.calendula.jobs.PurgeCacheJob;
+import es.usc.citius.servando.calendula.modules.CalendulaModule;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
@@ -91,7 +92,7 @@ public class BaseModule extends CalendulaModule {
     }
 
     @Override
-    void onApplicationStartup(Context ctx) {
+    protected void onApplicationStartup(Context ctx) {
         prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         PreferenceUtils.init(ctx);
         // initialize SQLite engine

@@ -16,18 +16,29 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
-package es.usc.citius.servando.calendula.modules;
+package es.usc.citius.servando.calendula.modules.modules;
 
 import android.content.Context;
 
+import es.usc.citius.servando.calendula.modules.CalendulaModule;
+
 /**
- * Created by alvaro.brey.vilas on 30/11/16.
+ * Created by alvaro.brey.vilas on 12/12/16.
  */
 
-public abstract class CalendulaModule {
+public class AllergiesModule extends CalendulaModule {
 
-    public abstract String getId();
+    public static final String ID = "CALENDULA_ALLERGIES_MODULE";
 
-    protected abstract void onApplicationStartup(Context ctx);
+    private static final String TAG = "AllergiesModule";
 
+    @Override
+    public String getId() {
+        return ID;
+    }
+
+    @Override
+    protected void onApplicationStartup(Context ctx) {
+        // stub
+    }
 }

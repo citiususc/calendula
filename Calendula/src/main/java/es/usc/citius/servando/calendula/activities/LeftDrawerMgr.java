@@ -51,6 +51,8 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.HomePagerActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.modules.ModuleManager;
+import es.usc.citius.servando.calendula.modules.modules.AllergiesModule;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.IconUtils;
@@ -127,69 +129,74 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                 .build();
 
         //Create the drawer
-        drawer = new DrawerBuilder()
+        DrawerBuilder b = new DrawerBuilder()
                 .withActivity(home)
                 .withFullscreen(true)
                 .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
-                .addDrawerItems(
-                        new PrimaryDrawerItem()
-                                .withName(R.string.title_home)
-                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_home, R.color.black).alpha(110))
-                                .withIdentifier(HOME),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.title_activity_patients)
-                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_account_multiple, R.color.black).alpha(110))
-                                .withIdentifier(PATIENTS),
-                        new DividerDrawerItem(),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.title_activity_routines)
-                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_alarm, R.color.black).alpha(110))
-                                .withIdentifier(ROUTINES),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.title_activity_medicines)
-                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_pill, R.color.black).alpha(110))
-                                .withIdentifier(MEDICINES),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.title_activity_schedules)
-                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_calendar, R.color.black).alpha(110))
-                                .withIdentifier(SCHEDULES),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.home_menu_allergies)
-                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_alert, R.color.black).alpha(110))
-                                .withIdentifier(ALLERGIES),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.home_menu_pharmacies)
-                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_map_marker_multiple, R.color.black).alpha(38))
-                                .withEnabled(false)
-                                .withIdentifier(PHARMACIES),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.home_menu_plantrip)
-                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_airplanemode_active, R.color.black).alpha(38))
-                                .withEnabled(false)
-                                .withIdentifier(TRAVELPLAN),
-                        new DividerDrawerItem(),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.drawer_help_option)
-                                .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_pin_assistant, R.color.black).alpha(130))
-                                .withIdentifier(HELP),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.drawer_settings_option)
-                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_settings, R.color.black).alpha(110))
-                                .withIdentifier(SETTINGS),
-                        new DividerDrawerItem(),
-                        new PrimaryDrawerItem()
-                                .withName(R.string.drawer_about_option)
-                                .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_information, R.color.black).alpha(110))
-                                .withIdentifier(ABOUT)
-                )
                 .withOnDrawerItemClickListener(this)
                 .withOnDrawerItemLongClickListener(this)
                 .withDelayOnDrawerClose(70)
                 .withStickyFooterShadow(true)
                 .withScrollToTopAfterClick(true)
-                .withSavedInstance(savedInstanceState)
-                .build();
+                .withSavedInstance(savedInstanceState);
+
+        b.addDrawerItems(
+                new PrimaryDrawerItem()
+                        .withName(R.string.title_home)
+                        .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_home, R.color.black).alpha(110))
+                        .withIdentifier(HOME),
+                new PrimaryDrawerItem()
+                        .withName(R.string.title_activity_patients)
+                        .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_account_multiple, R.color.black).alpha(110))
+                        .withIdentifier(PATIENTS),
+                new DividerDrawerItem(),
+                new PrimaryDrawerItem()
+                        .withName(R.string.title_activity_routines)
+                        .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_alarm, R.color.black).alpha(110))
+                        .withIdentifier(ROUTINES),
+                new PrimaryDrawerItem()
+                        .withName(R.string.title_activity_medicines)
+                        .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_pill, R.color.black).alpha(110))
+                        .withIdentifier(MEDICINES),
+                new PrimaryDrawerItem()
+                        .withName(R.string.title_activity_schedules)
+                        .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_calendar, R.color.black).alpha(110))
+                        .withIdentifier(SCHEDULES));
+        if (ModuleManager.getInstance().isEnabled(AllergiesModule.ID)) {
+            b.addDrawerItems(new PrimaryDrawerItem()
+                    .withName(R.string.home_menu_allergies)
+                    .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_alert, R.color.black).alpha(110))
+                    .withIdentifier(ALLERGIES));
+        }
+        b.addDrawerItems(
+                new PrimaryDrawerItem()
+                        .withName(R.string.home_menu_pharmacies)
+                        .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_map_marker_multiple, R.color.black).alpha(38))
+                        .withEnabled(false)
+                        .withIdentifier(PHARMACIES),
+                new PrimaryDrawerItem()
+                        .withName(R.string.home_menu_plantrip)
+                        .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_airplanemode_active, R.color.black).alpha(38))
+                        .withEnabled(false)
+                        .withIdentifier(TRAVELPLAN),
+                new DividerDrawerItem(),
+                new PrimaryDrawerItem()
+                        .withName(R.string.drawer_help_option)
+                        .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_pin_assistant, R.color.black).alpha(130))
+                        .withIdentifier(HELP),
+                new PrimaryDrawerItem()
+                        .withName(R.string.drawer_settings_option)
+                        .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_settings, R.color.black).alpha(110))
+                        .withIdentifier(SETTINGS),
+                new DividerDrawerItem(),
+                new PrimaryDrawerItem()
+                        .withName(R.string.drawer_about_option)
+                        .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_information, R.color.black).alpha(110))
+                        .withIdentifier(ABOUT)
+        );
+
+        drawer = b.build();
 
         Patient p = DB.patients().getActive(home);
         headerResult.setActiveProfile(p.id().intValue(), false);

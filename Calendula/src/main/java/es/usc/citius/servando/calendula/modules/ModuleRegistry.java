@@ -23,6 +23,9 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.usc.citius.servando.calendula.modules.modules.AllergiesModule;
+import es.usc.citius.servando.calendula.modules.modules.BaseModule;
+
 /**
  * Created by alvaro.brey.vilas on 30/11/16.
  */
@@ -32,7 +35,7 @@ public class ModuleRegistry {
     public static final String TAG = "ModuleRegistry";
 
     public static List<CalendulaModule> getDefaultModules() {
-        return getModulesForConfig(ModuleConfig.DEFAULT);
+        return getModulesForConfig(ModuleConfig.STABLE);
     }
 
     public static List<CalendulaModule> getModulesForConfig(String configName) {
@@ -54,7 +57,7 @@ public class ModuleRegistry {
     }
 
     public enum ModuleConfig {
-        DEFAULT(ModuleLists.DEFAULT_MODULES);
+        STABLE(ModuleLists.STABLE_MODULES), BETA(ModuleLists.BETA_MODULES);
 
         private Class<?>[] modList;
 
@@ -64,8 +67,13 @@ public class ModuleRegistry {
     }
 
     private static class ModuleLists {
-        private static final Class<?>[] DEFAULT_MODULES = new Class<?>[]{
+        private static final Class<?>[] STABLE_MODULES = new Class<?>[]{
                 BaseModule.class // Base module is required. Do not remove!
+        };
+
+        private static final Class<?>[] BETA_MODULES = new Class<?>[]{
+                BaseModule.class,
+                AllergiesModule.class
         };
     }
 }
