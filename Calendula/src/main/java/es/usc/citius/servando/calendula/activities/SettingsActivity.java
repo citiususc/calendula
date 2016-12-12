@@ -62,6 +62,8 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.DownloadDatabaseDialogHelper;
 import es.usc.citius.servando.calendula.drugdb.SetupDBService;
+import es.usc.citius.servando.calendula.modules.ModuleManager;
+import es.usc.citius.servando.calendula.modules.modules.StockModule;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.PermissionUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
@@ -383,10 +385,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         getPreferenceScreen().addPreference(fakeHeader2);
         addPreferencesFromResource(R.xml.pref_notification);
 
-        PreferenceCategory fakeHeader3 = new PreferenceCategory(this);
-        fakeHeader3.setTitle(R.string.pref_header_stock);
-        getPreferenceScreen().addPreference(fakeHeader3);
-        addPreferencesFromResource(R.xml.pref_stock);
+        if (ModuleManager.getInstance().isEnabled(StockModule.ID)) {
+            PreferenceCategory fakeHeader3 = new PreferenceCategory(this);
+            fakeHeader3.setTitle(R.string.pref_header_stock);
+            getPreferenceScreen().addPreference(fakeHeader3);
+            addPreferencesFromResource(R.xml.pref_stock);
+            bindPreferenceSummaryToValue(findPreference("stock_alert_days"), true);
+        }
 
         // Add 'data and sync' preferences, and a corresponding header.
         //fakeHeader = new PreferenceCategory(this);
@@ -402,7 +407,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         bindPreferenceSummaryToValue(findPreference("alarm_reminder_window"), true);
         bindPreferenceSummaryToValue(findPreference("pref_notification_tone"), true);
         bindPreferenceSummaryToValue(findPreference("prescriptions_database"), true);
-        bindPreferenceSummaryToValue(findPreference("stock_alert_days"), true);
 
         findPreference("alarm_insistent").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override

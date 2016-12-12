@@ -150,93 +150,98 @@
             android:alpha="0.3"
             android:src="@drawable/ic_arrow_left_black_48dp"/>
 
-
-        <TextView
-            android:id="@+id/medicine_stock_title"
+        <RelativeLayout
+            android:id="@+id/stock_layout"
             android:layout_width="wrap_content"
-            android:layout_height="26dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/med_presentation"
-            android:layout_marginLeft="72dp"
-            android:layout_marginTop="25dp"
-            android:gravity="center_vertical"
-            android:text="Stock"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/dark_grey_text"
-            android:textSize="20sp"/>
+            android:visibility="gone">
 
-        <ImageView
-            android:id="@+id/ic_med_stock"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignTop="@+id/medicine_stock_title"
-            android:layout_marginLeft="16dp"
-            android:alpha="0.8"
-            android:src="@drawable/ic_edit_black_48dp"/>
+            <TextView
+                android:id="@+id/medicine_stock_title"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:layout_marginLeft="72dp"
+                android:layout_marginTop="25dp"
+                android:gravity="center_vertical"
+                android:text="Stock"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/dark_grey_text"
+                android:textSize="20sp"/>
 
-        <TextView
-            android:id="@+id/stock_units"
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/medicine_stock_title"
-            android:layout_marginLeft="72dp"
-            android:layout_marginTop="10dp"
-            android:layout_toLeftOf="@+id/btn_stock_remove"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="center_vertical"
-            android:text="30 capsules"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textIsSelectable="false"
-            android:textSize="19sp"
-            android:textStyle="bold"/>
+            <ImageView
+                android:id="@+id/ic_med_stock"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignTop="@+id/medicine_stock_title"
+                android:layout_marginLeft="16dp"
+                android:alpha="0.8"
+                android:src="@drawable/ic_edit_black_48dp"/>
 
-        <TextView
-            android:id="@+id/stock_estimated_duration"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/stock_units"
-            android:layout_marginLeft="72dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="5dp"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="center_vertical"
-            android:text="Enough for 2 weeks with the current schedule"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/android_blue_dark"
-            android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/stock_units"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/medicine_stock_title"
+                android:layout_marginLeft="72dp"
+                android:layout_marginTop="10dp"
+                android:layout_toLeftOf="@+id/btn_stock_remove"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="center_vertical"
+                android:text="30 capsules"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textIsSelectable="false"
+                android:textSize="19sp"
+                android:textStyle="bold"/>
 
-        <ImageButton
-            android:id="@+id/btn_stock_remove"
-            android:layout_width="45dp"
-            android:layout_height="50dp"
-            android:layout_alignTop="@+id/stock_units"
-            android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@+id/btn_stock_add"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:src="@drawable/abc_ic_star_black_16dp"/>
+            <TextView
+                android:id="@+id/stock_estimated_duration"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/stock_units"
+                android:layout_marginLeft="72dp"
+                android:layout_marginRight="32dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="center_vertical"
+                android:text="Enough for 2 weeks with the current schedule"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/android_blue_dark"
+                android:textSize="16sp"/>
 
-        <ImageButton
-            android:id="@+id/btn_stock_add"
-            android:layout_width="45dp"
-            android:layout_height="50dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/stock_units"
-            android:layout_marginRight="32dp"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:src="@drawable/abc_ic_star_black_16dp"/>
+            <ImageButton
+                android:id="@+id/btn_stock_remove"
+                android:layout_width="45dp"
+                android:layout_height="50dp"
+                android:layout_alignTop="@+id/stock_units"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/btn_stock_add"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/abc_ic_star_black_16dp"/>
 
-        <Switch
-            android:id="@+id/stock_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="false"
-            android:layout_alignTop="@+id/medicine_stock_title"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="32dp"
-            android:layout_toRightOf="@+id/medicine_stock_title"
-            android:checked="false"/>
+            <ImageButton
+                android:id="@+id/btn_stock_add"
+                android:layout_width="45dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/stock_units"
+                android:layout_marginRight="32dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/abc_ic_star_black_16dp"/>
 
+            <Switch
+                android:id="@+id/stock_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="false"
+                android:layout_alignTop="@+id/medicine_stock_title"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="32dp"
+                android:layout_toRightOf="@+id/medicine_stock_title"
+                android:checked="false"/>
+        </RelativeLayout>
 
     </RelativeLayout>
 </ScrollView>

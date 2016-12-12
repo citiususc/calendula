@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -38,6 +39,9 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import org.joda.time.LocalDate;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
@@ -45,6 +49,8 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
+import es.usc.citius.servando.calendula.modules.ModuleManager;
+import es.usc.citius.servando.calendula.modules.modules.StockModule;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.medicine.StockUtils;
@@ -56,23 +62,40 @@ import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
  */
 public class MedInfoFragment extends Fragment {
 
+    @BindView(R.id.ic_prospect)
     ImageView icProspect;
+    @BindView(R.id.ic_med_large_name)
     ImageView icMedName;
+    @BindView(R.id.ic_schedule_info)
     ImageView icScheduleInfo;
+    @BindView(R.id.ic_med_stock)
     ImageView icMedStock;
 
+    @BindView(R.id.med_large_name)
     TextView medName;
+    @BindView(R.id.med_large_name_description)
     TextView medDesc;
+    @BindView(R.id.schedule_info)
     TextView scheduleInfo;
+    @BindView(R.id.med_stock)
     TextView stockInfo;
+    @BindView(R.id.med_stock_readable)
     TextView stockInfoEnd;
+    @BindView(R.id.med_leaflet_butn)
     ImageButton showProspectBtn;
+    @BindView(R.id.ic_show_prospect)
     ImageView showProspectIcon;
 
+    @BindView(R.id.bind_medicine)
     Button bindMedBtn;
+
+    @BindView(R.id.stock_layout)
+    RelativeLayout stockLayout;
 
     Medicine m;
     PrescriptionDBMgr dbMgr;
+
+    Unbinder unbinder;
 
     public static MedInfoFragment newInstance(Medicine m) {
         MedInfoFragment fragment = new MedInfoFragment();
@@ -95,20 +118,15 @@ public class MedInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_med_info, container, false);
-        icMedName = (ImageView) rootView.findViewById(R.id.ic_med_large_name);
-        icProspect = (ImageView) rootView.findViewById(R.id.ic_prospect);
-        icScheduleInfo = (ImageView) rootView.findViewById(R.id.ic_schedule_info);
-        icMedStock = (ImageView) rootView.findViewById(R.id.ic_med_stock);
-        medName = (TextView) rootView.findViewById(R.id.med_large_name);
-        medDesc = (TextView) rootView.findViewById(R.id.med_large_name_description);
-        scheduleInfo = (TextView) rootView.findViewById(R.id.schedule_info);
-        stockInfo = (TextView) rootView.findViewById(R.id.med_stock);
-        stockInfoEnd = (TextView) rootView.findViewById(R.id.med_stock_readable);
-        showProspectBtn = (ImageButton) rootView.findViewById(R.id.med_leaflet_butn);
-        showProspectIcon = (ImageView) rootView.findViewById(R.id.imageView13);
-        bindMedBtn = (Button) rootView.findViewById(R.id.bind_medicine);
+        unbinder = ButterKnife.bind(this, rootView);
         setupView();
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     public void notifyDataChange() {
@@ -186,18 +204,20 @@ public class MedInfoFragment extends Fragment {
             });
         }
 
-        if (m.stockManagementEnabled()) {
-            final Float s = m.stock();
-            final String stock = s.intValue() == s ? String.valueOf(s.intValue()) : String.valueOf(s);
-            stockInfo.setText(stock + " " + m.presentation().units(getResources()) + "(s)");
-            LocalDate d = StockUtils.getEstimatedStockEnd(m);
-            String msg = StockUtils.getReadableStockDuration(d, getContext());
-            stockInfoEnd.setText(msg);
-        } else {
-            stockInfo.setText(R.string.stock_no_data);
-            stockInfoEnd.setText(R.string.stock_no_stock_info);
+        if (ModuleManager.getInstance().isEnabled(StockModule.ID)) {
+            stockLayout.setVisibility(View.VISIBLE);
+            if (m.stockManagementEnabled()) {
+                final Float s = m.stock();
+                final String stock = s.intValue() == s ? String.valueOf(s.intValue()) : String.valueOf(s);
+                stockInfo.setText(stock + " " + m.presentation().units(getResources()) + "(s)");
+                LocalDate d = StockUtils.getEstimatedStockEnd(m);
+                String msg = StockUtils.getReadableStockDuration(d, getContext());
+                stockInfoEnd.setText(msg);
+            } else {
+                stockInfo.setText(R.string.stock_no_data);
+                stockInfoEnd.setText(R.string.stock_no_stock_info);
+            }
         }
-
 
     }
 

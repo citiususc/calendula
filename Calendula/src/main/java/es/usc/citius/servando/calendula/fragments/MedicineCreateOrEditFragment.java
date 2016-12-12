@@ -42,6 +42,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -58,6 +59,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
@@ -67,6 +71,8 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
+import es.usc.citius.servando.calendula.modules.ModuleManager;
+import es.usc.citius.servando.calendula.modules.modules.StockModule;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Schedule;
@@ -91,28 +97,42 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     Prescription mPrescription;
 
     Boolean showConfirmButton = true;
+
+    @BindView(R.id.medicine_edit_name)
     TextView mNameTextView;
+    @BindView(R.id.textView3)
     TextView mPresentationTv;
 
     Presentation selectedPresentation;
+
+    @BindView(R.id.med_presentation_scroll)
     HorizontalScrollView presentationScroll;
+    @BindView(R.id.scrollView)
     ScrollView verticalScrollView;
 
+    @BindView(R.id.stock_layout)
+    RelativeLayout stockLayout;
+    @BindView(R.id.stock_units)
     TextView mStockUnits;
+    @BindView(R.id.stock_estimated_duration)
     TextView mStockEstimation;
+    @BindView(R.id.stock_switch)
     Switch stockSwitch;
+    @BindView(R.id.btn_stock_add)
     ImageButton addBtn;
+    @BindView(R.id.btn_stock_remove)
     ImageButton rmBtn;
 
     boolean enableSearch = false;
     long mMedicineId;
-    String cn;
     int pColor;
     PrescriptionDBMgr dbMgr;
 
     float stock = -1;
     String estimatedStockText = "";
     private String mIntentAction;
+
+    private Unbinder unbinder;
 
     private static ArrayList<View> getViewsByTag(ViewGroup root, String tag) {
         ArrayList<View> views = new ArrayList<>();
@@ -142,18 +162,17 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_or_edit_medicine, container, false);
+        unbinder = ButterKnife.bind(this, rootView);
+
+        if (ModuleManager.getInstance().isEnabled(StockModule.ID)) {
+            stockLayout.setVisibility(View.VISIBLE);
+        }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
         pColor = DB.patients().getActive(getActivity()).color();
         setupIcons(rootView);
-        verticalScrollView = (ScrollView) rootView.findViewById(R.id.scrollView);
-        mNameTextView = (TextView) rootView.findViewById(R.id.medicine_edit_name);
-        mPresentationTv = (TextView) rootView.findViewById(R.id.textView3);
-        mStockUnits = (TextView) rootView.findViewById(R.id.stock_units);
-        mStockEstimation = (TextView) rootView.findViewById(R.id.stock_estimated_duration);
-        stockSwitch = (Switch) rootView.findViewById(R.id.stock_switch);
-        addBtn = ((ImageButton) rootView.findViewById(R.id.btn_stock_add));
-        rmBtn = ((ImageButton) rootView.findViewById(R.id.btn_stock_remove));
+
         mNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -172,7 +191,6 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         String settingUp = getString(R.string.database_setting_up);
         String value = prefs.getString("prescriptions_database", none);
         enableSearch = !value.equals(none) && !value.equals(settingUp);
-        presentationScroll = (HorizontalScrollView) rootView.findViewById(R.id.med_presentation_scroll);
 
         Log.d(getTag(), "Arguments:  " + (getArguments() != null) + ", savedState: " + (savedInstanceState != null));
         if (getArguments() != null) {
@@ -221,6 +239,12 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     public void showDeleteConfirmationDialog(final Medicine m) {

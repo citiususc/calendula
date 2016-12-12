@@ -52,6 +52,8 @@ import es.usc.citius.servando.calendula.activities.MedicineInfoActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
+import es.usc.citius.servando.calendula.modules.ModuleManager;
+import es.usc.citius.servando.calendula.modules.modules.StockModule;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.util.IconUtils;
@@ -221,14 +223,18 @@ public class MedicinesListFragment extends Fragment {
         View overlay = item.findViewById(R.id.medicines_list_item_container);
         overlay.setTag(medicine);
 
-        String nextPickup = medicine.nextPickup();
-        TextView stockInfo = (TextView) item.findViewById(R.id.stock_info);
-        if (nextPickup != null) {
-            stockInfo.setText("Próxima e-Receta: " + nextPickup);
-        }
+        if (ModuleManager.getInstance().isEnabled(StockModule.ID)) {
+            String nextPickup = medicine.nextPickup();
+            TextView stockInfo = (TextView) item.findViewById(R.id.stock_info);
+            stockInfo.setVisibility(View.VISIBLE);
 
-        if (medicine.stock() >= 0) {
-            stockInfo.setText(getString(R.string.stock_remaining_msg, medicine.stock().intValue(), medicine.presentation().units(getResources())));
+            if (nextPickup != null) {
+                stockInfo.setText("Próxima e-Receta: " + nextPickup);
+            }
+
+            if (medicine.stock() >= 0) {
+                stockInfo.setText(getString(R.string.stock_remaining_msg, medicine.stock().intValue(), medicine.presentation().units(getResources())));
+            }
         }
 
         String cn = medicine.cn();
