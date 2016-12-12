@@ -26,6 +26,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.util.LongSparseArray;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -54,11 +56,17 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
+import com.j256.ormlite.dao.CloseableIterator;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -475,12 +483,124 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
     // Search adapter
     public class AutoCompleteAdapter extends ArrayAdapter<Prescription> implements Filterable {
-        int minCharsToSearch = 2;
+        int minCharsToSearch = 3;
         int hColor = Color.parseColor("#000000");
         int cnColor = Color.WHITE;//ScreenUtils.equivalentNoAlpha(color,0.8f);
         int cnHColor = hColor;
         Drawable icProspect;
         private List<Prescription> mData;
+        final Filter filter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults filterResults = new FilterResults();
+                if (constraint != null && constraint.length() >= minCharsToSearch && !TextUtils.isEmpty(constraint)) {
+                    try {
+
+                        final String search = constraint.toString().toLowerCase().trim();
+                        final String preFilter = search.subSequence(0, minCharsToSearch).toString();
+
+                        // preliminary filter with the first characters of the search (exact)
+                        final PreparedQuery<Prescription> prepare = DB.drugDB().prescriptions().queryBuilder()
+                                .where().like(Prescription.COLUMN_NAME, "%" + preFilter + "%")
+                                .or().like(Prescription.COLUMN_CODE, "%" + search + "%")
+                                .prepare();
+                        final CloseableIterator<Prescription> preIt = DB.drugDB().prescriptions().iterator(prepare);
+                        final List<Prescription> prescriptions = new ArrayList<>(500);
+                        final LongSparseArray<Pair<Integer, Integer>> metaInfo = new LongSparseArray<>(500);
+
+                        final PrescriptionDBMgr current = DBRegistry.instance().current();
+
+                        while (preIt.hasNext()) {
+                            Prescription p = preIt.next();
+
+                            if (p.getCode().contains(search)) {
+                                prescriptions.add(p);
+                            } else {
+                                final String name = current.shortName(p).toLowerCase();
+
+                                final int idx = name.indexOf(preFilter);
+                                // check if the pre-filter is in the short name
+                                if (idx >= 0) {
+                                    final String sub = name.substring(idx, Math.min(idx + search.length(), name.length()));
+                                    final int distance = StringUtils.getLevenshteinDistance(search, sub);
+                                    // add to results only if distance is less than 2
+                                    if (distance <= 2) {
+                                        prescriptions.add(p);
+                                        metaInfo.put(p.getId(), new Pair<>(distance, idx));
+                                    }
+                                }
+                            }
+                        }
+                        preIt.close();
+
+                        // sort results by distance, then by index, then by name
+                        // give priority to code matches over name matches
+                        Collections.sort(prescriptions, new Comparator<Prescription>() {
+                            @Override
+                            public int compare(Prescription o1, Prescription o2) {
+                                final Pair<Integer, Integer> meta1 = metaInfo.get(o1.getId());
+                                final Pair<Integer, Integer> meta2 = metaInfo.get(o2.getId());
+
+                                if (meta1 == null || (meta2 == null)) {
+                                    // null means it was a code match (no distance info)
+                                    // code match has priority over name match
+                                    if (meta2 != null) {
+                                        return -1;
+                                    } else if (meta1 != null) {
+                                        return 1;
+                                    } else {
+                                        return current.shortName(o1).compareTo(current.shortName(o2));
+                                    }
+                                } else {
+                                    final int i = meta1.first.compareTo(meta2.first);
+                                    if (i == 0) {
+                                        final int i2 = meta1.second.compareTo(meta2.second);
+                                        if (i2 == 0) {
+                                            return current.shortName(o1).compareTo(current.shortName(o2));
+                                        }
+                                        return i2;
+                                    }
+                                    return i;
+                                }
+                            }
+                        });
+
+
+                        mData = prescriptions;//Fetcher.fetchNames(constraint.toString());
+                        filterResults.values = mData;
+                        filterResults.count = mData.size();
+                    } catch (Exception e) {
+                        Log.e("myException", e.getMessage());
+                        filterResults.values = null;
+                        filterResults.count = 0;
+                    }
+                } else {
+                    mData = new ArrayList<>();
+                    filterResults.values = mData;
+                    filterResults.count = 0;
+                }
+
+                Log.d(TAG, "performFiltering: Results: " + filterResults.count);
+
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                notifyDataSetChanged();
+                if (results.count == 0) {
+                    if (constraint.length() >= minCharsToSearch && !TextUtils.isEmpty(constraint)) {
+                        addCustomMedBtn.setText(getString(R.string.add_custom_med_button_text, constraint));
+                        addCustomMedBtn.setVisibility(View.VISIBLE);
+                        emptyListText.setText(getString(R.string.medicine_search_not_found_msg));
+                    } else {
+                        emptyListText.setText(getString(R.string.medicine_search_empty_list_msg));
+                    }
+                } else {
+                    addCustomMedBtn.setVisibility(View.GONE);
+                }
+            }
+        };
 
         public AutoCompleteAdapter(Context context, int textViewResourceId) {
             super(context, textViewResourceId);
@@ -549,48 +669,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
         @Override
         public Filter getFilter() {
-            return new Filter() {
-                @Override
-                protected FilterResults performFiltering(CharSequence constraint) {
-                    FilterResults filterResults = new FilterResults();
-                    if (constraint != null && constraint.length() >= minCharsToSearch && !TextUtils.isEmpty(constraint)) {
-                        try {
-                            List<Prescription> prescriptions = DB.drugDB().prescriptions().findByNameOrCn(constraint.toString(), 500);
-                            mData = prescriptions;//Fetcher.fetchNames(constraint.toString());
-                            filterResults.values = mData;
-                            filterResults.count = mData.size();
-                        } catch (Exception e) {
-                            Log.e("myException", e.getMessage());
-                            filterResults.values = null;
-                            filterResults.count = 0;
-                        }
-                    } else {
-                        mData = new ArrayList<>();
-                        filterResults.values = mData;
-                        filterResults.count = 0;
-                    }
-
-                    Log.d(TAG, "performFiltering: Results: " + filterResults.count);
-
-                    return filterResults;
-                }
-
-                @Override
-                protected void publishResults(CharSequence constraint, FilterResults results) {
-                    notifyDataSetChanged();
-                    if (results.count == 0) {
-                        if (constraint.length() >= minCharsToSearch && !TextUtils.isEmpty(constraint)) {
-                            addCustomMedBtn.setText(getString(R.string.add_custom_med_button_text, constraint));
-                            addCustomMedBtn.setVisibility(View.VISIBLE);
-                            emptyListText.setText(getString(R.string.medicine_search_not_found_msg));
-                        } else {
-                            emptyListText.setText(getString(R.string.medicine_search_empty_list_msg));
-                        }
-                    } else {
-                        addCustomMedBtn.setVisibility(View.GONE);
-                    }
-                }
-            };
+            return filter;
         }
     }
 }
