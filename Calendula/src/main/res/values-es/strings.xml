@@ -426,5 +426,9 @@
     <string name="title_alert_allergy">Hay conflictos de alergias para este medicamento</string>
     <string name="stock_depleted">No queda stock</string>
     <string name="stock_depleted_msg">No queda stock para este medicamento.</string>
+    <string name="dialog_continue_option">Continuar</string>
+    <string name="dialog_get_me_out">¡Sácame de aquí!</string>
+    <string name="important_info">Información importante</string>
+    <string name="message_allergies_experimental_warning">La gestión de alergias es una función experimental. Recuerda leer los prospectos de tus medicamentos para estar seguro de la información de alergias.</string>
 
 </resources>
