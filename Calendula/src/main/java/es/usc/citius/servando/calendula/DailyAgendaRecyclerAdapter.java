@@ -55,6 +55,7 @@ import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub.DailyAgendaItemStubElement;
@@ -516,14 +517,18 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                     DB.dailyScheduleItems().saveAndUpdateStock(item, false, context);
                 }
 
+                if (stub.isRoutine) {
+                    AlarmScheduler.instance().onIntakeCompleted(DB.routines().findById(stub.id), stub.date, context);
+                } else {
+                    AlarmScheduler.instance().onIntakeCompleted(DB.schedules().findById(stub.id), stub.time, stub.date, context);
+                }
+
                 actionsView.animate().alpha(0).scaleX(0.5f).scaleY(0.5f).setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         updateItem(getAdapterPosition());
-                        DB.medicines().fireEvent();
                     }
                 });
-
 
             } else if (listener != null) {
                 listener.onItemClick(view, stub, getAdapterPosition());

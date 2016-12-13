@@ -179,8 +179,6 @@ public class AlarmScheduler {
     }
 
     public void onIntakeCancelled(Routine r, LocalDate date, Context ctx) {
-        // cancel notification
-        ReminderNotification.cancel(ctx, ReminderNotification.routineNotificationId(r.getId().intValue()));
         // set time taken
         cancelIntake(r, date, ctx);
         // cancel alarms
@@ -188,8 +186,6 @@ public class AlarmScheduler {
     }
 
     public void onIntakeCancelled(Schedule s, LocalTime t, LocalDate date, Context ctx) {
-        // cancel notification
-        ReminderNotification.cancel(ctx, ReminderNotification.routineNotificationId(s.getId().intValue()));
         // set time taken
         cancelIntake(s, t, date, ctx);
         // cancell all alarms
@@ -197,8 +193,6 @@ public class AlarmScheduler {
     }
 
     public void onIntakeConfirmAll(Routine r, LocalDate date, Context ctx) {
-        // cancel notification
-        ReminderNotification.cancel(ctx, ReminderNotification.routineNotificationId(r.getId().intValue()));
         // set time taken
         for (ScheduleItem scheduleItem : r.scheduleItems()) {
             DailyScheduleItem ds = DB.dailyScheduleItems().findByScheduleItemAndDate(scheduleItem, date);
@@ -214,8 +208,6 @@ public class AlarmScheduler {
     }
 
     public void onIntakeConfirmAll(Schedule s, LocalTime t, LocalDate date, Context ctx) {
-        // cancel notification
-        ReminderNotification.cancel(ctx, ReminderNotification.routineNotificationId(s.getId().intValue()));
         // set time taken
         DailyScheduleItem ds = DB.dailyScheduleItems().findBy(s, date, t);
         if (ds != null) {
@@ -229,15 +221,19 @@ public class AlarmScheduler {
     }
 
     public void onIntakeCompleted(Routine r, LocalDate date, Context ctx) {
+        // cancel notification
+        ReminderNotification.cancel(ctx, ReminderNotification.routineNotificationId(r.getId().intValue()));
         // cancel all delay alarms
         cancelDelayedAlarm(r, date, ctx, AlarmIntentParams.USER);
         cancelDelayedAlarm(r, date, ctx, AlarmIntentParams.AUTO);
     }
 
-    public void onIntakeCompleted(Schedule r, LocalTime t, LocalDate date, Context ctx) {
+    public void onIntakeCompleted(Schedule s, LocalTime t, LocalDate date, Context ctx) {
+        // cancel notification
+        ReminderNotification.cancel(ctx, ReminderNotification.scheduleNotificationId(s.getId().intValue()));
         // cancel all delay alarms
-        cancelHourlyDelayedAlarm(r, t, date, ctx, AlarmIntentParams.USER);
-        cancelHourlyDelayedAlarm(r, t, date, ctx, AlarmIntentParams.AUTO);
+        cancelHourlyDelayedAlarm(s, t, date, ctx, AlarmIntentParams.USER);
+        cancelHourlyDelayedAlarm(s, t, date, ctx, AlarmIntentParams.AUTO);
     }
 
     public void onCreateOrUpdateRoutine(Routine r, Context ctx) {
@@ -254,10 +250,6 @@ public class AlarmScheduler {
         Log.d(TAG, "onDeleteRoutine: " + r.getId() + ", " + r.name());
         cancelAlarm(r, LocalDate.now(), ctx);
     }
-
-    //
-    // Methods to check if a intake is available according to the user preferences
-    //
 
     private Long getAlarmRepeatFreq(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -428,8 +420,6 @@ public class AlarmScheduler {
     private void onRoutineLost(Routine routine, AlarmIntentParams params, Context ctx) {
         // get the schedule items for the current routine, excluding already taken
         List<ScheduleItem> doses = ScheduleUtils.getRoutineScheduleItems(routine, params.date());
-        // cancel notification
-        ReminderNotification.cancel(ctx, ReminderNotification.routineNotificationId(routine.getId().intValue()));
         // cancel intake
         cancelIntake(routine, params.date(), ctx);
         // cancel alarms
@@ -444,8 +434,6 @@ public class AlarmScheduler {
     }
 
     private void onHourlyScheduleLost(Schedule schedule, AlarmIntentParams params, Context ctx) {
-        // cancel notification
-        ReminderNotification.cancel(ctx, ReminderNotification.scheduleNotificationId(schedule.getId().intValue()));
         // cancel intake (set time taken)
         cancelIntake(schedule, params.scheduleTime(), params.date(), ctx);
         // cancel alarms

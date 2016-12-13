@@ -126,6 +126,7 @@ public class ConfirmActivity extends CalendulaActivity {
     View chekAllOverlay;
     ImageView checkAllImage;
     String relativeTime = "";
+    private boolean fromNotification = false;
 
     /*
      * Returns the intake margin interval
@@ -167,7 +168,12 @@ public class ConfirmActivity extends CalendulaActivity {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                supportFinishAfterTransition();
+                if (fromNotification) {
+                    startActivity(new Intent(this, HomePagerActivity.class));
+                    finish();
+                } else {
+                    supportFinishAfterTransition();
+                }
                 return true;
             case R.id.action_delay:
                 showDelayDialog();
@@ -238,6 +244,19 @@ public class ConfirmActivity extends CalendulaActivity {
         alert.show();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (fromNotification) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                finishAndRemoveTask();
+            } else {
+                finish();
+            }
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     void onClickFab() {
         boolean somethingChecked = false;
         for (DailyScheduleItem item : items) {
@@ -280,7 +299,11 @@ public class ConfirmActivity extends CalendulaActivity {
         chekAllOverlay.postDelayed(new Runnable() {
             @Override
             public void run() {
-                finish();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    finishAndRemoveTask();
+                } else {
+                    finish();
+                }
             }
         }, duration + 300);
 
@@ -406,6 +429,14 @@ public class ConfirmActivity extends CalendulaActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        // finish and restart with the new params
+        finish();
+        startActivity(intent);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         //Toast.makeText(this, "Is distant: " + isDistant + " (" + date.toDateTime(time).toString("dd/MM/YYYY, kk:mm")+")", Toast.LENGTH_LONG).show();
@@ -522,6 +553,8 @@ public class ConfirmActivity extends CalendulaActivity {
 
         action = i.getStringExtra("action");
         position = i.getIntExtra("position", -1);
+
+        fromNotification = position == -1;
 
         if (dateStr != null) {
             date = LocalDate.parse(dateStr, dateFormatter);
