@@ -48,6 +48,7 @@ import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,6 +71,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
@@ -111,18 +114,33 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     /**
      * The {@link android.support.v4.view.ViewPager} that will host the section contents.
      */
+    @BindView(R.id.pager)
     ViewPager mViewPager;
+
     Long mMedicineId;
     MenuItem removeItem;
+
+    @BindView(R.id.search_view)
     View searchView;
+    @BindView(R.id.search_edit_text)
     EditText searchEditText;
+    @BindView(R.id.close_search_button)
     ImageButton closeSearchButton;
+    @BindView(R.id.back_button)
     ImageButton backButton;
+    @BindView(R.id.add_custom_med_btn)
     Button addCustomMedBtn;
+    @BindView(R.id.textView10)
     TextView emptyListText;
+    @BindView(R.id.add_button)
     FloatingActionButton addButton;
+    @BindView(R.id.search_list)
     ListView searchList;
+    @BindView(R.id.main_progress_bar)
+    ProgressBar progressBar;
+
     ArrayAdapter<Prescription> adapter;
+
     int color;
     PrescriptionDBMgr dbMgr;
     private String intentAction;
@@ -243,9 +261,13 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicines);
+        ButterKnife.bind(this);
+
         color = DB.patients().getActive(this).color();
         setupToolbar(null, color);
         setupStatusBar(color);
+        progressBar.getIndeterminateDrawable().setColorFilter(color,
+                android.graphics.PorterDuff.Mode.MULTIPLY);
 
         dbMgr = DBRegistry.instance().current();
 
@@ -322,6 +344,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             @Override
             public void afterTextChanged(Editable s) {
                 Log.d(TAG, "afterTextChanged: " + s.toString());
+                progressBar.setVisibility(View.VISIBLE);
                 String filter = searchEditText.getText().toString();
                 adapter.getFilter().filter(filter);
             }
@@ -588,6 +611,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 notifyDataSetChanged();
+                progressBar.setVisibility(View.GONE);
                 if (results.count == 0) {
                     if (constraint.length() >= minCharsToSearch && !TextUtils.isEmpty(constraint)) {
                         addCustomMedBtn.setText(getString(R.string.add_custom_med_button_text, constraint));
