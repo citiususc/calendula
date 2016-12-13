@@ -37,7 +37,6 @@ import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.util.Settings;
-import es.usc.citius.servando.calendula.util.SettingsKeys;
 
 /**
  * Created by castrelo on 4/10/14.
@@ -141,11 +140,9 @@ public class CalendulaApp extends Application {
         }
 
         try {
-            final String config = Settings.instance().get(SettingsKeys.MODULE_CONFIG);
-            if (config != null)
-                ModuleManager.getInstance().runModules(config, applicationContext);
-            else
-                ModuleManager.getInstance().runDefaultModules(applicationContext);
+            Log.d(TAG, "Application flavor is \"" + BuildConfig.FLAVOR + "\"");
+            final String flavor = BuildConfig.FLAVOR.toUpperCase();
+            ModuleManager.getInstance().runModules(flavor, applicationContext);
         } catch (IllegalArgumentException | IllegalStateException e) {
             Log.e(TAG, "onCreate: Error loading module configuration", e);
             Log.w(TAG, "onCreate: Loading default module configuration instead");

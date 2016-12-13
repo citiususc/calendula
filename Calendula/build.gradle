@@ -99,7 +99,10 @@ android {
             versionNameSuffix "-build" + getDate()
         }
     }
-    productFlavors {}
+    productFlavors {
+        develop {}
+        product {}
+    }
 
     applicationVariants.all { variant ->
         variant.outputs.each { output ->

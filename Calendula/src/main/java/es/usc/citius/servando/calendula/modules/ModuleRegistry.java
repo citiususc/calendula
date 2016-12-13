@@ -36,7 +36,7 @@ public class ModuleRegistry {
     public static final String TAG = "ModuleRegistry";
 
     public static List<CalendulaModule> getDefaultModules() {
-        return getModulesForConfig(ModuleConfig.STABLE);
+        return getModulesForConfig(ModuleConfig.PRODUCT);
     }
 
     public static List<CalendulaModule> getModulesForConfig(String configName) {
@@ -58,7 +58,7 @@ public class ModuleRegistry {
     }
 
     public enum ModuleConfig {
-        STABLE(ModuleLists.STABLE_MODULES), BETA(ModuleLists.BETA_MODULES);
+        PRODUCT(ModuleLists.STABLE_MODULES), DEVELOP(ModuleLists.UNSTABLE_MODULES);
 
         private Class<?>[] modList;
 
@@ -72,7 +72,7 @@ public class ModuleRegistry {
                 BaseModule.class // Base module is required. Do not remove!
         };
 
-        private static final Class<?>[] BETA_MODULES = new Class<?>[]{
+        private static final Class<?>[] UNSTABLE_MODULES = new Class<?>[]{
                 BaseModule.class,
                 AllergiesModule.class,
                 StockModule.class
