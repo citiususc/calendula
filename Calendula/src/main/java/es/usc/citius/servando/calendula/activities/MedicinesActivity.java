@@ -36,6 +36,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -92,6 +93,7 @@ import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.DrivingCautionAlert;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
@@ -354,6 +356,14 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                 Prescription p = (Prescription) parent.getItemAtPosition(position);
                 hideSearchView();
                 ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).setPrescription(p);
+            }
+        });
+
+        searchList.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                KeyboardUtils.hideKeyboard(MedicinesActivity.this);
+                return false;
             }
         });
 
