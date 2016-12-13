@@ -386,6 +386,10 @@
     <string name="unconfirm_past_intake_warning">Confirmaches esta toma %1$s, tomaches a medicación?</string>
     <string name="stock_depleted">Non queda stock</string>
     <string name="stock_depleted_msg">Non queda stock para este medicamento.</string>
+    <string name="dialog_continue_option">Continuar</string>
+    <string name="dialog_get_me_out">Sácame de aquí!</string>
+    <string name="important_info">Información importante</string>
+    <string name="message_allergies_experimental_warning">A xestión de alerxias é unha función experimental. Lembra ler os prospectos dos teus medicamentos para estar seguro da súa información de alerxias.</string>
 
 </resources>
 

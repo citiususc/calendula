@@ -46,6 +46,7 @@ import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.listeners.ClickEventHook;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -79,6 +80,7 @@ import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert.AllergyAlertInfo;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 
@@ -87,6 +89,8 @@ public class AllergiesActivity extends CalendulaActivity {
 
 
     private static final String TAG = "AllergiesActivity";
+
+    private static final String PREFERENCE_WARNING_SHOWN = "PREFERENCE_ALLERGY_WARNING_SHOWN";
 
     // main view
     @BindView(R.id.add_button)
@@ -104,7 +108,7 @@ public class AllergiesActivity extends CalendulaActivity {
     private FastItemAdapter allergiesAdapter;
     private AllergiesStore store;
 
-    public void askForDatabase() {
+    public void askForDatabaseIfNeeded() {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean validDB = prefs.getString("prescriptions_database", getString(R.string.database_none_id)).equals(getString(R.string.database_aemps_id));
@@ -179,8 +183,40 @@ public class AllergiesActivity extends CalendulaActivity {
         //load allergies, set placeholder if needed
         new LoadAllergiesTask().execute();
 
-        askForDatabase();
+        showWarningsIfNeeded();
+    }
 
+    private void showWarningsIfNeeded() {
+        final SharedPreferences prefs = PreferenceUtils.instance().preferences();
+        if (!prefs.getBoolean(PREFERENCE_WARNING_SHOWN, false)) {
+            new MaterialStyledDialog.Builder(this)
+                    .setStyle(Style.HEADER_WITH_ICON)
+                    .setIcon(IconUtils.icon(this, GoogleMaterial.Icon.gmd_alert_circle, R.color.white, 100))
+                    .setHeaderColor(R.color.android_orange_dark)
+                    .withDialogAnimation(true)
+                    .setTitle(R.string.important_info)
+                    .setDescription(R.string.message_allergies_experimental_warning)
+                    .setCancelable(false)
+                    .setPositiveText(getString(R.string.dialog_continue_option))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            prefs.edit().putBoolean(PREFERENCE_WARNING_SHOWN, true).apply();
+                            askForDatabaseIfNeeded();
+                        }
+                    })
+                    .setNegativeText(R.string.dialog_get_me_out)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.cancel();
+                            finish();
+                        }
+                    })
+                    .show();
+        } else {
+            askForDatabaseIfNeeded();
+        }
     }
 
     private boolean checkConflictsAndCreateAlerts(final AllergenVO allergen) {
