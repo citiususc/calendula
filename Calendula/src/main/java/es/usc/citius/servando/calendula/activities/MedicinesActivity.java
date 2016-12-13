@@ -73,6 +73,7 @@ import java.util.concurrent.Callable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
@@ -128,8 +129,6 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     ImageButton closeSearchButton;
     @BindView(R.id.back_button)
     ImageButton backButton;
-    @BindView(R.id.add_custom_med_btn)
-    Button addCustomMedBtn;
     @BindView(R.id.textView10)
     TextView emptyListText;
     @BindView(R.id.add_button)
@@ -138,6 +137,10 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     ListView searchList;
     @BindView(R.id.main_progress_bar)
     ProgressBar progressBar;
+    @BindView(R.id.add_custom_med_btn)
+    Button addCustomMedBtn;
+
+    Button addCustomMedFooter;
 
     ArrayAdapter<Prescription> adapter;
 
@@ -276,21 +279,16 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         TextView title = ((TextView) findViewById(R.id.textView2));
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        searchView = findViewById(R.id.search_view);
-        closeSearchButton = (ImageButton) findViewById(R.id.close_search_button);
-        backButton = (ImageButton) findViewById(R.id.back_button);
-        addCustomMedBtn = (Button) findViewById(R.id.add_custom_med_btn);
-        emptyListText = (TextView) findViewById(R.id.textView10);
-        addButton = (FloatingActionButton) findViewById(R.id.add_button);
-        searchEditText = (EditText) findViewById(R.id.search_edit_text);
-        searchList = (ListView) findViewById(R.id.search_list);
-        mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         adapter = new AutoCompleteAdapter(this, R.layout.med_drop_down_item);
         searchList.setAdapter(adapter);
         searchList.setEmptyView(findViewById(android.R.id.empty));
 
-        addCustomMedBtn.setCompoundDrawables(new IconicsDrawable(this)
+        View footerView = getLayoutInflater().inflate(R.layout.medicine_search_footer, null, false);
+        addCustomMedFooter = (Button) footerView.findViewById(R.id.add_custom_med_btn);
+        searchList.addFooterView(footerView);
+
+        addCustomMedFooter.setCompoundDrawables(new IconicsDrawable(this)
                 .icon(CommunityMaterial.Icon.cmd_plus)
                 .color(color)
                 .sizeDp(25).paddingDp(5), null, null, null);
@@ -308,11 +306,10 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             }
         });
 
-        addCustomMedBtn.setOnClickListener(new View.OnClickListener() {
+        addCustomMedFooter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                hideSearchView();
-                ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).setMedicineName(searchEditText.getText().toString().trim());
+                addCustomMed();
             }
         });
 
@@ -345,6 +342,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             public void afterTextChanged(Editable s) {
                 Log.d(TAG, "afterTextChanged: " + s.toString());
                 progressBar.setVisibility(View.VISIBLE);
+                addCustomMedFooter.setVisibility(View.GONE);
                 String filter = searchEditText.getText().toString();
                 adapter.getFilter().filter(filter);
             }
@@ -381,6 +379,12 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         } else {
             hideSearchView();
         }
+    }
+
+    @OnClick(R.id.add_custom_med_btn)
+    protected void addCustomMed() {
+        hideSearchView();
+        ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).setMedicineName(searchEditText.getText().toString().trim());
     }
 
     @Override
@@ -513,12 +517,15 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         Drawable icProspect;
         private List<Prescription> mData;
         final Filter filter = new Filter() {
+
+            private boolean exactMatch;
+
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null && constraint.length() >= minCharsToSearch && !TextUtils.isEmpty(constraint)) {
                     try {
-
+                        exactMatch = false;
                         final String search = constraint.toString().toLowerCase().trim();
                         final String preFilter = search.subSequence(0, minCharsToSearch).toString();
 
@@ -588,6 +595,27 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                             }
                         });
 
+                        if (!prescriptions.isEmpty()) {
+                            final Prescription first = prescriptions.get(0);
+                            if (metaInfo.get(first.getId()).first == 0) {
+                                // Check if any word in the first result with distance 0
+                                // is exactly the constraint.
+                                // We need to check this because even if distance is 0 the matching
+                                // may have been done with only part of a word.
+                                final String sn = current.shortName(first).trim().toLowerCase();
+                                if (sn.equals(search)) {
+                                    exactMatch = true;
+                                } else {
+                                    final String[] split = sn.split("\\s+");
+                                    for (String s : split) {
+                                        if (s.equals(search)) {
+                                            exactMatch = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
                         mData = prescriptions;//Fetcher.fetchNames(constraint.toString());
                         filterResults.values = mData;
@@ -618,9 +646,14 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                         addCustomMedBtn.setVisibility(View.VISIBLE);
                         emptyListText.setText(getString(R.string.medicine_search_not_found_msg));
                     } else {
+                        addCustomMedBtn.setVisibility(View.GONE);
                         emptyListText.setText(getString(R.string.medicine_search_empty_list_msg));
                     }
                 } else {
+                    if (!exactMatch) {
+                        addCustomMedFooter.setText(getString(R.string.add_custom_med_button_text, constraint));
+                        addCustomMedFooter.setVisibility(View.VISIBLE);
+                    }
                     addCustomMedBtn.setVisibility(View.GONE);
                 }
             }
