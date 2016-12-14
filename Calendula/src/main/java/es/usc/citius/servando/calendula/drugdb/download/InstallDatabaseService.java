@@ -13,10 +13,10 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.drugdb;
+package es.usc.citius.servando.calendula.drugdb.download;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -31,31 +31,35 @@ import android.util.Log;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.DBRegistry;
+import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous database setup tasks
  */
-public class SetupDBService extends IntentService {
+public class InstallDatabaseService extends IntentService {
 
-    public static final String TAG = "SetupDBService.class";
-    public static final String ACTION_COMPLETE = "es.usc.citius.servando.calendula.persistence.medDatabases.action.DONE";
-    private static final String ACTION_SETUP = "es.usc.citius.servando.calendula.persistence.medDatabases.action.SETUP";
-    private static final String EXTRA_DB_PATH = "es.usc.citius.servando.calendula.persistence.medDatabases.extra.DB_PATH";
-    private static final String EXTRA_DB_PREFERENCE_VALUE = "es.usc.citius.servando.calendula.persistence.medDatabases.extra.DB_PREFERENCE_VALUE";
-    public static int NOTIFICATION_ID = "SetupDBService".hashCode();
+    public static final String TAG = "InstallDatabaseService";
+    public static final String ACTION_COMPLETE = "calendula.persistence.medDatabases.action.DONE";
+    public static final String ACTION_ERROR = "calendula.persistence.medDatabases.action.ERROR";
+    private static final String ACTION_SETUP = "calendula.persistence.medDatabases.action.SETUP";
+    private static final String EXTRA_DB_PATH = "calendula.persistence.medDatabases.extra.DB_PATH";
+    private static final String EXTRA_DB_PREF_VALUE = "calendula.persistence.medDatabases.extra.DB_PREF_VALUE";
+    public static int NOTIFICATION_ID = "InstallDatabaseService".hashCode();
+    public static boolean isRunning = false;
     NotificationCompat.Builder mBuilder;
     NotificationManager mNotifyManager;
 
-    public SetupDBService() {
+    public InstallDatabaseService() {
         super("SetupDBService");
     }
 
     public static void startSetup(Context context, String dbPath, String dbPreferenceValue) {
         context = context.getApplicationContext();
-        Intent intent = new Intent(context, SetupDBService.class);
+        Intent intent = new Intent(context, InstallDatabaseService.class);
         intent.setAction(ACTION_SETUP);
         intent.putExtra(EXTRA_DB_PATH, dbPath);
-        intent.putExtra(EXTRA_DB_PREFERENCE_VALUE, dbPreferenceValue);
+        intent.putExtra(EXTRA_DB_PREF_VALUE, dbPreferenceValue);
         context.startService(intent);
     }
 
@@ -65,7 +69,7 @@ public class SetupDBService extends IntentService {
             final String action = intent.getAction();
             if (ACTION_SETUP.equals(action)) {
                 final String dbPath = intent.getStringExtra(EXTRA_DB_PATH);
-                final String dbPref = intent.getStringExtra(EXTRA_DB_PREFERENCE_VALUE);
+                final String dbPref = intent.getStringExtra(EXTRA_DB_PREF_VALUE);
                 handleSetup(dbPath, dbPref);
             }
         }
@@ -73,10 +77,11 @@ public class SetupDBService extends IntentService {
 
     private void handleSetup(final String dbPath, final String dbPref) {
         try {
+            isRunning = true;
             // get a reference to  the selected dbManager
             final PrescriptionDBMgr mgr = DBRegistry.instance().db(dbPref);
             // call mgr setup in order to let it insert prescriptions data
-            mgr.setup(SetupDBService.this, dbPath, new PrescriptionDBMgr.SetupProgressListener() {
+            mgr.setup(InstallDatabaseService.this, dbPath, new PrescriptionDBMgr.SetupProgressListener() {
                 @Override
                 public void onProgressUpdate(int progress) {
                     Log.d(TAG, "Setting up db " + progress + "%");
@@ -84,31 +89,24 @@ public class SetupDBService extends IntentService {
                 }
             });
 
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(SetupDBService.this);
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(InstallDatabaseService.this);
             SharedPreferences.Editor edit = settings.edit();
             edit.putString("last_valid_database", dbPref);
             edit.putString("prescriptions_database", dbPref);
             edit.apply();
-
+            Log.d(TAG, "Finish saving " + DB.drugDB().prescriptions().count() + " prescriptions!");
+            onComplete();
         } catch (Exception e) {
             Log.e(TAG, "Error while saving prescription data", e);
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(SetupDBService.this);
-            SharedPreferences.Editor edit = settings.edit();
-            edit.putString("last_valid_database", getString(R.string.database_none_id));
-            edit.putString("prescriptions_database", getString(R.string.database_none_id));
-            edit.apply();
+            DownloadDatabaseHelper.instance().onDownloadFailed(this);
+            onFailure();
         }
-
-        // clear all allocated spaces
-        Log.d(TAG, "Finish saving " + DB.drugDB().prescriptions().count() + " prescriptions!");
 
         try {
             DB.drugDB().prescriptions().executeRaw("VACUUM;");
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        onComplete();
     }
 
 
@@ -132,6 +130,7 @@ public class SetupDBService extends IntentService {
     }
 
     private void onComplete() {
+        isRunning = false;
         mBuilder.setContentTitle("Database setup complete");
         mBuilder.setContentText("Tap to add a new med");
         mBuilder.setProgress(100, 100, false);
@@ -141,7 +140,16 @@ public class SetupDBService extends IntentService {
         Intent bcIntent = new Intent();
         bcIntent.setAction(ACTION_COMPLETE);
         sendBroadcast(bcIntent);
+    }
 
+    private void onFailure() {
+        isRunning = false;
+        mBuilder.setContentTitle("Database setup failed");
+        mBuilder.setContentText("Something went wrong while setting up the drug database");
+        mBuilder.setProgress(100, 100, false);
+        mBuilder.setSmallIcon(R.drawable.ic_clear_search_holo_light);
+        mBuilder.setContentInfo("");
+        mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 
 }

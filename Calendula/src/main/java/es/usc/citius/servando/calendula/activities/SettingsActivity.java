@@ -60,8 +60,8 @@ import java.util.List;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
-import es.usc.citius.servando.calendula.drugdb.DownloadDatabaseDialogHelper;
-import es.usc.citius.servando.calendula.drugdb.SetupDBService;
+import es.usc.citius.servando.calendula.drugdb.download.DownloadDatabaseHelper;
+import es.usc.citius.servando.calendula.drugdb.download.InstallDatabaseService;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.modules.modules.StockModule;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
@@ -160,7 +160,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     static boolean onUpdatePrescriptionsDatabasePreference(final ListPreference preference, final String stringValue) {
         Log.d(TAG, "New value: " + stringValue);
         if (!settingUp && !stringValue.equals(lastValidDatabase) && !NONE.equalsIgnoreCase(stringValue) && !SETTING_UP.equals(stringValue)) {
-            DownloadDatabaseDialogHelper.showDownloadDatabaseDialog(ctx, stringValue, new DownloadDatabaseDialogHelper.DownloadDatabaseDialogCallback() {
+            DownloadDatabaseHelper.instance().showDownloadDialog(ctx, stringValue, new DownloadDatabaseHelper.DownloadDatabaseDialogCallback() {
                 @Override
                 public void onDownloadAcceptedOrCancelled(boolean accepted) {
                     SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -288,6 +288,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         settingUp = SETTING_UP.equals(settings.getString("prescriptions_database", null));
 
+        if (settingUp && !DownloadDatabaseHelper.instance().isDBDownloadingOrInstalling(this)) {
+            Log.d(TAG, "onCreate: " + "Something weird happened. It seems like InstallDatabaseService was killed while working!");
+            settings.edit().putString("prescriptions_database", NONE).apply();
+            settingUp = false;
+        }
+
         Log.d(TAG, "sa onCreate: prescriptions_database: " + settings.getString("prescriptions_database", null));
         Log.d(TAG, "sa onCreate: SETTING_UP: " + SETTING_UP);
         Log.d(TAG, "sa onCreate: setting_up: " + settingUp);
@@ -298,10 +304,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 p.setEnabled(true);
                 bindPreferenceSummaryToValue(p, false);
                 settingUp = false;
-
             }
         };
-        registerReceiver(onDBSetupComplete, new IntentFilter(SetupDBService.ACTION_COMPLETE));
+
+        IntentFilter downloadFinished = new IntentFilter();
+        downloadFinished.addAction(InstallDatabaseService.ACTION_COMPLETE);
+        downloadFinished.addAction(InstallDatabaseService.ACTION_ERROR);
+        registerReceiver(onDBSetupComplete, downloadFinished);
     }
 
     @Override

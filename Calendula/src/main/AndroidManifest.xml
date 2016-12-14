@@ -119,6 +119,11 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
             </intent-filter>
         </receiver>
+        <receiver android:name=".drugdb.download.DBDownloadReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
+            </intent-filter>
+        </receiver>
 
         <meta-data
             android:name="AEMPS_DB_VERSION"
@@ -178,7 +183,7 @@
         </service>
 
         <service
-            android:name=".drugdb.SetupDBService"
+            android:name=".drugdb.download.InstallDatabaseService"
             android:exported="false">
         </service>
 
