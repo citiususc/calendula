@@ -164,7 +164,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         View rootView = inflater.inflate(R.layout.fragment_create_or_edit_medicine, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
-        if (ModuleManager.getInstance().isEnabled(StockModule.ID)) {
+        if (ModuleManager.isEnabled(StockModule.ID)) {
             stockLayout.setVisibility(View.VISIBLE);
         }
 

@@ -162,7 +162,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
                         .withName(R.string.title_activity_schedules)
                         .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_calendar, R.color.black).alpha(110))
                         .withIdentifier(SCHEDULES));
-        if (ModuleManager.getInstance().isEnabled(AllergiesModule.ID)) {
+        if (ModuleManager.isEnabled(AllergiesModule.ID)) {
             b.addDrawerItems(new PrimaryDrawerItem()
                     .withName(R.string.home_menu_allergies)
                     .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_alert, R.color.black).alpha(110))

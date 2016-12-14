@@ -385,7 +385,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         getPreferenceScreen().addPreference(fakeHeader2);
         addPreferencesFromResource(R.xml.pref_notification);
 
-        if (ModuleManager.getInstance().isEnabled(StockModule.ID)) {
+        if (ModuleManager.isEnabled(StockModule.ID)) {
             PreferenceCategory fakeHeader3 = new PreferenceCategory(this);
             fakeHeader3.setTitle(R.string.pref_header_stock);
             getPreferenceScreen().addPreference(fakeHeader3);

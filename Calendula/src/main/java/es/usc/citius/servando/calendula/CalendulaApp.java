@@ -91,7 +91,7 @@ public class CalendulaApp extends Application {
     }
 
     public static boolean isPharmaModeEnabled() {
-        return ModuleManager.getInstance().isEnabled(PharmacyModule.ID);
+        return ModuleManager.isEnabled(PharmacyModule.ID);
     }
 
     public static void open(boolean isOpen) {

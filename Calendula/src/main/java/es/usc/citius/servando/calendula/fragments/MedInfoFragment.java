@@ -204,7 +204,7 @@ public class MedInfoFragment extends Fragment {
             });
         }
 
-        if (ModuleManager.getInstance().isEnabled(StockModule.ID)) {
+        if (ModuleManager.isEnabled(StockModule.ID)) {
             stockLayout.setVisibility(View.VISIBLE);
             if (m.stockManagementEnabled()) {
                 final Float s = m.stock();
