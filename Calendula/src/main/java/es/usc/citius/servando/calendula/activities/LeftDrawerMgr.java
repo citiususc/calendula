@@ -61,7 +61,7 @@ import es.usc.citius.servando.calendula.util.ScreenUtils;
 /**
  * Created by joseangel.pineiro on 10/28/15.
  */
-public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.OnDrawerItemLongClickListener, AccountHeader.OnAccountHeaderListener {
+public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountHeader.OnAccountHeaderListener {
 
     public static final int HOME = 0;
     public static final int ROUTINES = 1;
@@ -94,7 +94,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
 
     public void init(Bundle savedInstanceState) {
 
-        boolean isPharmaEnabled = CalendulaApp.isPharmaModeEnabled(home);
+        boolean isPharmaEnabled = CalendulaApp.isPharmaModeEnabled();
 
         ArrayList<IProfile> profiles = new ArrayList<>();
 
@@ -135,7 +135,6 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
                 .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
                 .withOnDrawerItemClickListener(this)
-                .withOnDrawerItemLongClickListener(this)
                 .withDelayOnDrawerClose(70)
                 .withStickyFooterShadow(true)
                 .withScrollToTopAfterClick(true)
@@ -254,16 +253,6 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, Drawer.O
         }
         drawer.closeDrawer();
         return true;
-    }
-
-    @Override
-    public boolean onItemLongClick(View view, int i, IDrawerItem iDrawerItem) {
-        int identifier = iDrawerItem.getIdentifier();
-        if (identifier == PHARMACIES) {
-            home.enableOrDisablePharmacyMode();
-            return true;
-        }
-        return false;
     }
 
     public void onPharmacyModeChanged(boolean enabled) {

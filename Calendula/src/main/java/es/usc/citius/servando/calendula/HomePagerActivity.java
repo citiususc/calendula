@@ -77,7 +77,6 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
-import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.medicine.StockUtils;
 
 public class HomePagerActivity extends CalendulaActivity implements
@@ -149,7 +148,7 @@ public class HomePagerActivity extends CalendulaActivity implements
             menu.findItem(R.id.action_expand).setVisible(false);
         }
 
-        if (pageNum == 2 && CalendulaApp.isPharmaModeEnabled(this)) {
+        if (pageNum == 2 && CalendulaApp.isPharmaModeEnabled()) {
             menu.findItem(R.id.action_calendar).setVisible(true);
         } else {
             menu.findItem(R.id.action_calendar).setVisible(false);
@@ -185,22 +184,6 @@ public class HomePagerActivity extends CalendulaActivity implements
                 launchActivity(new Intent(this, SchedulesHelpActivity.class));
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void enableOrDisablePharmacyMode() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        if (CalendulaApp.isPharmaModeEnabled(getApplicationContext())) {
-            prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, false).apply();
-            Snack.show("Acabas de deshabilitar el modo farmacia!", this);
-            fabMgr.onPharmacyModeChanged(false);
-            drawerMgr.onPharmacyModeChanged(false);
-        } else {
-            prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, true).apply();
-            Snack.show("Acabas de habilitar el modo farmacia!", this);
-            fabMgr.onPharmacyModeChanged(false);
-            drawerMgr.onPharmacyModeChanged(false);
-        }
     }
 
     public void launchActivityDelayed(final Class<?> activityClazz, int delay) {

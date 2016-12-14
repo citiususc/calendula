@@ -424,7 +424,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             }
         });
 
-        if (!CalendulaApp.isPharmaModeEnabled(this)) {
+        if (!CalendulaApp.isPharmaModeEnabled()) {
             Preference alarmPk = findPreference("alarm_pickup_notifications");
             PreferenceScreen preferenceScreen = getPreferenceScreen();
             preferenceScreen.removePreference(alarmPk);

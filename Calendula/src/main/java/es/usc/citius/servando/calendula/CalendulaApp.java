@@ -36,6 +36,7 @@ import java.util.Locale;
 import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
+import es.usc.citius.servando.calendula.modules.modules.PharmacyModule;
 import es.usc.citius.servando.calendula.util.Settings;
 
 /**
@@ -43,7 +44,6 @@ import es.usc.citius.servando.calendula.util.Settings;
  */
 public class CalendulaApp extends Application {
 
-    public static final String PHARMACY_MODE_ENABLED = "PHARMACY_MODE_ENABLED";
     // PREFERENCES
     public static final String PREFERENCES_NAME = "CalendulaPreferences";
     public static final String PREF_ALARM_SETTLED = "alarm_settled";
@@ -90,9 +90,8 @@ public class CalendulaApp extends Application {
         return isOpen;
     }
 
-    public static boolean isPharmaModeEnabled(Context ctx) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return prefs.getBoolean(PHARMACY_MODE_ENABLED, false);
+    public static boolean isPharmaModeEnabled() {
+        return ModuleManager.getInstance().isEnabled(PharmacyModule.ID);
     }
 
     public static void open(boolean isOpen) {
