@@ -20,6 +20,7 @@ package es.usc.citius.servando.calendula.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -161,6 +162,9 @@ public class AllergiesSearchActivity extends CalendulaActivity {
         int color = DB.patients().getActive(this).color();
         searchLayout.setBackgroundColor(color);
         setupStatusBar(color);
+
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE,
+                android.graphics.PorterDuff.Mode.MULTIPLY);
 
         //retrieve allergy groups
         groups = DB.allergyGroups().findAllOrderByPrecedence();

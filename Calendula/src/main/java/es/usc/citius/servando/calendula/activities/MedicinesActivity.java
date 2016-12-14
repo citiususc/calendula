@@ -271,7 +271,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         color = DB.patients().getActive(this).color();
         setupToolbar(null, color);
         setupStatusBar(color);
-        progressBar.getIndeterminateDrawable().setColorFilter(color,
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE,
                 android.graphics.PorterDuff.Mode.MULTIPLY);
 
         dbMgr = DBRegistry.instance().current();
