@@ -442,6 +442,15 @@
     <string name="dialog_get_me_out">Get me out of here!</string>
     <string name="dialog_continue_option">Continue</string>
     <string name="important_info">Important information</string>
-
+    <string name="download_db_dialog_title">Setup med database</string>
+    <string name="download_db_dialog_message">The database will be downloaded and configured. This may take a few seconds, but you can continue using the application in the meantime.</string>
+    <string name="download_db_unexpected_error">Error downloading database :(</string>
+    <string name="install_db_notification_title">Setting up database</string>
+    <string name="install_db_notification_ticker">Setting up database</string>
+    <string name="install_db_notification_oncomplete">Database setup complete</string>
+    <string name="install_db_notification_oncomplete_text">Tap to add a new med</string>
+    <string name="install_db_notification_content">Setup in progress</string>
+    <string name="install_db_notification_onfailure">Database setup failed</string>
+    <string name="install_db_notification_onfailure_content">Something went wrong while setting up the drug database</string>
 </resources>
 

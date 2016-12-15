@@ -420,7 +420,8 @@
     <string name="label_info_short">Info</string>
     <string name="medicine_save_error_message">Se produjo un error al guardar tu medicamento.</string>
     <string name="message_schedule_medicine_allergy">Este medicamento no puede ser pautado porque eres alérgico a alguno de sus componentes.</string>
-    <string name="pref_available_databases_title">Base de datos de medicamentos</string>
+    <string name="pref_available_databases_title">Base de datos seleccionada</string>
+    <string name="pref_enable_databases_title">Habilitar base de datos</string>
     <string name="pref_header_stock">Control de stock</string>
     <string name="pref_stock_alert_title">Avisar cuando mis medicamentos se agoten</string>
     <string name="title_alert_allergy">Hay conflictos de alergias para este medicamento</string>
@@ -430,5 +431,14 @@
     <string name="dialog_get_me_out">¡Sácame de aquí!</string>
     <string name="important_info">Información importante</string>
     <string name="message_allergies_experimental_warning">La gestión de alergias es una función experimental. Recuerda leer los prospectos de tus medicamentos para estar seguro de la información de alergias.</string>
-
+    <string name="download_db_dialog_title">Instalar base de datos</string>
+    <string name="download_db_dialog_message">Vamos a descargar e instalar la base de datos. Esto puede llevar algunos segundos, pero podrás seguir usando la aplicación mientras tanto.</string>
+    <string name="download_db_unexpected_error">Ha ocurrido un error durante la descarga :(</string>
+    <string name="install_db_notification_title">Instalando base de datos</string>
+    <string name="install_db_notification_ticker">Instalando base de datos</string>
+    <string name="install_db_notification_oncomplete">Instalación completada</string>
+    <string name="install_db_notification_oncomplete_text">Pulsa para buscar un medicamento</string>
+    <string name="install_db_notification_content">Instalación en curso</string>
+    <string name="install_db_notification_onfailure">La instalación ha fallado</string>
+    <string name="install_db_notification_onfailure_content">Algo ha ido mal durante la instalación de la base de datos</string>
 </resources>

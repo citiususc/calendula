@@ -66,13 +66,12 @@ public class DownloadDatabaseHelper {
         Log.d(TAG, "ShowDownloadDatabase");
         final Context appContext = dialogCtx.getApplicationContext();
         AlertDialog.Builder builder = new AlertDialog.Builder(dialogCtx);
-        builder.setTitle("Setup med database");
+        builder.setTitle(R.string.download_db_dialog_title);
         builder.setCancelable(false);
-        builder.setMessage("The database will be downloaded and configured. This may take a few seconds, but you can continue using the application in the meantime.")
+        builder.setMessage(R.string.download_db_dialog_message)
                 .setCancelable(false)
                 .setPositiveButton("Download and setup", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(dialogCtx, "Downloading medicines info...", Toast.LENGTH_SHORT).show();
                         if (callback != null) {
                             callback.onDownloadAcceptedOrCancelled(true);
                         }
@@ -93,7 +92,7 @@ public class DownloadDatabaseHelper {
 
     public void onDownloadFailed(Context context) {
         InstallDatabaseService.isRunning = false;
-        Toast.makeText(context, "Error downloading database :(", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.download_db_unexpected_error, Toast.LENGTH_LONG).show();
         SharedPreferences settings = PreferenceUtils.instance().preferences();
         SharedPreferences.Editor edit = settings.edit();
         edit.putString("last_valid_database", context.getString(R.string.database_none_id));

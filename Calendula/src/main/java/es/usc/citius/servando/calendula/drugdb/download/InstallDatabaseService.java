@@ -119,11 +119,11 @@ public class InstallDatabaseService extends IntentService {
         mBuilder = new NotificationCompat.Builder(this)
                 .setTicker("")
                 .setSmallIcon(android.R.drawable.stat_sys_download) //stat_notify_sync
-                .setTicker("Setting up database")
+                .setTicker(getString(R.string.install_db_notification_ticker))
                 .setAutoCancel(false)
                 .setContentIntent(pIntent)
-                .setContentTitle("Setting up database")
-                .setContentText("Setup in progress")
+                .setContentTitle(getString(R.string.install_db_notification_title))
+                .setContentText(getString(R.string.install_db_notification_content))
                 .setProgress(max, prog, false);
 
         mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
@@ -131,11 +131,13 @@ public class InstallDatabaseService extends IntentService {
 
     private void onComplete() {
         isRunning = false;
-        mBuilder.setContentTitle("Database setup complete");
-        mBuilder.setContentText("Tap to add a new med");
+        mBuilder.setContentTitle(getString(R.string.install_db_notification_oncomplete));
+        mBuilder.setContentText(getString(R.string.install_db_notification_oncomplete_text));
+        mBuilder.setAutoCancel(true);
         mBuilder.setProgress(100, 100, false);
         mBuilder.setSmallIcon(R.drawable.ic_done_white_36dp);
         mBuilder.setContentInfo("");
+
         mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
         Intent bcIntent = new Intent();
         bcIntent.setAction(ACTION_COMPLETE);
@@ -144,8 +146,9 @@ public class InstallDatabaseService extends IntentService {
 
     private void onFailure() {
         isRunning = false;
-        mBuilder.setContentTitle("Database setup failed");
-        mBuilder.setContentText("Something went wrong while setting up the drug database");
+        mBuilder.setContentTitle(getString(R.string.install_db_notification_onfailure));
+        mBuilder.setContentText(getString(R.string.install_db_notification_onfailure_content));
+        mBuilder.setAutoCancel(true);
         mBuilder.setProgress(100, 100, false);
         mBuilder.setSmallIcon(R.drawable.ic_clear_search_holo_light);
         mBuilder.setContentInfo("");

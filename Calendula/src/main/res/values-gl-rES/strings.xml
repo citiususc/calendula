@@ -371,7 +371,8 @@
     <string name="notification_error_title">Ups…</string>
     <string name="pickup_date_format">dd/MM</string>
     <string name="pickup_interval">Ata o %1$s</string>
-    <string name="pref_available_databases_title">Base de datos de medicamentos</string>
+    <string name="pref_available_databases_title">Base de datos seleccionada</string>
+    <string name="pref_enable_databases_title">Habilitar base de datos</string>
     <string name="pref_header_stock">Control de stock</string>
     <string name="pref_stock_alert_title">Avisar cando os meus medicamentos se agoten</string>
     <string name="pref_title_pickup_notification">Notificacións de recollida de medicamentos</string>
@@ -390,6 +391,15 @@
     <string name="dialog_get_me_out">Sácame de aquí!</string>
     <string name="important_info">Información importante</string>
     <string name="message_allergies_experimental_warning">A xestión de alerxias é unha función experimental. Lembra ler os prospectos dos teus medicamentos para estar seguro da súa información de alerxias.</string>
-
+    <string name="download_db_dialog_title">Instalar base de datos</string>
+    <string name="download_db_dialog_message">Vaise descargar e instalar a base de datos. Isto pode levar un anaco, pero poderás seguir usando a aplicación mentras tanto.</string>
+    <string name="download_db_unexpected_error">Ocorreu un erro descargando a base de datos :(</string>
+    <string name="install_db_notification_title">Instalando base de datos</string>
+    <string name="install_db_notification_ticker">Instalando base de datos</string>
+    <string name="install_db_notification_oncomplete">Instalación completada</string>
+    <string name="install_db_notification_oncomplete_text">Pulsa para buscar un medicamento</string>
+    <string name="install_db_notification_content">Instalación en curso</string>
+    <string name="install_db_notification_onfailure">Fallou a instalación</string>
+    <string name="install_db_notification_onfailure_content">Algo foi mal durante a instalación da base de datos</string>
 </resources>
 
