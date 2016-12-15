@@ -90,6 +90,7 @@
     <string name="title_activity_patient_detail" translatable="false">PatientDetailActivity</string>
     <string name="title_activity_about" translatable="false">AboutActivity</string>
     <string name="title_activity_webview" translatable="false">WebViewActivity</string>
+    <string name="title_activity_allergies_search" translatable="false">AllergiesSearchActivity</string>
 
 
     <string-array name="pref_alarm_repeat_titles">
