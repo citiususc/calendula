@@ -100,8 +100,12 @@ android {
         }
     }
     productFlavors {
-        develop {}
-        product {}
+        develop {
+            applicationId "es.usc.citius.servando.calenduladev"
+        }
+        product {
+            applicationId "es.usc.citius.servando.calendula"
+        }
     }
 
     applicationVariants.all { variant ->
