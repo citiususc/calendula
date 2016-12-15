@@ -36,15 +36,14 @@ import java.util.Locale;
 import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
+import es.usc.citius.servando.calendula.modules.modules.PharmacyModule;
 import es.usc.citius.servando.calendula.util.Settings;
-import es.usc.citius.servando.calendula.util.SettingsKeys;
 
 /**
  * Created by castrelo on 4/10/14.
  */
 public class CalendulaApp extends Application {
 
-    public static final String PHARMACY_MODE_ENABLED = "PHARMACY_MODE_ENABLED";
     // PREFERENCES
     public static final String PREFERENCES_NAME = "CalendulaPreferences";
     public static final String PREF_ALARM_SETTLED = "alarm_settled";
@@ -91,9 +90,8 @@ public class CalendulaApp extends Application {
         return isOpen;
     }
 
-    public static boolean isPharmaModeEnabled(Context ctx) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return prefs.getBoolean(PHARMACY_MODE_ENABLED, false);
+    public static boolean isPharmaModeEnabled() {
+        return ModuleManager.isEnabled(PharmacyModule.ID);
     }
 
     public static void open(boolean isOpen) {
@@ -141,11 +139,9 @@ public class CalendulaApp extends Application {
         }
 
         try {
-            final String config = Settings.instance().get(SettingsKeys.MODULE_CONFIG);
-            if (config != null)
-                ModuleManager.getInstance().runModules(config, applicationContext);
-            else
-                ModuleManager.getInstance().runDefaultModules(applicationContext);
+            Log.d(TAG, "Application flavor is \"" + BuildConfig.FLAVOR + "\"");
+            final String flavor = BuildConfig.FLAVOR.toUpperCase();
+            ModuleManager.getInstance().runModules(flavor, applicationContext);
         } catch (IllegalArgumentException | IllegalStateException e) {
             Log.e(TAG, "onCreate: Error loading module configuration", e);
             Log.w(TAG, "onCreate: Loading default module configuration instead");

@@ -223,7 +223,7 @@ public class MedicinesListFragment extends Fragment {
         View overlay = item.findViewById(R.id.medicines_list_item_container);
         overlay.setTag(medicine);
 
-        if (ModuleManager.getInstance().isEnabled(StockModule.ID)) {
+        if (ModuleManager.isEnabled(StockModule.ID)) {
             String nextPickup = medicine.nextPickup();
             TextView stockInfo = (TextView) item.findViewById(R.id.stock_info);
             stockInfo.setVisibility(View.VISIBLE);

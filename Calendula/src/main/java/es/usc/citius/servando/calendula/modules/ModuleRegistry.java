@@ -20,11 +20,14 @@ package es.usc.citius.servando.calendula.modules;
 
 import android.util.Log;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.modules.modules.AllergiesModule;
 import es.usc.citius.servando.calendula.modules.modules.BaseModule;
+import es.usc.citius.servando.calendula.modules.modules.PharmacyModule;
 import es.usc.citius.servando.calendula.modules.modules.StockModule;
 
 /**
@@ -36,7 +39,7 @@ public class ModuleRegistry {
     public static final String TAG = "ModuleRegistry";
 
     public static List<CalendulaModule> getDefaultModules() {
-        return getModulesForConfig(ModuleConfig.STABLE);
+        return getModulesForConfig(ModuleConfig.PRODUCT);
     }
 
     public static List<CalendulaModule> getModulesForConfig(String configName) {
@@ -58,7 +61,7 @@ public class ModuleRegistry {
     }
 
     public enum ModuleConfig {
-        STABLE(ModuleLists.STABLE_MODULES), BETA(ModuleLists.BETA_MODULES);
+        PRODUCT(ModuleLists.STABLE_MODULES), DEVELOP(ModuleLists.UNSTABLE_MODULES);
 
         private Class<?>[] modList;
 
@@ -72,10 +75,10 @@ public class ModuleRegistry {
                 BaseModule.class // Base module is required. Do not remove!
         };
 
-        private static final Class<?>[] BETA_MODULES = new Class<?>[]{
-                BaseModule.class,
+        private static final Class<?>[] UNSTABLE_MODULES = ArrayUtils.addAll(
+                STABLE_MODULES,
+                PharmacyModule.class,
                 AllergiesModule.class,
-                StockModule.class
-        };
+                StockModule.class);
     }
 }

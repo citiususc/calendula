@@ -55,6 +55,9 @@ public class ModuleManager {
         return theInstance;
     }
 
+    public static boolean isEnabled(String moduleID) {
+        return getInstance().isModuleEnabled(moduleID);
+    }
 
     public void run(CalendulaModule module, Context ctx) {
         try {
@@ -92,8 +95,7 @@ public class ModuleManager {
         run(modules, ctx);
     }
 
-    public boolean isEnabled(String moduleID) {
+    public boolean isModuleEnabled(String moduleID) {
         return modules.keySet().contains(moduleID);
     }
-
 }

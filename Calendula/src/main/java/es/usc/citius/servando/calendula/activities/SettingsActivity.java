@@ -404,7 +404,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         getPreferenceScreen().addPreference(fakeHeader2);
         addPreferencesFromResource(R.xml.pref_notification);
 
-        if (ModuleManager.getInstance().isEnabled(StockModule.ID)) {
+        if (ModuleManager.isEnabled(StockModule.ID)) {
             PreferenceCategory fakeHeader3 = new PreferenceCategory(this);
             fakeHeader3.setTitle(R.string.pref_header_stock);
             getPreferenceScreen().addPreference(fakeHeader3);
@@ -441,7 +441,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         });
 
 
-        if (!CalendulaApp.isPharmaModeEnabled(this)) {
+        if (!CalendulaApp.isPharmaModeEnabled()) {
             Preference alarmPk = findPreference("alarm_pickup_notifications");
             PreferenceScreen preferenceScreen = getPreferenceScreen();
             preferenceScreen.removePreference(alarmPk);

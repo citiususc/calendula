@@ -221,7 +221,7 @@ public class FabMenuMgr implements View.OnClickListener {
         actions.add(actionB);
         actions.add(actionC);
         scanQrAction = (FloatingActionButton) fabMenu.findViewById(R.id.action_d);
-        if (CalendulaApp.isPharmaModeEnabled(activity)) {
+        if (CalendulaApp.isPharmaModeEnabled()) {
             scanQrAction.setVisibility(View.VISIBLE);
             actions.add(scanQrAction);
         } else {
