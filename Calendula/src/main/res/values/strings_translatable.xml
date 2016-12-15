@@ -297,7 +297,6 @@ Add your schedules here and let we just notify you!"</string>
     <string name="no_alerts_detected">"No alerts detected for this medicine"</string>
     <string name="stock_depleted">"Stock is depleted"</string>
     <string name="stock_depleted_msg">"There is no stock remaining for this medicine."</string>
-    <string name="title_activity_allergies_search">"AllergiesSearchActivity"</string>
     <string name="message_allergies_experimental_warning">"Allergy management is an experimental feature. Remember to read the leaflets of your medicines to be sure of their allergy information."</string>
     <string name="dialog_get_me_out">"Get me out of here!"</string>
     <string name="dialog_continue_option">"Continue"</string>
