@@ -35,12 +35,8 @@
     <string name="title_select_dose_dialog">"Introduce a dose"</string>
     <string name="doses_and_times">"Times and doses"</string>
     <string name="schedule_repeat_days">"Repeat"</string>
-
-    <!-- Schedule creation -->
     <string name="summary_title">"Check and confirm"</string>
     <string name="summary">"Summary"</string>
-
-    <!-- Med presentations -->
     <string name="injections">"Injections"</string>
     <string name="pills">"Pills"</string>
     <string name="capsules">"Capsules"</string>
@@ -53,8 +49,6 @@
     <string name="unknown">"Unknown"</string>
     <string name="effervescent">"Effervescent"</string>
     <string name="schedule">"Schedule"</string>
-
-    <!-- Med presentation units -->
     <string name="injections_units">"injection"</string>
     <string name="pills_units">"pill"</string>
     <string name="capsules_units">"capsule"</string>
@@ -66,8 +60,6 @@
     <string name="patches_units">"patch"</string>
     <string name="unknown_units">"unit"</string>
     <string name="effervescent_units">"sachet"</string>
-
-    <!-- Med schedules -->
     <string name="never">"Never"</string>
     <string name="every_day">"Every day"</string>
     <string name="once_a_day">"Once a day"</string>
@@ -76,8 +68,6 @@
     <string name="four_times_a_day">"Four times a day"</string>
     <string name="times_a_day">"times a day"</string>
     <string name="and">"and"</string>
-
-    <!-- Default routines -->
     <string name="routine_breakfast">"Breakfast"</string>
     <string name="routine_lunch">"Lunch"</string>
     <string name="routine_dinner">"Dinner"</string>
@@ -85,8 +75,6 @@
     <string name="schedule_timetable_dose_column">"DOSE"</string>
     <string name="take">"Take"</string>
     <string name="first_intake">"First intake at"</string>
-
-    <!-- Day Names -->
     <string name="day_monday_short">"Mon"</string>
     <string name="day_tuesday_short">"Tue"</string>
     <string name="day_wednesday_short">"Wed"</string>
@@ -94,8 +82,6 @@
     <string name="day_friday_short">"Fri"</string>
     <string name="day_saturday_short">"Sat"</string>
     <string name="day_sunday_short">"Sun"</string>
-
-    <!-- Day Names -->
     <string name="schedule_day_selector_mo">"MO"</string>
     <string name="schedule_day_selector_tu">"TU"</string>
     <string name="schedule_day_selector_we">"WE"</string>
@@ -128,16 +114,12 @@
     <string name="medicine_no_name_error_message">"Please, type a name"</string>
     <string name="medicine_unselected">"Not selected yet"</string>
     <string name="medicine_no_presentation_error_message">"Please, select a presentation"</string>
-
-    <!-- App Tutorial -->
     <string name="tutorial_understood">"Got it"</string>
     <string name="notification_repeat_message">"Alarm will be repeated at %1$s"</string>
     <string name="notification_cancel_now">"Cancel now"</string>
     <string name="notification_delay">"Delay"</string>
     <string name="alarm_delayed_message">"Alarm delayed %1$s minutes"</string>
     <string name="moods_dialog_title">"How are you feeling?"</string>
-
-    <!-- Moods -->
     <string name="mood_very_bad">"Feeling very bad"</string>
     <string name="mood_bad">"Feeling bad"</string>
     <string name="mood_neutral">"Feeling nothing"</string>
@@ -165,8 +147,6 @@ Please carefully read the leaflet or ask your pharmacist before you get behind t
     <string name="schedule_limits_date_format">"MMMM dd, YYYY"</string>
     <string name="schedules_stop_after">"Stop after %1$s intakes"</string>
     <string name="schedule_repeat_period">"Period + rest"</string>
-
-    <!-- Schedule repeat strings -->
     <string name="schedule_repeat_type_everyday">"Every day"</string>
     <string name="schedule_repeat_type_some_week_days">"Some week days"</string>
     <string name="schedule_repeat_type_interval">"Interval"</string>
@@ -189,7 +169,7 @@ Please carefully read the leaflet or ask your pharmacist before you get behind t
     <string name="schedule_help_hourly">"Please state the repeat period, dosage, and time of the first intake"</string>
     <string name="schedule_help_repeat">"State the schedule repetition. If it repeats every day, you do not have to do anything."</string>
     <string name="schedule_help_timesbyday">"Please state the number of times per day that the schedule repeats"</string>
-    <string name="schedule_help_timetable">" Now, link each intake to your routines and state the dosage for each of them"</string>
+    <string name="schedule_help_timetable">"Now, link each intake to your routines and state the dosage for each of them"</string>
     <string name="title_activity_calendar">"Pickups calendar"</string>
     <string name="title_pickups_bottom_sheet">"Pickups on %1$s"</string>
     <string name="pickup_interval">"Until %1$s"</string>
@@ -202,20 +182,10 @@ Please carefully read the leaflet or ask your pharmacist before you get behind t
     <string name="all_meds_taken">"All meds taken!"</string>
     <string name="create_schedule_select_med_before_dose">"Please, select a med first"</string>
     <string name="title_activity_patients">"Patients"</string>
-<string name="schedule_type_help_title">"
-      You are about to create a schedule, choose the one that best suits your needs!
-  "</string>
-<string name="schedule_type_routines_help">"
-      This kind of schedule lets you bind intakes to your routines, such as: \"Every day at breakfast and dinner, excluding sundays\", or \"Every 3 days, with lunch.\"
-  "</string>
-<string name="schedule_type_hourly_help">"
-      Hourly schedules are intended to those intakes that repeat by a certain period, such as: \"Every 8 hours\".
-
-Set the time of the first intake and go on.
-  "</string>
-<string name="schedule_type_intervalrest_help">"
-      Birth control pills and other meds are taken for a while, and then there's a rest. This kind of schedule allows you to specify both periods and simplify those intakes.
-  "</string>
+    <string name="schedule_type_help_title">"You are about to create a schedule, choose the one that best suits your needs!"</string>
+    <string name="schedule_type_routines_help">"This kind of schedule lets you bind intakes to your routines, such as: \"Every day at breakfast and dinner, excluding sundays\", or \"Every 3 days, with lunch.\""</string>
+    <string name="schedule_type_hourly_help">"Hourly schedules are intended to those intakes that repeat by a certain period, such as: \"Every 8 hours\". Set the time of the first intake and go on."</string>
+    <string name="schedule_type_intervalrest_help">"Birth control pills and other meds are taken for a while, and then there's a rest. This kind of schedule allows you to specify both periods and simplify those intakes."</string>
 <string name="routines_list_empty_text">"There are no routines yet.
 
 Routines are times when you need to take meds, like breakfast or dinner. You can reuse it for creating schedules faster."</string>
@@ -224,7 +194,7 @@ Routines are times when you need to take meds, like breakfast or dinner. You can
 Add your meds to the kit, and you will have easy access to leaflets and warnings."</string>
 <string name="schedules_list_empty_text">"There are no schedules yet.
 
-Add your schedules here and let we just notify you! "</string>
+Add your schedules here and let we just notify you!"</string>
 <string name="about_description"><![CDATA[<br/><br/>Calendula is developed by the Research Centre for Information Technologies
                          of the USC (<a href=\'http://citius.usc.es\'>CITIUS</a>)
                           <br/><br/>Visit our web site for more info:
@@ -343,61 +313,29 @@ Add your schedules here and let we just notify you! "</string>
     <string name="install_db_notification_onfailure">"Database setup failed"</string>
     <string name="install_db_notification_onfailure_content">"Something went wrong while setting up the drug database"</string>
     <string name="intro_title">"Welcome to Calendula!"</string>
-    <string name="delays_one_min">1 min</string>
-    <string name="delays_fifteen_min">15 min</string>
-    <string name="delays_thirty_min">30 min</string>
-    <string name="delays_sixty_min">60 min</string>
-
 <string name="intro_description">"Taking your medication properly is not easy, but now at least it won't be so difficult!
-
-
-
+   
 Please, take a look at what we have for you!"</string>
     <string name="intro_routines_title">"Routines"</string>
-<string name="intro_routines_text">"
-      A routine is a time of the day at which you usually need to take some meds.
+<string name="intro_routines_text">"A routine is a time of the day at which you usually need to take some meds.
 
-Do you
-      take multiple medications at breakfast or lunch? Create a routine for that time,
-      and Calendula will group all your intakes in a single notification.
-  "</string>
+Do you take multiple medications at breakfast or lunch? Create a routine for that time, and Calendula will group all your intakes in a single notification."</string>
     <string name="intro_meds_title">"Medication kit"</string>
-<string name="intro_meds_text">"
-      Keep all your drugs under control using the medication kit, and get easy access to package
-      leaflets in the Spanish Agency for Medicines and Health Products.
-  "</string>
+    <string name="intro_meds_text">"Keep all your drugs under control using the medication kit, and get easy access to package leaflets from official medicine databases."</string>
     <string name="intro_schedules_title">"Schedules"</string>
-<string name="intro_schedules_text">"
-      Create your medication agenda by using the schedules editor. You
-      can link your intakes to your routines, define hourly or daily repetitions and much more!
-  "</string>
+    <string name="intro_schedules_text">"Create your medication agenda by using the schedules editor. You can link your intakes to your routines, define hourly or daily repetitions and much more!"</string>
     <string name="intro_reminders_title">"Reminders"</string>
-<string name="intro_reminders_text">"
-      Calendula will remind you about all your intakes. Remember to confirm, or we will notify you again!
-      
+<string name="intro_reminders_text">"Calendula will remind you about all your intakes. Remember to confirm, or we will notify you again!
 
-Customize alarms in the settings menu.
-  "</string>
+Customize alarms in the settings menu."</string>
     <string name="intro_multipat_title">"Multiple patients!"</string>
-<string name="intro_multipat_text">"
-      Calendula allows you to manage the medication of several patients, with their own medication kit, routines and schedules.
-      
+<string name="intro_multipat_text">"Calendula allows you to manage the medication of several patients, with their own medication kit, routines and schedules.
 
-You will see all their intakes in the home screen.
-  "</string>
-
-    <!-- Strings related to Settings -->
+You will see all their intakes in the home screen."</string>
     <string name="title_activity_settings">"Settings"</string>
-
-    <!-- Strings related to Settings
-     Example General settings -->
     <string name="pref_header_general">"General"</string>
     <string name="pref_title_display_name">"Display name"</string>
-
-    <!-- Day Names -->
     <string name="pref_default_display_name">"Calendula"</string>
-
-    <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">"Notifications"</string>
     <string name="pref_title_new_alarm_notification">"Medicine intake alarms"</string>
     <string name="pref_title_pickup_notification">"Medicine pickup notifications"</string>
@@ -425,5 +363,10 @@ You will see all their intakes in the home screen.
     <string name="database_aemps_display">"AEMPS Database"</string>
     <string name="database_aemps_desc">"Agencia Española de Medicamentos y Productos Sanitarios database"</string>
     <string name="database_setting_up">"Setting up…"</string>
-
+    <string name="schedule_type_from_qr">"From QR"</string>
+    <string name="calendar_date_tomorrow">"tomorrow"</string>
+    <string name="delays_one_min">"1 min"</string>
+    <string name="delays_thirty_min">"30 min"</string>
+    <string name="delays_fifteen_min">"15 min"</string>
+    <string name="delays_sixty_min">"60 min"</string>
 </resources>

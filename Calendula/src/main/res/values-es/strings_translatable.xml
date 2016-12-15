@@ -35,12 +35,8 @@
     <string name="title_select_dose_dialog">"Introduce una dosis"</string>
     <string name="doses_and_times">"Horarios y dosis"</string>
     <string name="schedule_repeat_days">"Repetir"</string>
-
-    <!-- Schedule creation -->
     <string name="summary_title">"Revisa y confirma"</string>
     <string name="summary">"Resumen"</string>
-
-    <!-- Med presentations -->
     <string name="injections">"Inyecciones"</string>
     <string name="pills">"Pastillas"</string>
     <string name="capsules">"Cápsulas"</string>
@@ -53,8 +49,6 @@
     <string name="unknown">"Desconocido"</string>
     <string name="effervescent">"Efervescente"</string>
     <string name="schedule">"Pauta"</string>
-
-    <!-- Med presentation units -->
     <string name="injections_units">"inyección"</string>
     <string name="pills_units">"pastilla"</string>
     <string name="capsules_units">"cápsula"</string>
@@ -66,8 +60,6 @@
     <string name="patches_units">"parche"</string>
     <string name="unknown_units">"unidad"</string>
     <string name="effervescent_units">"sobre"</string>
-
-    <!-- Med schedules -->
     <string name="never">"Nunca"</string>
     <string name="every_day">"Todos los días"</string>
     <string name="once_a_day">"Una vez al día"</string>
@@ -76,8 +68,6 @@
     <string name="four_times_a_day">"Cuatro veces al día"</string>
     <string name="times_a_day">"veces al día"</string>
     <string name="and">"y"</string>
-
-    <!-- Default routines -->
     <string name="routine_breakfast">"Desayuno"</string>
     <string name="routine_lunch">"Comida"</string>
     <string name="routine_dinner">"Cena"</string>
@@ -85,8 +75,6 @@
     <string name="schedule_timetable_dose_column">"DOSIS"</string>
     <string name="take">"Tomar"</string>
     <string name="first_intake">"Primera toma a las "</string>
-
-    <!-- Day Names -->
     <string name="schedule_day_selector_mo">"LU"</string>
     <string name="schedule_day_selector_tu">"MA"</string>
     <string name="schedule_day_selector_we">"MI"</string>
@@ -118,8 +106,6 @@
     <string name="medicine_no_name_error_message">"Indica un nombre, por favor"</string>
     <string name="medicine_unselected">"Aún sin seleccionar"</string>
     <string name="medicine_no_presentation_error_message">"Selecciona una presentación, por favor"</string>
-
-    <!-- App Tutorial -->
     <string name="tutorial_understood">"Entendido"</string>
     <string name="notification_repeat_message">"La alarma se repetirá a las %1$s"</string>
     <string name="notification_cancel_now">"Cancelar ahora"</string>
@@ -176,20 +162,12 @@ Por favor, lee detenidamente las instrucciones de uso o consulta a tu farmacéut
     <string name="all_meds_taken">"¡Has tomado todas tus medicinas!"</string>
     <string name="create_schedule_select_med_before_dose">"Por favor, selecciona un medicamento primero"</string>
     <string name="title_activity_patients">"Pacientes"</string>
-<string name="schedule_type_help_title">"
-        Estás a punto de crear una pauta, ¡selecciona la que mejor se ajuste a tus necesidades!
-    "</string>
-<string name="schedule_type_routines_help">"
-        Este tipo de pauta te permite vincular tus tomas con rutinas, por ejemplo: \"Todos los días con desayuno y cena, excepto los domingos\", o \"Cada 3 días, con la comida.\"
-    "</string>
-<string name="schedule_type_hourly_help">"
-        Las pautas de intervalo horario están pensadas para esas tomas que se repiten cada cierto número de horas: \"Cada 8 horas\".
+    <string name="schedule_type_help_title">"Estás a punto de crear una pauta, ¡selecciona la que mejor se ajuste a tus necesidades!"</string>
+    <string name="schedule_type_routines_help">"Este tipo de pauta te permite vincular tus tomas con rutinas, por ejemplo: \"Todos los días con desayuno y cena, excepto los domingos\", o \"Cada 3 días, con la comida.\""</string>
+<string name="schedule_type_hourly_help">"Las pautas de intervalo horario están pensadas para esas tomas que se repiten cada cierto número de horas: \"Cada 8 horas\".
 
-Establece la hora de la primera toma, ¡y listo!.
-    "</string>
-<string name="schedule_type_intervalrest_help">"
-        Algunos anticonceptivos y otros medicamentos deben tomarse durante un tiempo, y luego hay un descanso. Estas pautas te permiten especificar ambos períodos y simplificar este tipo de tomas.
-    "</string>
+Establece la hora de la primera toma, ¡y listo!."</string>
+    <string name="schedule_type_intervalrest_help">"Algunos anticonceptivos y otros medicamentos deben tomarse durante un tiempo, y luego hay un descanso. Estas pautas te permiten especificar ambos períodos y simplificar este tipo de tomas."</string>
 <string name="routines_list_empty_text">"Aún no se han añadido rutinas.
 
 Las rutinas son horas del día en las que habitualmente tomas medicamentos, como el desayuno o la cena. Puedes reutilizarlas para crear pautas más rápido."</string>
@@ -198,7 +176,7 @@ Las rutinas son horas del día en las que habitualmente tomas medicamentos, como
 Añade tus medicamentos al botiquín, y tendrás fácil acceso a sus prospectos y avisos."</string>
 <string name="schedules_list_empty_text">"Aún no se han añadido pautas.
 
-¡Añade aquí tus pautas y permite que te avisemos! "</string>
+¡Añade aquí tus pautas y permite que te avisemos!"</string>
 <string name="about_description"><![CDATA[<br/><br/>Calendula está desarrollada por el Centro de Investigación en Tecnologías de la Información
                             de la USC (<a href=\'http://citius.usc.es\'>CITIUS</a>)
                             <br/><br/>Visita nuestra web para obtener más información:
@@ -321,50 +299,24 @@ Añade tus medicamentos al botiquín, y tendrás fácil acceso a sus prospectos 
 
 Por favor, ¡echa un vistazo a lo que tenemos para ti!"</string>
     <string name="intro_routines_title">"Rutinas"</string>
-<string name="intro_routines_text">"
-        Una rutina es un momento del día en que habitualmente debes tomar algún medicamento.
-        
-
-¿Tomas varios medicamentos con el desayuno? Define una rutina para esa hora y Calendula
-        agrupará todas tus tomas en un único aviso.
-    "</string>
+<string name="intro_routines_text">"Una rutina es un momento del día en que habitualmente debes tomar algún medicamento.
+¿Tomas varios medicamentos con el desayuno? Define una rutina para esa hora y Calendula agrupará todas tus tomas en un único aviso."</string>
     <string name="intro_meds_title">"Botiquín"</string>
-<string name="intro_meds_text">"
-       Mantén el control de todos tus fármacos usando el botiquín, y accede de forma
-        fácil a sus prospectos en la Agencia Española de Medicamentos y Productos Sanitarios.
-    "</string>
+    <string name="intro_meds_text">"Mantén el control de todos tus fármacos usando el botiquín, y accede de forma fácil a sus prospectos en la Agencia Española de Medicamentos y Productos Sanitarios."</string>
     <string name="intro_schedules_title">"Pautas"</string>
-<string name="intro_schedules_text">"
-        Define tu calendario de tomas usando nuestro editor de pautas. Puedes vincular tus tomas con tus rutinas,
-        definir pautas que se repiten diariamente o semanalmente, ¡y mucho más!
-    "</string>
+    <string name="intro_schedules_text">"Define tu calendario de tomas usando nuestro editor de pautas. Puedes vincular tus tomas con tus rutinas, definir pautas que se repiten diariamente o semanalmente, ¡y mucho más!"</string>
     <string name="intro_reminders_title">"Recordatorios"</string>
-<string name="intro_reminders_text">"
-        Calendula te recordará todas tus tomas. Acuérdate de confirmar, ¡o te seguiremos avisando!
-        
+<string name="intro_reminders_text">"Calendula te recordará todas tus tomas. Acuérdate de confirmar, ¡o te seguiremos avisando!
 
-Personaliza tus alarmas en el menú de opciones.
-    "</string>
+Personaliza tus alarmas en el menú de opciones."</string>
     <string name="intro_multipat_title">"¡Varios pacientes!"</string>
-<string name="intro_multipat_text">"
-        Calendula te permite gestionar la medicación de varios pacientes, con su propio botiquín, rutinas y pautas.
-        
+<string name="intro_multipat_text">"Calendula te permite gestionar la medicación de varios pacientes, con su propio botiquín, rutinas y pautas.       
 
-Verás todas sus tomas en la pantalla de inicio.
-    "</string>
-
-    <!-- Strings related to Settings -->
+Verás todas sus tomas en la pantalla de inicio."</string>
     <string name="title_activity_settings">"Opciones"</string>
-
-    <!-- Strings related to Settings
-     Example General settings -->
     <string name="pref_header_general">"General"</string>
     <string name="pref_title_display_name">"Nombre"</string>
-
-    <!-- Day Names -->
     <string name="pref_default_display_name">"Calendula"</string>
-
-    <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">"Notificaciones"</string>
     <string name="pref_title_new_alarm_notification">"Avisos de medicación"</string>
     <string name="pref_title_pickup_notification">"Notificaciones de recogida de medicamentos"</string>

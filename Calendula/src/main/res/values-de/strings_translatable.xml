@@ -33,12 +33,8 @@
     <string name="title_select_dose_dialog">"Legen Sie Dosierung fest"</string>
     <string name="doses_and_times">"Zeiten und Dosierungen"</string>
     <string name="schedule_repeat_days">"Wiederholen"</string>
-
-    <!-- Schedule creation -->
     <string name="summary_title">"Kontrollieren und Bestätigen"</string>
     <string name="summary">"Zusammenfassung"</string>
-
-    <!-- Med presentations -->
     <string name="injections">"Injektionen"</string>
     <string name="pills">"Tabletten"</string>
     <string name="capsules">"Kapseln"</string>
@@ -51,8 +47,6 @@
     <string name="unknown">"Unbekannt"</string>
     <string name="effervescent">"Brausetablette / -pulver"</string>
     <string name="schedule">"Plan"</string>
-
-    <!-- Med presentation units -->
     <string name="injections_units">"Injektion"</string>
     <string name="pills_units">"Tablette"</string>
     <string name="capsules_units">"Kapsel"</string>
@@ -64,8 +58,6 @@
     <string name="patches_units">"Pflaster"</string>
     <string name="unknown_units">"Einheiten"</string>
     <string name="effervescent_units">"Päckchen"</string>
-
-    <!-- Med schedules -->
     <string name="never">"Nie"</string>
     <string name="every_day">"Jeden Tag"</string>
     <string name="once_a_day">"Einmal täglich"</string>
@@ -74,8 +66,6 @@
     <string name="four_times_a_day">"Viermal täglich"</string>
     <string name="times_a_day">"Mal pro Tag"</string>
     <string name="and">"und"</string>
-
-    <!-- Default routines -->
     <string name="routine_breakfast">"Frühstück"</string>
     <string name="routine_lunch">"Mittagessen"</string>
     <string name="routine_dinner">"Abendessen"</string>
@@ -83,8 +73,6 @@
     <string name="schedule_timetable_dose_column">"DOSIERUNG"</string>
     <string name="take">"Einnahme"</string>
     <string name="first_intake">"Erste Einnahme um"</string>
-
-    <!-- Day Names -->
     <string name="schedule_day_selector_mo">"MO"</string>
     <string name="schedule_day_selector_tu">"DI"</string>
     <string name="schedule_day_selector_we">"MI"</string>
@@ -112,8 +100,6 @@
     <string name="medicine_no_name_error_message">"Bitte geben Sie einen Namen ein"</string>
     <string name="medicine_unselected">"Noch nichts ausgewählt"</string>
     <string name="medicine_no_presentation_error_message">"Bitte wählen Sie eine Präsentation"</string>
-
-    <!-- App Tutorial -->
     <string name="tutorial_understood">"Verstanden"</string>
     <string name="notification_repeat_message">"Der Alarm wird wiederholt um %1$s"</string>
     <string name="notification_cancel_now">"Jetzt löschen"</string>
@@ -157,7 +143,7 @@ Lesen Sie den Beipackzetel sorgfältig oder fragen Sie Ihren Arzt oder Apotheker
     <string name="schedule_help_hourly">"Bitte geben Sie den Wiederholungszeitraum, die Dosierung und den Zeitpunkt der ersten Einnahme an."</string>
     <string name="schedule_help_repeat">"Geben Sie an, an welchen Wochentagen eine Einnahme erfolgen soll. Bei täglicher Einnahme müssen Sie keine Änderungen vornehmen."</string>
     <string name="schedule_help_timesbyday">"Geben Sie an, wie häufig eine Einnahme pro Tag vorgesehen ist."</string>
-    <string name="schedule_help_timetable">" Jetzt verknüpfen jede Einnahme mit Ihren Routinen und geben die Dosierung jeder Einnahme an"</string>
+    <string name="schedule_help_timetable">"Jetzt verknüpfen jede Einnahme mit Ihren Routinen und geben die Dosierung jeder Einnahme an"</string>
     <string name="all_meds_taken">"Alle Medikamente eingenommen!"</string>
     <string name="message_generic_pageloaderror">"There was an error loading the page"</string>
     <string name="title_prospect_webview">"Prospect view"</string>
@@ -169,19 +155,10 @@ Lesen Sie den Beipackzetel sorgfältig oder fragen Sie Ihren Arzt oder Apotheker
     <string name="yesterday">"Gestern"</string>
     <string name="today">"Heute"</string>
     <string name="tomorrow">"Morgen"</string>
-
-    <!-- Strings related to Settings -->
     <string name="title_activity_settings">"Einstellungen"</string>
-
-    <!-- Strings related to Settings
-     Example General settings -->
     <string name="pref_header_general">"Allgemein"</string>
     <string name="pref_title_display_name">"Zeige Name"</string>
-
-    <!-- Day Names -->
     <string name="pref_default_display_name">"Calendula"</string>
-
-    <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">"Benachrichtigungen"</string>
     <string name="pref_title_new_alarm_notification">"Alarme Medikamenteneinnahme"</string>
     <string name="pref_title_insistent_alarms">"Hartnäckige Benachrichtigungen"</string>
