@@ -60,8 +60,8 @@ import java.util.List;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
-import es.usc.citius.servando.calendula.drugdb.DownloadDatabaseDialogHelper;
-import es.usc.citius.servando.calendula.drugdb.SetupDBService;
+import es.usc.citius.servando.calendula.drugdb.download.DownloadDatabaseHelper;
+import es.usc.citius.servando.calendula.drugdb.download.InstallDatabaseService;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.modules.modules.StockModule;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
@@ -81,7 +81,9 @@ import es.usc.citius.servando.calendula.util.view.CustomListPreference;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
-    public static final int REQ_CODE_EXTERNAL_STORAGE = 20;
+    public static final int REQ_CODE_EXTERNAL_STORAGE_RINGTONE = 20;
+    public static final int REQ_CODE_EXTERNAL_STORAGE_MED_DB = 21;
+
     /**
      * Determines whether to always show the simplified settings UI, where
      * settings are presented in a single list. When false, settings are shown
@@ -160,7 +162,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     static boolean onUpdatePrescriptionsDatabasePreference(final ListPreference preference, final String stringValue) {
         Log.d(TAG, "New value: " + stringValue);
         if (!settingUp && !stringValue.equals(lastValidDatabase) && !NONE.equalsIgnoreCase(stringValue) && !SETTING_UP.equals(stringValue)) {
-            DownloadDatabaseDialogHelper.showDownloadDatabaseDialog(ctx, stringValue, new DownloadDatabaseDialogHelper.DownloadDatabaseDialogCallback() {
+            DownloadDatabaseHelper.instance().showDownloadDialog(ctx, stringValue, new DownloadDatabaseHelper.DownloadDatabaseDialogCallback() {
                 @Override
                 public void onDownloadAcceptedOrCancelled(boolean accepted) {
                     SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -265,13 +267,21 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case REQ_CODE_EXTERNAL_STORAGE: {
+            case REQ_CODE_EXTERNAL_STORAGE_RINGTONE:
                 PermissionUtils.markedPermissionAsAsked(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     CheckBoxPreference ins = (CheckBoxPreference) findPreference("alarm_insistent");
                     ins.setChecked(true);
                 }
+                break;
+            case REQ_CODE_EXTERNAL_STORAGE_MED_DB:
+                PermissionUtils.markedPermissionAsAsked(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    CheckBoxPreference ins = (CheckBoxPreference) findPreference("enable_prescriptions_db");
+                    ins.setChecked(true);
+                    break;
             }
         }
 
@@ -288,6 +298,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         settingUp = SETTING_UP.equals(settings.getString("prescriptions_database", null));
 
+        if (settingUp && !DownloadDatabaseHelper.instance().isDBDownloadingOrInstalling(this)) {
+            Log.d(TAG, "onCreate: " + "Something weird happened. It seems like InstallDatabaseService was killed while working!");
+            settings.edit().putString("prescriptions_database", NONE).apply();
+            settingUp = false;
+        }
+
         Log.d(TAG, "sa onCreate: prescriptions_database: " + settings.getString("prescriptions_database", null));
         Log.d(TAG, "sa onCreate: SETTING_UP: " + SETTING_UP);
         Log.d(TAG, "sa onCreate: setting_up: " + settingUp);
@@ -298,10 +314,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 p.setEnabled(true);
                 bindPreferenceSummaryToValue(p, false);
                 settingUp = false;
-
             }
         };
-        registerReceiver(onDBSetupComplete, new IntentFilter(SetupDBService.ACTION_COMPLETE));
+
+        IntentFilter downloadFinished = new IntentFilter();
+        downloadFinished.addAction(InstallDatabaseService.ACTION_COMPLETE);
+        downloadFinished.addAction(InstallDatabaseService.ACTION_ERROR);
+        registerReceiver(onDBSetupComplete, downloadFinished);
     }
 
     @Override
@@ -411,24 +430,35 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         findPreference("alarm_insistent").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
-                boolean val = (boolean) o;
-                String p = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-                if (val && PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(activity, p)) {
-                    if (PermissionUtils.shouldAskForPermission(activity, p))
-                        PermissionUtils.requestPermissions(activity, new String[]{p}, REQ_CODE_EXTERNAL_STORAGE);
-                    else
-                        showStupidUserDialog();
-                    return false;
-                }
-                return true;
+                return checkPreferenceAskForPermission(o, REQ_CODE_EXTERNAL_STORAGE_RINGTONE);
             }
         });
+        findPreference("enable_prescriptions_db").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                return checkPreferenceAskForPermission(o, REQ_CODE_EXTERNAL_STORAGE_MED_DB);
+            }
+        });
+
 
         if (!CalendulaApp.isPharmaModeEnabled(this)) {
             Preference alarmPk = findPreference("alarm_pickup_notifications");
             PreferenceScreen preferenceScreen = getPreferenceScreen();
             preferenceScreen.removePreference(alarmPk);
         }
+    }
+
+    private boolean checkPreferenceAskForPermission(Object o, int reqCode) {
+        boolean val = (boolean) o;
+        String p = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        if (val && PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(activity, p)) {
+            if (PermissionUtils.shouldAskForPermission(activity, p))
+                PermissionUtils.requestPermissions(activity, new String[]{p}, reqCode);
+            else
+                showStupidUserDialog();
+            return false;
+        }
+        return true;
     }
 
     private void showStupidUserDialog() {
