@@ -281,8 +281,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     CheckBoxPreference ins = (CheckBoxPreference) findPreference("enable_prescriptions_db");
                     ins.setChecked(true);
+                    showDatabaseDialog();
                     break;
-            }
+                }
         }
 
     }
@@ -353,7 +354,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    ((CustomListPreference) findPreference("prescriptions_database")).show();
+                    showDatabaseDialog();
                 }
             }, 500);
 
@@ -384,6 +385,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     protected void onDestroy() {
         unregisterReceiver(onDBSetupComplete);
         super.onDestroy();
+    }
+
+    private void showDatabaseDialog() {
+        ((CustomListPreference) findPreference("prescriptions_database")).show();
     }
 
     /**
@@ -436,7 +441,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         findPreference("enable_prescriptions_db").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
-                return checkPreferenceAskForPermission(o, REQ_CODE_EXTERNAL_STORAGE_MED_DB);
+                final boolean val = (boolean) o;
+                final boolean hasPermission = checkPreferenceAskForPermission(o, REQ_CODE_EXTERNAL_STORAGE_MED_DB);
+                if (val && hasPermission) {
+                    showDatabaseDialog();
+                }
+                return hasPermission;
             }
         });
 
