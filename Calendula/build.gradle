@@ -218,5 +218,7 @@ dependencies {
     // levenshtein distance etc
     compile 'org.apache.commons:commons-lang3:3.5'
 
+    // gif imageview
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
 
 }

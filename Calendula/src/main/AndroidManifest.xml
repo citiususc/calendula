@@ -196,6 +196,12 @@
         <activity
             android:name=".activities.AllergiesSearchActivity"
             android:label="@string/title_activity_allergies_search"/>
+
+        <activity
+            android:name=".notifications.LockScreenAlarmActivity"
+            android:label="@string/title_activity_allergies_search"
+            android:showOnLockScreen="true"/>
+
     </application>
 
 </manifest>
