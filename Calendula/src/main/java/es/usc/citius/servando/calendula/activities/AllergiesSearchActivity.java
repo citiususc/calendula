@@ -20,10 +20,13 @@ package es.usc.citius.servando.calendula.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -39,7 +42,12 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.ISelectionListener;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
@@ -70,6 +78,7 @@ import es.usc.citius.servando.calendula.allergies.AllergenGroupWrapper;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.AllergyGroup;
+import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.Strings;
 
@@ -153,6 +162,46 @@ public class AllergiesSearchActivity extends CalendulaActivity {
         finish();
     }
 
+    /**
+     * @return <code>true</code> if db was valid when called, <code>false</code> otherwise
+     */
+    public boolean askForDatabaseIfNeeded() {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean validDB = prefs.getString("prescriptions_database", getString(R.string.database_none_id)).equals(getString(R.string.database_aemps_id));
+
+        if (!validDB) {
+            new MaterialStyledDialog.Builder(this)
+                    .setStyle(Style.HEADER_WITH_ICON)
+                    .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_database, R.color.white, 100))
+                    .setHeaderColor(R.color.android_blue)
+                    .withDialogAnimation(true)
+                    .setTitle(R.string.title_allergies_database_required)
+                    .setDescription(R.string.message_allergies_database_required)
+                    .setCancelable(false)
+                    .setPositiveText(getString(R.string.ok))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Intent i = new Intent(AllergiesSearchActivity.this, SettingsActivity.class);
+                            i.putExtra("show_database_dialog", true);
+                            finish();
+                            startActivity(i);
+                        }
+                    })
+                    .setNegativeText(R.string.cancel)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.cancel();
+                            finish();
+                        }
+                    })
+                    .show();
+        }
+        return validDB;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,6 +215,15 @@ public class AllergiesSearchActivity extends CalendulaActivity {
         progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE,
                 android.graphics.PorterDuff.Mode.MULTIPLY);
 
+        final boolean valid = askForDatabaseIfNeeded();
+        if (valid) {
+            loadData();
+        }
+
+
+    }
+
+    private void loadData() {
         //retrieve allergy groups
         groups = DB.allergyGroups().findAllOrderByPrecedence();
 
@@ -173,7 +231,6 @@ public class AllergiesSearchActivity extends CalendulaActivity {
 
         //setup search view
         setupSearchView();
-
     }
 
     private void checkSearchPlaceholder() {

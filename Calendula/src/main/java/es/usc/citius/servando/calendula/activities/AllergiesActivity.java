@@ -108,41 +108,6 @@ public class AllergiesActivity extends CalendulaActivity {
     private FastItemAdapter allergiesAdapter;
     private AllergiesStore store;
 
-    public void askForDatabaseIfNeeded() {
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean validDB = prefs.getString("prescriptions_database", getString(R.string.database_none_id)).equals(getString(R.string.database_aemps_id));
-
-        if (!validDB) {
-            new MaterialStyledDialog.Builder(this)
-                    .setStyle(Style.HEADER_WITH_ICON)
-                    .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_database, R.color.white, 100))
-                    .setHeaderColor(R.color.android_blue)
-                    .withDialogAnimation(true)
-                    .setTitle(R.string.title_allergies_database_required)
-                    .setDescription(R.string.message_allergies_database_required)
-                    .setCancelable(false)
-                    .setPositiveText(getString(R.string.ok))
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Intent i = new Intent(AllergiesActivity.this, SettingsActivity.class);
-                            i.putExtra("show_database_dialog", true);
-                            finish();
-                            startActivity(i);
-                        }
-                    })
-                    .setNegativeText(R.string.cancel)
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            dialog.cancel();
-                            finish();
-                        }
-                    })
-                    .show();
-        }
-    }
 
     @OnClick(R.id.add_button)
     void showSearchView() {
@@ -183,10 +148,10 @@ public class AllergiesActivity extends CalendulaActivity {
         //load allergies, set placeholder if needed
         new LoadAllergiesTask().execute();
 
-        showWarningsIfNeeded();
+        showWarningIfNeeded();
     }
 
-    private void showWarningsIfNeeded() {
+    private void showWarningIfNeeded() {
         final SharedPreferences prefs = PreferenceUtils.instance().preferences();
         if (!prefs.getBoolean(PREFERENCE_WARNING_SHOWN, false)) {
             new MaterialStyledDialog.Builder(this)
@@ -202,7 +167,7 @@ public class AllergiesActivity extends CalendulaActivity {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             prefs.edit().putBoolean(PREFERENCE_WARNING_SHOWN, true).apply();
-                            askForDatabaseIfNeeded();
+                            dialog.dismiss();
                         }
                     })
                     .setNegativeText(R.string.dialog_get_me_out)
@@ -214,8 +179,6 @@ public class AllergiesActivity extends CalendulaActivity {
                         }
                     })
                     .show();
-        } else {
-            askForDatabaseIfNeeded();
         }
     }
 
