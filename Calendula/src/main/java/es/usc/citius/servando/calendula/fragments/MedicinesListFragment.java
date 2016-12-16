@@ -19,22 +19,21 @@
 package es.usc.citius.servando.calendula.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -42,13 +41,18 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicineInfoActivity;
+import es.usc.citius.servando.calendula.adapters.items.MedicineItem;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
@@ -68,23 +72,31 @@ public class MedicinesListFragment extends Fragment {
 
     List<Medicine> mMedicines;
     OnMedicineSelectedListener mMedicineSelectedCallback;
-    ArrayAdapter adapter;
-    ListView listview;
+
+    @BindView(R.id.medicines_list)
+    RecyclerView recyclerView;
+    @BindView(android.R.id.empty)
+    View emptyView;
+
     Handler handler;
+    Unbinder unbinder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_medicines_list, container, false);
+        unbinder = ButterKnife.bind(this, rootView);
         handler = new Handler();
-        listview = (ListView) rootView.findViewById(R.id.medicines_list);
-        View empty = rootView.findViewById(android.R.id.empty);
-        listview.setEmptyView(empty);
         mMedicines = DB.medicines().findAllForActivePatient(getContext());
-        adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
-        listview.setAdapter(adapter);
+        emptyView.setVisibility(View.GONE);
+        setupRecyclerView();
         return rootView;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,27 +116,6 @@ public class MedicinesListFragment extends Fragment {
 
     public void openProspect(Prescription p) {
         ProspectUtils.openProspect(p, getActivity(), true);
-    }
-
-    public void showDrivingAdvice(final Prescription p) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(getString(R.string.driving_warning))
-                .setTitle(getString(R.string.driving_warning_title))
-                .setIcon(getResources().getDrawable(R.drawable.ic_warning_amber_48dp));
-        builder.setPositiveButton(getString(R.string.driving_warning_show_prospect), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                openProspect(p);
-
-            }
-        });
-        builder.setNeutralButton(getString(R.string.driving_warning_gotit), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.show();
     }
 
     @Override
@@ -205,6 +196,18 @@ public class MedicinesListFragment extends Fragment {
                 })
                 .show();
 
+    }
+
+    private void setupRecyclerView() {
+        LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(llm);
+        FastItemAdapter<MedicineItem> adapter = new FastItemAdapter<>();
+        adapter.withSelectable(false);
+        adapter.withPositionBasedStateManagement(false);
+        for (Medicine mMedicine : mMedicines) {
+            adapter.add(new MedicineItem(mMedicine));
+        }
+        recyclerView.setAdapter(adapter);
     }
 
     private View createMedicineListItem(LayoutInflater inflater, final Medicine medicine) {
@@ -308,12 +311,12 @@ public class MedicinesListFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            adapter.clear();
-            for (Medicine m : mMedicines) {
-                adapter.add(m);
-            }
-            adapter.notifyDataSetChanged();
+//            super.onPostExecute(aVoid);
+//            adapter.clear();
+//            for (Medicine m : mMedicines) {
+//                adapter.add(m);
+//            }
+//            adapter.notifyDataSetChanged();
         }
     }
 
