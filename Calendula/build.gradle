@@ -43,8 +43,11 @@ idea {
 
 // read keystore for app signing
 def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+def keystoreProperties = null
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties = new Properties()
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
 
 
 def getDate() {
@@ -70,10 +73,10 @@ android {
 
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties != null ? keystoreProperties['keyAlias'] : null
+            keyPassword keystoreProperties != null ? keystoreProperties['keyPassword'] : null
+            storeFile keystoreProperties != null ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties != null ? keystoreProperties['storePassword'] : null
         }
     }
 
