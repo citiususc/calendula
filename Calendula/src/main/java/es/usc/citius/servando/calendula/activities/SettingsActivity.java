@@ -354,7 +354,16 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    showDatabaseDialog();
+                    CheckBoxPreference ins = (CheckBoxPreference) findPreference("enable_prescriptions_db");
+                    if (ins.isChecked()) {
+                        showDatabaseDialog();
+                    } else {
+                        boolean permitted = checkPreferenceAskForPermission(true, REQ_CODE_EXTERNAL_STORAGE_MED_DB);
+                        if (permitted) {
+                            ins.setChecked(true);
+                            showDatabaseDialog();
+                        }
+                    }
                 }
             }, 500);
 
