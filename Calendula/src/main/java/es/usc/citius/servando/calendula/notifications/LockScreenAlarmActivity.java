@@ -61,6 +61,12 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
     private View confirmButtonBackground;
 
     @Override
+    public void onBackPressed() {
+        stopPlayingAlarm();
+        animateAndFinish();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupForVisibilityOverLockScreen();
@@ -96,7 +102,7 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
      */
     private void startAlarmAnimation() {
         try {
-            anim.setImageDrawable(new GifDrawable(getResources(), R.drawable.clock));
+            anim.setImageDrawable(new GifDrawable(getResources(), R.drawable.animated_clock));
         } catch (Exception e) {
             Log.e(TAG, "An error occurred loading animation", e);
         }
@@ -137,10 +143,10 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
     private void stopPlayingAlarm() {
         Log.d(TAG, "stopPlayingAlarm() called");
         if (mediaPlayer.isPlaying()) {
-            vibrator.cancel();
             mediaPlayer.stop();
             mediaPlayer.release();
         }
+        vibrator.cancel();
     }
 
     /**
@@ -197,9 +203,12 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 finishAndRemoveTask();
+                } else {
+                    finish();
+            }
             }
         }, 600);
     }
-
 }
