@@ -105,7 +105,7 @@ public class ReminderNotification {
         options.text = r.name() + " (" + doses.size() + " " + context.getString(R.string.home_menu_medicines).toLowerCase() + ")";
 
         notify(context, routineNotificationId(r.getId().intValue()), title, intents, confirmAll, intent, options);
-        showInsistentScreen(context, r, date);
+        showInsistentScreen(context, intent);
     }
 
     public static void notify(final Context context, final String title, Schedule schedule, LocalDate date, LocalTime time, Intent intent, boolean lost) {
@@ -136,7 +136,7 @@ public class ReminderNotification {
         options.text = schedule.medicine().name() + " (" + schedule.toReadableString(context) + ")";
         notify(context, scheduleNotificationId(schedule.getId().intValue()), title, intents, confirmAll, intent, options);
 
-        showInsistentScreen(context, schedule, date, time);
+        showInsistentScreen(context, intent);
     }
 
     /**
@@ -155,26 +155,12 @@ public class ReminderNotification {
         }
     }
 
-    private static void showInsistentScreen(Context context, Schedule schedule, LocalDate date, LocalTime time) {
-        boolean insistentNotifications = PreferenceUtils.instance().preferences().getBoolean("alarm_insistent", false);
-        if (insistentNotifications) {
-
-            Intent intent = new Intent(context, LockScreenAlarmActivity.class);
-            intent.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
-            intent.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, date.toString("kk:mm"));
-            intent.putExtra("date", date.toString(AlarmIntentParams.DATE_FORMAT));
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-        }
-    }
-
-    private static void showInsistentScreen(Context context, Routine r, LocalDate date) {
+    private static void showInsistentScreen(Context context, Intent i) {
         boolean insistentNotifications = PreferenceUtils.instance().preferences().getBoolean("alarm_insistent", false);
         if (insistentNotifications) {
             Intent intent = new Intent(context, LockScreenAlarmActivity.class);
-            intent.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, r.getId());
-            intent.putExtra("date", date.toString(AlarmIntentParams.DATE_FORMAT));
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("target", i);
             context.startActivity(intent);
         }
     }

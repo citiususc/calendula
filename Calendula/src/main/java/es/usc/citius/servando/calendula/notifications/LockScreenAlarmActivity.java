@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.notifications;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -13,6 +14,7 @@ import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -59,6 +61,7 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private ImageButton confirmButton;
     private View confirmButtonBackground;
+    private Intent target = null;
 
     @Override
     public void onBackPressed() {
@@ -72,6 +75,12 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
         setupForVisibilityOverLockScreen();
         setContentView(R.layout.activity_lock_screen_alarm);
         anim = (ImageView) findViewById(R.id.anim_image);
+
+        if(getIntent() != null){
+            target = getIntent().getParcelableExtra("target");
+            Log.d(TAG, "Target " + (target != null));
+        }
+
         confirmButtonBackground = findViewById(R.id.confirm_button_bg);
         confirmButton = (ImageButton) findViewById(R.id.confirm_btn);
         confirmButton.setImageDrawable(IconUtils.icon(this, CommunityMaterial.Icon.cmd_alarm_off, R.color.white, 70, 10));
@@ -81,20 +90,28 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
                 animateAndFinish();
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setupMediaPlayer();
         startPlayingAlarm();
         startAlarmAnimation();
     }
 
     @Override
-    protected void onPause() {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)){
+            // stop sound and vibration if the user
+            // press volume down button
+            stopPlayingAlarm();
+        }else if ((keyCode == KeyEvent.KEYCODE_VOLUME_UP)){
+            // restart sound and vibration if the user
+            // press volume down up
+            startPlayingAlarm();
+        }
+        return true;
+    }
+
+    @Override
+    protected void onDestroy() {
         stopPlayingAlarm();
-        super.onPause();
+        super.onDestroy();
     }
 
     /**
@@ -117,6 +134,7 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+            mediaPlayer.setVolume(1,1);
             mediaPlayer.setScreenOnWhilePlaying(true);
             mediaPlayer.setDataSource(this, uri);
             mediaPlayer.prepare();
@@ -131,6 +149,7 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
      */
     private void startPlayingAlarm() {
         Log.d(TAG, "startPlayingAlarm() called");
+        setupMediaPlayer();
         if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
             mediaPlayer.start();
             vibrator.vibrate(VIB_PATTERN, 0);
@@ -142,11 +161,12 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
      */
     private void stopPlayingAlarm() {
         Log.d(TAG, "stopPlayingAlarm() called");
-        if (mediaPlayer.isPlaying()) {
+        vibrator.cancel();
+        if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
+            mediaPlayer = null;
         }
-        vibrator.cancel();
     }
 
     /**
@@ -203,11 +223,16 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                finishAndRemoveTask();
-                } else {
-                    finish();
-            }
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    finishAndRemoveTask();
+//                } else {
+//                    finish();
+//            }
+                Log.d(TAG, "Target " + (target != null));
+                if(target != null){
+                    startActivity(target);
+                }
+                finish();
             }
         }, 600);
     }
