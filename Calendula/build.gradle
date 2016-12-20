@@ -65,6 +65,7 @@ android {
         versionCode 29
         versionName "2.5-SNAPSHOT"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        applicationId "es.usc.citius.servando.calendula"
     }
 
     packagingOptions {
@@ -101,13 +102,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             versionNameSuffix "-build" + getDate()
         }
+        alpha {
+            minifyEnabled false
+            applicationIdSuffix ".alpha"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.release
+        }
     }
+
     productFlavors {
         develop {
-            applicationId "es.usc.citius.servando.calenduladev"
+            applicationIdSuffix ".dev"
         }
         product {
-            applicationId "es.usc.citius.servando.calendula"
+
         }
     }
 
