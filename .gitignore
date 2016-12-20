@@ -8,6 +8,8 @@
 *.apk
 *.ap_
 
+!assets/apk/*.apk
+
 # files for the dex VM
 *.dex
 
