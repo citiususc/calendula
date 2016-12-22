@@ -25,7 +25,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
@@ -63,6 +62,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import es.usc.citius.servando.calendula.CalendulaActivity;
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.adapters.items.allergylist.AllergyGroupItem;
 import es.usc.citius.servando.calendula.adapters.items.allergylist.AllergyGroupSubItem;
@@ -73,6 +73,7 @@ import es.usc.citius.servando.calendula.allergies.AllergenGroupWrapper;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
@@ -400,12 +401,15 @@ public class AllergiesActivity extends CalendulaActivity {
         public AllergiesStore() {
         }
 
-        public int deleteAllergen(PatientAllergen a) {
+        public int deleteAllergen(PatientAllergen a, boolean notify) {
             try {
                 int index = currentAllergies.indexOf(a);
                 DB.patientAllergens().delete(a);
                 AllergyAlertUtil.removeAllergyAlerts(a);
                 currentAllergies.remove(a);
+                if (notify) {
+                    CalendulaApp.eventBus().post(PersistenceEvents.MEDICINE_EVENT);
+                }
                 return index;
             } catch (SQLException e) {
                 Log.e(TAG, "Couldn't delete allergen " + a, e);
@@ -415,18 +419,20 @@ public class AllergiesActivity extends CalendulaActivity {
         }
 
         public int deleteAllergens(final List<PatientAllergen> a) {
-            return (int) DB.transaction(new Callable<Integer>() {
+            final int res = (int) DB.transaction(new Callable<Integer>() {
                 @Override
                 public Integer call() throws Exception {
                     int res = 0;
                     for (PatientAllergen patientAllergen : a) {
-                        res = deleteAllergen(patientAllergen);
+                        res = deleteAllergen(patientAllergen, false);
                         if (res == -2)
                             break;
                     }
                     return res;
                 }
             });
+            CalendulaApp.eventBus().post(PersistenceEvents.MEDICINE_EVENT);
+            return res;
         }
 
         public List<PatientAllergen> getAllergies() {
@@ -578,7 +584,7 @@ public class AllergiesActivity extends CalendulaActivity {
                 throw new IllegalArgumentException("Invalid argument length");
             }
             int index = allergiesAdapter.getAdapterPosition(params[0]);
-            store.deleteAllergen(params[0].getAllergen());
+            store.deleteAllergen(params[0].getAllergen(), true);
             return index;
         }
     }
