@@ -7,4 +7,5 @@
     <item name="fastadapter_allergy_group_sub_item" type="id">5</item>
     <item name="fastadapter_allergy_item" type="id">6</item>
     <item name="fastadapter_medicine_item" type="id">7</item>
+    <item name="fastadapter_schedule_item" type="id">8</item>
 </resources>
