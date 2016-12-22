@@ -53,11 +53,9 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicineInfoActivity;
 import es.usc.citius.servando.calendula.adapters.items.MedicineItem;
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.IconUtils;
-import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -109,10 +107,6 @@ public class MedicinesListFragment extends Fragment {
     public void notifyDataChange() {
         Log.d(getTag(), "Medicines - Notify data change");
         new ReloadItemsTask().execute();
-    }
-
-    public void openProspect(Prescription p) {
-        ProspectUtils.openProspect(p, getActivity(), true);
     }
 
     @Override
@@ -227,6 +221,15 @@ public class MedicinesListFragment extends Fragment {
             }
         });
 
+        adapter.withOnClickListener(new FastAdapter.OnClickListener<MedicineItem>() {
+            @Override
+            public boolean onClick(View v, IAdapter<MedicineItem> adapter, MedicineItem item, int position) {
+                if (mMedicineSelectedCallback != null && item != null && item.getMedicine() != null)
+                    mMedicineSelectedCallback.onMedicineSelected(item.getMedicine());
+                return true;
+            }
+        });
+
         recyclerView.setAdapter(adapter);
     }
 
@@ -243,8 +246,8 @@ public class MedicinesListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
+            Log.d(TAG, "Reloading items...");
             mMedicines = DB.medicines().findAllForActivePatient(getContext());
-
             return null;
         }
 
@@ -256,6 +259,7 @@ public class MedicinesListFragment extends Fragment {
                 adapter.add(new MedicineItem(m));
             }
             adapter.notifyAdapterDataSetChanged();
+            Log.d(TAG, "Reloaded items, count: " + mMedicines.size());
         }
     }
 

@@ -82,8 +82,6 @@ public class MedicineItem extends AbstractItem<MedicineItem, MedicineItem.Medici
                 .colorRes(R.color.agenda_item_title)
                 .paddingDp(8)
                 .sizeDp(40));
-        holder.overlay.setTag(medicine);
-
 
         if (ModuleManager.isEnabled(StockModule.ID)) {
             String nextPickup = medicine.nextPickup();
@@ -129,8 +127,6 @@ public class MedicineItem extends AbstractItem<MedicineItem, MedicineItem.Medici
         public TextView name;
         @BindView(R.id.imageView)
         public ImageView alertIcon;
-        @BindView(R.id.medicines_list_item_container)
-        public View overlay;
         @BindView(R.id.stock_info)
         public TextView stockInfo;
 
