@@ -82,7 +82,8 @@ public class MedicinesListFragment extends Fragment {
         unbinder = ButterKnife.bind(this, rootView);
         handler = new Handler();
         mMedicines = DB.medicines().findAllForActivePatient(getContext());
-        emptyView.setVisibility(View.GONE);
+        if (mMedicines.size() > 0)
+            emptyView.setVisibility(View.GONE);
         setupRecyclerView();
         return rootView;
     }
@@ -254,6 +255,11 @@ public class MedicinesListFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            if (mMedicines.size() > 0) {
+                emptyView.setVisibility(View.GONE);
+            } else {
+                emptyView.setVisibility(View.VISIBLE);
+            }
             adapter.clear();
             for (Medicine m : mMedicines) {
                 adapter.add(new MedicineItem(m));
