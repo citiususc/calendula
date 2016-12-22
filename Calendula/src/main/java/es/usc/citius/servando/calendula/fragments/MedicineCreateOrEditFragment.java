@@ -244,7 +244,8 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        if (unbinder != null)
+            unbinder.unbind();
     }
 
     public void showDeleteConfirmationDialog(final Medicine m) {
