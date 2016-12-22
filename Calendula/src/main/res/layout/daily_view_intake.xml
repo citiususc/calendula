@@ -79,7 +79,7 @@
                 android:layout_marginRight="10dp"
                 android:fontFamily="sans-serif-light"
                 android:gravity="center"
-                android:text="Tómate tus medicinas ahora"
+                android:text="@string/text_take_medicines_now"
                 android:textColor="#fff"
                 android:textSize="15dp"
                 android:textStyle="bold"/>
