@@ -373,5 +373,5 @@ You will see all their intakes in the home screen."</string>
 <string name="delays_thirty_min">"30 min"</string>
 <string name="delays_fifteen_min">"15 min"</string>
 <string name="delays_sixty_min">"60 min"</string>
-    <string name="text_take_medicines_now">"Take your medicines now"</string>
+<string name="text_take_medicines_now">"Take your medicines now"</string>
 </resources>
