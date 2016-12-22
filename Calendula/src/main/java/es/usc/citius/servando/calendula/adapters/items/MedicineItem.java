@@ -31,7 +31,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
@@ -120,27 +119,25 @@ public class MedicineItem extends AbstractItem<MedicineItem, MedicineItem.Medici
     @Override
     public void unbindView(MedicineViewHolder holder) {
         super.unbindView(holder);
-        holder.unbinder.unbind();
     }
 
     public static class MedicineViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.imageButton)
-        ImageView icon;
+        public ImageView icon;
         @BindView(R.id.medicines_list_item_name)
-        TextView name;
+        public TextView name;
         @BindView(R.id.imageView)
-        ImageView alertIcon;
+        public ImageView alertIcon;
         @BindView(R.id.medicines_list_item_container)
-        View overlay;
+        public View overlay;
         @BindView(R.id.stock_info)
-        TextView stockInfo;
+        public TextView stockInfo;
 
-        Unbinder unbinder;
 
         public MedicineViewHolder(View view) {
             super(view);
-            unbinder = ButterKnife.bind(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 }

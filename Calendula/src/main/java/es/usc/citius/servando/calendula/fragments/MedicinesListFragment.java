@@ -19,12 +19,12 @@
 package es.usc.citius.servando.calendula.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,7 +32,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,7 +40,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
+import com.mikepenz.fastadapter.listeners.ClickEventHook;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.List;
@@ -78,6 +80,7 @@ public class MedicinesListFragment extends Fragment {
     @BindView(android.R.id.empty)
     View emptyView;
 
+    FastItemAdapter<MedicineItem> adapter;
     Handler handler;
     Unbinder unbinder;
 
@@ -201,12 +204,35 @@ public class MedicinesListFragment extends Fragment {
     private void setupRecyclerView() {
         LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(llm);
-        FastItemAdapter<MedicineItem> adapter = new FastItemAdapter<>();
+        adapter = new FastItemAdapter<>();
         adapter.withSelectable(false);
         adapter.withPositionBasedStateManagement(false);
         for (Medicine mMedicine : mMedicines) {
             adapter.add(new MedicineItem(mMedicine));
         }
+        adapter.withOnLongClickListener(new FastAdapter.OnLongClickListener<MedicineItem>() {
+            @Override
+            public boolean onLongClick(View v, IAdapter<MedicineItem> adapter, MedicineItem item, int position) {
+                showDeleteConfirmationDialog(item.getMedicine());
+                return true;
+            }
+        });
+
+        adapter.withItemEvent(new ClickEventHook<MedicineItem>() {
+            @Nullable
+            @Override
+            public View onBind(@NonNull RecyclerView.ViewHolder viewHolder) {
+                if (viewHolder instanceof MedicineItem.MedicineViewHolder)
+                    return ((MedicineItem.MedicineViewHolder) viewHolder).alertIcon;
+                return null;
+            }
+
+            @Override
+            public void onClick(View v, int position, FastAdapter<MedicineItem> fastAdapter, MedicineItem item) {
+                openMedicineInfoActivity(item.getMedicine(), true);
+            }
+        });
+
         recyclerView.setAdapter(adapter);
     }
 
@@ -311,25 +337,12 @@ public class MedicinesListFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-//            super.onPostExecute(aVoid);
-//            adapter.clear();
-//            for (Medicine m : mMedicines) {
-//                adapter.add(m);
-//            }
-//            adapter.notifyDataSetChanged();
-        }
-    }
-
-    private class MedicinesListAdapter extends ArrayAdapter<Medicine> {
-
-        public MedicinesListAdapter(Context context, int layoutResourceId, List<Medicine> items) {
-            super(context, layoutResourceId, items);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-            return createMedicineListItem(layoutInflater, mMedicines.get(position));
+            super.onPostExecute(aVoid);
+            adapter.clear();
+            for (Medicine m : mMedicines) {
+                adapter.add(new MedicineItem(m));
+            }
+            adapter.notifyDataSetChanged();
         }
     }
 
