@@ -43,13 +43,16 @@ idea {
 
 // read keystore for app signing
 def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+def keystoreProperties = null
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties = new Properties()
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
 
 
 def getDate() {
     def date = new Date()
-    def formattedDate = date.format('yyyyMMddHHmmss')
+    def formattedDate = date.format('yyyy.MM.dd')
     return formattedDate
 }
 
@@ -62,6 +65,7 @@ android {
         versionCode 29
         versionName "2.5-SNAPSHOT"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        applicationId "es.usc.citius.servando.calendula"
     }
 
     packagingOptions {
@@ -70,10 +74,10 @@ android {
 
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties != null ? keystoreProperties['keyAlias'] : null
+            keyPassword keystoreProperties != null ? keystoreProperties['keyPassword'] : null
+            storeFile keystoreProperties != null ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties != null ? keystoreProperties['storePassword'] : null
         }
     }
 
@@ -98,13 +102,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             versionNameSuffix "-build" + getDate()
         }
+        alpha {
+            minifyEnabled false
+            applicationIdSuffix ".alpha"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.release
+            versionNameSuffix "-" + getDate()
+        }
     }
+
     productFlavors {
         develop {
-            applicationId "es.usc.citius.servando.calenduladev"
+            applicationIdSuffix ".dev"
         }
         product {
-            applicationId "es.usc.citius.servando.calendula"
+
         }
     }
 
@@ -215,5 +227,7 @@ dependencies {
     // levenshtein distance etc
     compile 'org.apache.commons:commons-lang3:3.5'
 
+    // gif imageview
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
 
 }

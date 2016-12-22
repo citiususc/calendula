@@ -86,14 +86,14 @@ public class DBRegistry {
 //            uk.setDisplayName(ctx.getString(R.string.database_uk_display));
 //            uk.setDescription(ctx.getString(R.string.database_uk_display));
 
-            PrescriptionDBMgr us = new USPrescriptionDBMgr();
-            us.setId(ctx.getString(R.string.database_us_id));
-            us.setDisplayName(ctx.getString(R.string.database_us_display));
-            us.setDescription(ctx.getString(R.string.database_us_display));
+//            PrescriptionDBMgr us = new USPrescriptionDBMgr();
+//            us.setId(ctx.getString(R.string.database_us_id));
+//            us.setDisplayName(ctx.getString(R.string.database_us_display));
+//            us.setDescription(ctx.getString(R.string.database_us_display));
 
             instance.databases.put(aemps.id(), aemps);
 //            instance.databases.put(uk.id(),uk);
-            instance.databases.put(us.id(), us);
+//            instance.databases.put(us.id(), us);
 
             instance.defaultDBMgr = aemps;
         }

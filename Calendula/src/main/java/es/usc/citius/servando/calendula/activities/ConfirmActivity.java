@@ -46,6 +46,8 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
@@ -323,6 +325,8 @@ public class ConfirmActivity extends CalendulaActivity {
         processIntent();
         setContentView(R.layout.activity_confirm);
 
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 
         isToday = LocalDate.now().equals(date);
         isInWindow = AlarmScheduler.isWithinDefaultMargins(date.toDateTime(time), this);

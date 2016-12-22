@@ -132,5 +132,7 @@
     <color name="schedule_help_background">#3498db</color>
     <color name="schedule_help_background_dark">#2980b9</color>
 
+    <color name="alarm_activity_bg_color">#e36c4c</color>
+    <color name="alarm_activity_bg_overlay">#44000000</color>
 
 </resources>

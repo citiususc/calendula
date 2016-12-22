@@ -45,6 +45,7 @@ import java.util.Random;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.notifications.LockScreenAlarmActivity;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Routine;
@@ -53,6 +54,7 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.NotificationEventReceiver;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
  * Helper class for showing and canceling intake notifications
@@ -103,6 +105,7 @@ public class ReminderNotification {
         options.text = r.name() + " (" + doses.size() + " " + context.getString(R.string.home_menu_medicines).toLowerCase() + ")";
 
         notify(context, routineNotificationId(r.getId().intValue()), title, intents, confirmAll, intent, options);
+        showInsistentScreen(context, intent);
     }
 
     public static void notify(final Context context, final String title, Schedule schedule, LocalDate date, LocalTime time, Intent intent, boolean lost) {
@@ -132,6 +135,8 @@ public class ReminderNotification {
         options.picture = getLargeIcon(context.getResources(), schedule.patient());
         options.text = schedule.medicine().name() + " (" + schedule.toReadableString(context) + ")";
         notify(context, scheduleNotificationId(schedule.getId().intValue()), title, intents, confirmAll, intent, options);
+
+        showInsistentScreen(context, intent);
     }
 
     /**
@@ -150,6 +155,16 @@ public class ReminderNotification {
         }
     }
 
+    private static void showInsistentScreen(Context context, Intent i) {
+        boolean insistentNotifications = PreferenceUtils.instance().preferences().getBoolean("alarm_insistent", false);
+        if (insistentNotifications) {
+            Intent intent = new Intent(context, LockScreenAlarmActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("target", i);
+            context.startActivity(intent);
+        }
+    }
+
     private static void notify(final Context context, int id, final String title,
                                Pair<Intent, Intent> actionIntents, Intent confirmIntent, Intent intent,
                                NotificationOptions options) {
@@ -163,7 +178,6 @@ public class ReminderNotification {
         }
 
         final Resources res = context.getResources();
-        boolean insistentNotifications = prefs.getBoolean("alarm_insistent", false);
         // prepare notification intents
         PendingIntent defaultIntent = PendingIntent.getActivity(context, random.nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent delayIntent = null;
@@ -178,7 +192,6 @@ public class ReminderNotification {
 
         int ic = options.lost ? R.drawable.ic_pill_small_lost : R.drawable.ic_pill_small;
         options.picture = options.picture != null ? options.picture : BitmapFactory.decodeResource(res, ic);
-        options.insistent = insistentNotifications;
         options.title = title;
         options.ticker = title;
         options.defaultIntent = defaultIntent;
@@ -187,7 +200,7 @@ public class ReminderNotification {
             options.delayIntent = delayIntent;
             options.confirmAllIntent = confirmAllIntent;
         }
-        options.ringtone = getRingtoneUri(prefs, insistentNotifications);
+        options.ringtone = getRingtoneUri();
 
         Notification n = buildNotification(context, options);
         notify(context, id, n, options.tag);
@@ -197,6 +210,7 @@ public class ReminderNotification {
     private static Notification buildNotification(Context context, NotificationOptions options) {
 
         Resources res = context.getResources();
+        boolean insistentNotifications = PreferenceUtils.instance().preferences().getBoolean("alarm_insistent", false);
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 
@@ -206,7 +220,7 @@ public class ReminderNotification {
                 .setSmallIcon(options.lost ? R.drawable.ic_pill_small_lost : R.drawable.ic_pill_small)
                 .setContentTitle(options.title)
                 .setContentText(options.text)
-                .setPriority(options.insistent ? NotificationCompat.PRIORITY_MAX : NotificationCompat.PRIORITY_HIGH)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 // Provide a large icon, shown with the notification in the
                 // notification drawer on devices running Android 3.0 or later.
                 .setLargeIcon(options.picture)
@@ -220,10 +234,13 @@ public class ReminderNotification {
                 // Show an expanded list of items on devices running Android 4.1
                 // or later.
                 .setStyle(options.style)
-                //.setLights(0x00ff0000, 500, 1000)
-                .setVibrate(new long[]{1000, 200, 100, 500, 400, 200, 100, 500, 400, 200, 100, 500, 1000}).setSound(options.ringtone)
                 // Automatically dismiss the notification when it is touched.
                 .setAutoCancel(true);
+
+        if (!insistentNotifications) {
+            // if insistent is enabled, an activity with vibration will start
+            builder.setVibrate(new long[]{1000, 200, 100, 500, 400, 200, 100, 500, 400, 200, 100, 500, 1000}).setSound(options.ringtone);
+        }
 
         if (!options.lost) {
             // add delay button and cancel button
@@ -247,20 +264,11 @@ public class ReminderNotification {
                     )));
         }
 
-        if (options.insistent) {
-            builder.setFullScreenIntent(options.defaultIntent, true);
-        }
-
         Notification n = builder.build();
         n.defaults = 0;
         n.ledARGB = 0x00ffa500;
         n.ledOnMS = 1000;
         n.ledOffMS = 2000;
-
-        if (!options.lost && options.insistent) {
-            n.flags |= Notification.FLAG_INSISTENT;
-        }
-
         return n;
     }
 
@@ -346,15 +354,8 @@ public class ReminderNotification {
         return new Pair<>(delay, cancel);
     }
 
-    private static Uri getRingtoneUri(SharedPreferences prefs, boolean insistentNotifications) {
-
-        String ringtonePref = prefs.getString("pref_notification_tone", null);
-
-        if (insistentNotifications) {
-            return ringtonePref != null ? Uri.parse(ringtonePref) : Settings.System.DEFAULT_ALARM_ALERT_URI;
-        } else {
-            return Settings.System.DEFAULT_NOTIFICATION_URI;
-        }
+    private static Uri getRingtoneUri() {
+        return Settings.System.DEFAULT_NOTIFICATION_URI;
     }
 
     private static Bitmap getLargeIcon(Resources r, Patient p) {
@@ -376,7 +377,6 @@ public class ReminderNotification {
 
     private static class NotificationOptions {
         int notificationNumber;
-        boolean insistent;
         boolean lost = false;
         String title;
         String text;

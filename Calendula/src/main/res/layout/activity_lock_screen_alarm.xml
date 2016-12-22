@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/alarm_activity_bg_color">
+
+    <ImageView
+        android:id="@+id/confirm_button_bg"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:alpha="0.6"
+        android:src="@drawable/circle_white"/>
+
+    <ImageView
+        android:id="@+id/anim_image"
+        android:layout_width="333dp"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/delay_btn"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="false"
+        android:layout_marginBottom="200dp"
+        android:layout_marginTop="100dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/clock"/>
+
+
+    <ImageButton
+        android:id="@+id/confirm_btn"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="55dp"
+        android:text="@string/confirm"/>
+
+</RelativeLayout>
