@@ -19,45 +19,43 @@
 package es.usc.citius.servando.calendula.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.IAdapter;
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
+import com.mikepenz.fastadapter.listeners.ClickEventHook;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicineInfoActivity;
+import es.usc.citius.servando.calendula.adapters.items.MedicineItem;
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
-import es.usc.citius.servando.calendula.modules.ModuleManager;
-import es.usc.citius.servando.calendula.modules.modules.StockModule;
 import es.usc.citius.servando.calendula.persistence.Medicine;
-import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.util.IconUtils;
-import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -68,23 +66,33 @@ public class MedicinesListFragment extends Fragment {
 
     List<Medicine> mMedicines;
     OnMedicineSelectedListener mMedicineSelectedCallback;
-    ArrayAdapter adapter;
-    ListView listview;
+
+    @BindView(R.id.medicines_list)
+    RecyclerView recyclerView;
+    @BindView(android.R.id.empty)
+    View emptyView;
+
+    FastItemAdapter<MedicineItem> adapter;
     Handler handler;
+    Unbinder unbinder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_medicines_list, container, false);
+        unbinder = ButterKnife.bind(this, rootView);
         handler = new Handler();
-        listview = (ListView) rootView.findViewById(R.id.medicines_list);
-        View empty = rootView.findViewById(android.R.id.empty);
-        listview.setEmptyView(empty);
         mMedicines = DB.medicines().findAllForActivePatient(getContext());
-        adapter = new MedicinesListAdapter(getActivity(), R.layout.medicines_list_item, mMedicines);
-        listview.setAdapter(adapter);
+        if (mMedicines.size() > 0)
+            emptyView.setVisibility(View.GONE);
+        setupRecyclerView();
         return rootView;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,31 +108,6 @@ public class MedicinesListFragment extends Fragment {
     public void notifyDataChange() {
         Log.d(getTag(), "Medicines - Notify data change");
         new ReloadItemsTask().execute();
-    }
-
-    public void openProspect(Prescription p) {
-        ProspectUtils.openProspect(p, getActivity(), true);
-    }
-
-    public void showDrivingAdvice(final Prescription p) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(getString(R.string.driving_warning))
-                .setTitle(getString(R.string.driving_warning_title))
-                .setIcon(getResources().getDrawable(R.drawable.ic_warning_amber_48dp));
-        builder.setPositiveButton(getString(R.string.driving_warning_show_prospect), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                openProspect(p);
-
-            }
-        });
-        builder.setNeutralButton(getString(R.string.driving_warning_gotit), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.show();
     }
 
     @Override
@@ -207,86 +190,49 @@ public class MedicinesListFragment extends Fragment {
 
     }
 
-    private View createMedicineListItem(LayoutInflater inflater, final Medicine medicine) {
-
-        View item = inflater.inflate(R.layout.medicines_list_item, null);
-        ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
-        TextView name = (TextView) item.findViewById(R.id.medicines_list_item_name);
-        ImageView alertIcon = (ImageView) item.findViewById(R.id.imageView);
-        name.setText(medicine.name());
-        icon.setImageDrawable(new IconicsDrawable(getContext())
-                .icon(medicine.presentation().icon())
-                .colorRes(R.color.agenda_item_title)
-                .paddingDp(8)
-                .sizeDp(40));
-
-        View overlay = item.findViewById(R.id.medicines_list_item_container);
-        overlay.setTag(medicine);
-
-        if (ModuleManager.isEnabled(StockModule.ID)) {
-            String nextPickup = medicine.nextPickup();
-            TextView stockInfo = (TextView) item.findViewById(R.id.stock_info);
-            stockInfo.setVisibility(View.VISIBLE);
-
-            if (nextPickup != null) {
-                stockInfo.setText("Próxima e-Receta: " + nextPickup);
-            }
-
-            if (medicine.stock() >= 0) {
-                stockInfo.setText(getString(R.string.stock_remaining_msg, medicine.stock().intValue(), medicine.presentation().units(getResources())));
-            }
+    private void setupRecyclerView() {
+        LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(llm);
+        adapter = new FastItemAdapter<>();
+        adapter.withSelectable(false);
+        adapter.withPositionBasedStateManagement(false);
+        for (Medicine mMedicine : mMedicines) {
+            adapter.add(new MedicineItem(mMedicine));
         }
-
-        String cn = medicine.cn();
-        final Prescription p = cn != null ? DB.drugDB().prescriptions().findByCn(medicine.cn()) : null;
-
-        List<PatientAlert> alerts = DB.alerts().findBy(PatientAlert.COLUMN_MEDICINE, medicine);
-        boolean hasAlerts = !alerts.isEmpty();
-
-        if (!hasAlerts) {
-            item.findViewById(R.id.imageView).setVisibility(View.GONE);
-        } else {
-            int level = PatientAlert.Level.LOW;
-            for (PatientAlert a : alerts) {
-                if (a.getLevel() > level) {
-                    level = a.getLevel();
-                }
-            }
-            alertIcon.setImageDrawable(IconUtils.alertLevelIcon(level, getActivity()));
-
-            item.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openMedicineInfoActivity(medicine, true);
-                }
-            });
-        }
-
-        View.OnClickListener clickListener = new View.OnClickListener() {
+        adapter.withOnLongClickListener(new FastAdapter.OnLongClickListener<MedicineItem>() {
             @Override
-            public void onClick(View view) {
-                Medicine m = (Medicine) view.getTag();
-                if (mMedicineSelectedCallback != null && m != null) {
-                    Log.d(getTag(), "Click at " + m.name());
-                    mMedicineSelectedCallback.onMedicineSelected(m);
-                } else {
-                    Log.d(getTag(), "No callback set");
-                }
-            }
-        };
-
-        overlay.setOnClickListener(clickListener);
-        overlay.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (view.getTag() != null)
-                    showDeleteConfirmationDialog((Medicine) view.getTag());
+            public boolean onLongClick(View v, IAdapter<MedicineItem> adapter, MedicineItem item, int position) {
+                showDeleteConfirmationDialog(item.getMedicine());
                 return true;
             }
         });
-        return item;
-    }
 
+        adapter.withItemEvent(new ClickEventHook<MedicineItem>() {
+            @Nullable
+            @Override
+            public View onBind(@NonNull RecyclerView.ViewHolder viewHolder) {
+                if (viewHolder instanceof MedicineItem.MedicineViewHolder)
+                    return ((MedicineItem.MedicineViewHolder) viewHolder).alertIcon;
+                return null;
+            }
+
+            @Override
+            public void onClick(View v, int position, FastAdapter<MedicineItem> fastAdapter, MedicineItem item) {
+                openMedicineInfoActivity(item.getMedicine(), true);
+            }
+        });
+
+        adapter.withOnClickListener(new FastAdapter.OnClickListener<MedicineItem>() {
+            @Override
+            public boolean onClick(View v, IAdapter<MedicineItem> adapter, MedicineItem item, int position) {
+                if (mMedicineSelectedCallback != null && item != null && item.getMedicine() != null)
+                    mMedicineSelectedCallback.onMedicineSelected(item.getMedicine());
+                return true;
+            }
+        });
+
+        recyclerView.setAdapter(adapter);
+    }
 
     //
     // Container Activity must implement this interface
@@ -301,32 +247,25 @@ public class MedicinesListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
+            Log.d(TAG, "Reloading items...");
             mMedicines = DB.medicines().findAllForActivePatient(getContext());
-
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            if (mMedicines.size() > 0) {
+                emptyView.setVisibility(View.GONE);
+            } else {
+                emptyView.setVisibility(View.VISIBLE);
+            }
             adapter.clear();
             for (Medicine m : mMedicines) {
-                adapter.add(m);
+                adapter.add(new MedicineItem(m));
             }
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    private class MedicinesListAdapter extends ArrayAdapter<Medicine> {
-
-        public MedicinesListAdapter(Context context, int layoutResourceId, List<Medicine> items) {
-            super(context, layoutResourceId, items);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-            return createMedicineListItem(layoutInflater, mMedicines.get(position));
+            adapter.notifyAdapterDataSetChanged();
+            Log.d(TAG, "Reloaded items, count: " + mMedicines.size());
         }
     }
 

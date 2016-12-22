@@ -21,7 +21,7 @@
                 android:layout_height="match_parent"
                 android:background="#fcfcfc">
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/schedule_list"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"

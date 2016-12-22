@@ -21,7 +21,7 @@
                 android:layout_height="fill_parent"
                 android:background="#fcfcfc">
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/medicines_list"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
@@ -30,6 +30,7 @@
         android:divider="#fff"
         android:dividerHeight="0dp"
         android:paddingBottom="96dp"
+        android:paddingTop="8dp"
         android:scrollbars="none"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

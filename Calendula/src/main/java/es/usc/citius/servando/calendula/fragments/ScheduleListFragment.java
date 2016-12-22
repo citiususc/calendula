@@ -19,38 +19,37 @@
 package es.usc.citius.servando.calendula.fragments;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.typeface.IIcon;
+import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.IAdapter;
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.adapters.items.ScheduleListItem;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Schedule;
-import es.usc.citius.servando.calendula.persistence.ScheduleItem;
-import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
 
 /**
@@ -62,23 +61,34 @@ public class ScheduleListFragment extends Fragment {
 
     List<Schedule> mSchedules;
     OnScheduleSelectedListener mScheduleSelectedCallback;
-    ArrayAdapter adapter;
-    ListView listview;
 
+    FastItemAdapter<ScheduleListItem> adapter;
+
+    @BindView(R.id.schedule_list)
+    RecyclerView recyclerView;
+    @BindView(android.R.id.empty)
+    View empty;
+
+    Unbinder unbinder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_schedule_list, container, false);
-        listview = (ListView) rootView.findViewById(R.id.schedule_list);
-
-        View empty = rootView.findViewById(android.R.id.empty);
-        listview.setEmptyView(empty);
+        ButterKnife.bind(this, rootView);
 
         mSchedules = DB.schedules().findAllForActivePatient(getContext());
-        adapter = new ScheduleListAdapter(getActivity(), R.layout.schedules_list_item, mSchedules);
-        listview.setAdapter(adapter);
+        if (mSchedules.size() > 0)
+            empty.setVisibility(View.GONE);
+        setupRecyclerView();
+
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     public void notifyDataChange() {
@@ -148,68 +158,37 @@ public class ScheduleListFragment extends Fragment {
                 .show();
     }
 
-    private View createScheduleListItem(LayoutInflater inflater, final Schedule schedule) {
+    private void setupRecyclerView() {
+        LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(llm);
 
-        View item = inflater.inflate(R.layout.schedules_list_item, null);
-        ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
-        ImageView icon2 = (ImageView) item.findViewById(R.id.imageView);
-
-        String timeStr = "";
-        List<ScheduleItem> items = schedule.items();
-
-        if (schedule.type() != Schedule.SCHEDULE_TYPE_HOURLY) {
-            timeStr = ScheduleUtils.getTimesStr(items != null ? items.size() : 0, getActivity());
-        } else {
-            timeStr = ScheduleUtils.getTimesStr(24 / schedule.rule().interval(), getActivity());
+        adapter = new FastItemAdapter<>();
+        adapter.withSelectable(false);
+        adapter.withPositionBasedStateManagement(false);
+        for (Schedule schedule : mSchedules) {
+            adapter.add(new ScheduleListItem(schedule));
         }
-
-        Log.d(TAG, "Schedule " + schedule.medicine().name() + " is scanned: " + schedule.scanned());
-        String auto = schedule.scanned() ? " ↻" : "";
-
-        icon2.setImageDrawable(new IconicsDrawable(getContext())
-                .icon(schedule.medicine().presentation().icon())
-                .color(Color.WHITE)
-                .paddingDp(8)
-                .sizeDp(40));
-
-        IIcon i = schedule.repeatsHourly() ? CommunityMaterial.Icon.cmd_history : CommunityMaterial.Icon.cmd_clock;
-
-        icon.setImageDrawable(new IconicsDrawable(getContext())
-                .icon(i)
-                .colorRes(R.color.agenda_item_title)
-                .paddingDp(8)
-                .sizeDp(40));
-
-        ((TextView) item.findViewById(R.id.schedules_list_item_medname)).setText(
-                schedule.medicine().name() + auto);
-        ((TextView) item.findViewById(R.id.schedules_list_item_times)).setText(timeStr);
-        ((TextView) item.findViewById(R.id.schedules_list_item_days)).setText(
-                schedule.toReadableString(getActivity()));
-
-        View overlay = item.findViewById(R.id.schedules_list_item_container);
-        overlay.setTag(schedule);
-
-        View.OnClickListener clickListener = new View.OnClickListener() {
+        adapter.withOnClickListener(new FastAdapter.OnClickListener<ScheduleListItem>() {
             @Override
-            public void onClick(View view) {
-                Schedule s = (Schedule) view.getTag();
+            public boolean onClick(View v, IAdapter<ScheduleListItem> adapter, ScheduleListItem item, int position) {
+                Schedule s = item.getSchedule();
                 if (mScheduleSelectedCallback != null && s != null) {
                     Log.d(getTag(), "Click at " + s.medicine().name() + " schedule");
                     mScheduleSelectedCallback.onScheduleSelected(s);
                 } else {
                     Log.d(getTag(), "No callback set");
                 }
-            }
-        };
-        overlay.setOnClickListener(clickListener);
-        overlay.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (view.getTag() != null) showDeleteConfirmationDialog((Schedule) view.getTag());
                 return true;
             }
         });
-        return item;
+        adapter.withOnLongClickListener(new FastAdapter.OnLongClickListener<ScheduleListItem>() {
+            @Override
+            public boolean onLongClick(View v, IAdapter<ScheduleListItem> adapter, ScheduleListItem item, int position) {
+                showDeleteConfirmationDialog(item.getSchedule());
+                return true;
+            }
+        });
+        recyclerView.setAdapter(adapter);
     }
 
     // Container Activity must implement this interface
@@ -232,24 +211,17 @@ public class ScheduleListFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            if (mSchedules.size() > 0) {
+                empty.setVisibility(View.GONE);
+            } else {
+                empty.setVisibility(View.VISIBLE);
+            }
             adapter.clear();
             for (Schedule s : mSchedules) {
-                adapter.add(s);
+                adapter.add(new ScheduleListItem(s));
             }
-            adapter.notifyDataSetChanged();
+            adapter.notifyAdapterDataSetChanged();
         }
     }
 
-    private class ScheduleListAdapter extends ArrayAdapter<Schedule> {
-
-        public ScheduleListAdapter(Context context, int layoutResourceId, List<Schedule> items) {
-            super(context, layoutResourceId, items);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-            return createScheduleListItem(layoutInflater, mSchedules.get(position));
-        }
-    }
 }
