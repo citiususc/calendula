@@ -44,6 +44,17 @@ public class PersistenceEvents {
         }
     }
 
+    public static class IntakeConfirmedEvent {
+        public Long id;
+
+        public boolean isRoutine;
+
+        public IntakeConfirmedEvent(Long id, boolean routine) {
+            this.id = id;
+            this.isRoutine = routine;
+        }
+    }
+
     public static class MedicineAddedEvent {
 
         public Long id;

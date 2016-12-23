@@ -249,6 +249,11 @@ public class HomePagerActivity extends CalendulaActivity implements
                         ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
                         ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
                         ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
+                    } else if (evt instanceof PersistenceEvents.IntakeConfirmedEvent) {
+                        // dismiss "take all" button, update checkboxes
+                        ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
+                        // stock info may need to be updated
+                        ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
                     } else if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
                         activePatient = ((PersistenceEvents.ActiveUserChangeEvent) evt).patient;
                         updateTitle(mViewPager.getCurrentItem());

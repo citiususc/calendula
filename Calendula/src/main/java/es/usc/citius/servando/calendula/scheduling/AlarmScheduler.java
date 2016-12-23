@@ -40,6 +40,7 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ConfirmActivity;
 import es.usc.citius.servando.calendula.activities.ReminderNotification;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
@@ -226,6 +227,8 @@ public class AlarmScheduler {
         // cancel all delay alarms
         cancelDelayedAlarm(r, date, ctx, AlarmIntentParams.USER);
         cancelDelayedAlarm(r, date, ctx, AlarmIntentParams.AUTO);
+        // update the relevant screens
+        CalendulaApp.eventBus().post(new PersistenceEvents.IntakeConfirmedEvent(r.getId() + date.hashCode(), true));
     }
 
     public void onIntakeCompleted(Schedule s, LocalTime t, LocalDate date, Context ctx) {
@@ -234,6 +237,8 @@ public class AlarmScheduler {
         // cancel all delay alarms
         cancelHourlyDelayedAlarm(s, t, date, ctx, AlarmIntentParams.USER);
         cancelHourlyDelayedAlarm(s, t, date, ctx, AlarmIntentParams.AUTO);
+        // update the relevant screens
+        CalendulaApp.eventBus().post(new PersistenceEvents.IntakeConfirmedEvent(s.getId() + date.hashCode(), true));
     }
 
     public void onCreateOrUpdateRoutine(Routine r, Context ctx) {
