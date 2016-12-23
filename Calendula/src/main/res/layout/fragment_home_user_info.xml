@@ -27,7 +27,6 @@
     >
 
 
-
     <ImageView
         android:id="@+id/image_switcher"
         android:layout_width="fill_parent"
@@ -36,22 +35,57 @@
         android:scaleType="centerCrop"
         />
 
+
+
+    <RelativeLayout
+        android:id="@+id/santa_container"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        >
+        <ImageView
+            android:id="@+id/image_santa"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentTop="true"
+            android:scaleType="centerCrop"
+            />
+
+        <ImageButton
+            android:id="@+id/santa_mode_button"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="70dp"
+            android:background="@drawable/circle_white"
+            android:layout_marginRight="26dp"
+            android:layout_alignParentRight="true"
+            android:scaleType="centerInside"
+            />
+
+    </RelativeLayout>
+
     <ImageView
+        android:id="@+id/blur_mask"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:src="@drawable/blur_mask"
         android:scaleType="centerCrop"
+        android:clickable="false"
         android:alpha="0.9"/>
 
     <ImageView
         android:id="@+id/bottom_shadow"
+        android:clickable="false"
         android:layout_width="fill_parent"
-        android:layout_height="40dp"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
-        android:alpha="0.5"
+        android:alpha="0.7"
         android:scaleType="fitXY"
         android:src="@drawable/daily_view_list_item_tab_shadow_bottom"/>
-
 
     <RelativeLayout
         android:id="@+id/profile_info"
@@ -65,7 +99,8 @@
         <es.usc.citius.servando.calendula.util.view.CustomDigitalClock
             android:id="@+id/home_clock"
             style="@style/whiteTextWithShadow"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="false"
             android:layout_alignParentRight="false"
@@ -79,9 +114,10 @@
         <TextView
             android:id="@+id/profile_username"
             style="@style/whiteTextWithShadow"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/home_clock"
+            android:layout_centerVertical="true"
             android:layout_centerInParent="true"
             android:fontFamily="sans-serif-light"
             android:gravity="center"
