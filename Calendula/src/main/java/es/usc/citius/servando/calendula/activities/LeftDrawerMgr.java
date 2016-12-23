@@ -109,11 +109,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
 
         for (Patient p : DB.patients().findAll()) {
             Log.d("LeftDrawer", "Adding patient to drawer: " + p.name());
-            profiles.add(new ProfileDrawerItem()
-                    .withIdentifier(p.id().intValue())
-                    .withName(p.name())
-                    .withEmail(p.name() + "@calendula")
-                    .withIcon(AvatarMgr.res(p.avatar())));
+            profiles.add(genProfile(p));
         }
 
         headerResult = new AccountHeaderBuilder()
@@ -126,6 +122,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
                 .withThreeSmallProfileImages(true)
                 .withOnAccountHeaderListener(this)
                 .withSavedInstance(savedInstanceState)
+                .withSelectionListEnabledForSingleProfile(false)
                 .build();
 
         //Create the drawer
@@ -398,10 +395,20 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
     }
 
     private IProfile genProfile(Patient p) {
+        final int schedules = DB.schedules().findAll(p).size();
+        String fakeMail;
+        if (schedules > 0) {
+            fakeMail = home.getString(R.string.active_schedules_number, schedules);
+        } else {
+            fakeMail = home.getString(R.string.active_schedules_none);
+        }
+
         return new ProfileDrawerItem()
                 .withIdentifier(p.id().intValue())
                 .withName(p.name())
-                .withEmail(p.name() + "@calendula")
-                .withIcon(AvatarMgr.res(p.avatar()));
+                .withEmail(fakeMail)
+                .withIcon(AvatarMgr.res(p.avatar()))
+                .withNameShown(true);
     }
+
 }
