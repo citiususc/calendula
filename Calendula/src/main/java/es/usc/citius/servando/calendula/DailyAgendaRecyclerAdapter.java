@@ -389,9 +389,11 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     private void updateItem(int position) {
-        DailyAgendaItemStub stub = items.get(position);
-        updateStub(stub);
-        notifyItemChanged(position);
+        if (position < items.size() && position > -1) {
+            DailyAgendaItemStub stub = items.get(position);
+            updateStub(stub);
+            notifyItemChanged(position);
+        }
     }
 
     public interface EventListener {
