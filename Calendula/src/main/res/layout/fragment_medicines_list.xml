@@ -30,7 +30,6 @@
         android:divider="#fff"
         android:dividerHeight="0dp"
         android:paddingBottom="96dp"
-        android:paddingTop="8dp"
         android:scrollbars="none"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
