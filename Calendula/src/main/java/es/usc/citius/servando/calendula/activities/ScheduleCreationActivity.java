@@ -357,6 +357,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                 .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         DB.schedules().deleteCascade(s, true);
+                        ReminderNotification.cancel(ScheduleCreationActivity.this, ReminderNotification.scheduleNotificationId(s.getId().intValue()));
                         finish();
                     }
                 })

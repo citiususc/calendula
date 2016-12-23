@@ -89,6 +89,7 @@ public class RoutinesActivity extends CalendulaActivity implements RoutineCreate
     public void onRoutineDeleted(Routine r) {
         AlarmScheduler.instance().onDeleteRoutine(r, this);
         DB.routines().deleteCascade(r, true);
+        ReminderNotification.cancel(this, ReminderNotification.routineNotificationId(r.getId().intValue()));
         finish();
     }
 

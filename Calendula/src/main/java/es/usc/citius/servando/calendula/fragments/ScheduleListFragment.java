@@ -46,6 +46,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.ReminderNotification;
 import es.usc.citius.servando.calendula.adapters.items.ScheduleListItem;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
@@ -147,6 +148,7 @@ public class ScheduleListFragment extends Fragment {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         DB.schedules().deleteCascade(s, true);
+                        ReminderNotification.cancel(getContext(), ReminderNotification.scheduleNotificationId(s.getId().intValue()));
                         notifyDataChange();
                     }
                 })

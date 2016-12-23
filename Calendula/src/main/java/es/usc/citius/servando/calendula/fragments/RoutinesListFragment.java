@@ -46,6 +46,7 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.ReminderNotification;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Routine;
@@ -148,6 +149,7 @@ public class RoutinesListFragment extends Fragment {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         AlarmScheduler.instance().onDeleteRoutine(r, getActivity());
                         DB.routines().deleteCascade(r, true);
+                        ReminderNotification.cancel(getContext(), ReminderNotification.routineNotificationId(r.getId().intValue()));
                         notifyDataChange();
                     }
                 })
