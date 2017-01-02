@@ -37,10 +37,12 @@ Non-code contributions are also welcome!. You can do a lot of things:
 
 
 ### Help with app translations
-You can also contribute by translating the app to your (or other) language. All you need to do is:
+Contributing translations is now easier than ever! Just join us at POEditor using [this link](https://poeditor.com/join/project/kIdyqFodDn) and start translating Calendula to one of the existing languages, or suggest a new one. This is the recommended method for translations.
+You can also contribute with better translations for particular words or sentences.
+
+Alternatively, you can contribute translations via pull request:
 
  * Add a new folder named `values-{LANG}/` at `Calendula/src/main/res/`
- * Translate all the `strings_*` files inside
- * Send a pull request. PR are preferable, but you can also send us the translated files and we'll do the rest.
+ * Translate the `strings_translatable.xml` file from `values-en` to your desired language.
+ * Send a pull request.
 
-You can also Contribute with a better translation for a particular word or sentence.
