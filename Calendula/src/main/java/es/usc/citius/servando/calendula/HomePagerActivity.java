@@ -504,7 +504,7 @@ public class HomePagerActivity extends CalendulaActivity implements
             public void onPageSelected(int position) {
                 updateTitle(position);
                 fabMgr.onViewPagerItemChange(position);
-                if (position == 0) {
+                if (position == 0 && !((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded()) {
                     appBarLayout.setExpanded(true);
                 } else {
                     appBarLayout.setExpanded(false);
