@@ -86,7 +86,7 @@ public class HomePagerActivity extends CalendulaActivity implements
 
     public static final int REQ_CODE_EXTERNAL_STORAGE = 10;
     private static final String TAG = "HomePagerActivity";
-    AppBarLayout appBarLayout;
+    public AppBarLayout appBarLayout;
     CollapsingToolbarLayout toolbarLayout;
     HomeProfileMgr homeProfileMgr;
     View userInfoFragment;

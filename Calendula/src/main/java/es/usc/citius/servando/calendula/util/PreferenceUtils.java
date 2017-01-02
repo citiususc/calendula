@@ -48,4 +48,8 @@ public class PreferenceUtils {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
+    public SharedPreferences.Editor edit() {
+        return preferences().edit();
+    }
+
 }
