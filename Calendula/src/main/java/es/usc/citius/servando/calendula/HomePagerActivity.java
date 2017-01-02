@@ -139,7 +139,7 @@ public class HomePagerActivity extends CalendulaActivity implements
 
         int pageNum = mViewPager.getCurrentItem();
 
-        if (pageNum == 0) {
+        if (pageNum == HomePages.HOME.ordinal()) {
             boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).isExpanded();
             menu.findItem(R.id.action_expand).setVisible(true);
             menu.findItem(R.id.action_expand).setIcon(!expanded ? icAgendaMore : icAgendaLess);
@@ -147,7 +147,7 @@ public class HomePagerActivity extends CalendulaActivity implements
             menu.findItem(R.id.action_expand).setVisible(false);
         }
 
-        if (pageNum == 2 && CalendulaApp.isPharmaModeEnabled()) {
+        if (pageNum == HomePages.MEDICINES.ordinal() && CalendulaApp.isPharmaModeEnabled()) {
             menu.findItem(R.id.action_calendar).setVisible(true);
         } else {
             menu.findItem(R.id.action_calendar).setVisible(false);
