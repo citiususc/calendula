@@ -32,9 +32,10 @@ import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
  * Created by alvaro.brey.vilas on 02/01/17.
  */
 public enum HomePages {
+    // attention: order is important!!!
     HOME(DailyAgendaFragment.class.getName(), R.string.app_name, GoogleMaterial.Icon.gmd_home),
-    ROUTINES(RoutinesListFragment.class.getName(), R.string.title_activity_routines, GoogleMaterial.Icon.gmd_alarm),
     MEDICINES(MedicinesListFragment.class.getName(), R.string.title_activity_medicines, CommunityMaterial.Icon.cmd_pill),
+    ROUTINES(RoutinesListFragment.class.getName(), R.string.title_activity_routines, GoogleMaterial.Icon.gmd_alarm),
     SCHEDULES(ScheduleListFragment.class.getName(), R.string.title_activity_schedules, GoogleMaterial.Icon.gmd_calendar);
 
     public String className;
