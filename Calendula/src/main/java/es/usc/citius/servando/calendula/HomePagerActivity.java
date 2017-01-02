@@ -44,9 +44,7 @@ import android.widget.Toast;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.typeface.IIcon;
 
 import org.joda.time.DateTime;
 
@@ -474,17 +472,10 @@ public class HomePagerActivity extends CalendulaActivity implements
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        IIcon[] icons = new IIcon[]{
-                GoogleMaterial.Icon.gmd_home,
-                GoogleMaterial.Icon.gmd_alarm,
-                CommunityMaterial.Icon.cmd_pill,
-                GoogleMaterial.Icon.gmd_calendar,
-        };
-
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
 
             Drawable icon = new IconicsDrawable(this)
-                    .icon(icons[i])
+                    .icon(HomePages.values()[i].icon)
                     .alpha(80)
                     .paddingDp(2)
                     .color(Color.WHITE)
@@ -527,22 +518,7 @@ public class HomePagerActivity extends CalendulaActivity implements
     }
 
     private void updateTitle(int page) {
-        String title;
-
-        switch (page) {
-            case 1:
-                title = getString(R.string.relation_user_possession_thing, activePatient.name(), getString(R.string.title_activity_routines));
-                break;
-            case 2:
-                title = getString(R.string.relation_user_possession_thing, activePatient.name(), getString(R.string.title_activity_medicines));
-                break;
-            case 3:
-                title = getString(R.string.relation_user_possession_thing, activePatient.name(), getString(R.string.title_activity_schedules));
-                break;
-            default:
-                title = getString(R.string.app_name);
-                break;
-        }
+        String title = getString(R.string.relation_user_possession_thing, activePatient.name(), getString(HomePages.values()[page].title));
         toolbarTitle.setText(title);
     }
 

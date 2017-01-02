@@ -18,6 +18,11 @@
 
 package es.usc.citius.servando.calendula.adapters;
 
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.typeface.IIcon;
+
+import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.fragments.DailyAgendaFragment;
 import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
 import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
@@ -27,11 +32,18 @@ import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
  * Created by alvaro.brey.vilas on 02/01/17.
  */
 public enum HomePages {
-    HOME(DailyAgendaFragment.class.getName()), ROUTINES(RoutinesListFragment.class.getName()), MEDICINES(MedicinesListFragment.class.getName()), SCHEDULES(ScheduleListFragment.class.getName());
+    HOME(DailyAgendaFragment.class.getName(), R.string.app_name, GoogleMaterial.Icon.gmd_home),
+    ROUTINES(RoutinesListFragment.class.getName(), R.string.title_activity_routines, GoogleMaterial.Icon.gmd_alarm),
+    MEDICINES(MedicinesListFragment.class.getName(), R.string.title_activity_medicines, CommunityMaterial.Icon.cmd_pill),
+    SCHEDULES(ScheduleListFragment.class.getName(), R.string.title_activity_schedules, GoogleMaterial.Icon.gmd_calendar);
 
     public String className;
+    public int title;
+    public IIcon icon;
 
-    HomePages(String className) {
+    HomePages(String className, int title, IIcon icon) {
         this.className = className;
+        this.title = title;
+        this.icon = icon;
     }
 }
