@@ -106,6 +106,8 @@
 <string name="notification_delay">"Verzögern"</string>
 <string name="alarm_delayed_message">"Alarm ist verzögert um %1$s Minuten"</string>
 <string name="moods_dialog_title">"Wie fühlen Sie sich?"</string>
+
+<!-- Fuzzy -->
 <string name="search_med_hint">"Suche…"</string>
 <string name="medicine_edit_name_hint">"Hier schreiben…"</string>
 <string name="enable_prescriptions_dialog_message">"Sie können einfach Medikamente hinzufügen und Beipackzettel ansehen durch Aktivierung des Suchassistenten. Sie können die Aktivierung auch später über das Menu vornehmen."</string>

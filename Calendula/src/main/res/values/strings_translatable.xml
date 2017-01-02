@@ -125,7 +125,7 @@
 <string name="mood_neutral">"Feeling nothing"</string>
 <string name="mood_good">"Feeling good"</string>
 <string name="mood_very_good">"Feeling very good"</string>
-<string name="search_med_hint">"Search by name or CN…"</string>
+<string name="search_med_hint">"Search by name or code…"</string>
 <string name="pref_header_prescriptions">"Medicine search"</string>
 <string name="medicine_edit_name_hint">"Write here…"</string>
 <string name="enable_prescriptions_dialog_message">"You can easily add medicines and view leaflets by enabling search assistant. If you prefer not to do it, you can activate it later from the settings menu."</string>
@@ -374,6 +374,6 @@ You will see all their intakes in the home screen."</string>
 <string name="delays_fifteen_min">"15 min"</string>
 <string name="delays_sixty_min">"60 min"</string>
 <string name="text_take_medicines_now">"Take your medicines now"</string>
-    <string name="message_patients_name_required">Please input a name.</string>
-    <string name="label_patient_name">Name</string>
+<string name="message_patients_name_required">"Please input a name."</string>
+<string name="label_patient_name">"Name"</string>
 </resources>
