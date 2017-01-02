@@ -165,9 +165,9 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             // TODO: get from strings
             String title;
             if (item.date.equals(LocalDate.now())) {
-                title = ctx.getString(R.string.yesterday);
-            } else if (item.date.equals(LocalDate.now().minusDays(1))) {
                 title = ctx.getString(R.string.today);
+            } else if (item.date.equals(LocalDate.now().minusDays(1))) {
+                title = ctx.getString(R.string.yesterday);
             } else if (item.date.equals(LocalDate.now().plusDays(1))) {
                 title = ctx.getString(R.string.tomorrow);
             } else {
