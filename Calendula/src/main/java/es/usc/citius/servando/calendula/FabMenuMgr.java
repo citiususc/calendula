@@ -39,6 +39,7 @@ import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.ScanActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.activities.SchedulesHelpActivity;
+import es.usc.citius.servando.calendula.adapters.HomePages;
 import es.usc.citius.servando.calendula.fragments.ScheduleTypeFragment;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
@@ -103,6 +104,7 @@ public class FabMenuMgr implements View.OnClickListener {
     public void onViewPagerItemChange(int currentPage) {
 
         this.currentPage = currentPage;
+        HomePages page = HomePages.values()[currentPage];
 
         fab.setColorNormal(Color.parseColor("#ecf0f1"));
         fab.setColorPressed(Color.parseColor("#e7e7e7"));
@@ -110,14 +112,14 @@ public class FabMenuMgr implements View.OnClickListener {
 //        fab.setColorNormalResId(getFabColor(currentPage));
 //        fab.setColorPressedResId(getFabPressedColor(currentPage));
 
-        switch (currentPage) {
+        switch (page) {
 
-            case 0:
+            case HOME:
                 fabMenu.setVisibility(View.GONE);
                 fab.setVisibility(View.GONE);
                 break;
-            case 1:
-            case 2:
+            case ROUTINES:
+            case MEDICINES:
                 for (FloatingActionButton f : scheduleActions) {
                     f.setVisibility(View.GONE);
                 }
@@ -126,7 +128,7 @@ public class FabMenuMgr implements View.OnClickListener {
                 fab.bringToFront();
                 break;
 
-            case 3:
+            case SCHEDULES:
                 for (FloatingActionButton f : scheduleActions) {
                     f.setVisibility(View.VISIBLE);
                 }
@@ -165,31 +167,31 @@ public class FabMenuMgr implements View.OnClickListener {
 
     }
 
-    public int getFabColor(int page) {
-        switch (page) {
-            case 1:
-                return R.color.android_orange;
-            case 2:
-                return R.color.android_pink_dark;
-            case 3:
-                return R.color.android_green;
-            default:
-                return R.color.android_blue_darker;
-        }
-    }
-
-    public int getFabPressedColor(int page) {
-        switch (page) {
-            case 1:
-                return R.color.android_orange_dark;
-            case 2:
-                return R.color.android_pink;
-            case 3:
-                return R.color.android_green_dark;
-            default:
-                return R.color.android_blue_dark;
-        }
-    }
+//    public int getFabColor(int page) {
+//        switch (page) {
+//            case 1:
+//                return R.color.android_orange;
+//            case 2:
+//                return R.color.android_pink_dark;
+//            case 3:
+//                return R.color.android_green;
+//            default:
+//                return R.color.android_blue_darker;
+//        }
+//    }
+//
+//    public int getFabPressedColor(int page) {
+//        switch (page) {
+//            case 1:
+//                return R.color.android_orange_dark;
+//            case 2:
+//                return R.color.android_pink;
+//            case 3:
+//                return R.color.android_green_dark;
+//            default:
+//                return R.color.android_blue_dark;
+//        }
+//    }
 
     public void onPatientUpdate(Patient p) {
         for (FloatingActionButton f : scheduleActions) {
@@ -231,16 +233,17 @@ public class FabMenuMgr implements View.OnClickListener {
     }
 
     private void onClickAdd() {
-        switch (currentPage) {
-            case 0:
+        HomePages page = HomePages.values()[currentPage];
+        switch (page) {
+            case HOME:
                 return;
-            case 1:
+            case ROUTINES:
                 launchActivity(RoutinesActivity.class);
                 break;
-            case 2:
+            case MEDICINES:
                 launchActivity(MedicinesActivity.class);
                 break;
-            case 3:
+            case SCHEDULES:
         }
     }
 
