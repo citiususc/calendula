@@ -21,9 +21,14 @@ package es.usc.citius.servando.calendula.fragments.dosePickers;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 
 import com.filippudak.ProgressPieView.ProgressPieView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import es.usc.citius.servando.calendula.R;
 
@@ -33,50 +38,91 @@ import es.usc.citius.servando.calendula.R;
  */
 public class PillDosePickerFragment extends DosePickerFragment {
 
+    public static final int MAX_DISPLAY_PILLS = 3;
     NumberPicker integerPicker;
     NumberPicker fractionPicker;
-    ProgressPieView progress1;
-    ProgressPieView progress2;
-
+    LinearLayout graphicsLayout;
     String[] integers = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
     int[] integersValues = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     String[] fractions = new String[]{"0", "1/8", "1/4", "1/2", "3/4"};
     float[] fractionValues = new float[]{0, 0.125f, 0.25f, 0.5f, 0.75f};
+    List<ProgressPieView> pills;
+    ProgressPieView fractionPill = null;
+    private int lastInt = 0;
+
+    void addWholePills(final int number) {
+        for (int i = 0; i < number; i++) {
+            ProgressPieView p = new ProgressPieView(getContext());
+            p.setProgress(100);
+            graphicsLayout.addView(p, fractionPill != null ? graphicsLayout.getChildCount() - 1 : graphicsLayout.getChildCount());
+            final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) p.getLayoutParams();
+            layoutParams.setMargins(0, 0, 10, 0);
+            p.setLayoutParams(layoutParams);
+            pills.add(p);
+        }
+    }
 
     void updateProgress() {
-        double integerPart = integersValues[integerPicker.getValue()];
-        double fraction = fractionValues[fractionPicker.getValue()];
+        int integerPart = integersValues[integerPicker.getValue()];
+        float fraction = fractionValues[fractionPicker.getValue()];
 
-
-        progress1.setProgress(100);
-
-        if (fraction == 0.125) {
-            progress2.setProgress(12);
-            progress2.setText("1/8");
-
-        } else if (fraction == 0.25) {
-            progress2.setProgress(25);
-            progress2.setText("1/4");
-        } else if (fraction == 0.5) {
-            progress2.setProgress(50);
-            progress2.setText("1/2");
-        } else if (fraction == 0.75) {
-            progress2.setProgress(75);
-            progress2.setText("3/4");
+        // whole pills
+        if (integerPart > MAX_DISPLAY_PILLS && lastInt > MAX_DISPLAY_PILLS) {
+            pills.get(0).setText(String.format(Locale.getDefault(), "%1$d", integerPart));
         } else {
-            progress2.setProgress(0);
-            progress2.setText("");
+            if (integerPart < lastInt) {
+                // remove pills...
+                if (lastInt > MAX_DISPLAY_PILLS) {
+                    graphicsLayout.removeView(pills.get(0));
+                    pills.remove(0);
+                    addWholePills(integerPart);
+                } else {
+                    final int diff = lastInt - integerPart;
+                    for (int i = 0; i < diff; i++) {
+                        graphicsLayout.removeView(pills.get(pills.size() - 1));
+                        pills.remove(pills.size() - 1);
+                    }
+                }
+            } else if (integerPart > 0 && integerPart > lastInt) {
+                if (integerPart > MAX_DISPLAY_PILLS) {
+                    while (!pills.isEmpty()) {
+                        graphicsLayout.removeView(pills.get(pills.size() - 1));
+                        pills.remove(pills.size() - 1);
+                    }
+                    ProgressPieView p = new ProgressPieView(getContext());
+                    p.setProgress(100);
+                    p.setText(String.format(Locale.getDefault(), "%1$d", integerPart));
+                    graphicsLayout.addView(p, fractionPill != null ? graphicsLayout.getChildCount() - 1 : graphicsLayout.getChildCount());
+                    final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) p.getLayoutParams();
+                    layoutParams.setMargins(0, 0, 10, 0);
+                    p.setLayoutParams(layoutParams);
+                    pills.add(p);
+                } else {
+                    final int diff = integerPart - lastInt;
+                    addWholePills(diff);
+                }
+            }
         }
 
-        if (integerPart > 0) {
-            progress1.setProgress(100);
-            progress1.setText(((int) integerPart) + "");
+        // pill fraction
+        if (fraction > 0) {
+            final int progress = (int) (100 * fraction);
+            if (fractionPill != null) {
+                fractionPill.animateProgressFill(progress);
+            } else {
+                ProgressPieView p = new ProgressPieView(getContext());
+                graphicsLayout.addView(p);
+                p.animateProgressFill(progress);
+                fractionPill = p;
+            }
         } else {
-            progress1.setProgress(0);
-            progress1.setText("");
+            if (fractionPill != null) {
+                graphicsLayout.removeView(fractionPill);
+                fractionPill = null;
+            }
         }
 
-
+        lastInt = integerPart;
     }
 
     @Override
@@ -89,9 +135,8 @@ public class PillDosePickerFragment extends DosePickerFragment {
 
         integerPicker = (NumberPicker) rootView.findViewById(R.id.dosePickerInteger);
         fractionPicker = (NumberPicker) rootView.findViewById(R.id.dosePickerDecimal);
+        graphicsLayout = (LinearLayout) rootView.findViewById(R.id.graphics_layout);
 
-        progress1 = (ProgressPieView) rootView.findViewById(R.id.progressPieView);
-        progress2 = (ProgressPieView) rootView.findViewById(R.id.progressPieView2);
 
         integerPicker.setMaxValue(integers.length - 1);
         integerPicker.setMinValue(0);
@@ -116,6 +161,8 @@ public class PillDosePickerFragment extends DosePickerFragment {
         integerPicker.setOnValueChangedListener(valueChangeListener);
         fractionPicker.setOnValueChangedListener(valueChangeListener);
 
+        pills = new ArrayList<>();
+
     }
 
     @Override
@@ -123,34 +170,14 @@ public class PillDosePickerFragment extends DosePickerFragment {
         int integerPart = (int) initialDose;
         double fraction = initialDose - integerPart;
 
-        if (fraction == 0.125) {
-            fractionPicker.setValue(1);
-            progress2.setProgress(12);
-            progress2.setText("1/8");
-        } else if (fraction == 0.25) {
-            fractionPicker.setValue(2);
-            progress2.setProgress(25);
-            progress2.setText("1/4");
-        } else if (fraction == 0.5) {
-            fractionPicker.setValue(3);
-            progress2.setProgress(50);
-            progress2.setText("1/2");
-        } else if (fraction == 0.75) {
-            fractionPicker.setValue(4);
-            progress2.setProgress(75);
-            progress2.setText("3/4");
-        } else {
-            fractionPicker.setValue(0);
-            progress2.setProgress(0);
-            progress2.setText("0");
-        }
-
         integerPicker.setValue(integerPart);
-
-        if (integerPart > 0) {
-            progress1.setProgress(100);
-            progress1.setText(integerPart + "");
+        for (int i = 0; i < fractionValues.length; i++) {
+            if (fractionValues[i] == fraction) {
+                fractionPicker.setValue(i);
+                break;
+            }
         }
+        updateProgress();
     }
 
     @Override
