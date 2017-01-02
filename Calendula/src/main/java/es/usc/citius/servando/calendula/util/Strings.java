@@ -85,6 +85,15 @@ public class Strings {
         return sb;
     }
 
+    public static SpannableStringBuilder getHighlighted(final String text, final int start, final int end, final int color) {
+        final SpannableStringBuilder sb = new SpannableStringBuilder(Strings.toProperCase(text));
+        final ForegroundColorSpan fcs = new ForegroundColorSpan(color);
+        final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
+        sb.setSpan(fcs, start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        sb.setSpan(bss, start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        return sb;
+    }
+
     /**
      * Calls appropriate version of Html.fromHtml depending on build sdk version
      *

@@ -102,7 +102,9 @@ import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 public class MedicinesActivity extends CalendulaActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
 
+    public static final int MIN_SEARCH_LEN = 3;
     private final static String TAG = MedicinesActivity.class.getSimpleName();
+
 //    RoutinesListFragment listFragment;
 //    RoutineCreateOrEditFragment editFragment;
     /**
@@ -150,6 +152,8 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     PrescriptionDBMgr dbMgr;
     private String intentAction;
     private String intentSearchText = null;
+
+    private String lastSearch = "";
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -520,7 +524,6 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
     // Search adapter
     public class AutoCompleteAdapter extends ArrayAdapter<Prescription> implements Filterable {
-        int minCharsToSearch = 3;
         int hColor = Color.parseColor("#000000");
         int cnColor = Color.WHITE;//ScreenUtils.equivalentNoAlpha(color,0.8f);
         int cnHColor = hColor;
@@ -533,11 +536,11 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
-                if (constraint != null && constraint.length() >= minCharsToSearch && !TextUtils.isEmpty(constraint)) {
+                if (constraint != null && constraint.length() >= MIN_SEARCH_LEN && !TextUtils.isEmpty(constraint)) {
                     try {
                         exactMatch = false;
                         final String search = constraint.toString().toLowerCase().trim();
-                        final String preFilter = search.subSequence(0, minCharsToSearch).toString();
+                        final String preFilter = search.subSequence(0, MIN_SEARCH_LEN).toString();
 
                         // preliminary filter with the first characters of the search (exact)
                         final PreparedQuery<Prescription> prepare = DB.drugDB().prescriptions().queryBuilder()
@@ -649,9 +652,10 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 notifyDataSetChanged();
+                lastSearch = constraint.toString();
                 progressBar.setVisibility(View.GONE);
                 if (results.count == 0) {
-                    if (constraint.length() >= minCharsToSearch && !TextUtils.isEmpty(constraint)) {
+                    if (constraint.length() >= MIN_SEARCH_LEN && !TextUtils.isEmpty(constraint)) {
                         addCustomMedBtn.setText(getString(R.string.add_custom_med_button_text, constraint));
                         addCustomMedBtn.setVisibility(View.VISIBLE);
                         emptyListText.setText(getString(R.string.medicine_search_not_found_msg));
@@ -701,8 +705,12 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                 final Prescription p = mData.get(position);
 
                 String name = dbMgr.shortName(p);
-                String match = searchEditText.getText().toString().trim();
                 Presentation pres = dbMgr.expected(p);
+
+                final String search = lastSearch.toLowerCase();
+                final int searchLength = lastSearch.length();
+                final String lowerCode = p.getCode().toLowerCase();
+                final String lowerName = name.toLowerCase();
 
                 ImageButton prospectIcon = ((ImageButton) item.findViewById(R.id.prospect_icon));
                 TextView cnView = (TextView) item.findViewById(R.id.prescription_cn);
@@ -712,10 +720,26 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                 ImageView prView = ((ImageView) item.findViewById(R.id.presentation_image));
 
                 cnView.setTextColor(cnColor);
-                nameView.setText(Strings.getHighlighted(name, match, hColor));
+                if (lowerCode.contains(search)) {
+                    cnView.setText(Strings.getHighlighted(p.getCode(), search, cnHColor));
+                    nameView.setText(Strings.toProperCase(name));
+                } else {
+                    cnView.setText(p.getCode());
+                    if (lowerName.contains(search)) {
+                        nameView.setText(Strings.getHighlighted(name, search, hColor));
+                    } else {
+                        String minSearch = search.substring(0, MIN_SEARCH_LEN);
+                        int index = lowerName.indexOf(minSearch);
+                        if (index >= 0) {
+                            nameView.setText(Strings.getHighlighted(name, index, index + searchLength, hColor));
+                        } else {
+                            nameView.setText(Strings.toProperCase(name));
+                        }
+                    }
+                }
+
                 doseView.setText(p.getDose());
                 contentView.setText(p.getContent());
-                cnView.setText(Strings.getHighlighted(p.getCode(), match, cnHColor));
                 prospectIcon.setImageDrawable(icProspect);
 
                 prospectIcon.setOnClickListener(new View.OnClickListener() {

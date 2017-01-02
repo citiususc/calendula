@@ -55,9 +55,9 @@
                 android:paddingTop="5dp"
                 android:singleLine="false"
                 android:text="Medicine name that needs two rows"
-                android:textColor="#333"
-                android:textSize="16dp"
-                android:textStyle="bold"/>
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#222"
+                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/text2"
