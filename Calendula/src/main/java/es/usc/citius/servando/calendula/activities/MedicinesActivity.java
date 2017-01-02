@@ -610,7 +610,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
                         if (!prescriptions.isEmpty()) {
                             final Prescription first = prescriptions.get(0);
-                            if (metaInfo.get(first.getId()).first == 0) {
+                            if (metaInfo.get(first.getId()) != null && metaInfo.get(first.getId()).first == 0) {
                                 // Check if any word in the first result with distance 0
                                 // is exactly the constraint.
                                 // We need to check this because even if distance is 0 the matching
@@ -630,17 +630,16 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                             }
                         }
 
-                        mData = prescriptions;//Fetcher.fetchNames(constraint.toString());
-                        filterResults.values = mData;
-                        filterResults.count = mData.size();
+                        //Fetcher.fetchNames(constraint.toString());
+                        filterResults.values = prescriptions;
+                        filterResults.count = prescriptions.size();
                     } catch (Exception e) {
-                        Log.e("myException", e.getMessage());
-                        filterResults.values = null;
+                        Log.e(TAG, "Exception occurred while searching for prescriptions", e);
+                        filterResults.values = new ArrayList<>();
                         filterResults.count = 0;
                     }
                 } else {
-                    mData = new ArrayList<>();
-                    filterResults.values = mData;
+                    filterResults.values = new ArrayList<>();
                     filterResults.count = 0;
                 }
 
@@ -650,7 +649,9 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             }
 
             @Override
+            @SuppressWarnings("unchecked")
             protected void publishResults(CharSequence constraint, FilterResults results) {
+                mData = (List<Prescription>) results.values;
                 notifyDataSetChanged();
                 lastSearch = constraint.toString();
                 progressBar.setVisibility(View.GONE);
