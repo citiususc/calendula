@@ -62,6 +62,7 @@ import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.activities.SchedulesHelpActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
+import es.usc.citius.servando.calendula.adapters.HomePages;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.events.StockRunningOutEvent;
@@ -141,7 +142,7 @@ public class HomePagerActivity extends CalendulaActivity implements
         int pageNum = mViewPager.getCurrentItem();
 
         if (pageNum == 0) {
-            boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
+            boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).isExpanded();
             menu.findItem(R.id.action_expand).setVisible(true);
             menu.findItem(R.id.action_expand).setIcon(!expanded ? icAgendaMore : icAgendaLess);
         } else {
@@ -165,7 +166,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                 return true;
             case R.id.action_expand:
 
-                final boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
+                final boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).isExpanded();
                 appBarLayout.setExpanded(expanded);
 
 
@@ -174,7 +175,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
+                        ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).toggleViewMode();
                     }
                 }, delay ? 500 : 0);
 
@@ -245,15 +246,15 @@ public class HomePagerActivity extends CalendulaActivity implements
                     if (evt instanceof PersistenceEvents.ModelCreateOrUpdateEvent) {
                         PersistenceEvents.ModelCreateOrUpdateEvent event = (PersistenceEvents.ModelCreateOrUpdateEvent) evt;
                         Log.d(TAG, "onEvent: " + event.clazz.getName());
-                        ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
-                        ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
-                        ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
-                        ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
+                        ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).notifyDataChange();
+                        ((RoutinesListFragment) getViewPagerFragment(HomePages.ROUTINES)).notifyDataChange();
+                        ((MedicinesListFragment) getViewPagerFragment(HomePages.MEDICINES)).notifyDataChange();
+                        ((ScheduleListFragment) getViewPagerFragment(HomePages.SCHEDULES)).notifyDataChange();
                     } else if (evt instanceof PersistenceEvents.IntakeConfirmedEvent) {
                         // dismiss "take all" button, update checkboxes
-                        ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
+                        ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).notifyDataChange();
                         // stock info may need to be updated
-                        ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
+                        ((MedicinesListFragment) getViewPagerFragment(HomePages.MEDICINES)).notifyDataChange();
                     } else if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
                         activePatient = ((PersistenceEvents.ActiveUserChangeEvent) evt).patient;
                         updateTitle(mViewPager.getCurrentItem());
@@ -261,7 +262,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                         fabMgr.onPatientUpdate(activePatient);
                     } else if (evt instanceof PersistenceEvents.UserUpdateEvent) {
                         Patient p = ((PersistenceEvents.UserUpdateEvent) evt).patient;
-                        ((DailyAgendaFragment) getViewPagerFragment(0)).onUserUpdate();
+                        ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).onUserUpdate();
                         drawerMgr.onPatientUpdated(p);
                         if (DB.patients().isActive(p, HomePagerActivity.this)) {
                             activePatient = p;
@@ -273,12 +274,12 @@ public class HomePagerActivity extends CalendulaActivity implements
                         Patient created = ((PersistenceEvents.UserCreateEvent) evt).patient;
                         drawerMgr.onPatientCreated(created);
                     } else if (evt instanceof HomeProfileMgr.BackgroundUpdatedEvent) {
-                        ((DailyAgendaFragment) getViewPagerFragment(0)).refresh();
+                        ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).refresh();
                     } else if (evt instanceof ConfirmActivity.ConfirmStateChangeEvent) {
                         pendingRefresh = ((ConfirmActivity.ConfirmStateChangeEvent) evt).position;
-                        ((DailyAgendaFragment) getViewPagerFragment(0)).refreshPosition(pendingRefresh);
+                        ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).refreshPosition(pendingRefresh);
                     } else if (evt instanceof DailyAgenda.AgendaUpdatedEvent) {
-                        ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
+                        ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).notifyDataChange();
                         homeProfileMgr.updateDate();
                     } else if (evt instanceof StockRunningOutEvent) {
                         final StockRunningOutEvent sro = (StockRunningOutEvent) evt;
@@ -301,8 +302,8 @@ public class HomePagerActivity extends CalendulaActivity implements
                 .setAction("Action", null).show();
     }
 
-    Fragment getViewPagerFragment(int position) {
-        String tag = FragmentUtils.makeViewPagerFragmentName(R.id.container, position);
+    Fragment getViewPagerFragment(HomePages page) {
+        String tag = FragmentUtils.makeViewPagerFragmentName(R.id.container, page.ordinal());
         return getSupportFragmentManager().findFragmentByTag(tag);
     }
 
@@ -437,7 +438,7 @@ public class HomePagerActivity extends CalendulaActivity implements
 
     private void showInvalidNotificationError() {
 
-        final boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
+        final boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).isExpanded();
 
         new AlertDialog.Builder(this)
                 .setTitle(R.string.notification_error_title)
@@ -454,13 +455,13 @@ public class HomePagerActivity extends CalendulaActivity implements
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
+                                    ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).toggleViewMode();
                                 }
                             }, 200);
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ((DailyAgendaFragment) getViewPagerFragment(0)).scrollTo(DateTime.now());
+                                    ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).scrollTo(DateTime.now());
                                 }
                             }, 600);
                         }
@@ -504,7 +505,7 @@ public class HomePagerActivity extends CalendulaActivity implements
             public void onPageSelected(int position) {
                 updateTitle(position);
                 fabMgr.onViewPagerItemChange(position);
-                if (position == 0 && !((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded()) {
+                if (position == 0 && !((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).isExpanded()) {
                     appBarLayout.setExpanded(true);
                 } else {
                     appBarLayout.setExpanded(false);
