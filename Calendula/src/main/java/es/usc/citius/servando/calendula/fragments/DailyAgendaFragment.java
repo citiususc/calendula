@@ -104,16 +104,7 @@ public class DailyAgendaFragment extends Fragment {
 
         boolean expanded = PreferenceUtils.instance().preferences().getBoolean(PREF_EXPANDED, false);
         if (expanded != isExpanded()) {
-            if (expanded) {
-                toggleViewMode(new Runnable() {
-                    @Override
-                    public void run() {
-                        scrollTo(DateTime.now());
-                    }
-                });
-            } else {
-                toggleViewMode();
-            }
+            toggleViewMode();
             ((HomePagerActivity) getActivity()).appBarLayout.setExpanded(!expanded);
         }
 
@@ -310,11 +301,6 @@ public class DailyAgendaFragment extends Fragment {
         }
     }
 
-    public void toggleViewMode(Runnable after) {
-        rvListener.afterOneShot = after;
-        rvAdapter.toggleCollapseMode();
-    }
-
     public void toggleViewMode() {
         rvAdapter.toggleCollapseMode();
     }
@@ -341,7 +327,7 @@ public class DailyAgendaFragment extends Fragment {
         }
 
         if (position > 0)
-            llm.scrollToPositionWithOffset(position - 1, 50);
+            llm.scrollToPositionWithOffset(position - 1, 0);
     }
 
     public boolean isExpanded() {
@@ -477,7 +463,6 @@ public class DailyAgendaFragment extends Fragment {
 
     private class DailyAgendaRecyclerListener implements DailyAgendaRecyclerAdapter.EventListener {
         DateTime firstTime = null;
-        Runnable afterOneShot = null;
 
         @Override
         public void onItemClick(View v, DailyAgendaItemStub item, int position) {
@@ -504,13 +489,17 @@ public class DailyAgendaFragment extends Fragment {
         @Override
         public void onAfterToggleCollapse(boolean expanded, boolean somethingVisible) {
             PreferenceUtils.instance().edit().putBoolean(PREF_EXPANDED, expanded).apply();
-            if (expanded && firstTime != null) {
+            /*if (expanded && firstTime != null) {
                 scrollTo(firstTime);
-            }
-            firstTime = null;
-            if (afterOneShot != null) {
-                new Handler().post(afterOneShot);
-                afterOneShot = null;
+                firstTime = null;
+            } else */
+            if (expanded) {
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        scrollTo(DateTime.now());
+                    }
+                });
             }
         }
     }
