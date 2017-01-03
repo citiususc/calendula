@@ -84,16 +84,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
             routineId = savedInstanceState.getLong(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
         }
 
-        if (routineId != -1) {
-            mRoutine = Routine.findById(routineId);
-            setRoutine(mRoutine);
-            hour = mRoutine.time().getHourOfDay();
-            minute = mRoutine.time().getMinuteOfHour();
-        } else {
-            DateTime now = DateTime.now();
-            hour = now.getHourOfDay();
-            minute = now.getMinuteOfHour();
-        }
+        setRoutine(routineId);
 
         if (getDialog() != null) {
             getDialog().setTitle(R.string.title_create_routine_activity);
@@ -133,6 +124,19 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
 
 
         return rootView;
+    }
+
+    public void setRoutine(long routineId) {
+        if (routineId != -1) {
+            mRoutine = Routine.findById(routineId);
+            hour = mRoutine.time().getHourOfDay();
+            minute = mRoutine.time().getMinuteOfHour();
+            setRoutine(mRoutine);
+        } else {
+            DateTime now = DateTime.now();
+            hour = now.getHourOfDay();
+            minute = now.getMinuteOfHour();
+        }
     }
 
 
