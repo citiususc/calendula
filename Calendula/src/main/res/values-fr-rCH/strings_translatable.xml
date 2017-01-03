@@ -106,6 +106,8 @@
 <string name="notification_delay">"Remettre à plus tard"</string>
 <string name="alarm_delayed_message">"Alarme reportée %1$s minutes"</string>
 <string name="moods_dialog_title">"Comment vous sentez-vous ?"</string>
+
+<!-- Fuzzy -->
 <string name="search_med_hint">"Chercher…"</string>
 <string name="medicine_edit_name_hint">"Écrivez ici…"</string>
 <string name="enable_prescriptions_dialog_message">"Vous pourrez ajouter plus facilement vos médicaments et consulter leurs notices en activant l'assistant de recherche. Si vous changez d'avis, vous pourrez le désactiver dans le menu paramètres."</string>
