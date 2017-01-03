@@ -159,7 +159,8 @@
             android:name=".activities.PatientDetailActivity"
             android:label="@string/title_activity_patient_detail"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="es.usc.citius.servando.calendula.activities.PatientsActivity"/>

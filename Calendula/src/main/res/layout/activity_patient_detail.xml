@@ -73,53 +73,72 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-
-    <EditText
-        android:id="@+id/patient_name"
+    <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_marginLeft="72dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginTop="24dp"
-        android:imeOptions="actionDone"
-        android:textColor="@color/dark_grey_home"
-        android:textSize="22dp"/>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
+        android:layout_height="match_parent"
         android:layout_below="@+id/top"
-        android:layout_marginLeft="72dp"
-        android:layout_marginTop="30dp"
-        android:gravity="center_vertical"
-        android:text="@string/label_patient_name"
-        android:textColor="@color/dark_grey_text"
-        android:textSize="20sp"/>
+        android:layout_marginTop="@dimen/negative_status_bar_height"
+        android:fitsSystemWindows="true"
+        android:overScrollMode="never">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="0dp">
+
+            <EditText
+                android:id="@+id/patient_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView2"
+                android:layout_marginLeft="72dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginTop="24dp"
+                android:imeOptions="actionDone"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/dark_grey_home"
+                android:textSize="22dp"/>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginLeft="72dp"
+                android:layout_marginTop="30dp"
+                android:gravity="center_vertical"
+                android:text="@string/label_patient_name"
+                android:textColor="@color/dark_grey_text"
+                android:textSize="20sp"/>
 
 
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/patient_name"
-        android:layout_below="@+id/patient_name"
-        android:layout_marginTop="36dp"
-        android:elegantTextHeight="false"
-        android:text="@string/create_default_routines"
-        android:textColor="@color/dark_grey_text"
-        android:textSize="16sp"/>
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/patient_name"
+                android:layout_below="@+id/patient_name"
+                android:layout_marginTop="36dp"
+                android:elegantTextHeight="false"
+                android:text="@string/create_default_routines"
+                android:textColor="@color/dark_grey_text"
+                android:textSize="16sp"/>
 
-    <com.mikepenz.iconics.view.IconicsImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_below="@+id/top"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="30dp"
-        app:iiv_color="@color/dark_grey_home"
-        app:iiv_icon="cmd-account"
-        app:iiv_padding="3dp"/>
+            <com.mikepenz.iconics.view.IconicsImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="30dp"
+                app:iiv_color="@color/dark_grey_home"
+                app:iiv_icon="cmd-account"
+                app:iiv_padding="3dp"/>
+
+
+        </RelativeLayout>
+    </ScrollView>
 
 
     <RelativeLayout
