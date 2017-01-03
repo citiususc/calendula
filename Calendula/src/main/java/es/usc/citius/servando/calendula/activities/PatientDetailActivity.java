@@ -51,6 +51,8 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
@@ -137,6 +139,8 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
     boolean linked = false;
     String token = null;
     long patientId;
+    ScrollView scroll;
+    TextView patientNameLabel;
     private Menu menu;
     private int avatarBackgroundColor;
 
@@ -144,7 +148,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
     public void onBackPressed() {
         //ScreenUtils.setStatusBarColor(this, color2);
         patientAvatarBg.setVisibility(View.INVISIBLE);
-        super.onBackPressed();
+        finish();
     }
 
     @Override
@@ -260,6 +264,9 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         addRoutinesCheckBox = (CheckBox) findViewById(R.id.checkBox);
         colorScroll = (HorizontalScrollView) findViewById(R.id.colorScroll);
         linkButton = (Button) findViewById(R.id.linkButton);
+        scroll = (ScrollView) findViewById(R.id.scroll);
+        patientNameLabel = (TextView) findViewById(R.id.textView2);
+
 
         avatarGrid.setVisibility(View.VISIBLE);
         gridContainer.setVisibility(View.GONE);
@@ -312,11 +319,14 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         setupAvatarList();
         setupColorChooser();
         loadPatient();
-        patientName.requestFocus();
+
+        scroll.setSmoothScrollingEnabled(true);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                patientName.requestFocus();
                 KeyboardUtils.showKeyboard(PatientDetailActivity.this);
+                scroll.smoothScrollTo(0, patientNameLabel.getTop());
             }
         }, 200);
     }

@@ -23,4 +23,5 @@
     <dimen name="tabs_margin_top">81dp</dimen>
     <!-- action_bar_height + status bar height +  tabs_height -->
     <dimen name="fragment_tabs_margin_top">136dp</dimen>
+    <dimen name="negative_status_bar_height">-24dip</dimen>
 </resources>

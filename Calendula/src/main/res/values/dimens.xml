@@ -42,5 +42,6 @@
     <dimen name="calendar_month_title_bottommargin">20dp</dimen>
     <dimen name="calendar_text_medium">16sp</dimen>
     <dimen name="calendar_text_small">12sp</dimen>
+    <dimen name="negative_status_bar_height">0dp</dimen>
 
 </resources>
