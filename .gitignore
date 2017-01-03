@@ -41,3 +41,6 @@ libraries/*.iml
 *.swp
 
 Calendula/google-services.json
+
+# captures
+captures/
