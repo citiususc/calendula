@@ -39,13 +39,13 @@ import es.usc.citius.servando.calendula.R;
 public class PillDosePickerFragment extends DosePickerFragment {
 
     public static final int MAX_DISPLAY_PILLS = 3;
-    NumberPicker integerPicker;
-    NumberPicker fractionPicker;
+    NumberPicker leftPicker;
+    NumberPicker rightPicker;
     LinearLayout graphicsLayout;
-    String[] integers = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
-    int[] integersValues = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    String[] fractions = new String[]{"0", "1/8", "1/4", "1/2", "3/4"};
-    float[] fractionValues = new float[]{0, 0.125f, 0.25f, 0.5f, 0.75f};
+    String[] leftLabels = new String[]{"0", "1/8", "1/4", "1/2", "3/4", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+    double[] leftValues = new double[]{0d, 0.125d, 0.25d, 0.5d, 0.75d, 1d, 2d, 3d, 4d, 5d, 6d, 7d, 8d, 9d, 10d};
+    String[] rightLabels = new String[]{"0", "1/8", "1/4", "1/2", "3/4"};
+    double[] rightValues = new double[]{0d, 0.125d, 0.25d, 0.5d, 0.75d};
     List<ProgressPieView> pills;
     ProgressPieView fractionPill = null;
     private int lastInt = 0;
@@ -63,8 +63,9 @@ public class PillDosePickerFragment extends DosePickerFragment {
     }
 
     void updateProgress() {
-        int integerPart = integersValues[integerPicker.getValue()];
-        float fraction = fractionValues[fractionPicker.getValue()];
+        double value = leftValues[leftPicker.getValue()] + rightValues[rightPicker.getValue()];
+        int integerPart = (int) value;
+        double fraction = value - (double) integerPart;
 
         // whole pills
         if (integerPart > MAX_DISPLAY_PILLS && lastInt > MAX_DISPLAY_PILLS) {
@@ -133,22 +134,22 @@ public class PillDosePickerFragment extends DosePickerFragment {
     @Override
     protected void setupRootView(View rootView) {
 
-        integerPicker = (NumberPicker) rootView.findViewById(R.id.dosePickerInteger);
-        fractionPicker = (NumberPicker) rootView.findViewById(R.id.dosePickerDecimal);
+        leftPicker = (NumberPicker) rootView.findViewById(R.id.dosePickerInteger);
+        rightPicker = (NumberPicker) rootView.findViewById(R.id.dosePickerDecimal);
         graphicsLayout = (LinearLayout) rootView.findViewById(R.id.graphics_layout);
 
 
-        integerPicker.setMaxValue(integers.length - 1);
-        integerPicker.setMinValue(0);
-        integerPicker.setWrapSelectorWheel(false);
-        integerPicker.setDisplayedValues(integers);
-        integerPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        leftPicker.setMaxValue(leftLabels.length - 1);
+        leftPicker.setMinValue(0);
+        leftPicker.setWrapSelectorWheel(false);
+        leftPicker.setDisplayedValues(leftLabels);
+        leftPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
-        fractionPicker.setMaxValue(fractions.length - 1);
-        fractionPicker.setMinValue(0);
-        fractionPicker.setWrapSelectorWheel(false);
-        fractionPicker.setDisplayedValues(fractions);
-        fractionPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        rightPicker.setMaxValue(rightLabels.length - 1);
+        rightPicker.setMinValue(0);
+        rightPicker.setWrapSelectorWheel(false);
+        rightPicker.setDisplayedValues(rightLabels);
+        rightPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
 
         NumberPicker.OnValueChangeListener valueChangeListener = new NumberPicker.OnValueChangeListener() {
@@ -158,8 +159,8 @@ public class PillDosePickerFragment extends DosePickerFragment {
             }
         };
 
-        integerPicker.setOnValueChangedListener(valueChangeListener);
-        fractionPicker.setOnValueChangedListener(valueChangeListener);
+        leftPicker.setOnValueChangedListener(valueChangeListener);
+        rightPicker.setOnValueChangedListener(valueChangeListener);
 
         pills = new ArrayList<>();
 
@@ -170,10 +171,10 @@ public class PillDosePickerFragment extends DosePickerFragment {
         int integerPart = (int) initialDose;
         double fraction = initialDose - integerPart;
 
-        integerPicker.setValue(integerPart);
-        for (int i = 0; i < fractionValues.length; i++) {
-            if (fractionValues[i] == fraction) {
-                fractionPicker.setValue(i);
+        leftPicker.setValue(integerPart);
+        for (int i = 0; i < rightValues.length; i++) {
+            if (rightValues[i] == fraction) {
+                rightPicker.setValue(i);
                 break;
             }
         }
@@ -182,8 +183,8 @@ public class PillDosePickerFragment extends DosePickerFragment {
 
     @Override
     protected double getSelectedDose() {
-        double dose = integersValues[integerPicker.getValue()] + fractionValues[fractionPicker.getValue()];
-        Log.d("VALUE ", integersValues[integerPicker.getValue()] + "." + fractionValues[fractionPicker.getValue()]);
+        double dose = leftValues[leftPicker.getValue()] + rightValues[rightPicker.getValue()];
+        Log.d("VALUE ", leftValues[leftPicker.getValue()] + "." + rightValues[rightPicker.getValue()]);
         return dose;
     }
 
