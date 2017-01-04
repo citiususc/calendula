@@ -697,8 +697,9 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
     private void setupStockViews() {
         Context c = getActivity();
-        Drawable add = IconUtils.icon(c, CommunityMaterial.Icon.cmd_basket_fill, R.color.android_green, 24, 6);
-        Drawable remove = IconUtils.icon(c, CommunityMaterial.Icon.cmd_basket_unfill, R.color.android_red, 24, 6);
+
+        Drawable add = IconUtils.icon(c, CommunityMaterial.Icon.cmd_plus_circle, R.color.agenda_item_title, 26, 4);
+        Drawable remove = IconUtils.icon(c, CommunityMaterial.Icon.cmd_minus_circle, R.color.agenda_item_title, 26, 4);
 
         addBtn.setImageDrawable(add);
         rmBtn.setImageDrawable(remove);
