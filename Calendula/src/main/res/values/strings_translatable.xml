@@ -126,10 +126,10 @@
 <string name="mood_good">"Feeling good"</string>
 <string name="mood_very_good">"Feeling very good"</string>
 <string name="search_med_hint">"Search by name or code…"</string>
-<string name="pref_header_prescriptions">"Medicine search"</string>
+<string name="pref_header_prescriptions">"Medicine database"</string>
 <string name="medicine_edit_name_hint">"Write here…"</string>
-<string name="enable_prescriptions_dialog_message">"You can easily add medicines and view leaflets by enabling search assistant. If you prefer not to do it, you can activate it later from the settings menu."</string>
-<string name="enable_prescriptions_dialog_title">"Search assistant"</string>
+<string name="enable_prescriptions_dialog_message">"You can easily add medicines and view leaflets by enabling a medicine database. If you prefer not to do it, you can activate it later from the settings menu."</string>
+<string name="enable_prescriptions_dialog_title">"Medicine database"</string>
 <string name="enable_prescriptions_dialog_yes">"Activate (Recommended)"</string>
 <string name="enable_prescriptions_dialog_no">"Cancel"</string>
 <string name="driving_warning">"Taking this medicine may have effects on your ability to drive.
@@ -356,7 +356,7 @@ You will see all their intakes in the home screen."</string>
 <string name="pref_alarm_reminder_thirty_min">"30 min"</string>
 <string name="pref_alarm_reminder_one_hour">"1 hour"</string>
 <string name="pref_alarm_reminder_two_hours">"2 hours"</string>
-<string name="pref_enable_databases_title">"Enable medicine search"</string>
+<string name="pref_enable_databases_title">"Enable medicine database"</string>
 <string name="pref_available_databases_title">"Selected database"</string>
 <string name="pref_header_stock">"Stock control"</string>
 <string name="pref_stock_do_not_warn">"Do not warn me"</string>
