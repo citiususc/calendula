@@ -110,8 +110,9 @@
 <!-- Fuzzy -->
 <string name="search_med_hint">"Chercher…"</string>
 <string name="medicine_edit_name_hint">"Écrivez ici…"</string>
+
+<!-- Fuzzy -->
 <string name="enable_prescriptions_dialog_message">"Vous pourrez ajouter plus facilement vos médicaments et consulter leurs notices en activant l'assistant de recherche. Si vous changez d'avis, vous pourrez le désactiver dans le menu paramètres."</string>
-<string name="enable_prescriptions_dialog_title">"Assistant de recherche"</string>
 <string name="enable_prescriptions_dialog_yes">"Activer (Recommandé)"</string>
 <string name="enable_prescriptions_dialog_no">"Annuler"</string>
 <string name="driving_warning">"L'usage de ce médicament pourrait avoir des effets sur l'aptitude à conduire des véhicules.
