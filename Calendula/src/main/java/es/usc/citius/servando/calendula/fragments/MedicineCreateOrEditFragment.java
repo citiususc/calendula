@@ -29,6 +29,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -47,8 +48,12 @@ import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.doomonafireball.betterpickers.numberpicker.NumberPickerBuilder;
 import com.doomonafireball.betterpickers.numberpicker.NumberPickerDialogFragment;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -445,25 +450,32 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         boolean dbEnabled = !prefs.getString("prescriptions_database", getString(R.string.database_none_id)).equals(getString(R.string.database_none_id));
 
         if (!adviceShown && !dbEnabled) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle(getString(R.string.enable_prescriptions_dialog_title));
-            builder.setCancelable(false);
-            builder.setMessage(getString(R.string.enable_prescriptions_dialog_message))
+            new MaterialStyledDialog.Builder(getActivity())
+                    .setStyle(Style.HEADER_WITH_ICON)
+                    .setIcon(IconUtils.icon(getActivity(), CommunityMaterial.Icon.cmd_database, R.color.white, 100))
+                    .setHeaderColor(R.color.android_blue)
+                    .withDialogAnimation(true)
+                    .setTitle(R.string.enable_prescriptions_dialog_title)
+                    .setDescription(R.string.enable_prescriptions_dialog_message)
                     .setCancelable(false)
-                    .setPositiveButton(getString(R.string.enable_prescriptions_dialog_yes), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    .setPositiveText(getString(R.string.enable_prescriptions_dialog_yes))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             Intent i = new Intent(getActivity(), SettingsActivity.class);
                             i.putExtra("show_database_dialog", true);
                             startActivity(i);
                         }
                     })
-                    .setNegativeButton(getString(R.string.enable_prescriptions_dialog_no), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    .setNegativeText(R.string.enable_prescriptions_dialog_no)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             dialog.cancel();
                         }
-                    });
-            AlertDialog alert = builder.create();
-            alert.show();
+                    })
+                    .show();
+
         } else {
             if (mMedicine == null) {
                 showSoftInput();
