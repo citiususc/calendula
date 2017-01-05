@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2017 CITIUS - USC
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -19,23 +19,20 @@
 package es.usc.citius.servando.calendula.jobs;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import org.joda.time.Duration;
-
-import es.usc.citius.servando.calendula.util.HtmlCacheManager;
 
 /**
  * Created by alvaro.brey.vilas on 17/11/16.
  */
 
-public class PurgeCacheJob extends CalendulaJob {
+public class CheckDatabaseUpdatesJob extends CalendulaJob {
 
-    public final static String TAG = "PurgeCacheJob";
+    public final static String TAG = "CheckDatabaseUpdatesJob";
 
-    private static final Integer PERIOD_DAYS = 30;
+    private static final Integer PERIOD_DAYS = 7;
 
-    public PurgeCacheJob() {
+    public CheckDatabaseUpdatesJob() {
     }
 
     @Override
@@ -50,7 +47,7 @@ public class PurgeCacheJob extends CalendulaJob {
 
     @Override
     public boolean requiresIdle() {
-        return true;
+        return false;
     }
 
     @Override
@@ -62,9 +59,7 @@ public class PurgeCacheJob extends CalendulaJob {
     @NonNull
     @Override
     protected Result onRunJob(Params params) {
-        Log.d(TAG, "onRunJob: Job started");
-        Integer purged = HtmlCacheManager.getInstance().purgeCache();
-        Log.d(TAG, "onRunJob: Purged " + purged + " entries");
+        // TODO: 05/01/17
         return Result.SUCCESS;
     }
 

@@ -34,7 +34,10 @@ import es.usc.citius.servando.calendula.DefaultDataGenerator;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.database.PatientDao;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
+import es.usc.citius.servando.calendula.jobs.CalendulaJob;
 import es.usc.citius.servando.calendula.jobs.CalendulaJobCreator;
+import es.usc.citius.servando.calendula.jobs.CalendulaJobScheduler;
+import es.usc.citius.servando.calendula.jobs.CheckDatabaseUpdatesJob;
 import es.usc.citius.servando.calendula.jobs.PurgeCacheJob;
 import es.usc.citius.servando.calendula.modules.CalendulaModule;
 import es.usc.citius.servando.calendula.persistence.Patient;
@@ -117,7 +120,12 @@ public class BaseModule extends CalendulaModule {
 
         //initialize job engine
         JobManager.create(ctx).addJobCreator(new CalendulaJobCreator());
-        PurgeCacheJob.scheduleJob();
+        //schedule jobs
+        CalendulaJob[] jobs = new CalendulaJob[]{
+                new CheckDatabaseUpdatesJob(),
+                new PurgeCacheJob()
+        };
+        CalendulaJobScheduler.scheduleJobs(jobs);
     }
 
     private void updatePreferences(Context ctx) {

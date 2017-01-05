@@ -31,6 +31,8 @@ public class CalendulaJobCreator implements JobCreator {
         switch (tag) {
             case PurgeCacheJob.TAG:
                 return new PurgeCacheJob();
+            case CheckDatabaseUpdatesJob.TAG:
+                return new CheckDatabaseUpdatesJob();
             default:
                 return null;
         }
