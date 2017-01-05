@@ -40,6 +40,7 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.drugdb.updates.DBVersionManager;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Settings;
 import es.usc.citius.servando.calendula.util.SettingsKeys;
@@ -98,8 +99,8 @@ public class DownloadDatabaseHelper {
         Toast.makeText(context, R.string.download_db_unexpected_error, Toast.LENGTH_LONG).show();
         SharedPreferences settings = PreferenceUtils.instance().preferences();
         SharedPreferences.Editor edit = settings.edit();
-        edit.putString("last_valid_database", context.getString(R.string.database_none_id));
-        edit.putString("prescriptions_database", context.getString(R.string.database_none_id));
+        edit.putString(PreferenceKeys.DRUGDB_LAST_VALID, context.getString(R.string.database_none_id));
+        edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB, context.getString(R.string.database_none_id));
         edit.commit();
         Intent bcIntent = new Intent();
         bcIntent.setAction(InstallDatabaseService.ACTION_ERROR);

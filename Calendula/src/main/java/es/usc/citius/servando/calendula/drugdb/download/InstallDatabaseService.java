@@ -34,6 +34,7 @@ import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous database setup tasks
@@ -95,9 +96,9 @@ public class InstallDatabaseService extends IntentService {
 
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(InstallDatabaseService.this);
             SharedPreferences.Editor edit = settings.edit();
-            edit.putString("last_valid_database", dbPref);
-            edit.putString("prescriptions_database", dbPref);
-            edit.putString("database_version", dbVersion);
+            edit.putString(PreferenceKeys.DRUGDB_LAST_VALID, dbPref);
+            edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB, dbPref);
+            edit.putString(PreferenceKeys.DRUGDB_VERSION, dbVersion);
             edit.apply();
             Log.d(TAG, dbPref + "-" + dbVersion + ": Finished saving " + DB.drugDB().prescriptions().count() + " prescriptions!");
             onComplete();

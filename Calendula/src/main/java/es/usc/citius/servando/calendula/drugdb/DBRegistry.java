@@ -41,6 +41,7 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionActiveIngredient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionExcipient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PresentationForm;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 
 /**
  * Created by joseangel.pineiro on 9/4/15.
@@ -105,7 +106,7 @@ public class DBRegistry {
     }
 
     public PrescriptionDBMgr current() {
-        String key = settings.getString("prescriptions_database", none);
+        String key = settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB, none);
         Log.d("DBRegistry", "Key: " + key);
         return (key != null && !key.equals(none) && !key.equals(settingUp)) ? databases.get(key) : defaultDBMgr;
     }

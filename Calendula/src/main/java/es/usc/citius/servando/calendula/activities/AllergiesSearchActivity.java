@@ -80,6 +80,7 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.AllergyGroup;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.Strings;
 
 @SuppressWarnings("unchecked")
@@ -117,6 +118,46 @@ public class AllergiesSearchActivity extends CalendulaActivity {
     @Override
     public void onBackPressed() {
         cancel();
+    }
+
+    /**
+     * @return <code>true</code> if db was valid when called, <code>false</code> otherwise
+     */
+    public boolean askForDatabaseIfNeeded() {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean validDB = prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB, getString(R.string.database_none_id)).equals(getString(R.string.database_aemps_id));
+
+        if (!validDB) {
+            new MaterialStyledDialog.Builder(this)
+                    .setStyle(Style.HEADER_WITH_ICON)
+                    .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_database, R.color.white, 100))
+                    .setHeaderColor(R.color.android_blue)
+                    .withDialogAnimation(true)
+                    .setTitle(R.string.title_allergies_database_required)
+                    .setDescription(R.string.message_allergies_database_required)
+                    .setCancelable(false)
+                    .setPositiveText(getString(R.string.ok))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Intent i = new Intent(AllergiesSearchActivity.this, SettingsActivity.class);
+                            i.putExtra("show_database_dialog", true);
+                            finish();
+                            startActivity(i);
+                        }
+                    })
+                    .setNegativeText(R.string.cancel)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.cancel();
+                            finish();
+                        }
+                    })
+                    .show();
+        }
+        return validDB;
     }
 
     @OnClick(R.id.close_search_button)
@@ -160,46 +201,6 @@ public class AllergiesSearchActivity extends CalendulaActivity {
     void cancel() {
         setResult(Activity.RESULT_CANCELED);
         finish();
-    }
-
-    /**
-     * @return <code>true</code> if db was valid when called, <code>false</code> otherwise
-     */
-    public boolean askForDatabaseIfNeeded() {
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean validDB = prefs.getString("prescriptions_database", getString(R.string.database_none_id)).equals(getString(R.string.database_aemps_id));
-
-        if (!validDB) {
-            new MaterialStyledDialog.Builder(this)
-                    .setStyle(Style.HEADER_WITH_ICON)
-                    .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_database, R.color.white, 100))
-                    .setHeaderColor(R.color.android_blue)
-                    .withDialogAnimation(true)
-                    .setTitle(R.string.title_allergies_database_required)
-                    .setDescription(R.string.message_allergies_database_required)
-                    .setCancelable(false)
-                    .setPositiveText(getString(R.string.ok))
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Intent i = new Intent(AllergiesSearchActivity.this, SettingsActivity.class);
-                            i.putExtra("show_database_dialog", true);
-                            finish();
-                            startActivity(i);
-                        }
-                    })
-                    .setNegativeText(R.string.cancel)
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            dialog.cancel();
-                            finish();
-                        }
-                    })
-                    .show();
-        }
-        return validDB;
     }
 
     @Override
