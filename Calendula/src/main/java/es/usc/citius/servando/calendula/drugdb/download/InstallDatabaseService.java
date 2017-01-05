@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.util.Pair;
 import android.util.Log;
 
 import es.usc.citius.servando.calendula.R;
@@ -45,6 +46,7 @@ public class InstallDatabaseService extends IntentService {
     private static final String ACTION_SETUP = "calendula.persistence.medDatabases.action.SETUP";
     private static final String EXTRA_DB_PATH = "calendula.persistence.medDatabases.extra.DB_PATH";
     private static final String EXTRA_DB_PREF_VALUE = "calendula.persistence.medDatabases.extra.DB_PREF_VALUE";
+    private static final String EXTRA_DB_VERSION = "calendula.persistence.medDatabases.extra.DB_VERSION";
     public static int NOTIFICATION_ID = "InstallDatabaseService".hashCode();
     public static boolean isRunning = false;
     NotificationCompat.Builder mBuilder;
@@ -54,12 +56,13 @@ public class InstallDatabaseService extends IntentService {
         super("SetupDBService");
     }
 
-    public static void startSetup(Context context, String dbPath, String dbPreferenceValue) {
+    public static void startSetup(Context context, String dbPath, Pair<String, String> databaseInfo) {
         context = context.getApplicationContext();
         Intent intent = new Intent(context, InstallDatabaseService.class);
         intent.setAction(ACTION_SETUP);
         intent.putExtra(EXTRA_DB_PATH, dbPath);
-        intent.putExtra(EXTRA_DB_PREF_VALUE, dbPreferenceValue);
+        intent.putExtra(EXTRA_DB_PREF_VALUE, databaseInfo.first);
+        intent.putExtra(EXTRA_DB_VERSION, databaseInfo.second);
         context.startService(intent);
     }
 
@@ -70,12 +73,13 @@ public class InstallDatabaseService extends IntentService {
             if (ACTION_SETUP.equals(action)) {
                 final String dbPath = intent.getStringExtra(EXTRA_DB_PATH);
                 final String dbPref = intent.getStringExtra(EXTRA_DB_PREF_VALUE);
-                handleSetup(dbPath, dbPref);
+                final String dbVersion = intent.getStringExtra(EXTRA_DB_VERSION);
+                handleSetup(dbPath, dbPref, dbVersion);
             }
         }
     }
 
-    private void handleSetup(final String dbPath, final String dbPref) {
+    private void handleSetup(final String dbPath, final String dbPref, final String dbVersion) {
         try {
             isRunning = true;
             // get a reference to  the selected dbManager
@@ -93,8 +97,9 @@ public class InstallDatabaseService extends IntentService {
             SharedPreferences.Editor edit = settings.edit();
             edit.putString("last_valid_database", dbPref);
             edit.putString("prescriptions_database", dbPref);
+            edit.putString("database_version", dbVersion);
             edit.apply();
-            Log.d(TAG, "Finish saving " + DB.drugDB().prescriptions().count() + " prescriptions!");
+            Log.d(TAG, dbPref + "-" + dbVersion + ": Finished saving " + DB.drugDB().prescriptions().count() + " prescriptions!");
             onComplete();
         } catch (Exception e) {
             Log.e(TAG, "Error while saving prescription data", e);

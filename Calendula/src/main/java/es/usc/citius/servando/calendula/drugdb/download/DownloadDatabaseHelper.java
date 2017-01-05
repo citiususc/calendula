@@ -204,9 +204,9 @@ public class DownloadDatabaseHelper {
                 // save id in preferences for later use in DBDownloadReceiver
                 SharedPreferences preferences = PreferenceUtils.instance().preferences();
                 preferences.edit()
-                        .putLong("download_mgr_download_id", downloadId)
-                        .putString("download_mgr_download_db", dbName)
-                        .putString("download_mgr_download_dbversion", dbVersion)
+                        .putLong(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_ID, downloadId)
+                        .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_DB, dbName)
+                        .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_VERSION, dbVersion)
                         .apply();
             } else {
                 Toast.makeText(ctx, "Database not available :(", Toast.LENGTH_SHORT).show();
