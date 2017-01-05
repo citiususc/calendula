@@ -43,14 +43,16 @@ public class CalendulaJobScheduler {
         Log.d(TAG, "scheduleJob: There are " + jobs + " running and " + requests + " requests already for " + job.getTag());
         if (job.isUnique()) {
             if (jobs + requests != 1) {
-                // if not, cancel all jobs just to be safe:
-                Log.v(TAG, "Removing duplicate jobs/requests");
-                JobManager.instance().cancelAllForTag(job.getTag());
+                if (jobs + requests > 1) {
+                    Log.v(TAG, "Removing duplicate jobs/requests");
+                    JobManager.instance().cancelAllForTag(job.getTag());
+                }
                 //and create one
                 Log.v(TAG, "Scheduling new job " + job.getTag());
                 doSchedule(job);
             }
         } else {
+            Log.v(TAG, "Scheduling new job " + job.getTag());
             doSchedule(job);
         }
 
