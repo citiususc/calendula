@@ -78,6 +78,7 @@ public class DownloadDatabaseHelper {
                             callback.onDownloadAcceptedOrCancelled(true);
                         }
                         downloadDatabase(appContext, database);
+                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton(dialogCtx.getString(R.string.cancel), new DialogInterface.OnClickListener() {
