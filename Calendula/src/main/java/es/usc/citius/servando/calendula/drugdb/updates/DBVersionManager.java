@@ -42,8 +42,14 @@ public class DBVersionManager {
     private static final String VERSION_FILE = "versions.json";
     private static final String TAG = "DBVersionManager";
 
+    /**
+     * Connects to the database server, retrieves version info and determines the newest working
+     * version for a given database.
+     *
+     * @param databaseID the database ID
+     * @return the newest working version
+     */
     public static String getLastDBVersion(String databaseID) {
-//        NotificationManager mNotifyManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
         final String downloadUrl = Settings.instance().get(SettingsKeys.DATABASE_LOCATION);
         final String url = downloadUrl + VERSION_FILE;
 
