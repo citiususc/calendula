@@ -18,9 +18,17 @@
 
 package es.usc.citius.servando.calendula.jobs;
 
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import org.joda.time.DateTime;
 import org.joda.time.Duration;
+import org.joda.time.format.ISODateTimeFormat;
+
+import es.usc.citius.servando.calendula.drugdb.updates.DBVersionManager;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
  * Created by alvaro.brey.vilas on 17/11/16.
@@ -59,7 +67,25 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
     @NonNull
     @Override
     protected Result onRunJob(Params params) {
-        // TODO: 05/01/17
+        final SharedPreferences prefs = PreferenceUtils.instance().preferences();
+        final String database = prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB, null);
+        final String currentVersion = prefs.getString(PreferenceKeys.DRUGDB_VERSION, null);
+
+        if (database != null) {
+            if (currentVersion != null) {
+                final String lastDBVersion = DBVersionManager.getLastDBVersion(database);
+                final DateTime lastDBDate = DateTime.parse(lastDBVersion, ISODateTimeFormat.basicDate());
+                final DateTime currentDBDate = DateTime.parse(currentVersion, ISODateTimeFormat.basicDate());
+
+                if (lastDBDate.isAfter(currentDBDate)) {
+                    // update is available!
+                    Log.d(TAG, "onRunJob: Update found for database " + database + " (" + lastDBVersion + ")");
+                }
+            } else {
+                Log.e(TAG, "Database is " + database + " but no version is set!");
+            }
+        }
+
         return Result.SUCCESS;
     }
 
