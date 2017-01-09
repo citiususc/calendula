@@ -26,6 +26,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.format.ISODateTimeFormat;
 
+import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.updates.DBVersionManager;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
@@ -67,11 +68,13 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
     @NonNull
     @Override
     protected Result onRunJob(Params params) {
+        Log.d(TAG, "onRunJob: Job started");
         final SharedPreferences prefs = PreferenceUtils.instance().preferences();
-        final String database = prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB, null);
+        final String noneId = getContext().getString(R.string.database_none_id);
+        final String database = prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB, noneId);
         final String currentVersion = prefs.getString(PreferenceKeys.DRUGDB_VERSION, null);
 
-        if (database != null) {
+        if (!database.equals(noneId)) {
             if (currentVersion != null) {
                 final String lastDBVersion = DBVersionManager.getLastDBVersion(database);
                 final DateTime lastDBDate = DateTime.parse(lastDBVersion, ISODateTimeFormat.basicDate());
@@ -80,10 +83,14 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
                 if (lastDBDate.isAfter(currentDBDate)) {
                     // update is available!
                     Log.d(TAG, "onRunJob: Update found for database " + database + " (" + lastDBVersion + ")");
+                } else {
+                    Log.d(TAG, "onRunJob: Database is updated. ID is '" + database + "', version is '" + currentVersion + "'");
                 }
             } else {
                 Log.e(TAG, "Database is " + database + " but no version is set!");
             }
+        } else {
+            Log.d(TAG, "onRunJob: No database. No version check needed.");
         }
 
         return Result.SUCCESS;
