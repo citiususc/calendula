@@ -162,7 +162,7 @@ public class DownloadDatabaseHelper {
         void onDownloadAcceptedOrCancelled(boolean accepted);
     }
 
-    private class DownloadDatabaseTask extends AsyncTask<String, Void, Void> {
+    private class DownloadDatabaseTask extends AsyncTask<String, Void, Boolean> {
 
         private Context ctx;
         private DBInstallType type;
@@ -172,8 +172,17 @@ public class DownloadDatabaseHelper {
             this.type = type;
         }
 
+
         @Override
-        protected Void doInBackground(String... params) {
+        protected void onPostExecute(Boolean correct) {
+            if (!correct) {
+                onDownloadFailed(ctx);
+                Toast.makeText(ctx, "Database not available :(", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
             final String database = params[0];
 
             PrescriptionDBMgr mgr = DBRegistry.instance().db(database);
@@ -213,11 +222,10 @@ public class DownloadDatabaseHelper {
                         .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_TYPE, type.toString())
                         .apply();
             } else {
-                Toast.makeText(ctx, "Database not available :(", Toast.LENGTH_SHORT).show();
-                onDownloadFailed(ctx);
+                return false;
             }
 
-            return null;
+            return true;
         }
     }
 
