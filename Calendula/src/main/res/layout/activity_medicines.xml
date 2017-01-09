@@ -136,12 +136,12 @@
                       android:background="#fff"
                       android:gravity="center_horizontal"
                       android:orientation="vertical"
-                      android:paddingTop="80dp">
+                      android:paddingTop="70dp">
 
             <ImageView
                 android:id="@+id/med_list_empty_icon"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:alpha="0.3"
                 android:src="@drawable/ic_intro_alarm"/>
 
@@ -151,12 +151,22 @@
                 android:layout_height="wrap_content"
                 android:alpha="0.9"
                 android:gravity="center_horizontal"
-                android:padding="30dp"
+                android:padding="20dp"
                 android:text="@string/medicine_search_empty_list_msg"
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#aaa"
                 android:textSize="16dp"/>
+
+            <Button
+                android:id="@+id/barcode_scan_btn"
+                android:background="@drawable/shape_list_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/scan_barcode"/>
+
+
 
         </LinearLayout>
 
