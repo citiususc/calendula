@@ -124,18 +124,18 @@ public class DBVersionManager {
                 final DateTime currentDBDate = DateTime.parse(currentVersion, ISODateTimeFormat.basicDate());
 
                 if (lastDBDate.isAfter(currentDBDate)) {
-                    Log.d(TAG, "onRunJob: Update found for database " + database + " (" + lastDBVersion + ")");
+                    Log.d(TAG, "checkForUpdate: Update found for database " + database + " (" + lastDBVersion + ")");
                     return lastDBVersion;
                 } else {
-                    Log.d(TAG, "onRunJob: Database is updated. ID is '" + database + "', version is '" + currentVersion + "'");
+                    Log.d(TAG, "checkForUpdate: Database is updated. ID is '" + database + "', version is '" + currentVersion + "'");
                     return null;
                 }
             } else {
-                Log.w(TAG, "Database is " + database + " but no version is set!");
+                Log.w(TAG, "checkForUpdate: Database is " + database + " but no version is set!");
                 return null;
             }
         } else {
-            Log.d(TAG, "onRunJob: No database. No version check needed.");
+            Log.d(TAG, "checkForUpdate: No database. No version check needed.");
             return null;
         }
 
