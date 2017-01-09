@@ -124,6 +124,7 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
                 .setSmallIcon(R.drawable.ic_launcher_white)
                 .setLargeIcon(IconUtils.icon(ctx, CommunityMaterial.Icon.cmd_database, R.color.white, 100).toBitmap())
                 .setVibrate(new long[]{0, 400})
+                .setAutoCancel(true)
                 .setContentIntent(updateIntent);
 
         nManager.notify(UPDATE_NOTIFICATION_TAG, UPDATE_NOTIFICATION_ID, builder.build());
