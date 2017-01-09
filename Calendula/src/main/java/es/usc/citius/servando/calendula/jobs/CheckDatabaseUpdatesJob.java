@@ -34,8 +34,8 @@ import org.joda.time.Duration;
 import org.joda.time.format.ISODateTimeFormat;
 
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.drugdb.updates.DBVersionManager;
-import es.usc.citius.servando.calendula.drugdb.updates.UpdateDatabaseService;
+import es.usc.citius.servando.calendula.drugdb.download.DBVersionManager;
+import es.usc.citius.servando.calendula.drugdb.download.UpdateDatabaseService;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
@@ -95,7 +95,7 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
 
                 if (lastDBDate.isAfter(currentDBDate)) {
                     Log.d(TAG, "onRunJob: Update found for database " + database + " (" + lastDBVersion + ")");
-                    notifyUpdate(ctx);
+                    notifyUpdate(ctx, database);
                 } else {
                     Log.d(TAG, "onRunJob: Database is updated. ID is '" + database + "', version is '" + currentVersion + "'");
                 }
@@ -109,9 +109,10 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
         return Result.SUCCESS;
     }
 
-    private void notifyUpdate(Context ctx) {
+    private void notifyUpdate(Context ctx, final String database) {
 
         Intent i = new Intent(ctx, UpdateDatabaseService.class);
+        i.putExtra(UpdateDatabaseService.EXTRA_DATABASE_ID, database);
         PendingIntent updateIntent = PendingIntent.getService(ctx, 0, i, 0);
 
 

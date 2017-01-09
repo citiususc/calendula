@@ -45,6 +45,7 @@ public class InstallDatabaseService extends IntentService {
     public static final String ACTION_COMPLETE = "calendula.persistence.medDatabases.action.DONE";
     public static final String ACTION_ERROR = "calendula.persistence.medDatabases.action.ERROR";
     private static final String ACTION_SETUP = "calendula.persistence.medDatabases.action.SETUP";
+    private static final String ACTION_UPDATE = "calendula.persistence.medDatabases.action.UPDATE";
     private static final String EXTRA_DB_PATH = "calendula.persistence.medDatabases.extra.DB_PATH";
     private static final String EXTRA_DB_PREF_VALUE = "calendula.persistence.medDatabases.extra.DB_PREF_VALUE";
     private static final String EXTRA_DB_VERSION = "calendula.persistence.medDatabases.extra.DB_VERSION";
@@ -57,10 +58,17 @@ public class InstallDatabaseService extends IntentService {
         super("SetupDBService");
     }
 
-    public static void startSetup(Context context, String dbPath, Pair<String, String> databaseInfo) {
+    public static void startSetup(Context context, String dbPath, Pair<String, String> databaseInfo, DBInstallType type) {
         context = context.getApplicationContext();
         Intent intent = new Intent(context, InstallDatabaseService.class);
-        intent.setAction(ACTION_SETUP);
+        switch (type) {
+            case SETUP:
+                intent.setAction(ACTION_SETUP);
+                break;
+            case UPDATE:
+                intent.setAction(ACTION_UPDATE);
+                break;
+        }
         intent.putExtra(EXTRA_DB_PATH, dbPath);
         intent.putExtra(EXTRA_DB_PREF_VALUE, databaseInfo.first);
         intent.putExtra(EXTRA_DB_VERSION, databaseInfo.second);
@@ -71,13 +79,21 @@ public class InstallDatabaseService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             final String action = intent.getAction();
-            if (ACTION_SETUP.equals(action)) {
+            if (ACTION_SETUP.equals(action) || ACTION_UPDATE.equals(action)) {
                 final String dbPath = intent.getStringExtra(EXTRA_DB_PATH);
                 final String dbPref = intent.getStringExtra(EXTRA_DB_PREF_VALUE);
                 final String dbVersion = intent.getStringExtra(EXTRA_DB_VERSION);
                 handleSetup(dbPath, dbPref, dbVersion);
+                if (ACTION_UPDATE.equals(action)) {
+                    checkForInvalidData();
+                }
             }
         }
+    }
+
+    private void checkForInvalidData() {
+        Log.d(TAG, "checkForInvalidData() called");
+        // TODO: 09/01/17
     }
 
     private void handleSetup(final String dbPath, final String dbPref, final String dbVersion) {

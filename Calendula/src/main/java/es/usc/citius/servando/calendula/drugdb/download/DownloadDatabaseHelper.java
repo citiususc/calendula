@@ -39,7 +39,6 @@ import java.net.URI;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
-import es.usc.citius.servando.calendula.drugdb.updates.DBVersionManager;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Settings;
@@ -78,7 +77,7 @@ public class DownloadDatabaseHelper {
                         if (callback != null) {
                             callback.onDownloadAcceptedOrCancelled(true);
                         }
-                        downloadDatabase(appContext, database);
+                        downloadDatabase(appContext, database, DBInstallType.SETUP);
                         dialog.dismiss();
                     }
                 })
@@ -145,8 +144,8 @@ public class DownloadDatabaseHelper {
 
     }
 
-    private void downloadDatabase(Context ctx, final String database) {
-        new DownloadDatabaseTask(ctx).execute(database);
+    void downloadDatabase(Context ctx, final String database, final DBInstallType type) {
+        new DownloadDatabaseTask(ctx, type).execute(database);
     }
 
     private void removePreviousDownloads(String dbName) {
@@ -166,9 +165,11 @@ public class DownloadDatabaseHelper {
     private class DownloadDatabaseTask extends AsyncTask<String, Void, Void> {
 
         private Context ctx;
+        private DBInstallType type;
 
-        private DownloadDatabaseTask(Context ctx) {
+        private DownloadDatabaseTask(Context ctx, DBInstallType type) {
             this.ctx = ctx;
+            this.type = type;
         }
 
         @Override
@@ -209,6 +210,7 @@ public class DownloadDatabaseHelper {
                         .putLong(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_ID, downloadId)
                         .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_DB, dbName)
                         .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_VERSION, dbVersion)
+                        .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_TYPE, type.toString())
                         .apply();
             } else {
                 Toast.makeText(ctx, "Database not available :(", Toast.LENGTH_SHORT).show();

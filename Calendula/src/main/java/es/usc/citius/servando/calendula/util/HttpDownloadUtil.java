@@ -16,7 +16,7 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
-package es.usc.citius.servando.calendula.drugdb.updates;
+package es.usc.citius.servando.calendula.util;
 
 import android.util.Log;
 

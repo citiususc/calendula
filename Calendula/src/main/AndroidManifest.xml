@@ -186,7 +186,7 @@
         </service>
 
         <service
-            android:name=".drugdb.updates.UpdateDatabaseService"
+            android:name=".drugdb.download.UpdateDatabaseService"
             android:exported="false"
             />
 

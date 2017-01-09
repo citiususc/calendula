@@ -16,28 +16,11 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
-package es.usc.citius.servando.calendula.drugdb.updates;
-
-import android.app.IntentService;
-import android.content.Intent;
-import android.util.Log;
+package es.usc.citius.servando.calendula.drugdb.download;
 
 /**
  * Created by alvaro.brey.vilas on 09/01/17.
  */
-
-public class UpdateDatabaseService extends IntentService {
-
-    private static final String TAG = "UpdateDatabaseService";
-
-    public UpdateDatabaseService() {
-        super(TAG);
-    }
-
-    @Override
-    protected void onHandleIntent(Intent intent) {
-        Log.d(TAG, "onHandleIntent() called with: intent = [" + intent + "]");
-        // TODO: 09/01/17
-    }
-
+public enum DBInstallType {
+    SETUP, UPDATE
 }
