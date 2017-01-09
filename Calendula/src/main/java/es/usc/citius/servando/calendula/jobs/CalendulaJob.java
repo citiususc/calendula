@@ -57,13 +57,24 @@ public abstract class CalendulaJob extends Job {
 
     /**
      * If <code>true</code>, there can only be a copy of this job scheduled at a given time.
-     * The first scheduled copy is the one that persists. Newer copies do not overwrite, but are
-     * instead ignored.
      *
      * @return whether the job should be unique
      */
     public boolean isUnique() {
         return true;
+    }
+
+    /**
+     * Controls the behaviour of unique jobs.
+     * If <code>true</code> and <code>isUnique</code> is <code>true</code>, new jobs will overwrite existing ones.
+     * If <code>false</code>, existing jobs will persist and new ones will be discarded.
+     * <p>
+     * If <code>isUnique</code> is <code>false</code>, this value is ignored.
+     *
+     * @return
+     */
+    public boolean shouldOverwritePrevious() {
+        return false;
     }
 
 }
