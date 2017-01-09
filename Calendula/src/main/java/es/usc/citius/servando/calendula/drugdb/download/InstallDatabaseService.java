@@ -29,11 +29,16 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.Pair;
 import android.util.Log;
 
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
+import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 
 /**
@@ -93,7 +98,38 @@ public class InstallDatabaseService extends IntentService {
 
     private void checkForInvalidData() {
         Log.d(TAG, "checkForInvalidData() called");
-        // TODO: 09/01/17
+
+        boolean anyMissing = false;
+        for (Medicine m : DB.medicines().findAll()) {
+            if (m.isBoundToPrescription()) {
+                final String cn = m.cn();
+                final Prescription byCn = DB.drugDB().prescriptions().findByCn(cn);
+                if (byCn == null) {
+                    anyMissing = true;
+                    m.setCn(null);
+                }
+            }
+        }
+        if (anyMissing) {
+            notifyDataMissing();
+        }
+
+    }
+
+
+    private void notifyDataMissing() {
+
+        mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mBuilder = new NotificationCompat.Builder(this)
+                .setTicker("")
+                .setSmallIcon(R.drawable.ic_launcher_white)
+                .setLargeIcon(IconUtils.icon(getApplicationContext(), GoogleMaterial.Icon.gmd_alert_triangle, R.color.white, 100).toBitmap())
+                .setTicker(getString(R.string.text_database_update_data_lost))
+                .setAutoCancel(true)
+                .setContentTitle(getString(R.string.title_database_update_data_lost))
+                .setContentText(getString(R.string.text_database_update_data_lost));
+
+        mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 
     private void handleSetup(final String dbPath, final String dbPref, final String dbVersion) {
