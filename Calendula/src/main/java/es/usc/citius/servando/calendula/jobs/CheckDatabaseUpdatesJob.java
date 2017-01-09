@@ -18,9 +18,16 @@
 
 package es.usc.citius.servando.calendula.jobs;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
@@ -28,6 +35,8 @@ import org.joda.time.format.ISODateTimeFormat;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.updates.DBVersionManager;
+import es.usc.citius.servando.calendula.drugdb.updates.UpdateDatabaseService;
+import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
@@ -40,6 +49,9 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
     public final static String TAG = "CheckDatabaseUpdatesJob";
 
     private static final Integer PERIOD_DAYS = 7;
+    private static final String UPDATE_NOTIFICATION_TAG = "Calendula.notifications.update_notification";
+    private static final int UPDATE_NOTIFICATION_ID = 0;
+
 
     public CheckDatabaseUpdatesJob() {
     }
@@ -47,6 +59,7 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
     @Override
     public Duration getInterval() {
         return Duration.standardDays(PERIOD_DAYS);
+        //return Duration.standardMinutes(1L);
     }
 
     @Override
@@ -64,25 +77,25 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
         return true;
     }
 
-
     @NonNull
     @Override
     protected Result onRunJob(Params params) {
         Log.d(TAG, "onRunJob: Job started");
         final SharedPreferences prefs = PreferenceUtils.instance().preferences();
-        final String noneId = getContext().getString(R.string.database_none_id);
+        final Context ctx = getContext();
+        final String noneId = ctx.getString(R.string.database_none_id);
         final String database = prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB, noneId);
         final String currentVersion = prefs.getString(PreferenceKeys.DRUGDB_VERSION, null);
 
-        if (!database.equals(noneId)) {
+        if (!database.equals(noneId) && !database.equals(ctx.getString(R.string.database_setting_up))) {
             if (currentVersion != null) {
                 final String lastDBVersion = DBVersionManager.getLastDBVersion(database);
                 final DateTime lastDBDate = DateTime.parse(lastDBVersion, ISODateTimeFormat.basicDate());
                 final DateTime currentDBDate = DateTime.parse(currentVersion, ISODateTimeFormat.basicDate());
 
                 if (lastDBDate.isAfter(currentDBDate)) {
-                    // update is available!
                     Log.d(TAG, "onRunJob: Update found for database " + database + " (" + lastDBVersion + ")");
+                    notifyUpdate(ctx);
                 } else {
                     Log.d(TAG, "onRunJob: Database is updated. ID is '" + database + "', version is '" + currentVersion + "'");
                 }
@@ -94,6 +107,26 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
         }
 
         return Result.SUCCESS;
+    }
+
+    private void notifyUpdate(Context ctx) {
+
+        Intent i = new Intent(ctx, UpdateDatabaseService.class);
+        PendingIntent updateIntent = PendingIntent.getService(ctx, 0, i, 0);
+
+
+        NotificationManager nManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx)
+                .setContentTitle(ctx.getString(R.string.title_database_update_available))
+                .setContentText(ctx.getString(R.string.action_download_update))
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(ctx.getString(R.string.action_download_update)))
+                .setTicker(ctx.getString(R.string.app_name) + ctx.getString(R.string.text_database_update_available))
+                .setSmallIcon(R.drawable.ic_launcher_white)
+                .setLargeIcon(IconUtils.icon(ctx, CommunityMaterial.Icon.cmd_database, R.color.white, 100).toBitmap())
+                .setVibrate(new long[]{0, 400})
+                .setContentIntent(updateIntent);
+
+        nManager.notify(UPDATE_NOTIFICATION_TAG, UPDATE_NOTIFICATION_ID, builder.build());
     }
 
 }
