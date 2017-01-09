@@ -18,10 +18,15 @@
 
 package es.usc.citius.servando.calendula.drugdb.download;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -30,7 +35,10 @@ import java.util.List;
 import java.util.Map;
 
 import es.usc.citius.servando.calendula.BuildConfig;
+import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.util.HttpDownloadUtil;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Settings;
 import es.usc.citius.servando.calendula.util.SettingsKeys;
 
@@ -94,5 +102,42 @@ public class DBVersionManager {
             Log.e(TAG, "getLastDBVersion: ", e);
             return null;
         }
+    }
+
+
+    /**
+     * Checks if there is any available update for the current medicine database.
+     *
+     * @param ctx the context
+     * @return the version code of the update if there is one available, <code>null</code> otherwise
+     */
+    public static String checkForUpdate(Context ctx) {
+        final SharedPreferences prefs = PreferenceUtils.instance().preferences();
+        final String noneId = ctx.getString(R.string.database_none_id);
+        final String database = prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB, noneId);
+        final String currentVersion = prefs.getString(PreferenceKeys.DRUGDB_VERSION, null);
+
+        if (!database.equals(noneId) && !database.equals(ctx.getString(R.string.database_setting_up))) {
+            if (currentVersion != null) {
+                final String lastDBVersion = DBVersionManager.getLastDBVersion(database);
+                final DateTime lastDBDate = DateTime.parse(lastDBVersion, ISODateTimeFormat.basicDate());
+                final DateTime currentDBDate = DateTime.parse(currentVersion, ISODateTimeFormat.basicDate());
+
+                if (lastDBDate.isAfter(currentDBDate)) {
+                    Log.d(TAG, "onRunJob: Update found for database " + database + " (" + lastDBVersion + ")");
+                    return lastDBVersion;
+                } else {
+                    Log.d(TAG, "onRunJob: Database is updated. ID is '" + database + "', version is '" + currentVersion + "'");
+                    return null;
+                }
+            } else {
+                Log.w(TAG, "Database is " + database + " but no version is set!");
+                return null;
+            }
+        } else {
+            Log.d(TAG, "onRunJob: No database. No version check needed.");
+            return null;
+        }
+
     }
 }

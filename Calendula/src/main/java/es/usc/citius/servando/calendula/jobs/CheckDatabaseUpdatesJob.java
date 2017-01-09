@@ -22,16 +22,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 
-import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.joda.time.format.ISODateTimeFormat;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.download.DBVersionManager;
@@ -77,35 +74,19 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
         return true;
     }
 
+    public boolean checkForUpdate(Context ctx) {
+        if (DBVersionManager.checkForUpdate(getContext()) != null) {
+            notifyUpdate(ctx, PreferenceUtils.instance().preferences().getString(PreferenceKeys.DRUGDB_CURRENT_DB, null));
+            return true;
+        }
+        return false;
+    }
+
     @NonNull
     @Override
     protected Result onRunJob(Params params) {
         Log.d(TAG, "onRunJob: Job started");
-        final SharedPreferences prefs = PreferenceUtils.instance().preferences();
-        final Context ctx = getContext();
-        final String noneId = ctx.getString(R.string.database_none_id);
-        final String database = prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB, noneId);
-        final String currentVersion = prefs.getString(PreferenceKeys.DRUGDB_VERSION, null);
-
-        if (!database.equals(noneId) && !database.equals(ctx.getString(R.string.database_setting_up))) {
-            if (currentVersion != null) {
-                final String lastDBVersion = DBVersionManager.getLastDBVersion(database);
-                final DateTime lastDBDate = DateTime.parse(lastDBVersion, ISODateTimeFormat.basicDate());
-                final DateTime currentDBDate = DateTime.parse(currentVersion, ISODateTimeFormat.basicDate());
-
-                if (lastDBDate.isAfter(currentDBDate)) {
-                    Log.d(TAG, "onRunJob: Update found for database " + database + " (" + lastDBVersion + ")");
-                    notifyUpdate(ctx, database);
-                } else {
-                    Log.d(TAG, "onRunJob: Database is updated. ID is '" + database + "', version is '" + currentVersion + "'");
-                }
-            } else {
-                Log.e(TAG, "Database is " + database + " but no version is set!");
-            }
-        } else {
-            Log.d(TAG, "onRunJob: No database. No version check needed.");
-        }
-
+        checkForUpdate(getContext());
         return Result.SUCCESS;
     }
 
