@@ -57,6 +57,12 @@
             android:positiveButtonText="@null"
             android:title="@string/pref_available_databases_title"/>
 
+        <Preference
+            android:dependency="enable_prescriptions_db"
+            android:key="prescriptions_database_update"
+            android:title="@string/preference_check_for_updates"
+            />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -381,4 +381,6 @@ You will see all their intakes in the home screen."</string>
     <string name="action_download_update">Tap to download and install update!</string>
     <string name="text_database_update_data_lost">Some of the medicines in your medkit have been removed from the database in the latest update. They remain in your medkits, but you won\'t be able to check their leaflets, etc. anymore.</string>
     <string name="title_database_update_data_lost">Extra information lost after update</string>
+    <string name="preference_check_for_updates">Check for updates</string>
+    <string name="database_update_not_available">No database update available</string>
 </resources>

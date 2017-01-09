@@ -34,6 +34,7 @@ import android.graphics.drawable.Drawable;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -50,6 +51,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -62,6 +64,7 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.download.DownloadDatabaseHelper;
 import es.usc.citius.servando.calendula.drugdb.download.InstallDatabaseService;
+import es.usc.citius.servando.calendula.jobs.CheckDatabaseUpdatesJob;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.modules.modules.StockModule;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
@@ -465,6 +468,26 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             }
         });
 
+        findPreference("prescriptions_database_update").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new AsyncTask<Void, Void, Boolean>() {
+                    @Override
+                    protected void onPostExecute(Boolean update) {
+                        if (!update) {
+                            Toast.makeText(getApplicationContext(), R.string.database_update_not_available, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    protected Boolean doInBackground(Void... params) {
+                        return new CheckDatabaseUpdatesJob().checkForUpdate(getApplicationContext());
+                    }
+                }.execute();
+                return true;
+            }
+        });
+
 
         if (!CalendulaApp.isPharmaModeEnabled()) {
             Preference alarmPk = findPreference("alarm_pickup_notifications");
@@ -472,6 +495,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             preferenceScreen.removePreference(alarmPk);
         }
     }
+
 
     private boolean checkPreferenceAskForPermission(Object o, int reqCode) {
         boolean val = (boolean) o;
