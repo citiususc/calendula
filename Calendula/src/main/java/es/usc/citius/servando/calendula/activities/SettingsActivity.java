@@ -173,7 +173,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
                     SharedPreferences.Editor edit = settings.edit();
                     final String val = accepted ? SETTING_UP : lastValidDatabase;
-                    edit.putString(KEY_PRESCRIPTIONS_DATABASE, val);
+                    edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB, val);
                     edit.apply();
                     if (accepted) {
                         settingUp = true;
