@@ -26,13 +26,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.util.Pair;
 import android.util.Log;
+
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
+import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous database setup tasks
@@ -43,8 +50,10 @@ public class InstallDatabaseService extends IntentService {
     public static final String ACTION_COMPLETE = "calendula.persistence.medDatabases.action.DONE";
     public static final String ACTION_ERROR = "calendula.persistence.medDatabases.action.ERROR";
     private static final String ACTION_SETUP = "calendula.persistence.medDatabases.action.SETUP";
+    private static final String ACTION_UPDATE = "calendula.persistence.medDatabases.action.UPDATE";
     private static final String EXTRA_DB_PATH = "calendula.persistence.medDatabases.extra.DB_PATH";
     private static final String EXTRA_DB_PREF_VALUE = "calendula.persistence.medDatabases.extra.DB_PREF_VALUE";
+    private static final String EXTRA_DB_VERSION = "calendula.persistence.medDatabases.extra.DB_VERSION";
     public static int NOTIFICATION_ID = "InstallDatabaseService".hashCode();
     public static boolean isRunning = false;
     NotificationCompat.Builder mBuilder;
@@ -54,12 +63,20 @@ public class InstallDatabaseService extends IntentService {
         super("SetupDBService");
     }
 
-    public static void startSetup(Context context, String dbPath, String dbPreferenceValue) {
+    public static void startSetup(Context context, String dbPath, Pair<String, String> databaseInfo, DBInstallType type) {
         context = context.getApplicationContext();
         Intent intent = new Intent(context, InstallDatabaseService.class);
-        intent.setAction(ACTION_SETUP);
+        switch (type) {
+            case SETUP:
+                intent.setAction(ACTION_SETUP);
+                break;
+            case UPDATE:
+                intent.setAction(ACTION_UPDATE);
+                break;
+        }
         intent.putExtra(EXTRA_DB_PATH, dbPath);
-        intent.putExtra(EXTRA_DB_PREF_VALUE, dbPreferenceValue);
+        intent.putExtra(EXTRA_DB_PREF_VALUE, databaseInfo.first);
+        intent.putExtra(EXTRA_DB_VERSION, databaseInfo.second);
         context.startService(intent);
     }
 
@@ -67,15 +84,55 @@ public class InstallDatabaseService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             final String action = intent.getAction();
-            if (ACTION_SETUP.equals(action)) {
+            if (ACTION_SETUP.equals(action) || ACTION_UPDATE.equals(action)) {
                 final String dbPath = intent.getStringExtra(EXTRA_DB_PATH);
                 final String dbPref = intent.getStringExtra(EXTRA_DB_PREF_VALUE);
-                handleSetup(dbPath, dbPref);
+                final String dbVersion = intent.getStringExtra(EXTRA_DB_VERSION);
+                handleSetup(dbPath, dbPref, dbVersion);
+                if (ACTION_UPDATE.equals(action)) {
+                    checkForInvalidData();
+                }
             }
         }
     }
 
-    private void handleSetup(final String dbPath, final String dbPref) {
+    private void checkForInvalidData() {
+        Log.d(TAG, "checkForInvalidData() called");
+
+        boolean anyMissing = false;
+        for (Medicine m : DB.medicines().findAll()) {
+            if (m.isBoundToPrescription()) {
+                final String cn = m.cn();
+                final Prescription byCn = DB.drugDB().prescriptions().findByCn(cn);
+                if (byCn == null) {
+                    anyMissing = true;
+                    m.setCn(null);
+                }
+            }
+        }
+        if (anyMissing) {
+            notifyDataMissing();
+        }
+
+    }
+
+
+    private void notifyDataMissing() {
+
+        mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mBuilder = new NotificationCompat.Builder(this)
+                .setTicker("")
+                .setSmallIcon(R.drawable.ic_launcher_white)
+                .setLargeIcon(IconUtils.icon(getApplicationContext(), GoogleMaterial.Icon.gmd_alert_triangle, R.color.white, 100).toBitmap())
+                .setTicker(getString(R.string.text_database_update_data_lost))
+                .setAutoCancel(true)
+                .setContentTitle(getString(R.string.title_database_update_data_lost))
+                .setContentText(getString(R.string.text_database_update_data_lost));
+
+        mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
+    }
+
+    private void handleSetup(final String dbPath, final String dbPref, final String dbVersion) {
         try {
             isRunning = true;
             // get a reference to  the selected dbManager
@@ -91,10 +148,11 @@ public class InstallDatabaseService extends IntentService {
 
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(InstallDatabaseService.this);
             SharedPreferences.Editor edit = settings.edit();
-            edit.putString("last_valid_database", dbPref);
-            edit.putString("prescriptions_database", dbPref);
+            edit.putString(PreferenceKeys.DRUGDB_LAST_VALID, dbPref);
+            edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB, dbPref);
+            edit.putString(PreferenceKeys.DRUGDB_VERSION, dbVersion);
             edit.apply();
-            Log.d(TAG, "Finish saving " + DB.drugDB().prescriptions().count() + " prescriptions!");
+            Log.d(TAG, dbPref + "-" + dbVersion + ": Finished saving " + DB.drugDB().prescriptions().count() + " prescriptions!");
             onComplete();
         } catch (Exception e) {
             Log.e(TAG, "Error while saving prescription data", e);

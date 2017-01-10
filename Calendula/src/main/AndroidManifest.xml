@@ -185,6 +185,11 @@
             android:exported="false">
         </service>
 
+        <service
+            android:name=".drugdb.download.UpdateDatabaseService"
+            android:exported="false"
+            />
+
 
         <activity
             android:name=".activities.WebViewActivity"

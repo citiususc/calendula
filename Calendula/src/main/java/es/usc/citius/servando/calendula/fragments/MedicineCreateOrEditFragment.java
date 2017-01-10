@@ -82,6 +82,7 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
 import es.usc.citius.servando.calendula.util.medicine.StockUtils;
@@ -194,7 +195,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
         String none = getString(R.string.database_none_id);
         String settingUp = getString(R.string.database_setting_up);
-        String value = prefs.getString("prescriptions_database", none);
+        String value = prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB, none);
         enableSearch = !value.equals(none) && !value.equals(settingUp);
 
         Log.d(getTag(), "Arguments:  " + (getArguments() != null) + ", savedState: " + (savedInstanceState != null));
@@ -447,7 +448,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean adviceShown = prefs.getBoolean("show_use_prescriptions_advice", false);
-        boolean dbEnabled = !prefs.getString("prescriptions_database", getString(R.string.database_none_id)).equals(getString(R.string.database_none_id));
+        boolean dbEnabled = !prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB, getString(R.string.database_none_id)).equals(getString(R.string.database_none_id));
 
         if (!adviceShown && !dbEnabled) {
             new MaterialStyledDialog.Builder(getActivity())
@@ -487,10 +488,10 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if ("prescriptions_database".equals(key)) {
+        if (PreferenceKeys.DRUGDB_CURRENT_DB.equals(key)) {
             String none = getString(R.string.database_none_id);
             String settingUp = getString(R.string.database_setting_up);
-            String value = sharedPreferences.getString("prescriptions_database", none);
+            String value = sharedPreferences.getString(PreferenceKeys.DRUGDB_CURRENT_DB, none);
             enableSearch = !value.equals(none) && !value.equals(settingUp);
             if (enableSearch) {
 //                enableSearchButton();

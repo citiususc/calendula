@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2017 CITIUS - USC
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -16,25 +16,15 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses>.
  */
 
-package es.usc.citius.servando.calendula.jobs;
-
-import com.evernote.android.job.Job;
-import com.evernote.android.job.JobCreator;
+package es.usc.citius.servando.calendula.util;
 
 /**
- * Created by alvaro.brey.vilas on 17/11/16.
+ * Created by alvaro.brey.vilas on 05/01/17.
  */
 
-public class CalendulaJobCreator implements JobCreator {
-    @Override
-    public Job create(String tag) {
-        switch (tag) {
-            case PurgeCacheJob.TAG:
-                return new PurgeCacheJob();
-            case CheckDatabaseUpdatesJob.TAG:
-                return new CheckDatabaseUpdatesJob();
-            default:
-                return null;
-        }
-    }
+public class PreferenceKeys {
+
+    public static final String DRUGDB_LAST_VALID = "last_valid_database";
+    public static final String DRUGDB_CURRENT_DB = "prescriptions_database";
+    public static final String DRUGDB_VERSION = "database_version";
 }
