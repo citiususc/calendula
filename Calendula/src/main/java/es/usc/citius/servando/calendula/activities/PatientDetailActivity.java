@@ -61,6 +61,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.nispok.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaActivity;
@@ -267,7 +268,10 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         scroll = (ScrollView) findViewById(R.id.scroll);
         patientNameLabel = (TextView) findViewById(R.id.textView2);
 
-
+        Collections.sort(avatars);
+        for (String s : avatars) {
+            Log.d("AVATAR", "onCreate: " + s);
+        }
         avatarGrid.setVisibility(View.VISIBLE);
         gridContainer.setVisibility(View.GONE);
 

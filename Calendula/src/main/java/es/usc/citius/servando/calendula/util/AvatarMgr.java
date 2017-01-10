@@ -35,18 +35,21 @@ import es.usc.citius.servando.calendula.R;
 public class AvatarMgr {
 
     public static final String DEFAULT_AVATAR = "avatar_default";
-    public static final String AVATAR_1 = "avatar_1";
-    public static final String AVATAR_2 = "avatar_2";
-    public static final String AVATAR_3 = "avatar_3";
-    public static final String AVATAR_4 = "avatar_4";
-    public static final String AVATAR_5 = "avatar_5";
-    public static final String AVATAR_6 = "avatar_6";
-    public static final String AVATAR_7 = "avatar_7";
-    public static final String AVATAR_8 = "avatar_8";
-    public static final String AVATAR_9 = "avatar_9";
+    public static final String AVATAR_1 = "avatar_01";
+    public static final String AVATAR_2 = "avatar_02";
+    public static final String AVATAR_3 = "avatar_03";
+    public static final String AVATAR_4 = "avatar_04";
+    public static final String AVATAR_5 = "avatar_05";
+    public static final String AVATAR_6 = "avatar_06";
+    public static final String AVATAR_7 = "avatar_07";
+    public static final String AVATAR_8 = "avatar_08";
+    public static final String AVATAR_9 = "avatar_09";
     public static final String AVATAR_10 = "avatar_10";
     public static final String AVATAR_11 = "avatar_11";
     public static final String AVATAR_12 = "avatar_12";
+    public static final String AVATAR_13 = "avatar_13";
+    public static final String AVATAR_14 = "avatar_14";
+    public static final String AVATAR_15 = "avatar_15";
 
     public static final Map<String, Integer> avatars;
     private static HashMap<String, int[]> cache = new HashMap<>();
@@ -65,6 +68,9 @@ public class AvatarMgr {
         map.put(AVATAR_10, R.drawable.avatar10);
         map.put(AVATAR_11, R.drawable.avatar11);
         map.put(AVATAR_12, R.drawable.avatar12);
+        map.put(AVATAR_13, R.drawable.baby);
+        map.put(AVATAR_14, R.drawable.dog);
+        map.put(AVATAR_15, R.drawable.cat);
         map.put(DEFAULT_AVATAR, R.drawable.avatar_default);
 
         avatars = Collections.unmodifiableMap(map);

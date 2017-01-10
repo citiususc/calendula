@@ -72,8 +72,7 @@ We try to follow [Material Design](https://material.google.com/#) principles. Ta
   <img src="https://dl.dropboxusercontent.com/u/4213618/calendula/multipat/navdrawer.png" width="250px" />
   <img src="https://dl.dropboxusercontent.com/u/4213618/calendula/multipat/profile.png" width="250px" />
 
-We use <a href="http://www.freepik.com/free-vector/people-avatars_761436.htm">this vector pack at Freepik</a> for user avatars.
-
+We use <a href="http://www.freepik.com/free-vector/people-avatars_761436.htm">this vector pack at Freepik</a>, [an icon](http://www.flaticon.com/free-icon/baby_13627) made by <a href="http://www.flaticon.com/authors/madebyoliver" title="Madebyoliver">Madebyoliver</a>, and some animals icons ([dog](http://www.flaticon.com/free-icon/dog_194178) and [cat](http://www.flaticon.com/free-icon/cat_194179)) from Freepick for avatars.
 ## Future work ##
 
 We have a lot of development ideas, and we are open to newer ones. Below are some interesting features that could be very useful:
