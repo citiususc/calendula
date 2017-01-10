@@ -173,8 +173,8 @@ dependencies {
     compile 'de.greenrobot:eventbus:2.2.1'
 
     // qr scanning
-    compile 'com.journeyapps:zxing-android-embedded:2.0.1@aar'
-    compile 'com.journeyapps:zxing-android-integration:2.0.1@aar'
+    compile 'com.journeyapps:zxing-android-embedded:3.4.0@aar'
+    //compile 'com.journeyapps:zxing-android-integration:2.0.1@aar'
     compile 'com.google.zxing:core:3.0.1'
 
     // ormlite

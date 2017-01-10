@@ -19,9 +19,11 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -58,6 +60,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -122,6 +125,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     @BindView(R.id.pager)
     ViewPager mViewPager;
 
+    String qrData;
     Long mMedicineId;
     MenuItem removeItem;
 
@@ -143,6 +147,9 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     ProgressBar progressBar;
     @BindView(R.id.add_custom_med_btn)
     Button addCustomMedBtn;
+    @BindView(R.id.barcode_scan_btn)
+    Button barcodeBtn;
+
 
     Button addCustomMedFooter;
 
@@ -260,6 +267,16 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void doScan() {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+        integrator.setOrientationLocked(true);
+        integrator.setTimeout(30 * 1000);
+        integrator.setBeepEnabled(false);
+        integrator.setPrompt(getString(R.string.scan_barcode));
+        integrator.initiateScan();
     }
 
     Fragment getViewPagerFragment(int position) {
@@ -381,6 +398,13 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                 .colorRes(R.color.white)
                 .actionBar();
 
+        Drawable icBarcode = new IconicsDrawable(this)
+                .icon(CommunityMaterial.Icon.cmd_barcode)
+                .colorRes(R.color.black)
+                .actionBar();
+
+        barcodeBtn.setCompoundDrawables(null, null, icBarcode, null);
+        barcodeBtn.setCompoundDrawablePadding(10);
         closeSearchButton.setImageDrawable(icClose);
         backButton.setImageDrawable(icBack);
         addCustomMedBtn.setVisibility(View.GONE);
@@ -388,10 +412,49 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         searchView.setBackgroundColor(color);
         searchList.setDivider(null);
         searchList.setDividerHeight(0);
+
         if (mMedicineId == -1 || intentSearchText != null) {
             showSearchView(intentSearchText);
         } else {
             hideSearchView();
+        }
+        barcodeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doScan();
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            String contents = data.getStringExtra("SCAN_RESULT");
+            String format = data.getStringExtra("SCAN_RESULT_FORMAT");
+            // Handle successful scan
+            Log.d(TAG, "onActivityResult: " + contents + ", " + format);
+            if (contents != null) {
+                final Prescription p = getPrescriptionFromBarcode(contents);
+                if (p != null) {
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            //hideSearchView();
+                            //((MedicineCreateOrEditFragment) getViewPagerFragment(0)).setPrescription(p);
+                            searchEditText.setText(p.getCode());
+                        }
+                    });
+                } else {
+                    Log.d(TAG, "onCreate: " + p);
+                    Toast.makeText(this, R.string.medicine_not_found_error, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, R.string.medicine_not_found_error, Toast.LENGTH_SHORT).show();
+            }
+        } else if (resultCode == RESULT_CANCELED) {
+            // Handle cancel
+            Log.d("SCAN", "onActivityResult: Cancel");
         }
     }
 
@@ -407,10 +470,18 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         overridePendingTransition(0, 0);
     }
 
+    private Prescription getPrescriptionFromBarcode(String barcode) {
+        int len = barcode.length();
+        String cn = len > 6 ? barcode.substring(len - 7, len - 1) : null;
+        Log.d(TAG, "getPrescriptionFromBarcode: " + cn);
+        return DB.drugDB().prescriptions().findByCn(cn);
+    }
+
     private void processIntent() {
         mMedicineId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, -1);
         intentAction = getIntent().getStringExtra(CalendulaApp.INTENT_EXTRA_ACTION);
         intentSearchText = getIntent().getStringExtra("search_text");
+        qrData = getIntent().getStringExtra("qr_data");
     }
 
     private void showAllergyDialog(final MaterialDialog.SingleButtonCallback onOk) {

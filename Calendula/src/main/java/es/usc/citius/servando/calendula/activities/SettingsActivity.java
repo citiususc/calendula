@@ -172,12 +172,14 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 public void onDownloadAcceptedOrCancelled(boolean accepted) {
                     SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
                     SharedPreferences.Editor edit = settings.edit();
-                    edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB, accepted ? SETTING_UP : lastValidDatabase);
+                    final String val = accepted ? SETTING_UP : lastValidDatabase;
+                    edit.putString(KEY_PRESCRIPTIONS_DATABASE, val);
                     edit.apply();
                     if (accepted) {
                         settingUp = true;
                         preference.setEnabled(false);
                     }
+                    preference.setValue(val);
                     bindPreferenceSummaryToValue(preference, true);
                 }
             });
