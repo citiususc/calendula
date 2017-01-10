@@ -194,34 +194,40 @@ public class DownloadDatabaseHelper {
 
                 final String downloadUrl = Settings.instance().get(SettingsKeys.DATABASE_LOCATION);
                 final String dbName = mgr.id();
-                //get version
-                final String dbVersion = DBVersionManager.getLastDBVersion(dbName);
-                final String url = ctx.getString(R.string.database_file_location, downloadUrl, dbName, dbVersion);
-                Log.d(TAG, "doInBackground: Downloading database from " + url);
+
+                try {//get version
+                    final String dbVersion = DBVersionManager.getLastDBVersion(dbName);
+                    final String url = ctx.getString(R.string.database_file_location, downloadUrl, dbName, dbVersion);
+                    Log.d(TAG, "doInBackground: Downloading database from " + url);
 
 
-                // remove previous downloads and cancel notifications
-                removePreviousDownloads(dbName);
-                mNotifyManager.cancel(InstallDatabaseService.NOTIFICATION_ID);
-                // create the download request
-                DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-                request.setDescription(mgr.description());
-                request.setTitle(mgr.displayName());
-                request.allowScanningByMediaScanner();
-                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
-                request.setVisibleInDownloadsUi(true);
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, dbName + downloadSuffix);
-                // get download service and enqueue file
-                long downloadId = manager.enqueue(request);
-                // save id in preferences for later use in DBDownloadReceiver
-                SharedPreferences preferences = PreferenceUtils.instance().preferences();
-                preferences.edit()
-                        .putLong(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_ID, downloadId)
-                        .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_DB, dbName)
-                        .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_VERSION, dbVersion)
-                        .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_TYPE, type.toString())
-                        .apply();
+                    // remove previous downloads and cancel notifications
+                    removePreviousDownloads(dbName);
+                    mNotifyManager.cancel(InstallDatabaseService.NOTIFICATION_ID);
+                    // create the download request
+                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+                    request.setDescription(mgr.description());
+                    request.setTitle(mgr.displayName());
+                    request.allowScanningByMediaScanner();
+                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
+                    request.setVisibleInDownloadsUi(true);
+                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, dbName + downloadSuffix);
+                    // get download service and enqueue file
+                    long downloadId = manager.enqueue(request);
+                    // save id in preferences for later use in DBDownloadReceiver
+                    SharedPreferences preferences = PreferenceUtils.instance().preferences();
+                    preferences.edit()
+                            .putLong(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_ID, downloadId)
+                            .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_DB, dbName)
+                            .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_VERSION, dbVersion)
+                            .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_TYPE, type.toString())
+                            .apply();
+                } catch (Exception e) {
+                    Log.e(TAG, "doInBackground: ", e);
+                    return false;
+                }
             } else {
+                Log.e(TAG, "PrescriptionDBMgr for " + database + " is null");
                 return false;
             }
 
