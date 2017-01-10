@@ -57,6 +57,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
@@ -467,6 +468,18 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 return hasPermission;
             }
         });
+
+        //get enabled databases
+        final CustomListPreference dbPref = (CustomListPreference) findPreference("prescriptions_database");
+        final List<String> registeredDbs = DBRegistry.instance().getRegistered();
+        final List<String> displays = new ArrayList<>(registeredDbs.size());
+        for (String registeredDb : registeredDbs) {
+            displays.add(DBRegistry.instance().db(registeredDb).displayName());
+        }
+        registeredDbs.add(0, getString(R.string.database_none_id));
+        displays.add(0, getString(R.string.database_none_display));
+        dbPref.setEntries(displays.toArray(new String[displays.size()]));
+        dbPref.setEntryValues(registeredDbs.toArray(new String[registeredDbs.size()]));
 
         findPreference("prescriptions_database_update").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override

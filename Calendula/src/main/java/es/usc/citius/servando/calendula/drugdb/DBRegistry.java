@@ -27,7 +27,9 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import es.usc.citius.servando.calendula.R;
@@ -99,6 +101,10 @@ public class DBRegistry {
             instance.defaultDBMgr = aemps;
         }
         return instance;
+    }
+
+    public List<String> getRegistered() {
+        return new ArrayList<>(databases.keySet());
     }
 
     public PrescriptionDBMgr db(String key) {
