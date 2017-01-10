@@ -178,6 +178,7 @@ Por favor, le con con calma as instruccións de uso ou consulta ó teu farmacéu
 <string name="confirm_prescription_x_of_y">"Prescrición %1$s de %2$s"</string>
 <string name="scan_prescriptions_title">"Escanear prescricións"</string>
 <string name="scan_qr">"Escanear QR"</string>
+<string name="scan_barcode">"Escanear código de barras"</string>
 <string name="duration">"Duración"</string>
 <string name="all_meds_taken">"Tódolos medicamentos tomados!"</string>
 <string name="create_schedule_select_med_before_dose">"Por favor, selecciona un medicamento primeiro"</string>
@@ -261,7 +262,7 @@ Para este desenvolvemento facemos uso dalgunhas librarías e utilidades de códi
 <string name="allergies_group_elements_selected">"%1$d elementos (%2$d seleccionados)"</string>
 <string name="add_custom_med_button_text">"Engadir \"%1$s\" ao botiquín"</string>
 <string name="medicine_search_not_found_msg">"Sentímolo, non puidemos atopar nada con ese nome"</string>
-<string name="medicine_search_empty_list_msg">"Escribe un nome ou un código para comezar a buscar…"</string>
+<string name="medicine_search_empty_list_msg">"Escribe un nome ou un código para comezar a buscar, ou escanea un código de barras"</string>
 <string name="search_hint">"Buscar…"</string>
 <string name="database_us_display">"Base de datos US"</string>
 <string name="pref_stock_alert_title">"Avisar cando os meus medicamentos se agoten"</string>
