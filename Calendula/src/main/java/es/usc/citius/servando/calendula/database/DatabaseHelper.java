@@ -39,6 +39,7 @@ import java.util.concurrent.Callable;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.migrationHelpers.DrugModelMigrationHelper;
 import es.usc.citius.servando.calendula.database.migrationHelpers.LocalDateMigrationHelper;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.ATCCode;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.ActiveIngredient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.ContentUnit;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Excipient;
@@ -71,7 +72,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
     // List of persisted classes to simplify table creation
     public Class<?>[] persistedClasses = new Class<?>[]{
             Routine.class,
@@ -100,6 +101,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             PatientAllergen.class,
             PatientAlert.class,
             AllergyGroup.class,
+            // v13
+            ATCCode.class
     };
     // the DAO object we use to access the Medicines table
     private Dao<Medicine, Long> medicinesDao = null;
@@ -206,6 +209,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                     TableUtils.createTable(connectionSource, AllergyGroup.class);
                     getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN " + Schedule.COLUMN_STATE + " TEXT;");
                     TableUtils.createTable(connectionSource, PatientAlert.class);
+                case 13:
+                    TableUtils.createTable(connectionSource, ATCCode.class);
             }
 
         } catch (Exception e) {

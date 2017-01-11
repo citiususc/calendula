@@ -47,6 +47,8 @@ public class DrugDBModule {
     private final PrescriptionExcipientDAO PrescriptionExcipients;
     // Presentation forms
     private final PresentationFormDAO PresentationForms;
+    // ATC codes
+    private final ATCCodeDAO ATCCodes;
 
     private DrugDBModule(final DatabaseHelper db) {
         ActiveIngredients = new ActiveIngredientDAO(db);
@@ -58,6 +60,7 @@ public class DrugDBModule {
         Prescriptions = new PrescriptionDAO(db);
         PrescriptionExcipients = new PrescriptionExcipientDAO(db);
         PresentationForms = new PresentationFormDAO(db);
+        ATCCodes = new ATCCodeDAO(db);
         Log.v(TAG, "Drug DB Module initialized");
     }
 
@@ -102,5 +105,9 @@ public class DrugDBModule {
 
     public PresentationFormDAO presentationForms() {
         return PresentationForms;
+    }
+
+    public ATCCodeDAO atcCodes() {
+        return ATCCodes;
     }
 }

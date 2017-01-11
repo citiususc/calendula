@@ -34,6 +34,7 @@ import java.util.Map;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.ATCCode;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.ActiveIngredient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.ContentUnit;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Excipient;
@@ -132,8 +133,8 @@ public class DBRegistry {
                 Prescription.class,
                 PresentationForm.class,
                 PrescriptionActiveIngredient.class,
-                PrescriptionExcipient.class
-
+                PrescriptionExcipient.class,
+                ATCCode.class
         };
 
         ConnectionSource connectionSource = DB.helper().getConnectionSource();
