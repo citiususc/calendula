@@ -23,6 +23,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.ATCCode;
 
 /**
  * Created by alvaro.brey.vilas on 22/11/16.
@@ -43,7 +45,7 @@ import es.usc.citius.servando.calendula.allergies.AllergenVO;
 
 public class AllergenItem extends AbstractItem<AllergenItem, AllergenItem.ViewHolder> implements Comparable<AllergenItem> {
 
-    private String allergenType;
+    private String subtitle;
 
     private AllergenVO vo;
 
@@ -55,10 +57,15 @@ public class AllergenItem extends AbstractItem<AllergenItem, AllergenItem.ViewHo
         this.title = vo.getName();
         switch (vo.getType()) {
             case ACTIVE_INGREDIENT:
-                allergenType = context.getString(R.string.active_ingredient);
+                subtitle = context.getString(R.string.active_ingredient);
                 break;
             case EXCIPIENT:
-                allergenType = context.getString(R.string.excipient);
+                subtitle = context.getString(R.string.excipient);
+                break;
+            case ATC_CODE:
+                if (vo.getIdentifier().length() < ATCCode.FULL_ATC_LENGTH) {
+                    subtitle = context.getString(R.string.atc_therapeutic_pharmacological_subgroup) + ": " + vo.getIdentifier();
+                }
                 break;
         }
         this.vo = vo;
@@ -102,7 +109,12 @@ public class AllergenItem extends AbstractItem<AllergenItem, AllergenItem.ViewHo
         final int selectedColor = ContextCompat.getColor(viewHolder.itemView.getContext(), R.color.med_presentation_circle_bg);
         UIUtils.setBackground(viewHolder.itemView, FastAdapterUIUtils.getSelectableBackground(viewHolder.itemView.getContext(), selectedColor, true));
         viewHolder.title.setText(titleSpannable != null ? titleSpannable : title);
-        viewHolder.subtitle.setText(allergenType);
+        if (TextUtils.isEmpty(subtitle)) {
+            viewHolder.subtitle.setVisibility(View.GONE);
+        } else {
+            viewHolder.subtitle.setText(subtitle);
+            viewHolder.subtitle.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

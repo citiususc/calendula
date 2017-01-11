@@ -21,6 +21,7 @@ package es.usc.citius.servando.calendula.allergies;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import es.usc.citius.servando.calendula.drugdb.model.persistence.ATCCode;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.ActiveIngredient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Excipient;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
@@ -31,10 +32,20 @@ import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 
 public class AllergenVO implements Parcelable {
 
+    public static final Parcelable.Creator<AllergenVO> CREATOR = new Parcelable.Creator<AllergenVO>() {
+        @Override
+        public AllergenVO createFromParcel(Parcel source) {
+            return new AllergenVO(source);
+        }
+
+        @Override
+        public AllergenVO[] newArray(int size) {
+            return new AllergenVO[size];
+        }
+    };
     private AllergenType type;
     private String name;
     private String identifier;
-
 
     public AllergenVO(AllergenType type, String name, String identifier) {
         this.type = type;
@@ -60,6 +71,19 @@ public class AllergenVO implements Parcelable {
         this.identifier = allergen.getIdentifier();
     }
 
+    public AllergenVO(ATCCode atcCode) {
+        this.type = AllergenType.ATC_CODE;
+        this.name = atcCode.getTag();
+        this.identifier = atcCode.getCode();
+    }
+
+    protected AllergenVO(Parcel in) {
+        int tmpType = in.readInt();
+        this.type = tmpType == -1 ? null : AllergenType.values()[tmpType];
+        this.name = in.readString();
+        this.identifier = in.readString();
+    }
+
     public AllergenType getType() {
         return type;
     }
@@ -83,8 +107,6 @@ public class AllergenVO implements Parcelable {
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
-
-
 
     @Override
     public boolean equals(Object o) {
@@ -125,23 +147,4 @@ public class AllergenVO implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.identifier);
     }
-
-    protected AllergenVO(Parcel in) {
-        int tmpType = in.readInt();
-        this.type = tmpType == -1 ? null : AllergenType.values()[tmpType];
-        this.name = in.readString();
-        this.identifier = in.readString();
-    }
-
-    public static final Parcelable.Creator<AllergenVO> CREATOR = new Parcelable.Creator<AllergenVO>() {
-        @Override
-        public AllergenVO createFromParcel(Parcel source) {
-            return new AllergenVO(source);
-        }
-
-        @Override
-        public AllergenVO[] newArray(int size) {
-            return new AllergenVO[size];
-        }
-    };
 }

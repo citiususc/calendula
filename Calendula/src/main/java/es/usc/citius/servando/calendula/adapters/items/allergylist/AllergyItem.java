@@ -21,6 +21,7 @@ package es.usc.citius.servando.calendula.adapters.items.allergylist;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.ATCCode;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 
 /**
@@ -43,7 +45,7 @@ import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 public class AllergyItem extends AbstractItem<AllergyItem, AllergyItem.ViewHolder> implements Comparable<AllergyItem> {
 
     private String title;
-    private String allergenType;
+    private String subtitle;
     private PatientAllergen allergen;
     private ViewHolder holder;
 
@@ -51,10 +53,15 @@ public class AllergyItem extends AbstractItem<AllergyItem, AllergyItem.ViewHolde
         this.title = vo.getName();
         switch (vo.getType()) {
             case ACTIVE_INGREDIENT:
-                allergenType = context.getString(R.string.active_ingredient);
+                subtitle = context.getString(R.string.active_ingredient);
                 break;
             case EXCIPIENT:
-                allergenType = context.getString(R.string.excipient);
+                subtitle = context.getString(R.string.excipient);
+                break;
+            case ATC_CODE:
+                if (vo.getIdentifier().length() < ATCCode.FULL_ATC_LENGTH) {
+                    subtitle = context.getString(R.string.atc_therapeutic_pharmacological_subgroup) + ": " + vo.getIdentifier();
+                }
                 break;
         }
         this.allergen = vo;
@@ -89,7 +96,12 @@ public class AllergyItem extends AbstractItem<AllergyItem, AllergyItem.ViewHolde
         super.bindView(viewHolder, payloads);
         this.holder = viewHolder;
         viewHolder.title.setText(title);
-        viewHolder.subtitle.setText(allergenType);
+        if (TextUtils.isEmpty(subtitle)) {
+            viewHolder.subtitle.setVisibility(View.GONE);
+        } else {
+            viewHolder.subtitle.setText(subtitle);
+            viewHolder.subtitle.setVisibility(View.VISIBLE);
+        }
         viewHolder.deleteButton.setImageDrawable(new IconicsDrawable(viewHolder.deleteButton.getContext())
                 .icon(CommunityMaterial.Icon.cmd_delete)
                 .colorRes(R.color.agenda_item_title)

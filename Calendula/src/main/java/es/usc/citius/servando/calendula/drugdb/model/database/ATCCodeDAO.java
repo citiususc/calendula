@@ -22,8 +22,11 @@ package es.usc.citius.servando.calendula.drugdb.model.database;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import es.usc.citius.servando.calendula.database.DatabaseHelper;
 import es.usc.citius.servando.calendula.database.GenericDao;
@@ -49,6 +52,22 @@ public class ATCCodeDAO extends GenericDao<ATCCode, Long> {
         } catch (SQLException e) {
             Log.e(TAG, "Error creating ATCCode DAO", e);
             throw new RuntimeException("Error creating ATCCode DAO", e);
+        }
+    }
+
+    public List<ATCCode> searchByCodeGroupByTag(final String search) {
+        try {
+            Log.d(TAG, "searchByCodeGroupByTag: Searching \"" + search + "\"");
+            QueryBuilder<ATCCode, Long> qb = dao.queryBuilder();
+            Where w = qb.where();
+            w.like(ATCCode.COLUMN_TAG, "%" + search + "%");
+            qb.groupBy(ATCCode.COLUMN_TAG);
+            qb.orderBy(ATCCode.COLUMN_TAG, true);
+            qb.setWhere(w);
+            return qb.query();
+        } catch (SQLException e) {
+            Log.e(TAG, "searchByCodeGroupByTag: ", e);
+            throw new RuntimeException(e);
         }
     }
 

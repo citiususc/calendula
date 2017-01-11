@@ -384,4 +384,5 @@ You will see all their intakes in the home screen."</string>
     <string name="title_database_update_data_lost">Extra information lost after update</string>
     <string name="preference_check_for_updates">Check for updates</string>
     <string name="database_update_not_available">No database update available</string>
+    <string name="atc_therapeutic_pharmacological_subgroup">Therapeutic/Pharmacological subgroup</string>
 </resources>
