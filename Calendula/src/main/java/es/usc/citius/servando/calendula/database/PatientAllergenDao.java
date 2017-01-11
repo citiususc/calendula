@@ -19,8 +19,10 @@
 package es.usc.citius.servando.calendula.database;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -54,6 +56,18 @@ public class PatientAllergenDao extends GenericDao<PatientAllergen, Long> {
 
     public List<PatientAllergen> findAllForActivePatient(Context ctx) {
         return findAll(DB.patients().getActive(ctx));
+    }
+
+    public List<PatientAllergen> findAllForActivePatientGroupByName(Context ctx) {
+        try {
+            final QueryBuilder<PatientAllergen, Long> qb = dao.queryBuilder();
+            qb.where().eq(PatientAllergen.COLUMN_PATIENT, DB.patients().getActive(ctx));
+            qb.groupBy(PatientAllergen.COLUMN_NAME);
+            return qb.query();
+        } catch (SQLException e) {
+            Log.e(TAG, "findAllForActivePatientGroupByName: ", e);
+            throw new RuntimeException(e);
+        }
     }
 
     public List<PatientAllergen> findAll(Patient p) {

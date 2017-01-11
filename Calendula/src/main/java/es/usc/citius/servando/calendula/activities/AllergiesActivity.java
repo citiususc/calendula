@@ -453,7 +453,7 @@ public class AllergiesActivity extends CalendulaActivity {
         }
 
         public void reload() {
-            currentAllergies = DB.patientAllergens().findAllForActivePatient(context);
+            currentAllergies = DB.patientAllergens().findAllForActivePatientGroupByName(context);
             Collections.sort(currentAllergies, new Comparator<PatientAllergen>() {
                 @Override
                 public int compare(PatientAllergen o1, PatientAllergen o2) {
