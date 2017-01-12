@@ -55,9 +55,9 @@ public class ATCCodeDAO extends GenericDao<ATCCode, Long> {
         }
     }
 
-    public List<ATCCode> searchByCodeGroupByTag(final String search) {
+    public List<ATCCode> searchByTagGroupByTag(final String search) {
         try {
-            Log.d(TAG, "searchByCodeGroupByTag: Searching \"" + search + "\"");
+            Log.d(TAG, "searchByTagGroupByTag: Searching \"" + search + "\"");
             QueryBuilder<ATCCode, Long> qb = dao.queryBuilder();
             Where w = qb.where();
             w.like(ATCCode.COLUMN_TAG, "%" + search + "%");
@@ -66,7 +66,25 @@ public class ATCCodeDAO extends GenericDao<ATCCode, Long> {
             qb.setWhere(w);
             return qb.query();
         } catch (SQLException e) {
-            Log.e(TAG, "searchByCodeGroupByTag: ", e);
+            Log.e(TAG, "searchByTagGroupByTag: ", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<ATCCode> searchByTagOrCodeGroupByTag(final String search) {
+        try {
+            Log.d(TAG, "searchByTagGroupByTag: Searching \"" + search + "\"");
+            QueryBuilder<ATCCode, Long> qb = dao.queryBuilder();
+            Where w = qb.where();
+            final String wildcard = "%" + search + "%";
+            w.like(ATCCode.COLUMN_TAG, wildcard);
+            w.or().like(ATCCode.COLUMN_CODE, wildcard);
+            qb.groupBy(ATCCode.COLUMN_TAG);
+            qb.orderBy(ATCCode.COLUMN_TAG, true);
+            qb.setWhere(w);
+            return qb.query();
+        } catch (SQLException e) {
+            Log.e(TAG, "searchByTagGroupByTag: ", e);
             throw new RuntimeException(e);
         }
     }

@@ -434,7 +434,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
 
             final String filter = params[0].trim();
 
-            final List<ATCCode> codes = DB.drugDB().atcCodes().searchByCodeGroupByTag(filter);
+            final List<ATCCode> codes = DB.drugDB().atcCodes().searchByTagOrCodeGroupByTag(filter);
             final List<AllergenVO> allergenVOs = new ArrayList<>(codes.size());
             Collections.sort(codes, new Comparator<ATCCode>() {
                 @Override
@@ -458,7 +458,8 @@ public class AllergiesSearchActivity extends CalendulaActivity {
             final int highlightColor = ContextCompat.getColor(AllergiesSearchActivity.this, R.color.black);
             for (AllergenVO vo : allergenVOs) {
                 final AllergenItem e = new AllergenItem(vo, AllergiesSearchActivity.this);
-                e.setTitleSpannable(Strings.getHighlighted(e.getTitle(), filter, highlightColor));
+                e.setTitleSpannable(Strings.getHighlighted(e.getTitle(), filter, highlightColor, true));
+                e.setSubtitleSpannable(Strings.getHighlighted(e.getSubtitle(), filter, highlightColor, false));
                 items.add(e);
             }
 

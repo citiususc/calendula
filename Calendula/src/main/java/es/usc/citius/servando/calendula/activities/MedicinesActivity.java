@@ -831,12 +831,12 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
                 cnView.setTextColor(cnColor);
                 if (lowerCode.contains(search)) {
-                    cnView.setText(Strings.getHighlighted(p.getCode(), search, cnHColor));
+                    cnView.setText(Strings.getHighlighted(p.getCode(), search, cnHColor, true));
                     nameView.setText(Strings.toProperCase(name));
                 } else {
                     cnView.setText(p.getCode());
                     if (lowerName.contains(search)) {
-                        nameView.setText(Strings.getHighlighted(name, search, hColor));
+                        nameView.setText(Strings.getHighlighted(name, search, hColor, true));
                     } else {
                         String minSearch = search.substring(0, MIN_SEARCH_LEN);
                         int index = lowerName.indexOf(minSearch);

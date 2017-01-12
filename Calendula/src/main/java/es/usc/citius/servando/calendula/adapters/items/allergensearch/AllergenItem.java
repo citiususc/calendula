@@ -37,7 +37,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
-import es.usc.citius.servando.calendula.drugdb.model.persistence.ATCCode;
 
 /**
  * Created by alvaro.brey.vilas on 22/11/16.
@@ -52,6 +51,7 @@ public class AllergenItem extends AbstractItem<AllergenItem, AllergenItem.ViewHo
     private String title;
 
     private SpannableStringBuilder titleSpannable;
+    private SpannableStringBuilder subtitleSpannable;
 
     public AllergenItem(AllergenVO vo, Context context) {
         this.title = vo.getName();
@@ -63,9 +63,7 @@ public class AllergenItem extends AbstractItem<AllergenItem, AllergenItem.ViewHo
                 subtitle = context.getString(R.string.excipient);
                 break;
             case ATC_CODE:
-                if (vo.getIdentifier().length() < ATCCode.FULL_ATC_LENGTH) {
-                    subtitle = context.getString(R.string.atc_therapeutic_pharmacological_subgroup) + ": " + vo.getIdentifier();
-                }
+                subtitle = vo.getIdentifier();
                 break;
         }
         this.vo = vo;
@@ -109,12 +107,17 @@ public class AllergenItem extends AbstractItem<AllergenItem, AllergenItem.ViewHo
         final int selectedColor = ContextCompat.getColor(viewHolder.itemView.getContext(), R.color.med_presentation_circle_bg);
         UIUtils.setBackground(viewHolder.itemView, FastAdapterUIUtils.getSelectableBackground(viewHolder.itemView.getContext(), selectedColor, true));
         viewHolder.title.setText(titleSpannable != null ? titleSpannable : title);
-        if (TextUtils.isEmpty(subtitle)) {
+
+        if (!TextUtils.isEmpty(subtitleSpannable)) {
+            viewHolder.subtitle.setText(subtitleSpannable);
+            viewHolder.subtitle.setVisibility(View.VISIBLE);
+        } else if (TextUtils.isEmpty(subtitle)) {
             viewHolder.subtitle.setVisibility(View.GONE);
         } else {
             viewHolder.subtitle.setText(subtitle);
             viewHolder.subtitle.setVisibility(View.VISIBLE);
         }
+
     }
 
     @Override
@@ -126,6 +129,14 @@ public class AllergenItem extends AbstractItem<AllergenItem, AllergenItem.ViewHo
 
     public void setTitleSpannable(SpannableStringBuilder titleSpannable) {
         this.titleSpannable = titleSpannable;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitleSpannable(SpannableStringBuilder subtitleSpannable) {
+        this.subtitleSpannable = subtitleSpannable;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

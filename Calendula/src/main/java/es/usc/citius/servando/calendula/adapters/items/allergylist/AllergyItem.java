@@ -35,7 +35,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.drugdb.model.persistence.ATCCode;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 
 /**
@@ -59,9 +58,7 @@ public class AllergyItem extends AbstractItem<AllergyItem, AllergyItem.ViewHolde
                 subtitle = context.getString(R.string.excipient);
                 break;
             case ATC_CODE:
-                if (vo.getIdentifier().length() < ATCCode.FULL_ATC_LENGTH) {
-                    subtitle = context.getString(R.string.atc_therapeutic_pharmacological_subgroup) + ": " + vo.getIdentifier();
-                }
+                subtitle = vo.getIdentifier();
                 break;
         }
         this.allergen = vo;

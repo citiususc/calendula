@@ -71,8 +71,8 @@ public class Strings {
         }
     }
 
-    public static SpannableStringBuilder getHighlighted(String text, String match, int color) {
-        final SpannableStringBuilder sb = new SpannableStringBuilder(Strings.toProperCase(text));
+    public static SpannableStringBuilder getHighlighted(String text, String match, int color, boolean toProperCase) {
+        final SpannableStringBuilder sb = new SpannableStringBuilder(toProperCase ? Strings.toProperCase(text) : text);
         String t = text.toLowerCase(), m = match.toLowerCase();
         int start = t.indexOf(m);
         if (start >= 0) {
