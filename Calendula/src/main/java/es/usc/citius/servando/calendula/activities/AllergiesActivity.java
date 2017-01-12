@@ -70,9 +70,11 @@ import es.usc.citius.servando.calendula.adapters.items.allergylist.AllergyItem;
 import es.usc.citius.servando.calendula.allergies.AllergenConversionUtil;
 import es.usc.citius.servando.calendula.allergies.AllergenFacade;
 import es.usc.citius.servando.calendula.allergies.AllergenGroupWrapper;
+import es.usc.citius.servando.calendula.allergies.AllergenType;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.ATCCode;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
@@ -401,11 +403,28 @@ public class AllergiesActivity extends CalendulaActivity {
         public AllergiesStore() {
         }
 
-        public int deleteAllergen(PatientAllergen a, boolean notify) {
+        public int deleteAllergen(final PatientAllergen a, boolean notify) {
             try {
                 int index = currentAllergies.indexOf(a);
-                DB.patientAllergens().delete(a);
-                AllergyAlertUtil.removeAllergyAlerts(a);
+                if (a.getType() == AllergenType.ATC_CODE) {
+                    DB.transaction(new Callable<Object>() {
+                        @Override
+                        public Object call() throws Exception {
+                            final List<ATCCode> codes = DB.drugDB().atcCodes().findBy(ATCCode.COLUMN_TAG, a.getName());
+                            for (ATCCode atcCode : codes) {
+                                final PatientAllergen a1 = DB.patientAllergens().findOneBy(PatientAllergen.COLUMN_IDENTIFIER, atcCode.getCode());
+                                if (a1 != null) {
+                                    DB.patientAllergens().delete(a1);
+                                    AllergyAlertUtil.removeAllergyAlerts(a1);
+                                }
+                            }
+                            return null;
+                        }
+                    });
+                } else {
+                    DB.patientAllergens().delete(a);
+                    AllergyAlertUtil.removeAllergyAlerts(a);
+                }
                 currentAllergies.remove(a);
                 if (notify) {
                     CalendulaApp.eventBus().post(PersistenceEvents.MEDICINE_EVENT);
