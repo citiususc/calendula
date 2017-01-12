@@ -18,7 +18,6 @@
 
 package es.usc.citius.servando.calendula.database;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
@@ -196,7 +195,7 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
         }
     }
 
-    public void saveAndUpdateStock(DailyScheduleItem model, boolean fireEvent, Context c) {
+    public void saveAndUpdateStock(DailyScheduleItem model, boolean fireEvent) {
         // get original value
         DailyScheduleItem original = findById(model.getId());
         // ensure checked status has changed

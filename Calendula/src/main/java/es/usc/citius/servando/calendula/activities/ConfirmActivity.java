@@ -197,7 +197,7 @@ public class ConfirmActivity extends CalendulaActivity {
                             AlarmScheduler.instance().onUserDelayHourlySchedule(schedule, time, date, ConfirmActivity.this, minutes);
                         }
 
-                        String msg = ConfirmActivity.this.getString(R.string.alarm_delayed_message, minutes);
+                        String msg = ConfirmActivity.this.getString(R.string.alarm_delayed_message, String.valueOf(minutes));
                         Toast.makeText(ConfirmActivity.this, msg, Toast.LENGTH_SHORT).show();
                         supportFinishAfterTransition();
                     }
@@ -264,7 +264,7 @@ public class ConfirmActivity extends CalendulaActivity {
         for (DailyScheduleItem item : items) {
             if (!item.takenToday()) {
                 item.setTakenToday(true);
-                DB.dailyScheduleItems().saveAndUpdateStock(item, true, ConfirmActivity.this);
+                DB.dailyScheduleItems().saveAndUpdateStock(item, true);
                 somethingChecked = true;
             }
 
@@ -727,7 +727,7 @@ public class ConfirmActivity extends CalendulaActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dailyScheduleItem.setTakenToday(!taken);
-                            DB.dailyScheduleItems().saveAndUpdateStock(dailyScheduleItem, true, ConfirmActivity.this);
+                            DB.dailyScheduleItems().saveAndUpdateStock(dailyScheduleItem, true);
                             stateChanged = true;
                             onDailyAgendaItemCheck(check);
                             notifyItemChanged(getAdapterPosition());
@@ -736,7 +736,7 @@ public class ConfirmActivity extends CalendulaActivity {
                 } else {
 
                     dailyScheduleItem.setTakenToday(!taken);
-                    DB.dailyScheduleItems().saveAndUpdateStock(dailyScheduleItem, true, ConfirmActivity.this);
+                    DB.dailyScheduleItems().saveAndUpdateStock(dailyScheduleItem, true);
                     stateChanged = true;
                     onDailyAgendaItemCheck(check);
                     notifyItemChanged(getAdapterPosition());

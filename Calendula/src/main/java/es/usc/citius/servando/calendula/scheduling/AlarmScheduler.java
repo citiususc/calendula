@@ -201,7 +201,7 @@ public class AlarmScheduler {
                 Log.d(TAG, "Confirming schedule item");
                 ds.setTimeTaken(LocalTime.now());
                 ds.setTakenToday(true);
-                ds.save();
+                DB.dailyScheduleItems().saveAndUpdateStock(ds,true);
             }
         }
         // cancel alarms
@@ -215,7 +215,7 @@ public class AlarmScheduler {
             Log.d(TAG, "Confirming schedule item");
             ds.setTakenToday(true);
             ds.setTimeTaken(LocalTime.now());
-            ds.save();
+            DB.dailyScheduleItems().saveAndUpdateStock(ds,true);
         }
         // cancell all alarms
         onIntakeCompleted(s, t, date, ctx);

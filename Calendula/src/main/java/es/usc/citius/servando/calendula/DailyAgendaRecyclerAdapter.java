@@ -47,12 +47,10 @@ import com.mikepenz.iconics.typeface.IIcon;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
-import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
@@ -498,43 +496,25 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         @Override
         public void onClick(View view) {
             Log.d("Recycler", "Click row, listener is null? " + (listener == null));
-
             if (view.getId() == R.id.check_all_button || view.getId() == R.id.action_container) {
-
-                List<DailyScheduleItem> dailyScheduleItems = new ArrayList<>();
-                if (stub.isRoutine) {
-                    List<ScheduleItem> rsi = Routine.findById(stub.id).scheduleItems();
-                    for (ScheduleItem si : rsi) {
-                        DailyScheduleItem dsi = DB.dailyScheduleItems().findByScheduleItemAndDate(si, stub.date);
-                        if (dsi != null)
-                            dailyScheduleItems.add(dsi);
-                    }
-                } else {
-                    Schedule s = Schedule.findById(stub.id);
-                    dailyScheduleItems.add(DB.dailyScheduleItems().findBy(s, stub.date, stub.time));
-                }
-
-                for (DailyScheduleItem item : dailyScheduleItems) {
-                    item.setTakenToday(true);
-                    DB.dailyScheduleItems().saveAndUpdateStock(item, false, context);
-                }
-
-                if (stub.isRoutine) {
-                    AlarmScheduler.instance().onIntakeCompleted(DB.routines().findById(stub.id), stub.date, context);
-                } else {
-                    AlarmScheduler.instance().onIntakeCompleted(DB.schedules().findById(stub.id), stub.time, stub.date, context);
-                }
-
-                actionsView.animate().alpha(0).scaleX(0.5f).scaleY(0.5f).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        updateItem(getAdapterPosition());
-                    }
-                });
-
+                hideCheckAllButton();
             } else if (listener != null) {
                 listener.onItemClick(view, stub, getAdapterPosition());
             }
+        }
+
+        public void hideCheckAllButton(){
+            actionsView.animate().setDuration(100).alpha(0).scaleY(0.5f).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if (stub.isRoutine) {
+                        AlarmScheduler.instance().onIntakeConfirmAll(DB.routines().findById(stub.id), stub.date, context);
+                    } else {
+                        AlarmScheduler.instance().onIntakeConfirmAll(DB.routines().findById(stub.id), stub.date, context);
+                    }
+                    updateItem(getAdapterPosition());
+                }
+            });
         }
     }
 
