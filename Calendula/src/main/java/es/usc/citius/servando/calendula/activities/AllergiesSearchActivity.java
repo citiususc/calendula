@@ -359,7 +359,6 @@ public class AllergiesSearchActivity extends CalendulaActivity {
 
         @Override
         public void onSelectionChanged(AbstractItem item, boolean selected) {
-            KeyboardUtils.hideKeyboard(AllergiesSearchActivity.this);
             switch (item.getType()) {
                 case R.id.fastadapter_allergen_group_item:
                     AllergenGroupItem i = (AllergenGroupItem) item;
@@ -396,6 +395,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
             if (selectedNumber > 0) {
                 selectLayout.setVisibility(View.VISIBLE);
                 selectText.setText(getString(R.string.allergies_selected_number, selectedNumber));
+                KeyboardUtils.hideKeyboard(AllergiesSearchActivity.this);
             } else {
                 selectLayout.setVisibility(View.GONE);
             }
