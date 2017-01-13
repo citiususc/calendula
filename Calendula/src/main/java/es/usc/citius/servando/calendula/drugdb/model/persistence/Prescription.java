@@ -1,37 +1,14 @@
-/*
- *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
- *
- *    Calendula is free software; you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation; either version 3 of the License, or
- *    (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
- */
 
 package es.usc.citius.servando.calendula.drugdb.model.persistence;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import es.usc.citius.servando.calendula.util.Strings;
-
-/**
- * This class was generated automatically.
- * Please check consistency and completion.
- * Replace {} with the appropriate classes and generate methods as needed.
- */
 @DatabaseTable(tableName = "Prescription")
 public class Prescription {
 
     public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_ATC_CODE = "ATCCode";
     public static final String COLUMN_AFFECTS_DRIVING = "AffectsDriving";
     public static final String COLUMN_CODE = "Code";
     public static final String COLUMN_CONTENT = "Content";
@@ -50,6 +27,8 @@ public class Prescription {
      */
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
+    @DatabaseField(columnName = COLUMN_ATC_CODE)
+    private String aTCCode;
     @DatabaseField(columnName = COLUMN_AFFECTS_DRIVING)
     private Boolean affectsDriving;
     @DatabaseField(columnName = COLUMN_CODE)
@@ -57,7 +36,7 @@ public class Prescription {
     @DatabaseField(columnName = COLUMN_CONTENT)
     private String content;
     @DatabaseField(columnName = COLUMN_CONTENT_UNIT)
-    private Long contentUnit;
+    private String contentUnit;
     @DatabaseField(columnName = COLUMN_DOSE)
     private String dose;
     @DatabaseField(columnName = COLUMN_GENERIC)
@@ -81,7 +60,8 @@ public class Prescription {
     public Prescription() {
     }
 
-    public Prescription(Boolean affectsDriving, String code, String content, Long contentUnit, String dose, Boolean generic, String homogeneousGroup, String name, String pID, String packageType, Float packagingUnits, String presentationForm) {
+    public Prescription(String aTCCode, Boolean affectsDriving, String code, String content, String contentUnit, String dose, Boolean generic, String homogeneousGroup, String name, String pID, String packageType, Float packagingUnits, String presentationForm) {
+        this.aTCCode = aTCCode;
         this.affectsDriving = affectsDriving;
         this.code = code;
         this.content = content;
@@ -104,7 +84,15 @@ public class Prescription {
         this.id = id;
     }
 
-    public Boolean getAffectsDriving() {
+    public String getATCCode() {
+        return aTCCode;
+    }
+
+    public void setATCCode(String aTCCode) {
+        this.aTCCode = aTCCode;
+    }
+
+    public Boolean isAffectsDriving() {
         return affectsDriving;
     }
 
@@ -128,11 +116,11 @@ public class Prescription {
         this.content = content;
     }
 
-    public Long getContentUnit() {
+    public String getContentUnit() {
         return contentUnit;
     }
 
-    public void setContentUnit(Long contentUnit) {
+    public void setContentUnit(String contentUnit) {
         this.contentUnit = contentUnit;
     }
 
@@ -144,7 +132,7 @@ public class Prescription {
         this.dose = dose;
     }
 
-    public Boolean getGeneric() {
+    public Boolean isGeneric() {
         return generic;
     }
 
@@ -168,11 +156,11 @@ public class Prescription {
         this.name = name;
     }
 
-    public String getpID() {
+    public String getPID() {
         return pID;
     }
 
-    public void setpID(String pID) {
+    public void setPID(String pID) {
         this.pID = pID;
     }
 
@@ -200,17 +188,5 @@ public class Prescription {
         this.presentationForm = presentationForm;
     }
 
-    public String shortName() {
-        try {
-            String[] parts = name.split(" ");
-            String s = parts[0].toLowerCase();
-            if ((s.contains("acido") || s.contains("ácido")) && parts.length > 1) {
-                return Strings.toCamelCase(s + " " + parts[1], " ");
-            }
-            return Strings.toProperCase(s);
 
-        } catch (Exception e) {
-            return name;
-        }
-    }
 }

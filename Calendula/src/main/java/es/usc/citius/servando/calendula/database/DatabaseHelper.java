@@ -211,6 +211,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                     TableUtils.createTable(connectionSource, PatientAlert.class);
                 case 13:
                     TableUtils.createTable(connectionSource, ATCCode.class);
+                    getMedicinesDao().executeRaw("ALTER TABLE Prescription ADD COLUMN ATCCode TEXT;");
             }
 
         } catch (Exception e) {
