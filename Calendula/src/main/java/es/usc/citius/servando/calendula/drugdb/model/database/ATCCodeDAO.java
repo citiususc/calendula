@@ -22,6 +22,8 @@ package es.usc.citius.servando.calendula.drugdb.model.database;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.GenericRawResults;
+import com.j256.ormlite.dao.RawRowMapper;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
@@ -36,6 +38,7 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.ATCCode;
 public class ATCCodeDAO extends GenericDao<ATCCode, Long> {
 
     public static final String TAG = "ATCCodeDAO";
+    public static final String CONCAT_SEPARATOR = "/";
 
     private Dao<ATCCode, Long> daoInstance = null;
 
@@ -85,6 +88,23 @@ public class ATCCodeDAO extends GenericDao<ATCCode, Long> {
             return qb.query();
         } catch (SQLException e) {
             Log.e(TAG, "searchByTagGroupByTag: ", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<ATCCode> searchByTagOrCodeGroupByTagConcat(final String search) {
+        Log.d(TAG, "searchByTagOrCodeGroupByTagConcat() called with: search = [" + search + "]");
+        final String sq = String.format("%%%s%%", search);
+        try {
+            final GenericRawResults<ATCCode> atcCodes = dao.queryRaw("select Tag, group_concat(Code, '/') from ATCCode where Tag like ? or Tag like ? group by Tag;", new RawRowMapper<ATCCode>() {
+                @Override
+                public ATCCode mapRow(String[] columnNames, String[] resultColumns) throws SQLException {
+                    return new ATCCode(resultColumns[1], resultColumns[0]);
+                }
+            }, sq, sq);
+            return atcCodes.getResults();
+        } catch (SQLException e) {
+            Log.e(TAG, "searchByTagOrCodeGroupByTagConcat: ", e);
             throw new RuntimeException(e);
         }
     }

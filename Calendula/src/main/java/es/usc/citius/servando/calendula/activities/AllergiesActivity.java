@@ -74,6 +74,7 @@ import es.usc.citius.servando.calendula.allergies.AllergenType;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.model.database.ATCCodeDAO;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.ATCCode;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
@@ -647,8 +648,17 @@ public class AllergiesActivity extends CalendulaActivity {
             for (AllergenGroupWrapper w : ws) {
                 if (w.getGroup() != null)
                     pa.add(new PatientAllergen(w.getVo(), p, w.getGroup()));
-                else
-                    pa.add(new PatientAllergen(w.getVo(), p));
+                else {
+                    if (w.getVo().getType() == AllergenType.ATC_CODE) {
+                        String[] codes = w.getVo().getIdentifier().split(ATCCodeDAO.CONCAT_SEPARATOR);
+                        for (String code : codes) {
+                            AllergenVO vo = new AllergenVO(AllergenType.ATC_CODE, w.getVo().getName(), code.trim());
+                            pa.add(new PatientAllergen(vo, p));
+                        }
+                    } else {
+                        pa.add(new PatientAllergen(w.getVo(), p));
+                    }
+                }
             }
 
             final SaveResult r = store.storeAllergens(pa);

@@ -71,7 +71,6 @@ import es.usc.citius.servando.calendula.adapters.items.allergylist.AllergyGroupS
 import es.usc.citius.servando.calendula.adapters.items.allergylist.AllergyItem;
 import es.usc.citius.servando.calendula.allergies.AllergenConversionUtil;
 import es.usc.citius.servando.calendula.allergies.AllergenGroupWrapper;
-import es.usc.citius.servando.calendula.allergies.AllergenType;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.ATCCode;
@@ -182,15 +181,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
                     break;
                 case R.id.fastadapter_allergen_item:
                     final AllergenItem item1 = (AllergenItem) i;
-                    final AllergenVO vo = item1.getVo();
-                    if (vo.getType() == AllergenType.ATC_CODE) {
-                        List<ATCCode> atcCodes = DB.drugDB().atcCodes().findBy(ATCCode.COLUMN_TAG, vo.getName());
-                        for (ATCCode atcCode : atcCodes) {
-                            vos.add(new AllergenGroupWrapper(new AllergenVO(atcCode)));
-                        }
-                    } else {
-                        vos.add(new AllergenGroupWrapper(vo));
-                    }
+                    vos.add(new AllergenGroupWrapper(item1.getVo()));
                     break;
                 default:
                     Log.wtf(TAG, "Invalid item type in adapter: " + i);
@@ -434,7 +425,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
 
             final String filter = params[0].trim();
 
-            final List<ATCCode> codes = DB.drugDB().atcCodes().searchByTagOrCodeGroupByTag(filter);
+            final List<ATCCode> codes = DB.drugDB().atcCodes().searchByTagOrCodeGroupByTagConcat(filter);
             final List<AllergenVO> allergenVOs = new ArrayList<>(codes.size());
             Collections.sort(codes, new Comparator<ATCCode>() {
                 @Override
