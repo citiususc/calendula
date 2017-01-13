@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.ATCCode;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.ActiveIngredient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Excipient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
@@ -64,12 +65,8 @@ public class AllergenFacade {
     }
 
     public static List<AllergenVO> findAllergensForPrescription(final Prescription p) {
-        String code = p.getCode();
-        return findAllergensForPrescription(code);
-    }
-
-    public static List<AllergenVO> findAllergensForPrescription(final String code) {
-        Log.d(TAG, "getAllergensForPrescription() called with: p = [" + code + "]");
+        Log.d(TAG, "getAllergensForPrescription() called with: p = [" + p + "]");
+        final String code = p.getCode();
         List<AllergenVO> ret = new ArrayList<>();
         // active ingredients
         List<PrescriptionActiveIngredient> pais = DB.drugDB().prescriptionActiveIngredients().findBy(PrescriptionActiveIngredient.COLUMN_PRESCRIPTION_CODE, code);
@@ -82,7 +79,7 @@ public class AllergenFacade {
             }
         }
 
-        //excipients
+        // excipients
         List<PrescriptionExcipient> pes = DB.drugDB().prescriptionExcipients().findBy(PrescriptionExcipient.COLUMN_PRESCRIPTION_CODE, code);
         for (PrescriptionExcipient pe : pes) {
             List<Excipient> dbe = DB.drugDB().excipients().findBy(Excipient.COLUMN_EXCIPIENT_ID, pe.getExcipientID());
@@ -91,6 +88,12 @@ public class AllergenFacade {
             } else {
                 ret.add(new AllergenVO(dbe.get(0)));
             }
+        }
+
+        // atc codes
+        List<ATCCode> codes = DB.drugDB().atcCodes().findBy(ATCCode.COLUMN_CODE, p.getAtcCode());
+        for (ATCCode atcCode : codes) {
+            ret.add(new AllergenVO(atcCode));
         }
 
 
@@ -106,6 +109,7 @@ public class AllergenFacade {
      * @return list of intersections between patient allergies and prescription allergens.
      */
     public static List<AllergenVO> checkAllergies(Context ctx, Prescription p) {
+        // TODO: 13/01/17 check more than 1 level of ATC
         List<AllergenVO> prescriptionAllergens = AllergenFacade.findAllergensForPrescription(p);
         List<AllergenVO> patientAllergies = AllergenConversionUtil.toVO(DB.patientAllergens().findAllForActivePatient(ctx));
 
@@ -129,7 +133,8 @@ public class AllergenFacade {
         List<Medicine> patientMedicines = DB.medicines().findAllForActivePatient(ctx);
         for (Medicine m : patientMedicines) {
             if (m.isBoundToPrescription()) {
-                List<AllergenVO> prescriptionAllergens = findAllergensForPrescription(m.cn());
+                final Prescription p = DB.drugDB().prescriptions().findByCn(m.cn());
+                List<AllergenVO> prescriptionAllergens = findAllergensForPrescription(p);
                 if (prescriptionAllergens.contains(newAllergen))
                     medicines.add(m);
             }
