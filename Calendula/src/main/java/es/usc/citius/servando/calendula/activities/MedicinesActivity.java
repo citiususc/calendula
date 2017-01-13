@@ -570,7 +570,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     private boolean createAllergyAlerts(final Medicine m, final List<AllergenVO> allergies) {
 
         final List<PatientAlert> allergyAlerts = DB.alerts().findByMedicineAndType(m, new AllergyPatientAlert().getType());
-        switch (allergies.size()) {
+        switch (allergyAlerts.size()) {
             case 0:
                 AllergyPatientAlert alert = new AllergyPatientAlert(m, allergies);
                 AlertManager.createAlert(alert);

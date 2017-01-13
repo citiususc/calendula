@@ -69,10 +69,10 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     public static final String TAG = "DatabaseHelper";
+    // any time you make changes to your database objects, you may have to increase the database version
+    public static final int DATABASE_VERSION = 13;
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
-    // any time you make changes to your database objects, you may have to increase the database version
-    private static final int DATABASE_VERSION = 13;
     // List of persisted classes to simplify table creation
     public Class<?>[] persistedClasses = new Class<?>[]{
             Routine.class,

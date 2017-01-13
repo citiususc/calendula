@@ -34,8 +34,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import es.usc.citius.servando.calendula.BuildConfig;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.database.DatabaseHelper;
 import es.usc.citius.servando.calendula.util.HttpDownloadUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
@@ -82,7 +82,7 @@ public class DBVersionManager {
             //check last valid version threshold
             int lastValid = -1;
             for (Integer version : appVersionThresholds) {
-                if (version <= BuildConfig.VERSION_CODE) {
+                if (version <= DatabaseHelper.DATABASE_VERSION) {
                     lastValid = version;
                 } else {
                     break;
