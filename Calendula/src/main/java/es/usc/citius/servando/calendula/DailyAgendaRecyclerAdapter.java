@@ -162,7 +162,6 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         if (expanded) {
             int color = DB.patients().getActive(holder.itemView.getContext()).color();
 
-            // TODO: get from strings
             String title;
             if (item.date.equals(LocalDate.now())) {
                 title = ctx.getString(R.string.today);
