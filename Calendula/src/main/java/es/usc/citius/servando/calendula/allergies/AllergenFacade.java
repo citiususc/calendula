@@ -22,7 +22,9 @@ import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.ATCCode;
@@ -109,13 +111,28 @@ public class AllergenFacade {
      * @return list of intersections between patient allergies and prescription allergens.
      */
     public static List<AllergenVO> checkAllergies(Context ctx, Prescription p) {
-        // TODO: 13/01/17 check more than 1 level of ATC
         List<AllergenVO> prescriptionAllergens = AllergenFacade.findAllergensForPrescription(p);
         List<AllergenVO> patientAllergies = AllergenConversionUtil.toVO(DB.patientAllergens().findAllForActivePatient(ctx));
 
+        //check for ATC sublevels
+        List<AllergenVO> atcAllergies = new ArrayList<>();
+        for (AllergenVO allergy : patientAllergies) {
+            // we'll only check allergies that are ATC codes but aren't last level
+            // last level ATC codes are handled by the retainAll call
+            if (allergy.getType() == AllergenType.ATC_CODE && allergy.getIdentifier().length() < ATCCode.FULL_ATC_LENGTH) {
+                if (p.getAtcCode().contains(allergy.getIdentifier())) {
+                    atcAllergies.add(allergy);
+                }
+            }
+        }
+
         prescriptionAllergens.retainAll(patientAllergies);
 
-        return prescriptionAllergens;
+        Set<AllergenVO> voSet = new HashSet<>();
+        voSet.addAll(prescriptionAllergens);
+        voSet.addAll(atcAllergies);
+
+        return new ArrayList<>(voSet);
     }
 
     /**
@@ -134,8 +151,7 @@ public class AllergenFacade {
         for (Medicine m : patientMedicines) {
             if (m.isBoundToPrescription()) {
                 final Prescription p = DB.drugDB().prescriptions().findByCn(m.cn());
-                List<AllergenVO> prescriptionAllergens = findAllergensForPrescription(p);
-                if (prescriptionAllergens.contains(newAllergen))
+                if (checkAllergies(ctx, p).size() > 0)
                     medicines.add(m);
             }
         }
