@@ -109,5 +109,19 @@ public class ATCCodeDAO extends GenericDao<ATCCode, Long> {
         }
     }
 
+    /**
+     * Some active principles appear in the ATC tree multiple times, depending on their function.
+     * This method, given one of those ATC codes, returns a list of the ATC codes that reference
+     * the same active principle.
+     *
+     * @param code the code
+     * @return the list
+     */
+    public List<ATCCode> findEquivalentCodes(final String code) {
+        Log.d(TAG, "findEquivalentCodes() called with: code = [" + code + "]");
+        final ATCCode code1 = findOneBy(ATCCode.COLUMN_CODE, code);
+        return findBy(ATCCode.COLUMN_TAG, code1.getTag());
+    }
+
 
 }

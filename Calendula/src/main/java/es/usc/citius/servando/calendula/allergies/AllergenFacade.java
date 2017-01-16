@@ -22,6 +22,8 @@ import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -93,7 +95,7 @@ public class AllergenFacade {
         }
 
         // atc codes
-        List<ATCCode> codes = DB.drugDB().atcCodes().findBy(ATCCode.COLUMN_CODE, p.getAtcCode());
+        List<ATCCode> codes = DB.drugDB().atcCodes().findEquivalentCodes(p.getAtcCode());
         for (ATCCode atcCode : codes) {
             ret.add(new AllergenVO(atcCode));
         }
@@ -114,25 +116,37 @@ public class AllergenFacade {
         List<AllergenVO> prescriptionAllergens = AllergenFacade.findAllergensForPrescription(p);
         List<AllergenVO> patientAllergies = AllergenConversionUtil.toVO(DB.patientAllergens().findAllForActivePatient(ctx));
 
-        //check for ATC sublevels
+        //check for ATC sub-levels
         List<AllergenVO> atcAllergies = new ArrayList<>();
-        for (AllergenVO allergy : patientAllergies) {
+        for (AllergenVO patientAllergy : patientAllergies) {
             // we'll only check allergies that are ATC codes but aren't last level
             // last level ATC codes are handled by the retainAll call
-            if (allergy.getType() == AllergenType.ATC_CODE && allergy.getIdentifier().length() < ATCCode.FULL_ATC_LENGTH) {
-                if (p.getAtcCode().contains(allergy.getIdentifier())) {
-                    atcAllergies.add(allergy);
+            if (patientAllergy.getType() == AllergenType.ATC_CODE && patientAllergy.getIdentifier().length() < ATCCode.FULL_ATC_LENGTH) {
+                for (AllergenVO prescriptionAllergen : prescriptionAllergens) {
+                    //we need to check all equivalent ATC codes, not just the one from the prescription
+                    if (prescriptionAllergen.getType() == AllergenType.ATC_CODE && prescriptionAllergen.getIdentifier().contains(patientAllergy.getIdentifier())) {
+                        atcAllergies.add(patientAllergy);
+                    }
                 }
+
             }
         }
 
         prescriptionAllergens.retainAll(patientAllergies);
 
+        //ensure uniqueness
         Set<AllergenVO> voSet = new HashSet<>();
         voSet.addAll(prescriptionAllergens);
         voSet.addAll(atcAllergies);
 
-        return new ArrayList<>(voSet);
+        final ArrayList<AllergenVO> allergenVOs = new ArrayList<>(voSet);
+        Collections.sort(allergenVOs, new Comparator<AllergenVO>() {
+            @Override
+            public int compare(AllergenVO o1, AllergenVO o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+        return allergenVOs;
     }
 
     /**
