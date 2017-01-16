@@ -96,7 +96,7 @@ public class ATCCodeDAO extends GenericDao<ATCCode, Long> {
         Log.d(TAG, "searchByTagOrCodeGroupByTagConcat() called with: search = [" + search + "]");
         final String sq = String.format("%%%s%%", search);
         try {
-            final GenericRawResults<ATCCode> atcCodes = dao.queryRaw("select Tag, group_concat(Code, '/') from ATCCode where Tag like ? or Tag like ? group by Tag;", new RawRowMapper<ATCCode>() {
+            final GenericRawResults<ATCCode> atcCodes = dao.queryRaw("select Tag, group_concat(Code, '/') from ATCCode where Tag like ? or Code like ? group by Tag;", new RawRowMapper<ATCCode>() {
                 @Override
                 public ATCCode mapRow(String[] columnNames, String[] resultColumns) throws SQLException {
                     return new ATCCode(resultColumns[1], resultColumns[0]);
