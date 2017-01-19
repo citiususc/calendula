@@ -111,7 +111,7 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
 
         final ConnectionSource connection = DB.helper().getConnectionSource();
         final String basePath = downloadPath.replaceAll("/[^/]*$", "");
-        final String uncompressedPath = basePath + "AEMPS.sql";
+        final String uncompressedPath = basePath + "/AEMPS.sql";
 
         Log.d(TAG, "setup: uncompressing " + downloadPath + " into " + uncompressedPath);
         ZipUtil.unzip(new File(downloadPath), new File(basePath));
