@@ -154,6 +154,20 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
                 return null;
             }
         });
+
+        Log.d(TAG, "setup: cleaning up...");
+        try {
+            boolean delete = new File(downloadPath).delete();
+            if (!delete) {
+                Log.i(TAG, "setup: couldn't delete file " + downloadPath);
+            }
+            delete = new File(uncompressedPath).delete();
+            if (!delete) {
+                Log.i(TAG, "setup: couldn't delete file " + uncompressedPath);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "setup: couldn't finish cleanup: ", e);
+        }
     }
 
     private void updateProgress(SetupProgressListener l, int progress) {
