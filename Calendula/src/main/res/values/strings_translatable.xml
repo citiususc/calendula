@@ -384,4 +384,8 @@ You will see all their intakes in the home screen."</string>
     <string name="title_database_update_data_lost">Extra information lost after update</string>
     <string name="preference_check_for_updates">Check for updates</string>
     <string name="database_update_not_available">No database update available</string>
+    <string name="title_database_update_required">Database update required</string>
+    <string name="message_database_update_required">"This version of the app requires a newer database. Do you want to download and configure it now?
+If you choose not to download it, some of your medicines' information may be lost."</string>
+    <string name="download">Download</string>
 </resources>
