@@ -20,11 +20,13 @@ package es.usc.citius.servando.calendula.drugdb;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
@@ -32,6 +34,7 @@ import java.util.concurrent.Callable;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
+import es.usc.citius.servando.calendula.util.ZipUtil;
 
 /**
  * Created by joseangel.pineiro on 9/8/15.
@@ -39,6 +42,7 @@ import es.usc.citius.servando.calendula.persistence.Presentation;
 public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
 
     public static final String PROSPECT_URL = "https://www.aemps.gob.es/cima/dochtml/p/#ID#/Prospecto_#ID#.html";
+    private static final String TAG = "AEMPSPrescriptionDBMgr";
 
     @Override
     public String getProspectURL(Prescription p) {
@@ -106,6 +110,11 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
     public void setup(final Context ctx, final String downloadPath, final SetupProgressListener l) throws Exception {
 
         final ConnectionSource connection = DB.helper().getConnectionSource();
+        final String basePath = downloadPath.replaceAll("/[^/]*$", "");
+        final String uncompressedPath = basePath + "AEMPS.sql";
+
+        Log.d(TAG, "setup: uncompressing " + downloadPath + " into " + uncompressedPath);
+        ZipUtil.unzip(new File(downloadPath), new File(basePath));
 
         TransactionManager.callInTransaction(connection, new Callable<Object>() {
             @Override
@@ -119,7 +128,7 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
                 int lines = 0;
                 int i = 0;
 
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(uncompressedPath)));
                 // count file lines (for progress updating)
                 while (br.readLine() != null) {
                     lines++;
@@ -128,7 +137,8 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
                 progressUpdateBy = lines / 20;
                 updateProgress(l, 0);
 
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
+                Log.d(TAG, "call: reading from " + uncompressedPath);
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(uncompressedPath)));
 
                 SQLiteDatabase database = DB.helper().getWritableDatabase();
                 while ((line = br.readLine()) != null) {
