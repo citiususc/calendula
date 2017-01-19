@@ -148,8 +148,8 @@ public class DownloadDatabaseHelper {
         new DownloadDatabaseTask(ctx, type).execute(database);
     }
 
-    private void removePreviousDownloads(String dbName) {
-        File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+    private void removePreviousDownloads(Context ctx, String dbName) {
+        File downloads = ctx.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
         final String path = downloads.getAbsolutePath() + "/" + dbName + downloadSuffix;
         File f = new File(path);
         if (f.exists()) {
@@ -202,16 +202,15 @@ public class DownloadDatabaseHelper {
 
 
                     // remove previous downloads and cancel notifications
-                    removePreviousDownloads(dbName);
+                    removePreviousDownloads(ctx, dbName);
                     mNotifyManager.cancel(InstallDatabaseService.NOTIFICATION_ID);
                     // create the download request
                     DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
                     request.setDescription(mgr.description());
                     request.setTitle(mgr.displayName());
-                    request.allowScanningByMediaScanner();
                     request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
                     request.setVisibleInDownloadsUi(true);
-                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, dbName + downloadSuffix);
+                    request.setDestinationInExternalFilesDir(ctx, Environment.DIRECTORY_DOWNLOADS, dbName + downloadSuffix);
                     // get download service and enqueue file
                     long downloadId = manager.enqueue(request);
                     // save id in preferences for later use in DBDownloadReceiver
