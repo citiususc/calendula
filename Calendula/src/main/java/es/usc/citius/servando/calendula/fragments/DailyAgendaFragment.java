@@ -327,7 +327,7 @@ public class DailyAgendaFragment extends Fragment {
         }
 
         if (position > 0)
-            llm.scrollToPositionWithOffset(position - 1, 0);
+            llm.smoothScrollToPosition(rv, null, position - 1);
     }
 
     public boolean isExpanded() {
@@ -494,12 +494,12 @@ public class DailyAgendaFragment extends Fragment {
                 firstTime = null;
             } else */
             if (expanded) {
-                new Handler().post(new Runnable() {
+                new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         scrollTo(DateTime.now());
                     }
-                });
+                }, 600);
             }
         }
     }
