@@ -18,6 +18,8 @@
 
 package es.usc.citius.servando.calendula;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +29,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.ColorInt;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
@@ -109,6 +112,9 @@ public class HomePagerActivity extends CalendulaActivity implements
     private int pendingRefresh = -2;
     private Queue<Object> pendingEvents = new LinkedList<>();
     private Handler handler;
+
+    @ColorInt
+    private int previousColor = -1;
 
     public void showPagerItem(int position) {
         showPagerItem(position, true);
@@ -335,8 +341,7 @@ public class HomePagerActivity extends CalendulaActivity implements
         homeProfileMgr.init(userInfoFragment, this);
 
         activePatient = DB.patients().getActive(this);
-        toolbarLayout.setContentScrimColor(activePatient.color());
-
+        updateScrim(0);
 
         // Setup fab
         addButton = (FloatingActionsMenu) findViewById(R.id.fab_menu);
@@ -495,18 +500,19 @@ public class HomePagerActivity extends CalendulaActivity implements
             @Override
             public void onPageSelected(int position) {
                 updateTitle(position);
+                updateScrim(position);
                 fabMgr.onViewPagerItemChange(position);
-                if (position == 0 && !((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).isExpanded()) {
+                if (position == HomePages.HOME.ordinal() && !((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).isExpanded()) {
                     appBarLayout.setExpanded(true);
                 } else {
                     appBarLayout.setExpanded(false);
                 }
 
                 if (expandItem != null) {
-                    expandItem.setVisible(position == 0);
+                    expandItem.setVisible(position == HomePages.HOME.ordinal());
                 }
                 if (helpItem != null) {
-                    helpItem.setVisible(position == 3);
+                    helpItem.setVisible(position == HomePages.SCHEDULES.ordinal());
                 }
             }
 
@@ -515,6 +521,28 @@ public class HomePagerActivity extends CalendulaActivity implements
 
             }
         };
+    }
+
+    private void updateScrim(int position) {
+        @ColorInt
+        final int color = position == HomePages.HOME.ordinal() ? R.color.transparent_black : activePatient.color();
+
+        if (previousColor != -1) {
+            ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), previousColor, color);
+            colorAnimation.setDuration(250); // milliseconds
+            colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                @Override
+                public void onAnimationUpdate(ValueAnimator animator) {
+                    toolbarLayout.setContentScrimColor((int) animator.getAnimatedValue());
+                }
+
+            });
+            colorAnimation.start();
+        } else {
+            toolbarLayout.setContentScrimColor(color);
+        }
+        previousColor = color;
     }
 
     private void updateTitle(int page) {

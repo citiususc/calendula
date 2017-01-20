@@ -41,9 +41,7 @@
                 android:background="#00000000"
                 android:clipToPadding="true"
                 android:fitsSystemWindows="true"
-                app:contentScrim="#1976D2"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:statusBarScrim="#00000000"
                 app:titleEnabled="false">
 
                 <!--app:titleEnabled="true"-->
