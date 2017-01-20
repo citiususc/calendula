@@ -546,7 +546,13 @@ public class HomePagerActivity extends CalendulaActivity implements
     }
 
     private void updateTitle(int page) {
-        String title = getString(R.string.relation_user_possession_thing, activePatient.name(), getString(HomePages.values()[page].title));
+        String title;
+        if (page == HomePages.HOME.ordinal()) {
+            title = getString(R.string.app_name);
+        } else {
+            title = getString(R.string.relation_user_possession_thing, activePatient.name(), getString(HomePages.values()[page].title));
+        }
+
         toolbarTitle.setText(title);
     }
 

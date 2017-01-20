@@ -189,6 +189,6 @@
         android:layout_marginTop="@dimen/status_bar_height"
         android:height="@dimen/action_bar_height"
         android:gravity="center_vertical"
-        android:text="Calendula"/>
+        android:text="@string/app_name"/>
 
 </RelativeLayout>
