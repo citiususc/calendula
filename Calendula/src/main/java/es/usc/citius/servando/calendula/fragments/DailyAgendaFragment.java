@@ -272,6 +272,25 @@ public class DailyAgendaFragment extends Fragment {
                 }
             }
 
+            if (!exact) {
+                for (Routine routine : DB.routines().findAll()) {
+                    if (exact) {
+                        break;
+                    }
+                    for (ScheduleItem scheduleItem : routine.scheduleItems()) {
+                        List<DailyScheduleItem> dailyScheduleItems = DB.dailyScheduleItems().findAllByScheduleItem(scheduleItem);
+                        for (DailyScheduleItem dailyScheduleItem : dailyScheduleItems) {
+                            if (dailyScheduleItem == null) {
+                                break;
+                            } else if (dailyScheduleItem.time().equals(start.toLocalTime())) {
+                                exact = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+
             Interval hour = new Interval(start, start.plusHours(1));
             if (!exact || hour.contains(DateTime.now())) {
                 stubs.add(new DailyAgendaItemStub(start.toLocalDate(), start.toLocalTime()));
