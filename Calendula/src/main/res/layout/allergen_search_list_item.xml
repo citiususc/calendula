@@ -17,14 +17,22 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@drawable/touchable_white">
 
     <RelativeLayout
-        android:id="@+id/medicines_list_item_container"
-        android:layout_width="fill_parent"
+        android:id="@+id/spacer"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"/>
+
+    <RelativeLayout
+
+        android:id="@+id/allergen_search_item_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/touchable_white">
+        android:layout_toRightOf="@+id/spacer">
 
         <ImageView
             android:layout_width="fill_parent"
@@ -47,7 +55,8 @@
                 android:gravity="top"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#222"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                tools:text="Allergen placeholder name!"/>
 
             <TextView
                 android:id="@+id/text2"
@@ -55,7 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:textColor="@color/agenda_item_title"
-                android:textSize="15sp"/>
+                android:textSize="15sp"
+                tools:text="Some additional info about the type of allergen"/>
 
         </LinearLayout>
 

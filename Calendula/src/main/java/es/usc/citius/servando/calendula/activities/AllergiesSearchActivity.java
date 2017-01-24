@@ -352,6 +352,15 @@ public class AllergiesSearchActivity extends CalendulaActivity {
         }
     }
 
+    private String getSubtitle(AbstractItem i) {
+        switch (i.getType()) {
+            case R.id.fastadapter_allergen_item:
+                return ((AllergenItem) i).getSubtitle();
+            default:
+                throw new RuntimeException("Unsupported item type");
+        }
+    }
+
     private class AllergySelectionListener implements ISelectionListener<AbstractItem> {
 
         @Override
@@ -454,6 +463,8 @@ public class AllergiesSearchActivity extends CalendulaActivity {
                 items.add(e);
             }
 
+            Collections.sort(items, new AllergenSearchComparator(filter));
+
             return items;
         }
     }
@@ -468,37 +479,9 @@ public class AllergiesSearchActivity extends CalendulaActivity {
 
         @Override
         public int compare(AbstractItem o1, AbstractItem o2) {
-            final String f = filter.toLowerCase();
-            final String t1 = getTitle(o1).toLowerCase().trim();
-            boolean c1 = t1.contains(f);
-            final String t2 = getTitle(o2).toLowerCase().trim();
-            boolean c2 = t2.toLowerCase().trim().contains(f);
-
-            if (c1 && !c2) {
-                return -1;
-            } else if (c2 && !c1) {
-                return 1;
-            } else if (c1) { //if c1 is true, c2 is true at this point too
-                int i1 = t1.toLowerCase().trim().indexOf(filter.toLowerCase());
-                int i2 = t2.toLowerCase().trim().indexOf(filter.toLowerCase());
-                if (i1 == i2) {
-                    //if the index is the same, prioritize groups
-                    final int ty1 = o1.getType();
-                    final int ty2 = o2.getType();
-                    final int gid = R.id.fastadapter_allergen_group_item;
-                    if (ty1 == gid && ty2 != gid) {
-                        return -1;
-                    } else if (ty1 != gid && ty2 == gid) {
-                        return 1;
-                    } else {
-                        return t1.compareTo(t2);
-                    }
-                } else {
-                    return i1 < i2 ? -1 : 1;
-                }
-            } else {
-                return t1.compareTo(t2);
-            }
+            final String t1 = getSubtitle(o1).toLowerCase().trim();
+            final String t2 = getSubtitle(o2).toLowerCase().trim();
+            return t1.compareTo(t2);
         }
     }
 }

@@ -25,6 +25,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mikepenz.fastadapter.commons.utils.FastAdapterUIUtils;
@@ -36,7 +38,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.allergies.AllergenType;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.ATCCode;
+import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 /**
  * Created by alvaro.brey.vilas on 22/11/16.
@@ -118,6 +123,14 @@ public class AllergenItem extends AbstractItem<AllergenItem, AllergenItem.ViewHo
             viewHolder.subtitle.setVisibility(View.VISIBLE);
         }
 
+        if (this.vo.getType() == AllergenType.ATC_CODE) {
+            final int codeLength = vo.getIdentifier().contains("/") ? vo.getIdentifier().split("/")[0].length() : vo.getIdentifier().length();
+            final int left = (codeLength - ATCCode.MIN_SEARCH_ATC_LENGTH) * 8;
+            final ViewGroup.LayoutParams layoutParams = viewHolder.spacer.getLayoutParams();
+            layoutParams.width = ScreenUtils.dpToPx(viewHolder.itemView.getResources(), left);
+            viewHolder.spacer.setLayoutParams(layoutParams);
+        }
+
     }
 
     @Override
@@ -146,6 +159,9 @@ public class AllergenItem extends AbstractItem<AllergenItem, AllergenItem.ViewHo
 
         @BindView(R.id.text2)
         TextView subtitle;
+
+        @BindView(R.id.spacer)
+        RelativeLayout spacer;
 
         public ViewHolder(View view) {
             super(view);
