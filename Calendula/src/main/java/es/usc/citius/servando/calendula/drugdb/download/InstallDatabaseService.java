@@ -204,12 +204,19 @@ public class InstallDatabaseService extends IntentService {
 
     private void onFailure() {
         isRunning = false;
+        if (mBuilder == null) {
+            mBuilder = new NotificationCompat.Builder(this);
+        }
         mBuilder.setContentTitle(getString(R.string.install_db_notification_onfailure));
         mBuilder.setContentText(getString(R.string.install_db_notification_onfailure_content));
         mBuilder.setAutoCancel(true);
         mBuilder.setProgress(100, 100, false);
         mBuilder.setSmallIcon(R.drawable.ic_clear_search_holo_light);
         mBuilder.setContentInfo("");
+        
+        if (mNotifyManager == null) {
+            mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        }
         mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 

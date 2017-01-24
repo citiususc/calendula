@@ -24,7 +24,8 @@ package es.usc.citius.servando.calendula.util;
 
 public class PreferenceKeys {
 
-    public static final String DRUGDB_LAST_VALID = "last_valid_database";
     public static final String DRUGDB_CURRENT_DB = "prescriptions_database";
+    public static final String DRUGDB_ENABLE_DRUGDB = "drugdb_enable_db";
+    public static final String DRUGDB_LAST_VALID = "last_valid_database";
     public static final String DRUGDB_VERSION = "database_version";
 }

@@ -276,7 +276,7 @@ public class HomeProfileMgr {
 
     void updateProfileInfo() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String displayName = preferences.getString("display_name", "Calendula");
+        String displayName = preferences.getString("display_name", context.getString(R.string.app_name));
         profileUsername.setText(displayName);
         updateDate();
     }

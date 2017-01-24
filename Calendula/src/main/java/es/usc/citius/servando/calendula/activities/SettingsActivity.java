@@ -286,7 +286,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 PermissionUtils.markedPermissionAsAsked(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    CheckBoxPreference ins = (CheckBoxPreference) findPreference("enable_prescriptions_db");
+                    CheckBoxPreference ins = (CheckBoxPreference) findPreference(PreferenceKeys.DRUGDB_ENABLE_DRUGDB);
                     ins.setChecked(true);
                     showDatabaseDialog();
                     break;
@@ -361,7 +361,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    CheckBoxPreference ins = (CheckBoxPreference) findPreference("enable_prescriptions_db");
+                    CheckBoxPreference ins = (CheckBoxPreference) findPreference(PreferenceKeys.DRUGDB_ENABLE_DRUGDB);
                     if (ins.isChecked()) {
                         showDatabaseDialog();
                     } else {
@@ -454,7 +454,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 return checkPreferenceAskForPermission(o, REQ_CODE_EXTERNAL_STORAGE_RINGTONE);
             }
         });
-        findPreference("enable_prescriptions_db").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        findPreference(PreferenceKeys.DRUGDB_ENABLE_DRUGDB).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
                 ListPreference p = (ListPreference) findPreference(PreferenceKeys.DRUGDB_CURRENT_DB);
@@ -472,7 +472,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         });
 
         //get enabled databases
-        final CustomListPreference dbPref = (CustomListPreference) findPreference("prescriptions_database");
+        final CustomListPreference dbPref = (CustomListPreference) findPreference(PreferenceKeys.DRUGDB_CURRENT_DB);
         final List<String> registeredDbs = DBRegistry.instance().getRegistered();
         final List<String> displays = new ArrayList<>(registeredDbs.size());
         for (String registeredDb : registeredDbs) {
