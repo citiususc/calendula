@@ -109,6 +109,23 @@ public class ATCCodeDAO extends GenericDao<ATCCode, Long> {
         }
     }
 
+    public List<ATCCode> searchByTagOrCodeGroupByTagConcat(final String search, final int minCodelength) {
+        Log.d(TAG, "searchByTagOrCodeGroupByTagConcat() called with: search = [" + search + "]");
+        final String sq = String.format("%%%s%%", search);
+        try {
+            final GenericRawResults<ATCCode> atcCodes = dao.queryRaw("select Tag, group_concat(Code, '/') from ATCCode where (Tag like ? or Code like ?) and length(Code) >= " + minCodelength + " group by Tag;", new RawRowMapper<ATCCode>() {
+                @Override
+                public ATCCode mapRow(String[] columnNames, String[] resultColumns) throws SQLException {
+                    return new ATCCode(resultColumns[1], resultColumns[0]);
+                }
+            }, sq, sq);
+            return atcCodes.getResults();
+        } catch (SQLException e) {
+            Log.e(TAG, "searchByTagOrCodeGroupByTagConcat: ", e);
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Some active principles appear in the ATC tree multiple times, depending on their function.
      * This method, given one of those ATC codes, returns a list of the ATC codes that reference

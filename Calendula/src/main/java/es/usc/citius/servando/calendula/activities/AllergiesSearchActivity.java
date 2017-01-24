@@ -425,7 +425,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
 
             final String filter = params[0].trim();
 
-            final List<ATCCode> codes = DB.drugDB().atcCodes().searchByTagOrCodeGroupByTagConcat(filter);
+            final List<ATCCode> codes = DB.drugDB().atcCodes().searchByTagOrCodeGroupByTagConcat(filter, ATCCode.MIN_SEARCH_ATC_LENGTH);
             final List<AllergenVO> allergenVOs = new ArrayList<>(codes.size());
             Collections.sort(codes, new Comparator<ATCCode>() {
                 @Override
