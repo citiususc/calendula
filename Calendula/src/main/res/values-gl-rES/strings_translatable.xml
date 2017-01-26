@@ -178,7 +178,6 @@ Por favor, le con con calma as instruccións de uso ou consulta ó teu farmacéu
 <string name="confirm_prescription_x_of_y">"Prescrición %1$s de %2$s"</string>
 <string name="scan_prescriptions_title">"Escanear prescricións"</string>
 <string name="scan_qr">"Escanear QR"</string>
-<string name="scan_barcode">"Escanear código de barras"</string>
 <string name="duration">"Duración"</string>
 <string name="all_meds_taken">"Tódolos medicamentos tomados!"</string>
 <string name="create_schedule_select_med_before_dose">"Por favor, selecciona un medicamento primeiro"</string>
@@ -262,7 +261,7 @@ Para este desenvolvemento facemos uso dalgunhas librarías e utilidades de códi
 <string name="allergies_group_elements_selected">"%1$d elementos (%2$d seleccionados)"</string>
 <string name="add_custom_med_button_text">"Engadir \"%1$s\" ao botiquín"</string>
 <string name="medicine_search_not_found_msg">"Sentímolo, non puidemos atopar nada con ese nome"</string>
-<string name="medicine_search_empty_list_msg">"Escribe un nome ou un código para comezar a buscar, ou escanea un código de barras"</string>
+<string name="medicine_search_empty_list_msg">"Escribe un nome ou un código para comezar a buscar, ou escanea un código de barras…"</string>
 <string name="search_hint">"Buscar…"</string>
 <string name="database_us_display">"Base de datos US"</string>
 <string name="pref_stock_alert_title">"Avisar cando os meus medicamentos se agoten"</string>
@@ -376,4 +375,16 @@ Verás todas a súas tomas na pantalla de inicio."</string>
 <string name="text_take_medicines_now">"Toma as túas medicinas agora"</string>
 <string name="message_patients_name_required">"Por favor, introduce un nome."</string>
 <string name="label_patient_name">"Nome"</string>
+<string name="scan_barcode">"Escanear código de barras"</string>
+<string name="title_database_update_available">"Actualización dispoñible para a base de datos"</string>
+<string name="text_database_update_available">"Hai unha actualización dispoñible para a base de datos de medicamentos actual. Queres descargar e instalar a actualización?"</string>
+<string name="action_download_update">"Toca para descargar e instalar a actualización!"</string>
+<string name="text_database_update_data_lost">"Algunhas das medicinas no teu botiquín elimináronse da base de datos na última actualización. Seguen a estar no teu botiquín, pero xa non poderás ver os seus prospectos, etc."</string>
+<string name="title_database_update_data_lost">"Información adicional perdida despois da actualización"</string>
+<string name="preference_check_for_updates">"Buscar actualizacións"</string>
+<string name="database_update_not_available">"Non hai actualización dispoñible para a base de datos"</string>
+<string name="title_database_update_required">"Actualización da base de datos requerida"</string>
+<string name="message_database_update_required">"Esta versión da aplicación require unha base de datos máis nova. Queres descargala e configurala agora?
+Se escolles non facelo, algunha información das túas medicinas pode perderse."</string>
+<string name="download">"Descargar"</string>
 </resources>

@@ -178,7 +178,6 @@ Please carefully read the leaflet or ask your pharmacist before you get behind t
 <string name="confirm_prescription_x_of_y">"Prescription %1$s of %2$s"</string>
 <string name="scan_prescriptions_title">"Scan prescriptions"</string>
 <string name="scan_qr">"Scan QR"</string>
-<string name="scan_barcode">"Scan barcode"</string>
 <string name="duration">"Duration"</string>
 <string name="all_meds_taken">"All meds taken!"</string>
 <string name="create_schedule_select_med_before_dose">"Please, select a med first"</string>
@@ -262,7 +261,7 @@ For this development, we use several open source libraries that are shown below:
 <string name="allergies_group_elements_selected">"%1$d elements (%2$d selected)"</string>
 <string name="add_custom_med_button_text">"Add \"%1$s\" to the med kit"</string>
 <string name="medicine_search_not_found_msg">"Sorry, we didn't find anything with that name"</string>
-<string name="medicine_search_empty_list_msg">"Type a drug name or code to start searching, or scan a package barcode"</string>
+<string name="medicine_search_empty_list_msg">"Type a drug name or code to start searching, or scan a package barcode…"</string>
 <string name="search_hint">"Search…"</string>
 <string name="database_us_display">"US Database"</string>
 <string name="pref_stock_alert_title">"Warn me when my medicines run out"</string>
@@ -377,15 +376,16 @@ You will see all their intakes in the home screen."</string>
 <string name="text_take_medicines_now">"Take your medicines now"</string>
 <string name="message_patients_name_required">"Please input a name."</string>
 <string name="label_patient_name">"Name"</string>
-    <string name="title_database_update_available">Database update available</string>
-    <string name="text_database_update_available">There is an update available for the current medicine database. Do you want to download and install the update?</string>
-    <string name="action_download_update">Tap to download and install update!</string>
-    <string name="text_database_update_data_lost">Some of the medicines in your medkit have been removed from the database in the latest update. They remain in your medkits, but you won\'t be able to check their leaflets, etc. anymore.</string>
-    <string name="title_database_update_data_lost">Extra information lost after update</string>
-    <string name="preference_check_for_updates">Check for updates</string>
-    <string name="database_update_not_available">No database update available</string>
-    <string name="title_database_update_required">Database update required</string>
-    <string name="message_database_update_required">"This version of the app requires a newer database. Do you want to download and configure it now?
+<string name="scan_barcode">"Scan barcode"</string>
+<string name="title_database_update_available">"Database update available"</string>
+<string name="text_database_update_available">"There is an update available for the current medicine database. Do you want to download and install the update?"</string>
+<string name="action_download_update">"Tap to download and install update!"</string>
+<string name="text_database_update_data_lost">"Some of the medicines in your medkit have been removed from the database in the latest update. They remain in your medkits, but you won't be able to check their leaflets, etc. anymore."</string>
+<string name="title_database_update_data_lost">"Extra information lost after update"</string>
+<string name="preference_check_for_updates">"Check for updates"</string>
+<string name="database_update_not_available">"No database update available"</string>
+<string name="title_database_update_required">"Database update required"</string>
+<string name="message_database_update_required">"This version of the app requires a newer database. Do you want to download and configure it now?
 If you choose not to download it, some of your medicines' information may be lost."</string>
-    <string name="download">Download</string>
+<string name="download">"Download"</string>
 </resources>
