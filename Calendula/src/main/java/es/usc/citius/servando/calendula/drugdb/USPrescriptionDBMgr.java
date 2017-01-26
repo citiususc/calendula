@@ -20,11 +20,13 @@ package es.usc.citius.servando.calendula.drugdb;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
@@ -37,6 +39,8 @@ import es.usc.citius.servando.calendula.persistence.Presentation;
  * Created by joseangel.pineiro on 9/8/15.
  */
 public class USPrescriptionDBMgr extends PrescriptionDBMgr {
+
+    private static final String TAG = "USPrescriptionDBMgr";
 
 
     @Override
@@ -154,6 +158,16 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
                 return null;
             }
         });
+
+        Log.d(TAG, "setup: cleaning up...");
+        try {
+            boolean delete = new File(downloadPath).delete();
+            if (!delete) {
+                Log.i(TAG, "setup: couldn't delete file " + downloadPath);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "setup: couldn't finish cleanup: ", e);
+        }
     }
 
     private void updateProgress(SetupProgressListener l, int progress) {

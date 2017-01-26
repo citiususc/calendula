@@ -161,4 +161,7 @@
         <item>@string/delays_sixty_min</item>
     </string-array>
 
+
+    <string name="database_file_location">%1$s%2$s/%2$s-%3$s.db</string>
+
 </resources>

@@ -44,18 +44,24 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="enable_prescriptions_db"
+            android:key="drugdb_enable_db"
             android:title="@string/pref_enable_databases_title"/>
 
         <es.usc.citius.servando.calendula.util.view.CustomListPreference
             android:defaultValue="None"
-            android:dependency="enable_prescriptions_db"
+            android:dependency="drugdb_enable_db"
             android:entries="@array/pref_available_databases"
             android:entryValues="@array/pref_available_databases_values"
             android:key="prescriptions_database"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:title="@string/pref_available_databases_title"/>
+
+        <Preference
+            android:dependency="drugdb_enable_db"
+            android:key="prescriptions_database_update"
+            android:title="@string/preference_check_for_updates"
+            />
 
     </PreferenceCategory>
 

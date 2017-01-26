@@ -37,6 +37,8 @@ public class DBDownloadReceiver extends BroadcastReceiver {
     public static final String TAG = DBDownloadReceiver.class.getName();
     public static final String DOWNLOAD_MGR_DOWNLOAD_ID = "download_mgr_download_id";
     public static final String DOWNLOAD_MGR_DOWNLOAD_DB = "download_mgr_download_db";
+    public static final String DOWNLOAD_MGR_DOWNLOAD_VERSION = "download_mgr_download_version";
+    public static final String DOWNLOAD_MGR_DOWNLOAD_TYPE = "download_mgr_download_type";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -45,13 +47,19 @@ public class DBDownloadReceiver extends BroadcastReceiver {
         SharedPreferences preferences = PreferenceUtils.instance().preferences();
         long downloadId = preferences.getLong(DOWNLOAD_MGR_DOWNLOAD_ID, -1);
         String downloadDb = preferences.getString(DOWNLOAD_MGR_DOWNLOAD_DB, null);
+        String dbVersion = preferences.getString(DOWNLOAD_MGR_DOWNLOAD_VERSION, null);
+        String type = preferences.getString(DOWNLOAD_MGR_DOWNLOAD_TYPE, null);
 
-        if (downloadId != -1 && downloadDb != null && id == downloadId) {
+        android.support.v4.util.Pair<String, String> databaseInfo = new android.support.v4.util.Pair<>(downloadDb, dbVersion);
+
+        if (downloadId != -1 && downloadDb != null && id == downloadId && dbVersion != null && type != null) {
             Pair<Integer, String> status = DownloadDatabaseHelper.instance().downloadStatus(id, context);
             if (status != null && status.first == DownloadManager.STATUS_SUCCESSFUL) {
                 String path = status.second;
                 Log.d(TAG, "onReceive: valid download " + id + ", " + path + ", " + intent.getExtras().getString(DownloadManager.COLUMN_URI));
-                InstallDatabaseService.startSetup(context, path, downloadDb);
+                final DBInstallType dbInstallType = DBInstallType.valueOf(type);
+                InstallDatabaseService.startSetup(context, path, databaseInfo, dbInstallType);
+
             } else {
                 Log.d(TAG, "onReceive: invalid download " + id);
                 DownloadDatabaseHelper.instance().onDownloadFailed(context);
@@ -60,6 +68,8 @@ public class DBDownloadReceiver extends BroadcastReceiver {
         preferences.edit()
                 .remove(DOWNLOAD_MGR_DOWNLOAD_ID)
                 .remove(DOWNLOAD_MGR_DOWNLOAD_DB)
+                .remove(DOWNLOAD_MGR_DOWNLOAD_VERSION)
+                .remove(DOWNLOAD_MGR_DOWNLOAD_TYPE)
                 .apply();
     }
 

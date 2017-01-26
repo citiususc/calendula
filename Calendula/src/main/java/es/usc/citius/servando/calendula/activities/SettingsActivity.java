@@ -34,6 +34,7 @@ import android.graphics.drawable.Drawable;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -50,11 +51,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
@@ -62,10 +65,12 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.download.DownloadDatabaseHelper;
 import es.usc.citius.servando.calendula.drugdb.download.InstallDatabaseService;
+import es.usc.citius.servando.calendula.jobs.CheckDatabaseUpdatesJob;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.modules.modules.StockModule;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.PermissionUtils;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.view.CustomListPreference;
 
@@ -92,7 +97,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
     private static final String TAG = "SettingsActivity";
-    private static final String KEY_PRESCRIPTIONS_DATABASE = "prescriptions_database";
     static Context ctx;
     static Activity activity;
     static Context appCtx;
@@ -122,7 +126,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
 
             } else if (preference instanceof ListPreference) {
-                if (preference.getKey().equals(KEY_PRESCRIPTIONS_DATABASE)) {
+                if (preference.getKey().equals(PreferenceKeys.DRUGDB_CURRENT_DB)) {
                     //Toast.makeText(ctx, "Value: " + stringValue + ", settingUp:" + settingUp, Toast.LENGTH_SHORT).show();
                     if (!onUpdatePrescriptionsDatabasePreference((ListPreference) preference, stringValue)) {
                         //return false;
@@ -168,12 +172,14 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 public void onDownloadAcceptedOrCancelled(boolean accepted) {
                     SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
                     SharedPreferences.Editor edit = settings.edit();
-                    edit.putString(KEY_PRESCRIPTIONS_DATABASE, accepted ? SETTING_UP : lastValidDatabase);
+                    final String val = accepted ? SETTING_UP : lastValidDatabase;
+                    edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB, val);
                     edit.apply();
                     if (accepted) {
                         settingUp = true;
                         preference.setEnabled(false);
                     }
+                    preference.setValue(val);
                     bindPreferenceSummaryToValue(preference, true);
                 }
             });
@@ -183,8 +189,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 DBRegistry.instance().clear();
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
                 SharedPreferences.Editor edit = settings.edit();
-                edit.putString(KEY_PRESCRIPTIONS_DATABASE, settings.getString("last_valid_database", NONE));
-                //edit.putString("last_valid_database", settings.getString("last_valid_database", NONE));
+                edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB, settings.getString(PreferenceKeys.DRUGDB_LAST_VALID, NONE));
+                //edit.putString(PreferenceKeys.DRUGDB_LAST_VALID, settings.getString(PreferenceKeys.DRUGDB_LAST_VALID, NONE));
                 edit.apply();
                 lastValidDatabase = NONE;
             } catch (SQLException e) {
@@ -280,7 +286,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 PermissionUtils.markedPermissionAsAsked(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    CheckBoxPreference ins = (CheckBoxPreference) findPreference("enable_prescriptions_db");
+                    CheckBoxPreference ins = (CheckBoxPreference) findPreference(PreferenceKeys.DRUGDB_ENABLE_DRUGDB);
                     ins.setChecked(true);
                     showDatabaseDialog();
                     break;
@@ -296,23 +302,23 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         SETTING_UP = getString(R.string.database_setting_up);
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        lastValidDatabase = settings.getString("last_valid_database", NONE);
+        lastValidDatabase = settings.getString(PreferenceKeys.DRUGDB_LAST_VALID, NONE);
 
-        settingUp = SETTING_UP.equals(settings.getString(KEY_PRESCRIPTIONS_DATABASE, null));
+        settingUp = SETTING_UP.equals(settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB, null));
 
         if (settingUp && !DownloadDatabaseHelper.instance().isDBDownloadingOrInstalling(this)) {
             Log.d(TAG, "onCreate: " + "Something weird happened. It seems like InstallDatabaseService was killed while working!");
-            settings.edit().putString(KEY_PRESCRIPTIONS_DATABASE, NONE).apply();
+            settings.edit().putString(PreferenceKeys.DRUGDB_CURRENT_DB, NONE).apply();
             settingUp = false;
         }
 
-        Log.d(TAG, "sa onCreate: prescriptions_database: " + settings.getString(KEY_PRESCRIPTIONS_DATABASE, null));
+        Log.d(TAG, "sa onCreate: prescriptions_database: " + settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB, null));
         Log.d(TAG, "sa onCreate: SETTING_UP: " + SETTING_UP);
         Log.d(TAG, "sa onCreate: setting_up: " + settingUp);
 
         onDBSetupComplete = new BroadcastReceiver() {
             public void onReceive(Context ctxt, Intent intent) {
-                Preference p = findPreference(KEY_PRESCRIPTIONS_DATABASE);
+                Preference p = findPreference(PreferenceKeys.DRUGDB_CURRENT_DB);
                 p.setEnabled(true);
                 bindPreferenceSummaryToValue(p, false);
                 settingUp = false;
@@ -355,7 +361,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    CheckBoxPreference ins = (CheckBoxPreference) findPreference("enable_prescriptions_db");
+                    CheckBoxPreference ins = (CheckBoxPreference) findPreference(PreferenceKeys.DRUGDB_ENABLE_DRUGDB);
                     if (ins.isChecked()) {
                         showDatabaseDialog();
                     } else {
@@ -398,7 +404,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     }
 
     private void showDatabaseDialog() {
-        ((CustomListPreference) findPreference(KEY_PRESCRIPTIONS_DATABASE)).show();
+        ((CustomListPreference) findPreference(PreferenceKeys.DRUGDB_CURRENT_DB)).show();
     }
 
     /**
@@ -440,7 +446,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         bindPreferenceSummaryToValue(findPreference("alarm_repeat_frequency"), true);
         bindPreferenceSummaryToValue(findPreference("alarm_reminder_window"), true);
         bindPreferenceSummaryToValue(findPreference("pref_notification_tone"), true);
-        bindPreferenceSummaryToValue(findPreference(KEY_PRESCRIPTIONS_DATABASE), true);
+        bindPreferenceSummaryToValue(findPreference(PreferenceKeys.DRUGDB_CURRENT_DB), true);
 
         findPreference("alarm_insistent").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -448,10 +454,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 return checkPreferenceAskForPermission(o, REQ_CODE_EXTERNAL_STORAGE_RINGTONE);
             }
         });
-        findPreference("enable_prescriptions_db").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        findPreference(PreferenceKeys.DRUGDB_ENABLE_DRUGDB).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
-                ListPreference p = (ListPreference) findPreference(KEY_PRESCRIPTIONS_DATABASE);
+                ListPreference p = (ListPreference) findPreference(PreferenceKeys.DRUGDB_CURRENT_DB);
                 if (settingUp) {
                     // database cannot be disabled while it's setting up
                     return false;
@@ -465,6 +471,38 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             }
         });
 
+        //get enabled databases
+        final CustomListPreference dbPref = (CustomListPreference) findPreference(PreferenceKeys.DRUGDB_CURRENT_DB);
+        final List<String> registeredDbs = DBRegistry.instance().getRegistered();
+        final List<String> displays = new ArrayList<>(registeredDbs.size());
+        for (String registeredDb : registeredDbs) {
+            displays.add(DBRegistry.instance().db(registeredDb).displayName());
+        }
+        registeredDbs.add(0, getString(R.string.database_none_id));
+        displays.add(0, getString(R.string.database_none_display));
+        dbPref.setEntries(displays.toArray(new String[displays.size()]));
+        dbPref.setEntryValues(registeredDbs.toArray(new String[registeredDbs.size()]));
+
+        findPreference("prescriptions_database_update").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new AsyncTask<Void, Void, Boolean>() {
+                    @Override
+                    protected void onPostExecute(Boolean update) {
+                        if (!update) {
+                            Toast.makeText(getApplicationContext(), R.string.database_update_not_available, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    protected Boolean doInBackground(Void... params) {
+                        return new CheckDatabaseUpdatesJob().checkForUpdate(getApplicationContext());
+                    }
+                }.execute();
+                return true;
+            }
+        });
+
 
         if (!CalendulaApp.isPharmaModeEnabled()) {
             Preference alarmPk = findPreference("alarm_pickup_notifications");
@@ -472,6 +510,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             preferenceScreen.removePreference(alarmPk);
         }
     }
+
 
     private boolean checkPreferenceAskForPermission(Object o, int reqCode) {
         boolean val = (boolean) o;

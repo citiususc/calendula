@@ -50,6 +50,7 @@ import org.joda.time.LocalDate;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.fragments.HomeProfileMgr;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
@@ -158,9 +159,8 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindViewSpacerItemViewHolder(SpacerItemViewHolder holder, DailyAgendaItemStub item, int position) {
 
         if (expanded) {
-            int color = DB.patients().getActive(holder.itemView.getContext()).color();
+            int color = HomeProfileMgr.colorForCurrent(ctx);
 
-            // TODO: get from strings
             String title;
             if (item.date.equals(LocalDate.now())) {
                 title = ctx.getString(R.string.today);

@@ -48,7 +48,6 @@ import android.widget.NumberPicker;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.doomonafireball.betterpickers.numberpicker.NumberPickerBuilder;
 import com.doomonafireball.betterpickers.numberpicker.NumberPickerDialogFragment;
@@ -84,6 +83,7 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.persistence.ScheduleItemComparator;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
+import es.usc.citius.servando.calendula.util.Snack;
 
 /**
  * Created by joseangel.pineiro on 12/11/13.
@@ -743,8 +743,7 @@ public class ScheduleTimetableFragment extends Fragment
         Medicine med = ScheduleHelper.instance().getSelectedMed();
 
         if (med == null) {
-            // TODO: get from resources and use snack.show()
-            Toast.makeText(getActivity(), "Por favor, selecciona un medicamento antes", Toast.LENGTH_LONG).show();
+            Snack.showIfUnobstructed(R.string.create_schedule_select_med_before_dose, getActivity());
             return;
         }
 

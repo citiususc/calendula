@@ -130,6 +130,7 @@ public class CalendulaApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d(TAG, "Application started");
         //load settings
         final Context applicationContext = getApplicationContext();
         try {

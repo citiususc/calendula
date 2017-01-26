@@ -272,6 +272,25 @@ public class DailyAgendaFragment extends Fragment {
                 }
             }
 
+            if (!exact) {
+                for (Routine routine : DB.routines().findAll()) {
+                    if (exact) {
+                        break;
+                    }
+                    for (ScheduleItem scheduleItem : routine.scheduleItems()) {
+                        List<DailyScheduleItem> dailyScheduleItems = DB.dailyScheduleItems().findAllByScheduleItem(scheduleItem);
+                        for (DailyScheduleItem dailyScheduleItem : dailyScheduleItems) {
+                            if (dailyScheduleItem == null) {
+                                break;
+                            } else if (dailyScheduleItem.time().equals(start.toLocalTime())) {
+                                exact = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+
             Interval hour = new Interval(start, start.plusHours(1));
             if (!exact || hour.contains(DateTime.now())) {
                 stubs.add(new DailyAgendaItemStub(start.toLocalDate(), start.toLocalTime()));
@@ -327,7 +346,7 @@ public class DailyAgendaFragment extends Fragment {
         }
 
         if (position > 0)
-            llm.scrollToPositionWithOffset(position - 1, 0);
+            llm.smoothScrollToPosition(rv, null, position - 1);
     }
 
     public boolean isExpanded() {
@@ -494,12 +513,12 @@ public class DailyAgendaFragment extends Fragment {
                 firstTime = null;
             } else */
             if (expanded) {
-                new Handler().post(new Runnable() {
+                new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         scrollTo(DateTime.now());
                     }
-                });
+                }, 600);
             }
         }
     }

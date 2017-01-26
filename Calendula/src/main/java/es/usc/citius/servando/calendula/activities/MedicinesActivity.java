@@ -72,7 +72,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 import butterknife.BindView;
@@ -91,6 +93,7 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.DrivingCautionAlert;
@@ -557,10 +560,45 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         }
     }
 
-    private void createAllergyAlerts(final Medicine m, final List<AllergenVO> allergies) throws RuntimeException {
+    /**
+     * Creates or updates allergy alert for a medicine with te given allergens.
+     *
+     * @param m         the medicine
+     * @param allergies the allergens
+     * @return <code>true</code> if changes have been made, <code>false</code> otherwise (error or no allergy changes)
+     */
+    private boolean createAllergyAlerts(final Medicine m, final List<AllergenVO> allergies) {
 
-        AllergyPatientAlert alert = new AllergyPatientAlert(m, allergies);
-        AlertManager.createAlert(alert);
+        final List<PatientAlert> allergyAlerts = DB.alerts().findByMedicineAndType(m, new AllergyPatientAlert().getType());
+        switch (allergyAlerts.size()) {
+            case 0:
+                AllergyPatientAlert alert = new AllergyPatientAlert(m, allergies);
+                AlertManager.createAlert(alert);
+                Log.d(TAG, "createAllergyAlerts: New alert created");
+                return true;
+            case 1:
+                AllergyPatientAlert alert1 = (AllergyPatientAlert) allergyAlerts.get(0).map();
+                final AllergyPatientAlert.AllergyAlertInfo details = alert1.getDetails();
+                final Set<AllergenVO> previousAllergens = new HashSet<>(details.getAllergens());
+                final Set<AllergenVO> allergiesSet = new HashSet<>(allergies);
+                if (allergiesSet.equals(previousAllergens)) {
+                    //do nothing
+                    return false;
+                } else {
+                    details.setAllergens(allergies);
+                    alert1.setDetails(details);
+                    try {
+                        DB.alerts().update(alert1);
+                        return true;
+                    } catch (SQLException e) {
+                        Log.e(TAG, "createAllergyAlerts: ", e);
+                        return false;
+                    }
+                }
+            default:
+                Log.e(TAG, "createAllergyAlerts: more than 1 allergy alert for a medicine!");
+                return false;
+        }
 
     }
 

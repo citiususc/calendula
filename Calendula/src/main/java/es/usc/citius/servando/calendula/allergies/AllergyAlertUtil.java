@@ -47,13 +47,12 @@ public class AllergyAlertUtil {
 
     public static List<PatientAlert> getAlertsForMedicine(final Medicine m) throws SQLException {
         Log.d(TAG, "getAlertsForMedicine() called with: m = [" + m + "]");
-        // TODO: 18/11/16 check if we need to escape quotes (queryForFieldValuesArgs)
         HashMap<String, Object> query = new HashMap<String, Object>() {{
             put(PatientAlert.COLUMN_TYPE, AllergyPatientAlert.class.getCanonicalName());
             put(PatientAlert.COLUMN_PATIENT, m.patient());
             put(PatientAlert.COLUMN_MEDICINE, m);
         }};
-        return DB.alerts().queryForFieldValues(query);
+        return DB.alerts().queryForFieldValuesArgs(query);
     }
 
     /**

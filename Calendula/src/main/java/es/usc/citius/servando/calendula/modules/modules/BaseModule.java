@@ -24,17 +24,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.evernote.android.job.JobManager;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.Iconics;
 
 import org.joda.time.LocalTime;
 
 import es.usc.citius.servando.calendula.DefaultDataGenerator;
+import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.database.PatientDao;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
+import es.usc.citius.servando.calendula.drugdb.download.UpdateDatabaseService;
+import es.usc.citius.servando.calendula.jobs.CalendulaJob;
 import es.usc.citius.servando.calendula.jobs.CalendulaJobCreator;
+import es.usc.citius.servando.calendula.jobs.CalendulaJobScheduler;
+import es.usc.citius.servando.calendula.jobs.CheckDatabaseUpdatesJob;
 import es.usc.citius.servando.calendula.jobs.PurgeCacheJob;
 import es.usc.citius.servando.calendula.modules.CalendulaModule;
 import es.usc.citius.servando.calendula.persistence.Patient;
@@ -42,6 +53,7 @@ import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
+import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.PresentationsTypeface;
 
@@ -117,19 +129,53 @@ public class BaseModule extends CalendulaModule {
 
         //initialize job engine
         JobManager.create(ctx).addJobCreator(new CalendulaJobCreator());
-        PurgeCacheJob.scheduleJob();
+        //schedule jobs
+        CalendulaJob[] jobs = new CalendulaJob[]{
+                new CheckDatabaseUpdatesJob(),
+                new PurgeCacheJob()
+        };
+        CalendulaJobScheduler.scheduleJobs(jobs);
     }
 
-    private void updatePreferences(Context ctx) {
+    /**
+     * When updating from an old version of the app (with the old DB format), checks if DB was enabled.
+     * If so, triggers the download and configuration of the new DB format, using the then-default database (AEMPS).
+     *
+     * @param ctx the context
+     */
+    private void updatePreferences(final Context ctx) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         boolean dbWasEnabled = prefs.getBoolean("enable_prescriptions_db", false);
-        SharedPreferences.Editor editor = prefs.edit();
 
-        // replace old "run db preference" with the default db key (AEMPS)
         if (dbWasEnabled) {
-            editor.putString("last_valid_database", DBRegistry.instance().defaultDBMgr().id())
-                    .putString("prescriptions_database", DBRegistry.instance().defaultDBMgr().id());
+            new MaterialStyledDialog.Builder(ctx)
+                    .setStyle(Style.HEADER_WITH_ICON)
+                    .setIcon(IconUtils.icon(ctx, CommunityMaterial.Icon.cmd_database, R.color.white, 100))
+                    .setHeaderColor(R.color.android_blue)
+                    .withDialogAnimation(true)
+                    .setTitle(R.string.title_database_update_required)
+                    .setDescription(R.string.message_database_update_required)
+                    .setCancelable(false)
+                    .setPositiveText(ctx.getString(R.string.download))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Intent i = new Intent(ctx, UpdateDatabaseService.class);
+                            i.putExtra(UpdateDatabaseService.EXTRA_DATABASE_ID, ctx.getString(R.string.database_aemps_id));
+                            ctx.startService(i);
+                        }
+                    })
+                    .setNegativeText(R.string.cancel)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.cancel();
+                        }
+                    })
+                    .show();
         }
+
+        SharedPreferences.Editor editor = prefs.edit();
         editor.remove("enable_prescriptions_db");
         editor.apply();
     }
