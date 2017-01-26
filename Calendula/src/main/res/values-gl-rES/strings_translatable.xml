@@ -261,7 +261,7 @@ Para este desenvolvemento facemos uso dalgunhas librarías e utilidades de códi
 <string name="allergies_group_elements_selected">"%1$d elementos (%2$d seleccionados)"</string>
 <string name="add_custom_med_button_text">"Engadir \"%1$s\" ao botiquín"</string>
 <string name="medicine_search_not_found_msg">"Sentímolo, non puidemos atopar nada con ese nome"</string>
-<string name="medicine_search_empty_list_msg">"Escribe un nome ou un código para comezar a buscar…"</string>
+<string name="medicine_search_empty_list_msg">"Escribe un nome ou un código para comezar a buscar, ou escanea un código de barras…"</string>
 <string name="search_hint">"Buscar…"</string>
 <string name="database_us_display">"Base de datos US"</string>
 <string name="pref_stock_alert_title">"Avisar cando os meus medicamentos se agoten"</string>

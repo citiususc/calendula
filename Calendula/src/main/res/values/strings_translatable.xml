@@ -261,7 +261,7 @@ For this development, we use several open source libraries that are shown below:
 <string name="allergies_group_elements_selected">"%1$d elements (%2$d selected)"</string>
 <string name="add_custom_med_button_text">"Add \"%1$s\" to the med kit"</string>
 <string name="medicine_search_not_found_msg">"Sorry, we didn't find anything with that name"</string>
-<string name="medicine_search_empty_list_msg">"Type a drug name or code to start searching…"</string>
+<string name="medicine_search_empty_list_msg">"Type a drug name or code to start searching, or scan a package barcode…"</string>
 <string name="search_hint">"Search…"</string>
 <string name="database_us_display">"US Database"</string>
 <string name="pref_stock_alert_title">"Warn me when my medicines run out"</string>
