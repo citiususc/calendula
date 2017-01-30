@@ -39,6 +39,7 @@ import java.net.URI;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
+import es.usc.citius.servando.calendula.util.NetworkUtils;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Settings;
@@ -74,11 +75,19 @@ public class DownloadDatabaseHelper {
                 .setCancelable(false)
                 .setPositiveButton("Download and setup", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if (callback != null) {
-                            callback.onDownloadAcceptedOrCancelled(true);
+                        if (NetworkUtils.isNetworkAvailable(appContext)) {
+                            if (callback != null) {
+                                callback.onDownloadAcceptedOrCancelled(true);
+                            }
+                            downloadDatabase(appContext, database, DBInstallType.SETUP);
+                            dialog.dismiss();
+                        } else {
+                            if (callback != null) {
+                                callback.onDownloadAcceptedOrCancelled(false);
+                            }
+                            Toast.makeText(appContext, R.string.message_no_internet_error, Toast.LENGTH_SHORT).show();
                         }
-                        downloadDatabase(appContext, database, DBInstallType.SETUP);
-                        dialog.dismiss();
+
                     }
                 })
                 .setNegativeButton(dialogCtx.getString(R.string.cancel), new DialogInterface.OnClickListener() {
