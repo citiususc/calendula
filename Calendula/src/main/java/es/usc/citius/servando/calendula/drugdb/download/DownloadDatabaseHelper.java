@@ -186,7 +186,6 @@ public class DownloadDatabaseHelper {
         protected void onPostExecute(Boolean correct) {
             if (!correct) {
                 onDownloadFailed(ctx);
-                Toast.makeText(ctx, "Database not available :(", Toast.LENGTH_SHORT).show();
             }
         }
 
