@@ -303,6 +303,9 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         processIntent();
 
         TextView title = ((TextView) findViewById(R.id.textView2));
+        if (mMedicineId != -1) {
+            title.setText(getString(R.string.edit_medicine));
+        }
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
