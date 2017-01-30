@@ -213,7 +213,8 @@ public class InstallDatabaseService extends IntentService {
         mBuilder.setProgress(100, 100, false);
         mBuilder.setSmallIcon(R.drawable.ic_clear_search_holo_light);
         mBuilder.setContentInfo("");
-        
+        mBuilder.setContentIntent(null);
+
         if (mNotifyManager == null) {
             mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
