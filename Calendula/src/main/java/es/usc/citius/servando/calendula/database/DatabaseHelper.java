@@ -70,7 +70,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     public static final String TAG = "DatabaseHelper";
     // any time you make changes to your database objects, you may have to increase the database version
-    public static final int DATABASE_VERSION = 13;
+    public static final int DATABASE_VERSION = 14;
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // List of persisted classes to simplify table creation
@@ -101,7 +101,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             PatientAllergen.class,
             PatientAlert.class,
             AllergyGroup.class,
-            // v13
+            // v14
             ATCCode.class
     };
     // the DAO object we use to access the Medicines table
@@ -209,7 +209,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                     TableUtils.createTable(connectionSource, AllergyGroup.class);
                     getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN " + Schedule.COLUMN_STATE + " TEXT;");
                     TableUtils.createTable(connectionSource, PatientAlert.class);
-                case 13:
+                case 14:
                     TableUtils.createTable(connectionSource, ATCCode.class);
                     getMedicinesDao().executeRaw("ALTER TABLE Prescription ADD COLUMN " + Prescription.COLUMN_ATC_CODE + " TEXT;");
             }
