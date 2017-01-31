@@ -91,7 +91,7 @@ public class MedicineItem extends AbstractItem<MedicineItem, MedicineItem.Medici
                 holder.stockInfo.setText("Próxima e-Receta: " + nextPickup);
             }
 
-            if (medicine.stock() >= 0) {
+            if (medicine.stock() != null && medicine.stock() >= 0) {
                 holder.stockInfo.setText(ctx.getString(R.string.stock_remaining_msg, medicine.stock().intValue(), medicine.presentation().units(ctx.getResources())));
             }
         }

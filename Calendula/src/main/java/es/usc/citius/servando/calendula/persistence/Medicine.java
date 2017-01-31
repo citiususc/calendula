@@ -221,7 +221,7 @@ public class Medicine implements Comparable<Medicine> {
     }
 
     public boolean stockManagementEnabled() {
-        return stock != -1;
+        return stock != null && stock != -1;
     }
 
     @Override
