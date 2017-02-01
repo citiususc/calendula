@@ -126,6 +126,8 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     ImageButton addBtn;
     @BindView(R.id.btn_stock_remove)
     ImageButton rmBtn;
+    @BindView(R.id.btn_stock_reset)
+    ImageButton resetBtn;
 
     boolean enableSearch = false;
     long mMedicineId;
@@ -678,11 +680,15 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     private void setupStockViews() {
         Context c = getActivity();
 
-        Drawable add = IconUtils.icon(c, CommunityMaterial.Icon.cmd_plus_circle, R.color.agenda_item_title, 26, 4);
-        Drawable remove = IconUtils.icon(c, CommunityMaterial.Icon.cmd_minus_circle, R.color.agenda_item_title, 26, 4);
+        // TODO: 1/02/17 use some better icons, these are temporary
+        Drawable add = IconUtils.icon(c, CommunityMaterial.Icon.cmd_plus, R.color.agenda_item_title, 26, 4);
+        Drawable remove = IconUtils.icon(c, CommunityMaterial.Icon.cmd_minus, R.color.agenda_item_title, 26, 4);
+        Drawable reset = IconUtils.icon(c, CommunityMaterial.Icon.cmd_reload, R.color.agenda_item_title, 26, 4);
 
         addBtn.setImageDrawable(add);
         rmBtn.setImageDrawable(remove);
+        resetBtn.setImageDrawable(reset);
+
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -697,15 +703,22 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             }
         });
 
+        resetBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: resetting stock...");
+                setDefaultStock();
+                updateStockText();
+            }
+        });
+
         stockSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 updateStockControlsVisibility();
                 if (isChecked) {
                     // user is enabling stock first time
-                    if (stock == -1 && mPrescription != null && mPrescription.getPackagingUnits() > 0) {
-                        stock = mPrescription.getPackagingUnits();
-                        new ComputeEstimatedStockEndTask().execute();
-                    }
+                    if (stock == -1)
+                        setDefaultStock();
 
                     verticalScrollView.post(new Runnable() {
                         @Override
@@ -727,12 +740,21 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         updateStockText();
     }
 
+    private void setDefaultStock() {
+        if (mPrescription != null && mPrescription.getPackagingUnits() > 0) {
+            stock = mPrescription.getPackagingUnits();
+            new ComputeEstimatedStockEndTask().execute();
+        }
+    }
+
     private void updateStockControlsVisibility() {
         int visibility = stockSwitch.isChecked() ? View.VISIBLE : View.INVISIBLE;
         mStockUnits.setVisibility(visibility);
         mStockEstimation.setVisibility(stockSwitch.isChecked() & estimatedStockText != null ? View.VISIBLE : View.INVISIBLE);
         addBtn.setVisibility(visibility);
         rmBtn.setVisibility(visibility);
+        int resetVisibility = stockSwitch.isChecked() && mPrescription != null ? View.VISIBLE : View.INVISIBLE;
+        resetBtn.setVisibility(resetVisibility);
     }
 
     private void selectPresentation(Presentation p) {

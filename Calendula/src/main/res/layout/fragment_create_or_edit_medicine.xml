@@ -18,6 +18,7 @@
 
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -155,7 +156,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/med_presentation"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <TextView
                 android:id="@+id/medicine_stock_title"
@@ -224,12 +226,24 @@
                 android:id="@+id/btn_stock_add"
                 android:layout_width="45dp"
                 android:layout_height="50dp"
+                android:layout_alignTop="@+id/stock_units"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/btn_stock_reset"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/abc_ic_star_black_16dp"/>
+
+            <ImageButton
+                android:id="@+id/btn_stock_reset"
+                android:layout_width="45dp"
+                android:layout_height="50dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/stock_units"
                 android:layout_marginRight="32dp"
                 android:background="@null"
                 android:scaleType="fitCenter"
                 android:src="@drawable/abc_ic_star_black_16dp"/>
+
 
             <Switch
                 android:id="@+id/stock_switch"
