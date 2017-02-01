@@ -170,7 +170,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.medicines, menu);
         removeItem = menu.findItem(R.id.action_remove);
-        removeItem.setVisible(mMedicineId != -1);
+        removeItem.setVisible(false);
         return true;
     }
 
@@ -178,7 +178,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_remove:
-                ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).showDeleteConfirmationDialog(Medicine.findById(mMedicineId));
+                //noop
                 return true;
             default:
                 finish();

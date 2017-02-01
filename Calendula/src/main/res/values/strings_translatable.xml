@@ -389,4 +389,5 @@ You will see all their intakes in the home screen."</string>
 If you choose not to download it, some of your medicines' information may be lost."</string>
 <string name="download">"Download"</string>
     <string name="message_no_internet_error">No internet connection available! Please establish a connection and try again.</string>
+    <string name="action_edit">Edit</string>
 </resources>

@@ -20,9 +20,7 @@ package es.usc.citius.servando.calendula.fragments;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -254,25 +252,6 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             unbinder.unbind();
     }
 
-    public void showDeleteConfirmationDialog(final Medicine m) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // "Remove " + m.name() + "?"
-        builder.setMessage(String.format(getString(R.string.remove_medicine_message_short), m.name()))
-                .setCancelable(true)
-                .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (mMedicineEditCallback != null)
-                            mMedicineEditCallback.onMedicineDeleted(m);
-                    }
-                })
-                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {

@@ -23,6 +23,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -34,6 +35,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
@@ -99,8 +104,46 @@ public class MedicineInfoActivity extends CalendulaActivity {
                 intent.putExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, medicine.getId());
                 startActivity(intent);
                 return true;
+            case R.id.action_remove:
+                showDeleteConfirmationDialog(medicine);
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showDeleteConfirmationDialog(final Medicine m) {
+        String message;
+        if (!DB.schedules().findByMedicine(m).isEmpty()) {
+            message = String.format(getString(R.string.remove_medicine_message_long), m.name());
+        } else {
+            message = String.format(getString(R.string.remove_medicine_message_short), m.name());
+        }
+
+        new MaterialStyledDialog.Builder(this)
+                .setStyle(Style.HEADER_WITH_ICON)
+                .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_pill, R.color.white, 100))
+                .setHeaderColor(R.color.android_red)
+                .withDialogAnimation(true)
+                .setTitle(getString(R.string.remove_medicine_dialog_title))
+                .setDescription(message)
+                .setCancelable(true)
+                .setNeutralText(getString(R.string.dialog_no_option))
+                .setPositiveText(getString(R.string.dialog_yes_option))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        DB.medicines().deleteCascade(m, true);
+                        CalendulaApp.eventBus().post(PersistenceEvents.MEDICINE_EVENT);
+                        finish();
+                    }
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 
     // Method called from the event bus
