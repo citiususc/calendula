@@ -213,7 +213,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             try {
                 Log.d(DatabaseHelper.class.getName(), "Will try to recreate db...");
                 dropAndCreateAllTables();
-                createDefaultPatient();
             } catch (Exception ex) {
                 throw new RuntimeException(e);
             }
@@ -345,6 +344,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 Log.d(TAG, "Creating table " + c.getSimpleName());
                 TableUtils.createTable(connectionSource, c);
             }
+            createDefaultPatient();
 
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Can't recreate database", e);
