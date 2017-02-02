@@ -15,16 +15,13 @@ import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.TestUtils;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 
 public class MedicinesActivityEditTest extends ActivityInstrumentationTestCase2<MedicinesActivity> {
 
-    public static final String NAME_BEFORE_EDIT = "Aspirin";
-    public static final String NAME_AFTER_EDIT = "Paracetamol";
+    public static final String MEDICINE_NAME = "Aspirin";
 
     private MedicinesActivity mActivity;
 
@@ -41,7 +38,8 @@ public class MedicinesActivityEditTest extends ActivityInstrumentationTestCase2<
         DB.dropAndCreateDatabase();
 
         // create medicine
-        Medicine created = new Medicine(NAME_BEFORE_EDIT, Presentation.EFFERVESCENT);
+        Medicine created = new Medicine(MEDICINE_NAME, Presentation.EFFERVESCENT);
+        created.setPatient(DB.patients().getDefault());
         created.save();
 
         // set edit intent
@@ -63,26 +61,22 @@ public class MedicinesActivityEditTest extends ActivityInstrumentationTestCase2<
     public void testEditMedicine() {
 
         assertEquals(1, DB.medicines().count());
-        assertEquals(NAME_BEFORE_EDIT, DB.medicines().findAll().get(0).name());
+        assertEquals(MEDICINE_NAME, DB.medicines().findAll().get(0).name());
 
-        // type name
-        onView(withId(R.id.medicine_edit_name))
-                .perform(clearText())
-                .perform(typeText(NAME_AFTER_EDIT));
-        // close Soft Keyboard
-        TestUtils.closeKeyboard();
+        TestUtils.sleep(200);
         // select capsules presentation
         onView(withId(R.id.med_presentation_2))
                 .perform(click());
+        TestUtils.sleep(200);
+
         // click save
         onView(withId(R.id.add_button))
                 .perform(click());
 
         // find edited med and do assertions
-        Medicine m = DB.medicines().findOneBy(Medicine.COLUMN_NAME, NAME_AFTER_EDIT);
+        Medicine m = DB.medicines().findOneBy(Medicine.COLUMN_NAME, MEDICINE_NAME);
         assertEquals(1, DB.medicines().count());
         assertNotNull(m);
-        assertEquals(NAME_AFTER_EDIT, m.name());
         assertEquals(Presentation.CAPSULES, m.presentation());
     }
 

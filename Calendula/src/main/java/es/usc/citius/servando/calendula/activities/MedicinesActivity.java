@@ -516,6 +516,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             finish();
         } catch (RuntimeException | SQLException e) {
             Snack.show(R.string.medicine_save_error_message, this);
+            Log.e(TAG, "updateMedicine: ", e);
         }
     }
 
@@ -527,7 +528,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
      */
     private void removeOldAlerts(final Medicine m) throws SQLException {
         Medicine old = DB.medicines().findById(m.getId());
-        if (!m.cn().equals(old.cn())) { // if prescription didn't change, don't check for alerts
+        if (m.isBoundToPrescription() && !m.cn().equals(old.cn())) { // if prescription didn't change, don't check for alerts
             AllergyAlertUtil.removeAllergyAlerts(m);
         }
     }
