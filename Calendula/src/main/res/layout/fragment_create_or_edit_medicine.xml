@@ -211,38 +211,41 @@
                 android:textColor="@color/android_blue_dark"
                 android:textSize="16sp"/>
 
-            <ImageButton
-                android:id="@+id/btn_stock_remove"
-                android:layout_width="45dp"
-                android:layout_height="50dp"
-                android:layout_alignTop="@+id/stock_units"
-                android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@+id/btn_stock_add"
-                android:background="@null"
-                android:scaleType="fitCenter"
-                android:src="@drawable/abc_ic_star_black_16dp"/>
-
-            <ImageButton
-                android:id="@+id/btn_stock_add"
-                android:layout_width="45dp"
-                android:layout_height="50dp"
-                android:layout_alignTop="@+id/stock_units"
-                android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@+id/btn_stock_reset"
-                android:background="@null"
-                android:scaleType="fitCenter"
-                android:src="@drawable/abc_ic_star_black_16dp"/>
-
-            <ImageButton
-                android:id="@+id/btn_stock_reset"
-                android:layout_width="45dp"
-                android:layout_height="50dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/stock_units"
                 android:layout_marginRight="32dp"
-                android:background="@null"
-                android:scaleType="fitCenter"
-                android:src="@drawable/abc_ic_star_black_16dp"/>
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btn_stock_remove"
+                    android:layout_width="45dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/abc_ic_star_black_16dp"/>
+
+                <ImageButton
+                    android:id="@+id/btn_stock_add"
+                    android:layout_width="45dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/abc_ic_star_black_16dp"/>
+
+                <ImageButton
+                    android:id="@+id/btn_stock_reset"
+                    android:layout_width="45dp"
+                    android:layout_height="50dp"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/abc_ic_star_black_16dp"/>
+            </LinearLayout>
 
 
             <Switch
