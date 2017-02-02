@@ -730,7 +730,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             }
         });
 
-        stock = mMedicine != null ? mMedicine.stock() : -1;
+        stock = mMedicine != null && mMedicine.stock() != null ? mMedicine.stock() : -1;
 
         if (stock > -1) {
             stockSwitch.setChecked(true);
