@@ -25,7 +25,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class RoutinesActivityCreateTest extends ActivityInstrumentationTestCase2<RoutinesActivity> {
 
-    public static final String NAME = "Breakfast";
+    public static final String NAME = "breakfast";
 
     private RoutinesActivity mActivity;
 
@@ -81,7 +81,7 @@ public class RoutinesActivityCreateTest extends ActivityInstrumentationTestCase2
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                RoutineCreateOrEditFragment f = (RoutineCreateOrEditFragment) mActivity.getViewPagerFragment(0);
+                RoutineCreateOrEditFragment f = mActivity.routineFragment;
                 f.onDialogTimeSet(0, hour, minute);
             }
         });

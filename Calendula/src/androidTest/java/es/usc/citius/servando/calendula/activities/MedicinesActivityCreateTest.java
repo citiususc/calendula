@@ -21,7 +21,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 public class MedicinesActivityCreateTest extends ActivityInstrumentationTestCase2<MedicinesActivity> {
 
-    public static final String NAME = "Aspirin";
+    public static final String NAME = "aspirin";
 
     private MedicinesActivity mActivity;
 
@@ -52,10 +52,15 @@ public class MedicinesActivityCreateTest extends ActivityInstrumentationTestCase
         assertEquals(DB.medicines().count(), 0);
 
         // type name
-        onView(withId(R.id.medicine_edit_name))
+        onView(withId(R.id.search_edit_text))
                 .perform(typeText(NAME), ViewActions.closeSoftKeyboard());
         // close Soft Keyboard
         TestUtils.closeKeyboard();
+
+        //click "add custom med"
+        onView(withId(R.id.add_custom_med_btn))
+                .perform(click());
+
         // select capsules presentation
         onView(withId(R.id.med_presentation_2))
                 .perform(click());

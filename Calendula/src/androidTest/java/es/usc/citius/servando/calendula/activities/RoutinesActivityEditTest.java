@@ -27,8 +27,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class RoutinesActivityEditTest extends ActivityInstrumentationTestCase2<RoutinesActivity> {
 
-    public static final String NAME_BEFORE_EDIT = "Breakfast";
-    public static final String NAME_AFTER_EDIT = "Lunch";
+    public static final String NAME_BEFORE_EDIT = "breakfast";
+    public static final String NAME_AFTER_EDIT = "lunch";
 
     private RoutinesActivity mActivity;
 
@@ -98,7 +98,7 @@ public class RoutinesActivityEditTest extends ActivityInstrumentationTestCase2<R
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                RoutineCreateOrEditFragment f = (RoutineCreateOrEditFragment) mActivity.getViewPagerFragment(0);
+                RoutineCreateOrEditFragment f = mActivity.routineFragment;
                 f.onDialogTimeSet(0, hour, minute);
             }
         });
