@@ -89,10 +89,8 @@ import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 public class AllergiesActivity extends CalendulaActivity {
 
 
+    public static final String PREFERENCE_WARNING_SHOWN = "PREFERENCE_ALLERGY_WARNING_SHOWN";
     private static final String TAG = "AllergiesActivity";
-
-    private static final String PREFERENCE_WARNING_SHOWN = "PREFERENCE_ALLERGY_WARNING_SHOWN";
-
     // main view
     @BindView(R.id.add_button)
     protected AddFloatingActionButton addButton;
