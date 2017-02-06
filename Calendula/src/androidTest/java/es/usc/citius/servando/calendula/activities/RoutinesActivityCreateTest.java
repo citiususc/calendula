@@ -18,7 +18,6 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -58,12 +57,16 @@ public class RoutinesActivityCreateTest extends ActivityInstrumentationTestCase2
         TestUtils.closeKeyboard();
         // set routine time (not possible vía UI)
         setTimepickerTime(18, 30);
-        // open time picker
-        onView(withId(R.id.button2)).perform(click());
-        // check its open
-        onView(withId(R.id.done_button)).check(matches(isDisplayed()));
-        // press done
-        onView(withId(R.id.done_button)).perform(click());
+
+        // time picker is not consistent across screen sizes/android versions.
+        // It cannot be tested this way.
+//        // open time picker
+//        onView(withId(R.id.button2)).perform(click());
+//        // check its open
+//        onView(withId(R.id.done_button)).check(matches(isDisplayed()));
+//        // press done
+//        onView(withId(R.id.done_button)).perform(click());
+
         // check button has the correct time
         onView(withId(R.id.button2)).check(matches(withText("18:30")));
         // click save

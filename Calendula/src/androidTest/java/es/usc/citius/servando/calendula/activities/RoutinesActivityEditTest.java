@@ -20,7 +20,6 @@ import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -63,7 +62,7 @@ public class RoutinesActivityEditTest extends ActivityInstrumentationTestCase2<R
 
 
     @Test
-    public void testEditMedicine() {
+    public void testEditRoutine() {
 
         assertEquals(1, DB.routines().count());
         assertEquals(NAME_BEFORE_EDIT, DB.routines().findAll().get(0).name());
@@ -74,12 +73,16 @@ public class RoutinesActivityEditTest extends ActivityInstrumentationTestCase2<R
         TestUtils.closeKeyboard();
         // set routine time (not possible vía UI)
         setTimepickerTime(20, 0);
-        // open time picker
-        onView(withId(R.id.button2)).perform(click());
-        // check its open
-        onView(withId(R.id.done_button)).check(matches(isDisplayed()));
-        // press done
-        onView(withId(R.id.done_button)).perform(click());
+
+        // time picker is not consistent across screen sizes/android versions.
+        // It cannot be tested this way.
+//        // open time picker
+//        onView(withId(R.id.button2)).perform(click());
+//        // check its open
+//        onView(withId(R.id.done_button)).check(matches(isDisplayed()));
+//        // press done
+//        onView(withId(R.id.done_button)).perform(click());
+
         // check button has the correct time
         onView(withId(R.id.button2)).check(matches(withText("20:00")));
         // click save
