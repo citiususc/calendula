@@ -1,0 +1,63 @@
+<!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2016 CITIUS - USC
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <string name="scan_review_prescriptions_start">Start</string>
+    <string name="scan_review_prescriptions_title">Rezepte überprüfen</string>
+    <string name="scan_review_title">Überprüfung</string>
+    <string name="scan_review_text">Bitte die eingescannten Rezepte sorgfältig überprüfen, falls notwendig ändern und schließlich bestätigen.</string>
+    <string name="scan_prescriptions">Rezepte einscannen</string>
+
+    <string name="scan_dose_zero_msg">Die angegebene Dosierung ist nicht eindeutig, bitte manuell anpassen</string>
+    <string name="scan_dose_changed_msg">Die Dosierung hat sich geändert</string>
+    <string name="scan_interval_changed_msg">Das Intervall hat sich geändert von %1$s zu %2$s</string>
+    <string name="scan_frequency_changed_msg">Die Häufigkeit hat sich geändert von %1$s zu %2$s Mal pro Tag</string>
+    <string name="scan_schedule_ends_msg">Dieser Plan umfasst einen Zeitraum von %1$s Tag(en). Bitte das Anfangs- und Enddatum überprüfen.</string>
+
+
+    <string name="scan_reading_qr">Erfasse QR-Code …</string>
+    <string name="scan_new_schedule">Neuer Plan!</string>
+    <string name="scan_existing_schedule">Existierender Plan (wird aktualisiert)</string>
+    <string name="scan_schedule_changed">Dieser Plan hat sich geändert:</string>
+
+    <string name="scan_schedules_to_create">%1$s Pläne werden erstellt.</string>
+    <string name="scan_schedules_to_update">%1$s Pläne werden aktualisiert.</string>
+
+    <string name="best_days_messge">Findet der Apothekenbesuch an einem der folgenden Tage statt, so können %1$s Medikamente auf einmal abgeholt werden:</string>
+    <string name="best_single_day_messge">Findet der Apothekenbesuch am %1$s statt, so können %2$s Medikamente auf einmal abgeholt werden:</string>
+    <string name="best_single_day_messge_one_med">Folgendes Medikament kann am %1$s abgeholt werden:</string>
+    <string name="best_single_day_messge_after_pending">Dann könnte erneut %1$s aufgesucht werden und %2$s Medikamente auf einmal abgeholt werden:</string>
+    <string name="best_single_day_messge_after_pending_one_med">Dann könnte %1$s erneut aufgesucht und folgendes Medikament abgeholt werden:</string>
+    <string name="pending_meds_msg">Folgende Medikamente müssen noch aus der Apotheke abgeholt werden:</string>
+    <string name="calendar_date_tomorrow">am morgigen Tag</string>
+
+
+    <string name="best_date_format">dd. MMMM YYYY</string>
+    <string name="best_date_recommendation_title">Empfehlung</string>
+    <string name="best_date_meds">Medikamente</string>
+
+    <string name="best_date_reminder">Erinnerung</string>
+
+    <string-array name="calendar_pickup_reminder_values">
+        <item>1 Tag vorher</item>
+        <item>2 Tage vorher</item>
+        <item>3 Tage vorher</item>
+    </string-array>
+
+</resources>
