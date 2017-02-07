@@ -32,12 +32,11 @@
 <string name="confirm">"Confirm"</string>
 <string name="meds_time">"Remember to take your meds"</string>
 <string name="meds_time_lost">"Alarm lost"</string>
-<string name="title_select_dose_dialog">"Introduce a dose"</string>
+<string name="title_select_dose_dialog">"Select a dose"</string>
 <string name="doses_and_times">"Times and doses"</string>
 <string name="schedule_repeat_days">"Repeat"</string>
 <string name="summary_title">"Check and confirm"</string>
 <string name="summary">"Summary"</string>
-<string name="injections">"Injections"</string>
 <string name="pills">"Pills"</string>
 <string name="capsules">"Capsules"</string>
 <string name="inhaler">"Inhaler"</string>
@@ -49,17 +48,50 @@
 <string name="unknown">"Unknown"</string>
 <string name="effervescent">"Effervescent"</string>
 <string name="schedule">"Schedule"</string>
-<string name="injections_units">"injection"</string>
-<string name="pills_units">"pill"</string>
-<string name="capsules_units">"capsule"</string>
-<string name="inhaler_units">"inhalation"</string>
-<string name="spray_units">"application"</string>
-<string name="drops_units">"drop"</string>
-<string name="pomade_units">"application"</string>
-<string name="syrup_units">"ml"</string>
-<string name="patches_units">"patch"</string>
-<string name="unknown_units">"unit"</string>
-<string name="effervescent_units">"sachet"</string>
+<plurals name="injections_units">
+<item quantity="one">"injection"</item>
+<item quantity="other">"injections"</item>
+</plurals>
+<plurals name="pills_units">
+<item quantity="one">"pill"</item>
+<item quantity="other">"pills"</item>
+</plurals>
+<plurals name="capsules_units">
+<item quantity="one">"capsule"</item>
+<item quantity="other">"capsules"</item>
+</plurals>
+<plurals name="inhaler_units">
+<item quantity="one">"inhalation"</item>
+<item quantity="other">"inhalations"</item>
+</plurals>
+<plurals name="spray_units">
+<item quantity="one">"application"</item>
+<item quantity="other">"applications"</item>
+</plurals>
+<plurals name="drops_units">
+<item quantity="one">"drop"</item>
+<item quantity="other">"drops"</item>
+</plurals>
+<plurals name="pomade_units">
+<item quantity="one">"application"</item>
+<item quantity="other">"applications"</item>
+</plurals>
+<plurals name="syrup_units">
+<item quantity="one">"ml"</item>
+<item quantity="other">"ml"</item>
+</plurals>
+<plurals name="patches_units">
+<item quantity="one">"patch"</item>
+<item quantity="other">"patches"</item>
+</plurals>
+<plurals name="unknown_units">
+<item quantity="one">"unit"</item>
+<item quantity="other">"units"</item>
+</plurals>
+<plurals name="effervescent_units">
+<item quantity="one">"sachet"</item>
+<item quantity="other">"sachets"</item>
+</plurals>
 <string name="never">"Never"</string>
 <string name="every_day">"Every day"</string>
 <string name="once_a_day">"Once a day"</string>
@@ -282,7 +314,7 @@ For this development, we use several open source libraries that are shown below:
 <string name="create_default_routines">"Create default routines"</string>
 <string name="stock_running_out">"Running out of stock"</string>
 <string name="add_more_stock">"Add more"</string>
-<string name="stock_remaining_msg">"%1$d %2$s(s) remaining"</string>
+<string name="stock_remaining_msg">"%1$d %2$s remaining"</string>
 <string name="active_schedules_none">"No active schedules"</string>
 <string name="active_schedules_one">"1 active schedule"</string>
 <string name="active_schedules_number">"%1$d active schedules"</string>
@@ -388,6 +420,7 @@ You will see all their intakes in the home screen."</string>
 <string name="message_database_update_required">"This version of the app requires a newer database. Do you want to download and configure it now?
 If you choose not to download it, some of your medicines' information may be lost."</string>
 <string name="download">"Download"</string>
-    <string name="message_no_internet_error">No internet connection available! Please establish a connection and try again.</string>
-    <string name="action_edit">Edit</string>
+<string name="message_no_internet_error">"No internet connection available! Please establish a connection and try again."</string>
+<string name="action_edit">"Edit"</string>
+<string name="injections">"Injections"</string>
 </resources>

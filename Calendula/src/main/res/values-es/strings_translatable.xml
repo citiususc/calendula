@@ -37,7 +37,6 @@
 <string name="schedule_repeat_days">"Repetir"</string>
 <string name="summary_title">"Revisa y confirma"</string>
 <string name="summary">"Resumen"</string>
-<string name="injections">"Inyecciones"</string>
 <string name="pills">"Pastillas"</string>
 <string name="capsules">"Cápsulas"</string>
 <string name="inhaler">"Inhalador"</string>
@@ -49,17 +48,50 @@
 <string name="unknown">"Desconocido"</string>
 <string name="effervescent">"Efervescente"</string>
 <string name="schedule">"Pauta"</string>
-<string name="injections_units">"inyección"</string>
-<string name="pills_units">"pastilla"</string>
-<string name="capsules_units">"cápsula"</string>
-<string name="inhaler_units">"inhalación"</string>
-<string name="spray_units">"aplicación"</string>
-<string name="drops_units">"gota"</string>
-<string name="pomade_units">"aplicación"</string>
-<string name="syrup_units">"ml"</string>
-<string name="patches_units">"parche"</string>
-<string name="unknown_units">"unidad"</string>
-<string name="effervescent_units">"sobre"</string>
+<plurals name="injections_units">
+<item quantity="one">"inyección"</item>
+<item quantity="other">"inyecciones"</item>
+</plurals>
+<plurals name="pills_units">
+<item quantity="one">"pastilla"</item>
+<item quantity="other">"pastillas"</item>
+</plurals>
+<plurals name="capsules_units">
+<item quantity="one">"cápsula"</item>
+<item quantity="other">"cápsulas"</item>
+</plurals>
+<plurals name="inhaler_units">
+<item quantity="one">"inhalación"</item>
+<item quantity="other">"inhalaciones"</item>
+</plurals>
+<plurals name="spray_units">
+<item quantity="one">"aplicación"</item>
+<item quantity="other">"aplicaciones"</item>
+</plurals>
+<plurals name="drops_units">
+<item quantity="one">"gota"</item>
+<item quantity="other">"gotas"</item>
+</plurals>
+<plurals name="pomade_units">
+<item quantity="one">"aplicación"</item>
+<item quantity="other">"aplicaciones"</item>
+</plurals>
+<plurals name="syrup_units">
+<item quantity="one">"ml"</item>
+<item quantity="other">"ml"</item>
+</plurals>
+<plurals name="patches_units">
+<item quantity="one">"parche"</item>
+<item quantity="other">"parches"</item>
+</plurals>
+<plurals name="unknown_units">
+<item quantity="one">"unidad"</item>
+<item quantity="other">"unidades"</item>
+</plurals>
+<plurals name="effervescent_units">
+<item quantity="one">"sobre"</item>
+<item quantity="other">"sobres"</item>
+</plurals>
 <string name="never">"Nunca"</string>
 <string name="every_day">"Todos los días"</string>
 <string name="once_a_day">"Una vez al día"</string>
@@ -166,10 +198,10 @@ Por favor, lee detenidamente las instrucciones de uso o consulta a tu farmacéut
 <string name="schedule_type_period_description">"Ex: 21 días + 7 de descanso"</string>
 <string name="schedule_help_cycle">"Indica el ciclo de repetición (período + descanso)"</string>
 <string name="schedule_help_duration">"Para acabar, puedes indicar cuando empieza y acaba esta pauta. Puedes dejarlo como está para que se repita indefinidamente."</string>
-<string name="schedule_help_hourly">"Por favor, indica el período de repetición, la dósis, y la hora de la primera toma"</string>
+<string name="schedule_help_hourly">"Por favor, indica el período de repetición, la dosis, y la hora de la primera toma"</string>
 <string name="schedule_help_repeat">"Indica cómo se repite la pauta. Si se repite todos los días no tienes que hacer nada."</string>
 <string name="schedule_help_timesbyday">"Por favor, indica el número de veces al día que se repite la pauta"</string>
-<string name="schedule_help_timetable">"Ahora, asocia cada toma a tus rutinas e indica la dósis para cada una"</string>
+<string name="schedule_help_timetable">"Ahora, asocia cada toma a tus rutinas e indica la dosis para cada una"</string>
 <string name="title_activity_calendar">"Calendario"</string>
 <string name="title_pickups_bottom_sheet">"Recogidas el %1$s"</string>
 <string name="pickup_interval">"Hasta el %1$s"</string>
@@ -284,7 +316,7 @@ Para este desarrollo hacemos uso de algunas librerías y utilidades de código a
 <string name="create_default_routines">"Crear rutinas por defecto"</string>
 <string name="stock_running_out">"Se está agotando el stock"</string>
 <string name="add_more_stock">"Recargar"</string>
-<string name="stock_remaining_msg">"Quedan %1$d %2$s(s)"</string>
+<string name="stock_remaining_msg">"Quedan %1$d %2$s"</string>
 <string name="active_schedules_none">"Sin pautas activas"</string>
 <string name="active_schedules_one">"1 pauta activa"</string>
 <string name="active_schedules_number">"%1$d pautas activas"</string>
@@ -390,4 +422,7 @@ Verás todas sus tomas en la pantalla de inicio."</string>
 <string name="message_database_update_required">"Esta versión de la aplicación requiere una base de datos nueva. Quieres descargarla y configurarla ahora?
 Si eliges no descargarla, puede perderse alguna información de tus medicamentos."</string>
 <string name="download">"Descargar"</string>
+<string name="message_no_internet_error">"¡No hay conexión a Internet! Por favor, establece una conexión e inténtalo de nuevo."</string>
+<string name="action_edit">"Editar"</string>
+<string name="injections">"Inyecciones"</string>
 </resources>

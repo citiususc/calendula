@@ -37,7 +37,6 @@
 <string name="schedule_repeat_days">"Repetir"</string>
 <string name="summary_title">"Revisa e confirma"</string>
 <string name="summary">"Resumo"</string>
-<string name="injections">"Inxeccións"</string>
 <string name="pills">"Pastillas"</string>
 <string name="capsules">"Cápsulas"</string>
 <string name="inhaler">"Inhalador"</string>
@@ -49,17 +48,50 @@
 <string name="unknown">"Descoñecido"</string>
 <string name="effervescent">"Efervescente"</string>
 <string name="schedule">"Pauta"</string>
-<string name="injections_units">"inxección"</string>
-<string name="pills_units">"pastilla"</string>
-<string name="capsules_units">"cápsula"</string>
-<string name="inhaler_units">"inhalación"</string>
-<string name="spray_units">"aplicación"</string>
-<string name="drops_units">"gota"</string>
-<string name="pomade_units">"aplicación"</string>
-<string name="syrup_units">"ml"</string>
-<string name="patches_units">"parche"</string>
-<string name="unknown_units">"unidade"</string>
-<string name="effervescent_units">"sobre"</string>
+<plurals name="injections_units">
+<item quantity="one">"inxección"</item>
+<item quantity="other">"inxeccións"</item>
+</plurals>
+<plurals name="pills_units">
+<item quantity="one">"pastilla"</item>
+<item quantity="other">"pastillas"</item>
+</plurals>
+<plurals name="capsules_units">
+<item quantity="one">"cápsula"</item>
+<item quantity="other">"cápsulas"</item>
+</plurals>
+<plurals name="inhaler_units">
+<item quantity="one">"inhalación"</item>
+<item quantity="other">"inhalacións"</item>
+</plurals>
+<plurals name="spray_units">
+<item quantity="one">"aplicación"</item>
+<item quantity="other">"aplicacións"</item>
+</plurals>
+<plurals name="drops_units">
+<item quantity="one">"gota"</item>
+<item quantity="other">"gotas"</item>
+</plurals>
+<plurals name="pomade_units">
+<item quantity="one">"aplicación"</item>
+<item quantity="other">"aplicacións"</item>
+</plurals>
+<plurals name="syrup_units">
+<item quantity="one">"ml"</item>
+<item quantity="other">"ml"</item>
+</plurals>
+<plurals name="patches_units">
+<item quantity="one">"parche"</item>
+<item quantity="other">"parches"</item>
+</plurals>
+<plurals name="unknown_units">
+<item quantity="one">"unidade"</item>
+<item quantity="other">"unidades"</item>
+</plurals>
+<plurals name="effervescent_units">
+<item quantity="one">"sobre"</item>
+<item quantity="other">"sobres"</item>
+</plurals>
 <string name="never">"Nunca"</string>
 <string name="every_day">"Tódolos días"</string>
 <string name="once_a_day">"Unha vez ó día"</string>
@@ -282,7 +314,7 @@ Para este desenvolvemento facemos uso dalgunhas librarías e utilidades de códi
 <string name="create_default_routines">"Crear rutinas por defecto"</string>
 <string name="stock_running_out">"Estase a agotar o stock"</string>
 <string name="add_more_stock">"Recargar"</string>
-<string name="stock_remaining_msg">"Quedan %1$d %2$s(s)"</string>
+<string name="stock_remaining_msg">"Quedan %1$d %2$s"</string>
 <string name="active_schedules_none">"Sen pautas activas"</string>
 <string name="active_schedules_one">"1 pauta activa"</string>
 <string name="active_schedules_number">"%1$d pautas activas"</string>
@@ -387,4 +419,7 @@ Verás todas a súas tomas na pantalla de inicio."</string>
 <string name="message_database_update_required">"Esta versión da aplicación require unha base de datos máis nova. Queres descargala e configurala agora?
 Se escolles non facelo, algunha información das túas medicinas pode perderse."</string>
 <string name="download">"Descargar"</string>
+<string name="message_no_internet_error">"Non está dispoñible ningunha conexión a Internet! Por favor, establece unha conexión e inténtao de novo."</string>
+<string name="action_edit">"Editar"</string>
+<string name="injections">"Inxeccións"</string>
 </resources>
