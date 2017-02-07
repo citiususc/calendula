@@ -114,7 +114,7 @@ public class StockUtils {
 
     public static void showStockRunningOutDialog(final Context context, final Medicine m, Long days) {
 
-        String msg = "Quedan " + m.stock().intValue() + " " + m.presentation().units(context.getResources()) + " de " + m.name() + ", y ";
+        String msg = "Quedan " + m.stock().intValue() + " " + m.presentation().units(context.getResources(), m.stock()) + " de " + m.name() + ", y ";
         msg += "se acabarán en " + days + " días con la pauta actual.";
 
 

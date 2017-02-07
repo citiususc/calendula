@@ -510,8 +510,8 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     }
 
     void updateStockText() {
-        String units = selectedPresentation != null ? selectedPresentation.units(getResources()) : Presentation.UNKNOWN.units(getResources());
-        String text = stock == -1 ? "No stock info" : (stock + " " + units + "(s)");
+        String units = selectedPresentation != null ? selectedPresentation.units(getResources(), stock) : Presentation.UNKNOWN.units(getResources(), stock);
+        String text = stock == -1 ? "No stock info" : (stock + " " + units);
         mStockEstimation.setVisibility(estimatedStockText != null ? View.VISIBLE : View.INVISIBLE);
         mStockEstimation.setText(estimatedStockText != null ? estimatedStockText : "");
         mStockUnits.setText(text);

@@ -19,6 +19,9 @@
 package es.usc.citius.servando.calendula.persistence;
 
 import android.content.res.Resources;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.PluralsRes;
+import android.support.annotation.StringRes;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.typeface.IIcon;
@@ -31,23 +34,26 @@ import es.usc.citius.servando.calendula.util.PresentationsTypeface;
  */
 public enum Presentation {
 
-    INJECTIONS(R.drawable.icp_injection, R.string.injections, R.string.injections_units),
-    CAPSULES(R.drawable.icp_capsule, R.string.capsules, R.string.capsules_units),
-    EFFERVESCENT(R.drawable.icp_effervescent, R.string.effervescent, R.string.effervescent_units),
-    PILLS(R.drawable.icp_pill, R.string.pills, R.string.pills_units),
-    SYRUP(R.drawable.icp_syrup, R.string.syrup, R.string.syrup_units),
-    DROPS(R.drawable.icp_drop, R.string.drops, R.string.drops_units),
-    POMADE(R.drawable.ic_ppomade, R.string.pomade, R.string.pomade_units),
-    INHALER(R.drawable.icp_inhaler, R.string.inhaler, R.string.inhaler_units),
-    SPRAY(R.drawable.icp_nasalspray, R.string.spray, R.string.spray_units),
-    PATCHES(R.drawable.icp_patches, R.string.patches, R.string.patches_units),
+    INJECTIONS(R.drawable.icp_injection, R.string.injections, R.plurals.injections_units),
+    CAPSULES(R.drawable.icp_capsule, R.string.capsules, R.plurals.capsules_units),
+    EFFERVESCENT(R.drawable.icp_effervescent, R.string.effervescent, R.plurals.effervescent_units),
+    PILLS(R.drawable.icp_pill, R.string.pills, R.plurals.pills_units),
+    SYRUP(R.drawable.icp_syrup, R.string.syrup, R.plurals.syrup_units),
+    DROPS(R.drawable.icp_drop, R.string.drops, R.plurals.drops_units),
+    POMADE(R.drawable.ic_ppomade, R.string.pomade, R.plurals.pomade_units),
+    INHALER(R.drawable.icp_inhaler, R.string.inhaler, R.plurals.inhaler_units),
+    SPRAY(R.drawable.icp_nasalspray, R.string.spray, R.plurals.spray_units),
+    PATCHES(R.drawable.icp_patches, R.string.patches, R.plurals.patches_units),
 
 
-    UNKNOWN(R.drawable.ic_presentation_6, R.string.unknown, R.string.unknown_units);
+    UNKNOWN(R.drawable.ic_presentation_6, R.string.unknown, R.plurals.unknown_units);
 
+    @DrawableRes
     private int drawable = R.drawable.icp_injection;
+    @StringRes
     private int nameString = R.string.unknown;
-    private int unitsString = R.string.unknown_units;
+    @PluralsRes
+    private int unitsString = R.plurals.unknown_units;
 
     Presentation(int drawable, int nameString, int unitsString) {
         this.drawable = drawable;
@@ -130,8 +136,9 @@ public enum Presentation {
 //        return null;
 //    }
 
-    public String units(Resources r) {
-        return r.getString(unitsString);
+    public String units(Resources r, double quantity) {
+        final int intValue = Math.abs(quantity) == 1 ? 1 : 2;
+        return r.getQuantityString(unitsString, intValue);
     }
 
     public IIcon icon() {

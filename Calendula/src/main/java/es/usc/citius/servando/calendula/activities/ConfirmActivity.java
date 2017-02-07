@@ -205,8 +205,8 @@ public class ConfirmActivity extends CalendulaActivity {
         builder.create().show();
     }
 
-    public String getDisplayableDose(String dose, Medicine m) {
-        return dose + " " + m.presentation().units(getResources());
+    public String getDisplayableDose(double dose, String doseString, Medicine m) {
+        return doseString + " " + m.presentation().units(getResources(), dose);
 
     }
 
@@ -672,7 +672,7 @@ public class ConfirmActivity extends CalendulaActivity {
             }
 
             h.med.setText(m.name());
-            h.dose.setText(getDisplayableDose(i.boundToSchedule() ? s.displayDose() : si.displayDose(), m));
+            h.dose.setText(getDisplayableDose(i.boundToSchedule() ? s.dose() : si.dose(), i.boundToSchedule() ? s.displayDose() : si.displayDose(), m));
             h.status.setText(status);
             h.dailyScheduleItem = i;
             updateCheckedStatus();

@@ -284,7 +284,7 @@ public class ReminderNotification {
             final SpannableStringBuilder SpItem = new SpannableStringBuilder();
             final Medicine med = scheduleItem.schedule().medicine();
             SpItem.append(med.name());
-            SpItem.append(":  " + scheduleItem.dose() + " " + med.presentation().units(ctx.getResources()));
+            SpItem.append(":  " + scheduleItem.dose() + " " + med.presentation().units(ctx.getResources(), scheduleItem.dose()));
             style.addLine(SpItem);
         }
         String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
@@ -305,7 +305,7 @@ public class ReminderNotification {
         final Medicine med = schedule.medicine();
         final SpannableStringBuilder SpItem = new SpannableStringBuilder();
         SpItem.append(med.name());
-        SpItem.append("   " + schedule.dose() + " " + med.presentation().units(context.getResources()));
+        SpItem.append("   " + schedule.dose() + " " + med.presentation().units(context.getResources(), schedule.dose()));
         style.addLine(SpItem);
 
         String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");

@@ -35,7 +35,6 @@
 <string name="schedule_repeat_days">"Répéter"</string>
 <string name="summary_title">"Vérifiez et confirmez"</string>
 <string name="summary">"Résumé"</string>
-<string name="injections">"Injections"</string>
 <string name="pills">"Comprimés"</string>
 <string name="capsules">"Gélules"</string>
 <string name="inhaler">"Inhalateur"</string>
@@ -47,17 +46,6 @@
 <string name="unknown">"Inconnu"</string>
 <string name="effervescent">"Effervescent"</string>
 <string name="schedule">"Traitement"</string>
-<string name="injections_units">"injection"</string>
-<string name="pills_units">"comprimé"</string>
-<string name="capsules_units">"gélule"</string>
-<string name="inhaler_units">"inhalation"</string>
-<string name="spray_units">"application"</string>
-<string name="drops_units">"goutte"</string>
-<string name="pomade_units">"application"</string>
-<string name="syrup_units">"ml"</string>
-<string name="patches_units">"emplâtre"</string>
-<string name="unknown_units">"unité"</string>
-<string name="effervescent_units">"sachet"</string>
 <string name="never">"Jamais"</string>
 <string name="every_day">"Tous les jours"</string>
 <string name="once_a_day">"Une fois par jour"</string>

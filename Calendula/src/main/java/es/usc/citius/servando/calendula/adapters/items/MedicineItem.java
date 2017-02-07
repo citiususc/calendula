@@ -92,7 +92,7 @@ public class MedicineItem extends AbstractItem<MedicineItem, MedicineItem.Medici
             }
 
             if (medicine.stock() != null && medicine.stock() >= 0) {
-                holder.stockInfo.setText(ctx.getString(R.string.stock_remaining_msg, medicine.stock().intValue(), medicine.presentation().units(ctx.getResources())));
+                holder.stockInfo.setText(ctx.getString(R.string.stock_remaining_msg, medicine.stock().intValue(), medicine.presentation().units(ctx.getResources(), medicine.stock())));
             }
         }
 

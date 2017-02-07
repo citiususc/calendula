@@ -347,9 +347,9 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             TextView medDose = (TextView) intakeView.findViewById(R.id.med_item_dose);
             ImageView image = (ImageView) intakeView.findViewById(R.id.imageView);
 
-            String units = element.presentation.units(viewHolder.context.getResources());
+            String units = element.presentation.units(viewHolder.context.getResources(), element.dose);
             image.setImageDrawable(medIcon(element.presentation.icon(), intakeView.getContext()));
-            medDose.setText(element.displayDose + " " + units + (element.dose > 1 ? "s" : ""));
+            medDose.setText(element.displayDose + " " + units);
             medName.setText(element.medName);
 
             if (element.taken) {
