@@ -43,6 +43,6 @@ You can also contribute with better translations for particular words or sentenc
 Alternatively, you can contribute translations via pull request:
 
  * Add a new folder named `values-{LANG}/` at `Calendula/src/main/res/`
- * Translate the `strings_translatable.xml` file from `values-en` to your desired language.
+ * Translate the `strings_translatable.xml` file from `values` to your desired language.
  * Send a pull request.
 
