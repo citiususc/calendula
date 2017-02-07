@@ -131,7 +131,7 @@ public class StockRunningOutAlert extends PatientAlert<StockRunningOutAlert, Sto
             if (stock > 0) {
                 viewHolder.title.setText(R.string.stock_running_out);
                 viewHolder.duration.setText(ctx.getString(R.string.stock_enough_for_days, StockUtils.getEstimatedStockDays(m)));
-                viewHolder.description.setText(ctx.getString(R.string.stock_remaining_msg, stock, m.presentation().units(c.getResources())));
+                viewHolder.description.setText(ctx.getString(R.string.stock_remaining_msg, stock, m.presentation().units(c.getResources(), stock)));
             } else {
                 viewHolder.title.setText(R.string.stock_depleted);
                 viewHolder.description.setVisibility(View.GONE);

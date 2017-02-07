@@ -210,7 +210,7 @@ public class MedInfoFragment extends Fragment {
             if (m.stockManagementEnabled()) {
                 final Float s = m.stock();
                 final String stock = s.intValue() == s ? String.valueOf(s.intValue()) : String.valueOf(s);
-                stockInfo.setText(stock + " " + m.presentation().units(getResources()) + "(s)");
+                stockInfo.setText(stock + " " + m.presentation().units(getResources(), s));
                 LocalDate d = StockUtils.getEstimatedStockEnd(m);
                 String msg = StockUtils.getReadableStockDuration(d, getContext());
                 stockInfoEnd.setText(msg);
