@@ -265,28 +265,10 @@ public class DailyAgendaFragment extends Fragment {
         for (DateTime start = min; start.isBefore(max); start = start.plusHours(1)) {
 
             boolean exact = false;
-            for (DailyAgendaItemStub item : items) {
+            for (DailyAgendaItemStub item : stubs) {
                 if (start.equals(item.dateTime())) {
                     exact = true;
                     break;
-                }
-            }
-
-            if (!exact) {
-                for (Routine routine : DB.routines().findAll()) {
-                    if (exact) {
-                        break;
-                    }
-                    for (ScheduleItem scheduleItem : routine.scheduleItems()) {
-                        List<DailyScheduleItem> dailyScheduleItems = DB.dailyScheduleItems().findAllByScheduleItem(scheduleItem);
-                        for (DailyScheduleItem dailyScheduleItem : dailyScheduleItems) {
-                            if (dailyScheduleItem == null) {
-                                break;
-                            } else if (dailyScheduleItem.time().equals(start.toLocalTime())) {
-                                exact = true;
-                            }
-                        }
-                    }
                 }
             }
 
