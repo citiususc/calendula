@@ -225,6 +225,9 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             if (item.patient != null) {
                 viewHolder.avatarIcon.setImageResource(AvatarMgr.res(item.patient.avatar()));
                 viewHolder.patientIndicatorBand.setBackgroundColor(item.patient.color());
+                final ViewGroup.LayoutParams layoutParams = viewHolder.patientIndicatorBand.getLayoutParams();
+                layoutParams.height = viewHolder.itemView.getLayoutParams().height;
+                viewHolder.patientIndicatorBand.setLayoutParams(layoutParams);
             }
 
             viewHolder.title.setText(item.title);
@@ -503,7 +506,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             }
         }
 
-        public void hideCheckAllButton(){
+        public void hideCheckAllButton() {
             actionsView.animate().setDuration(100).alpha(0).scaleY(0.5f).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
