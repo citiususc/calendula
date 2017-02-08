@@ -182,8 +182,11 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         mNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CharSequence text = mNameTextView.getText();
-                ((MedicinesActivity) getActivity()).showSearchView(text != null ? text.toString() : null);
+                final MedicinesActivity medicinesActivity = (MedicinesActivity) getActivity();
+                if (!medicinesActivity.isSearchViewShowing()) {
+                    CharSequence text = mNameTextView.getText();
+                    medicinesActivity.showSearchView(text != null ? text.toString() : null);
+                }
             }
         });
 
@@ -689,26 +692,34 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         rmBtn.setImageDrawable(remove);
         resetBtn.setImageDrawable(reset);
 
+        final MedicinesActivity medicinesActivity = (MedicinesActivity) getActivity();
+
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showStockDialog(DIALOG_STOCK_ADD);
+                if (!medicinesActivity.isSearchViewShowing()) {
+                    showStockDialog(DIALOG_STOCK_ADD);
+                }
             }
         });
 
         rmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showStockDialog(DIALOG_STOCK_REMOVE);
+                if (!medicinesActivity.isSearchViewShowing()) {
+                    showStockDialog(DIALOG_STOCK_REMOVE);
+                }
             }
         });
 
         resetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: resetting stock...");
-                setDefaultStock();
-                updateStockText();
+                if (!medicinesActivity.isSearchViewShowing()) {
+                    Log.d(TAG, "onClick: resetting stock...");
+                    setDefaultStock();
+                    updateStockText();
+                }
             }
         });
 

@@ -60,9 +60,9 @@
             android:inputType="text"
             android:paddingBottom="15dp"
             android:paddingTop="10dp"
-            android:text="Ibuprofeno Apotex"
             android:textColor="#222"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            tools:text="Medicine Placeholder"/>
 
         <ImageView
             android:id="@+id/search_button"
@@ -190,11 +190,11 @@
                 android:layout_toLeftOf="@+id/btn_stock_remove"
                 android:fontFamily="sans-serif-condensed"
                 android:gravity="center_vertical"
-                android:text="30 capsules"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textIsSelectable="false"
                 android:textSize="19sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                tools:text="99 placeholders"/>
 
             <TextView
                 android:id="@+id/stock_estimated_duration"
@@ -206,10 +206,10 @@
                 android:layout_marginTop="5dp"
                 android:fontFamily="sans-serif-condensed"
                 android:gravity="center_vertical"
-                android:text="Enough for 2 weeks with the current schedule"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/android_blue_dark"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                tools:text="Enough for two placeholders with the current placeholder"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"

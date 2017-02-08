@@ -187,6 +187,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     }
 
     public void showSearchView(final String text) {
+        // TODO: 08/02/17 move search to separate activity and use startActivityFromResult 
         addButton.setVisibility(View.GONE);
         searchView.setVisibility(View.VISIBLE);
         searchEditText.requestFocus();
@@ -213,6 +214,10 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         InputMethodManager imm = (InputMethodManager) getSystemService(
                 Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+    }
+
+    public boolean isSearchViewShowing() {
+        return searchView.getVisibility() == View.VISIBLE;
     }
 
     @Override
