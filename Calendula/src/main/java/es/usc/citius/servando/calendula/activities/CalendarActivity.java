@@ -123,6 +123,9 @@ public class CalendarActivity extends CalendulaActivity {
             case R.id.action_best_day:
                 //onBestDaySelected();
                 return true;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             default:
                 return false;
         }
