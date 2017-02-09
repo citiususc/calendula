@@ -17,6 +17,7 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
 
@@ -75,6 +76,23 @@
             android:scaleType="fitCenter"
             android:src="@drawable/ic_presentation_3"/>
 
+        <TextView
+            android:id="@+id/medicines_list_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_toEndOf="@+id/imageButton"
+            android:layout_toLeftOf="@+id/selection_indicator"
+            android:layout_toRightOf="@+id/imageButton"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="#111"
+            android:textSize="20sp"
+            tools:text="Placeholder medicine that can have a pretty long name"/>
+
         <ImageView
             android:id="@+id/selection_indicator"
             android:layout_width="35dp"
@@ -83,19 +101,6 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="26dp"
             android:src="@drawable/ic_done_black_48dp"/>
-
-        <TextView
-            android:id="@+id/medicines_list_item_name"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_toEndOf="@+id/imageButton"
-            android:layout_toRightOf="@+id/imageButton"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center"
-            android:text="Atrovent"
-            android:textColor="#111"
-            android:textSize="20sp"/>
 
     </RelativeLayout>
 
