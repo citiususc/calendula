@@ -180,27 +180,72 @@
                 android:alpha="0.8"
                 android:src="@drawable/ic_edit_black_48dp"/>
 
-            <TextView
-                android:id="@+id/stock_units"
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:layout_below="@+id/medicine_stock_title"
-                android:layout_marginLeft="72dp"
-                android:layout_marginTop="10dp"
-                android:layout_toLeftOf="@+id/btn_stock_remove"
-                android:fontFamily="sans-serif-condensed"
-                android:gravity="center_vertical"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textIsSelectable="false"
-                android:textSize="19sp"
-                android:textStyle="bold"
-                tools:text="99 placeholders"/>
+            <RelativeLayout
+                android:id="@+id/stock_info_line"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/medicine_stock_title">
+
+                <TextView
+                    android:id="@+id/stock_units"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="72dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toLeftOf="@+id/stock_buttons"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textIsSelectable="false"
+                    android:textSize="19sp"
+                    android:textStyle="bold"
+                    tools:text="I got 99 placeholders but stock ain't one"/>
+
+                <LinearLayout
+                    android:id="@+id/stock_buttons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/stock_units"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@id/stock_units"
+                    android:layout_marginRight="32dp"
+                    android:gravity="center_vertical|right"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/btn_stock_remove"
+                        android:layout_width="45dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/abc_ic_star_black_16dp"/>
+
+                    <ImageButton
+                        android:id="@+id/btn_stock_add"
+                        android:layout_width="45dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/abc_ic_star_black_16dp"/>
+
+                    <ImageButton
+                        android:id="@+id/btn_stock_reset"
+                        android:layout_width="45dp"
+                        android:layout_height="50dp"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/abc_ic_star_black_16dp"/>
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/stock_estimated_duration"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/stock_units"
+                android:layout_below="@+id/stock_info_line"
                 android:layout_marginLeft="72dp"
                 android:layout_marginRight="32dp"
                 android:layout_marginTop="5dp"
@@ -210,43 +255,6 @@
                 android:textColor="@color/android_blue_dark"
                 android:textSize="16sp"
                 tools:text="Enough for two placeholders with the current placeholder"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/stock_units"
-                android:layout_marginRight="32dp"
-                android:gravity="right"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/btn_stock_remove"
-                    android:layout_width="45dp"
-                    android:layout_height="50dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@null"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/abc_ic_star_black_16dp"/>
-
-                <ImageButton
-                    android:id="@+id/btn_stock_add"
-                    android:layout_width="45dp"
-                    android:layout_height="50dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@null"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/abc_ic_star_black_16dp"/>
-
-                <ImageButton
-                    android:id="@+id/btn_stock_reset"
-                    android:layout_width="45dp"
-                    android:layout_height="50dp"
-                    android:background="@null"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/abc_ic_star_black_16dp"/>
-            </LinearLayout>
-
 
             <Switch
                 android:id="@+id/stock_switch"
