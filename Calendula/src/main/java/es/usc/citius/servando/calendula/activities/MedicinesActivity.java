@@ -676,6 +676,9 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
                             if (p.getCode().contains(search)) {
                                 prescriptions.add(p);
+                                if (p.getCode().equals(search)) {
+                                    exactMatch = true;
+                                }
                             } else {
                                 final String name = current.shortName(p).toLowerCase();
 
