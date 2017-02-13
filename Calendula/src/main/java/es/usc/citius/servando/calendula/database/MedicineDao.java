@@ -95,7 +95,7 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
         if (m.stockManagementEnabled() && m.getId() != null) {
 
             Medicine original = findById(m.getId());
-            boolean addedOrRemoved = !original.stock().equals(m.stock());
+            boolean addedOrRemoved = original.stock() == null || !original.stock().equals(m.stock());
             super.save(m);
 
             if (addedOrRemoved) {
