@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,7 +39,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
@@ -55,6 +55,7 @@ import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.joda.time.LocalDate;
 
@@ -123,11 +124,11 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     @BindView(R.id.stock_switch)
     Switch stockSwitch;
     @BindView(R.id.btn_stock_add)
-    ImageButton addBtn;
+    IconicsImageView addBtn;
     @BindView(R.id.btn_stock_remove)
-    ImageButton rmBtn;
+    IconicsImageView rmBtn;
     @BindView(R.id.btn_stock_reset)
-    ImageButton resetBtn;
+    IconicsImageView resetBtn;
 
     boolean enableSearch = false;
     long mMedicineId;
@@ -681,18 +682,17 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     }
 
     private void setupStockViews() {
-        Context c = getActivity();
-
-        // TODO: 1/02/17 use some better icons, these are temporary
-        Drawable add = IconUtils.icon(c, CommunityMaterial.Icon.cmd_plus, R.color.agenda_item_title, 26, 4);
-        Drawable remove = IconUtils.icon(c, CommunityMaterial.Icon.cmd_minus, R.color.agenda_item_title, 26, 4);
-        Drawable reset = IconUtils.icon(c, CommunityMaterial.Icon.cmd_reload, R.color.agenda_item_title, 26, 4);
-
-        addBtn.setImageDrawable(add);
-        rmBtn.setImageDrawable(remove);
-        resetBtn.setImageDrawable(reset);
-
         final MedicinesActivity medicinesActivity = (MedicinesActivity) getActivity();
+
+        IconicsDrawable resetDrawable = new IconicsDrawable(getContext(), CommunityMaterial.Icon.cmd_reload)
+                .iconOffsetXDp(2)
+                .backgroundColorRes(R.color.agenda_item_title)
+                .sizeDp(40)
+                .paddingDp(10)
+                .color(Color.WHITE)
+                .roundedCornersDp(23);
+
+        resetBtn.setImageDrawable(resetDrawable);
 
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -764,7 +764,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         mStockEstimation.setVisibility(stockSwitch.isChecked() & estimatedStockText != null ? View.VISIBLE : View.INVISIBLE);
         addBtn.setVisibility(visibility);
         rmBtn.setVisibility(visibility);
-        int resetVisibility = stockSwitch.isChecked() && mPrescription != null ? View.VISIBLE : View.GONE;
+        int resetVisibility = stockSwitch.isChecked() && mMedicine.isBoundToPrescription() ? View.VISIBLE : View.GONE;
         resetBtn.setVisibility(resetVisibility);
     }
 

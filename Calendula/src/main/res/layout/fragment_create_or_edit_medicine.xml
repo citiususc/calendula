@@ -18,6 +18,7 @@
 
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
@@ -205,38 +206,59 @@
                     android:id="@+id/stock_buttons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/stock_units"
                     android:layout_alignParentRight="true"
-                    android:layout_alignTop="@id/stock_units"
                     android:layout_marginRight="32dp"
                     android:gravity="center_vertical|right"
                     android:orientation="horizontal">
 
-                    <ImageButton
+                    <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/btn_stock_remove"
-                        android:layout_width="45dp"
-                        android:layout_height="50dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
-                        android:background="@null"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/abc_ic_star_black_16dp"/>
+                        app:iiv_background_color="@color/agenda_item_title"
+                        app:iiv_color="@color/white"
+                        app:iiv_corner_radius="23dp"
+                        app:iiv_icon="cmd-minus"
+                        app:iiv_padding="12dp"
+                        app:iiv_size="40dp"
+                        tools:layout_height="50dp"
+                        tools:layout_width="45dp"
+                        tools:src="@drawable/abc_ic_star_black_16dp"
+                        />
 
-                    <ImageButton
+                    <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/btn_stock_add"
-                        android:layout_width="45dp"
-                        android:layout_height="50dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
-                        android:background="@null"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/abc_ic_star_black_16dp"/>
+                        app:iiv_background_color="@color/agenda_item_title"
+                        app:iiv_color="@color/white"
+                        app:iiv_corner_radius="23dp"
+                        app:iiv_icon="cmd-plus"
+                        app:iiv_padding="12dp"
+                        app:iiv_size="40dp"
+                        tools:layout_height="50dp"
+                        tools:layout_width="45dp"
+                        tools:src="@drawable/abc_ic_star_black_16dp"
+                        />
 
-                    <ImageButton
+                    <com.mikepenz.iconics.view.IconicsImageView
                         android:id="@+id/btn_stock_reset"
-                        android:layout_width="45dp"
-                        android:layout_height="50dp"
-                        android:background="@null"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/abc_ic_star_black_16dp"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        app:iiv_background_color="@color/agenda_item_title"
+                        app:iiv_color="@color/white"
+                        app:iiv_corner_radius="23dp"
+                        app:iiv_icon="cmd-reload"
+                        app:iiv_padding="12dp"
+                        app:iiv_size="40dp"
+                        tools:layout_height="50dp"
+                        tools:layout_width="45dp"
+                        tools:src="@drawable/abc_ic_star_black_16dp"
+                        />
+
                 </LinearLayout>
 
             </RelativeLayout>
