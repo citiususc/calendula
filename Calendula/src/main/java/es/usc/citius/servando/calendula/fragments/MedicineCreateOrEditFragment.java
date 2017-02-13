@@ -65,6 +65,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
@@ -515,7 +516,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
     void updateStockText() {
         String units = selectedPresentation != null ? selectedPresentation.units(getResources(), stock) : Presentation.UNKNOWN.units(getResources(), stock);
-        String text = stock == -1 ? "No stock info" : (stock + " " + units);
+        String text = stock == -1 ? getString(R.string.no_stock_info_msg) : (stock + " " + units);
         mStockEstimation.setVisibility(estimatedStockText != null ? View.VISIBLE : View.INVISIBLE);
         mStockEstimation.setText(estimatedStockText != null ? estimatedStockText : "");
         mStockUnits.setText(text);
@@ -681,8 +682,51 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         imm.hideSoftInputFromWindow(mNameTextView.getWindowToken(), 0);
     }
 
-    private void setupStockViews() {
+
+    @OnClick(R.id.btn_stock_add)
+    protected void addStock() {
         final MedicinesActivity medicinesActivity = (MedicinesActivity) getActivity();
+        if (!medicinesActivity.isSearchViewShowing()) {
+            showStockDialog(DIALOG_STOCK_ADD);
+        }
+    }
+
+    @OnClick(R.id.btn_stock_remove)
+    protected void removeStock() {
+        final MedicinesActivity medicinesActivity = (MedicinesActivity) getActivity();
+        if (!medicinesActivity.isSearchViewShowing()) {
+            showStockDialog(DIALOG_STOCK_REMOVE);
+        }
+    }
+
+    @OnClick(R.id.btn_stock_reset)
+    protected void resetStock() {
+        final MedicinesActivity medicinesActivity = (MedicinesActivity) getActivity();
+        if (!medicinesActivity.isSearchViewShowing()) {
+            new MaterialStyledDialog.Builder(getContext())
+                    .setStyle(Style.HEADER_WITH_ICON)
+                    .setIcon(IconUtils.icon(getContext(), mMedicine.presentation().icon(), R.color.white, 100))
+                    .setHeaderColor(R.color.android_orange_dark)
+                    .withDialogAnimation(true)
+                    .setTitle(R.string.title_reset_stock)
+                    .setDescription(getString(R.string.message_reset_stock, mMedicine.name()))
+                    .setCancelable(true)
+                    .setNegativeText(R.string.cancel)
+                    .setPositiveText(R.string.reset)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Log.d(TAG, "onClick: resetting stock...");
+                            setDefaultStock();
+                            updateStockText();
+                        }
+                    })
+                    .show();
+        }
+    }
+
+    private void setupStockViews() {
+
 
         IconicsDrawable resetDrawable = new IconicsDrawable(getContext(), CommunityMaterial.Icon.cmd_reload)
                 .iconOffsetXDp(2)
@@ -694,34 +738,6 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
         resetBtn.setImageDrawable(resetDrawable);
 
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!medicinesActivity.isSearchViewShowing()) {
-                    showStockDialog(DIALOG_STOCK_ADD);
-                }
-            }
-        });
-
-        rmBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!medicinesActivity.isSearchViewShowing()) {
-                    showStockDialog(DIALOG_STOCK_REMOVE);
-                }
-            }
-        });
-
-        resetBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!medicinesActivity.isSearchViewShowing()) {
-                    Log.d(TAG, "onClick: resetting stock...");
-                    setDefaultStock();
-                    updateStockText();
-                }
-            }
-        });
 
         stockSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
