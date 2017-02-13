@@ -19,6 +19,7 @@
 
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                            xmlns:tools="http://schemas.android.com/tools"
                                             android:id="@+id/nestedScrollView"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
@@ -67,7 +68,8 @@
                     android:textColor="#000"
                     android:textIsSelectable="false"
                     android:textSize="19dp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    tools:text="Medicine name here"/>
 
                 <TextView
                     android:id="@+id/med_large_name_description"
@@ -81,7 +83,8 @@
                     android:fontFamily="sans-serif-condensed"
                     android:gravity="center_vertical"
                     android:textColor="@color/dark_grey_text"
-                    android:textSize="18dp"/>
+                    android:textSize="18dp"
+                    tools:text="Medicine extra info, maybe prompting to link to prescription"/>
 
                 <Button
                     android:id="@+id/bind_medicine"
@@ -104,7 +107,8 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <ImageView
                     android:id="@+id/ic_med_stock"
@@ -127,7 +131,8 @@
                     android:textColor="#000"
                     android:textIsSelectable="false"
                     android:textSize="19dp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    tools:text="Stock info"/>
 
                 <TextView
                     android:id="@+id/med_stock_readable"
@@ -141,7 +146,8 @@
                     android:fontFamily="sans-serif-condensed"
                     android:gravity="center_vertical"
                     android:textColor="@color/dark_grey_text"
-                    android:textSize="18dp"/>
+                    android:textSize="18dp"
+                    tools:text="Text description of the  stock"/>
 
             </RelativeLayout>
 
@@ -173,7 +179,8 @@
                     android:textColor="#000"
                     android:textIsSelectable="false"
                     android:textSize="19dp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    tools:text="Schedules info"/>
 
             </RelativeLayout>
 
@@ -233,7 +240,8 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_help_white_48dp"
                     android:textColor="@color/dark_grey_text"
-                    android:textSize="15dp"/>
+                    android:textSize="15dp"
+                    tools:src="@drawable/icp_capsule"/>
 
                 <TextView
                     android:layout_width="wrap_content"
