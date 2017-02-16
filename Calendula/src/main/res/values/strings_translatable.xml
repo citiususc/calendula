@@ -426,4 +426,5 @@ If you choose not to download it, some of your medicines' information may be los
     <string name="title_reset_stock">Reset stock?</string>
     <string name="message_reset_stock">"The stock information for %1$s will reset to the default value."</string>
     <string name="reset">Reset</string>
+    <string name="edit_medicine">Edit medicine</string>
 </resources>
