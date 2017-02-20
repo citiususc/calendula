@@ -109,13 +109,16 @@ public class MedicineItem extends AbstractItem<MedicineItem, MedicineItem.Medici
                 }
             }
             holder.alertIcon.setImageDrawable(IconUtils.alertLevelIcon(level, ctx));
+            holder.alertIcon.setVisibility(View.VISIBLE);
         }
 
     }
 
-    //reset the view here (this is an optional method, but recommended)
     @Override
     public void unbindView(MedicineViewHolder holder) {
+        holder.icon.setImageDrawable(null);
+        holder.name.setText(null);
+        holder.stockInfo.setText(null);
         super.unbindView(holder);
     }
 
