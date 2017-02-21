@@ -99,9 +99,7 @@ public class MedicineItem extends AbstractItem<MedicineItem, MedicineItem.Medici
         List<PatientAlert> alerts = DB.alerts().findBy(PatientAlert.COLUMN_MEDICINE, medicine);
         boolean hasAlerts = !alerts.isEmpty();
 
-        if (!hasAlerts) {
-            holder.alertIcon.setVisibility(View.GONE);
-        } else {
+        if (hasAlerts) {
             int level = PatientAlert.Level.LOW;
             for (PatientAlert a : alerts) {
                 if (a.getLevel() > level) {
@@ -119,6 +117,7 @@ public class MedicineItem extends AbstractItem<MedicineItem, MedicineItem.Medici
         holder.icon.setImageDrawable(null);
         holder.name.setText(null);
         holder.stockInfo.setText(null);
+        holder.alertIcon.setVisibility(View.GONE);
         super.unbindView(holder);
     }
 
