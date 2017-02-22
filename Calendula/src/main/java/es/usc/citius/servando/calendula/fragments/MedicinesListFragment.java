@@ -63,6 +63,7 @@ import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.medicine.MedicineSortUtil.MedSortType;
+import es.usc.citius.servando.calendula.util.view.CollapseExpandAnimator;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -157,6 +158,16 @@ public class MedicinesListFragment extends Fragment {
                     }
                 });
             }
+        }
+    }
+
+    public void toggleSort() {
+        final int height = sortLayout.getHeight();
+        if (height == 0) {
+            int targetHeight = (int) getResources().getDimension(R.dimen.sort_bar_height);
+            CollapseExpandAnimator.expand(sortLayout, 100, targetHeight);
+        } else {
+            CollapseExpandAnimator.collapse(sortLayout, 100, 0);
         }
     }
 

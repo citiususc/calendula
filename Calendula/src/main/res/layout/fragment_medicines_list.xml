@@ -25,9 +25,10 @@
     <LinearLayout
         android:id="@+id/sort_layout"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="0dp"
         android:background="@color/md_grey_700"
         android:gravity="center_vertical|end"
+        tools:layout_height="@dimen/sort_bar_height"
         tools:layout_marginTop="@dimen/status_bar_height"
         >
 

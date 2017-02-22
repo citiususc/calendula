@@ -431,4 +431,5 @@ If you choose not to download it, some of your medicines' information may be los
     <string name="sort_by_default">Default</string>
     <string name="sort_by_name">Name</string>
     <string name="sort_by_presentation">Presentation</string>
+    <string name="action_sort">Sort</string>
 </resources>

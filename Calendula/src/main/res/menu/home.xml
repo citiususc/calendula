@@ -32,6 +32,13 @@
     <!--app:showAsAction="always" />-->
 
     <item
+        android:id="@+id/action_sort"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:orderInCategory="100"
+        android:title="@string/action_sort"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/action_expand"
         android:icon="@drawable/ic_unfold_less_white_48dp"
         android:orderInCategory="100"

@@ -34,7 +34,7 @@ public class MedicineSortUtil {
 
     public enum MedSortType {
         NAME(R.string.sort_by_name, new MedicineNameComparator()),
-        mPRESENTATION(R.string.sort_by_presentation, new MedicinePresentationComparator());
+        PRESENTATION(R.string.sort_by_presentation, new MedicinePresentationComparator());
 
         private int displayName;
         private Comparator<Medicine> comparator;

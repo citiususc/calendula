@@ -95,10 +95,14 @@ public class HomePagerActivity extends CalendulaActivity implements
     FloatingActionsMenu addButton;
     FabMenuMgr fabMgr;
     TextView toolbarTitle;
-    MenuItem expandItem;
-    MenuItem helpItem;
     Drawable icAgendaMore;
     Drawable icAgendaLess;
+
+    //menu items
+    MenuItem expandItem;
+    MenuItem helpItem;
+    MenuItem sortItem;
+
     boolean appBarLayoutExpanded = true;
     boolean active = false;
     private HomePageAdapter mSectionsPagerAdapter;
@@ -137,6 +141,9 @@ public class HomePagerActivity extends CalendulaActivity implements
         expandItem = menu.findItem(R.id.action_expand);
         helpItem = menu.findItem(R.id.action_schedules_help);
         helpItem.setVisible(false);
+        sortItem = menu.findItem(R.id.action_sort);
+        sortItem.setIcon(IconUtils.icon(getApplicationContext(), CommunityMaterial.Icon.cmd_sort, R.color.white));
+        sortItem.setVisible(false);
         return true;
     }
 
@@ -157,6 +164,11 @@ public class HomePagerActivity extends CalendulaActivity implements
             menu.findItem(R.id.action_calendar).setVisible(true);
         } else {
             menu.findItem(R.id.action_calendar).setVisible(false);
+        }
+        if (pageNum == HomePages.MEDICINES.ordinal()) {
+            menu.findItem(R.id.action_sort).setVisible(true);
+        } else {
+            menu.findItem(R.id.action_sort).setVisible(false);
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -187,6 +199,11 @@ public class HomePagerActivity extends CalendulaActivity implements
                 return true;
             case R.id.action_schedules_help:
                 launchActivity(new Intent(this, SchedulesHelpActivity.class));
+                return true;
+            case R.id.action_sort:
+                ((MedicinesListFragment) getViewPagerFragment(HomePages.MEDICINES)).toggleSort();
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -513,6 +530,9 @@ public class HomePagerActivity extends CalendulaActivity implements
                 }
                 if (helpItem != null) {
                     helpItem.setVisible(position == HomePages.SCHEDULES.ordinal());
+                }
+                if (sortItem != null) {
+                    sortItem.setVisible(position == HomePages.MEDICINES.ordinal());
                 }
             }
 
