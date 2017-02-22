@@ -20,6 +20,7 @@ package es.usc.citius.servando.calendula.util;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorRes;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -50,21 +51,21 @@ public class IconUtils {
 
     );
 
-    public static IconicsDrawable icon(Context ctx, IIcon ic, int color) {
+    public static IconicsDrawable icon(Context ctx, IIcon ic, @ColorRes int color) {
         return new IconicsDrawable(ctx, ic)
                 .sizeDp(48)
                 .paddingDp(2)
                 .colorRes(color);
     }
 
-    public static IconicsDrawable icon(Context ctx, IIcon ic, int color, int size) {
+    public static IconicsDrawable icon(Context ctx, IIcon ic, @ColorRes int color, int size) {
         return new IconicsDrawable(ctx, ic)
                 .sizeDp(size)
                 .paddingDp(0)
                 .colorRes(color);
     }
 
-    public static IconicsDrawable icon(Context ctx, IIcon ic, int color, int size, int padding) {
+    public static IconicsDrawable icon(Context ctx, IIcon ic, @ColorRes int color, int size, int padding) {
         return new IconicsDrawable(ctx, ic)
                 .sizeDp(size)
                 .paddingDp(padding)
