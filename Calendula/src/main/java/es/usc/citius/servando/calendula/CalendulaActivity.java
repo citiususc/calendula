@@ -35,7 +35,7 @@ import es.usc.citius.servando.calendula.util.ScreenUtils;
  * Created by joseangel.pineiro on 10/30/15.
  */
 @SuppressLint("Registered")
-public class CalendulaActivity extends AppCompatActivity {
+public abstract class CalendulaActivity extends AppCompatActivity {
 
     protected Toolbar toolbar;
 
