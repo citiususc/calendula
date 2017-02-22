@@ -17,14 +17,43 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:background="#fcfcfc">
+
+    <LinearLayout
+        android:id="@+id/sort_layout"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/md_grey_700"
+        android:gravity="center_vertical|end"
+        tools:layout_marginTop="@dimen/status_bar_height"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sort_by"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textColor="@color/white"/>
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/medicine_sort_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/medicines_list"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
+        android:layout_below="@+id/sort_layout"
         android:background="#fcfcfc"
         android:clipToPadding="false"
         android:divider="#fff"

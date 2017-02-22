@@ -20,18 +20,22 @@ package es.usc.citius.servando.calendula.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -43,6 +47,8 @@ import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.listeners.ClickEventHook;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,6 +62,7 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.medicine.MedicineSortUtil.MedSortType;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -71,6 +78,10 @@ public class MedicinesListFragment extends Fragment {
     RecyclerView recyclerView;
     @BindView(android.R.id.empty)
     View emptyView;
+    @BindView(R.id.sort_layout)
+    View sortLayout;
+    @BindView(R.id.medicine_sort_spinner)
+    AppCompatSpinner sortSpinner;
 
     FastItemAdapter<MedicineItem> adapter;
     Handler handler;
@@ -82,9 +93,9 @@ public class MedicinesListFragment extends Fragment {
         unbinder = ButterKnife.bind(this, rootView);
         handler = new Handler();
         mMedicines = DB.medicines().findAllForActivePatient(getContext());
-        if (mMedicines.size() > 0)
-            emptyView.setVisibility(View.GONE);
         setupRecyclerView();
+        setupSortSpinner();
+        updateViewVisibility();
         return rootView;
     }
 
@@ -191,6 +202,31 @@ public class MedicinesListFragment extends Fragment {
 
     }
 
+    private void setupSortSpinner() {
+        ArrayAdapter<MedSortType> spinnerAdapter = new ArrayAdapter<>(getContext(), R.layout.sort_spinner_item, MedSortType.values());
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortSpinner.setAdapter(spinnerAdapter);
+        sortSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP); //change caret color
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                final MedSortType type = (MedSortType) parent.getItemAtPosition(position);
+                Comparator<Medicine> cmp = type.comparator();
+                if (cmp != null) {
+                    Collections.sort(mMedicines, cmp);
+                    updateAdapterItems();
+                } else {
+                    Log.e(TAG, "onItemSelected: null comparator! wrong sort type?");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //noop
+            }
+        });
+    }
+
     private void setupRecyclerView() {
         LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(llm);
@@ -235,6 +271,24 @@ public class MedicinesListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
+    private void updateViewVisibility() {
+        if (mMedicines.size() > 0) {
+            emptyView.setVisibility(View.GONE);
+            sortLayout.setVisibility(View.VISIBLE);
+        } else {
+            emptyView.setVisibility(View.VISIBLE);
+            sortLayout.setVisibility(View.GONE);
+        }
+    }
+
+    private void updateAdapterItems() {
+        adapter.clear();
+        for (Medicine m : mMedicines) {
+            adapter.add(new MedicineItem(m));
+        }
+        adapter.notifyAdapterDataSetChanged();
+    }
+
     //
     // Container Activity must implement this interface
     //
@@ -256,16 +310,8 @@ public class MedicinesListFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            if (mMedicines.size() > 0) {
-                emptyView.setVisibility(View.GONE);
-            } else {
-                emptyView.setVisibility(View.VISIBLE);
-            }
-            adapter.clear();
-            for (Medicine m : mMedicines) {
-                adapter.add(new MedicineItem(m));
-            }
-            adapter.notifyAdapterDataSetChanged();
+            updateViewVisibility();
+            updateAdapterItems();
             Log.d(TAG, "Reloaded items, count: " + mMedicines.size());
         }
     }

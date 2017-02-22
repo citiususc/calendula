@@ -75,6 +75,7 @@ public class CalendulaApp extends Application {
     public static boolean disableReceivers = false;
     private static boolean isOpen;
     private static EventBus eventBus = EventBus.getDefault();
+    private static Context mContext;
 
     public static String activePatientAuth(Context ctx) {
         Long id = DB.patients().getActive(ctx).id();
@@ -96,6 +97,10 @@ public class CalendulaApp extends Application {
 
     public static void open(boolean isOpen) {
         CalendulaApp.isOpen = isOpen;
+    }
+
+    public static Context getContext() {
+        return mContext;
     }
 
     public void exportDatabase(Context context, String databaseName, File out) {
@@ -133,6 +138,7 @@ public class CalendulaApp extends Application {
         Log.d(TAG, "Application started");
         //load settings
         final Context applicationContext = getApplicationContext();
+        mContext = applicationContext;
         try {
             Settings.instance().load(applicationContext);
         } catch (Exception e) {
