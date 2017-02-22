@@ -21,10 +21,13 @@ package es.usc.citius.servando.calendula.util.medicine;
 import android.support.annotation.StringRes;
 
 import java.util.Comparator;
+import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 
 /**
@@ -34,7 +37,8 @@ public class MedicineSortUtil {
 
     public enum MedSortType {
         NAME(R.string.sort_by_name, new MedicineNameComparator()),
-        PRESENTATION(R.string.sort_by_presentation, new MedicinePresentationComparator());
+        PRESENTATION(R.string.sort_by_presentation, new MedicinePresentationComparator()),
+        ALERTS(R.string.sort_by_alerts, new MedicineAlertComparator());
 
         private int displayName;
         private Comparator<Medicine> comparator;
@@ -68,6 +72,19 @@ public class MedicineSortUtil {
             final Presentation p1 = o1.presentation();
             final Presentation p2 = o2.presentation();
             return Integer.valueOf(p1.ordinal()).compareTo(p2.ordinal());
+        }
+    }
+
+    private static class MedicineAlertComparator implements Comparator<Medicine> {
+
+        @Override
+        public int compare(Medicine o1, Medicine o2) {
+            final List<PatientAlert> a1 = DB.alerts().findByMedicineSortByLevel(o1);
+            final List<PatientAlert> a2 = DB.alerts().findByMedicineSortByLevel(o2);
+            if (a1.size() == 0 || a2.size() == 0) {
+                return Integer.valueOf(a2.size()).compareTo(a1.size());
+            }
+            return Integer.valueOf(a2.get(0).getLevel()).compareTo(a1.get(0).getLevel());
         }
     }
 
