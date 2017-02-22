@@ -321,6 +321,8 @@ public class MedicinesListFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            final MedSortType sortType = (MedSortType) sortSpinner.getSelectedItem();
+            Collections.sort(mMedicines, sortType.comparator());
             updateViewVisibility();
             updateAdapterItems();
             Log.d(TAG, "Reloaded items, count: " + mMedicines.size());
