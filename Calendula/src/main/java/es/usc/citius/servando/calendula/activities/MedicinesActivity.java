@@ -853,7 +853,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                         String minSearch = search.substring(0, MIN_SEARCH_LEN);
                         int index = lowerName.indexOf(minSearch);
                         if (index >= 0) {
-                            nameView.setText(Strings.getHighlighted(name, index, Math.min(index + searchLength, name.length()), hColor));
+                            nameView.setText(Strings.getHighlighted(name, index, Math.min(index + searchLength, name.length()-1), hColor));
                         } else {
                             nameView.setText(Strings.toProperCase(name));
                         }
