@@ -422,4 +422,14 @@ Se escolles non facelo, algunha información das túas medicinas pode perderse."
 <string name="message_no_internet_error">"Non está dispoñible ningunha conexión a Internet! Por favor, establece unha conexión e inténtao de novo."</string>
 <string name="action_edit">"Editar"</string>
 <string name="injections">"Inxeccións"</string>
+<string name="title_reset_stock">"Reiniciar stock?"</string>
+<string name="message_reset_stock">"A información de stock para %1$s será reiniciada ao valor por defecto."</string>
+<string name="reset">"Reiniciar"</string>
+<string name="edit_medicine">"Editar medicamento"</string>
+<string name="sort_by">"Ordenar por:"</string>
+<string name="sort_by_default">"Por defecto"</string>
+<string name="sort_by_name">"Nome"</string>
+<string name="sort_by_presentation">"Presentación"</string>
+<string name="action_sort">"Ordenar"</string>
+<string name="sort_by_alerts">"Alertas"</string>
 </resources>

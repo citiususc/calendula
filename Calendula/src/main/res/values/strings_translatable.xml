@@ -423,14 +423,14 @@ If you choose not to download it, some of your medicines' information may be los
 <string name="message_no_internet_error">"No internet connection available! Please establish a connection and try again."</string>
 <string name="action_edit">"Edit"</string>
 <string name="injections">"Injections"</string>
-    <string name="title_reset_stock">Reset stock?</string>
-    <string name="message_reset_stock">"The stock information for %1$s will reset to the default value."</string>
-    <string name="reset">Reset</string>
-    <string name="edit_medicine">Edit medicine</string>
-    <string name="sort_by">Sort by:</string>
-    <string name="sort_by_default">Default</string>
-    <string name="sort_by_name">Name</string>
-    <string name="sort_by_presentation">Presentation</string>
-    <string name="action_sort">Sort</string>
-    <string name="sort_by_alerts">Alerts</string>
+<string name="title_reset_stock">"Reset stock?"</string>
+<string name="message_reset_stock">"The stock information for %1$s will reset to the default value."</string>
+<string name="reset">"Reset"</string>
+<string name="edit_medicine">"Edit medicine"</string>
+<string name="sort_by">"Sort by:"</string>
+<string name="sort_by_default">"Default"</string>
+<string name="sort_by_name">"Name"</string>
+<string name="sort_by_presentation">"Presentation"</string>
+<string name="action_sort">"Sort"</string>
+<string name="sort_by_alerts">"Alerts"</string>
 </resources>

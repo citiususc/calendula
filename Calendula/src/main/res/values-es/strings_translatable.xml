@@ -425,4 +425,14 @@ Si eliges no descargarla, puede perderse alguna información de tus medicamentos
 <string name="message_no_internet_error">"¡No hay conexión a Internet! Por favor, establece una conexión e inténtalo de nuevo."</string>
 <string name="action_edit">"Editar"</string>
 <string name="injections">"Inyecciones"</string>
+<string name="title_reset_stock">"¿Reiniciar stock?"</string>
+<string name="message_reset_stock">"La información de stock para %1$s será reiniciada."</string>
+<string name="reset">"Reiniciar"</string>
+<string name="edit_medicine">"Editar medicamento"</string>
+<string name="sort_by">"Ordenar por:"</string>
+<string name="sort_by_default">"Por defecto"</string>
+<string name="sort_by_name">"Nombre"</string>
+<string name="sort_by_presentation">"Presentación"</string>
+<string name="action_sort">"Ordenar"</string>
+<string name="sort_by_alerts">"Alertas"</string>
 </resources>
