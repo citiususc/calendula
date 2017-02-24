@@ -32,6 +32,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -83,6 +84,8 @@ public class MedicinesListFragment extends Fragment {
     View sortLayout;
     @BindView(R.id.medicine_sort_spinner)
     AppCompatSpinner sortSpinner;
+    @BindView(R.id.med_list_container)
+    View medListContainer;
 
     FastItemAdapter<MedicineItem> adapter;
     Handler handler;
@@ -96,6 +99,15 @@ public class MedicinesListFragment extends Fragment {
         mMedicines = DB.medicines().findAllForActivePatient(getContext());
         setupRecyclerView();
         setupSortSpinner();
+        medListContainer.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (!isSortCollapsed()) {
+                    toggleSort();
+                }
+                return false;
+            }
+        });
         updateViewVisibility();
         return rootView;
     }
@@ -162,8 +174,8 @@ public class MedicinesListFragment extends Fragment {
     }
 
     public void toggleSort() {
-        final int height = sortLayout.getHeight();
-        if (height == 0) {
+        Log.d(TAG, "toggleSort() called");
+        if (isSortCollapsed()) {
             int targetHeight = (int) getResources().getDimension(R.dimen.sort_bar_height);
             CollapseExpandAnimator.expand(sortLayout, 100, targetHeight);
         } else {
@@ -211,6 +223,12 @@ public class MedicinesListFragment extends Fragment {
                 })
                 .show();
 
+    }
+
+    private boolean isSortCollapsed() {
+        final boolean collapsed = sortLayout.getLayoutParams().height == 0;
+        Log.d(TAG, "isSortCollapsed() returned: " + collapsed);
+        return collapsed;
     }
 
     private void setupSortSpinner() {
@@ -280,6 +298,15 @@ public class MedicinesListFragment extends Fragment {
         });
 
         recyclerView.setAdapter(adapter);
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (!isSortCollapsed()) {
+                    toggleSort();
+                }
+                return false;
+            }
+        });
     }
 
     private void updateViewVisibility() {
