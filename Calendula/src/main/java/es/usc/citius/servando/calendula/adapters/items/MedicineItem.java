@@ -117,6 +117,7 @@ public class MedicineItem extends AbstractItem<MedicineItem, MedicineItem.Medici
         holder.icon.setImageDrawable(null);
         holder.name.setText(null);
         holder.stockInfo.setText(null);
+        holder.stockInfo.setVisibility(View.GONE);
         holder.alertIcon.setVisibility(View.GONE);
         super.unbindView(holder);
     }
