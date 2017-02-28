@@ -47,4 +47,8 @@ public enum HomePages {
         this.title = title;
         this.icon = icon;
     }
+
+    public static HomePages getPage(final int position) throws IndexOutOfBoundsException{
+        return values()[position];
+    }
 }

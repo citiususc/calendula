@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
+import android.support.annotation.MenuRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
@@ -88,6 +89,12 @@ public class HomePagerActivity extends CalendulaActivity implements
 
     public static final int REQ_CODE_EXTERNAL_STORAGE = 10;
     private static final String TAG = "HomePagerActivity";
+
+    @MenuRes
+    private static final int[] MENU_ITEMS = {
+            R.id.action_sort, R.id.action_expand, R.id.action_calendar, R.id.action_schedules_help
+    };
+
     public AppBarLayout appBarLayout;
     CollapsingToolbarLayout toolbarLayout;
     HomeProfileMgr homeProfileMgr;
@@ -100,8 +107,6 @@ public class HomePagerActivity extends CalendulaActivity implements
 
     //menu items
     MenuItem expandItem;
-    MenuItem helpItem;
-    MenuItem sortItem;
 
     boolean appBarLayoutExpanded = true;
     boolean active = false;
@@ -139,36 +144,37 @@ public class HomePagerActivity extends CalendulaActivity implements
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         expandItem = menu.findItem(R.id.action_expand);
-        helpItem = menu.findItem(R.id.action_schedules_help);
-        helpItem.setVisible(false);
-        sortItem = menu.findItem(R.id.action_sort);
-        sortItem.setIcon(IconUtils.icon(getApplicationContext(), CommunityMaterial.Icon.cmd_sort, R.color.white));
-        sortItem.setVisible(false);
+        menu.findItem(R.id.action_sort).setIcon(IconUtils.icon(getApplicationContext(), CommunityMaterial.Icon.cmd_sort, R.color.white));
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
-        int pageNum = mViewPager.getCurrentItem();
+        final int pageNum = mViewPager.getCurrentItem();
+        final HomePages page = HomePages.getPage(pageNum);
 
-        if (pageNum == HomePages.HOME.ordinal()) {
-            boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).isExpanded();
-            menu.findItem(R.id.action_expand).setVisible(true);
-            menu.findItem(R.id.action_expand).setIcon(!expanded ? icAgendaMore : icAgendaLess);
-        } else {
-            menu.findItem(R.id.action_expand).setVisible(false);
+        // hide all items first
+        for (int menuItem : MENU_ITEMS) {
+            menu.findItem(menuItem).setVisible(false);
         }
 
-        if (pageNum == HomePages.MEDICINES.ordinal() && CalendulaApp.isPharmaModeEnabled()) {
-            menu.findItem(R.id.action_calendar).setVisible(true);
-        } else {
-            menu.findItem(R.id.action_calendar).setVisible(false);
-        }
-        if (pageNum == HomePages.MEDICINES.ordinal()) {
-            menu.findItem(R.id.action_sort).setVisible(true);
-        } else {
-            menu.findItem(R.id.action_sort).setVisible(false);
+        // show items relevant to the current page
+        switch (page) {
+            case HOME:
+                final boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).isExpanded();
+                menu.findItem(R.id.action_expand).setVisible(true);
+                menu.findItem(R.id.action_expand).setIcon(!expanded ? icAgendaMore : icAgendaLess);
+                break;
+            case MEDICINES:
+                if (CalendulaApp.isPharmaModeEnabled()) {
+                    menu.findItem(R.id.action_calendar).setVisible(true);
+                }
+                menu.findItem(R.id.action_sort).setVisible(true);
+                break;
+            case SCHEDULES:
+                menu.findItem(R.id.action_schedules_help).setVisible(true);
+                break;
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -525,15 +531,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                     appBarLayout.setExpanded(false);
                 }
 
-                if (expandItem != null) {
-                    expandItem.setVisible(position == HomePages.HOME.ordinal());
-                }
-                if (helpItem != null) {
-                    helpItem.setVisible(position == HomePages.SCHEDULES.ordinal());
-                }
-                if (sortItem != null) {
-                    sortItem.setVisible(position == HomePages.MEDICINES.ordinal());
-                }
+                invalidateOptionsMenu();
             }
 
             @Override
