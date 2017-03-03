@@ -60,6 +60,8 @@ public class HomeProfileMgr {
 
 
     public static final int BG_COUNT = 8;
+    public static final String BG_IMAGE_PATTERN = "home_bg_%d.webp";
+
     private static HashMap<String, Integer> cache = new HashMap<>();
     int[] moodRes = new int[]{
             R.drawable.mood_1,
@@ -129,7 +131,7 @@ public class HomeProfileMgr {
     static String getBackgroundPath(Context ctx) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
         Integer idx = preferences.getInt("profile_background_idx", 1);
-        return "home_bg_" + idx + ".jpg";
+        return String.format(BG_IMAGE_PATTERN, idx);
     }
 
     public void init(View view, final Activity ctx) {
@@ -244,7 +246,7 @@ public class HomeProfileMgr {
         currentBgFileIdx = rand;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         preferences.edit().putInt("profile_background_idx", rand).apply();
-        return "home_bg_" + rand + ".jpg";
+        return String.format(BG_IMAGE_PATTERN, rand);
 
     }
 
