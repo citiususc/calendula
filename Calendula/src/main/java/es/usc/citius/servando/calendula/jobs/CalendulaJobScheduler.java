@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula.jobs;
 import android.util.Log;
 
 import com.evernote.android.job.JobManager;
-import com.evernote.android.job.JobRequest;
 
 /**
  * Created by alvaro.brey.vilas on 05/01/17.
@@ -49,11 +48,11 @@ public class CalendulaJobScheduler {
                 }
                 //and create one
                 Log.v(TAG, "Scheduling new job " + job.getTag());
-                doSchedule(job);
+                job.getRequest().schedule();
             }
         } else {
             Log.v(TAG, "Scheduling new job " + job.getTag());
-            doSchedule(job);
+            job.getRequest().schedule();
         }
 
     }
@@ -64,12 +63,4 @@ public class CalendulaJobScheduler {
         }
     }
 
-    private static int doSchedule(CalendulaJob job) {
-        return new JobRequest.Builder(job.getTag())
-                .setPeriodic(job.getInterval().getMillis())
-                .setRequiresDeviceIdle(job.requiresIdle())
-                .setPersisted(job.isPersisted())
-                .build()
-                .schedule();
-    }
 }

@@ -21,6 +21,8 @@ package es.usc.citius.servando.calendula.jobs;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.evernote.android.job.JobRequest;
+
 import org.joda.time.Duration;
 
 import es.usc.citius.servando.calendula.util.HtmlCacheManager;
@@ -39,25 +41,18 @@ public class PurgeCacheJob extends CalendulaJob {
     }
 
     @Override
-    public Duration getInterval() {
-        return Duration.standardDays(PERIOD_DAYS);
-    }
-
-    @Override
     public String getTag() {
         return TAG;
     }
 
     @Override
-    public boolean requiresIdle() {
-        return true;
+    public JobRequest getRequest() {
+        return new JobRequest.Builder(getTag())
+                .setPeriodic(Duration.standardDays(PERIOD_DAYS).getMillis())
+                .setRequiresDeviceIdle(true)
+                .setPersisted(true)
+                .build();
     }
-
-    @Override
-    public boolean isPersisted() {
-        return true;
-    }
-
 
     @NonNull
     @Override

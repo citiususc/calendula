@@ -19,6 +19,7 @@
 package es.usc.citius.servando.calendula.jobs;
 
 import com.evernote.android.job.Job;
+import com.evernote.android.job.JobRequest;
 
 import org.joda.time.Duration;
 
@@ -29,31 +30,11 @@ import org.joda.time.Duration;
 public abstract class CalendulaJob extends Job {
 
     /**
-     * Interval with wich the job will repeat.
-     *
-     * @return the interval
-     */
-    public abstract Duration getInterval();
-
-    /**
      * Identifier tag for the job. Remember it should be added in CalendulaJobCreator as well.
      *
      * @return the tag
      */
     public abstract String getTag();
-
-    /**
-     * Return <code>true</code> if the job should only be executed when the device is idle.
-     *
-     * @return whether the job requires idle device
-     */
-    public abstract boolean requiresIdle();
-
-
-    /**
-     * @return whether the job should persist across reboots/app restarts
-     */
-    public abstract boolean isPersisted();
 
     /**
      * If <code>true</code>, there can only be a copy of this job scheduled at a given time.
@@ -71,10 +52,17 @@ public abstract class CalendulaJob extends Job {
      * <p>
      * If <code>isUnique</code> is <code>false</code>, this value is ignored.
      *
-     * @return
+     * @return the value
      */
     public boolean shouldOverwritePrevious() {
         return false;
     }
+
+
+    /**
+     * Returns a {@link JobRequest} with which to schedule the job.
+     * @return the request
+     */
+    public abstract JobRequest getRequest();
 
 }

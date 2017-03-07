@@ -26,6 +26,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.evernote.android.job.JobRequest;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 
 import org.joda.time.Duration;
@@ -40,7 +41,6 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
 /**
  * Created by alvaro.brey.vilas on 17/11/16.
  */
-
 public class CheckDatabaseUpdatesJob extends CalendulaJob {
 
     public final static String TAG = "CheckDatabaseUpdatesJob";
@@ -53,11 +53,6 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
     public CheckDatabaseUpdatesJob() {
     }
 
-    @Override
-    public Duration getInterval() {
-        return Duration.standardDays(PERIOD_DAYS);
-        //return Duration.standardMinutes(1L);
-    }
 
     @Override
     public String getTag() {
@@ -65,13 +60,11 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
     }
 
     @Override
-    public boolean requiresIdle() {
-        return false;
-    }
-
-    @Override
-    public boolean isPersisted() {
-        return true;
+    public JobRequest getRequest() {
+        return new JobRequest.Builder(getTag())
+                .setPeriodic(Duration.standardDays(PERIOD_DAYS).getMillis())
+                .setPersisted(true)
+                .build();
     }
 
     public boolean checkForUpdate(Context ctx) {
