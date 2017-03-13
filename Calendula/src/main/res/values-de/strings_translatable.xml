@@ -141,7 +141,6 @@ Danke."</string>
 <string name="schedule_repeat_type_everyday">"Täglich"</string>
 <string name="schedule_repeat_type_some_week_days">"Einige Tage pro Woche"</string>
 <string name="schedule_repeat_type_interval">"Intervall mässig"</string>
-<string name="schedule_repeat_frequency_hours">"Stunden"</string>
 <string name="schedule_repeat_frequency_days">"Tage"</string>
 <string name="schedule_repeat_frequency_weeks">"Wochen"</string>
 <string name="schedule_repeat_frequency_months">"Monate"</string>

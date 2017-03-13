@@ -57,7 +57,6 @@
     </string-array>
 
     <string-array name="schedule_repeat_frequency_units">
-        <item>@string/schedule_repeat_frequency_hours</item>
         <item>@string/schedule_repeat_frequency_days</item>
         <item>@string/schedule_repeat_frequency_weeks</item>
         <item>@string/schedule_repeat_frequency_months</item>

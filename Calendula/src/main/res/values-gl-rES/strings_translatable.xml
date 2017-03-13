@@ -182,7 +182,6 @@ Por favor, le con con calma as instruccións de uso ou consulta ó teu farmacéu
 <string name="schedule_repeat_type_everyday">"Todos os días"</string>
 <string name="schedule_repeat_type_some_week_days">"Algúns días da semana"</string>
 <string name="schedule_repeat_type_interval">"Intervalo"</string>
-<string name="schedule_repeat_frequency_hours">"horas"</string>
 <string name="schedule_repeat_frequency_days">"días"</string>
 <string name="schedule_repeat_frequency_weeks">"semanas"</string>
 <string name="schedule_repeat_frequency_months">"meses"</string>

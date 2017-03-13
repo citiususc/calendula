@@ -182,8 +182,7 @@ Please carefully read the leaflet or ask your pharmacist before you get behind t
 <string name="schedule_repeat_type_everyday">"Every day"</string>
 <string name="schedule_repeat_type_some_week_days">"Some week days"</string>
 <string name="schedule_repeat_type_interval">"Interval"</string>
-<string name="schedule_repeat_frequency_hours">"hours"</string>
-<string name="schedule_repeat_frequency_days">"days"</string>
+    <string name="schedule_repeat_frequency_days">"days"</string>
 <string name="schedule_repeat_frequency_weeks">"weeks"</string>
 <string name="schedule_repeat_frequency_months">"months"</string>
 <string name="summary_show_calendar">"Show calendar"</string>
