@@ -331,7 +331,6 @@
     </string-array>
 
     <string-array name="schedule_repeat_frequency_units">
-        <item>Stunden</item>
         <item>Tage</item>
         <item>Wochen</item>
         <item>Monate</item>
