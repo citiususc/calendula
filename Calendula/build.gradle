@@ -57,11 +57,11 @@ def getDate() {
 }
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion 25
     buildToolsVersion '25'
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionCode 29
         versionName "2.5-SNAPSHOT"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -138,14 +138,14 @@ dependencies {
     compile 'com.github.amlcurran.showcaseview:library:5.0.0'
 
     // support
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:cardview-v7:24.2.1'
-    compile 'com.android.support:recyclerview-v7:24.2.1'
-    compile 'com.android.support:palette-v7:24.2.1'
-    compile 'com.android.support:support-v4:24.2.1'
-    compile 'com.android.support:design:24.2.1'
-    compile 'com.android.support:support-annotations:25.0.1'
-    
+    compile "com.android.support:appcompat-v7:$libVersions.android.support"
+    compile "com.android.support:cardview-v7:$libVersions.android.support"
+    compile "com.android.support:recyclerview-v7:$libVersions.android.support"
+    compile "com.android.support:palette-v7:$libVersions.android.support"
+    compile "com.android.support:support-v4:$libVersions.android.support"
+    compile "com.android.support:design:$libVersions.android.support"
+    compile "com.android.support:support-annotations:$libVersions.android.support"
+
     // view/resource binding
     compile 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
@@ -181,20 +181,19 @@ dependencies {
     // ormlite
     compile 'com.j256.ormlite:ormlite-android:4.45'
 
+    // testing support, to avoid version problems
+    androidTestCompile "com.android.support:appcompat-v7:$libVersions.android.support"
+    androidTestCompile "com.android.support:recyclerview-v7:$libVersions.android.support"
+    androidTestCompile "com.android.support:support-v4:$libVersions.android.support"
+    androidTestCompile "com.android.support:design:$libVersions.android.support"
+    androidTestCompile "com.android.support:support-annotations:$libVersions.android.support"
+
     // testing
-//    androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
-    androidTestCompile 'com.android.support.test:rules:0.5'
     androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support:support-annotations:25.0.1'
-    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.2') {
-        exclude group: 'com.android.support', module: 'appcompat-v7'
-        exclude group: 'com.android.support', module: 'support-v4'
-        exclude module: 'design'
-        exclude module: 'support-annotations'
-        exclude module: 'recyclerview-v7'
-        exclude module: 'appcompat-v7'
-    }
+    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:1.9.5"
 
