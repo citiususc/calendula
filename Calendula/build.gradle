@@ -241,4 +241,8 @@ dependencies {
     // gif imageview
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
 
+    // memory leak debugging
+    compile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+
 }

@@ -25,6 +25,8 @@ import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.squareup.leakcanary.LeakCanary;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -135,6 +137,14 @@ public class CalendulaApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (LeakCanary.isInAnalyzerProcess(CalendulaApp.this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            return;
+        }
+        //initialize LeakCanary
+        LeakCanary.install(CalendulaApp.this);
+
         Log.d(TAG, "Application started");
         //load settings
         final Context applicationContext = getApplicationContext();
