@@ -50,6 +50,7 @@ import java.util.List;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.HomePagerActivity;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.adapters.HomePages;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.modules.modules.AllergiesModule;
@@ -148,13 +149,13 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
                         .withIdentifier(PATIENTS),
                 new DividerDrawerItem(),
                 new PrimaryDrawerItem()
-                        .withName(R.string.title_activity_routines)
-                        .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_alarm, R.color.black).alpha(110))
-                        .withIdentifier(ROUTINES),
-                new PrimaryDrawerItem()
                         .withName(R.string.title_activity_medicines)
                         .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_pill, R.color.black).alpha(110))
                         .withIdentifier(MEDICINES),
+                new PrimaryDrawerItem()
+                        .withName(R.string.title_activity_routines)
+                        .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_alarm, R.color.black).alpha(110))
+                        .withIdentifier(ROUTINES),
                 new PrimaryDrawerItem()
                         .withName(R.string.title_activity_schedules)
                         .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_calendar, R.color.black).alpha(110))
@@ -209,16 +210,16 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
 
         switch (identifier) {
             case HOME:
-                home.showPagerItem(0, false);
+                home.showPagerItem(HomePages.HOME.ordinal(), false);
                 break;
             case ROUTINES:
-                home.showPagerItem(1, false);
+                home.showPagerItem(HomePages.ROUTINES.ordinal(), false);
                 break;
             case MEDICINES:
-                home.showPagerItem(2, false);
+                home.showPagerItem(HomePages.MEDICINES.ordinal(), false);
                 break;
             case SCHEDULES:
-                home.showPagerItem(3, false);
+                home.showPagerItem(HomePages.SCHEDULES.ordinal(), false);
                 break;
             case CALENDAR:
                 launchActivity(new Intent(home, CalendarActivity.class));
