@@ -97,30 +97,32 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
     private static final String TAG = "SettingsActivity";
-    static Context ctx;
-    static Activity activity;
-    static Context appCtx;
+
+
     static String lastValidDatabase;
     static String NONE;
     static String SETTING_UP;
     static boolean settingUp = false;
+
+    private SettingsActivity thisActivity;
+
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
      */
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
+    private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(final Preference preference, final Object value) {
             final String stringValue = value.toString();
 
             if (preference instanceof es.usc.citius.servando.calendula.util.RingtonePreference) {
                 String p = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-                if (PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(activity, p)) {
+                if (PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(thisActivity, p)) {
                     preference.setSummary("");
                 } else {
                     Uri ringtoneUri = Uri.parse(stringValue);
-                    Ringtone ringtone = RingtoneManager.getRingtone(ctx, ringtoneUri);
-                    String name = ringtone != null ? ringtone.getTitle(ctx) : ctx.getString(R.string.pref_notification_tone_sum);
+                    Ringtone ringtone = RingtoneManager.getRingtone(thisActivity, ringtoneUri);
+                    String name = ringtone != null ? ringtone.getTitle(thisActivity) : thisActivity.getString(R.string.pref_notification_tone_sum);
                     preference.setSummary(name);
                 }
 
@@ -164,13 +166,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     };
     BroadcastReceiver onDBSetupComplete;
 
-    static boolean onUpdatePrescriptionsDatabasePreference(final ListPreference preference, final String stringValue) {
+    boolean onUpdatePrescriptionsDatabasePreference(final ListPreference preference, final String stringValue) {
         Log.d(TAG, "New value: " + stringValue);
         if (!settingUp && !stringValue.equals(lastValidDatabase) && !NONE.equalsIgnoreCase(stringValue) && !SETTING_UP.equals(stringValue)) {
-            DownloadDatabaseHelper.instance().showDownloadDialog(ctx, stringValue, new DownloadDatabaseHelper.DownloadDatabaseDialogCallback() {
+            DownloadDatabaseHelper.instance().showDownloadDialog(thisActivity, stringValue, new DownloadDatabaseHelper.DownloadDatabaseDialogCallback() {
                 @Override
                 public void onDownloadAcceptedOrCancelled(boolean accepted) {
-                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
+                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(thisActivity);
                     SharedPreferences.Editor edit = settings.edit();
                     final String val = accepted ? SETTING_UP : lastValidDatabase;
                     edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB, val);
@@ -187,7 +189,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         } else if (stringValue.equalsIgnoreCase(NONE)) {
             try {
                 DBRegistry.instance().clear();
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ctx);
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(thisActivity);
                 SharedPreferences.Editor edit = settings.edit();
                 edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB, settings.getString(PreferenceKeys.DRUGDB_LAST_VALID, NONE));
                 //edit.putString(PreferenceKeys.DRUGDB_LAST_VALID, settings.getString(PreferenceKeys.DRUGDB_LAST_VALID, NONE));
@@ -231,7 +233,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
      *
      * @see #sBindPreferenceSummaryToValueListener
      */
-    private static void bindPreferenceSummaryToValue(Preference preference, boolean triggerListener) {
+    private void bindPreferenceSummaryToValue(Preference preference, boolean triggerListener) {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
@@ -351,10 +353,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         root.addView(toolbar, 0); // insert at top
 
-        activity = this;
-        ctx = getBaseContext();
-        ctx = SettingsActivity.this;
-        appCtx = getApplicationContext();
+        thisActivity = this;
+
         setupSimplePreferencesScreen();
 
         if (getIntent() != null && getIntent().getBooleanExtra("show_database_dialog", false)) {
@@ -515,9 +515,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private boolean checkPreferenceAskForPermission(Object o, int reqCode) {
         boolean val = (boolean) o;
         String p = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-        if (val && PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(activity, p)) {
-            if (PermissionUtils.shouldAskForPermission(activity, p))
-                PermissionUtils.requestPermissions(activity, new String[]{p}, reqCode);
+        if (val && PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(thisActivity, p)) {
+            if (PermissionUtils.shouldAskForPermission(thisActivity, p))
+                PermissionUtils.requestPermissions(thisActivity, new String[]{p}, reqCode);
             else
                 showStupidUserDialog();
             return false;
@@ -527,13 +527,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     private void showStupidUserDialog() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(thisActivity);
         // "Remove " + m.name() + "?"
         builder.setMessage(getString(R.string.permission_dialog_go_to_settings))
                 .setCancelable(true)
                 .setPositiveButton(getString(R.string.permission_dialog_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        PermissionUtils.goToAppSettings(activity);
+                        PermissionUtils.goToAppSettings(thisActivity);
                     }
                 })
                 .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
