@@ -66,6 +66,7 @@ android {
         versionName "2.5-SNAPSHOT"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         applicationId "es.usc.citius.servando.calendula"
+        multiDexEnabled true
     }
 
     packagingOptions {
