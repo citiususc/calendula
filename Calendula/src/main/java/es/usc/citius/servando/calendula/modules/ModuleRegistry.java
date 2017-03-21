@@ -29,6 +29,7 @@ import es.usc.citius.servando.calendula.modules.modules.AllergiesModule;
 import es.usc.citius.servando.calendula.modules.modules.BaseModule;
 import es.usc.citius.servando.calendula.modules.modules.PharmacyModule;
 import es.usc.citius.servando.calendula.modules.modules.StockModule;
+import es.usc.citius.servando.calendula.modules.modules.TestDataModule;
 
 /**
  * Created by alvaro.brey.vilas on 30/11/16.
@@ -79,6 +80,7 @@ public class ModuleRegistry {
                 STABLE_MODULES,
                 PharmacyModule.class,
                 AllergiesModule.class,
-                StockModule.class);
+                StockModule.class,
+                TestDataModule.class);
     }
 }

@@ -57,6 +57,7 @@ public class Schedule {
     public static final int SCHEDULE_TYPE_INTERVAL = 2;
     public static final int SCHEDULE_TYPE_HOURLY = 4;
     public static final int SCHEDULE_TYPE_CYCLE = 5;
+
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_MEDICINE = "Medicine";
     public static final String COLUMN_DAYS = "Days";
@@ -69,6 +70,7 @@ public class Schedule {
     public static final String COLUMN_SCANNED = "Scanned";
     public static final String COLUMN_PATIENT = "Patient";
     public static final String COLUMN_STATE = "State";
+
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
     @DatabaseField(columnName = COLUMN_MEDICINE, foreign = true, foreignAutoRefresh = true)
