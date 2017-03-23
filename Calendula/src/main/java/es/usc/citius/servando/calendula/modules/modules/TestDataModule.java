@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.activities.PatientDetailActivity;
 import es.usc.citius.servando.calendula.database.DB;
@@ -106,7 +107,7 @@ public class TestDataModule extends CalendulaModule {
     }
 
     @Override
-    protected void onApplicationStartup(Context ctx) {
+    protected void onApplicationStartup(final Context ctx) {
         // generate some default data to test UI and the likes
 
         final boolean testDataGenerated = PreferenceUtils.instance().preferences().getBoolean(KEY_TEST_DATA_GENERATED, false);
@@ -115,17 +116,23 @@ public class TestDataModule extends CalendulaModule {
         } else {
             Log.d(TAG, "onApplicationStartup: Generating test data");
 
-            // patients
-            final List<Patient> patients = generatePatients(ctx);
+            DB.transaction(new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    // patients
+                    final List<Patient> patients = generatePatients(ctx);
 
-            // medicines
-            final Map<Patient, List<Medicine>> medicines = generateMedicines(patients);
+                    // medicines
+                    final Map<Patient, List<Medicine>> medicines = generateMedicines(patients);
 
-            // routines
-            final Map<Patient, List<Routine>> routines = generateRoutines(patients);
+                    // routines
+                    final Map<Patient, List<Routine>> routines = generateRoutines(patients);
 
-            // schedules !
-            final Map<Patient, List<Schedule>> schedules = generateSchedules(patients, medicines, routines, ctx);
+                    // schedules !
+                    final Map<Patient, List<Schedule>> schedules = generateSchedules(patients, medicines, routines, ctx);
+                    return null;
+                }
+            });
 
             Log.d(TAG, "onApplicationStartup: Test data generation finished");
             PreferenceUtils.instance().preferences().edit().putBoolean(KEY_TEST_DATA_GENERATED, true).apply();
