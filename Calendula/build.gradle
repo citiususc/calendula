@@ -119,6 +119,9 @@ android {
         product {
 
         }
+        ci {
+
+        }
     }
 
     applicationVariants.all { variant ->

@@ -62,7 +62,7 @@ public class ModuleRegistry {
     }
 
     public enum ModuleConfig {
-        PRODUCT(ModuleLists.STABLE_MODULES), DEVELOP(ModuleLists.UNSTABLE_MODULES);
+        PRODUCT(ModuleLists.STABLE_MODULES), CI(ModuleLists.UNSTABLE_MODULES), DEVELOP(ModuleLists.BLEEDING_MODULES);
 
         private Class<?>[] modList;
 
@@ -80,7 +80,10 @@ public class ModuleRegistry {
                 STABLE_MODULES,
                 PharmacyModule.class,
                 AllergiesModule.class,
-                StockModule.class,
+                StockModule.class);
+
+        private static final Class<?>[] BLEEDING_MODULES = ArrayUtils.addAll(
+                UNSTABLE_MODULES,
                 TestDataModule.class);
     }
 }

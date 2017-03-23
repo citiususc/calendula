@@ -20,9 +20,9 @@ android:
     - extra-android-m2repository
 
 script:
-  - ./gradlew assembleDevelopDebug
+  - ./gradlew assembleCiDebug
   - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
   - emulator -avd test -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
-  - ./gradlew connectedDevelopDebugAndroidTest
+  - ./gradlew connectedCiDebugAndroidTest
