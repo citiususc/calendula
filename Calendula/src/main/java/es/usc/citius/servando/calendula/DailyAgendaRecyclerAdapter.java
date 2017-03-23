@@ -513,7 +513,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                     if (stub.isRoutine) {
                         AlarmScheduler.instance().onIntakeConfirmAll(DB.routines().findById(stub.id), stub.date, context);
                     } else {
-                        AlarmScheduler.instance().onIntakeConfirmAll(DB.routines().findById(stub.id), stub.date, context);
+                        AlarmScheduler.instance().onIntakeConfirmAll(DB.schedules().findById(stub.id), stub.time, stub.date, context);
                     }
                     updateItem(getAdapterPosition());
                 }
