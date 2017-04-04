@@ -167,9 +167,6 @@ public class HomePagerActivity extends CalendulaActivity implements
                 menu.findItem(R.id.action_expand).setIcon(!expanded ? icAgendaMore : icAgendaLess);
                 break;
             case MEDICINES:
-                if (CalendulaApp.isPharmaModeEnabled()) {
-                    menu.findItem(R.id.action_calendar).setVisible(true);
-                }
                 menu.findItem(R.id.action_sort).setVisible(true);
                 break;
             case SCHEDULES:
