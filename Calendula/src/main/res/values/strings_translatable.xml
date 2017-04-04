@@ -182,7 +182,7 @@ Please carefully read the leaflet or ask your pharmacist before you get behind t
 <string name="schedule_repeat_type_everyday">"Every day"</string>
 <string name="schedule_repeat_type_some_week_days">"Some week days"</string>
 <string name="schedule_repeat_type_interval">"Interval"</string>
-    <string name="schedule_repeat_frequency_days">"days"</string>
+<string name="schedule_repeat_frequency_days">"days"</string>
 <string name="schedule_repeat_frequency_weeks">"weeks"</string>
 <string name="schedule_repeat_frequency_months">"months"</string>
 <string name="summary_show_calendar">"Show calendar"</string>
@@ -225,7 +225,7 @@ Routines are times when you need to take meds, like breakfast or dinner. You can
 Add your meds to the kit, and you will have easy access to leaflets and warnings."</string>
 <string name="schedules_list_empty_text">"There are no schedules yet.
 
-Add your schedules here and let we just notify you!"</string>
+Add your schedules here and let us just notify you!"</string>
 <string name="about_description"><![CDATA[
 <br/><br/>
 Calendula is developed by the Research Centre for Information Technologies of the USC (<a href=\'http://citius.usc.es\'>CITIUS</a>)
