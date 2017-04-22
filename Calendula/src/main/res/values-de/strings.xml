@@ -27,11 +27,11 @@
     <string name="action_remove_all">Alles entfernen</string>
 
     <string name="action_exit">Exit</string>
-    <string name="home_menu_routines">ROUTINEN</string>
-    <string name="home_menu_medicines">MEDIKAMENTE</string>
+    <string name="home_menu_routines">Routinen</string>
+    <string name="home_menu_medicines">Medikamente</string>
     <string name="home_menu_schedules">Einnahmepläne</string>
-    <string name="home_menu_pharmacies">APOTHEKEN</string>
-    <string name="home_menu_plantrip">REISEPLANUNG</string>
+    <string name="home_menu_pharmacies">Apotheken</string>
+    <string name="home_menu_plantrip">Reiseplanung</string>
     <string name="action_bar_title_today">Heute</string>
     <string name="action_bar_title_home">Home</string>
     <string name="medicine">Medikamente</string>
@@ -44,7 +44,7 @@
     </string-array>
 
     <string name="drawer_top_option">Oben</string>
-    <string name="drawer_menu_option">Menu</string>
+    <string name="drawer_menu_option">Menü</string>
     <string name="drawer_bottom_option">Unten</string>
     <string name="drawer_services_option">Werkzeuge</string>
     <string name="drawer_help_option">Tour</string>
@@ -86,14 +86,14 @@
     <string name="add_medicine_button">MEDIKAMENT HINZUFÜGEN</string>
     <string name="no_stock_info_msg">Keine Bestandsinformation</string>
     <string name="title_activity_schedules">Pläne</string>
-    <string name="prev">Vorhergehend</string>
+    <string name="prev">Zurück</string>
     <string name="next">Nächste(r)</string>
     <string name="delay">Verzögerung</string>
     <string name="done">Erledigt</string>
     <string name="cancel">Rückgängig</string>
     <string name="confirm">Bestätigen</string>
-    <string name="meds_time">Denken Sie daran Ihre Medikamente zu nehmen</string>
-    <string name="title_select_dose_dialog">Legen Sie Dosierung fest</string>
+    <string name="meds_time">Bitte an die Medikamenteneinnahme denken</string>
+    <string name="title_select_dose_dialog">Dosierung festlegen</string>
     <string name="doses_and_times">Zeiten und Dosierungen</string>
     <string name="schedule_repeat_days">Wiederholen</string>
 
@@ -108,29 +108,29 @@
     <string name="injections">Injektionen</string>
     <string name="pills">Tabletten</string>
     <string name="capsules">Kapseln</string>
-    <string name="inhaler">Inhalationen</string>
+    <string name="inhaler">Inhalator</string>
     <string name="drops">Tropfen</string>
     <string name="pomade">Creme</string>
     <string name="syrup">Sirup</string>
     <string name="spray">Spray</string>
-    <string name="patches">Aufnäher</string>
+    <string name="patches">Pflaster</string>
     <string name="unknown">Unbekannt</string>
-    <string name="effervescent">Brausetablette / -pulver</string>
+    <string name="effervescent">Brausetablette/-pulver</string>
     <string name="schedule">Plan</string>
-    <string name="schedule_type">Plan Typ</string>
+    <string name="schedule_type">Plantyp</string>
 
     <!-- Med presentation units -->
-    <string name="injections_units">Injektion</string>
-    <string name="pills_units">Tablette</string>
-    <string name="capsules_units">Kapsel</string>
-    <string name="inhaler_units">Inhalationsstoß</string>
-    <string name="spray_units">Spraystöße</string>
+    <string name="injections_units">Injektion(en)</string>
+    <string name="pills_units">Tablette(n)</string>
+    <string name="capsules_units">Kapsel(n)</string>
+    <string name="inhaler_units">Inhalationsstoß/-stöße</string>
+    <string name="spray_units">Spraystoß/-stöße</string>
     <string name="drops_units">Tropfen</string>
-    <string name="pomade_units">Anwendungen</string>
+    <string name="pomade_units">Anwendung(en)</string>
     <string name="syrup_units">ml</string>
     <string name="patches_units">Pflaster</string>
-    <string name="unknown_units">Einheiten</string>
-    <string name="effervescent_units">Päckchen</string>
+    <string name="unknown_units">Einheit(en)</string>
+    <string name="effervescent_units">Päckchen/Tablette(n)</string>
 
     <string name="never">Nie</string>
     <string name="every_day">Jeden Tag</string>
@@ -185,10 +185,10 @@
     <string name="title_activity_agenda_detail">AgendaDetailActivity</string>
 
 
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
-    <string name="splash_quote">Therapie Management leicht gemacht</string>
-    <string name="toolbar_menu_title">Menu</string>
+    <string name="drawer_open">Menü öffnen</string>
+    <string name="drawer_close">Menü schließen</string>
+    <string name="splash_quote">Therapiemanagement leicht gemacht</string>
+    <string name="toolbar_menu_title">Menü</string>
     <string name="schedule_timetable_time_column">ZEIT</string>
     <string name="schedule_timetable_dose_column">DOSIERUNG</string>
     <string name="hourly_repeat_dose">Dosierung</string>
@@ -212,68 +212,68 @@
     <string name="schedule_day_selector_fr">FR</string>
     <string name="schedule_day_selector_sa">SA</string>
     <string name="schedule_day_selector_su">SO</string>
-    <string name="agenda_zoom_meds_time">Es ist Zeit Medikamente zu nehmen!</string>
-    <string name="create_schedule_unselected_med">Wählen Sie ein Medikament um einen Plan zu erstellen</string>
-    <string name="create_schedule_incomplete_items">Wählen Sie Routinen für alle Ihre Einnahmen</string>
-    <string name="create_schedule_incomplete_doses">Dosierungen müssen größer wie Null sein</string>
-    <string name="home_no_pending_meds_message">Es gibt keine ausstehenden Medikationen für heute</string>
-    <string name="work_in_progress">This feature will be available in future versions. Thanks you!</string>
-    <string name="medicine_created_message">Medizin erstellt!</string>
-    <string name="medicine_deleted_message">Medizin gelöscht!</string>
-    <string name="medicine_edited_message">Medizin aktualisiert!</string>
+    <string name="agenda_zoom_meds_time">Es ist Zeit, Medikamente zu nehmen!</string>
+    <string name="create_schedule_unselected_med">Medikament wählen, um einen Plan zu erstellen</string>
+    <string name="create_schedule_incomplete_items">Bitte alle Einnahmen mit Routinen verknüpfen</string>
+    <string name="create_schedule_incomplete_doses">Dosierungen müssen größer als Null sein</string>
+    <string name="home_no_pending_meds_message">Es gibt keine ausstehenden Einnahmen für heute</string>
+    <string name="work_in_progress">Dieses Feature ist zukünftigen Versionen vorbehalten.</string>
+    <string name="medicine_created_message">Medikament erstellt!</string>
+    <string name="medicine_deleted_message">Medikament gelöscht!</string>
+    <string name="medicine_edited_message">Medikament aktualisiert!</string>
 
     <string name="routine_created_message">Routine erstellt!</string>
     <string name="routine_deleted_message">Routine gelöscht!</string>
     <string name="routine_edited_message">Routine aktualisiert!</string>
     <string name="schedule_created_message">Plan erstellt!</string>
-    <string name="schedule_no_day_specified_message">Sie müssen mindestens einen Tag angeben</string>
-    <string name="cycle_period_cero_message">Die zyklische Einahme unde die Pause müssen größer Null sein</string>
-    <string name="reminder_delayed_message">Routine verzögert </string>
-    <string name="reminder_cancelled_message">Erinnerung rückgängig</string>
-    <string name="remove_routine_message_long">Die Routine %1$s hat assoziierte Pläne, die verloren gehen wenn Sie die Routine löschen. Wollen Sie trotzdem löschen?</string>
+    <string name="schedule_no_day_specified_message">Bitte mindestens einen Tag angeben</string>
+    <string name="cycle_period_cero_message">Die zyklische Einahme und die Pause müssen größer als Null sein</string>
+    <string name="reminder_delayed_message">Erinnerung verzögert</string>
+    <string name="reminder_cancelled_message">Erinnerung gelöscht</string>
+    <string name="remove_routine_message_long">Die Routine %1$s hat assoziierte Pläne, die verloren gehen, wenn die Routine gelöscht wird. Trotzdem fortfahren?</string>
     <string name="remove_routine_message_short">Routine %1$s entfernen?</string>
-    <string name="remove_medicine_message_short">Entfernen %1$s?</string>
+    <string name="remove_medicine_message_short">Entfernen von %1$s?</string>
     <string name="remove_routine_dialog_title">Routine entfernen</string>
 
     <string name="dialog_yes_option">Ja</string>
     <string name="dialog_no_option">Nein</string>
 
-    <string name="medicine_no_name_error_message">Bitte geben Sie einen Namen ein</string>
+    <string name="medicine_no_name_error_message">Bitte Namen eingeben</string>
     <string name="medicine_unselected">Noch nichts ausgewählt</string>
-    <string name="medicine_no_presentation_error_message">Bitte wählen Sie eine Präsentation</string>
+    <string name="medicine_no_presentation_error_message">Bitte eine Präsentation wählen</string>
 
     <!-- App Tutorial-->
-    <string name="tutorial_welcome_title">Willkommen zu Calendula!</string>
-    <string name="tutorial_welcome_text">Calendula wird Ihnen helfen Ihren Therapieplan zu erstellen. Ausstehende Medikationen für heute sehen Sie auf diesem Bildschirm.</string>
-    <string name="tutorial_homeinfo_title">Erkunden Sie!</string>
-    <string name="tutorial_homeinfo_text">Sie können alle Calendulafeatures durch das Menu erreichen. Die häufigsten Optionen können Sie auch durch nach rechts wischen erreichen!</string>
+    <string name="tutorial_welcome_title">Willkommen bei Calendula!</string>
+    <string name="tutorial_welcome_text">Calendula hilft bei der Erstellung des Terminplans. Ausstehende Einnahmen für heute werden auf diesem Bildschirm angezeigt.</string>
+    <string name="tutorial_homeinfo_title">Schauen Sie sich um!</string>
+    <string name="tutorial_homeinfo_text">Alle Features von Calendula können durch das Menü erreicht werden. Die gängigsten Optionen werden auch durch ein Wischen nach rechts angezeigt.</string>
     <string name="tutorial_routine_title">Gute Gewohnheiten</string>
-    <string name="tutorial_routine_text">Routinen erlauben es Ihnen die Medikamenteneinnahme mit Ihren täglichen Aktivitäten zu verbinden. Fügen Sie Ihre eigenen Routinen hinzu!</string>
-    <string name="tutorial_meds_title">Organisieren Sie Ihre Medikamente</string>
-    <string name="tutorial_meds_text">Behalten Sie die Übersicht über Ihre Medikamente durch Hinzufügen zum Medikamentensatz. Zukünftige Versionen werden ein verbessertes Bestandsmanagement haben!</string>
-    <string name="tutorial_schedule_title">Verwalten und organisieren Ihre Einnahmepläne!</string>
-    <string name="tutorial_schedule_text">Einnahmepläne erlauben uns Benachrichtigungen, wenn es für Sie Zeit ist  Ihre Medikamte zu nehmen. Fügen Sie Ihre Zeiten und Dosierungen hinzu und vergessen Sie keine Medikamenteneinnahme mehr!</string>
-    <string name="tutorial_next">Nächste</string>
+    <string name="tutorial_routine_text">Routinen dienen dazu, die Medikamenteneinnahme mit Alltagsaktivitäten bzw. Tageszeiten zu verbinden. Es können eigene Routinen hinzugefügt werden.</string>
+    <string name="tutorial_meds_title">Medikamente verwalten und organisieren</string>
+    <string name="tutorial_meds_text">Eigene Medikamente zur Verwaltung mit Calendula zum Medikamentenbestand hinzufügen. Zukünftige Versionen werden ein verbessertes Bestandsmanagement haben.</string>
+    <string name="tutorial_schedule_title">Einnahmepläne verwalten und organisieren</string>
+    <string name="tutorial_schedule_text">Das Einrichten von Einnahmeplänen ermöglicht die rechtzeitige Erinnerung an anstehende Medikamenteneinnahmen und deren Bestätigung.</string>
+    <string name="tutorial_next">Weiter</string>
     <string name="tutorial_understood">Verstanden</string>
-    <string name="tutorial_notifications_title">Überprüfen Sie Ihre eingenommmenen Medikamente!</string>
-    <string name="tutorial_notifications_text">Denken Sie daran Ihre Einnahme zu bestätigen oder Sie werden laufend erinnert. Sie können die Benachrichtigungseinstellungen im Optionsmenu ändern. </string>
+    <string name="tutorial_notifications_title">Bestätigung der Medikamenteneinnahme!</string>
+    <string name="tutorial_notifications_text">Wird die Einnahme nicht bestätigt, so erfolgen weiterhin Benachrichtigungen. Die Benachrichtigungseinstellungen können im Optionenmenü angepasst werden. </string>
 
-    <string name="notification_repeat_message">Der Alarm wird wiederholt um %1$s</string>
+    <string name="notification_repeat_message">Die Benachrichtigung wird wiederholt um %1$s</string>
     <string name="notification_cancel_now">Jetzt löschen</string>
-    <string name="notification_delay">Verzögern</string>
-    <string name="alarm_delayed_message">Alarm ist verzögert um %1$s Minuten</string>
+    <string name="notification_delay">Verschieben</string>
+    <string name="alarm_delayed_message">Alarm wird verschoben um %1$s Minuten</string>
 
     <string name="moods_dialog_title">Wie fühlen Sie sich?</string>
     <string-array name="moods">
         <item>sehr schlecht</item>
         <item>schlecht</item>
-        <item>indifferent</item>
+        <item>mittelmäßig</item>
         <item>gut</item>
         <item>sehr gut
 </item>
     </string-array>
 
-    <string name="search_med_hint">Suche…</string>
+    <string name="search_med_hint">Suche …</string>
     <string name="download_prospect_message">%1$s Beipackzettel wird jetzt heruntergeladen. Einmal heruntergeladen ist er auch ohne Internetverbindung verfügbar.</string>
     <string name="download_prospect_title">Beipackzettel herunterladen</string>
     <string name="download_prospect_not_available_message">Kein Beipackzettel für dieses Medikament verfügbar.</string>
@@ -282,21 +282,21 @@
     <string name="search_no_results_found">Keine Medikamente gefunden</string>
     <string name="pref_header_prescriptions">Medikamentensuche</string>
     <string name="pref_enable_prescriptions_db">Assistent aktivieren</string>
-    <string name="medicine_edit_name_hint">Hier schreiben…</string>
+    <string name="medicine_edit_name_hint">Hier schreiben …</string>
 
     <string name="enable_prescriptions_progress_message">Informationen über Medikamente werden erstellt. Dies nimmt wenige Sekunden in Anspruch.</string>
-    <string name="enable_prescriptions_dialog_message">Sie können einfach Medikamente hinzufügen und Beipackzettel ansehen durch Aktivierung des Suchassistenten. Sie können die Aktivierung auch später über das Menu vornehmen.</string>
+    <string name="enable_prescriptions_dialog_message">Durch Aktivierung des Suchassistenten können einfach Medikamente hinzugefügt und Beipackzettel angesehen werden. Die Aktivierung kann auch später über das Menü erfolgen.</string>
     <string name="enable_prescriptions_dialog_title">Suchassistent</string>
-    <string name="enable_prescriptions_finish_message">Sie können die Suche jetzt starten</string>
-    <string name="enable_prescriptions_dialog_yes">Aktivieren (Empfohlen)</string>
+    <string name="enable_prescriptions_finish_message">Die Suche kann jetzt gestartet werden</string>
+    <string name="enable_prescriptions_dialog_yes">Aktivieren (empfohlen)</string>
     <string name="enable_prescriptions_dialog_no">Abbrechen</string>
 
     <string name="prescriptions_download_complete">Der Beipackzettel ist jetzt verfügbar!</string>
 
 
-    <string name="driving_warning">Dieses Medikament kann Ihre Fahrtüchtigkeit beeinflussen. \n\nLesen Sie den Beipackzetel sorgfältig oder fragen Sie Ihren Arzt oder Apotheker. \n\nDanke.</string>
-    <string name="driving_warning_title">Seien Sie vorsichtig</string>
-    <string name="driving_warning_show_prospect">Lesen Sie den Beipackzettel</string>
+    <string name="driving_warning">Dieses Medikament kann Ihre Fahrtüchtigkeit beeinflussen. \n\nLesen Sie bitte den Beipackzettel sorgfältig oder fragen Sie Ihren Arzt oder Apotheker. \n\nDanke.</string>
+    <string name="driving_warning_title">Bitte vorsichtig sein</string>
+    <string name="driving_warning_show_prospect">Bitte den Beipackzettel lesen</string>
     <string name="driving_warning_gotit">Verstanden</string>
     <string name="repeat_every">Wiederhole alle</string>
     <string name="dialog_interval_title">Intervall</string>
@@ -307,20 +307,20 @@
     <string name="schedule_freq_days">Tage</string>
     <string name="schedule_freq_weeks">Wochen</string>
     <string name="schedule_freq_months">Monate</string>
-    <string name="label_schedule_repeat_today">Start</string>
+    <string name="label_schedule_repeat_today">Anfang</string>
     <string name="button_schedule_repeat_today">Heute</string>
-    <string name="label_schedule_repeat_until">Stop</string>
+    <string name="label_schedule_repeat_until">Ende</string>
     <string name="button_schedule_repeat_until">Nie</string>
-    <string name="schedule_limits_date_format">MMMM dd, YYYY</string>
-    <string name="schedule_week_days_connector">on</string>
-    <string name="schedules_stop_after">Stop nach %1$s Einnahmen</string>
+    <string name="schedule_limits_date_format">dd. MMMM YYYY</string>
+    <string name="schedule_week_days_connector">am</string>
+    <string name="schedules_stop_after">Ende nach %1$s Einnahmen</string>
     <string name="schedule_custom_rule_text">&lt;u> %1$s &lt;/u></string>
     <string name="schedule_repeat_period">Periode + Unterbrechung</string>
 
     <string-array name="schedule_repeat_types">
         <item>Jeden Tag</item>
-        <item>Einige Wochentage</item>
-        <item>Intervall</item>
+        <item>An manchen Tagen</item>
+        <item>Im Intervall</item>
         <!--<item>Customize</item>-->
     </string-array>
 
@@ -346,18 +346,18 @@
     <string name="every_weekday"></string>
     <string name="summary_show_calendar">Kalender anzeigen</string>
     <string name="hours">Stunden</string>
-    <string name="schedule_help_type">Erst einen Plantyp auswählen</string>
-    <string name="schedule_help_no_type_selected">Bitte wählen Sie einen Plantyp aus um dann einen Plan zu erstellen</string>
+    <string name="schedule_help_type">Bitte erst einen Plantyp auswählen</string>
+    <string name="schedule_help_no_type_selected">Bitte einen Plantyp auswählen, um anschließend einen Plan zu erstellen</string>
 
     <string name="schedule_type_routines_title">Verknüpft mit Routinen</string>
-    <string name="schedule_type_hourly_title">stündliches Intervall</string>
+    <string name="schedule_type_hourly_title">Stündliches Intervall</string>
     <string name="schedule_type_period_title">Perioden + Pausen</string>
-    <string name="schedule_type_common_periods">Übliche Zyklen</string>
+    <string name="schedule_type_common_periods">Gängige Zyklen</string>
 
 
-    <string name="schedule_type_routines_description">Ex: Alle 3 Tage  mit dem Frühstück Mittagessen Abendessen</string>
-    <string name="schedule_type_hourly_description">Ex: Alle 8 Stunden</string>
-    <string name="schedule_type_period_description">Ex: 21 Tage + 7 Pause</string>
+    <string name="schedule_type_routines_description">Beispiel: Alle drei Tage mit dem Frühstück/Mittagessen/Abendessen</string>
+    <string name="schedule_type_hourly_description">Beispiel: Alle acht Stunden</string>
+    <string name="schedule_type_period_description">Beispiel: 21 Tage + 7 Tage Pause</string>
 
     <string-array name="schedule_cycles">
         <item>21 + 7</item>
@@ -372,11 +372,11 @@
     </string-array>
     <string name="yearly_plain">Jährlich</string>
     <string name="schedule_help_cycle">Wiederholungszyklus einrichten (Einnahme + Unterbrechungen)</string>
-    <string name="schedule_help_duration">Sie können Anfang und Ende des Plans angeben. Ohne Angabe wird der Plan immer wiederholt.</string>
-    <string name="schedule_help_hourly">Bitte geben Sie den Wiederholungszeitraum, die Dosierung und den Zeitpunkt der ersten Einnahme an.</string>
-    <string name="schedule_help_repeat">Geben Sie an, an welchen Wochentagen eine Einnahme erfolgen soll. Bei täglicher Einnahme müssen Sie keine Änderungen vornehmen.</string>
-    <string name="schedule_help_timesbyday">Geben Sie an, wie häufig eine Einnahme pro Tag vorgesehen ist.</string>
-    <string name="schedule_help_timetable"> Jetzt verknüpfen jede Einnahme mit Ihren Routinen und geben die Dosierung jeder Einnahme an</string>
+    <string name="schedule_help_duration">Es können ein Anfang und Ende der Gültigkeit des Plans bestimmt werden. Ohne Angabe wird der Plan stets wiederholt.</string>
+    <string name="schedule_help_hourly">Bitte den Wiederholungszeitraum, die Dosierung und den Zeitpunkt der ersten Einnahme angeben.</string>
+    <string name="schedule_help_repeat">Bitte angeben, an welchen Wochentagen eine Einnahme erfolgen soll. Bei täglicher Einnahme müssen keine Änderungen vorgenommen werden.</string>
+    <string name="schedule_help_timesbyday">Bitte angeben, wie häufig eine Einnahme pro Tag vorgesehen ist.</string>
+    <string name="schedule_help_timetable"> Bitte jede Einnahme mit Routinen verknüpfen und die Dosierung jeder Einnahme angeben.</string>
 
     <string-array name="calendar_weekday_names">
         <item>NONE</item>
@@ -389,17 +389,28 @@
         <item>SA</item>
     </string-array>
 
+    <string name="title_activity_calendar">Aufstockkalender</string>
+    <string name="title_pickups_bottom_sheet">Neue Medikamente besorgen am %1$s</string>
+    <string name="pickup_interval">Bis %1$s</string>
+    <string name="pickup_date_format">dd. MMMM YYYY</string>
+
+    <string name="title_activity_confirm_schedules">Pläne bestätigen</string>
+    <string name="confirm_prescription_x_of_y">Rezept %1$s von %2$s</string>
+    <string name="recurrence_end_date"></string>
+    <string name="scan_prescriptions_title">Rezept scannen</string>
+    <string name="scan_qr">QR-Code scannen</string>
+    <string name="duration">Zeitraum</string>
 
     <string name="all_meds_taken">Alle Medikamente eingenommen!</string>
 
-    <string name="message_generic_pageloaderror">There was an error loading the page</string>
-    <string name="title_prospect_webview">Prospect view</string>
+    <string name="message_generic_pageloaderror">Beim Laden der Seite ist ein Fehler aufgetreten.</string>
+    <string name="title_prospect_webview">Merkblattansicht</string>
     <string name="title_activity_webview" translatable="false">WebViewActivity</string>
-    <string name="message_generic_pleasewait">Please wait for a few seconds…</string>
-    <string name="title_generic_loading">Loading</string>
-    <string name="message_prospect_loading">The leaflet will be ready soon…</string>
-    <string name="message_prospect_connection_error">The leaflet could not be loaded</string>
-    <string name="message_prospect_not_found_error">Sorry, but it there is no leaflet available for this med</string>
+    <string name="message_generic_pleasewait">Bitte einen Moment warten …</string>
+    <string name="title_generic_loading">Lade …</string>
+    <string name="message_prospect_loading">Das Merkblatt wird gleich fertig sein …</string>
+    <string name="message_prospect_connection_error">Das Merkblatt konnte nicht geladen werden</string>
+    <string name="message_prospect_not_found_error">Für dieses Medikament ist leider kein Merkblatt verfügbar</string>
 
 
 </resources>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2016 CITIUS - USC
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="intro_title">Willkommen bei Calendula!</string>
+    <string name="intro_description">Rechtzeitig die richtigen Medikamente in der korrekten Dosierung einzunehmen, ist nicht einfach. Diese App soll dabei helfen.</string>
+
+    <string name="intro_routines_title">Routinen</string>
+    <string name="intro_routines_text">
+        Als Routine wird die Verknüpfung der Medikamenteneinnahme mit regelmäßig stattfindenden Alltagsaktivitäten bzw. mit Zeitpunkten bezeichnet. Mit einer solchen Routine wiederum kann Calendula die Einnahme eines oder mehrerer Medikamente verbinden.
+    </string>
+
+    <string name="intro_meds_title">Medikamentenverwaltung</string>
+    <string name="intro_meds_text">
+        Mit der Medikamentenverwaltung können alle einzunehmenden Medikamente verwaltet und organisiert werden. Außerdem besteht die Möglichkeit, automatisch Merkblätter von der 
+        Agencia Española de Medicamentos y Productos Sanitarios, der spanischen Arzneimittelbehörde, zu beziehen. 
+    </string>
+
+    <string name="intro_schedules_title">Pläne</string>
+    <string name="intro_schedules_text">
+        Die Medikamentenpläne verknüpfen die Medikamenteneinahmen mit Routinen unter Berücksichtigung etwaiger Wiederholungen (etwa stündlich oder täglich) oder Einnahmepausen.
+    </string>
+
+    <string name="intro_reminders_title">Erinnerungen</string>
+    <string name="intro_reminders_text">
+        Calendula wird an alle anstehenden Einnahmen erinnern.
+        \n\nDie Benachrichtigungseinstellungen können im Optionenmenü angepasst werden.
+    </string>
+
+    <string name="intro_multipat_title">Mehrere Patienten/-innen</string>
+    <string name="intro_multipat_text">
+        Calendula erlaubt die Verwaltung der Medikamenteneinnahme mehrerer Personen.
+        \n\nAlle Einnahmen werden im Homescreen angezeigt.
+    </string>
+
+
+
+
+</resources>
+
