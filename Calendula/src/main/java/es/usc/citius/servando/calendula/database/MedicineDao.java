@@ -33,6 +33,7 @@ import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.events.StockRunningOutEvent;
 import es.usc.citius.servando.calendula.persistence.Medicine;
@@ -83,6 +84,16 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
         }
     }
 
+    public List<Medicine> findAllByGroup(Long patientId, String[] groups) {
+        try {
+            return dao.queryBuilder()
+                    .where().eq(Medicine.COLUMN_PATIENT, patientId).and().in(Medicine.COLUMN_HG, groups)
+                    .query();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding models", e);
+        }
+    }
+
     @Override
     public void fireEvent() {
         CalendulaApp.eventBus().post(PersistenceEvents.MEDICINE_EVENT);
@@ -115,9 +126,15 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
                 }
             }
         } else {
+            // assign homogeneous group if possible
+            if (m.isBoundToPrescription()) {
+                Prescription p = DB.drugDB().prescriptions().findByCn(m.cn());
+                if (p != null && p.getHomogeneousGroup() != null) {
+                    m.setHomogeneousGroup(p.getHomogeneousGroup());
+                }
+            }
             super.save(m);
         }
-
     }
 
     @Override

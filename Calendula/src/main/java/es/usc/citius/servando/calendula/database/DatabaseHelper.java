@@ -206,6 +206,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                     TableUtils.createTable(connectionSource, AllergyGroup.class);
                     getSchedulesDao().executeRaw("ALTER TABLE Schedules ADD COLUMN " + Schedule.COLUMN_STATE + " TEXT;");
                     TableUtils.createTable(connectionSource, PatientAlert.class);
+                    // add COLUMN_HG:text to meds table
+                    getSchedulesDao().executeRaw("ALTER TABLE Medicines ADD COLUMN " + Medicine.COLUMN_HG + " TEXT;");
             }
 
         } catch (Exception e) {
