@@ -20,7 +20,6 @@ package es.usc.citius.servando.calendula.activities;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -191,8 +190,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 DBRegistry.instance().clear();
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(thisActivity);
                 SharedPreferences.Editor edit = settings.edit();
-                edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB, settings.getString(PreferenceKeys.DRUGDB_LAST_VALID, NONE));
-                //edit.putString(PreferenceKeys.DRUGDB_LAST_VALID, settings.getString(PreferenceKeys.DRUGDB_LAST_VALID, NONE));
+                edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB, NONE);
                 edit.apply();
                 lastValidDatabase = NONE;
             } catch (SQLException e) {
