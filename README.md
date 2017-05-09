@@ -1,4 +1,4 @@
-![Calendula](https://dl.dropboxusercontent.com/u/4213618/calendula/calendula_promo_google_play.png)
+![Calendula](https://tec.citius.usc.es/calendula/github-assets/calendula_promo_google_play.png)
 # Calendula [![Build Status](https://travis-ci.org/citiususc/calendula.svg?branch=master)](https://travis-ci.org/citiususc/calendula)
 
 Calendula is an Android assistant for personal medication management, aimed at those who have trouble following their medication regimen, forget to take their drugs, or have complex schedules that are difficult to remember.
@@ -65,12 +65,12 @@ We try to follow [Material Design](https://material.google.com/#) principles. Ta
    
 *The screenshots below are taken from the development version (branch `develop`).*
 
-  <img src="https://dl.dropboxusercontent.com/u/4213618/calendula/multipat/home.png" width="250px" />
-  <img src="https://dl.dropboxusercontent.com/u/4213618/calendula/multipat/agenda.png" width="250px" />
-  <img src="https://dl.dropboxusercontent.com/u/4213618/calendula/multipat/schedules.png" width="250px" />
-  <img src="https://dl.dropboxusercontent.com/u/4213618/calendula/multipat/aviso.png" width="250px" />
-  <img src="https://dl.dropboxusercontent.com/u/4213618/calendula/multipat/navdrawer.png" width="250px" />
-  <img src="https://dl.dropboxusercontent.com/u/4213618/calendula/multipat/profile.png" width="250px" />
+  <img src="https://tec.citius.usc.es/calendula/github-assets/home.png" width="250px" />
+  <img src="https://tec.citius.usc.es/calendula/github-assets/agenda.png" width="250px" />
+  <img src="https://tec.citius.usc.es/calendula/github-assets/schedules.png" width="250px" />
+  <img src="https://tec.citius.usc.es/calendula/github-assets/aviso.png" width="250px" />
+  <img src="https://tec.citius.usc.es/calendula/github-assets/navdrawer.png" width="250px" />
+  <img src="https://tec.citius.usc.es/calendula/github-assets/profile.png" width="250px" />
 
 We use <a href="http://www.freepik.com/free-vector/people-avatars_761436.htm">this vector pack at Freepik</a> for user avatars.
 
