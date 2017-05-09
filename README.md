@@ -81,7 +81,7 @@ We have a lot of development ideas, and we are open to newer ones. Below are som
 
 
 ## Contributing ##
-Feel free to fork and send a pull request if you want to contribute to this project! Notice that Calendula is licensed under the terms of the [GPL v3 license](LICENSE.md), so by submitting content to the Calendula repository, you release your work to the public domain.
+Feel free to fork and send a pull request if you want to contribute to this project! Notice that Calendula is licensed under the terms of the [GPL v3 license](LICENSE.md), so by submitting content to the Calendula repository, you release your work under the terms of this license.
 
 Before starting, take a look at our [contribution guidelines](CONTRIBUTING.md).
 
