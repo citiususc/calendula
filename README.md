@@ -62,15 +62,13 @@ Check out the [contributing guidelines](CONTRIBUTING.md) for more info about the
 ## How does it look? ##
 
 We try to follow [Material Design](https://material.google.com/#) principles. Take a look at the result!
-   
+
 *The screenshots below are taken from the development version (branch `develop`).*
 
-  <img src="https://tec.citius.usc.es/calendula/github-assets/home.png" width="250px" />
-  <img src="https://tec.citius.usc.es/calendula/github-assets/agenda.png" width="250px" />
-  <img src="https://tec.citius.usc.es/calendula/github-assets/schedules.png" width="250px" />
-  <img src="https://tec.citius.usc.es/calendula/github-assets/aviso.png" width="250px" />
-  <img src="https://tec.citius.usc.es/calendula/github-assets/navdrawer.png" width="250px" />
-  <img src="https://tec.citius.usc.es/calendula/github-assets/profile.png" width="250px" />
+  | <img src="https://tec.citius.usc.es/calendula/github-assets/home.png" width="230px"/>  | <img src="https://tec.citius.usc.es/calendula/github-assets/agenda.png" width="230px"/> | <img src="https://tec.citius.usc.es/calendula/github-assets/schedules.png" width="230px"/>
+  |:---:|:---:|:---:|
+  | <img src="https://tec.citius.usc.es/calendula/github-assets/aviso.png" width="230px"/> | <img src="https://tec.citius.usc.es/calendula/github-assets/navdrawer.png" width="230px"/> | <img src="https://tec.citius.usc.es/calendula/github-assets/profile.png" width="230px"/>
+
 
 We use <a href="http://www.freepik.com/free-vector/people-avatars_761436.htm">this vector pack at Freepik</a> for user avatars.
 
@@ -80,13 +78,13 @@ We have a lot of development ideas, and we are open to newer ones. Below are som
 
  * Information about nearby pharmacies, their locations and timetables
  * Trip assistant (how many pills I need for this weekend?)
- * Introducing [gamification](https://en.wikipedia.org/wiki/Gamification) concepts to improve adherence. 
+ * Introducing [gamification](https://en.wikipedia.org/wiki/Gamification) concepts to improve adherence.
 
 
 ## Contributing ##
 Feel free to fork and send a pull request if you want to contribute to this project! Notice that Calendula is licensed under the terms of the [GPL v3 license](LICENSE.md), so by submitting content to the Calendula repository, you release your work to the public domain.
 
-Before starting, take a look at our [contribution guidelines](CONTRIBUTING.md). 
+Before starting, take a look at our [contribution guidelines](CONTRIBUTING.md).
 
 ### I would like to contribute, but I'm not a developer...
 If you're not a developer but you want to help, don't worry! You can help [with app translations](CONTRIBUTING.md#help-with-app-translations), by [joining the BETA group](#app-versions), and [much more](CONTRIBUTING.md#i-would-like-to-contribute-but-im-not-a-developer)!. Everyone is welcome!
