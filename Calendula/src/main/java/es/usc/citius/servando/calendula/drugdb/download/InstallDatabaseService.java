@@ -148,9 +148,9 @@ public class InstallDatabaseService extends IntentService {
 
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(InstallDatabaseService.this);
             SharedPreferences.Editor edit = settings.edit();
-            edit.putString(PreferenceKeys.DRUGDB_LAST_VALID, dbPref);
-            edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB, dbPref);
-            edit.putString(PreferenceKeys.DRUGDB_VERSION, dbVersion);
+            edit.putString(PreferenceKeys.DRUGDB_LAST_VALID.key(), dbPref);
+            edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), dbPref);
+            edit.putString(PreferenceKeys.DRUGDB_VERSION.key(), dbVersion);
             edit.apply();
             Log.d(TAG, dbPref + "-" + dbVersion + ": Finished saving " + DB.drugDB().prescriptions().count() + " prescriptions!");
             onComplete();

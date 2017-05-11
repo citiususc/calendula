@@ -112,7 +112,7 @@ public class DBRegistry {
     }
 
     public PrescriptionDBMgr current() {
-        String key = settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB, none);
+        String key = settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), none);
         Log.d("DBRegistry", "Key: " + key);
         return (key != null && !key.equals(none) && !key.equals(settingUp)) ? databases.get(key) : defaultDBMgr;
     }

@@ -69,7 +69,7 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
 
     public boolean checkForUpdate(Context ctx) {
         if (DBVersionManager.checkForUpdate(ctx) != null) {
-            notifyUpdate(ctx, PreferenceUtils.instance().preferences().getString(PreferenceKeys.DRUGDB_CURRENT_DB, null));
+            notifyUpdate(ctx, PreferenceUtils.instance().preferences().getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), null));
             return true;
         }
         return false;

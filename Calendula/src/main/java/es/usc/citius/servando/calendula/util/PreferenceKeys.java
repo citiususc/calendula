@@ -18,14 +18,35 @@
 
 package es.usc.citius.servando.calendula.util;
 
+import android.support.annotation.StringRes;
+
+import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.R;
+
 /**
  * Created by alvaro.brey.vilas on 05/01/17.
  */
+public enum PreferenceKeys {
 
-public class PreferenceKeys {
+    DRUGDB_CURRENT_DB(R.string.prefkey_drugdb_current_db),
+    DRUGDB_ENABLE_DRUGDB(R.string.prefkey_drugdb_enable_drugdb),
+    DRUGDB_LAST_VALID(R.string.prefkey_drugdb_last_valid),
+    DRUGDB_VERSION(R.string.prefkey_drugdb_version);
 
-    public static final String DRUGDB_CURRENT_DB = "prescriptions_database";
-    public static final String DRUGDB_ENABLE_DRUGDB = "drugdb_enable_db";
-    public static final String DRUGDB_LAST_VALID = "last_valid_database";
-    public static final String DRUGDB_VERSION = "database_version";
+    @StringRes
+    private final int stringId;
+
+    PreferenceKeys(int stringId) {
+        this.stringId = stringId;
+    }
+
+
+    public String key() {
+        return toString();
+    }
+
+    @Override
+    public String toString() {
+        return CalendulaApp.getContext().getString(stringId);
+    }
 }

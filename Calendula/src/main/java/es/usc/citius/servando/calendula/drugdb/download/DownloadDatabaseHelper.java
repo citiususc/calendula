@@ -107,8 +107,8 @@ public class DownloadDatabaseHelper {
         Toast.makeText(context, R.string.download_db_unexpected_error, Toast.LENGTH_LONG).show();
         SharedPreferences settings = PreferenceUtils.instance().preferences();
         SharedPreferences.Editor edit = settings.edit();
-        edit.putString(PreferenceKeys.DRUGDB_LAST_VALID, context.getString(R.string.database_none_id));
-        edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB, context.getString(R.string.database_none_id));
+        edit.putString(PreferenceKeys.DRUGDB_LAST_VALID.key(), context.getString(R.string.database_none_id));
+        edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), context.getString(R.string.database_none_id));
         edit.commit();
         Intent bcIntent = new Intent();
         bcIntent.setAction(InstallDatabaseService.ACTION_ERROR);
