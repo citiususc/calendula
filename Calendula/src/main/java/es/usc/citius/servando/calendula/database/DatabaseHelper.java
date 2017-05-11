@@ -361,6 +361,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void close() {
         super.close();
         medicinesDao = null;
+        routinesDao = null;
+        schedulesDao = null;
+        scheduleItemsDao = null;
+        dailyScheduleItemsDao = null;
+        prescriptionsDao = null;
+        homogeneousGroupsDao = null;
+        pickupInfoDao = null;
+        patientDao = null;
     }
 
     private Patient createDefaultPatient() throws SQLException {
