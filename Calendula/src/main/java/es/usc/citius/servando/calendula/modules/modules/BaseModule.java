@@ -109,10 +109,6 @@ public class BaseModule extends CalendulaModule {
         PreferenceUtils.init(ctx);
         // initialize SQLite engine
         initializeDatabase(ctx);
-        if (!prefs.getBoolean("DEFAULT_DATA_INSERTED", false)) {
-            DefaultDataGenerator.fillDBWithDummyData(ctx);
-            prefs.edit().putBoolean("DEFAULT_DATA_INSERTED", true).apply();
-        }
 
         // initialize daily agenda
         DailyAgenda.instance().setupForToday(ctx, false);
