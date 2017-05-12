@@ -149,11 +149,6 @@ public class CalendulaApp extends Application {
         //load settings
         final Context applicationContext = getApplicationContext();
         mContext = applicationContext;
-        try {
-            Settings.instance().load(applicationContext);
-        } catch (Exception e) {
-            Log.e(TAG, "onCreate: An exception happened when loading settings file");
-        }
 
         try {
             Log.d(TAG, "Application flavor is \"" + BuildConfig.FLAVOR + "\"");

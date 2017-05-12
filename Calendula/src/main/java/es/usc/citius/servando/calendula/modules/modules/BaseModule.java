@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -56,6 +57,7 @@ import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.PresentationsTypeface;
+import es.usc.citius.servando.calendula.util.Settings;
 
 /**
  * Created by alvaro.brey.vilas on 30/11/16.
@@ -105,8 +107,16 @@ public class BaseModule extends CalendulaModule {
 
     @Override
     protected void onApplicationStartup(Context ctx) {
+
         prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         PreferenceUtils.init(ctx);
+
+        try {
+            Settings.instance().load(ctx);
+        } catch (Exception e) {
+            Log.e(TAG, "onApplicationStartup: An exception happened when loading settings file");
+        }
+
         // initialize SQLite engine
         initializeDatabase(ctx);
 
