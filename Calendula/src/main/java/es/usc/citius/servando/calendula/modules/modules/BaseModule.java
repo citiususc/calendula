@@ -22,8 +22,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -36,10 +34,8 @@ import com.mikepenz.iconics.Iconics;
 
 import org.joda.time.LocalTime;
 
-import es.usc.citius.servando.calendula.DefaultDataGenerator;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.database.PatientDao;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.download.UpdateDatabaseService;
 import es.usc.citius.servando.calendula.jobs.CalendulaJob;
@@ -54,6 +50,7 @@ import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.PresentationsTypeface;
 
@@ -70,7 +67,6 @@ public class BaseModule extends CalendulaModule {
 
     /*----------*/
 
-    SharedPreferences prefs;
 
     @Override
     public String getId() {
@@ -83,7 +79,7 @@ public class BaseModule extends CalendulaModule {
         try {
             if (DB.patients().countOf() == 1) {
                 Patient p = DB.patients().getDefault();
-                prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).apply();
+                PreferenceUtils.edit().putLong(PreferenceKeys.PATIENTS_ACTIVE.key(), p.id()).apply();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,8 +101,8 @@ public class BaseModule extends CalendulaModule {
 
     @Override
     protected void onApplicationStartup(Context ctx) {
-        prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         PreferenceUtils.init(ctx);
+
         // initialize SQLite engine
         initializeDatabase(ctx);
 
@@ -140,10 +136,8 @@ public class BaseModule extends CalendulaModule {
      * @param ctx the context
      */
     private void updatePreferences(final Context ctx) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        boolean dbWasEnabled = prefs.getBoolean("enable_prescriptions_db", false);
 
-        if (dbWasEnabled) {
+        if (PreferenceUtils.getBoolean(PreferenceKeys.MEDICINES_LEGACY_DB_ENABLED, false)) {
             new MaterialStyledDialog.Builder(ctx)
                     .setStyle(Style.HEADER_WITH_ICON)
                     .setIcon(IconUtils.icon(ctx, CommunityMaterial.Icon.cmd_database, R.color.white, 100))
@@ -171,9 +165,7 @@ public class BaseModule extends CalendulaModule {
                     .show();
         }
 
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.remove("enable_prescriptions_db");
-        editor.apply();
+        PreferenceUtils.edit().remove(PreferenceKeys.MEDICINES_LEGACY_DB_ENABLED.key()).apply();
     }
 
 

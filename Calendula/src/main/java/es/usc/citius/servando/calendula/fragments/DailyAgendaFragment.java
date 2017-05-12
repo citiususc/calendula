@@ -65,6 +65,7 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub.DailyAgendaItemStubElement;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
@@ -72,7 +73,6 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
  */
 public class DailyAgendaFragment extends Fragment {
 
-    public static final String PREF_EXPANDED = "DailyAgendaFragment.expanded";
     final String TAG = "DailyAgendaFragment";
     View emptyView;
 
@@ -102,7 +102,7 @@ public class DailyAgendaFragment extends Fragment {
         setupRecyclerView();
         setupEmptyView();
 
-        boolean expanded = PreferenceUtils.instance().preferences().getBoolean(PREF_EXPANDED, false);
+        boolean expanded = PreferenceUtils.getBoolean(PreferenceKeys.HOME_DAILYAGENDA_EXPANDED, false);
         if (expanded != isExpanded()) {
             toggleViewMode();
             ((HomePagerActivity) getActivity()).appBarLayout.setExpanded(!expanded);
@@ -489,7 +489,7 @@ public class DailyAgendaFragment extends Fragment {
 
         @Override
         public void onAfterToggleCollapse(boolean expanded, boolean somethingVisible) {
-            PreferenceUtils.instance().edit().putBoolean(PREF_EXPANDED, expanded).apply();
+            PreferenceUtils.edit().putBoolean(PreferenceKeys.HOME_DAILYAGENDA_EXPANDED.key(), expanded).apply();
             /*if (expanded && firstTime != null) {
                 scrollTo(firstTime);
                 firstTime = null;

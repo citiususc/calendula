@@ -26,6 +26,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.util.Pair;
 
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
@@ -35,20 +36,16 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
 public class DBDownloadReceiver extends BroadcastReceiver {
 
     public static final String TAG = DBDownloadReceiver.class.getName();
-    public static final String DOWNLOAD_MGR_DOWNLOAD_ID = "download_mgr_download_id";
-    public static final String DOWNLOAD_MGR_DOWNLOAD_DB = "download_mgr_download_db";
-    public static final String DOWNLOAD_MGR_DOWNLOAD_VERSION = "download_mgr_download_version";
-    public static final String DOWNLOAD_MGR_DOWNLOAD_TYPE = "download_mgr_download_type";
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
         long id = intent.getExtras().getLong(DownloadManager.EXTRA_DOWNLOAD_ID);
         SharedPreferences preferences = PreferenceUtils.instance().preferences();
-        long downloadId = preferences.getLong(DOWNLOAD_MGR_DOWNLOAD_ID, -1);
-        String downloadDb = preferences.getString(DOWNLOAD_MGR_DOWNLOAD_DB, null);
-        String dbVersion = preferences.getString(DOWNLOAD_MGR_DOWNLOAD_VERSION, null);
-        String type = preferences.getString(DOWNLOAD_MGR_DOWNLOAD_TYPE, null);
+        long downloadId = preferences.getLong(PreferenceKeys.DRUGDB_DOWNLOAD_ID.key(), -1);
+        String downloadDb = preferences.getString(PreferenceKeys.DRUGDB_DOWNLOAD_DB.key(), null);
+        String dbVersion = preferences.getString(PreferenceKeys.DRUGDB_DOWNLOAD_VERSION.key(), null);
+        String type = preferences.getString(PreferenceKeys.DRUGDB_DOWNLOAD_TYPE.key(), null);
 
         android.support.v4.util.Pair<String, String> databaseInfo = new android.support.v4.util.Pair<>(downloadDb, dbVersion);
 
@@ -66,10 +63,10 @@ public class DBDownloadReceiver extends BroadcastReceiver {
             }
         }
         preferences.edit()
-                .remove(DOWNLOAD_MGR_DOWNLOAD_ID)
-                .remove(DOWNLOAD_MGR_DOWNLOAD_DB)
-                .remove(DOWNLOAD_MGR_DOWNLOAD_VERSION)
-                .remove(DOWNLOAD_MGR_DOWNLOAD_TYPE)
+                .remove(PreferenceKeys.DRUGDB_DOWNLOAD_ID.key())
+                .remove(PreferenceKeys.DRUGDB_DOWNLOAD_DB.key())
+                .remove(PreferenceKeys.DRUGDB_DOWNLOAD_VERSION.key())
+                .remove(PreferenceKeys.DRUGDB_DOWNLOAD_TYPE.key())
                 .apply();
     }
 

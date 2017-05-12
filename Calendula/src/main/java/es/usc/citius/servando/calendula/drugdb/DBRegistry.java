@@ -44,6 +44,7 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionAct
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionExcipient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PresentationForm;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
  * Created by joseangel.pineiro on 9/4/15.
@@ -75,7 +76,7 @@ public class DBRegistry {
             instance = new DBRegistry();
             instance.databases = new HashMap<>();
 
-            instance.settings = PreferenceManager.getDefaultSharedPreferences(ctx);
+            instance.settings = PreferenceUtils.instance().preferences();
             instance.none = ctx.getString(R.string.database_none_id);
             instance.settingUp = ctx.getString(R.string.database_setting_up);
 
@@ -112,7 +113,7 @@ public class DBRegistry {
     }
 
     public PrescriptionDBMgr current() {
-        String key = settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB, none);
+        String key = settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), none);
         Log.d("DBRegistry", "Key: " + key);
         return (key != null && !key.equals(none) && !key.equals(settingUp)) ? databases.get(key) : defaultDBMgr;
     }

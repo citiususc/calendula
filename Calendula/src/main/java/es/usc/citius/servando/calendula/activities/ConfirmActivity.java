@@ -23,13 +23,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -85,6 +83,8 @@ import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.view.ArcTranslateAnimation;
@@ -135,8 +135,8 @@ public class ConfirmActivity extends CalendulaActivity {
      */
     public Pair<DateTime, DateTime> getCheckMarginInterval(DateTime intakeTime) {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String checkMarginStr = prefs.getString("check_window_margin", "" + DEFAULT_CHECK_MARGIN);
+        String checkMarginStr = PreferenceUtils.getString(PreferenceKeys.CONFIRM_CHECK_WINDOW_MARGIN, String.valueOf(DEFAULT_CHECK_MARGIN));
+
         int checkMargin = Integer.parseInt(checkMarginStr);
 
         DateTime start = intakeTime.minusMinutes(30);
@@ -329,7 +329,7 @@ public class ConfirmActivity extends CalendulaActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 
         isToday = LocalDate.now().equals(date);
-        isInWindow = AlarmScheduler.isWithinDefaultMargins(date.toDateTime(time), this);
+        isInWindow = AlarmScheduler.isWithinDefaultMargins(date.toDateTime(time));
 
         DateTime dt = date.toDateTime(time);
         DateTime now = DateTime.now();

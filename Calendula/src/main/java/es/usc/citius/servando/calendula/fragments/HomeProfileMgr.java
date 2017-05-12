@@ -50,6 +50,8 @@ import java.util.HashMap;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 
 /**
@@ -100,7 +102,7 @@ public class HomeProfileMgr {
 
     public static int colorForCurrent(Context ctx) {
 
-        String path = getBackgroundPath(ctx);
+        String path = getBackgroundPath();
         int color = Color.BLACK;
         if (!cache.containsKey(path)) {
             Bitmap bm = getBitmapFromAsset(ctx, path);
@@ -128,9 +130,8 @@ public class HomeProfileMgr {
         return bitmap;
     }
 
-    static String getBackgroundPath(Context ctx) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
-        Integer idx = preferences.getInt("profile_background_idx", 1);
+    static String getBackgroundPath() {
+        Integer idx = PreferenceUtils.getInt(PreferenceKeys.HOME_PROFILE_BACKGROUND_INDEX, 1);
         return String.format(BG_IMAGE_PATTERN, idx);
     }
 
@@ -176,7 +177,7 @@ public class HomeProfileMgr {
         bottomShadow.setVisibility(View.INVISIBLE);
 
         Picasso.with(context)
-                .load("file:///android_asset/" + getBackgroundPath(ctx))
+                .load("file:///android_asset/" + getBackgroundPath())
                 .into(background);
 
         background.post(new Runnable() {
@@ -200,7 +201,7 @@ public class HomeProfileMgr {
     }
 
     public void updateModButton() {
-        int mood = PreferenceManager.getDefaultSharedPreferences(context).getInt("last_mood", 2);
+        int mood = PreferenceUtils.getInt(PreferenceKeys.HOME_LAST_MOOD,2);
         int color = moodColor[mood];
         int res = moodRes[mood];
         modFabButton.setImageResource(color);
@@ -244,8 +245,7 @@ public class HomeProfileMgr {
             rand = ((rand + 1) % BG_COUNT) + 1;
         }
         currentBgFileIdx = rand;
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        preferences.edit().putInt("profile_background_idx", rand).apply();
+        PreferenceUtils.edit().putInt(PreferenceKeys.HOME_PROFILE_BACKGROUND_INDEX.key(), rand).apply();
         return String.format(BG_IMAGE_PATTERN, rand);
 
     }
@@ -260,9 +260,8 @@ public class HomeProfileMgr {
                 .setAdapter(moodsAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
                         Snack.show("Mood saved!", context);
-                        preferences.edit().putInt("last_mood", which).apply();
+                        PreferenceUtils.edit().putInt(PreferenceKeys.HOME_LAST_MOOD.key(), which).apply();
                         updateModButton();
                     }
                 }).show();
@@ -277,8 +276,7 @@ public class HomeProfileMgr {
     }
 
     void updateProfileInfo() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String displayName = preferences.getString("display_name", context.getString(R.string.app_name));
+        String displayName = PreferenceUtils.getString(PreferenceKeys.HOME_DISPLAY_NAME, context.getString(R.string.app_name));
         profileUsername.setText(displayName);
         updateDate();
     }

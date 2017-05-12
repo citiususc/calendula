@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2016 CITIUS - USC
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <!-- Allergies -->
+    <string name="prefkey_allergies_warning_shown" translatable="false">allergies_warning_shown</string>
+
+    <!-- Confirm -->
+    <string name="prefkey_confirm_check_window_margin" translatable="false">check_window_margin</string>
+
+    <!-- Drug DB -->
+    <string name="prefkey_drugdb_current_db" translatable="false">prescriptions_database</string>
+    <string name="prefkey_drugdb_enable_drugdb" translatable="false">drugdb_enable_db</string>
+    <string name="prefkey_drugdb_last_valid" translatable="false">last_valid_database</string>
+    <string name="prefkey_drugdb_version" translatable="false">database_version</string>
+    <string name="prefkey_drugdb_download_id" translatable="false">download_mgr_download_id</string>
+    <string name="prefkey_drugdb_download_db" translatable="false">download_mgr_download_db</string>
+    <string name="prefkey_drugdb_download_version" translatable="false">download_mgr_download_version</string>
+    <string name="prefkey_drugdb_download_type" translatable="false">download_mgr_download_type</string>
+
+    <!-- Home -->
+    <string name="prefkey_home_intro_shown" translatable="false">PREFERENCE_INTRO_SHOWN</string>
+    <string name="prefkey_home_display_name" translatable="false">display_name</string>
+    <string name="prefkey_home_last_mood" translatable="false">last_mood</string>
+    <string name="prefkey_home_profile_background_index" translatable="false">profile_background_idx</string>
+    <string name="prefkey_home_dailyagenda_expanded" translatable="false">DailyAgendaFragment.expanded</string>
+
+    <!-- Medicines -->
+    <string name="prefkey_medicines_use_prescription_shown" translatable="false">show_use_prescriptions_advice</string>
+    <string name="prefkey_medicines_db_enabled" translatable="false">enable_prescriptions_db</string>
+
+
+    <!-- Patients -->
+    <string name="prefkey_patients_active">active_patient</string>
+
+    <!-- Settings -->
+    <string name="prefkey_settings_alarm_insistent">alarm_insistent</string>
+    <string name="prefkey_settings_alarm_reminder_window">alarm_reminder_window</string>
+    <string name="prefkey_settings_alarm_repeat_enabled">alarm_repeat_enabled</string>
+    <string name="prefkey_settings_alarm_repeat_frequency">alarm_repeat_frequency</string>
+    <string name="prefkey_settings_alarm_notifications">alarm_notifications</string>
+    <string name="prefkey_settings_alarm_pickup_notifications">alarm_pickup_notifications</string>
+    <string name="prefkey_settings_notification_tone">pref_notification_tone</string>
+    <string name="prefkey_settings_stock_alert_days">stock_alert_days</string>
+    <string name="prefkey_settings_database_update">prescriptions_database_update</string>
+
+    <!-- Schedules -->
+    <string name="prefkey_schedules_help_shown">PREFERENCE_SCHEDULE_HELP_SHOWN</string>
+
+    <!-- Test data module -->
+    <string name="prefkey_testdata_generated">test_data_generated</string>
+
+
+</resources>

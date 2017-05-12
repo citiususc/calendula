@@ -44,7 +44,7 @@ public class UpdateDatabaseService extends IntentService {
         Log.d(TAG, "onHandleIntent() called with: intent = [" + intent + "]");
         final Context ctx = getApplicationContext();
         final String database = intent.getStringExtra(EXTRA_DATABASE_ID);
-        if (database != null && database.equals(PreferenceUtils.instance().preferences().getString(PreferenceKeys.DRUGDB_CURRENT_DB, null)) && DBVersionManager.checkForUpdate(ctx) != null) {
+        if (database != null && database.equals(PreferenceUtils.getString(PreferenceKeys.DRUGDB_CURRENT_DB, null)) && DBVersionManager.checkForUpdate(ctx) != null) {
             DownloadDatabaseHelper.instance().downloadDatabase(ctx, database, DBInstallType.UPDATE);
         } else {
             Log.e(TAG, "onHandleIntent: no database id provided or database has changed since update notification");

@@ -25,7 +25,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
@@ -81,6 +80,7 @@ import es.usc.citius.servando.calendula.persistence.AllergyGroup;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Strings;
 
 @SuppressWarnings("unchecked")
@@ -125,8 +125,8 @@ public class AllergiesSearchActivity extends CalendulaActivity {
      */
     public boolean askForDatabaseIfNeeded() {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean validDB = prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB, getString(R.string.database_none_id)).equals(getString(R.string.database_aemps_id));
+        SharedPreferences prefs = PreferenceUtils.instance().preferences();
+        boolean validDB = prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), getString(R.string.database_none_id)).equals(getString(R.string.database_aemps_id));
 
         if (!validDB) {
             new MaterialStyledDialog.Builder(this)
@@ -142,7 +142,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             Intent i = new Intent(AllergiesSearchActivity.this, SettingsActivity.class);
-                            i.putExtra("show_database_dialog", true);
+                            i.putExtra(SettingsActivity.EXTRA_SHOW_DB_DIALOG, true);
                             finish();
                             startActivity(i);
                         }

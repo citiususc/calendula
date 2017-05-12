@@ -20,9 +20,7 @@ package es.usc.citius.servando.calendula;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.squareup.leakcanary.LeakCanary;
@@ -46,9 +44,6 @@ import es.usc.citius.servando.calendula.util.Settings;
  */
 public class CalendulaApp extends Application {
 
-    // PREFERENCES
-    public static final String PREFERENCES_NAME = "CalendulaPreferences";
-    public static final String PREF_ALARM_SETTLED = "alarm_settled";
     // INTENTS
     public static final String INTENT_EXTRA_ACTION = "action";
     public static final String INTENT_EXTRA_ROUTINE_ID = "routine_id";
@@ -79,11 +74,6 @@ public class CalendulaApp extends Application {
     private static EventBus eventBus = EventBus.getDefault();
     private static Context mContext;
 
-    public static String activePatientAuth(Context ctx) {
-        Long id = DB.patients().getActive(ctx).id();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return prefs.getString("remote_token" + id, null);
-    }
 
     public static EventBus eventBus() {
         return eventBus;
@@ -142,13 +132,16 @@ public class CalendulaApp extends Application {
             // This process is dedicated to LeakCanary for heap analysis.
             return;
         }
+
+        final Context applicationContext = getApplicationContext();
+        mContext = applicationContext;
+
         //initialize LeakCanary
         LeakCanary.install(CalendulaApp.this);
 
         Log.d(TAG, "Application started");
+
         //load settings
-        final Context applicationContext = getApplicationContext();
-        mContext = applicationContext;
         try {
             Settings.instance().load(applicationContext);
         } catch (Exception e) {

@@ -30,7 +30,7 @@
             android:capitalize="words"
             android:defaultValue="@string/pref_default_display_name"
             android:inputType="textCapWords"
-            android:key="display_name"
+            android:key="@string/prefkey_home_display_name"
             android:maxLines="1"
             android:selectAllOnFocus="true"
             android:singleLine="true"
@@ -44,22 +44,22 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="drugdb_enable_db"
+            android:key="@string/prefkey_drugdb_enable_drugdb"
             android:title="@string/pref_enable_databases_title"/>
 
         <es.usc.citius.servando.calendula.util.view.CustomListPreference
-            android:defaultValue="None"
+            android:defaultValue="@string/database_none_display"
             android:dependency="drugdb_enable_db"
             android:entries="@array/pref_available_databases"
             android:entryValues="@array/pref_available_databases_values"
-            android:key="prescriptions_database"
+            android:key="@string/prefkey_drugdb_current_db"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:title="@string/pref_available_databases_title"/>
 
         <Preference
             android:dependency="drugdb_enable_db"
-            android:key="prescriptions_database_update"
+            android:key="@string/prefkey_settings_database_update"
             android:title="@string/preference_check_for_updates"
             />
 

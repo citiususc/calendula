@@ -71,6 +71,7 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 
@@ -226,7 +227,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         if (qrData != null) {
             PatientLinkWrapper p = new Gson().fromJson(qrData, PatientLinkWrapper.class);
             Snack.show("Usuario vinculado correctamente!", this, Snackbar.SnackbarDuration.LENGTH_LONG);
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(PatientDetailActivity.this);
+            SharedPreferences prefs = PreferenceUtils.instance().preferences();
             prefs.edit().putString("remote_token" + patientId, p.token).apply();
             Log.d("PatDetail", p.toString());
         }
@@ -283,7 +284,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             patient = DB.patients().findById(patientId);
             addRoutinesCheckBox.setVisibility(View.GONE);
 
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences prefs = PreferenceUtils.instance().preferences();
             token = prefs.getString("remote_token" + patientId, null);
             if (token != null) {
                 linkButton.setVisibility(View.VISIBLE);
@@ -343,7 +344,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
                 .setPositiveButton("Si, desvincular", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         token = null;
-                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(PatientDetailActivity.this);
+                        SharedPreferences prefs = PreferenceUtils.instance().preferences();
                         prefs.edit().remove("remote_token" + patientId).apply();
                         linkButton.setText("Vincular");
                     }

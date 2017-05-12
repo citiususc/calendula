@@ -114,8 +114,8 @@ public class DBVersionManager {
     public static String checkForUpdate(Context ctx) {
         final SharedPreferences prefs = PreferenceUtils.instance().preferences();
         final String noneId = ctx.getString(R.string.database_none_id);
-        final String database = prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB, noneId);
-        final String currentVersion = prefs.getString(PreferenceKeys.DRUGDB_VERSION, null);
+        final String database = prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), noneId);
+        final String currentVersion = prefs.getString(PreferenceKeys.DRUGDB_VERSION.key(), null);
 
         if (!database.equals(noneId) && !database.equals(ctx.getString(R.string.database_setting_up))) {
             if (currentVersion != null) {

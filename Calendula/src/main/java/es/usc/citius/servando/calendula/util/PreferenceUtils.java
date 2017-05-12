@@ -22,6 +22,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.util.Set;
+
 /**
  * Utility to access default shared preferences
  */
@@ -38,18 +40,46 @@ public class PreferenceUtils {
         instance = new PreferenceUtils(context);
     }
 
-    public static PreferenceUtils instance() {
+    /**
+     * @return a singleton instance of this class
+     * @throws IllegalStateException if {@link #init(Context)} hasn't been called yet
+     */
+    public static PreferenceUtils instance() throws IllegalStateException {
         if (instance == null)
-            throw new RuntimeException("PreferenceUtil must be initialized before using calling init(context)");
+            throw new IllegalStateException("PreferenceUtils must be initialized before use!");
         return instance;
+    }
+
+    public static boolean getBoolean(PreferenceKeys key, boolean defVal) {
+        return instance().preferences().getBoolean(key.key(), defVal);
+    }
+
+    public static int getInt(PreferenceKeys key, int defVal) {
+        return instance().preferences().getInt(key.key(), defVal);
+    }
+
+    public static long getLong(PreferenceKeys key, long defVal) {
+        return instance().preferences().getLong(key.key(), defVal);
+    }
+
+    public static float getFloat(PreferenceKeys key, float defVal) {
+        return instance().preferences().getFloat(key.key(), defVal);
+    }
+
+    public static String getString(PreferenceKeys key, String defVal) {
+        return instance().preferences().getString(key.key(), defVal);
+    }
+
+    public static Set<String> getStringSet(PreferenceKeys key, Set<String> defVal) {
+        return instance().preferences().getStringSet(key.key(), defVal);
+    }
+
+    public static SharedPreferences.Editor edit() {
+        return instance().preferences().edit();
     }
 
     public SharedPreferences preferences() {
         return PreferenceManager.getDefaultSharedPreferences(context);
-    }
-
-    public SharedPreferences.Editor edit() {
-        return preferences().edit();
     }
 
 }

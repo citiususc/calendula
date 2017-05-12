@@ -168,7 +168,7 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
                     public void onClick(DialogInterface dialog, int id) {
 
                         if (DB.patients().isActive(p, getApplicationContext())) {
-                            DB.patients().setActive(DB.patients().getDefault(), getApplicationContext());
+                            DB.patients().setActive(DB.patients().getDefault());
                         }
                         DB.patients().removeCascade(p);
                         notifyDataChange();

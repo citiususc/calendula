@@ -45,6 +45,7 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
@@ -55,8 +56,6 @@ public class TestDataModule extends CalendulaModule {
     public static final String ID = "CALENDULA_TEST_DATA_MODULE";
 
     private static final String TAG = "TestDataModule";
-
-    private static final String KEY_TEST_DATA_GENERATED = "Calendula.prefs.test_data_generated";
 
     private static final int PATIENT_NUMBER = 2;
     private static final int MEDICINE_NUMBER = 6;
@@ -110,7 +109,7 @@ public class TestDataModule extends CalendulaModule {
     protected void onApplicationStartup(final Context ctx) {
         // generate some default data to test UI and the likes
 
-        final boolean testDataGenerated = PreferenceUtils.instance().preferences().getBoolean(KEY_TEST_DATA_GENERATED, false);
+        final boolean testDataGenerated = PreferenceUtils.getBoolean(PreferenceKeys.TEST_DATA_GENERATED, false);
         if (testDataGenerated) {
             Log.d(TAG, "onApplicationStartup: Test data already generated, skipping");
         } else {
@@ -135,7 +134,7 @@ public class TestDataModule extends CalendulaModule {
             });
 
             Log.d(TAG, "onApplicationStartup: Test data generation finished");
-            PreferenceUtils.instance().preferences().edit().putBoolean(KEY_TEST_DATA_GENERATED, true).apply();
+            PreferenceUtils.edit().putBoolean(PreferenceKeys.TEST_DATA_GENERATED.key(), true).apply();
         }
 
     }
@@ -158,7 +157,7 @@ public class TestDataModule extends CalendulaModule {
             Log.d(TAG, "Created patient " + p);
             patients.add(p);
         }
-        DB.patients().setActive(patients.get(0), ctx);
+        DB.patients().setActive(patients.get(0));
         Log.d(TAG, String.format("Created %d patients", PATIENT_NUMBER));
         return patients;
     }

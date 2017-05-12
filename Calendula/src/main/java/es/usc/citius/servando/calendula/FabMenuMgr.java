@@ -19,9 +19,7 @@
 package es.usc.citius.servando.calendula;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
 import android.view.View;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -42,6 +40,8 @@ import es.usc.citius.servando.calendula.activities.SchedulesHelpActivity;
 import es.usc.citius.servando.calendula.adapters.HomePages;
 import es.usc.citius.servando.calendula.fragments.ScheduleTypeFragment;
 import es.usc.citius.servando.calendula.persistence.Patient;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 /**
@@ -67,12 +67,11 @@ public class FabMenuMgr implements View.OnClickListener {
         this.drawerMgr = drawerMgr;
         this.scheduleActions = getScheduleActions();
 
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
 
         fabMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
             @Override
             public void onMenuExpanded() {
-                if (!prefs.getBoolean("PREFERENCE_SCHEDULE_HELP_SHOWN", false)) {
+                if (!PreferenceUtils.getBoolean(PreferenceKeys.SCHEDULES_HELP_SHOWN, false)) {
                     activity.launchActivityDelayed(SchedulesHelpActivity.class, 600);
                 }
             }

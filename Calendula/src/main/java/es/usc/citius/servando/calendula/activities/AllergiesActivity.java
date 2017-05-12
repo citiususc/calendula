@@ -81,6 +81,7 @@ import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert.AllergyAlertInfo;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
@@ -89,7 +90,6 @@ import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 public class AllergiesActivity extends CalendulaActivity {
 
 
-    public static final String PREFERENCE_WARNING_SHOWN = "PREFERENCE_ALLERGY_WARNING_SHOWN";
     private static final String TAG = "AllergiesActivity";
     // main view
     @BindView(R.id.add_button)
@@ -152,7 +152,7 @@ public class AllergiesActivity extends CalendulaActivity {
 
     private void showWarningIfNeeded() {
         final SharedPreferences prefs = PreferenceUtils.instance().preferences();
-        if (!prefs.getBoolean(PREFERENCE_WARNING_SHOWN, false)) {
+        if (!prefs.getBoolean(PreferenceKeys.ALLERGIES_WARNING_SHOWN.key(), false)) {
             new MaterialStyledDialog.Builder(this)
                     .setStyle(Style.HEADER_WITH_ICON)
                     .setIcon(IconUtils.icon(this, GoogleMaterial.Icon.gmd_alert_circle, R.color.white, 100))
@@ -165,7 +165,7 @@ public class AllergiesActivity extends CalendulaActivity {
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            prefs.edit().putBoolean(PREFERENCE_WARNING_SHOWN, true).apply();
+                            prefs.edit().putBoolean(PreferenceKeys.ALLERGIES_WARNING_SHOWN.key(), true).apply();
                             dialog.dismiss();
                         }
                     })

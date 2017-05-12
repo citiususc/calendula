@@ -27,7 +27,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 
@@ -87,14 +86,12 @@ public class PermissionUtils {
     }
 
     public static boolean hasAskedForPermission(Activity activity, String permission) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(activity)
+        return PreferenceUtils.instance().preferences()
                 .getBoolean("asked-for" + permission, false);
     }
 
     public static void markedPermissionAsAsked(Activity activity, String permission) {
-        PreferenceManager
-                .getDefaultSharedPreferences(activity)
+        PreferenceUtils
                 .edit()
                 .putBoolean("asked-for" + permission, true)
                 .apply();
