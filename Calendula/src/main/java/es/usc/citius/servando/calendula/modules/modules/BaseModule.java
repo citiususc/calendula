@@ -37,7 +37,6 @@ import com.mikepenz.iconics.Iconics;
 
 import org.joda.time.LocalTime;
 
-import es.usc.citius.servando.calendula.DefaultDataGenerator;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.database.PatientDao;
@@ -57,7 +56,7 @@ import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.PresentationsTypeface;
-import es.usc.citius.servando.calendula.util.Settings;
+import es.usc.citius.servando.calendula.util.SettingsProperties;
 
 /**
  * Created by alvaro.brey.vilas on 30/11/16.
@@ -112,7 +111,7 @@ public class BaseModule extends CalendulaModule {
         PreferenceUtils.init(ctx);
 
         try {
-            Settings.instance().load(ctx);
+            SettingsProperties.instance().load(ctx);
         } catch (Exception e) {
             Log.e(TAG, "onApplicationStartup: An exception happened when loading settings file");
         }

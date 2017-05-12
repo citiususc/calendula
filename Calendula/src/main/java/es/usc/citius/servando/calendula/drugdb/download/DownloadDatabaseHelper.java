@@ -42,8 +42,8 @@ import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.util.NetworkUtils;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
-import es.usc.citius.servando.calendula.util.Settings;
-import es.usc.citius.servando.calendula.util.SettingsKeys;
+import es.usc.citius.servando.calendula.util.SettingsProperties;
+import es.usc.citius.servando.calendula.util.SettingsPropertiesKeys;
 
 /**
  * Created by joseangel.pineiro on 9/2/15.
@@ -200,7 +200,7 @@ public class DownloadDatabaseHelper {
                 final DownloadManager manager = (DownloadManager) ctx.getSystemService(Context.DOWNLOAD_SERVICE);
 
 
-                final String downloadUrl = Settings.instance().get(SettingsKeys.DATABASE_LOCATION);
+                final String downloadUrl = SettingsProperties.instance().get(SettingsPropertiesKeys.DATABASE_LOCATION);
                 final String dbName = mgr.id();
 
                 try {//get version

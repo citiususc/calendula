@@ -39,7 +39,6 @@ import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.modules.modules.PharmacyModule;
-import es.usc.citius.servando.calendula.util.Settings;
 
 /**
  * Created by castrelo on 4/10/14.
@@ -146,7 +145,7 @@ public class CalendulaApp extends Application {
         LeakCanary.install(CalendulaApp.this);
 
         Log.d(TAG, "Application started");
-        //load settings
+
         final Context applicationContext = getApplicationContext();
         mContext = applicationContext;
 

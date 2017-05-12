@@ -30,20 +30,20 @@ import java.util.Properties;
 /**
  * Created by joseangel.pineiro on 7/3/14.
  */
-public class Settings {
+public class SettingsProperties {
 
-    private static final String TAG = Settings.class.getName();
+    private static final String TAG = SettingsProperties.class.getName();
 
     private static final String SETTINGS_FILE_NAME = "settings.properties";
 
-    private static final Settings instance = new Settings();
+    private static final SettingsProperties instance = new SettingsProperties();
 
-    Properties properties;
+    private Properties properties;
 
-    private Settings() {
+    private SettingsProperties() {
     }
 
-    public static Settings instance() {
+    public static SettingsProperties instance() {
         return instance;
     }
 
@@ -57,7 +57,7 @@ public class Settings {
             InputStream inputStream = assetManager.open(SETTINGS_FILE_NAME);
             properties = new Properties();
             properties.load(inputStream);
-            Log.d(TAG, "Settings loaded successfully!" + properties.toString());
+            Log.d(TAG, "SettingsProperties loaded successfully!" + properties.toString());
         } catch (IOException e) {
             properties = new Properties();
             throw new Exception("Error loading settings file", e);
@@ -66,13 +66,13 @@ public class Settings {
 
     public String get(String key) {
         if (properties == null)
-            throw new IllegalStateException("Settings not loaded");
+            throw new IllegalStateException("SettingsProperties not loaded");
         return properties.getProperty(key);
     }
 
     public String get(String key, String defaultValue) {
         if (properties == null)
-            throw new IllegalStateException("Settings not loaded");
+            throw new IllegalStateException("SettingsProperties not loaded");
         return properties.getProperty(key, defaultValue);
     }
 
