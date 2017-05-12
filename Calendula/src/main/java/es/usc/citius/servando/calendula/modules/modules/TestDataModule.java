@@ -47,6 +47,8 @@ import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
+import es.usc.citius.servando.calendula.util.SettingsProperties;
+import es.usc.citius.servando.calendula.util.SettingsPropertiesKeys;
 
 /**
  * Created by alvaro.brey.vilas on 21/03/17.
@@ -110,7 +112,7 @@ public class TestDataModule extends CalendulaModule {
         // generate some default data to test UI and the likes
 
         final boolean testDataGenerated = PreferenceUtils.getBoolean(PreferenceKeys.TEST_DATA_GENERATED, false);
-        if (testDataGenerated) {
+        if (testDataGenerated && SettingsProperties.instance().get(SettingsPropertiesKeys.GENERATE_TEST_DATA).equals("yes")) {
             Log.d(TAG, "onApplicationStartup: Test data already generated, skipping");
         } else {
             Log.d(TAG, "onApplicationStartup: Generating test data");
