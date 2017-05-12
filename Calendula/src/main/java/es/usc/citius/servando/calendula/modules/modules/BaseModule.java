@@ -37,6 +37,8 @@ import com.mikepenz.iconics.Iconics;
 
 import org.joda.time.LocalTime;
 
+import java.io.IOException;
+
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.database.PatientDao;
@@ -111,8 +113,8 @@ public class BaseModule extends CalendulaModule {
         PreferenceUtils.init(ctx);
 
         try {
-            SettingsProperties.instance().load(ctx);
-        } catch (Exception e) {
+            SettingsProperties.init(ctx);
+        } catch (IOException e) {
             Log.e(TAG, "onApplicationStartup: An exception happened when loading settings file");
         }
 

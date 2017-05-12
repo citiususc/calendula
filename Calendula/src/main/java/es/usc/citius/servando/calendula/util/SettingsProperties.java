@@ -36,21 +36,13 @@ public class SettingsProperties {
 
     private static final String SETTINGS_FILE_NAME = "settings.properties";
 
-    private static final SettingsProperties instance = new SettingsProperties();
+    private static SettingsProperties instance;
 
     private Properties properties;
 
-    private SettingsProperties() {
-    }
-
-    public static SettingsProperties instance() {
-        return instance;
-    }
-
-    public void load(Context ctx) throws Exception {
+    private SettingsProperties(final Context ctx) throws IOException {
         Resources resources = ctx.getResources();
         AssetManager assetManager = resources.getAssets();
-        // Read from the /assets directory
 
         Log.d(TAG, "Loading settings...");
         try {
@@ -60,19 +52,29 @@ public class SettingsProperties {
             Log.d(TAG, "SettingsProperties loaded successfully!" + properties.toString());
         } catch (IOException e) {
             properties = new Properties();
-            throw new Exception("Error loading settings file", e);
+            throw e;
         }
     }
 
+    /**
+     * @return the instance
+     * @throws if {@link #init(Context)} hasn't been called yet
+     */
+    public static SettingsProperties instance() throws IllegalStateException {
+        if (instance == null)
+            throw new IllegalStateException("SettingsProperties not initialized!");
+        return instance;
+    }
+
+    public static void init(Context ctx) throws IOException {
+        instance = new SettingsProperties(ctx);
+    }
+
     public String get(String key) {
-        if (properties == null)
-            throw new IllegalStateException("SettingsProperties not loaded");
         return properties.getProperty(key);
     }
 
     public String get(String key, String defaultValue) {
-        if (properties == null)
-            throw new IllegalStateException("SettingsProperties not loaded");
         return properties.getProperty(key, defaultValue);
     }
 
