@@ -66,8 +66,9 @@ public class SettingsProperties {
         return instance;
     }
 
-    public static void init(Context ctx) throws IOException {
-        instance = new SettingsProperties(ctx);
+    public synchronized static void init(Context ctx) throws IOException {
+        if (instance == null)
+            instance = new SettingsProperties(ctx);
     }
 
     public String get(String key) {

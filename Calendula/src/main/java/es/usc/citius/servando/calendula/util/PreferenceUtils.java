@@ -36,8 +36,9 @@ public class PreferenceUtils {
         this.context = context;
     }
 
-    public static void init(Context context) {
-        instance = new PreferenceUtils(context);
+    public synchronized static void init(Context context) {
+        if (instance == null)
+            instance = new PreferenceUtils(context);
     }
 
     /**
