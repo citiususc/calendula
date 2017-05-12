@@ -142,13 +142,16 @@ public class CalendulaApp extends Application {
             // This process is dedicated to LeakCanary for heap analysis.
             return;
         }
+
+        final Context applicationContext = getApplicationContext();
+        mContext = applicationContext;
+
         //initialize LeakCanary
         LeakCanary.install(CalendulaApp.this);
 
         Log.d(TAG, "Application started");
+
         //load settings
-        final Context applicationContext = getApplicationContext();
-        mContext = applicationContext;
         try {
             Settings.instance().load(applicationContext);
         } catch (Exception e) {
