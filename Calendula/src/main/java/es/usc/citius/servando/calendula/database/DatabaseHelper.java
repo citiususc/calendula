@@ -393,8 +393,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         getRoutinesDao().executeRaw("ALTER TABLE DailyScheduleItems ADD COLUMN Date TEXT;");
 
         Patient p = createDefaultPatient();
-        // SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences();
-        // prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).commit();
+        // PreferenceUtils.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).commit();
 
         // Assign all routines to the default patient
         UpdateBuilder<Routine, Long> rUpdateBuilder = getRoutinesDao().updateBuilder();

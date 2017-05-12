@@ -79,10 +79,8 @@ public class ReminderNotification {
     }
 
     public static void notify(final Context context, final String title, Routine r, List<ScheduleItem> doses, LocalDate date, Intent intent, boolean lost) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean notifications = prefs.getBoolean("alarm_notifications", true);
 
-        if (!notifications) {
+        if (!PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_NOTIFICATIONS, true)) {
             return;
         }
 
@@ -110,10 +108,8 @@ public class ReminderNotification {
     }
 
     public static void notify(final Context context, final String title, Schedule schedule, LocalDate date, LocalTime time, Intent intent, boolean lost) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean notifications = prefs.getBoolean("alarm_notifications", true);
 
-        if (!notifications) {
+        if (!PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_NOTIFICATIONS, true)) {
             return;
         }
 
@@ -170,8 +166,8 @@ public class ReminderNotification {
                                Pair<Intent, Intent> actionIntents, Intent confirmIntent, Intent intent,
                                NotificationOptions options) {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean notifications = prefs.getBoolean("alarm_notifications", true);
+        boolean notifications = PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_NOTIFICATIONS, true);
+
 
         // if notifications are disabled, exit
         if (!notifications) {
@@ -275,7 +271,6 @@ public class ReminderNotification {
 
     private static void styleForRoutine(Context ctx, NotificationCompat.InboxStyle style, Routine r, List<ScheduleItem> doses, boolean lost) {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
 
         for (ScheduleItem scheduleItem : doses) {
             //TODO: Use DecimalFormat
@@ -288,7 +283,7 @@ public class ReminderNotification {
             SpItem.append(":  " + scheduleItem.dose() + " " + med.presentation().units(ctx.getResources(), scheduleItem.dose()));
             style.addLine(SpItem);
         }
-        String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
+        String delayMinutesStr = PreferenceUtils.getString(PreferenceKeys.SETTINGS_ALARM_REPEAT_FREQUENCY, "15");
         int delayMinutes = (int) Long.parseLong(delayMinutesStr);
 
         if (delayMinutes > 0 && !lost) {
@@ -301,7 +296,6 @@ public class ReminderNotification {
     }
 
     private static void styleForSchedule(Context context, NotificationCompat.InboxStyle style, Schedule schedule, boolean lost) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         final Medicine med = schedule.medicine();
         final SpannableStringBuilder SpItem = new SpannableStringBuilder();
@@ -309,7 +303,7 @@ public class ReminderNotification {
         SpItem.append("   " + schedule.dose() + " " + med.presentation().units(context.getResources(), schedule.dose()));
         style.addLine(SpItem);
 
-        String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
+        String delayMinutesStr = PreferenceUtils.getString(PreferenceKeys.SETTINGS_ALARM_REPEAT_FREQUENCY, "15");
         int delayMinutes = (int) Long.parseLong(delayMinutesStr);
 
         if (delayMinutes > 0 && !lost) {

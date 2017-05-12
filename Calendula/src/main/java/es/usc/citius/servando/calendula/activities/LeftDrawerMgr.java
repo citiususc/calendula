@@ -306,7 +306,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
                 intent.putExtra("patient_id", id);
                 launchActivity(intent);
             } else {
-                DB.patients().setActive(p, home);
+                DB.patients().setActive(p);
                 updateHeaderBackground(p);
             }
         }

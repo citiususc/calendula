@@ -74,12 +74,12 @@ public class PreferenceUtils {
         return instance().preferences().getStringSet(key.key(), defVal);
     }
 
-    public SharedPreferences preferences() {
-        return PreferenceManager.getDefaultSharedPreferences(context);
+    public static SharedPreferences.Editor edit() {
+        return instance().preferences().edit();
     }
 
-    public SharedPreferences.Editor edit() {
-        return preferences().edit();
+    public SharedPreferences preferences() {
+        return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
 }

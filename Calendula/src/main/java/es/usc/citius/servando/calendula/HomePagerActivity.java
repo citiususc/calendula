@@ -23,12 +23,10 @@ import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
 import android.support.annotation.MenuRes;
 import android.support.design.widget.AppBarLayout;
@@ -80,6 +78,8 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.medicine.StockUtils;
 
 public class HomePagerActivity extends CalendulaActivity implements
@@ -410,8 +410,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                 .color(Color.WHITE)
                 .sizeDp(24);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        if (!prefs.getBoolean("PREFERENCE_INTRO_SHOWN", false)) {
+        if (!PreferenceUtils.getBoolean(PreferenceKeys.HOME_INTRO_SHOWN, false)) {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {

@@ -134,7 +134,7 @@ public class TestDataModule extends CalendulaModule {
             });
 
             Log.d(TAG, "onApplicationStartup: Test data generation finished");
-            PreferenceUtils.instance().edit().putBoolean(PreferenceKeys.TEST_DATA_GENERATED.key(), true).apply();
+            PreferenceUtils.edit().putBoolean(PreferenceKeys.TEST_DATA_GENERATED.key(), true).apply();
         }
 
     }
@@ -157,7 +157,7 @@ public class TestDataModule extends CalendulaModule {
             Log.d(TAG, "Created patient " + p);
             patients.add(p);
         }
-        DB.patients().setActive(patients.get(0), ctx);
+        DB.patients().setActive(patients.get(0));
         Log.d(TAG, String.format("Created %d patients", PATIENT_NUMBER));
         return patients;
     }

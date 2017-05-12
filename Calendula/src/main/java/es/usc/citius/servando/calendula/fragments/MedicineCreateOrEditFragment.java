@@ -83,6 +83,7 @@ import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
 import es.usc.citius.servando.calendula.util.medicine.StockUtils;
@@ -176,8 +177,6 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             stockLayout.setVisibility(View.VISIBLE);
         }
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
         pColor = DB.patients().getActive(getActivity()).color();
         setupIcons(rootView);
 
@@ -200,7 +199,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
         String none = getString(R.string.database_none_id);
         String settingUp = getString(R.string.database_setting_up);
-        String value = prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), none);
+        String value = PreferenceUtils.getString(PreferenceKeys.DRUGDB_CURRENT_DB, none);
         enableSearch = !value.equals(none) && !value.equals(settingUp);
 
         Log.d(getTag(), "Arguments:  " + (getArguments() != null) + ", savedState: " + (savedInstanceState != null));
@@ -271,13 +270,13 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     @Override
     public void onResume() {
         super.onResume();
-        PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
+        PreferenceUtils.instance().preferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
+        PreferenceUtils.instance().preferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 
     public boolean validate() {
@@ -432,8 +431,8 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
     public void askForPrescriptionUsage() {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        boolean adviceShown = prefs.getBoolean("show_use_prescriptions_advice", false);
+        SharedPreferences prefs = PreferenceUtils.instance().preferences();
+        boolean adviceShown = prefs.getBoolean(PreferenceKeys.MEDICINES_USE_PRESCRIPTIONS_SHOWN.key(), false);
         boolean dbEnabled = !prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), getString(R.string.database_none_id)).equals(getString(R.string.database_none_id));
 
         if (!adviceShown && !dbEnabled) {
@@ -450,7 +449,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             Intent i = new Intent(getActivity(), SettingsActivity.class);
-                            i.putExtra("show_database_dialog", true);
+                            i.putExtra(SettingsActivity.EXTRA_SHOW_DB_DIALOG, true);
                             startActivity(i);
                         }
                     })
@@ -468,7 +467,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                 showSoftInput();
             }
         }
-        prefs.edit().putBoolean("show_use_prescriptions_advice", true).apply();
+        prefs.edit().putBoolean(PreferenceKeys.MEDICINES_USE_PRESCRIPTIONS_SHOWN.key(), true).apply();
 
     }
 

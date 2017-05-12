@@ -18,14 +18,14 @@
 
 package es.usc.citius.servando.calendula.activities;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 
 public class SchedulesHelpActivity extends IntroActivity {
@@ -58,8 +58,7 @@ public class SchedulesHelpActivity extends IntroActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        prefs.edit().putBoolean("PREFERENCE_SCHEDULE_HELP_SHOWN", true).apply();
+        PreferenceUtils.edit().putBoolean(PreferenceKeys.SCHEDULES_HELP_SHOWN.key(), true).apply();
     }
 
 }

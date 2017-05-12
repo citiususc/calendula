@@ -45,6 +45,8 @@ import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
  *
@@ -64,9 +66,8 @@ public class AlarmScheduler {
         return instance;
     }
 
-    public static boolean isWithinDefaultMargins(DateTime t, Context cxt) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(cxt);
-        String delayMinutesStr = prefs.getString("alarm_reminder_window", "60");
+    public static boolean isWithinDefaultMargins(DateTime t) {
+        String delayMinutesStr = PreferenceUtils.getString(PreferenceKeys.SETTINGS_ALARM_REMINDER_WINDOW, "60");
         long window = Long.parseLong(delayMinutesStr);
         DateTime now = DateTime.now();
         return t.isBefore(now) && t.plusMillis((int) window * 60 * 1000).isAfter(now);
@@ -77,9 +78,8 @@ public class AlarmScheduler {
      * the alarm time and the alarm reminder window defined by the user. Alarm time plus
      * alarm window must be in the future to allow alarm scheduling
      */
-    public static boolean canBeScheduled(DateTime t, Context cxt) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(cxt);
-        String delayMinutesStr = prefs.getString("alarm_reminder_window", "60");
+    public static boolean canBeScheduled(DateTime t) {
+        String delayMinutesStr = PreferenceUtils.getString(PreferenceKeys.SETTINGS_ALARM_REMINDER_WINDOW, "60");
         int window = (int) Long.parseLong(delayMinutesStr);
         return t.plusMinutes(window).isAfterNow();
     }
@@ -121,7 +121,7 @@ public class AlarmScheduler {
         Routine routine = Routine.findById(params.routineId);
         if (routine != null) {
             Log.d(TAG, "onAlarmReceived: " + routine.getId() + ", " + routine.name());
-            if (params.actionType == AlarmIntentParams.USER || isWithinDefaultMargins(routine, params.date(), ctx)) {
+            if (params.actionType == AlarmIntentParams.USER || isWithinDefaultMargins(routine, params.date())) {
                 Log.d(TAG, "Routine alarm received, is user action: " + (params.actionType == AlarmIntentParams.USER));
                 onRoutineTime(routine, params, ctx);
             } else {
@@ -135,7 +135,7 @@ public class AlarmScheduler {
         Schedule schedule = Schedule.findById(params.scheduleId);
         if (schedule != null) {
             DateTime time = params.dateTime();
-            if (params.actionType == AlarmIntentParams.USER || isWithinDefaultMargins(time, ctx)) {
+            if (params.actionType == AlarmIntentParams.USER || isWithinDefaultMargins(time)) {
 
                 Log.d(TAG, "Hourly alarm received, is user action: " + (params.actionType == AlarmIntentParams.USER));
 
@@ -148,14 +148,14 @@ public class AlarmScheduler {
     }
 
     public void onDelayRoutine(Routine r, LocalDate date, Context ctx) {
-        if (isWithinDefaultMargins(r, date, ctx)) {
-            setRepeatAlarm(r, AlarmIntentParams.forRoutine(r.getId(), date, true), ctx, getAlarmRepeatFreq(ctx) * 60 * 1000);
+        if (isWithinDefaultMargins(r, date)) {
+            setRepeatAlarm(r, AlarmIntentParams.forRoutine(r.getId(), date, true), ctx, getAlarmRepeatFreq() * 60 * 1000);
         }
     }
 
     public void onDelayHourlySchedule(Schedule s, LocalTime t, LocalDate date, Context ctx) {
-        if (isWithinDefaultMargins(date.toDateTime(t), ctx)) {
-            setRepeatAlarm(s, AlarmIntentParams.forSchedule(s.getId(), t, date, true), ctx, getAlarmRepeatFreq(ctx) * 60 * 1000);
+        if (isWithinDefaultMargins(date.toDateTime(t))) {
+            setRepeatAlarm(s, AlarmIntentParams.forSchedule(s.getId(), t, date, true), ctx, getAlarmRepeatFreq() * 60 * 1000);
         }
     }
 
@@ -175,20 +175,20 @@ public class AlarmScheduler {
         }
     }
 
-    public boolean isWithinDefaultMargins(Routine r, LocalDate date, Context cxt) {
-        return isWithinDefaultMargins(date.toDateTime(r.time()), cxt);
+    public boolean isWithinDefaultMargins(Routine r, LocalDate date) {
+        return isWithinDefaultMargins(date.toDateTime(r.time()));
     }
 
     public void onIntakeCancelled(Routine r, LocalDate date, Context ctx) {
         // set time taken
-        cancelIntake(r, date, ctx);
+        cancelIntake(r, date);
         // cancel alarms
         onIntakeCompleted(r, date, ctx);
     }
 
     public void onIntakeCancelled(Schedule s, LocalTime t, LocalDate date, Context ctx) {
         // set time taken
-        cancelIntake(s, t, date, ctx);
+        cancelIntake(s, t, date);
         // cancell all alarms
         onIntakeCompleted(s, t, date, ctx);
     }
@@ -256,9 +256,8 @@ public class AlarmScheduler {
         cancelAlarm(r, LocalDate.now(), ctx);
     }
 
-    private Long getAlarmRepeatFreq(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
+    private Long getAlarmRepeatFreq() {
+        String delayMinutesStr = PreferenceUtils.getString(PreferenceKeys.SETTINGS_ALARM_REPEAT_FREQUENCY,"15");;
         return Long.parseLong(delayMinutesStr);
     }
 
@@ -339,14 +338,14 @@ public class AlarmScheduler {
     private void setAlarmsIfNeeded(Schedule schedule, LocalDate date, Context ctx) {
         if (!schedule.repeatsHourly()) {
             for (ScheduleItem scheduleItem : schedule.items()) {
-                if (scheduleItem.routine() != null && canBeScheduled(scheduleItem.routine().time().toDateTimeToday(), ctx)) {
+                if (scheduleItem.routine() != null && canBeScheduled(scheduleItem.routine().time().toDateTimeToday())) {
                     setFirstAlarm(scheduleItem.routine(), date, ctx);
                 }
             }
         } else {
             List<DateTime> times = schedule.hourlyItemsAt(date.toDateTimeAtStartOfDay());
             for (DateTime time : times) {
-                if (canBeScheduled(time, ctx)) {
+                if (canBeScheduled(time)) {
                     setFirstAlarm(schedule, time.toLocalTime(), date, ctx);
                 }
             }
@@ -379,11 +378,10 @@ public class AlarmScheduler {
             intent.putExtra("actionType", firstParams.actionType);
             ReminderNotification.notify(ctx, ctx.getResources().getString(R.string.meds_time), routine, doses, firstParams.date(), intent, false);
             Log.d(TAG, "Show notification");
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-            boolean repeatAlarms = prefs.getBoolean("alarm_repeat_enabled", false);
+            boolean repeatAlarms = PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_REPEAT_ENABLED, false);
             if (repeatAlarms) {
                 firstParams.actionType = AlarmIntentParams.AUTO;
-                setRepeatAlarm(routine, firstParams, ctx, getAlarmRepeatFreq(ctx) * 60 * 1000);
+                setRepeatAlarm(routine, firstParams, ctx, getAlarmRepeatFreq() * 60 * 1000);
             }
         }
     }
@@ -413,11 +411,10 @@ public class AlarmScheduler {
             String title = ctx.getResources().getString(R.string.meds_time);
             ReminderNotification.notify(ctx, title, schedule, firstParams.date(), firstParams.scheduleTime(), intent, false);
             // Handle delay if needed
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-            boolean repeatAlarms = prefs.getBoolean("alarm_repeat_enabled", false);
+            boolean repeatAlarms = PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_REPEAT_ENABLED, false);
             if (repeatAlarms) {
                 firstParams.actionType = AlarmIntentParams.AUTO;
-                setRepeatAlarm(schedule, firstParams, ctx, getAlarmRepeatFreq(ctx) * 60 * 1000);
+                setRepeatAlarm(schedule, firstParams, ctx, getAlarmRepeatFreq() * 60 * 1000);
             }
         }
     }
@@ -426,7 +423,7 @@ public class AlarmScheduler {
         // get the schedule items for the current routine, excluding already taken
         List<ScheduleItem> doses = ScheduleUtils.getRoutineScheduleItems(routine, params.date());
         // cancel intake
-        cancelIntake(routine, params.date(), ctx);
+        cancelIntake(routine, params.date());
         // cancel alarms
         onIntakeCompleted(routine, params.date(), ctx);
 
@@ -440,7 +437,7 @@ public class AlarmScheduler {
 
     private void onHourlyScheduleLost(Schedule schedule, AlarmIntentParams params, Context ctx) {
         // cancel intake (set time taken)
-        cancelIntake(schedule, params.scheduleTime(), params.date(), ctx);
+        cancelIntake(schedule, params.scheduleTime(), params.date());
         // cancel alarms
         onIntakeCompleted(schedule, params.scheduleTime(), params.date(), ctx);
 
@@ -453,7 +450,7 @@ public class AlarmScheduler {
         ReminderNotification.notify(ctx, title, schedule, params.date(), params.scheduleTime(), intent, true);
     }
 
-    private void cancelIntake(Routine r, LocalDate date, Context ctx) {
+    private void cancelIntake(Routine r, LocalDate date) {
         for (ScheduleItem scheduleItem : r.scheduleItems()) {
             DailyScheduleItem ds = DB.dailyScheduleItems().findByScheduleItemAndDate(scheduleItem, date);
             if (ds.timeTaken() == null) {
@@ -464,7 +461,7 @@ public class AlarmScheduler {
         }
     }
 
-    private void cancelIntake(Schedule s, LocalTime t, LocalDate date, Context ctx) {
+    private void cancelIntake(Schedule s, LocalTime t, LocalDate date) {
         DailyScheduleItem ds = DB.dailyScheduleItems().findBy(s, date, t);
         if (ds != null && ds.timeTaken() == null) {
             Log.d(TAG, "Cancelling schedule item");

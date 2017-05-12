@@ -77,7 +77,7 @@ public class AllergiesTest {
             DB.patientAllergens().create(pa);
         }
 
-        PreferenceUtils.instance().edit().remove(PreferenceKeys.ALLERGIES_WARNING_SHOWN.key()).commit();
+        PreferenceUtils.edit().remove(PreferenceKeys.ALLERGIES_WARNING_SHOWN.key()).commit();
 
         rule.launchActivity(new Intent());
     }

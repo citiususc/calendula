@@ -102,7 +102,7 @@ public class DailyAgendaFragment extends Fragment {
         setupRecyclerView();
         setupEmptyView();
 
-        boolean expanded = PreferenceUtils.getBoolean(PreferenceKeys.DAILYAGENDA_EXPANDED, false);
+        boolean expanded = PreferenceUtils.getBoolean(PreferenceKeys.HOME_DAILYAGENDA_EXPANDED, false);
         if (expanded != isExpanded()) {
             toggleViewMode();
             ((HomePagerActivity) getActivity()).appBarLayout.setExpanded(!expanded);
@@ -489,7 +489,7 @@ public class DailyAgendaFragment extends Fragment {
 
         @Override
         public void onAfterToggleCollapse(boolean expanded, boolean somethingVisible) {
-            PreferenceUtils.instance().edit().putBoolean(PreferenceKeys.DAILYAGENDA_EXPANDED.key(), expanded).apply();
+            PreferenceUtils.edit().putBoolean(PreferenceKeys.HOME_DAILYAGENDA_EXPANDED.key(), expanded).apply();
             /*if (expanded && firstTime != null) {
                 scrollTo(firstTime);
                 firstTime = null;
