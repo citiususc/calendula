@@ -40,9 +40,13 @@ public class PreferenceUtils {
         instance = new PreferenceUtils(context);
     }
 
-    public static PreferenceUtils instance() {
+    /**
+     * @return a singleton instance of this class
+     * @throws IllegalStateException if {@link #init(Context)} hasn't been called yet
+     */
+    public static PreferenceUtils instance() throws IllegalStateException {
         if (instance == null)
-            throw new RuntimeException("PreferenceUtil must be initialized before using calling init(context)");
+            throw new IllegalStateException("PreferenceUtils must be initialized before use!");
         return instance;
     }
 
