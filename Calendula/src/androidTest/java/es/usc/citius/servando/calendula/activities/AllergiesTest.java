@@ -39,6 +39,7 @@ import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 import es.usc.citius.servando.calendula.util.CustomViewActions;
 import es.usc.citius.servando.calendula.util.CustomViewMatchers;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.TestUtils;
 
@@ -76,7 +77,7 @@ public class AllergiesTest {
             DB.patientAllergens().create(pa);
         }
 
-        PreferenceUtils.instance().edit().remove(AllergiesActivity.PREFERENCE_WARNING_SHOWN).commit();
+        PreferenceUtils.instance().edit().remove(PreferenceKeys.ALLERGIES_WARNING_SHOWN.key()).commit();
 
         rule.launchActivity(new Intent());
     }

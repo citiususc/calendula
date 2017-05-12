@@ -109,7 +109,7 @@ public class DownloadDatabaseHelper {
         SharedPreferences.Editor edit = settings.edit();
         edit.putString(PreferenceKeys.DRUGDB_LAST_VALID.key(), context.getString(R.string.database_none_id));
         edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), context.getString(R.string.database_none_id));
-        edit.commit();
+        edit.apply();
         Intent bcIntent = new Intent();
         bcIntent.setAction(InstallDatabaseService.ACTION_ERROR);
         context.sendBroadcast(bcIntent);
@@ -143,7 +143,7 @@ public class DownloadDatabaseHelper {
     }
 
     public boolean isDBDownloadingOrInstalling(Context context) {
-        long downloadId = PreferenceUtils.instance().preferences().getLong(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_ID, -1);
+        long downloadId = PreferenceUtils.getLong(PreferenceKeys.DRUGDB_DOWNLOAD_ID, -1);
         Pair<Integer, String> status = downloadStatus(downloadId, context);
         Log.d(TAG, "isDBDownloadingOrInstalling: " + status + ", " + InstallDatabaseService.isRunning);
         int st = status != null ? status.first : DownloadManager.STATUS_FAILED;
@@ -224,10 +224,10 @@ public class DownloadDatabaseHelper {
                     // save id in preferences for later use in DBDownloadReceiver
                     SharedPreferences preferences = PreferenceUtils.instance().preferences();
                     preferences.edit()
-                            .putLong(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_ID, downloadId)
-                            .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_DB, dbName)
-                            .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_VERSION, dbVersion)
-                            .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_TYPE, type.toString())
+                            .putLong(PreferenceKeys.DRUGDB_DOWNLOAD_ID.key(), downloadId)
+                            .putString(PreferenceKeys.DRUGDB_DOWNLOAD_DB.key(), dbName)
+                            .putString(PreferenceKeys.DRUGDB_DOWNLOAD_VERSION.key(), dbVersion)
+                            .putString(PreferenceKeys.DRUGDB_DOWNLOAD_TYPE.key(), type.toString())
                             .apply();
                 } catch (Exception e) {
                     Log.e(TAG, "doInBackground: ", e);

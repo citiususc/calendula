@@ -54,6 +54,7 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.NotificationEventReceiver;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
@@ -156,7 +157,7 @@ public class ReminderNotification {
     }
 
     private static void showInsistentScreen(Context context, Intent i) {
-        boolean insistentNotifications = PreferenceUtils.instance().preferences().getBoolean("alarm_insistent", false);
+        boolean insistentNotifications = PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_INSISTENT, false);
         if (insistentNotifications) {
             Intent intent = new Intent(context, LockScreenAlarmActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -210,7 +211,7 @@ public class ReminderNotification {
     private static Notification buildNotification(Context context, NotificationOptions options) {
 
         Resources res = context.getResources();
-        boolean insistentNotifications = PreferenceUtils.instance().preferences().getBoolean("alarm_insistent", false);
+        boolean insistentNotifications = PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_INSISTENT, false);
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 

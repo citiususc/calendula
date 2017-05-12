@@ -2,7 +2,6 @@ package es.usc.citius.servando.calendula.notifications;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
@@ -25,6 +24,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import pl.droidsonroids.gif.GifDrawable;
 
@@ -70,13 +70,27 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)) {
+            // stop sound and vibration if the user
+            // press volume down button
+            stopPlayingAlarm();
+        } else if ((keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
+            // restart sound and vibration if the user
+            // press volume down up
+            startPlayingAlarm();
+        }
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupForVisibilityOverLockScreen();
         setContentView(R.layout.activity_lock_screen_alarm);
         anim = (ImageView) findViewById(R.id.anim_image);
 
-        if(getIntent() != null){
+        if (getIntent() != null) {
             target = getIntent().getParcelableExtra("target");
             Log.d(TAG, "Target " + (target != null));
         }
@@ -92,20 +106,6 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
         });
         startPlayingAlarm();
         startAlarmAnimation();
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)){
-            // stop sound and vibration if the user
-            // press volume down button
-            stopPlayingAlarm();
-        }else if ((keyCode == KeyEvent.KEYCODE_VOLUME_UP)){
-            // restart sound and vibration if the user
-            // press volume down up
-            startPlayingAlarm();
-        }
-        return true;
     }
 
     @Override
@@ -134,7 +134,7 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
-            mediaPlayer.setVolume(1,1);
+            mediaPlayer.setVolume(1, 1);
             mediaPlayer.setScreenOnWhilePlaying(true);
             mediaPlayer.setDataSource(this, uri);
             mediaPlayer.prepare();
@@ -175,8 +175,7 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
      * @return A ringtone for intake insistent alarms
      */
     private Uri getAlarmUri() {
-        SharedPreferences prefs = PreferenceUtils.instance().preferences();
-        String ringtonePref = prefs.getString("pref_notification_tone", null);
+        String ringtonePref = PreferenceUtils.getString(PreferenceKeys.SETTINGS_NOTIFICATION_TONE, null);
         return ringtonePref != null ? Uri.parse(ringtonePref) : RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
     }
 
@@ -229,7 +228,7 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
 //                    finish();
 //            }
                 Log.d(TAG, "Target " + (target != null));
-                if(target != null){
+                if (target != null) {
                     startActivity(target);
                 }
                 finish();

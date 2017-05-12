@@ -24,15 +24,35 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 
 /**
+ * Keys for preferences.
+ * <p>
+ * To access the key string use {@link #key()}.
+ * <p>
  * Created by alvaro.brey.vilas on 05/01/17.
  */
 public enum PreferenceKeys {
 
+    // Allergies
+    ALLERGIES_WARNING_SHOWN(R.string.prefkey_allergies_warning_shown),
+    // DailyAgendaFragment
+    DAILYAGENDA_EXPANDED(R.string.prefkey_dailyagenda_expanded),
+    // Drug DB
     DRUGDB_CURRENT_DB(R.string.prefkey_drugdb_current_db),
     DRUGDB_ENABLE_DRUGDB(R.string.prefkey_drugdb_enable_drugdb),
     DRUGDB_LAST_VALID(R.string.prefkey_drugdb_last_valid),
-    DRUGDB_VERSION(R.string.prefkey_drugdb_version);
+    DRUGDB_VERSION(R.string.prefkey_drugdb_version),
+    DRUGDB_DOWNLOAD_ID(R.string.prefkey_drugdb_download_id),
+    DRUGDB_DOWNLOAD_DB(R.string.prefkey_drugdb_download_db),
+    DRUGDB_DOWNLOAD_VERSION(R.string.prefkey_drugdb_download_version),
+    DRUGDB_DOWNLOAD_TYPE(R.string.prefkey_drugdb_download_type),
+    // Test data module
+    TEST_DATA_GENERATED(R.string.prefkey_testdata_generated),
+    // Settings
+    SETTINGS_ALARM_INSISTENT(R.string.prefkey_settings_alarm_insistent),
+    SETTINGS_NOTIFICATION_TONE(R.string.prefkey_settings_notification_tone),
+    SETTINGS_STOCK_ALERT_DAYS(R.string.prefkey_settings_stock_alert_days);
 
+    // TODO: 11/05/17 port the rest of keys here
     @StringRes
     private final int stringId;
 
