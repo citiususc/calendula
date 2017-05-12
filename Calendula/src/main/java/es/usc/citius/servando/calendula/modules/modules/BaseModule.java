@@ -23,6 +23,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -33,6 +34,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.Iconics;
 
 import org.joda.time.LocalTime;
+
+import java.io.IOException;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
@@ -53,6 +56,7 @@ import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.PresentationsTypeface;
+import es.usc.citius.servando.calendula.util.SettingsProperties;
 
 /**
  * Created by alvaro.brey.vilas on 30/11/16.
@@ -102,6 +106,13 @@ public class BaseModule extends CalendulaModule {
     @Override
     protected void onApplicationStartup(Context ctx) {
         PreferenceUtils.init(ctx);
+
+
+        try {
+            SettingsProperties.init(ctx);
+        } catch (IOException e) {
+            Log.e(TAG, "onApplicationStartup: An exception happened when loading settings file");
+        }
 
         // initialize SQLite engine
         initializeDatabase(ctx);

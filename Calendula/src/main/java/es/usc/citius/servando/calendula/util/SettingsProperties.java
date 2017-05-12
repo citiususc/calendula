@@ -30,49 +30,51 @@ import java.util.Properties;
 /**
  * Created by joseangel.pineiro on 7/3/14.
  */
-public class Settings {
+public class SettingsProperties {
 
-    private static final String TAG = Settings.class.getName();
+    private static final String TAG = SettingsProperties.class.getName();
 
     private static final String SETTINGS_FILE_NAME = "settings.properties";
 
-    private static final Settings instance = new Settings();
+    private static SettingsProperties instance;
 
-    Properties properties;
+    private Properties properties;
 
-    private Settings() {
-    }
-
-    public static Settings instance() {
-        return instance;
-    }
-
-    public void load(Context ctx) throws Exception {
+    private SettingsProperties(final Context ctx) throws IOException {
         Resources resources = ctx.getResources();
         AssetManager assetManager = resources.getAssets();
-        // Read from the /assets directory
 
         Log.d(TAG, "Loading settings...");
         try {
             InputStream inputStream = assetManager.open(SETTINGS_FILE_NAME);
             properties = new Properties();
             properties.load(inputStream);
-            Log.d(TAG, "Settings loaded successfully!" + properties.toString());
+            Log.d(TAG, "SettingsProperties loaded successfully!" + properties.toString());
         } catch (IOException e) {
             properties = new Properties();
-            throw new Exception("Error loading settings file", e);
+            throw e;
         }
     }
 
+    /**
+     * @return the instance
+     * @throws if {@link #init(Context)} hasn't been called yet
+     */
+    public static SettingsProperties instance() throws IllegalStateException {
+        if (instance == null)
+            throw new IllegalStateException("SettingsProperties not initialized!");
+        return instance;
+    }
+
+    public static void init(Context ctx) throws IOException {
+        instance = new SettingsProperties(ctx);
+    }
+
     public String get(String key) {
-        if (properties == null)
-            throw new IllegalStateException("Settings not loaded");
         return properties.getProperty(key);
     }
 
     public String get(String key, String defaultValue) {
-        if (properties == null)
-            throw new IllegalStateException("Settings not loaded");
         return properties.getProperty(key, defaultValue);
     }
 

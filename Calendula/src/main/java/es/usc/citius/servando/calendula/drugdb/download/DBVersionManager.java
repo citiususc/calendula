@@ -39,8 +39,8 @@ import es.usc.citius.servando.calendula.database.DatabaseHelper;
 import es.usc.citius.servando.calendula.util.HttpDownloadUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
-import es.usc.citius.servando.calendula.util.Settings;
-import es.usc.citius.servando.calendula.util.SettingsKeys;
+import es.usc.citius.servando.calendula.util.SettingsProperties;
+import es.usc.citius.servando.calendula.util.SettingsPropertiesKeys;
 
 /**
  * Created by alvaro.brey.vilas on 04/01/17.
@@ -59,7 +59,7 @@ public class DBVersionManager {
      * @return the newest working version
      */
     public static String getLastDBVersion(String databaseID) {
-        final String downloadUrl = Settings.instance().get(SettingsKeys.DATABASE_LOCATION);
+        final String downloadUrl = SettingsProperties.instance().get(SettingsPropertiesKeys.DATABASE_LOCATION);
         final String url = downloadUrl + VERSION_FILE;
 
         final String result = HttpDownloadUtil.downloadFileToText(url).trim();
