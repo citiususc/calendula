@@ -253,7 +253,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
             if (searchTask != null)
                 searchTask.cancel(true);
             searchTask = new DoSearchTask();
-            searchTask.execute((Object) new String[]{filter});
+            searchTask.execute(new String[]{filter});
         }
     }
 
