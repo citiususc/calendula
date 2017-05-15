@@ -63,7 +63,7 @@ public class MedicinesActivityEditTest extends ActivityInstrumentationTestCase2<
         assertEquals(1, DB.medicines().count());
         assertEquals(MEDICINE_NAME, DB.medicines().findAll().get(0).name());
 
-        TestUtils.sleep(200);
+        TestUtils.sleep(1500);
         // select capsules presentation
         onView(withId(R.id.med_presentation_2))
                 .perform(click());
