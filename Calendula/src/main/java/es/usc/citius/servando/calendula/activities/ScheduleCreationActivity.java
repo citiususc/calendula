@@ -31,7 +31,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,6 +66,7 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
@@ -75,7 +75,7 @@ import es.usc.citius.servando.calendula.util.Snack;
 
 public class ScheduleCreationActivity extends CalendulaActivity implements ViewPager.OnPageChangeListener {
 
-    public static final String TAG = ScheduleCreationActivity.class.getName();
+    public static final String TAG = "ScheduleCreationAct";
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -115,13 +115,13 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                     s.setState(Schedule.ScheduleState.ENABLED);
                     s.save();
 
-                    Log.d(TAG, "Saving schedule..." + s.toString());
+                    LogUtil.d(TAG, "Saving schedule..." + s.toString());
 
                     if (!s.repeatsHourly()) {
                         for (ScheduleItem item : ScheduleHelper.instance().getScheduleItems()) {
                             item.setSchedule(s);
                             item.save();
-                            Log.d(TAG, "Saving item..." + item.getId());
+                            LogUtil.d(TAG, "Saving item..." + item.getId());
                             // add to daily schedule
                             DailyAgenda.instance().addItem(patient, item, false);
                         }
@@ -139,7 +139,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
 
             ScheduleHelper.instance().clear();
             AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ScheduleCreationActivity.this);
-            Log.d(TAG, "Schedule saved successfully!");
+            LogUtil.d(TAG, "Schedule saved successfully!");
             Snack.show(R.string.schedule_created_message, this);
             CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
             finish();
@@ -208,7 +208,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
 
             ScheduleHelper.instance().clear();
             AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ScheduleCreationActivity.this);
-            Log.d(TAG, "Schedule saved successfully!");
+            LogUtil.d(TAG, "Schedule saved successfully!");
             Toast.makeText(this, R.string.schedule_created_message, Toast.LENGTH_SHORT).show();
             finish();
         } catch (Exception e) {
@@ -313,7 +313,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
     }
 
     public void onEvent(PersistenceEvents.MedicineAddedEvent event) {
-        Log.d("onEvent", event.id + " ----");
+        LogUtil.d(TAG, event.id + " ----");
         ((SelectMedicineListFragment) getViewPagerFragment(0)).setSelectedMed(event.id);
     }
 

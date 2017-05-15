@@ -24,12 +24,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import es.usc.citius.servando.calendula.R;
@@ -45,7 +43,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
  */
 public class PickupNotification {
 
-    public static final String TAG = PickupNotification.class.getName();
+    public static final String TAG = "PickupNotification";
     /**
      * The unique identifier for this type of notification.
      */

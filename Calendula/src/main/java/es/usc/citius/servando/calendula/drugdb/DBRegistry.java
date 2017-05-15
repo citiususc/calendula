@@ -20,8 +20,6 @@ package es.usc.citius.servando.calendula.drugdb;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
@@ -43,6 +41,7 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionActiveIngredient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionExcipient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PresentationForm;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
@@ -51,6 +50,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
  */
 public class DBRegistry {
 
+    private static final String TAG = "DBRegistry";
     private static DBRegistry instance;
 
     private Map<String, PrescriptionDBMgr> databases;
@@ -114,7 +114,7 @@ public class DBRegistry {
 
     public PrescriptionDBMgr current() {
         String key = settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), none);
-        Log.d("DBRegistry", "Key: " + key);
+        LogUtil.d(TAG, "Key: " + key);
         return (key != null && !key.equals(none) && !key.equals(settingUp)) ? databases.get(key) : defaultDBMgr;
     }
 

@@ -18,8 +18,6 @@
 
 package es.usc.citius.servando.calendula.util;
 
-import android.util.Log;
-
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 
@@ -79,10 +77,10 @@ public class HtmlCacheManager {
 
         HtmlCacheEntry newEntry = new HtmlCacheEntry(hashCode, new Date(DateTime.now().getMillis()), data, ttl);
         try {
-            Log.d(TAG, "put: writing entry: " + newEntry);
+            LogUtil.d(TAG, "put: writing entry: " + newEntry);
             return getDao().create(newEntry) == 1;
         } catch (SQLException e) {
-            Log.e(TAG, "put: ", e);
+            LogUtil.e(TAG, "put: ", e);
             return false;
         }
 
@@ -92,10 +90,10 @@ public class HtmlCacheManager {
         final int hashCode = url.hashCode();
         HtmlCacheEntry entry = retrieve(hashCode);
         if (entry != null) {
-            Log.d(TAG, "remove: removing entry: " + entry);
+            LogUtil.d(TAG, "remove: removing entry: " + entry);
             return remove(entry);
         } else {
-            Log.d(TAG, "remove: entry does not exist");
+            LogUtil.d(TAG, "remove: entry does not exist");
             return false;
         }
     }
@@ -124,7 +122,7 @@ public class HtmlCacheManager {
                     return count;
                 }
             });
-            Log.v(TAG, "purgeCache: purged " + count + " entries");
+            LogUtil.v(TAG, "purgeCache: purged " + count + " entries");
             return count;
         } catch (Exception e) {
             return -1;
@@ -138,7 +136,7 @@ public class HtmlCacheManager {
             if (htmlCacheEntries.isEmpty()) {
                 return null;
             } else if (htmlCacheEntries.size() > 1) {
-                Log.w(TAG, "Inconsistent state of cache: hashcode" + hashCode + " is not unique. Deleting all copies.");
+                LogUtil.w(TAG, "Inconsistent state of cache: hashcode" + hashCode + " is not unique. Deleting all copies.");
                 for (HtmlCacheEntry entry : htmlCacheEntries) {
                     remove(entry);
                 }
@@ -147,13 +145,13 @@ public class HtmlCacheManager {
                 if (checkTtl(htmlCacheEntries.get(0))) {
                     return htmlCacheEntries.get(0);
                 } else {
-                    Log.d(TAG, "retrieve: Deleting invalid entry with hashCode: " + hashCode);
+                    LogUtil.d(TAG, "retrieve: Deleting invalid entry with hashCode: " + hashCode);
                     remove(htmlCacheEntries.get(0));
                     return null;
                 }
             }
         } catch (SQLException e) {
-            Log.e(TAG, "retrieve: ", e);
+            LogUtil.e(TAG, "retrieve: ", e);
             return null;
         }
     }
@@ -169,7 +167,7 @@ public class HtmlCacheManager {
         try {
             return getDao().delete(entry) == 1;
         } catch (SQLException e) {
-            Log.e(TAG, "remove: ", e);
+            LogUtil.e(TAG, "remove: ", e);
             return false;
         }
     }
@@ -180,7 +178,7 @@ public class HtmlCacheManager {
                 remove(entry);
             }
         } catch (SQLException e) {
-            Log.e(TAG, "clearCache: ", e);
+            LogUtil.e(TAG, "clearCache: ", e);
         }
     }
 

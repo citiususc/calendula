@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula.util;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,7 +31,7 @@ import java.util.Properties;
  */
 public class SettingsProperties {
 
-    private static final String TAG = SettingsProperties.class.getName();
+    private static final String TAG = "SettingsProperties";
 
     private static final String SETTINGS_FILE_NAME = "settings.properties";
 
@@ -44,12 +43,12 @@ public class SettingsProperties {
         Resources resources = ctx.getResources();
         AssetManager assetManager = resources.getAssets();
 
-        Log.d(TAG, "Loading settings...");
+        LogUtil.d(TAG, "Loading settings...");
         try {
             InputStream inputStream = assetManager.open(SETTINGS_FILE_NAME);
             properties = new Properties();
             properties.load(inputStream);
-            Log.d(TAG, "SettingsProperties loaded successfully!" + properties.toString());
+            LogUtil.d(TAG, "SettingsProperties loaded successfully!" + properties.toString());
         } catch (IOException e) {
             properties = new Properties();
             throw e;

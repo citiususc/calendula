@@ -25,7 +25,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +42,7 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Routine;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.Snack;
 
 
@@ -51,6 +51,7 @@ import es.usc.citius.servando.calendula.util.Snack;
  */
 public class RoutineCreateOrEditFragment extends DialogFragment implements RadialTimePickerDialog.OnTimeSetListener, TimePickerDialogFragment.TimePickerDialogHandler {
 
+    private static final String TAG = "RoutineCoEFragment";
     OnRoutineEditListener mRoutineEditCallback;
     Routine mRoutine;
 
@@ -104,7 +105,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
             public void onClick(View v) {
 
                 float density = getResources().getDisplayMetrics().densityDpi;
-                Log.d("RoutineCOEFragment", "Density: " + density);
+                LogUtil.d(TAG, "Density: " + density);
                 if (density >= DisplayMetrics.DENSITY_XHIGH) {
                     RadialTimePickerDialog timePickerDialog = RadialTimePickerDialog
                             .newInstance(RoutineCreateOrEditFragment.this, hour, minute, true);
@@ -168,7 +169,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
             else {
                 mRoutine = new Routine(new LocalTime(hour, minute), name);
                 mRoutine.setPatient(DB.patients().getActive(getContext()));
-                Log.d(getTag(), "Routine created");
+                LogUtil.d(TAG, "Routine created");
                 DB.routines().saveAndFireEvent(mRoutine);
                 if (mRoutineEditCallback != null) {
                     mRoutineEditCallback.onRoutineCreated(mRoutine);
@@ -213,11 +214,11 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        Log.d(getTag(), "Activity " + activity.getClass().getName() + ", " + (activity instanceof OnRoutineEditListener));
+        LogUtil.d(TAG, "Activity " + activity.getClass().getName() + ", " + (activity instanceof OnRoutineEditListener));
         // If the container activity has implemented
         // the callback interface, set it as listener
         if (activity instanceof OnRoutineEditListener) {
-            Log.d(getTag(), "Set onRoutineEditListener onAttach");
+            LogUtil.d(TAG, "Set onRoutineEditListener onAttach");
             mRoutineEditCallback = (OnRoutineEditListener) activity;
         }
     }
@@ -244,7 +245,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
     }
 
     private void setRoutine(Routine r) {
-        Log.d(getTag(), "Routine set: " + r.name());
+        LogUtil.d(TAG, "Routine set: " + r.name());
         mRoutine = r;
         mNameTextView.setText(mRoutine.name());
         updateTime();

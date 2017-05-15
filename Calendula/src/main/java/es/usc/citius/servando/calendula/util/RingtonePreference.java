@@ -26,7 +26,6 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +44,7 @@ import es.usc.citius.servando.calendula.R;
  */
 public class RingtonePreference extends android.preference.RingtonePreference {
 
+    private static final String TAG = "RingtonePreference";
     String[] titles;
     String[] values;
     SimpleListAdapter adapter;
@@ -82,7 +82,7 @@ public class RingtonePreference extends android.preference.RingtonePreference {
             String id = cursor.getString(RingtoneManager.ID_COLUMN_INDEX);
             String uri = cursor.getString(RingtoneManager.URI_COLUMN_INDEX) + "/" + id;
 
-            Log.d("TAG", title + ", " + uri + ", " + id);
+            LogUtil.d(TAG, title + ", " + uri + ", " + id);
 
             _titles.add(title);
             _values.add(uri);

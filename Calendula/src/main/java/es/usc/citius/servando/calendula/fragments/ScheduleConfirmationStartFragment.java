@@ -33,7 +33,7 @@ import es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity;
  */
 public class ScheduleConfirmationStartFragment extends Fragment {
 
-    public static final String TAG = ScheduleConfirmationStartFragment.class.getName();
+    public static final String TAG = "ScheConfStartFragment";
 
 
     public static ScheduleConfirmationStartFragment newInstance() {

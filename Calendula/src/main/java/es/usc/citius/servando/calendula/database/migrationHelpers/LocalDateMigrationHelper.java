@@ -18,8 +18,6 @@
 
 package es.usc.citius.servando.calendula.database.migrationHelpers;
 
-import android.util.Log;
-
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.FieldType;
@@ -38,6 +36,7 @@ import es.usc.citius.servando.calendula.database.DatabaseHelper;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.Schedule;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Migrate local dates from ddMMYYYY to YYYYMMdd to make them sortable
@@ -52,25 +51,25 @@ public class LocalDateMigrationHelper {
         Dao<ScheduleStub, Long> schedulesDao = helper.getDao(ScheduleStub.class);
         Dao<DailyScheduleItemStub, Long> dailyItemsDao = helper.getDao(DailyScheduleItemStub.class);
         Dao<PickupInfoStub, Long> pickupsDao = helper.getDao(PickupInfoStub.class);
-        Log.d(TAG, "Migrating local dates...");
+        LogUtil.d(TAG, "Migrating local dates...");
         // update Schedule table local dates
         List<ScheduleStub> scheduleStubs = schedulesDao.queryForAll();
         for (ScheduleStub s : scheduleStubs) {
             schedulesDao.update(s);
         }
-        Log.d(TAG, "Schedules table: done.");
+        LogUtil.d(TAG, "Schedules table: done.");
         // update DailyScheduleItem table local dates
         List<DailyScheduleItemStub> dailyStubs = dailyItemsDao.queryForAll();
         for (DailyScheduleItemStub d : dailyStubs) {
             dailyItemsDao.update(d);
         }
-        Log.d(TAG, "DailyScheduleItems table: done.");
+        LogUtil.d(TAG, "DailyScheduleItems table: done.");
         // update PickupInfo  table local dates
         List<PickupInfoStub> pickups = pickupsDao.queryForAll();
         for (PickupInfoStub p : pickups) {
             pickupsDao.update(p);
         }
-        Log.d(TAG, "PickupsInfo table: done.");
+        LogUtil.d(TAG, "PickupsInfo table: done.");
     }
 
     @DatabaseTable(tableName = "Schedules")

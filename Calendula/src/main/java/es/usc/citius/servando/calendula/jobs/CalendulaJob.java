@@ -21,8 +21,6 @@ package es.usc.citius.servando.calendula.jobs;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
 
-import org.joda.time.Duration;
-
 /**
  * Created by alvaro.brey.vilas on 05/01/17.
  */
@@ -61,6 +59,7 @@ public abstract class CalendulaJob extends Job {
 
     /**
      * Returns a {@link JobRequest} with which to schedule the job.
+     *
      * @return the request
      */
     public abstract JobRequest getRequest();

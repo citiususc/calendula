@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula.scheduling;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.joda.time.LocalDate;
@@ -32,13 +31,14 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * This class receives our routine alarms
  */
 public class NotificationEventReceiver extends BroadcastReceiver {
 
-    public static final String TAG = NotificationEventReceiver.class.getName();
+    public static final String TAG = "NotificationEvReceiver";
 
 
     @Override
@@ -51,13 +51,13 @@ public class NotificationEventReceiver extends BroadcastReceiver {
 
         int action = intent.getIntExtra(CalendulaApp.INTENT_EXTRA_ACTION, -1);
 
-        Log.d(TAG, "Notification event received - Action : " + action);
+        LogUtil.d(TAG, "Notification event received - Action : " + action);
 
         String dateStr = intent.getStringExtra("date");
         if (dateStr != null) {
             date = DateTimeFormat.forPattern(AlarmIntentParams.DATE_FORMAT).parseLocalDate(dateStr);
         } else {
-            Log.w(TAG, "Date not supplied, assuming today.");
+            LogUtil.w(TAG, "Date not supplied, assuming today.");
             date = LocalDate.now();
         }
 
@@ -100,7 +100,7 @@ public class NotificationEventReceiver extends BroadcastReceiver {
                 break;
 
             default:
-                Log.d(TAG, "Request not handled " + intent.toString());
+                LogUtil.d(TAG, "Request not handled " + intent.toString());
                 break;
         }
 

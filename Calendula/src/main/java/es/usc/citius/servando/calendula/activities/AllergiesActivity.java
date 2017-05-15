@@ -30,7 +30,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -81,6 +80,7 @@ import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert.AllergyAlertInfo;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Snack;
@@ -198,7 +198,7 @@ public class AllergiesActivity extends CalendulaActivity {
                                 a.setDetails(d);
                                 DB.alerts().save(a);
                             } else {
-                                Log.wtf(TAG, "Duplicate alerts: " + list);
+                                LogUtil.wtf(TAG, "Duplicate alerts: " + list);
                             }
                         } else {
                             AlertManager.createAlert(new AllergyPatientAlert(conflict, new ArrayList<AllergenVO>() {{
@@ -271,7 +271,7 @@ public class AllergiesActivity extends CalendulaActivity {
 
             @Override
             public void onClick(View view, int i, FastAdapter fastAdapter, AbstractItem item) {
-                Log.d(TAG, "onEvent() called with: view = [" + view + ", i = [" + i + "], fastAdapter = [" + fastAdapter + "], item = [" + item + "]");
+                LogUtil.d(TAG, "onEvent() called with: view = [" + view + ", i = [" + i + "], fastAdapter = [" + fastAdapter + "], item = [" + item + "]");
                 switch (view.getId()) {
                     case R.id.delete_button:
                         // check if group or item
@@ -283,7 +283,7 @@ public class AllergiesActivity extends CalendulaActivity {
                                 showDeleteConfirmationDialog((AllergyItem) item);
                                 break;
                             default:
-                                Log.w(TAG, "onClick: Unexpected item type: " + item);
+                                LogUtil.w(TAG, "onClick: Unexpected item type: " + item);
                                 break;
                         }
                         break;
@@ -298,7 +298,7 @@ public class AllergiesActivity extends CalendulaActivity {
                             allergiesAdapter.collapse(i);
                         break;
                     default:
-                        Log.w(TAG, "onClick: Unexpected view type on click hook: " + view);
+                        LogUtil.w(TAG, "onClick: Unexpected view type on click hook: " + view);
                         break;
                 }
             }
@@ -410,7 +410,7 @@ public class AllergiesActivity extends CalendulaActivity {
                 }
                 return index;
             } catch (SQLException e) {
-                Log.e(TAG, "Couldn't delete allergen " + a, e);
+                LogUtil.e(TAG, "Couldn't delete allergen " + a, e);
                 return -2;
             }
 
@@ -465,10 +465,10 @@ public class AllergiesActivity extends CalendulaActivity {
             try {
                 rows = DB.patientAllergens().create(allergen);
             } catch (SQLException e) {
-                Log.e(TAG, "storeAllergen: couldn't create allergy", e);
+                LogUtil.e(TAG, "storeAllergen: couldn't create allergy", e);
                 return SaveResult.ERROR;
             }
-            Log.d(TAG, "storeAllergen: inserted allergen into database: " + allergen);
+            LogUtil.d(TAG, "storeAllergen: inserted allergen into database: " + allergen);
             if (rows == 1) {
                 final boolean r = checkConflictsAndCreateAlerts(new AllergenVO(allergen));
                 currentAllergies.add(allergen);
@@ -502,9 +502,9 @@ public class AllergiesActivity extends CalendulaActivity {
 
         @Override
         protected Integer doInBackground(AllergyGroupItem... params) {
-            Log.d(TAG, "doInBackground() called with: params = [" + Arrays.toString(params) + "]");
+            LogUtil.d(TAG, "doInBackground() called with: params = [" + Arrays.toString(params) + "]");
             if (params.length != 1) {
-                Log.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + params.length);
+                LogUtil.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + params.length);
                 throw new IllegalArgumentException("Invalid argument length");
             }
             int index = allergiesAdapter.getAdapterPosition(params[0]);
@@ -578,7 +578,7 @@ public class AllergiesActivity extends CalendulaActivity {
         @Override
         protected Integer doInBackground(AllergyItem... params) {
             if (params.length != 1) {
-                Log.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + params.length);
+                LogUtil.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + params.length);
                 throw new IllegalArgumentException("Invalid argument length");
             }
             int index = allergiesAdapter.getAdapterPosition(params[0]);
@@ -617,7 +617,7 @@ public class AllergiesActivity extends CalendulaActivity {
         @Override
         protected final Result doInBackground(Collection<AllergenGroupWrapper>... items) {
             if (items.length != 1) {
-                Log.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + items.length);
+                LogUtil.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + items.length);
                 throw new IllegalArgumentException("Invalid argument length");
             }
             final Collection<AllergenGroupWrapper> ws = items[0];

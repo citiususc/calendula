@@ -30,7 +30,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -63,6 +62,7 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.medicine.MedicineSortUtil.MedSortType;
 import es.usc.citius.servando.calendula.util.view.CollapseExpandAnimator;
 
@@ -131,7 +131,7 @@ public class MedicinesListFragment extends Fragment {
     }
 
     public void notifyDataChange() {
-        Log.d(getTag(), "Medicines - Notify data change");
+        LogUtil.d(TAG, "Medicines - Notify data change");
         new ReloadItemsTask().execute();
     }
 
@@ -174,7 +174,7 @@ public class MedicinesListFragment extends Fragment {
     }
 
     public void toggleSort() {
-        Log.d(TAG, "toggleSort() called");
+        LogUtil.d(TAG, "toggleSort() called");
         if (isSortCollapsed()) {
             int targetHeight = (int) getResources().getDimension(R.dimen.sort_bar_height);
             CollapseExpandAnimator.expand(sortLayout, 100, targetHeight);
@@ -227,7 +227,7 @@ public class MedicinesListFragment extends Fragment {
 
     private boolean isSortCollapsed() {
         final boolean collapsed = sortLayout.getLayoutParams().height == 0;
-        Log.d(TAG, "isSortCollapsed() returned: " + collapsed);
+        LogUtil.d(TAG, "isSortCollapsed() returned: " + collapsed);
         return collapsed;
     }
 
@@ -245,7 +245,7 @@ public class MedicinesListFragment extends Fragment {
                     Collections.sort(mMedicines, cmp);
                     updateAdapterItems();
                 } else {
-                    Log.e(TAG, "onItemSelected: null comparator! wrong sort type?");
+                    LogUtil.e(TAG, "onItemSelected: null comparator! wrong sort type?");
                 }
             }
 
@@ -340,7 +340,7 @@ public class MedicinesListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            Log.d(TAG, "Reloading items...");
+            LogUtil.d(TAG, "Reloading items...");
             mMedicines = DB.medicines().findAllForActivePatient(getContext());
             return null;
         }
@@ -352,7 +352,7 @@ public class MedicinesListFragment extends Fragment {
             Collections.sort(mMedicines, sortType.comparator());
             updateViewVisibility();
             updateAdapterItems();
-            Log.d(TAG, "Reloaded items, count: " + mMedicines.size());
+            LogUtil.d(TAG, "Reloaded items, count: " + mMedicines.size());
         }
     }
 

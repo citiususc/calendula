@@ -18,9 +18,9 @@
 
 package es.usc.citius.servando.calendula.jobs;
 
-import android.util.Log;
-
 import com.evernote.android.job.JobManager;
+
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by alvaro.brey.vilas on 05/01/17.
@@ -39,19 +39,19 @@ public class CalendulaJobScheduler {
         int jobs = JobManager.instance().getAllJobsForTag(job.getTag()).size();
         int requests = JobManager.instance().getAllJobRequestsForTag(job.getTag()).size();
 
-        Log.d(TAG, "scheduleJob: There are " + jobs + " running and " + requests + " requests already for " + job.getTag());
+        LogUtil.d(TAG, "scheduleJob: There are " + jobs + " running and " + requests + " requests already for " + job.getTag());
         if (job.isUnique()) {
             if (jobs + requests != 1 || job.shouldOverwritePrevious()) {
                 if (jobs + requests != 0) {
-                    Log.v(TAG, "Removing duplicate jobs/requests");
+                    LogUtil.v(TAG, "Removing duplicate jobs/requests");
                     JobManager.instance().cancelAllForTag(job.getTag());
                 }
                 //and create one
-                Log.v(TAG, "Scheduling new job " + job.getTag());
+                LogUtil.v(TAG, "Scheduling new job " + job.getTag());
                 job.getRequest().schedule();
             }
         } else {
-            Log.v(TAG, "Scheduling new job " + job.getTag());
+            LogUtil.v(TAG, "Scheduling new job " + job.getTag());
             job.getRequest().schedule();
         }
 

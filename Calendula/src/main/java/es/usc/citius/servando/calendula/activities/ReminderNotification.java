@@ -24,13 +24,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.Pair;
@@ -63,7 +61,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
  */
 public class ReminderNotification {
 
-    public static final String TAG = ReminderNotification.class.getName();
+    public static final String TAG = "ReminderNotification";
 
     private static final String NOTIFICATION_ROUTINE_TAG = "Reminder";
     private static final String NOTIFICATION_SCHEDULE_TAG = "ScheduleReminder";

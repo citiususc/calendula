@@ -18,8 +18,6 @@
 
 package es.usc.citius.servando.calendula.util;
 
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -58,10 +56,10 @@ public class HttpDownloadUtil {
             fileOutput.close();
             return true;
         } catch (MalformedURLException e) {
-            Log.e(TAG, "downloadFile: ", e);
+            LogUtil.e(TAG, "downloadFile: ", e);
             return false;
         } catch (IOException e) {
-            Log.e(TAG, "downloadFile: ", e);
+            LogUtil.e(TAG, "downloadFile: ", e);
             return false;
         }
     }
@@ -81,7 +79,7 @@ public class HttpDownloadUtil {
             in.close();
             return sb.toString();
         } catch (IOException e) {
-            Log.e(TAG, "downloadFileToText: ", e);
+            LogUtil.e(TAG, "downloadFileToText: ", e);
             return null;
         }
     }

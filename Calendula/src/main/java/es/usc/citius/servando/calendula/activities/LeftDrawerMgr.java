@@ -25,7 +25,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -57,6 +56,7 @@ import es.usc.citius.servando.calendula.modules.modules.AllergiesModule;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 /**
@@ -80,6 +80,8 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
     public static final int CALENDAR = 12;
 
     public static final int ALLERGIES = 11;
+
+    private static final String TAG = "LeftDrawerMgr";
 
 
     private AccountHeader headerResult = null;
@@ -109,7 +111,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
                 .withIdentifier(PATIENT_ADD));
 
         for (Patient p : DB.patients().findAll()) {
-            Log.d("LeftDrawer", "Adding patient to drawer: " + p.name());
+            LogUtil.d(TAG, "Adding patient to drawer: " + p.name());
             profiles.add(genProfile(p));
         }
 
@@ -273,7 +275,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
     }
 
     public void onPagerPositionChange(int pagerPosition) {
-        Log.d("LeftDrawer", "onPagerPositionChange: " + pagerPosition);
+        LogUtil.d(TAG, "onPagerPositionChange: " + pagerPosition);
         switch (pagerPosition) {
             case 0:
                 drawer.setSelection(HOME, false);

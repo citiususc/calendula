@@ -19,19 +19,19 @@
 package es.usc.citius.servando.calendula.database;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.j256.ormlite.misc.TransactionManager;
 
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.drugdb.model.database.DrugDBModule;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 
 public class DB {
 
 
-    public static final String TAG = DB.class.getSimpleName();
+    public static final String TAG = "DB";
 
     // Database name
     public static String DB_NAME = "calendula.db";
@@ -89,7 +89,7 @@ public class DB {
             PatientAlerts = new PatientAlertDao(db);
             PatientAllergens = new PatientAllergenDao(db);
             AllergyGroups = new AllergyGroupDao(db);
-            Log.v(TAG, "DB initialized " + DB.DB_NAME);
+            LogUtil.v(TAG, "DB initialized " + DB.DB_NAME);
         }
 
     }
@@ -101,7 +101,7 @@ public class DB {
         initialized = false;
         db.close();
         manager.releaseHelper(db);
-        Log.v(TAG, "DB disposed");
+        LogUtil.v(TAG, "DB disposed");
     }
 
     public static DatabaseHelper helper() {

@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,6 +36,7 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by joseangel.pineiro on 11/6/15.
@@ -56,7 +56,7 @@ public class AlertViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public AlertViewRecyclerAdapter(List<PatientAlert> items, final RecyclerView rv, final LinearLayoutManager llm, Activity ctx) {
         this.items = items;
-        Log.d(TAG, "AlertViewRecyclerAdapter: items " + this.items.size());
+        LogUtil.d(TAG, "AlertViewRecyclerAdapter: items " + this.items.size());
 
     }
 
@@ -67,7 +67,7 @@ public class AlertViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public int getItemViewType(int position) {
         PatientAlert item = items.get(position);
-        Log.d(TAG, "getItemViewType() called with: " + "position = [" + position + "]: " + item.viewProviderType());
+        LogUtil.d(TAG, "getItemViewType() called with: " + "position = [" + position + "]: " + item.viewProviderType());
         if (item.viewProviderType() != null) {
             return getTypeForClass(item.viewProviderType());
         }
@@ -78,7 +78,7 @@ public class AlertViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int type) {
 
         Integer viewType = type;
-        Log.d(TAG, "onCreateViewHolder() called with: viewType = [" + viewType + "]");
+        LogUtil.d(TAG, "onCreateViewHolder() called with: viewType = [" + viewType + "]");
         if (viewType == DEFAULT_ALERT) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.medicine_alert_list_item, parent, false);
             return new NormalItemViewHolder(v);
@@ -91,20 +91,20 @@ public class AlertViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final PatientAlert item = items.get(position);
-        Log.d(TAG, "onBindViewHolder() called with: " + item.viewProviderType());
+        LogUtil.d(TAG, "onBindViewHolder() called with: " + item.viewProviderType());
         if (holder instanceof NormalItemViewHolder) {
             onBindNormalItemViewHolder((NormalItemViewHolder) holder, item, position);
         } else if (item.viewProviderType() != null) {
-            Log.d(TAG, "onBindViewHolder() provider type found");
+            LogUtil.d(TAG, "onBindViewHolder() provider type found");
             getProviderForClass(item.viewProviderType()).onBindViewHolder(holder, item);
         } else {
-            Log.d(TAG, "onBindViewHolder: unknown view holder type");
+            LogUtil.d(TAG, "onBindViewHolder: unknown view holder type");
         }
     }
 
     @Override
     public int getItemCount() {
-        Log.d(TAG, "getItemCount: " + items.size());
+        LogUtil.d(TAG, "getItemCount: " + items.size());
         return items.size();
     }
 

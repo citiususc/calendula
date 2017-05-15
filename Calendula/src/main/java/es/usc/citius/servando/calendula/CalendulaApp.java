@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.util.Log;
 
 import com.squareup.leakcanary.LeakCanary;
 
@@ -37,6 +36,7 @@ import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.modules.modules.PharmacyModule;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by castrelo on 4/10/14.
@@ -99,7 +99,7 @@ public class CalendulaApp extends Application {
 
         // If the database already exists, return
         if (!dbPath.exists()) {
-            Log.d("APP", "Database not found");
+            LogUtil.d(TAG, "Database not found");
             return;
         }
 
@@ -119,7 +119,7 @@ public class CalendulaApp extends Application {
             output.close();
             inputStream.close();
         } catch (IOException e) {
-            Log.e("APP", "Failed to export database", e);
+            LogUtil.e(TAG, "Failed to export database", e);
         }
     }
 
@@ -138,15 +138,15 @@ public class CalendulaApp extends Application {
         //initialize LeakCanary
         LeakCanary.install(CalendulaApp.this);
 
-        Log.d(TAG, "Application started");
+        LogUtil.d(TAG, "Application started");
 
         try {
-            Log.d(TAG, "Application flavor is \"" + BuildConfig.FLAVOR + "\"");
+            LogUtil.d(TAG, "Application flavor is \"" + BuildConfig.FLAVOR + "\"");
             final String flavor = BuildConfig.FLAVOR.toUpperCase();
             ModuleManager.getInstance().runModules(flavor, applicationContext);
         } catch (IllegalArgumentException | IllegalStateException e) {
-            Log.e(TAG, "onCreate: Error loading module configuration", e);
-            Log.w(TAG, "onCreate: Loading default module configuration instead");
+            LogUtil.e(TAG, "onCreate: Error loading module configuration", e);
+            LogUtil.w(TAG, "onCreate: Loading default module configuration instead");
             ModuleManager.getInstance().runDefaultModules(applicationContext);
         }
 

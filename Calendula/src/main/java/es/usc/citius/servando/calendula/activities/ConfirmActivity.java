@@ -36,7 +36,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -83,6 +82,7 @@ import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
@@ -523,7 +523,7 @@ public class ConfirmActivity extends CalendulaActivity {
 
     private void showRipple(int x, int y, int duration) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            Log.d(TAG, "Ripple x,y [" + x + ", " + y + "]");
+            LogUtil.d(TAG, "Ripple x,y [" + x + ", " + y + "]");
             chekAllOverlay.setVisibility(View.INVISIBLE);
             // get the final radius for the clipping circle
             int finalRadius = (int) Math.hypot(chekAllOverlay.getWidth(), chekAllOverlay.getHeight());
@@ -570,7 +570,7 @@ public class ConfirmActivity extends CalendulaActivity {
             finish();
         }
 
-        Log.d("Confirm", timeStr + ", " + dateStr + ", " + routineId + ", " + scheduleId + ", " + date);
+        LogUtil.d(TAG, timeStr + ", " + dateStr + ", " + routineId + ", " + scheduleId + ", " + date);
 
         if (routineId != -1) {
             isRoutine = true;
@@ -587,7 +587,7 @@ public class ConfirmActivity extends CalendulaActivity {
     private void loadItems() {
         if (isRoutine) {
             List<ScheduleItem> rsi = routine.scheduleItems();
-            Log.d("Confirm", rsi.size() + " items");
+            LogUtil.d(TAG, rsi.size() + " items");
             for (ScheduleItem si : rsi) {
                 DailyScheduleItem item = DB.dailyScheduleItems().findByScheduleItemAndDate(si, date);
                 if (item != null)
@@ -598,7 +598,7 @@ public class ConfirmActivity extends CalendulaActivity {
         }
 
         for (DailyScheduleItem i : items) {
-            Log.d("Confirm", i != null ? i.toString() : "Null");
+            LogUtil.d(TAG, i != null ? i.toString() : "Null");
         }
     }
 

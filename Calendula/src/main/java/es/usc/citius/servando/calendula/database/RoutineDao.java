@@ -19,7 +19,6 @@
 package es.usc.citius.servando.calendula.database;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -37,6 +36,7 @@ import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by joseangel.pineiro on 3/26/15.
@@ -121,7 +121,7 @@ public class RoutineDao extends GenericDao<Routine, Long> {
                     .between(Routine.COLUMN_TIME, time, endTime)
                     .query();
         } catch (Exception e) {
-            Log.e(TAG, "Error in findInHour", e);
+            LogUtil.e(TAG, "Error in findInHour", e);
             throw new RuntimeException(e);
         }
     }

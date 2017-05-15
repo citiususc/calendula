@@ -19,13 +19,13 @@
 package es.usc.citius.servando.calendula.jobs;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.evernote.android.job.JobRequest;
 
 import org.joda.time.Duration;
 
 import es.usc.citius.servando.calendula.util.HtmlCacheManager;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by alvaro.brey.vilas on 17/11/16.
@@ -57,9 +57,9 @@ public class PurgeCacheJob extends CalendulaJob {
     @NonNull
     @Override
     protected Result onRunJob(Params params) {
-        Log.d(TAG, "onRunJob: Job started");
+        LogUtil.d(TAG, "onRunJob: Job started");
         Integer purged = HtmlCacheManager.getInstance().purgeCache();
-        Log.d(TAG, "onRunJob: Purged " + purged + " entries");
+        LogUtil.d(TAG, "onRunJob: Purged " + purged + " entries");
         return Result.SUCCESS;
     }
 

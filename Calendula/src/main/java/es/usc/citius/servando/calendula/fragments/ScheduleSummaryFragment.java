@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +42,7 @@ import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 
 
@@ -51,7 +51,7 @@ import es.usc.citius.servando.calendula.util.ScheduleHelper;
  */
 public class ScheduleSummaryFragment extends Fragment {
 
-    public static final String TAG = ScheduleSummaryFragment.class.getName();
+    public static final String TAG = "ScheduleSummaryFragm";
 
     public ScheduleSummaryFragment() {
         // Required empty public constructor
@@ -77,7 +77,7 @@ public class ScheduleSummaryFragment extends Fragment {
 
         int color = DB.patients().getActive(getActivity()).color();
 
-        Log.d(TAG, "updateSummary ScheduleSUmmaryFragment");
+        LogUtil.d(TAG, "updateSummary ScheduleSUmmaryFragment");
         View rootView = getView();
 
         Medicine med = ScheduleHelper.instance().getSelectedMed();

@@ -18,12 +18,12 @@
 
 package es.usc.citius.servando.calendula.persistence;
 
-import android.util.Log;
-
 import org.joda.time.LocalTime;
 
 import java.util.Arrays;
 import java.util.List;
+
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by joseangel.pineiro on 10/9/14.
@@ -34,13 +34,13 @@ public class Testing {
 
     public static void test() {
 
-        Log.d(TAG, "================================================================");
+        LogUtil.d(TAG, "================================================================");
 
         List<Routine> routines = Routine.findAll();
 
         for (Routine routine : routines) {
             Medicine med = routine.scheduleItems().get(0).schedule().medicine();
-            Log.d(TAG, "Presentation of " + med.name() + ": " + med.presentation().name());
+            LogUtil.d(TAG, "Presentation of " + med.name() + ": " + med.presentation().name());
         }
 
         Routine r = Routine.findByName("Breakfast");
@@ -74,26 +74,26 @@ public class Testing {
 
 
         for (Routine routine : routines) {
-            Log.d(TAG, "Routine: " + Routine.findById(routine.getId()).name() + ", " + routine.time());
+            LogUtil.d(TAG, "Routine: " + Routine.findById(routine.getId()).name() + ", " + routine.time());
             for (ScheduleItem i : routine.scheduleItems()) {
-                Log.d(TAG, " -- ScheduleItem: " + i.getId() + ", " + i.schedule().getId() + ", " + i.schedule().medicine().name());
+                LogUtil.d(TAG, " -- ScheduleItem: " + i.getId() + ", " + i.schedule().getId() + ", " + i.schedule().medicine().name());
             }
 
         }
 
         List<Medicine> medicines = Medicine.findAll();
         for (Medicine med : medicines) {
-            Log.d(TAG, "Medicine: " + med.name());
+            LogUtil.d(TAG, "Medicine: " + med.name());
         }
 
 
         List<Schedule> schedules = Schedule.findAll();
         for (Schedule schedule : schedules) {
-            Log.d(TAG, "Schedule: " + schedule.medicine().name() + ", " + Arrays.toString(schedule.days()));
+            LogUtil.d(TAG, "Schedule: " + schedule.medicine().name() + ", " + Arrays.toString(schedule.days()));
         }
 
 //        for (DailyScheduleItem d : DailyScheduleItem.fromDate(DateTime.now())) {
-//            Log.d(TAG, "DSI: " + d.toString());
+//            LogUtil.d(TAG, "DSI: " + d.toString());
 //        }
     }
 

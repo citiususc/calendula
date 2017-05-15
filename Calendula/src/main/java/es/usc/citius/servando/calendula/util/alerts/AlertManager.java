@@ -18,8 +18,6 @@
 
 package es.usc.citius.servando.calendula.util.alerts;
 
-import android.util.Log;
-
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
@@ -34,6 +32,7 @@ import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 import static es.usc.citius.servando.calendula.persistence.PatientAlert.Level;
 
@@ -46,7 +45,7 @@ public class AlertManager {
     private static final String TAG = "AlertManager";
 
     public static void createAlert(final PatientAlert alert) {
-        Log.d(TAG, "createAlert() called with: alert = [" + alert + "]");
+        LogUtil.d(TAG, "createAlert() called with: alert = [" + alert + "]");
         DB.alerts().save(alert);
 
         switch (alert.getLevel()) {
@@ -111,7 +110,7 @@ public class AlertManager {
             @Override
             public Object call() throws Exception {
                 final List<Schedule> schedules = DB.schedules().findByMedicine(medicine);
-                Log.d(TAG, "blockSchedulesForMedicine: Found " + schedules.size() + " schedules to block.");
+                LogUtil.d(TAG, "blockSchedulesForMedicine: Found " + schedules.size() + " schedules to block.");
                 for (Schedule schedule : schedules) {
                     blockSchedule(schedule);
                 }

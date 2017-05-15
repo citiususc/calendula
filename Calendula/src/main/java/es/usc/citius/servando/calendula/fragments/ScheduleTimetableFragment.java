@@ -31,7 +31,6 @@ import android.support.v4.app.FragmentManager;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -82,6 +81,7 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.persistence.ScheduleItemComparator;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 import es.usc.citius.servando.calendula.util.Snack;
 
@@ -92,7 +92,7 @@ public class ScheduleTimetableFragment extends Fragment
         implements NumberPickerDialogFragment.NumberPickerDialogHandler,
         RecurrencePickerDialog.OnRecurrenceSetListener, RadialTimePickerDialog.OnTimeSetListener {
 
-    public static final String TAG = ScheduleTimetableFragment.class.getName();
+    public static final String TAG = "ScheduleTimetableFragm";
 
     public static final int REF_DIALOG_HOURLY_INTERVAL = 1;
     public static final int REF_DIALOG_ROUTINE_INTERVAL = 2;
@@ -219,9 +219,9 @@ public class ScheduleTimetableFragment extends Fragment
     }
 
     public void onTypeSelected() {
-        Log.d(TAG, "onTypeSelected");
+        LogUtil.d(TAG, "onTypeSelected");
         if (getView() != null) {
-            Log.d(TAG, "getView() is not null");
+            LogUtil.d(TAG, "getView() is not null");
             setupForCurrentSchedule(getView());
         }
     }
@@ -282,14 +282,14 @@ public class ScheduleTimetableFragment extends Fragment
         event.parse(s);
         event.setStartDate(startDate);
 
-        Log.d(TAG, "OnRecurrenceSet: " + event.startDate);
+        LogUtil.d(TAG, "OnRecurrenceSet: " + event.startDate);
 
         schedule.setRepetition(new RepetitionRule("RRULE:" + s));
         setScheduleStart(schedule.start());
         LocalDate end = schedule.end();
-        Log.d(TAG, "ICAL: " + schedule.rule().toIcal());
+        LogUtil.d(TAG, "ICAL: " + schedule.rule().toIcal());
         setScheduleEnd(end);
-        Log.d(TAG, "ICAL: " + schedule.rule().toIcal());
+        LogUtil.d(TAG, "ICAL: " + schedule.rule().toIcal());
         ruleText.setText(getCurrentSchedule());
     }
 
@@ -339,7 +339,7 @@ public class ScheduleTimetableFragment extends Fragment
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                                   int dayOfMonth) {
-                                Log.d(TAG, year + " " + monthOfYear);
+                                LogUtil.d(TAG, year + " " + monthOfYear);
                                 LocalDate d = new LocalDate(year, monthOfYear + 1, dayOfMonth);
                                 setScheduleStart(d);
                             }
@@ -487,7 +487,7 @@ public class ScheduleTimetableFragment extends Fragment
                     schedule.setType(Schedule.SCHEDULE_TYPE_EVERYDAY);
                 }
 
-                Log.d(TAG, "All days selected: " + allDaysSelected + ", repeatType: " + schedule.type());
+                LogUtil.d(TAG, "All days selected: " + allDaysSelected + ", repeatType: " + schedule.type());
             }
         };
 
@@ -599,7 +599,7 @@ public class ScheduleTimetableFragment extends Fragment
         ScheduleHelper.instance().setScheduleItems(scheduleItems);
 
         //        for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems())
-        //            Log.d(TAG, "addTimetableEntries (end): " + i.getId() + ", " + i.routine().name() + ", " + i.dose());
+        //            LogUtil.d(TAG, "addTimetableEntries (end): " + i.getId() + ", " + i.routine().name() + ", " + i.dose());
 
     }
 
@@ -691,9 +691,9 @@ public class ScheduleTimetableFragment extends Fragment
                         String names[] = getUpdatedRoutineNames();
                         updateRoutineSelectionAdapter(entryView, rSpinner, names);
 
-                        Log.d(TAG, "Routine name: " + r.name());
-                        Log.d(TAG, "Routine time: " + r.time().toString("hh:mm"));
-                        Log.d(TAG, "Names: " + Arrays.toString(names));
+                        LogUtil.d(TAG, "Routine name: " + r.name());
+                        LogUtil.d(TAG, "Routine time: " + r.time().toString("hh:mm"));
+                        LogUtil.d(TAG, "Names: " + Arrays.toString(names));
 
                         int selection = Arrays.asList(names).indexOf(r.name());
                         rSpinner.setSelection(selection);
@@ -723,7 +723,7 @@ public class ScheduleTimetableFragment extends Fragment
                     new LiquidDosePickerFragment.OnDoseSelectedListener() {
                         @Override
                         public void onDoseSelected(double dose) {
-                            Log.d(TAG, "Set dose "
+                            LogUtil.d(TAG, "Set dose "
                                     + dose
                                     + " to item "
                                     + item.routine().name()
@@ -767,7 +767,7 @@ public class ScheduleTimetableFragment extends Fragment
 
     void checkSelectedDays(View rootView, boolean[] days) {
 
-        Log.d(TAG, "Checking selected days: " + Arrays.toString(days));
+        LogUtil.d(TAG, "Checking selected days: " + Arrays.toString(days));
         schedule.setDays(days);
 
         TextView mo = ((TextView) rootView.findViewById(R.id.day_mo));
@@ -895,7 +895,7 @@ public class ScheduleTimetableFragment extends Fragment
     private void setupForKnownSchedule(View rootView) {
 
         int type = ScheduleHelper.instance().getScheduleType();
-        Log.d(TAG, "Setup for known schedule:  " + type);
+        LogUtil.d(TAG, "Setup for known schedule:  " + type);
 
         boxTimesByDay.setVisibility(View.GONE);
         boxTimetable.setVisibility(View.GONE);
@@ -931,7 +931,7 @@ public class ScheduleTimetableFragment extends Fragment
 
     private void setupForNewSchedule(View rootView) {
         int type = ScheduleHelper.instance().getScheduleType();
-        Log.d(TAG, "Setup for new schedule:  " + type);
+        LogUtil.d(TAG, "Setup for new schedule:  " + type);
 
         boxTimesByDay.setVisibility(View.GONE);
         boxTimetable.setVisibility(View.GONE);
@@ -1312,7 +1312,7 @@ public class ScheduleTimetableFragment extends Fragment
                     updateEntryTime(null, entryView);
                     showAddNewRoutineDialog(entryView);
                 }
-                Log.d(TAG, "Updated routine to "
+                LogUtil.d(TAG, "Updated routine to "
                         + (r != null ? r.name() : "NULL")
                         + " on item "
                         + item.getId());
@@ -1344,7 +1344,7 @@ public class ScheduleTimetableFragment extends Fragment
 
     private void logScheduleItems() {
         for (ScheduleItem si : ScheduleHelper.instance().getScheduleItems()) {
-            Log.d("TAG", (si.routine() != null ? si.routine().name() : "NONE")
+            LogUtil.d(TAG, (si.routine() != null ? si.routine().name() : "NONE")
                     + ", "
                     + si.dose()
                     + " ****************************");

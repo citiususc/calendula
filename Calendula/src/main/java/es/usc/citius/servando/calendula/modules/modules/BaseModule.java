@@ -23,7 +23,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -53,6 +52,7 @@ import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.PresentationsTypeface;
@@ -111,7 +111,7 @@ public class BaseModule extends CalendulaModule {
         try {
             SettingsProperties.init(ctx);
         } catch (IOException e) {
-            Log.e(TAG, "onApplicationStartup: An exception happened when loading settings file");
+            LogUtil.e(TAG, "onApplicationStartup: An exception happened when loading settings file");
         }
 
         // initialize SQLite engine

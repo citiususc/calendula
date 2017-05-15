@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -24,6 +23,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import pl.droidsonroids.gif.GifDrawable;
@@ -36,7 +36,7 @@ import pl.droidsonroids.gif.GifDrawable;
  */
 public class LockScreenAlarmActivity extends AppCompatActivity {
 
-    private static final String TAG = "LockScreenAlarmActivity";
+    private static final String TAG = "LockScreenAlarmAct";
 
     // vibration pattern
     public static long[] VIB_PATTERN = new long[]{
@@ -92,7 +92,7 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
 
         if (getIntent() != null) {
             target = getIntent().getParcelableExtra("target");
-            Log.d(TAG, "Target " + (target != null));
+            LogUtil.d(TAG, "Target " + (target != null));
         }
 
         confirmButtonBackground = findViewById(R.id.confirm_button_bg);
@@ -121,7 +121,7 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
         try {
             anim.setImageDrawable(new GifDrawable(getResources(), R.drawable.animated_clock));
         } catch (Exception e) {
-            Log.e(TAG, "An error occurred loading animation", e);
+            LogUtil.e(TAG, "An error occurred loading animation", e);
         }
     }
 
@@ -139,7 +139,7 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
             mediaPlayer.setDataSource(this, uri);
             mediaPlayer.prepare();
         } catch (Exception e) {
-            Log.e(TAG, "An error occurred while preparing media player", e);
+            LogUtil.e(TAG, "An error occurred while preparing media player", e);
             finish();
         }
     }
@@ -148,7 +148,7 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
      * Start vibrating and playing sound
      */
     private void startPlayingAlarm() {
-        Log.d(TAG, "startPlayingAlarm() called");
+        LogUtil.d(TAG, "startPlayingAlarm() called");
         setupMediaPlayer();
         if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
             mediaPlayer.start();
@@ -160,7 +160,7 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
      * Stop the media player and cancel vibration
      */
     private void stopPlayingAlarm() {
-        Log.d(TAG, "stopPlayingAlarm() called");
+        LogUtil.d(TAG, "stopPlayingAlarm() called");
         vibrator.cancel();
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -227,7 +227,7 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
 //                } else {
 //                    finish();
 //            }
-                Log.d(TAG, "Target " + (target != null));
+                LogUtil.d(TAG, "Target " + (target != null));
                 if (target != null) {
                     startActivity(target);
                 }

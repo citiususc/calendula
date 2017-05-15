@@ -45,7 +45,6 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -67,6 +66,7 @@ import es.usc.citius.servando.calendula.jobs.CheckDatabaseUpdatesJob;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.modules.modules.StockModule;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PermissionUtils;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
@@ -210,7 +210,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (PreferenceKeys.SETTINGS_ALARM_REPEAT_FREQUENCY.key().equals(key)) {
-            Log.d("SettingsActivity", "Update " + key);
+            LogUtil.d(TAG, "Update " + key);
             AlarmScheduler.instance().updateAllAlarms(this);
         }
     }
@@ -240,7 +240,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     }
 
     boolean onUpdatePrescriptionsDatabasePreference(final ListPreference preference, final String stringValue) {
-        Log.d(TAG, "New value: " + stringValue);
+        LogUtil.d(TAG, "New value: " + stringValue);
         if (!settingUp && !stringValue.equals(lastValidDatabase) && !NONE.equalsIgnoreCase(stringValue) && !SETTING_UP.equals(stringValue)) {
             DownloadDatabaseHelper.instance().showDownloadDialog(thisActivity, stringValue, new DownloadDatabaseHelper.DownloadDatabaseDialogCallback() {
                 @Override
@@ -286,14 +286,14 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         settingUp = SETTING_UP.equals(settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), null));
 
         if (settingUp && !DownloadDatabaseHelper.instance().isDBDownloadingOrInstalling(this)) {
-            Log.d(TAG, "onCreate: " + "Something weird happened. It seems like InstallDatabaseService was killed while working!");
+            LogUtil.d(TAG, "onCreate: " + "Something weird happened. It seems like InstallDatabaseService was killed while working!");
             settings.edit().putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), NONE).apply();
             settingUp = false;
         }
 
-        Log.d(TAG, "sa onCreate: prescriptions_database: " + settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), null));
-        Log.d(TAG, "sa onCreate: SETTING_UP: " + SETTING_UP);
-        Log.d(TAG, "sa onCreate: setting_up: " + settingUp);
+        LogUtil.d(TAG, "sa onCreate: prescriptions_database: " + settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), null));
+        LogUtil.d(TAG, "sa onCreate: SETTING_UP: " + SETTING_UP);
+        LogUtil.d(TAG, "sa onCreate: setting_up: " + settingUp);
 
         onDBSetupComplete = new BroadcastReceiver() {
             public void onReceive(Context ctxt, Intent intent) {

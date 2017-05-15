@@ -34,7 +34,6 @@ import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -100,6 +99,7 @@ import es.usc.citius.servando.calendula.persistence.alerts.DrivingCautionAlert;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
@@ -109,7 +109,7 @@ import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 public class MedicinesActivity extends CalendulaActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
 
     public static final int MIN_SEARCH_LEN = 3;
-    private final static String TAG = MedicinesActivity.class.getSimpleName();
+    private final static String TAG = "MedicinesActivity";
 
 //    RoutinesListFragment listFragment;
 //    RoutineCreateOrEditFragment editFragment;
@@ -374,7 +374,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.d(TAG, "afterTextChanged: " + s.toString());
+                LogUtil.d(TAG, "afterTextChanged: " + s.toString());
                 progressBar.setVisibility(View.VISIBLE);
                 addCustomMedFooter.setVisibility(View.GONE);
                 String filter = searchEditText.getText().toString();
@@ -444,7 +444,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             String contents = data.getStringExtra("SCAN_RESULT");
             String format = data.getStringExtra("SCAN_RESULT_FORMAT");
             // Handle successful scan
-            Log.d(TAG, "onActivityResult: " + contents + ", " + format);
+            LogUtil.d(TAG, "onActivityResult: " + contents + ", " + format);
             if (contents != null) {
                 final Prescription p = getPrescriptionFromBarcode(contents);
                 if (p != null) {
@@ -457,7 +457,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                         }
                     });
                 } else {
-                    Log.d(TAG, "onCreate: " + p);
+                    LogUtil.d(TAG, "onCreate: " + p);
                     Toast.makeText(this, R.string.medicine_not_found_error, Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -465,7 +465,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             }
         } else if (resultCode == RESULT_CANCELED) {
             // Handle cancel
-            Log.d("SCAN", "onActivityResult: Cancel");
+            LogUtil.d(TAG, "onActivityResult: Cancel");
         }
     }
 
@@ -484,7 +484,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     private Prescription getPrescriptionFromBarcode(String barcode) {
         int len = barcode.length();
         String cn = len > 6 ? barcode.substring(len - 7, len - 1) : null;
-        Log.d(TAG, "getPrescriptionFromBarcode: " + cn);
+        LogUtil.d(TAG, "getPrescriptionFromBarcode: " + cn);
         return DB.drugDB().prescriptions().findByCn(cn);
     }
 
@@ -521,7 +521,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             finish();
         } catch (RuntimeException | SQLException e) {
             Snack.show(R.string.medicine_save_error_message, this);
-            Log.e(TAG, "updateMedicine: ", e);
+            LogUtil.e(TAG, "updateMedicine: ", e);
         }
     }
 
@@ -565,7 +565,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             finish();
         } catch (RuntimeException e) {
             Snack.show(R.string.medicine_save_error_message, this);
-            Log.e(TAG, "createMedicine: ", e);
+            LogUtil.e(TAG, "createMedicine: ", e);
         }
     }
 
@@ -583,7 +583,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             case 0:
                 AllergyPatientAlert alert = new AllergyPatientAlert(m, allergies);
                 AlertManager.createAlert(alert);
-                Log.d(TAG, "createAllergyAlerts: New alert created");
+                LogUtil.d(TAG, "createAllergyAlerts: New alert created");
                 return true;
             case 1:
                 AllergyPatientAlert alert1 = (AllergyPatientAlert) allergyAlerts.get(0).map();
@@ -600,12 +600,12 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                         DB.alerts().update(alert1);
                         return true;
                     } catch (SQLException e) {
-                        Log.e(TAG, "createAllergyAlerts: ", e);
+                        LogUtil.e(TAG, "createAllergyAlerts: ", e);
                         return false;
                     }
                 }
             default:
-                Log.e(TAG, "createAllergyAlerts: more than 1 allergy alert for a medicine!");
+                LogUtil.e(TAG, "createAllergyAlerts: more than 1 allergy alert for a medicine!");
                 return false;
         }
 
@@ -755,7 +755,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                         filterResults.values = prescriptions;
                         filterResults.count = prescriptions.size();
                     } catch (Exception e) {
-                        Log.e(TAG, "Exception occurred while searching for prescriptions", e);
+                        LogUtil.e(TAG, "Exception occurred while searching for prescriptions", e);
                         filterResults.values = new ArrayList<>();
                         filterResults.count = 0;
                     }
@@ -764,7 +764,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                     filterResults.count = 0;
                 }
 
-                Log.d(TAG, "performFiltering: Results: " + filterResults.count);
+                LogUtil.d(TAG, "performFiltering: Results: " + filterResults.count);
 
                 return filterResults;
             }
@@ -853,7 +853,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                         String minSearch = search.substring(0, MIN_SEARCH_LEN);
                         int index = lowerName.indexOf(minSearch);
                         if (index >= 0) {
-                            nameView.setText(Strings.getHighlighted(name, index, Math.min(index + searchLength, name.length()-1), hColor));
+                            nameView.setText(Strings.getHighlighted(name, index, Math.min(index + searchLength, name.length() - 1), hColor));
                         } else {
                             nameView.setText(Strings.toProperCase(name));
                         }

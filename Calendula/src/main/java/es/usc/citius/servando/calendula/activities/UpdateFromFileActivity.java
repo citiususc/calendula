@@ -25,7 +25,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -34,6 +33,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 public class UpdateFromFileActivity extends ActionBarActivity {
 
@@ -50,7 +50,7 @@ public class UpdateFromFileActivity extends ActionBarActivity {
 
         try {
             String fileContents = readFile();
-            Log.d(TAG, "Text from file: " + fileContents);
+            LogUtil.d(TAG, "Text from file: " + fileContents);
 
             if (fileContents != null) {
                 Intent intent = new Intent(getApplicationContext(), ConfirmSchedulesActivity.class);

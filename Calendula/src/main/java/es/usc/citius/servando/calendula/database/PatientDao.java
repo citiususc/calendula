@@ -19,8 +19,6 @@
 package es.usc.citius.servando.calendula.database;
 
 import android.content.Context;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
 
 import com.j256.ormlite.dao.Dao;
 

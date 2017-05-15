@@ -36,7 +36,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,6 +77,7 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.medicine.StockUtils;
@@ -269,7 +269,7 @@ public class HomePagerActivity extends CalendulaActivity implements
 
                     if (evt instanceof PersistenceEvents.ModelCreateOrUpdateEvent) {
                         PersistenceEvents.ModelCreateOrUpdateEvent event = (PersistenceEvents.ModelCreateOrUpdateEvent) evt;
-                        Log.d(TAG, "onEvent: " + event.clazz.getName());
+                        LogUtil.d(TAG, "onEvent: " + event.clazz.getName());
                         ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).notifyDataChange();
                         ((RoutinesListFragment) getViewPagerFragment(HomePages.ROUTINES)).notifyDataChange();
                         ((MedicinesListFragment) getViewPagerFragment(HomePages.MEDICINES)).notifyDataChange();
@@ -379,20 +379,20 @@ public class HomePagerActivity extends CalendulaActivity implements
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
-                //Log.d(TAG, "Values: (" + toolbarLayout.getHeight()+ " + " +verticalOffset + ") < (2 * " + ViewCompat.getMinimumHeight(toolbarLayout) + ")");
+                //LogUtil.d(TAG, "Values: (" + toolbarLayout.getHeight()+ " + " +verticalOffset + ") < (2 * " + ViewCompat.getMinimumHeight(toolbarLayout) + ")");
 
                 if ((toolbarLayout.getHeight() + verticalOffset) < (1.8 * ViewCompat.getMinimumHeight(toolbarLayout))) {
                     homeProfileMgr.onCollapse();
                     toolbarTitle.animate().alpha(1);
                     appBarLayoutExpanded = false;
-                    Log.d(TAG, "OnCollapse");
+                    LogUtil.d(TAG, "OnCollapse");
                 } else {
                     appBarLayoutExpanded = true;
                     if (mViewPager.getCurrentItem() == 0) {
                         toolbarTitle.animate().alpha(0);
                     }
                     homeProfileMgr.onExpand();
-                    Log.d(TAG, "OnExpand");
+                    LogUtil.d(TAG, "OnExpand");
                 }
 
 
@@ -444,7 +444,7 @@ public class HomePagerActivity extends CalendulaActivity implements
 
         // process pending events
         while (!pendingEvents.isEmpty()) {
-            Log.d(TAG, "Processing pending event...");
+            LogUtil.d(TAG, "Processing pending event...");
             onEvent(pendingEvents.poll());
         }
     }
