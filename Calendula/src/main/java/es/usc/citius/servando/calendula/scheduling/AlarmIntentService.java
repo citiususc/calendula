@@ -29,7 +29,7 @@ import es.usc.citius.servando.calendula.util.WakeIntentService;
  */
 public class AlarmIntentService extends WakeIntentService {
 
-    public static final String TAG = "AlarmIntentService";
+    private static final String TAG = "AlarmIntentService";
 
     public AlarmIntentService() {
         super("AlarmIntentService");

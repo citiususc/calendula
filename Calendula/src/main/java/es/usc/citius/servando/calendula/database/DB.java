@@ -31,7 +31,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 public class DB {
 
 
-    public static final String TAG = "DB";
+    private static final String TAG = "DB";
 
     // Database name
     public static String DB_NAME = "calendula.db";

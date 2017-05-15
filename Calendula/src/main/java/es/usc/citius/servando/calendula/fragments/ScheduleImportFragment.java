@@ -93,15 +93,12 @@ public class ScheduleImportFragment extends Fragment
         implements NumberPickerDialogFragment.NumberPickerDialogHandler,
         RecurrencePickerDialog.OnRecurrenceSetListener, RadialTimePickerDialog.OnTimeSetListener {
 
-    public static final String TAG = "ScheduleImportFragment";
-
     public static final String ARG_PRESCRIPTION = "ARG_PRESCRIPTION";
-
     public static final int REF_DIALOG_HOURLY_INTERVAL = 1;
     public static final int REF_DIALOG_ROUTINE_INTERVAL = 2;
     public static final int REF_DIALOG_CYCLE_DAYS = 3;
     public static final int REF_DIALOG_CYCLE_REST = 4;
-
+    private static final String TAG = "ScheduleImportFragment";
     final Frequency[] FREQ =
             new Frequency[]{Frequency.DAILY, Frequency.WEEKLY, Frequency.MONTHLY};
     public int selectedScheduleIdx;

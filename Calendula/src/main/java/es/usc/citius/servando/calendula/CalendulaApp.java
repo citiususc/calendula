@@ -67,7 +67,7 @@ public class CalendulaApp extends Application {
     // REQUEST CODES
     public static final int RQ_SHOW_ROUTINE = 1;
     public static final int RQ_DELAY_ROUTINE = 2;
-    private final static String TAG = "CalendulaApp";
+    private static final String TAG = "CalendulaApp";
     public static boolean disableReceivers = false;
     private static boolean isOpen;
     private static EventBus eventBus = EventBus.getDefault();

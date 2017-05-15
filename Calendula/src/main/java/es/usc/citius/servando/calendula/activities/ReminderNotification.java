@@ -61,7 +61,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
  */
 public class ReminderNotification {
 
-    public static final String TAG = "ReminderNotification";
+    private static final String TAG = "ReminderNotification";
 
     private static final String NOTIFICATION_ROUTINE_TAG = "Reminder";
     private static final String NOTIFICATION_SCHEDULE_TAG = "ScheduleReminder";

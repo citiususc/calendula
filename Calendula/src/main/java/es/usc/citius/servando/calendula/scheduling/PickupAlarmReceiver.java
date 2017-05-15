@@ -32,7 +32,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
  */
 public class PickupAlarmReceiver extends BroadcastReceiver {
 
-    public static final String TAG = "PickupReceiver";
+    private static final String TAG = "PickupReceiver";
 
 
     @Override

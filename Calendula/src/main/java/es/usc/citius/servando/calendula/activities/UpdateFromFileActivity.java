@@ -37,7 +37,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 
 public class UpdateFromFileActivity extends ActionBarActivity {
 
-    public static final String TAG = "UpdateActivity";
+    private static final String TAG = "UpdateActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

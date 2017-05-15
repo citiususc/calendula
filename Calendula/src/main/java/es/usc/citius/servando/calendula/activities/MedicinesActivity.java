@@ -109,7 +109,7 @@ import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 public class MedicinesActivity extends CalendulaActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
 
     public static final int MIN_SEARCH_LEN = 3;
-    private final static String TAG = "MedicinesActivity";
+    private static final String TAG = "MedicinesActivity";
 
 //    RoutinesListFragment listFragment;
 //    RoutineCreateOrEditFragment editFragment;

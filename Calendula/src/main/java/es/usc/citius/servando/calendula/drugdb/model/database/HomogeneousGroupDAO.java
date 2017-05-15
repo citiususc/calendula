@@ -33,7 +33,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
  */
 public class HomogeneousGroupDAO extends GenericDao<HomogeneousGroup, Long> {
 
-    public static final String TAG = "HomogeneousGroupDAO";
+    private static final String TAG = "HomogeneousGroupDAO";
 
     private Dao<HomogeneousGroup, Long> daoInstance = null;
 

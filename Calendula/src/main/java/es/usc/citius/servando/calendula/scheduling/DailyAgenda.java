@@ -45,7 +45,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
  */
 public class DailyAgenda {
 
-    public static final String TAG = "DailyAgenda";
+    private static final String TAG = "DailyAgenda";
 
     private static final String PREFERENCES_NAME = "DailyAgendaPreferences";
     private static final String PREF_LAST_DATE = "LastDate";

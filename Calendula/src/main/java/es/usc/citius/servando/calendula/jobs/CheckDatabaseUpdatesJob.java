@@ -43,7 +43,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
  */
 public class CheckDatabaseUpdatesJob extends CalendulaJob {
 
-    public final static String TAG = "CheckDatabaseUpdJob";
+    private static final String TAG = "CheckDatabaseUpdJob";
 
     private static final Integer PERIOD_DAYS = 7;
     private static final String UPDATE_NOTIFICATION_TAG = "Calendula.notifications.update_notification";

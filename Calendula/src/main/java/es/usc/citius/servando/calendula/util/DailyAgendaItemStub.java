@@ -32,7 +32,7 @@ import es.usc.citius.servando.calendula.persistence.Presentation;
  */
 public class DailyAgendaItemStub {
 
-    public static final String TAG = "DailyAgendaItemStub";
+    private static final String TAG = "DailyAgendaItemStub";
 
     public List<DailyAgendaItemStubElement> meds;
 

@@ -38,7 +38,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
  */
 public class NotificationEventReceiver extends BroadcastReceiver {
 
-    public static final String TAG = "NotificationEvReceiver";
+    private static final String TAG = "NotificationEvReceiver";
 
 
     @Override

@@ -43,7 +43,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
  */
 public class RoutineDao extends GenericDao<Routine, Long> {
 
-    public static final String TAG = "RoutineDao";
+    private static final String TAG = "RoutineDao";
 
     public RoutineDao(DatabaseHelper db) {
         super(db);

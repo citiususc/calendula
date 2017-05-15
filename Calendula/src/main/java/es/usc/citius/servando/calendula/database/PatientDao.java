@@ -38,7 +38,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
 public class PatientDao extends GenericDao<Patient, Long> {
 
 
-    public static final String TAG = "PatientDao";
+    private static final String TAG = "PatientDao";
 
     public PatientDao(DatabaseHelper db) {
         super(db);

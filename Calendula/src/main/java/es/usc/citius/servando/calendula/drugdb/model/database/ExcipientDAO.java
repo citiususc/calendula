@@ -33,7 +33,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
  */
 public class ExcipientDAO extends GenericDao<Excipient, Long> {
 
-    public static final String TAG = "ExcipientDAO";
+    private static final String TAG = "ExcipientDAO";
 
     private Dao<Excipient, Long> daoInstance = null;
 

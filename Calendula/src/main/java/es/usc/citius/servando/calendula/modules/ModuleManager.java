@@ -35,7 +35,7 @@ import static java.util.Collections.addAll;
 
 public class ModuleManager {
 
-    private final static String TAG = "ModuleManager";
+    private static final String TAG = "ModuleManager";
     private static ModuleManager theInstance = null;
     private Map<String, CalendulaModule> modules;
 

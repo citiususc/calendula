@@ -75,7 +75,7 @@ import es.usc.citius.servando.calendula.util.Snack;
 
 public class ScheduleCreationActivity extends CalendulaActivity implements ViewPager.OnPageChangeListener {
 
-    public static final String TAG = "ScheduleCreationAct";
+    private static final String TAG = "ScheduleCreationAct";
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a

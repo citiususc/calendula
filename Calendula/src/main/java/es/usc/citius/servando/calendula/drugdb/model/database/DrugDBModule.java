@@ -26,7 +26,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 public class DrugDBModule {
 
 
-    public static final String TAG = "DrugDBModule";
+    private static final String TAG = "DrugDBModule";
     private static DrugDBModule instance = null;
     // Active ingredients DAO
     private final ActiveIngredientDAO ActiveIngredients;

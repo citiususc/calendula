@@ -73,7 +73,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
  */
 public class DailyAgendaFragment extends Fragment {
 
-    final String TAG = "DailyAgendaFragment";
+    private static final String TAG = "DailyAgendaFragment";
     View emptyView;
 
     LinearLayoutManager llm;

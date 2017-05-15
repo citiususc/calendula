@@ -42,7 +42,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
  */
 public class ScheduleDao extends GenericDao<Schedule, Long> {
 
-    private final static String TAG = "ScheduleDao";
+    private static final String TAG = "ScheduleDao";
 
     public ScheduleDao(DatabaseHelper db) {
         super(db);

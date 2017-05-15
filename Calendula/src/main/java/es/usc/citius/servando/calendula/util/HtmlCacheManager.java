@@ -40,7 +40,7 @@ public class HtmlCacheManager {
 
 
     public static final Long DEFAULT_TTL_MILLIS = Duration.standardMinutes(5).getMillis(); //5 minutes
-    private final static String TAG = "HtmlCacheManager";
+    private static final String TAG = "HtmlCacheManager";
     private static HtmlCacheManager theInstance = null;
     private Dao<HtmlCacheEntry, Long> dao = null;
 

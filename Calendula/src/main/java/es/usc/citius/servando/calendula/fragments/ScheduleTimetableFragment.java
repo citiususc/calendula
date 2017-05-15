@@ -92,13 +92,11 @@ public class ScheduleTimetableFragment extends Fragment
         implements NumberPickerDialogFragment.NumberPickerDialogHandler,
         RecurrencePickerDialog.OnRecurrenceSetListener, RadialTimePickerDialog.OnTimeSetListener {
 
-    public static final String TAG = "ScheduleTimetableFragm";
-
     public static final int REF_DIALOG_HOURLY_INTERVAL = 1;
     public static final int REF_DIALOG_ROUTINE_INTERVAL = 2;
     public static final int REF_DIALOG_CYCLE_DAYS = 3;
     public static final int REF_DIALOG_CYCLE_REST = 4;
-
+    private static final String TAG = "ScheduleTimetableFragm";
     final Frequency[] FREQ =
             new Frequency[]{Frequency.DAILY, Frequency.WEEKLY, Frequency.MONTHLY};
 

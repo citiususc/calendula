@@ -28,7 +28,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 
 public class CalendulaJobScheduler {
 
-    private final static String TAG = "CalendulaJobScheduler";
+    private static final String TAG = "CalendulaJobScheduler";
 
     private CalendulaJobScheduler() {
 

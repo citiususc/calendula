@@ -55,7 +55,7 @@ import es.usc.citius.servando.calendula.util.Snack;
 public class SelectMedicineListFragment extends Fragment {
 
 
-    private static String TAG = "SelectMedicineListFrag";
+    private static final String TAG = "SelectMedicineListFrag";
     List<Medicine> mMedicines;
     ArrayAdapter adapter;
     ListView listview;

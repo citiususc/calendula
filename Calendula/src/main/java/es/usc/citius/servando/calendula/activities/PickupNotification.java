@@ -43,7 +43,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
  */
 public class PickupNotification {
 
-    public static final String TAG = "PickupNotification";
+    private static final String TAG = "PickupNotification";
     /**
      * The unique identifier for this type of notification.
      */

@@ -34,7 +34,7 @@ import java.net.URL;
 
 public class HttpDownloadUtil {
 
-    private final static String TAG = "HttpDownloadUtil";
+    private static final String TAG = "HttpDownloadUtil";
 
     public static boolean downloadFile(final String fileUrl, final File file) {
         try {

@@ -36,7 +36,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 
 public class ModuleRegistry {
 
-    public static final String TAG = "ModuleRegistry";
+    private static final String TAG = "ModuleRegistry";
 
     public static List<CalendulaModule> getDefaultModules() {
         return getModulesForConfig(ModuleConfig.PRODUCT);

@@ -50,7 +50,7 @@ import es.usc.citius.servando.calendula.util.SettingsPropertiesKeys;
  */
 public class DownloadDatabaseHelper {
 
-    public static final String TAG = "DownloadDatabaseHelper";
+    private static final String TAG = "DownloadDatabaseHelper";
     private static final String downloadSuffix = ".db";
 
     private static DownloadDatabaseHelper instance;

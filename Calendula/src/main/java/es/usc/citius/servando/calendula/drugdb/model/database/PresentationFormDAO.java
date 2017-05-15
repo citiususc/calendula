@@ -33,7 +33,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
  */
 public class PresentationFormDAO extends GenericDao<PresentationForm, Long> {
 
-    public static final String TAG = "PresentationFormDAO";
+    private static final String TAG = "PresentationFormDAO";
 
     private Dao<PresentationForm, Long> daoInstance = null;
 

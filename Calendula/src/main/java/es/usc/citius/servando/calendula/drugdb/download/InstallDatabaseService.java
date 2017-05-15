@@ -46,9 +46,9 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
  */
 public class InstallDatabaseService extends IntentService {
 
-    public static final String TAG = "InstallDatabaseService";
     public static final String ACTION_COMPLETE = "calendula.persistence.medDatabases.action.DONE";
     public static final String ACTION_ERROR = "calendula.persistence.medDatabases.action.ERROR";
+    private static final String TAG = "InstallDatabaseService";
     private static final String ACTION_SETUP = "calendula.persistence.medDatabases.action.SETUP";
     private static final String ACTION_UPDATE = "calendula.persistence.medDatabases.action.UPDATE";
     private static final String EXTRA_DB_PATH = "calendula.persistence.medDatabases.extra.DB_PATH";

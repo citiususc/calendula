@@ -30,7 +30,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
  */
 public class Testing {
 
-    public static final String TAG = "Testing";
+    private static final String TAG = "Testing";
 
     public static void test() {
 

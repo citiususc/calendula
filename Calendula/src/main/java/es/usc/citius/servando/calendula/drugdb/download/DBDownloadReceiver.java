@@ -35,7 +35,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
  */
 public class DBDownloadReceiver extends BroadcastReceiver {
 
-    public static final String TAG = "DBDownloadReceiver";
+    private static final String TAG = "DBDownloadReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {

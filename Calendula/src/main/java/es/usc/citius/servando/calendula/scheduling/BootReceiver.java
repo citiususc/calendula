@@ -29,7 +29,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
  */
 public class BootReceiver extends BroadcastReceiver {
 
-    public static final String TAG = "BootReceiver";
+    private static final String TAG = "BootReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {

@@ -35,11 +35,8 @@ import es.usc.citius.servando.calendula.util.LogUtil;
  */
 public class AlarmIntentParams implements Parcelable {
 
-    public static final String TAG = "AlarmIntentParams";
-
     public static final String DATE_FORMAT = "dd/MM/YYYY";
     public static final String TIME_FORMAT = "kk:mm";
-
     public static final int AUTO = 0; // auto generated, default
     public static final int USER = 1; // generated due to an user action (i.e. delay an intake)
     public static final Parcelable.Creator<AlarmIntentParams> CREATOR = new Parcelable.Creator<AlarmIntentParams>() {
@@ -51,6 +48,7 @@ public class AlarmIntentParams implements Parcelable {
             return new AlarmIntentParams[size];
         }
     };
+    private static final String TAG = "AlarmIntentParams";
     public int action = -1;
     public long routineId = -1;
     public long scheduleId = -1;

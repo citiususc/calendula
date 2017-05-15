@@ -51,7 +51,7 @@ import es.usc.citius.servando.calendula.util.ScheduleHelper;
  */
 public class ScheduleSummaryFragment extends Fragment {
 
-    public static final String TAG = "ScheduleSummaryFragm";
+    private static final String TAG = "ScheduleSummaryFragm";
 
     public ScheduleSummaryFragment() {
         // Required empty public constructor

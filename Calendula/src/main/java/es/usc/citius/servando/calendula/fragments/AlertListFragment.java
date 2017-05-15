@@ -57,7 +57,7 @@ public class AlertListFragment extends Fragment {
             DrivingCautionAlert.DrivingAlertViewProvider.class,
             AllergyPatientAlert.AllergyAlertViewProvider.class
     };
-    final String TAG = "AlertListFragment";
+    private static final String TAG = "AlertListFragment";
     View emptyView;
     LinearLayoutManager llm;
     RecyclerView rv;

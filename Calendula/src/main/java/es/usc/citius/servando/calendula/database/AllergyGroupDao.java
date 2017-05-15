@@ -32,7 +32,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
  */
 public class AllergyGroupDao extends GenericDao<AllergyGroup, Long> {
 
-    public static final String TAG = "AllergyGroupDao";
+    private static final String TAG = "AllergyGroupDao";
 
     private Dao<AllergyGroup, Long> daoInstance = null;
 

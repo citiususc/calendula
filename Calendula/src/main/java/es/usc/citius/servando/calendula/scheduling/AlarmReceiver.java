@@ -30,7 +30,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
  */
 public class AlarmReceiver extends BroadcastReceiver {
 
-    public static final String TAG = "AlarmReceiver.class";
+    private static final String TAG = "AlarmReceiver.class";
 
     @Override
     public void onReceive(Context context, Intent intent) {
