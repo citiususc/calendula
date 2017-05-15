@@ -69,6 +69,10 @@ android {
         multiDexEnabled true
     }
 
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
     packagingOptions {
         exclude 'LICENSE.txt'
     }
@@ -89,24 +93,22 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            testProguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
         debug {
             debuggable true
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
         }
         beta {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             versionNameSuffix "-build" + getDate()
         }
         alpha {
             minifyEnabled false
             applicationIdSuffix ".alpha"
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             signingConfig signingConfigs.release
             versionNameSuffix "-" + getDate()
         }
@@ -160,7 +162,6 @@ dependencies {
     // Time and date handling
     compile 'joda-time:joda-time:2.3'
     compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.1.0'
-    compile 'com.ocpsoft:ocpsoft-pretty-time:1.0.7'
 
     // Floating action button
     compile 'com.melnykov:floatingactionbutton:1.1.0'
