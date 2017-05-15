@@ -112,7 +112,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
 
     private FastItemAdapter<AbstractItem> searchAdapter;
     private List<AllergyGroup> groups;
-    private AsyncTask searchTask = null;
+    private DoSearchTask searchTask = null;
     private List<AllergenVO> patientAllergies;
 
     @Override

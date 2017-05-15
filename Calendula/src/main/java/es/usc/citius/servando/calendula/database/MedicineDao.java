@@ -87,7 +87,7 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
     public List<Medicine> findAllByGroup(Long patientId, String[] groups) {
         try {
             return dao.queryBuilder()
-                    .where().eq(Medicine.COLUMN_PATIENT, patientId).and().in(Medicine.COLUMN_HG, groups)
+                    .where().eq(Medicine.COLUMN_PATIENT, patientId).and().in(Medicine.COLUMN_HG, (Object[]) groups)
                     .query();
         } catch (SQLException e) {
             throw new RuntimeException("Error finding models", e);
