@@ -39,7 +39,7 @@ public class ScheduleTypeFragment extends Fragment {
     public static final int TYPE_HOURLY = 2;
     public static final int TYPE_PERIOD = 3;
 
-    public static final String TAG = ScheduleTypeFragment.class.getName();
+    private static final String TAG = "ScheduleTypeFragm";
     View optionRoutines;
     View optionHourly;
     View optionPeriod;

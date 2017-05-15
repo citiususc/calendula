@@ -26,7 +26,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -73,6 +72,7 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
@@ -182,13 +182,13 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
         s.setPatient(patient);
         s.setScanned(true);
         s.save();
-        Log.d(TAG, "Saving schedule..." + s.toString());
+        LogUtil.d(TAG, "Saving schedule..." + s.toString());
 
         if (!s.repeatsHourly()) {
             for (ScheduleItem item : items) {
                 item.setSchedule(s);
                 item.save();
-                Log.d(TAG, "Saving item..." + item.getId());
+                LogUtil.d(TAG, "Saving item..." + item.getId());
                 // add to daily schedule
                 DailyAgenda.instance().addItem(patient, item, false);
             }
@@ -247,7 +247,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                 DailyScheduleItem dsi = new DailyScheduleItem(s, timeToday);
                 dsi.setPatient(patient);
                 dsi.save();
-                Log.d(TAG, "Saving daily schedule item..."
+                LogUtil.d(TAG, "Saving daily schedule item..."
                         + dsi.getId()
                         + " timeToday: "
                         + timeToday.toString("kk:mm"));
@@ -267,7 +267,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
     public void onPageSelected(int i) {
         updatePageTitle(i);
 
-        Log.d("ConfirmSchedulesAct", " Page Selected: " + i);
+        LogUtil.d(TAG, " Page Selected: " + i);
 
         if (i == 0) {
             hideScheduleTypeSelector();
@@ -291,7 +291,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
 
         int type = ((ScheduleImportFragment) f).getSchedule().type();
 
-        Log.d("Confirm", "Type: " + type);
+        LogUtil.d(TAG, "Type: " + type);
 
         if (f instanceof ScheduleImportFragment) {
             if (type == Schedule.SCHEDULE_TYPE_HOURLY) {
@@ -314,7 +314,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
     }
 
     public PrescriptionListWrapper parseQRData(String data) {
-        Log.d(TAG, "QRDATA: " + data);
+        LogUtil.d(TAG, "QRDATA: " + data);
         return new Gson().fromJson(data, PrescriptionListWrapper.class);
     }
 
@@ -370,7 +370,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
         try {
             new ProcessQRTask().execute(qrData);
         } catch (Exception e) {
-            Log.e(TAG, "Error processing QR", e);
+            LogUtil.e(TAG, "Error processing QR", e);
             Toast.makeText(this, "Error inesperado actualizando!", Toast.LENGTH_LONG).show();
             finish();
         }
@@ -394,7 +394,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
 
                 HomogeneousGroup group = findGroup(pw.g);
                 if (group != null) {
-                    Log.d("ConfirmSchedulesAct", "Found group: " + group.getName());
+                    LogUtil.d(TAG, "Found group: " + group.getName());
                     pw.exists = true;
                     pw.isGroup = true;
                     pw.group = group;
@@ -404,9 +404,9 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
 
             if (pw.pk != null) {
                 for (PickupWrapper pkw : pw.pk) {
-                    Log.d("ConfirmSchedulesAct", "Pickup : " + df.parseDateTime(pkw.f).toString("dd/MM/yyyy"));
-                    Log.d("ConfirmSchedulesAct", "Pickup : " + df.parseDateTime(pkw.t).toString("dd/MM/yyyy"));
-                    Log.d("ConfirmSchedulesAct", "Pickup : " + pkw.tk);
+                    LogUtil.d(TAG, "Pickup : " + df.parseDateTime(pkw.f).toString("dd/MM/yyyy"));
+                    LogUtil.d(TAG, "Pickup : " + df.parseDateTime(pkw.t).toString("dd/MM/yyyy"));
+                    LogUtil.d(TAG, "Pickup : " + pkw.tk);
                 }
             }
         }
@@ -441,25 +441,25 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
 
                             for (int i = 0; i < scheduleCount; i++) {
 
-                                Log.d("PRESCRIPTION", "Item " + i);
+                                LogUtil.d(TAG, "Item " + i);
 
                                 Fragment f = getViewPagerFragment(i + 1);
 
                                 if (f instanceof ScheduleImportFragment) {
 
-                                    Log.d("PRESCRIPTION", "Fragment " + i);
+                                    LogUtil.d(TAG, "Fragment " + i);
 
                                     ScheduleImportFragment c = (ScheduleImportFragment) f;
 
                                     if (c.validate()) {
                                         PrescriptionWrapper w = prescriptionList.get(i);
-                                        Log.d("PRESCRIPTION", "Validate!");
+                                        LogUtil.d(TAG, "Validate!");
                                         String cn = w.cn;
                                         Medicine m = null;
                                         if (cn != null) {
                                             m = DB.medicines().findByCnAndPatient(cn, patient);
                                             if (m == null) {
-                                                Log.d("PRESCRIPTION", "Saving medicine!");
+                                                LogUtil.d(TAG, "Saving medicine!");
                                                 m = Medicine.fromPrescription(DB.drugDB().prescriptions().findByCn(cn));
                                                 m.setPatient(patient);
                                                 m.save();
@@ -483,10 +483,10 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                                         Schedule prev = DB.schedules().findByMedicineAndPatient(m, patient);
                                         // TODO: find by med and patient
                                         if (prev != null) {
-                                            Log.d("PRESCRIPTION", "Found previous schedule for med " + m.getId());
+                                            LogUtil.d(TAG, "Found previous schedule for med " + m.getId());
                                             updateSchedule(prev, s, c.getScheduleItems());
                                         } else {
-                                            Log.d("PRESCRIPTION", "Not found previous schedule for med " + m.getId());
+                                            LogUtil.d(TAG, "Not found previous schedule for med " + m.getId());
                                             createSchedule(s, c.getScheduleItems(), m);
                                         }
 
@@ -522,7 +522,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                     return true;
 
                 } catch (Exception e) {
-                    Log.e("ConfirmSchedulesAct", "Error saving prescriptions", e);
+                    LogUtil.e(TAG, "Error saving prescriptions", e);
                     return false;
                 }
             }
@@ -579,7 +579,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
         @Override
         public Fragment getItem(int position) {
 
-            Log.d("ScanQR", "Position: " + position);
+            LogUtil.d(TAG, "Position: " + position);
 
             if (position == 0) {
                 return ScheduleConfirmationStartFragment.newInstance();
@@ -628,7 +628,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                         return 0L;
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "Error processing QR", e);
+                    LogUtil.e(TAG, "Error processing QR", e);
                     return -1L;
                 }
             } else {

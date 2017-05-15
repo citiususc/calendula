@@ -24,15 +24,15 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
  * Helper class for showing and canceling message
@@ -43,7 +43,7 @@ import es.usc.citius.servando.calendula.R;
  */
 public class PickupNotification {
 
-    public static final String TAG = PickupNotification.class.getName();
+    private static final String TAG = "PickupNotification";
     /**
      * The unique identifier for this type of notification.
      */
@@ -68,14 +68,7 @@ public class PickupNotification {
 
         final Resources res = context.getResources();
 
-        // if notifications are disabled, exit
-        // boolean notifications = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("alarm_notifications", true);
-        //        if (!notifications) {
-        //            return;
-        //        }
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
+        String delayMinutesStr = PreferenceUtils.getString(PreferenceKeys.SETTINGS_ALARM_REPEAT_FREQUENCY, "15");
 
 
         // This image is used as the notification's large icon (thumbnail).

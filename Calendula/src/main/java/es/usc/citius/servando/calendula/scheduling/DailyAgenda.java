@@ -20,7 +20,6 @@ package es.usc.citius.servando.calendula.scheduling;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.j256.ormlite.misc.TransactionManager;
 
@@ -39,13 +38,14 @@ import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by joseangel.pineiro on 10/10/14.
  */
 public class DailyAgenda {
 
-    public static final String TAG = DailyAgenda.class.getName();
+    private static final String TAG = "DailyAgenda";
 
     private static final String PREFERENCES_NAME = "DailyAgendaPreferences";
     private static final String PREF_LAST_DATE = "LastDate";
@@ -67,7 +67,7 @@ public class DailyAgenda {
         final Long lastDate = settings.getLong(PREF_LAST_DATE, 0);
         final DateTime now = DateTime.now();
 
-        Log.d(TAG, "Setup daily agenda. Last updated: " + new DateTime(lastDate).toString("dd/MM - kk:mm"));
+        LogUtil.d(TAG, "Setup daily agenda. Last updated: " + new DateTime(lastDate).toString("dd/MM - kk:mm"));
 
         Interval today = new Interval(now.withTimeAtStartOfDay(), now.withTimeAtStartOfDay().plusDays(1));
 
@@ -100,24 +100,24 @@ public class DailyAgenda {
                 });
             } catch (SQLException e) {
                 if (!force) {
-                    Log.e(TAG, "Error setting up daily agenda. Retrying with force = true", e);
+                    LogUtil.e(TAG, "Error setting up daily agenda. Retrying with force = true", e);
                     // setup with force, destroy current daily agenda but continues working
                     setupForToday(ctx, true);
                 } else {
-                    Log.e(TAG, "Error setting up daily agenda", e);
+                    LogUtil.e(TAG, "Error setting up daily agenda", e);
                 }
             }
             // Update alarms
             AlarmScheduler.instance().updateAllAlarms(ctx);
             CalendulaApp.eventBus().post(new AgendaUpdatedEvent());
         } else {
-            Log.d(TAG, "No need to update daily schedule (" + DailyScheduleItem.findAll().size() + " items found for today)");
+            LogUtil.d(TAG, "No need to update daily schedule (" + DailyScheduleItem.findAll().size() + " items found for today)");
         }
     }
 
     public void createScheduleForDate(LocalDate date) {
 
-        Log.d(TAG, "Adding DailyScheduleItem to daily schedule for date: " + date.toString("dd/MM"));
+        LogUtil.d(TAG, "Adding DailyScheduleItem to daily schedule for date: " + date.toString("dd/MM"));
         int items = 0;
         // create a list with all day doses for schedules bound to routines
         for (Routine r : Routine.findAll()) {
@@ -143,7 +143,7 @@ public class DailyAgenda {
                 dsi.save();
             }
         }
-        Log.d(TAG, items + " items added to daily schedule");
+        LogUtil.d(TAG, items + " items added to daily schedule");
     }
 
     // SINGLETON

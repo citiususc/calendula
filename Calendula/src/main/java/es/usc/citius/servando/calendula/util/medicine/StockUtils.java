@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula.util.medicine;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -42,6 +41,7 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by joseangel.pineiro on 17/11/16.
@@ -53,7 +53,7 @@ public class StockUtils {
     public static String getReadableStockDuration(LocalDate estimatedEnd, Context ctx) {
         String response;
         if (estimatedEnd != null) {
-            Log.d(TAG, "updateStockText: estimado " + estimatedEnd.toString("dd/MM"));
+            LogUtil.d(TAG, "updateStockText: estimado " + estimatedEnd.toString("dd/MM"));
             long days = new Duration(DateTime.now().withTimeAtStartOfDay(), estimatedEnd.toDateTimeAtStartOfDay()).getStandardDays();
             if (days < 21) {
                 response = ctx.getString(R.string.stock_enough_for_days, days);
@@ -88,7 +88,7 @@ public class StockUtils {
 
         float virtualStock = stock;
 
-        Log.d(TAG, "getEstimatedStockEnd: virtual stock " + virtualStock);
+        LogUtil.d(TAG, "getEstimatedStockEnd: virtual stock " + virtualStock);
 
         for (int i = 0; i < duration.getStandardDays(); i++) {
             for (Schedule s : schedules) {
@@ -102,7 +102,7 @@ public class StockUtils {
                         }
                     }
                 }
-                Log.d(TAG, "getEstimatedStockEnd: virtual stock " + virtualStock + " on " + current.toString("dd/MM"));
+                LogUtil.d(TAG, "getEstimatedStockEnd: virtual stock " + virtualStock + " on " + current.toString("dd/MM"));
             }
             if (virtualStock < 0) {
                 return current;

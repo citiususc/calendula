@@ -21,8 +21,8 @@ package es.usc.citius.servando.calendula.drugdb.download;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
@@ -41,13 +41,13 @@ public class UpdateDatabaseService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d(TAG, "onHandleIntent() called with: intent = [" + intent + "]");
+        LogUtil.d(TAG, "onHandleIntent() called with: intent = [" + intent + "]");
         final Context ctx = getApplicationContext();
         final String database = intent.getStringExtra(EXTRA_DATABASE_ID);
-        if (database != null && database.equals(PreferenceUtils.instance().preferences().getString(PreferenceKeys.DRUGDB_CURRENT_DB, null)) && DBVersionManager.checkForUpdate(ctx) != null) {
+        if (database != null && database.equals(PreferenceUtils.getString(PreferenceKeys.DRUGDB_CURRENT_DB, null)) && DBVersionManager.checkForUpdate(ctx) != null) {
             DownloadDatabaseHelper.instance().downloadDatabase(ctx, database, DBInstallType.UPDATE);
         } else {
-            Log.e(TAG, "onHandleIntent: no database id provided or database has changed since update notification");
+            LogUtil.e(TAG, "onHandleIntent: no database id provided or database has changed since update notification");
         }
     }
 

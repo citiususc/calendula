@@ -20,10 +20,7 @@ package es.usc.citius.servando.calendula;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.squareup.leakcanary.LeakCanary;
 
@@ -39,16 +36,13 @@ import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.modules.modules.PharmacyModule;
-import es.usc.citius.servando.calendula.util.Settings;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by castrelo on 4/10/14.
  */
 public class CalendulaApp extends Application {
 
-    // PREFERENCES
-    public static final String PREFERENCES_NAME = "CalendulaPreferences";
-    public static final String PREF_ALARM_SETTLED = "alarm_settled";
     // INTENTS
     public static final String INTENT_EXTRA_ACTION = "action";
     public static final String INTENT_EXTRA_ROUTINE_ID = "routine_id";
@@ -73,17 +67,12 @@ public class CalendulaApp extends Application {
     // REQUEST CODES
     public static final int RQ_SHOW_ROUTINE = 1;
     public static final int RQ_DELAY_ROUTINE = 2;
-    private final static String TAG = "CalendulaApp";
+    private static final String TAG = "CalendulaApp";
     public static boolean disableReceivers = false;
     private static boolean isOpen;
     private static EventBus eventBus = EventBus.getDefault();
     private static Context mContext;
 
-    public static String activePatientAuth(Context ctx) {
-        Long id = DB.patients().getActive(ctx).id();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return prefs.getString("remote_token" + id, null);
-    }
 
     public static EventBus eventBus() {
         return eventBus;
@@ -110,7 +99,7 @@ public class CalendulaApp extends Application {
 
         // If the database already exists, return
         if (!dbPath.exists()) {
-            Log.d("APP", "Database not found");
+            LogUtil.d(TAG, "Database not found");
             return;
         }
 
@@ -130,7 +119,7 @@ public class CalendulaApp extends Application {
             output.close();
             inputStream.close();
         } catch (IOException e) {
-            Log.e("APP", "Failed to export database", e);
+            LogUtil.e(TAG, "Failed to export database", e);
         }
     }
 
@@ -142,26 +131,22 @@ public class CalendulaApp extends Application {
             // This process is dedicated to LeakCanary for heap analysis.
             return;
         }
+
+        final Context applicationContext = getApplicationContext();
+        mContext = applicationContext;
+
         //initialize LeakCanary
         LeakCanary.install(CalendulaApp.this);
 
-        Log.d(TAG, "Application started");
-        //load settings
-        final Context applicationContext = getApplicationContext();
-        mContext = applicationContext;
-        try {
-            Settings.instance().load(applicationContext);
-        } catch (Exception e) {
-            Log.e(TAG, "onCreate: An exception happened when loading settings file");
-        }
+        LogUtil.d(TAG, "Application started");
 
         try {
-            Log.d(TAG, "Application flavor is \"" + BuildConfig.FLAVOR + "\"");
+            LogUtil.d(TAG, "Application flavor is \"" + BuildConfig.FLAVOR + "\"");
             final String flavor = BuildConfig.FLAVOR.toUpperCase();
             ModuleManager.getInstance().runModules(flavor, applicationContext);
         } catch (IllegalArgumentException | IllegalStateException e) {
-            Log.e(TAG, "onCreate: Error loading module configuration", e);
-            Log.w(TAG, "onCreate: Loading default module configuration instead");
+            LogUtil.e(TAG, "onCreate: Error loading module configuration", e);
+            LogUtil.w(TAG, "onCreate: Loading default module configuration instead");
             ModuleManager.getInstance().runDefaultModules(applicationContext);
         }
 

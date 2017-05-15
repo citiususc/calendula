@@ -18,8 +18,6 @@
 
 package es.usc.citius.servando.calendula.database;
 
-import android.util.Log;
-
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -37,12 +35,15 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by joseangel.pineiro on 3/26/15.
  */
 public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
 
+
+    private static final String TAG = "DailyScheduleItemDao";
 
     public DailyScheduleItemDao(DatabaseHelper db) {
         super(db);
@@ -223,7 +224,7 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
                         DB.medicines().fireEvent();
                     }
                 } catch (Exception e) {
-                    Log.e("DSIDAO", "An error occurred updating stock", e);
+                    LogUtil.e(TAG, "An error occurred updating stock", e);
                 }
             }
         }

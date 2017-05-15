@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula.modules.modules;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.ical.values.Frequency;
 
@@ -45,7 +44,11 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
+import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
+import es.usc.citius.servando.calendula.util.SettingsProperties;
+import es.usc.citius.servando.calendula.util.SettingsPropertiesKeys;
 
 /**
  * Created by alvaro.brey.vilas on 21/03/17.
@@ -55,8 +58,6 @@ public class TestDataModule extends CalendulaModule {
     public static final String ID = "CALENDULA_TEST_DATA_MODULE";
 
     private static final String TAG = "TestDataModule";
-
-    private static final String KEY_TEST_DATA_GENERATED = "Calendula.prefs.test_data_generated";
 
     private static final int PATIENT_NUMBER = 2;
     private static final int MEDICINE_NUMBER = 6;
@@ -68,6 +69,39 @@ public class TestDataModule extends CalendulaModule {
         return ID;
     }
 
+    @Override
+    protected void onApplicationStartup(final Context ctx) {
+        // generate some default data to test UI and the likes
+
+        final boolean testDataGenerated = PreferenceUtils.getBoolean(PreferenceKeys.TEST_DATA_GENERATED, false);
+        if (testDataGenerated && SettingsProperties.instance().get(SettingsPropertiesKeys.GENERATE_TEST_DATA).equals("yes")) {
+            LogUtil.d(TAG, "onApplicationStartup: Test data already generated, skipping");
+        } else {
+            LogUtil.d(TAG, "onApplicationStartup: Generating test data");
+
+            DB.transaction(new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    // patients
+                    final List<Patient> patients = generatePatients(ctx);
+
+                    // medicines
+                    final Map<Patient, List<Medicine>> medicines = generateMedicines(patients);
+
+                    // routines
+                    final Map<Patient, List<Routine>> routines = generateRoutines(patients);
+
+                    // schedules !
+                    final Map<Patient, List<Schedule>> schedules = generateSchedules(patients, medicines, routines, ctx);
+                    return null;
+                }
+            });
+
+            LogUtil.d(TAG, "onApplicationStartup: Test data generation finished");
+            PreferenceUtils.edit().putBoolean(PreferenceKeys.TEST_DATA_GENERATED.key(), true).apply();
+        }
+
+    }
 
     private String getAvatar(final int i) {
         switch (i + 1) {
@@ -106,44 +140,9 @@ public class TestDataModule extends CalendulaModule {
         }
     }
 
-    @Override
-    protected void onApplicationStartup(final Context ctx) {
-        // generate some default data to test UI and the likes
-
-        final boolean testDataGenerated = PreferenceUtils.instance().preferences().getBoolean(KEY_TEST_DATA_GENERATED, false);
-        if (testDataGenerated) {
-            Log.d(TAG, "onApplicationStartup: Test data already generated, skipping");
-        } else {
-            Log.d(TAG, "onApplicationStartup: Generating test data");
-
-            DB.transaction(new Callable<Object>() {
-                @Override
-                public Object call() throws Exception {
-                    // patients
-                    final List<Patient> patients = generatePatients(ctx);
-
-                    // medicines
-                    final Map<Patient, List<Medicine>> medicines = generateMedicines(patients);
-
-                    // routines
-                    final Map<Patient, List<Routine>> routines = generateRoutines(patients);
-
-                    // schedules !
-                    final Map<Patient, List<Schedule>> schedules = generateSchedules(patients, medicines, routines, ctx);
-                    return null;
-                }
-            });
-
-            Log.d(TAG, "onApplicationStartup: Test data generation finished");
-            PreferenceUtils.instance().preferences().edit().putBoolean(KEY_TEST_DATA_GENERATED, true).apply();
-        }
-
-    }
-
-
     @NonNull
     private List<Patient> generatePatients(Context ctx) {
-        Log.d(TAG, "Creating patients");
+        LogUtil.d(TAG, "Creating patients");
         List<Patient> patients = new ArrayList<>(PATIENT_NUMBER);
         final Patient def = DB.patients().getDefault();
         DB.patients().removeCascade(def);
@@ -155,16 +154,16 @@ public class TestDataModule extends CalendulaModule {
             p.setColor(Color.parseColor(PatientDetailActivity.COLORS[i % PatientDetailActivity.COLORS.length]));
             p.setDefault(false);
             DB.patients().save(p);
-            Log.d(TAG, "Created patient " + p);
+            LogUtil.d(TAG, "Created patient " + p);
             patients.add(p);
         }
-        DB.patients().setActive(patients.get(0), ctx);
-        Log.d(TAG, String.format("Created %d patients", PATIENT_NUMBER));
+        DB.patients().setActive(patients.get(0));
+        LogUtil.d(TAG, String.format("Created %d patients", PATIENT_NUMBER));
         return patients;
     }
 
     private Map<Patient, List<Medicine>> generateMedicines(List<Patient> patients) {
-        Log.d(TAG, "Creating medicines");
+        LogUtil.d(TAG, "Creating medicines");
         Map<Patient, List<Medicine>> medicines = new HashMap<>();
         for (Patient patient : patients) {
             medicines.put(patient, new ArrayList<Medicine>());
@@ -178,15 +177,15 @@ public class TestDataModule extends CalendulaModule {
             m.setPatient(patient);
             m.setStock((float) (20 * i % (50 - MEDICINE_NUMBER)));
             DB.medicines().save(m);
-            Log.d(TAG, "Created medicine " + m);
+            LogUtil.d(TAG, "Created medicine " + m);
             medicines.get(patient).add(m);
         }
-        Log.d(TAG, String.format("Created %d medicines", MEDICINE_NUMBER));
+        LogUtil.d(TAG, String.format("Created %d medicines", MEDICINE_NUMBER));
         return medicines;
     }
 
     private Map<Patient, List<Routine>> generateRoutines(List<Patient> patients) {
-        Log.d(TAG, "Creating routines");
+        LogUtil.d(TAG, "Creating routines");
         Map<Patient, List<Routine>> routines = new HashMap<>();
         for (Patient patient : patients) {
             routines.put(patient, new ArrayList<Routine>());
@@ -198,15 +197,15 @@ public class TestDataModule extends CalendulaModule {
             r.setName("Test routine " + (i + 1));
             r.setTime(LocalTime.MIDNIGHT.plusHours(5 * i % 24).plusMinutes(6 * i % 60));
             DB.routines().save(r);
-            Log.d(TAG, "Created routine " + r);
+            LogUtil.d(TAG, "Created routine " + r);
             routines.get(patient).add(r);
         }
-        Log.d(TAG, String.format("Created %d routines", ROUTINE_NUMBER));
+        LogUtil.d(TAG, String.format("Created %d routines", ROUTINE_NUMBER));
         return routines;
     }
 
     private Map<Patient, List<Schedule>> generateSchedules(List<Patient> patients, Map<Patient, List<Medicine>> medicines, Map<Patient, List<Routine>> routines, Context ctx) {
-        Log.d(TAG, "Creating schedules");
+        LogUtil.d(TAG, "Creating schedules");
         Map<Patient, List<Schedule>> schedules = new HashMap<>();
         for (Patient patient : patients) {
             schedules.put(patient, new ArrayList<Schedule>());
@@ -230,7 +229,7 @@ public class TestDataModule extends CalendulaModule {
             // TODO: 22/03/17 add some variety
 
             DB.schedules().save(s);
-            Log.d(TAG, "Created schedule " + s);
+            LogUtil.d(TAG, "Created schedule " + s);
             schedules.get(p).add(s);
         }
         DailyAgenda.instance().setupForToday(ctx, true); // update agenda

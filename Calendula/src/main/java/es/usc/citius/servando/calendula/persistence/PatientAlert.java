@@ -18,13 +18,13 @@
 
 package es.usc.citius.servando.calendula.persistence;
 
-import android.util.Log;
-
 import com.fatboyindustrial.gsonjodatime.Converters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * An abstract representation of an alert, that allows a simplified alarm
@@ -44,6 +44,8 @@ public class PatientAlert<P extends PatientAlert<P, T>, T> {
     public static final String COLUMN_MEDICINE = "Medicine";
     public static final String COLUMN_LEVEL = "Level";
     private static final Gson gson = Converters.registerAll(new GsonBuilder()).create();
+    private static final String TAG = "PatientAlert";
+
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
     @DatabaseField(columnName = COLUMN_TYPE)
@@ -143,7 +145,7 @@ public class PatientAlert<P extends PatientAlert<P, T>, T> {
             result.setType(type);
             return result;
         } catch (Exception e) {
-            Log.e("PatientAlert", "Unable to map alert to an specific alert type", e);
+            LogUtil.e(TAG, "Unable to map alert to an specific alert type", e);
             throw new RuntimeException(e);
         }
     }

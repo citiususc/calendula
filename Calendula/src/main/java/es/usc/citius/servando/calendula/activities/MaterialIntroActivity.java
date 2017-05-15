@@ -18,14 +18,14 @@
 
 package es.usc.citius.servando.calendula.activities;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 public class MaterialIntroActivity extends IntroActivity {
 
@@ -78,7 +78,6 @@ public class MaterialIntroActivity extends IntroActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        prefs.edit().putBoolean("PREFERENCE_INTRO_SHOWN", true).apply();
+        PreferenceUtils.edit().putBoolean(PreferenceKeys.HOME_INTRO_SHOWN.key(), true).apply();
     }
 }

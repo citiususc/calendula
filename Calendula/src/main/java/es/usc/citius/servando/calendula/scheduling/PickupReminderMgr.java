@@ -22,12 +22,12 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by joseangel.pineiro on 7/9/14.
@@ -35,7 +35,7 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 public class PickupReminderMgr {
 
 
-    private static final String TAG = PickupReminderMgr.class.getName();
+    private static final String TAG = "PickupReminderMgr";
     // static instance
     private static final PickupReminderMgr instance = new PickupReminderMgr();
 
@@ -56,7 +56,7 @@ public class PickupReminderMgr {
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             alarmManager.set(AlarmManager.RTC_WAKEUP, d.getMillis(), calendarReminderPendingIntent);
-            Log.d(TAG, "Pickup check alarm scheduled!");
+            LogUtil.d(TAG, "Pickup check alarm scheduled!");
         }
     }
 

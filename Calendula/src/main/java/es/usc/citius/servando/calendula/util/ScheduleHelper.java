@@ -18,8 +18,6 @@
 
 package es.usc.citius.servando.calendula.util;
 
-import android.util.Log;
-
 import com.google.ical.values.Frequency;
 
 import org.joda.time.DateTime;
@@ -39,6 +37,7 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
  */
 public class ScheduleHelper {
 
+    private static final String TAG = "ScheduleHelper";
     private static ScheduleHelper instance;
 
     private List<ScheduleItem> scheduleItems;
@@ -72,9 +71,9 @@ public class ScheduleHelper {
         int days = (int) new Interval(start, day).toDuration().getStandardDays();
         int cyclesUntilNow = days / cycleLength;
 
-        Log.d("ScheduleHelper",
+        LogUtil.d(TAG,
                 "start: " + start.toString("dd/MM/YYYY") + ", day: " + day.toString("dd/MM/YYYY"));
-        Log.d("ScheduleHelper", "Active: "
+        LogUtil.d(TAG, "Active: "
                 + activePeriod
                 + ", rest: "
                 + restPeriod

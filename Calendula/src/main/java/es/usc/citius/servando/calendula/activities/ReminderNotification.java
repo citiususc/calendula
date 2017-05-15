@@ -24,13 +24,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.Pair;
@@ -54,6 +52,7 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.NotificationEventReceiver;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
@@ -62,7 +61,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
  */
 public class ReminderNotification {
 
-    public static final String TAG = ReminderNotification.class.getName();
+    private static final String TAG = "ReminderNotification";
 
     private static final String NOTIFICATION_ROUTINE_TAG = "Reminder";
     private static final String NOTIFICATION_SCHEDULE_TAG = "ScheduleReminder";
@@ -78,10 +77,8 @@ public class ReminderNotification {
     }
 
     public static void notify(final Context context, final String title, Routine r, List<ScheduleItem> doses, LocalDate date, Intent intent, boolean lost) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean notifications = prefs.getBoolean("alarm_notifications", true);
 
-        if (!notifications) {
+        if (!PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_NOTIFICATIONS, true)) {
             return;
         }
 
@@ -109,10 +106,8 @@ public class ReminderNotification {
     }
 
     public static void notify(final Context context, final String title, Schedule schedule, LocalDate date, LocalTime time, Intent intent, boolean lost) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean notifications = prefs.getBoolean("alarm_notifications", true);
 
-        if (!notifications) {
+        if (!PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_NOTIFICATIONS, true)) {
             return;
         }
 
@@ -156,7 +151,7 @@ public class ReminderNotification {
     }
 
     private static void showInsistentScreen(Context context, Intent i) {
-        boolean insistentNotifications = PreferenceUtils.instance().preferences().getBoolean("alarm_insistent", false);
+        boolean insistentNotifications = PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_INSISTENT, false);
         if (insistentNotifications) {
             Intent intent = new Intent(context, LockScreenAlarmActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -169,8 +164,8 @@ public class ReminderNotification {
                                Pair<Intent, Intent> actionIntents, Intent confirmIntent, Intent intent,
                                NotificationOptions options) {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean notifications = prefs.getBoolean("alarm_notifications", true);
+        boolean notifications = PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_NOTIFICATIONS, true);
+
 
         // if notifications are disabled, exit
         if (!notifications) {
@@ -210,7 +205,7 @@ public class ReminderNotification {
     private static Notification buildNotification(Context context, NotificationOptions options) {
 
         Resources res = context.getResources();
-        boolean insistentNotifications = PreferenceUtils.instance().preferences().getBoolean("alarm_insistent", false);
+        boolean insistentNotifications = PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_INSISTENT, false);
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 
@@ -274,7 +269,6 @@ public class ReminderNotification {
 
     private static void styleForRoutine(Context ctx, NotificationCompat.InboxStyle style, Routine r, List<ScheduleItem> doses, boolean lost) {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
 
         for (ScheduleItem scheduleItem : doses) {
             //TODO: Use DecimalFormat
@@ -287,7 +281,7 @@ public class ReminderNotification {
             SpItem.append(":  " + scheduleItem.dose() + " " + med.presentation().units(ctx.getResources(), scheduleItem.dose()));
             style.addLine(SpItem);
         }
-        String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
+        String delayMinutesStr = PreferenceUtils.getString(PreferenceKeys.SETTINGS_ALARM_REPEAT_FREQUENCY, "15");
         int delayMinutes = (int) Long.parseLong(delayMinutesStr);
 
         if (delayMinutes > 0 && !lost) {
@@ -300,7 +294,6 @@ public class ReminderNotification {
     }
 
     private static void styleForSchedule(Context context, NotificationCompat.InboxStyle style, Schedule schedule, boolean lost) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         final Medicine med = schedule.medicine();
         final SpannableStringBuilder SpItem = new SpannableStringBuilder();
@@ -308,7 +301,7 @@ public class ReminderNotification {
         SpItem.append("   " + schedule.dose() + " " + med.presentation().units(context.getResources(), schedule.dose()));
         style.addLine(SpItem);
 
-        String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
+        String delayMinutesStr = PreferenceUtils.getString(PreferenceKeys.SETTINGS_ALARM_REPEAT_FREQUENCY, "15");
         int delayMinutes = (int) Long.parseLong(delayMinutesStr);
 
         if (delayMinutes > 0 && !lost) {

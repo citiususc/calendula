@@ -24,10 +24,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.Pair;
-import android.util.Log;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 
@@ -39,16 +37,18 @@ import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous database setup tasks
  */
 public class InstallDatabaseService extends IntentService {
 
-    public static final String TAG = "InstallDatabaseService";
     public static final String ACTION_COMPLETE = "calendula.persistence.medDatabases.action.DONE";
     public static final String ACTION_ERROR = "calendula.persistence.medDatabases.action.ERROR";
+    private static final String TAG = "InstallDatabaseService";
     private static final String ACTION_SETUP = "calendula.persistence.medDatabases.action.SETUP";
     private static final String ACTION_UPDATE = "calendula.persistence.medDatabases.action.UPDATE";
     private static final String EXTRA_DB_PATH = "calendula.persistence.medDatabases.extra.DB_PATH";
@@ -97,7 +97,7 @@ public class InstallDatabaseService extends IntentService {
     }
 
     private void checkForInvalidData() {
-        Log.d(TAG, "checkForInvalidData() called");
+        LogUtil.d(TAG, "checkForInvalidData() called");
 
         boolean anyMissing = false;
         for (Medicine m : DB.medicines().findAll()) {
@@ -141,21 +141,21 @@ public class InstallDatabaseService extends IntentService {
             mgr.setup(InstallDatabaseService.this, dbPath, new PrescriptionDBMgr.SetupProgressListener() {
                 @Override
                 public void onProgressUpdate(int progress) {
-                    Log.d(TAG, "Setting up db " + progress + "%");
+                    LogUtil.d(TAG, "Setting up db " + progress + "%");
                     showNotification(100, progress);
                 }
             });
 
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(InstallDatabaseService.this);
+            SharedPreferences settings = PreferenceUtils.instance().preferences();
             SharedPreferences.Editor edit = settings.edit();
-            edit.putString(PreferenceKeys.DRUGDB_LAST_VALID, dbPref);
-            edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB, dbPref);
-            edit.putString(PreferenceKeys.DRUGDB_VERSION, dbVersion);
+            edit.putString(PreferenceKeys.DRUGDB_LAST_VALID.key(), dbPref);
+            edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), dbPref);
+            edit.putString(PreferenceKeys.DRUGDB_VERSION.key(), dbVersion);
             edit.apply();
-            Log.d(TAG, dbPref + "-" + dbVersion + ": Finished saving " + DB.drugDB().prescriptions().count() + " prescriptions!");
+            LogUtil.d(TAG, dbPref + "-" + dbVersion + ": Finished saving " + DB.drugDB().prescriptions().count() + " prescriptions!");
             onComplete();
         } catch (Exception e) {
-            Log.e(TAG, "Error while saving prescription data", e);
+            LogUtil.e(TAG, "Error while saving prescription data", e);
             DownloadDatabaseHelper.instance().onDownloadFailed(this);
             onFailure();
         }

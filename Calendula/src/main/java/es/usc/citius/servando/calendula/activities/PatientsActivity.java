@@ -28,7 +28,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +50,7 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 
@@ -168,7 +168,7 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
                     public void onClick(DialogInterface dialog, int id) {
 
                         if (DB.patients().isActive(p, getApplicationContext())) {
-                            DB.patients().setActive(DB.patients().getDefault(), getApplicationContext());
+                            DB.patients().setActive(DB.patients().getDefault());
                         }
                         DB.patients().removeCascade(p);
                         notifyDataChange();
@@ -192,6 +192,7 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
     private class PatientAdapter extends BaseAdapter {
 
 
+        private static final String TAG = "PatientAdapter";
         private Context context;
 
         public PatientAdapter(Context context) {
@@ -223,7 +224,7 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
 
             final Patient p = (Patient) getItem(position);
 
-            Log.d("Patients", p.toString());
+            LogUtil.d(TAG, p.toString());
 
             boolean isActive = DB.patients().isActive(p, context);
 

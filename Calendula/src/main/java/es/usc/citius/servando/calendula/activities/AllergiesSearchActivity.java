@@ -25,7 +25,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
@@ -34,7 +33,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -80,7 +78,9 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.AllergyGroup;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Strings;
 
 @SuppressWarnings("unchecked")
@@ -88,7 +88,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
 
 
     public static final int REQUEST_NEW_ALLERGIES = 1;
-    private static final String TAG = "AllergiesSearchActivity";
+    private static final String TAG = "AllergiesSearchAct";
     private final ISelectionListener<AbstractItem> selectionListener = new AllergySelectionListener();
 
     @BindView(R.id.close_search_button)
@@ -125,8 +125,8 @@ public class AllergiesSearchActivity extends CalendulaActivity {
      */
     public boolean askForDatabaseIfNeeded() {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean validDB = prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB, getString(R.string.database_none_id)).equals(getString(R.string.database_aemps_id));
+        SharedPreferences prefs = PreferenceUtils.instance().preferences();
+        boolean validDB = prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), getString(R.string.database_none_id)).equals(getString(R.string.database_aemps_id));
 
         if (!validDB) {
             new MaterialStyledDialog.Builder(this)
@@ -142,7 +142,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             Intent i = new Intent(AllergiesSearchActivity.this, SettingsActivity.class);
-                            i.putExtra("show_database_dialog", true);
+                            i.putExtra(SettingsActivity.EXTRA_SHOW_DB_DIALOG, true);
                             finish();
                             startActivity(i);
                         }
@@ -187,7 +187,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
                     vos.add(new AllergenGroupWrapper(item1.getVo()));
                     break;
                 default:
-                    Log.wtf(TAG, "Invalid item type in adapter: " + i);
+                    LogUtil.wtf(TAG, "Invalid item type in adapter: " + i);
                     break;
             }
 
@@ -253,7 +253,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
             if (searchTask != null)
                 searchTask.cancel(true);
             searchTask = new DoSearchTask();
-            searchTask.execute(new String[]{filter});
+            searchTask.execute((Object) new String[]{filter});
         }
     }
 
@@ -276,7 +276,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
             }
         }
 
-        Log.d(TAG, "getSelected() returned: " + items.size() + " elements");
+        LogUtil.d(TAG, "getSelected() returned: " + items.size() + " elements");
         return items;
     }
 
@@ -422,7 +422,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
         @Override
         protected List<AbstractItem> doInBackground(String... params) {
             if (params.length != 1) {
-                Log.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + params.length);
+                LogUtil.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + params.length);
                 throw new IllegalArgumentException("Invalid argument length");
             }
 

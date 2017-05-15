@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula.util;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,49 +29,52 @@ import java.util.Properties;
 /**
  * Created by joseangel.pineiro on 7/3/14.
  */
-public class Settings {
+public class SettingsProperties {
 
-    private static final String TAG = Settings.class.getName();
+    private static final String TAG = "SettingsProperties";
 
     private static final String SETTINGS_FILE_NAME = "settings.properties";
 
-    private static final Settings instance = new Settings();
+    private static SettingsProperties instance;
 
-    Properties properties;
+    private Properties properties;
 
-    private Settings() {
-    }
-
-    public static Settings instance() {
-        return instance;
-    }
-
-    public void load(Context ctx) throws Exception {
+    private SettingsProperties(final Context ctx) throws IOException {
         Resources resources = ctx.getResources();
         AssetManager assetManager = resources.getAssets();
-        // Read from the /assets directory
 
-        Log.d(TAG, "Loading settings...");
+        LogUtil.d(TAG, "Loading settings...");
         try {
             InputStream inputStream = assetManager.open(SETTINGS_FILE_NAME);
             properties = new Properties();
             properties.load(inputStream);
-            Log.d(TAG, "Settings loaded successfully!" + properties.toString());
+            LogUtil.d(TAG, "SettingsProperties loaded successfully!" + properties.toString());
         } catch (IOException e) {
             properties = new Properties();
-            throw new Exception("Error loading settings file", e);
+            throw e;
         }
     }
 
+    /**
+     * @return the instance
+     * @throws if {@link #init(Context)} hasn't been called yet
+     */
+    public static SettingsProperties instance() throws IllegalStateException {
+        if (instance == null)
+            throw new IllegalStateException("SettingsProperties not initialized!");
+        return instance;
+    }
+
+    public synchronized static void init(Context ctx) throws IOException {
+        if (instance == null)
+            instance = new SettingsProperties(ctx);
+    }
+
     public String get(String key) {
-        if (properties == null)
-            throw new IllegalStateException("Settings not loaded");
         return properties.getProperty(key);
     }
 
     public String get(String key, String defaultValue) {
-        if (properties == null)
-            throw new IllegalStateException("Settings not loaded");
         return properties.getProperty(key, defaultValue);
     }
 

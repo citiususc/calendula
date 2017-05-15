@@ -22,32 +22,32 @@
          when checked/unchecked. -->
     <CheckBoxPreference
         android:defaultValue="true"
-        android:key="alarm_notifications"
+        android:key="@string/prefkey_settings_alarm_notifications"
         android:title="@string/pref_title_new_alarm_notification"/>
 
     <CheckBoxPreference
         android:defaultValue="true"
-        android:dependency="alarm_notifications"
-        android:key="alarm_repeat_enabled"
+        android:dependency="@string/prefkey_settings_alarm_notifications"
+        android:key="@string/prefkey_settings_alarm_repeat_enabled"
         android:title="@string/pref_title_repeat_alarms"/>
 
 
     <ListPreference
         android:defaultValue="15"
-        android:dependency="alarm_repeat_enabled"
+        android:dependency="@string/prefkey_settings_alarm_repeat_enabled"
         android:entries="@array/pref_alarm_repeat_titles"
         android:entryValues="@array/pref_alarm_repeat_values"
-        android:key="alarm_repeat_frequency"
+        android:key="@string/prefkey_settings_alarm_repeat_frequency"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:title="@string/pref_title_sync_frequency"/>
 
     <ListPreference
         android:defaultValue="120"
-        android:dependency="alarm_repeat_enabled"
+        android:dependency="@string/prefkey_settings_alarm_repeat_enabled"
         android:entries="@array/pref_alarm_reminder_window_titles"
         android:entryValues="@array/pref_alarm_reminder_window_values"
-        android:key="alarm_reminder_window"
+        android:key="@string/prefkey_settings_alarm_reminder_window"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:title="@string/pref_title_reminder_window"/>
@@ -63,20 +63,20 @@
 
     <CheckBoxPreference
         android:defaultValue="false"
-        android:dependency="alarm_notifications"
-        android:key="alarm_insistent"
+        android:dependency="@string/prefkey_settings_alarm_notifications"
+        android:key="@string/prefkey_settings_alarm_insistent"
         android:title="@string/pref_title_insistent_alarms"/>
 
 
     <es.usc.citius.servando.calendula.util.RingtonePreference
-        android:dependency="alarm_insistent"
-        android:key="pref_notification_tone"
+        android:dependency="@string/prefkey_settings_alarm_insistent"
+        android:key="@string/prefkey_settings_notification_tone"
         android:summary="@string/pref_notification_tone_sum"
         android:title="@string/pref_notification_tone"/>
 
     <CheckBoxPreference
         android:defaultValue="true"
-        android:key="alarm_pickup_notifications"
+        android:key="@string/prefkey_settings_alarm_pickup_notifications"
         android:title="@string/pref_title_pickup_notification"/>
 
 

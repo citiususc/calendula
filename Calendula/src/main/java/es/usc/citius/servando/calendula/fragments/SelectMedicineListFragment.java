@@ -24,7 +24,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +45,7 @@ import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 import es.usc.citius.servando.calendula.util.Snack;
 
@@ -55,7 +55,7 @@ import es.usc.citius.servando.calendula.util.Snack;
 public class SelectMedicineListFragment extends Fragment {
 
 
-    private static String TAG = "SelectMedicineListFragm";
+    private static final String TAG = "SelectMedicineListFrag";
     List<Medicine> mMedicines;
     ArrayAdapter adapter;
     ListView listview;
@@ -133,7 +133,7 @@ public class SelectMedicineListFragment extends Fragment {
                 hasAllergies = true;
             }
         } catch (SQLException e) {
-            Log.e(TAG, "createMedicineListItem: ", e);
+            LogUtil.e(TAG, "createMedicineListItem: ", e);
             hasAllergies = true;
         }
 

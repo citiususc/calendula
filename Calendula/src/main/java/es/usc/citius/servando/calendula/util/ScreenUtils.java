@@ -33,7 +33,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
@@ -53,6 +52,7 @@ import es.usc.citius.servando.calendula.R;
  */
 public class ScreenUtils {
 
+    private static final String TAG = "ScreenUtils";
     private static Palette p;
 
     public static PointF getDpSize(Activity activity) {
@@ -131,7 +131,7 @@ public class ScreenUtils {
             return Bitmap.createScaledBitmap(roughBitmap, (int) (roughBitmap.getWidth() * values[0]), (int) (roughBitmap.getHeight() * values[4]), true);
 
         } catch (IOException e) {
-            Log.e("Image", e.getMessage(), e);
+            LogUtil.e(TAG, e.getMessage(), e);
         }
         return null;
     }

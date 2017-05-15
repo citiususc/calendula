@@ -19,7 +19,6 @@
 package es.usc.citius.servando.calendula.database;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -42,6 +41,7 @@ import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.alerts.StockRunningOutAlert;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 import es.usc.citius.servando.calendula.util.medicine.StockUtils;
@@ -111,8 +111,7 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
 
             if (addedOrRemoved) {
                 Long days = StockUtils.getEstimatedStockDays(m);
-                SharedPreferences preferences = PreferenceUtils.instance().preferences();
-                int stock_alert_days = Integer.parseInt(preferences.getString("stock_alert_days", "-1"));
+                int stock_alert_days = Integer.parseInt(PreferenceUtils.getString(PreferenceKeys.SETTINGS_STOCK_ALERT_DAYS, "-1"));
                 List<PatientAlert> alerts = DB.alerts().findByMedicineAndType(m, StockRunningOutAlert.class.getCanonicalName());
                 if (days != null && days < stock_alert_days) {
                     if (alerts.isEmpty()) {

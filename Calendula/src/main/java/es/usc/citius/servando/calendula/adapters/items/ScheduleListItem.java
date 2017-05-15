@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula.adapters.items;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,6 +38,7 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by alvaro.brey.vilas on 22/11/16.
@@ -87,7 +87,7 @@ public class ScheduleListItem extends AbstractItem<ScheduleListItem, ScheduleLis
             timeStr = ScheduleUtils.getTimesStr(24 / schedule.rule().interval(), ctx);
         }
 
-        Log.d(TAG, "Schedule " + schedule.medicine().name() + " is scanned: " + schedule.scanned());
+        LogUtil.d(TAG, "Schedule " + schedule.medicine().name() + " is scanned: " + schedule.scanned());
         String auto = schedule.scanned() ? " ↻" : "";
 
         holder.icon2.setImageDrawable(new IconicsDrawable(ctx)

@@ -26,18 +26,19 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by joseangel.pineiro on 10/7/15.
  */
 public abstract class DosePickerFragment extends DialogFragment {
 
+    private static final String TAG = "DosePickerFragment";
     OnDoseSelectedListener mDoseSelectedListener;
 
     private double initialDose = 1.0f;
@@ -57,7 +58,7 @@ public abstract class DosePickerFragment extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.d(getTag(), "Activity " + activity.getClass().getName() + ", " + (activity instanceof OnDoseSelectedListener));
+        LogUtil.d(TAG, "Activity " + activity.getClass().getName() + ", " + (activity instanceof OnDoseSelectedListener));
         // If the container activity has implemented
         // the callback interface, set it as listener
         if (activity instanceof OnDoseSelectedListener) {

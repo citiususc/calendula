@@ -38,7 +38,6 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -74,11 +73,13 @@ import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.scheduling.PickupReminderMgr;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PickupUtils;
 
 public class CalendarActivity extends CalendulaActivity {
 
     public static final int ACTION_SHOW_REMINDERS = 1;
+    private static final String TAG = "CalendarActivity";
     static PickupUtils pickupUtils;
     private static DateFormat dtf2 = new SimpleDateFormat("dd/MMM");
     DateTime from;
@@ -186,10 +187,10 @@ public class CalendarActivity extends CalendulaActivity {
         // there are not urgent meds, but there are others to pickup
         if (urgent.isEmpty() && best != null) {
 
-//            Log.d("Calendar", "Urgent: " + urgent.size());
-//            Log.d("Calendar", "Next: " + next.size());
+//            LogUtil.d(TAG, "Urgent: " + urgent.size());
+//            LogUtil.d(TAG, "Next: " + next.size());
 
-            Log.d("Calendar", "there are not urgent meds, but there are others to pickup");
+            LogUtil.d(TAG, "there are not urgent meds, but there are others to pickup");
             if (next.size() > 1) {
                 msg = new SpannableString(getString(R.string.best_single_day_messge, best.first.toString(getString(R.string.best_date_format)), next.size()) + "\n\n");
             } else {
@@ -199,16 +200,16 @@ public class CalendarActivity extends CalendulaActivity {
         }
 
         // there are urgent meds
-        Log.d("Calendar", "there are urgent meds");
+        LogUtil.d(TAG, "there are urgent meds");
         if (!urgent.isEmpty()) {
             // and others
-            Log.d("Calendar", "and others");
+            LogUtil.d(TAG, "and others");
             if (best != null) {
 
                 String bestStr = best.equals(LocalDate.now().plusDays(1)) ? getString(R.string.calendar_date_tomorrow) : best.first.toString(getString(R.string.best_date_format));
 
                 // and the others date is near
-                Log.d("Calendar", "and the others date is near");
+                LogUtil.d(TAG, "and the others date is near");
                 if (today.plusDays(3).isAfter(best.first)) {
                     List<PickupInfo> all = new ArrayList<>();
                     all.addAll(urgent);
@@ -219,27 +220,27 @@ public class CalendarActivity extends CalendulaActivity {
                 // and the others date is not near
                 else {
 
-                    Log.d("Calendar", "and the others date is not near");
+                    LogUtil.d(TAG, "and the others date is not near");
                     msg = addPickupList(new SpannableString(getString(R.string.pending_meds_msg) + "\n\n"), urgent);
 
                     msg = TextUtils.concat(msg, new SpannableString("\n"));
                     if (next.size() > 1) {
-                        Log.d("Calendar", " size > 1");
+                        LogUtil.d(TAG, " size > 1");
                         msg = TextUtils.concat(msg, getString(R.string.best_single_day_messge_after_pending, bestStr, next.size()) + "\n\n");
                     } else {
-                        Log.d("Calendar", " size <= 1");
+                        LogUtil.d(TAG, " size <= 1");
                         msg = TextUtils.concat(msg, getString(R.string.best_single_day_messge_after_pending_one_med, bestStr) + "\n\n");
                     }
                     msg = addPickupList(msg, next);
                 }
             } else {
-                Log.d("Calendar", " there are only urgent meds");
+                LogUtil.d(TAG, " there are only urgent meds");
                 // there are only urgent meds
                 msg = addPickupList(getString(R.string.pending_meds_msg) + "\n\n", urgent);
             }
         }
 
-        Log.d("BEST_DAY", msg.toString());
+        LogUtil.d(TAG, msg.toString());
         return msg;
     }
 

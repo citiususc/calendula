@@ -29,7 +29,7 @@ import es.usc.citius.servando.calendula.persistence.HtmlCacheEntry;
  */
 public class HtmlCacheDAO extends GenericDao<HtmlCacheEntry, Long> {
 
-    public static final String TAG = "HtmlCacheDAO";
+    private static final String TAG = "HtmlCacheDAO";
 
     private Dao<HtmlCacheEntry, Long> daoInstance = null;
 

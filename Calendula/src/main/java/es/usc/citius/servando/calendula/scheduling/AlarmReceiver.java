@@ -21,16 +21,16 @@ package es.usc.citius.servando.calendula.scheduling;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * This class receives our routine alarms
  */
 public class AlarmReceiver extends BroadcastReceiver {
 
-    public static final String TAG = "AlarmReceiver.class";
+    private static final String TAG = "AlarmReceiver.class";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -42,10 +42,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         AlarmIntentParams params = AlarmScheduler.getAlarmParams(intent);
 
         if (params == null) {
-            Log.w(TAG, "No extra params supplied");
+            LogUtil.w(TAG, "No extra params supplied");
             return;
         } else {
-            Log.d(TAG, "Received alarm: " + params.action);
+            LogUtil.d(TAG, "Received alarm: " + params.action);
         }
 
         Intent serviceIntent = new Intent(context, AlarmIntentService.class);
