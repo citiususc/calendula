@@ -33,7 +33,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 
 public class PurgeCacheJob extends CalendulaJob {
 
-    private static final String TAG = "PurgeCacheJob";
+    static final String TAG = "PurgeCacheJob";
 
     private static final Integer PERIOD_DAYS = 30;
 
