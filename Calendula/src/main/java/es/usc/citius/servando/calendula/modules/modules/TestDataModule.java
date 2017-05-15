@@ -74,8 +74,10 @@ public class TestDataModule extends CalendulaModule {
         // generate some default data to test UI and the likes
 
         final boolean testDataGenerated = PreferenceUtils.getBoolean(PreferenceKeys.TEST_DATA_GENERATED, false);
-        if (testDataGenerated && SettingsProperties.instance().get(SettingsPropertiesKeys.GENERATE_TEST_DATA).equals("yes")) {
+        if (testDataGenerated) {
             LogUtil.d(TAG, "onApplicationStartup: Test data already generated, skipping");
+        } else if (!SettingsProperties.instance().get(SettingsPropertiesKeys.GENERATE_TEST_DATA).equals("yes")) {
+            LogUtil.d(TAG, "onApplicationStartup: GENERATE_TEST_DATA is not set");
         } else {
             LogUtil.d(TAG, "onApplicationStartup: Generating test data");
 
