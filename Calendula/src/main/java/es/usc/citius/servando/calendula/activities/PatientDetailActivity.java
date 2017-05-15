@@ -30,9 +30,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -71,6 +69,7 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
@@ -118,6 +117,8 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
 //            "#9e9e9e",
 //            "#607d8b"
     };
+    private static final String TAG = "PatientDetailActivity";
+
     GridView avatarGrid;
     BaseAdapter adapter;
     Patient patient;
@@ -229,7 +230,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             Snack.show("Usuario vinculado correctamente!", this, Snackbar.SnackbarDuration.LENGTH_LONG);
             SharedPreferences prefs = PreferenceUtils.instance().preferences();
             prefs.edit().putString("remote_token" + patientId, p.token).apply();
-            Log.d("PatDetail", p.toString());
+            LogUtil.d(TAG, p.toString());
         }
     }
 
@@ -271,7 +272,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
 
         Collections.sort(avatars);
         for (String s : avatars) {
-            Log.d("AVATAR", "onCreate: " + s);
+            LogUtil.d(TAG, "onCreate: " + s);
         }
         avatarGrid.setVisibility(View.VISIBLE);
         gridContainer.setVisibility(View.GONE);

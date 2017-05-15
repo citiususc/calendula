@@ -19,7 +19,6 @@
 package es.usc.citius.servando.calendula.database.migrationHelpers;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
@@ -35,6 +34,7 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionActiveIngredient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionExcipient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PresentationForm;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Helper that performs the migration to the new drug model
@@ -59,11 +59,11 @@ public class DrugModelMigrationHelper {
         };
 
         // drop deprecated db tables
-        Log.d(TAG, "Dropping deprecated tables...");
+        LogUtil.d(TAG, "Dropping deprecated tables...");
         db.execSQL("DROP TABLE IF EXISTS Prescriptions;");
         db.execSQL("DROP TABLE IF EXISTS Groups;");
         // create new db tables
-        Log.d(TAG, "Creating new drug model tables...");
+        LogUtil.d(TAG, "Creating new drug model tables...");
         for (Class<?> c : drugDbClasses) {
             TableUtils.createTable(connectionSource, c);
         }

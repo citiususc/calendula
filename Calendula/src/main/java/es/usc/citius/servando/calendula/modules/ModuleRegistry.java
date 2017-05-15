@@ -18,8 +18,6 @@
 
 package es.usc.citius.servando.calendula.modules;
 
-import android.util.Log;
-
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
@@ -30,6 +28,7 @@ import es.usc.citius.servando.calendula.modules.modules.BaseModule;
 import es.usc.citius.servando.calendula.modules.modules.PharmacyModule;
 import es.usc.citius.servando.calendula.modules.modules.StockModule;
 import es.usc.citius.servando.calendula.modules.modules.TestDataModule;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by alvaro.brey.vilas on 30/11/16.
@@ -37,7 +36,7 @@ import es.usc.citius.servando.calendula.modules.modules.TestDataModule;
 
 public class ModuleRegistry {
 
-    public static final String TAG = "ModuleRegistry";
+    private static final String TAG = "ModuleRegistry";
 
     public static List<CalendulaModule> getDefaultModules() {
         return getModulesForConfig(ModuleConfig.PRODUCT);
@@ -53,11 +52,11 @@ public class ModuleRegistry {
             try {
                 modules.add((CalendulaModule) moduleClass.newInstance());
             } catch (Exception e) {
-                Log.e(TAG, "getModulesForConfig: An error occurred when trying to instantiate module", e);
+                LogUtil.e(TAG, "getModulesForConfig: An error occurred when trying to instantiate module", e);
                 throw new RuntimeException(e);
             }
         }
-        Log.d(TAG, "getModulesForConfig: " + modules.size() + " modules instantiated successfully");
+        LogUtil.d(TAG, "getModulesForConfig: " + modules.size() + " modules instantiated successfully");
         return modules;
     }
 

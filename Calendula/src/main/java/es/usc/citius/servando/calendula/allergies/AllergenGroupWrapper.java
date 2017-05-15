@@ -27,6 +27,17 @@ import android.os.Parcelable;
 
 public class AllergenGroupWrapper implements Parcelable {
 
+    public static final Parcelable.Creator<AllergenGroupWrapper> CREATOR = new Parcelable.Creator<AllergenGroupWrapper>() {
+        @Override
+        public AllergenGroupWrapper createFromParcel(Parcel source) {
+            return new AllergenGroupWrapper(source);
+        }
+
+        @Override
+        public AllergenGroupWrapper[] newArray(int size) {
+            return new AllergenGroupWrapper[size];
+        }
+    };
     private AllergenVO vo;
     private String group;
 
@@ -37,6 +48,11 @@ public class AllergenGroupWrapper implements Parcelable {
 
     public AllergenGroupWrapper(AllergenVO vo) {
         this.vo = vo;
+    }
+
+    protected AllergenGroupWrapper(Parcel in) {
+        this.vo = in.readParcelable(AllergenVO.class.getClassLoader());
+        this.group = in.readString();
     }
 
     public AllergenVO getVo() {
@@ -55,7 +71,6 @@ public class AllergenGroupWrapper implements Parcelable {
         this.group = group;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -66,21 +81,4 @@ public class AllergenGroupWrapper implements Parcelable {
         dest.writeParcelable(this.vo, flags);
         dest.writeString(this.group);
     }
-
-    protected AllergenGroupWrapper(Parcel in) {
-        this.vo = in.readParcelable(AllergenVO.class.getClassLoader());
-        this.group = in.readString();
-    }
-
-    public static final Parcelable.Creator<AllergenGroupWrapper> CREATOR = new Parcelable.Creator<AllergenGroupWrapper>() {
-        @Override
-        public AllergenGroupWrapper createFromParcel(Parcel source) {
-            return new AllergenGroupWrapper(source);
-        }
-
-        @Override
-        public AllergenGroupWrapper[] newArray(int size) {
-            return new AllergenGroupWrapper[size];
-        }
-    };
 }

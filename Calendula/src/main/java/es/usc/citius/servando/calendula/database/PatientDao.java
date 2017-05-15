@@ -19,8 +19,6 @@
 package es.usc.citius.servando.calendula.database;
 
 import android.content.Context;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
 
 import com.j256.ormlite.dao.Dao;
 
@@ -40,7 +38,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
 public class PatientDao extends GenericDao<Patient, Long> {
 
 
-    public static final String TAG = "PatientDao";
+    private static final String TAG = "PatientDao";
 
     public PatientDao(DatabaseHelper db) {
         super(db);

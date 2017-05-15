@@ -25,7 +25,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 
 import java.util.Collection;
 
@@ -98,7 +97,7 @@ public class Strings {
         // fix end index if needed
         int realEnd = end;
         if (end > sb.length()) {
-            Log.d(TAG, "getHighlighted: end index bigger than string, defaulting to last valid index");
+            LogUtil.d(TAG, "getHighlighted: end index bigger than string, defaulting to last valid index");
             realEnd = sb.length();
         }
 

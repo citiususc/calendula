@@ -30,7 +30,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Base64;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -64,6 +63,7 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.util.HtmlCacheManager;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 public class WebViewActivity extends CalendulaActivity {
 
@@ -107,7 +107,7 @@ public class WebViewActivity extends CalendulaActivity {
         //check for request and URL  and finish if not present
         request = getIntent().getParcelableExtra(PARAM_WEBVIEW_REQUEST);
         if (request == null || (url = request.getUrl()) == null) {
-            Log.e(TAG, "onCreate: No WebViewRequest provided in intent!");
+            LogUtil.e(TAG, "onCreate: No WebViewRequest provided in intent!");
             showErrorToast(null);
             finish();
         } else {
@@ -132,7 +132,7 @@ public class WebViewActivity extends CalendulaActivity {
     @Override
     public void onActionModeStarted(ActionMode mode) {
         super.onActionModeStarted(mode);
-        Log.d(TAG, "onActionModeStarted");
+        LogUtil.d(TAG, "onActionModeStarted");
         if (toolbar != null) {
             toolbarSahdow.setVisibility(View.GONE);
             toolbar.setVisibility(View.GONE);
@@ -143,7 +143,7 @@ public class WebViewActivity extends CalendulaActivity {
     @Override
     public void onActionModeFinished(ActionMode mode) {
         super.onActionModeFinished(mode);
-        Log.d(TAG, "onActionModeFinished");
+        LogUtil.d(TAG, "onActionModeFinished");
         if (toolbar != null) {
             setupStatusBar(color);
             handler.postDelayed(new Runnable() {
@@ -232,17 +232,17 @@ public class WebViewActivity extends CalendulaActivity {
         //enable JavaScript if it is explicitly enabled or custom css sheet must be injected
         if (request.isJavaScriptEnabled() || request.getCustomCss() != null) {
             if (!isJavaScriptInsecure) {
-                Log.d(TAG, "Enabling JavaScript!");
+                LogUtil.d(TAG, "Enabling JavaScript!");
                 webView.getSettings().setJavaScriptEnabled(true);
                 webView.getSettings().setJavaScriptEnabled(true);
             } else {
-                Log.w(TAG, "Javascript cannot be enabled with API version < 17 due to security reasons, disabling.");
+                LogUtil.w(TAG, "Javascript cannot be enabled with API version < 17 due to security reasons, disabling.");
             }
         }
 
 
         final String originalUrl = url;
-        Log.d(TAG, "Opening URL: " + originalUrl);
+        LogUtil.d(TAG, "Opening URL: " + originalUrl);
 
         //setup progressDialog
         String loadingMessage = request.getLoadingMessage();
@@ -273,10 +273,10 @@ public class WebViewActivity extends CalendulaActivity {
         webView.setWebViewClient(new CustomWebViewClient(request));
 
         if (cachedData != null) {
-            Log.d(TAG, "setupWebView: Loading page from cache");
+            LogUtil.d(TAG, "setupWebView: Loading page from cache");
             webView.loadData(cachedData, "text/html; charset=UTF-8", null);
         } else {
-            Log.d(TAG, "setupWebView: Loading page from URL");
+            LogUtil.d(TAG, "setupWebView: Loading page from URL");
             webView.loadUrl(originalUrl);
         }
     }
@@ -344,12 +344,12 @@ public class WebViewActivity extends CalendulaActivity {
                     "parent.appendChild(style)" +
                     "})()");
         } catch (Exception e) {
-            Log.w(TAG, "injectCSS:" + file);
+            LogUtil.w(TAG, "injectCSS:" + file);
         }
     }
 
     private void enableAppCache() {
-        Log.d(TAG, "Enabling cache with max size " + CACHE_MAX_SIZE + " bytes");
+        LogUtil.d(TAG, "Enabling cache with max size " + CACHE_MAX_SIZE + " bytes");
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setAppCacheMaxSize(CACHE_MAX_SIZE);
         webView.getSettings().setAppCachePath(getFilesDir().getPath() + "data/" + getPackageName() + "/cache");
@@ -653,7 +653,7 @@ public class WebViewActivity extends CalendulaActivity {
         public void onPageFinished(WebView view, String url) {
 
             if (view.getTitle().matches(HTTP_ERROR_REGEXP)) {
-                Log.e(TAG, "Received HTTP error, page title is: " + view.getTitle());
+                LogUtil.e(TAG, "Received HTTP error, page title is: " + view.getTitle());
                 showErrorToast(request.getNotFoundErrorMessage());
                 hideLoading();
                 WebViewActivity.this.finish();
@@ -677,14 +677,14 @@ public class WebViewActivity extends CalendulaActivity {
                             hideLoading();
                         }
                     }, 200);
-                    Log.d(TAG, "Finished loading URL: " + url);
+                    LogUtil.d(TAG, "Finished loading URL: " + url);
                 }
             }
         }
 
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-            Log.e(TAG, "Received error when trying to load page");
+            LogUtil.e(TAG, "Received error when trying to load page");
             showErrorToast(request.getConnectionErrorMessage());
             hideLoading();
             finish();
@@ -692,7 +692,7 @@ public class WebViewActivity extends CalendulaActivity {
 
         @Override
         public void onReceivedHttpError(WebView view, WebResourceRequest r, WebResourceResponse errorResponse) {
-            Log.e(TAG, "Received HTTP Error when trying to load page");
+            LogUtil.e(TAG, "Received HTTP Error when trying to load page");
             showErrorToast(request.getNotFoundErrorMessage());
             hideLoading();
             finish();
@@ -700,7 +700,7 @@ public class WebViewActivity extends CalendulaActivity {
 
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-            Log.e(TAG, "Received SSL Error when trying to load page");
+            LogUtil.e(TAG, "Received SSL Error when trying to load page");
             showErrorToast(request.getConnectionErrorMessage());
             hideLoading();
             finish();
@@ -732,7 +732,7 @@ public class WebViewActivity extends CalendulaActivity {
                     }
 
                 } catch (Exception e) {
-                    Log.e(TAG, "Error trying to post process content", e);
+                    LogUtil.e(TAG, "Error trying to post process content", e);
                 }
             }
             // in other case, simply write html content to cache

@@ -26,7 +26,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +51,7 @@ import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -59,6 +59,7 @@ import es.usc.citius.servando.calendula.util.IconUtils;
 public class RoutinesListFragment extends Fragment {
 
 
+    private static final String TAG = "RoutinesListFragment";
     List<Routine> mRoutines;
     OnRoutineSelectedListener mRoutineSelectedCallback;
     ArrayAdapter adapter;
@@ -91,7 +92,7 @@ public class RoutinesListFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.d(getTag(), "Activity " + activity.getClass().getName() + ", " + (activity instanceof OnRoutineSelectedListener));
+        LogUtil.d(TAG, "Activity " + activity.getClass().getName() + ", " + (activity instanceof OnRoutineSelectedListener));
         // If the container activity has implemented
         // the callback interface, set it as listener
         if (activity instanceof OnRoutineSelectedListener) {
@@ -100,7 +101,7 @@ public class RoutinesListFragment extends Fragment {
     }
 
     public void notifyDataChange() {
-        Log.d(getTag(), "Routines - Notify data change");
+        LogUtil.d(TAG, "Routines - Notify data change");
         new ReloadItemsTask().execute();
     }
 
@@ -190,10 +191,10 @@ public class RoutinesListFragment extends Fragment {
             public void onClick(View view) {
                 Routine r = (Routine) view.getTag();
                 if (mRoutineSelectedCallback != null && r != null) {
-                    Log.d(getTag(), "Click at " + r.name());
+                    LogUtil.d(TAG, "Click at " + r.name());
                     mRoutineSelectedCallback.onRoutineSelected(r);
                 } else {
-                    Log.d(getTag(), "No callback set");
+                    LogUtil.d(TAG, "No callback set");
                 }
 
             }

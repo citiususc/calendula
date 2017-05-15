@@ -21,18 +21,18 @@ package es.usc.citius.servando.calendula.scheduling;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.activities.CalendarActivity;
 import es.usc.citius.servando.calendula.activities.PickupNotification;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * This class receives our pickup check alarms
  */
 public class PickupAlarmReceiver extends BroadcastReceiver {
 
-    public static final String TAG = "PickupReceiver.class";
+    private static final String TAG = "PickupReceiver";
 
 
     @Override
@@ -44,7 +44,7 @@ public class PickupAlarmReceiver extends BroadcastReceiver {
             // get action type
             int action = intent.getIntExtra(CalendulaApp.INTENT_EXTRA_ACTION, -1);
 
-            Log.d(TAG, "Alarm received - Action : " + action);
+            LogUtil.d(TAG, "Alarm received - Action : " + action);
 
             if (action == CalendulaApp.ACTION_CHECK_PICKUPS_ALARM) {
                 String description = "Recuerda recoger tus medicinas!";

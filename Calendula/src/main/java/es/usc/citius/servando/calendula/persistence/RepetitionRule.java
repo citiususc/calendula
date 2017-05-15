@@ -65,7 +65,7 @@ public class RepetitionRule {
                 DateValue v = new DateTimeValueImpl(1,0,0,0,0,0);
                 rrule.setUntil(v);
             }*/
-            //Log.d("RRule", "Creating repetition rule: " + rrule.toIcal());
+            //LogUtil.d(TAG, "Creating repetition rule: " + rrule.toIcal());
         } catch (ParseException p) {
             throw new RuntimeException("Error parsing RRule", p);
         }

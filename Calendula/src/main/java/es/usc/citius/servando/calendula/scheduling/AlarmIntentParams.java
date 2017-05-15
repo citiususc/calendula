@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula.scheduling;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -29,17 +28,15 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Encapsulates extras of alarm intents
  */
 public class AlarmIntentParams implements Parcelable {
 
-    public static final String TAG = "AlarmIntentParams";
-
     public static final String DATE_FORMAT = "dd/MM/YYYY";
     public static final String TIME_FORMAT = "kk:mm";
-
     public static final int AUTO = 0; // auto generated, default
     public static final int USER = 1; // generated due to an user action (i.e. delay an intake)
     public static final Parcelable.Creator<AlarmIntentParams> CREATOR = new Parcelable.Creator<AlarmIntentParams>() {
@@ -51,6 +48,7 @@ public class AlarmIntentParams implements Parcelable {
             return new AlarmIntentParams[size];
         }
     };
+    private static final String TAG = "AlarmIntentParams";
     public int action = -1;
     public long routineId = -1;
     public long scheduleId = -1;
@@ -75,7 +73,7 @@ public class AlarmIntentParams implements Parcelable {
         params.action = delayed ? CalendulaApp.ACTION_ROUTINE_DELAYED_TIME : CalendulaApp.ACTION_ROUTINE_TIME;
         params.routineId = routineId;
         params.date = date.toString(DATE_FORMAT);
-        Log.d(TAG, "forRoutine: " + params.toString());
+        LogUtil.d(TAG, "forRoutine: " + params.toString());
         return params;
     }
 
@@ -85,7 +83,7 @@ public class AlarmIntentParams implements Parcelable {
         params.scheduleId = scheduleId;
         params.scheduleTime = time.toString(TIME_FORMAT);
         params.date = date.toString(DATE_FORMAT);
-        Log.d(TAG, "forSchedule: " + params.toString());
+        LogUtil.d(TAG, "forSchedule: " + params.toString());
         return params;
     }
 

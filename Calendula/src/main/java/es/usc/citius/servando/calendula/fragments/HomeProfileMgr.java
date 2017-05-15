@@ -22,12 +22,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.graphics.Palette;
 import android.view.LayoutInflater;
@@ -201,7 +199,7 @@ public class HomeProfileMgr {
     }
 
     public void updateModButton() {
-        int mood = PreferenceUtils.getInt(PreferenceKeys.HOME_LAST_MOOD,2);
+        int mood = PreferenceUtils.getInt(PreferenceKeys.HOME_LAST_MOOD, 2);
         int color = moodColor[mood];
         int res = moodRes[mood];
         modFabButton.setImageResource(color);

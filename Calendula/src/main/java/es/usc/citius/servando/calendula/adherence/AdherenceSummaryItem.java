@@ -18,8 +18,6 @@
 
 package es.usc.citius.servando.calendula.adherence;
 
-import android.util.Log;
-
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
@@ -28,6 +26,7 @@ import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  *
@@ -35,6 +34,7 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 public class AdherenceSummaryItem {
 
     public static final DateTimeFormatter DTF = ISODateTimeFormat.dateTimeNoMillis();
+    private static final String TAG = "AdherenceSummaryItem";
 
     public Long scheduleId;
     public String drug;
@@ -48,7 +48,7 @@ public class AdherenceSummaryItem {
 
     public AdherenceSummaryItem(DailyScheduleItem item) {
 
-        Log.d("TEST", item.toString());
+        LogUtil.d(TAG, item.toString());
 
         Schedule s = item.boundToSchedule() ? item.schedule() : DB.schedules().findById(item.scheduleItem().schedule().getId());
         ScheduleItem si = item.scheduleItem(); // only for items not bound to schedule
@@ -61,7 +61,7 @@ public class AdherenceSummaryItem {
         timeTaken = item.takenToday() ? item.date().toDateTime(item.timeTaken()).toString(DTF) : null;
         dateTime = item.date().toDateTime(item.time()).toString(DTF);
         scheduleId = s.getId();
-        Log.d("TEST", toString());
+        LogUtil.d(TAG, toString());
     }
 
     @Override

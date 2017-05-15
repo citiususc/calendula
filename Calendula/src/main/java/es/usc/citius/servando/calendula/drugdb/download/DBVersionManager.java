@@ -20,7 +20,6 @@ package es.usc.citius.servando.calendula.drugdb.download;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -37,6 +36,7 @@ import java.util.Map;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DatabaseHelper;
 import es.usc.citius.servando.calendula.util.HttpDownloadUtil;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.SettingsProperties;
@@ -63,21 +63,21 @@ public class DBVersionManager {
         final String url = downloadUrl + VERSION_FILE;
 
         final String result = HttpDownloadUtil.downloadFileToText(url).trim();
-        Log.d(TAG, "getLastDBVersion: json is: " + result);
+        LogUtil.d(TAG, "getLastDBVersion: json is: " + result);
 
         try {
             Type type = new TypeToken<Map<String, Map<Integer, String>>>() {
             }.getType();
             Map<String, Map<Integer, String>> versions = new Gson().fromJson(result, type);
-            Log.d(TAG, "getLastDBVersion: map is: " + versions);
+            LogUtil.d(TAG, "getLastDBVersion: map is: " + versions);
             Map<Integer, String> dbVersions = versions.get(databaseID);
             if (dbVersions == null) {
-                Log.e(TAG, "getLastDBVersion: Invalid database ID \"" + databaseID + "\"");
+                LogUtil.e(TAG, "getLastDBVersion: Invalid database ID \"" + databaseID + "\"");
                 return null;
             }
             List<Integer> appVersionThresholds = new ArrayList<>(dbVersions.keySet());
             Collections.sort(appVersionThresholds);
-            Log.d(TAG, "getLastDBVersion: version thresholds are: " + appVersionThresholds);
+            LogUtil.d(TAG, "getLastDBVersion: version thresholds are: " + appVersionThresholds);
 
             //check last valid version threshold
             int lastValid = -1;
@@ -91,15 +91,15 @@ public class DBVersionManager {
 
             if (lastValid != -1) {
                 String dbVersion = dbVersions.get(lastValid);
-                Log.d(TAG, "getLastDBVersion: Last valid threshold was: " + lastValid + ", corresponding db version is " + dbVersion);
+                LogUtil.d(TAG, "getLastDBVersion: Last valid threshold was: " + lastValid + ", corresponding db version is " + dbVersion);
                 return dbVersion;
             } else {
-                Log.e(TAG, "getLastDBVersion: No valid threshold! This probably means the version file is wrong.");
+                LogUtil.e(TAG, "getLastDBVersion: No valid threshold! This probably means the version file is wrong.");
                 return null;
             }
 
         } catch (Exception e) {
-            Log.e(TAG, "getLastDBVersion: ", e);
+            LogUtil.e(TAG, "getLastDBVersion: ", e);
             return null;
         }
     }
@@ -124,18 +124,18 @@ public class DBVersionManager {
                 final DateTime currentDBDate = DateTime.parse(currentVersion, ISODateTimeFormat.basicDate());
 
                 if (lastDBDate.isAfter(currentDBDate)) {
-                    Log.d(TAG, "checkForUpdate: Update found for database " + database + " (" + lastDBVersion + ")");
+                    LogUtil.d(TAG, "checkForUpdate: Update found for database " + database + " (" + lastDBVersion + ")");
                     return lastDBVersion;
                 } else {
-                    Log.d(TAG, "checkForUpdate: Database is updated. ID is '" + database + "', version is '" + currentVersion + "'");
+                    LogUtil.d(TAG, "checkForUpdate: Database is updated. ID is '" + database + "', version is '" + currentVersion + "'");
                     return null;
                 }
             } else {
-                Log.w(TAG, "checkForUpdate: Database is " + database + " but no version is set!");
+                LogUtil.w(TAG, "checkForUpdate: Database is " + database + " but no version is set!");
                 return null;
             }
         } else {
-            Log.d(TAG, "checkForUpdate: No database. No version check needed.");
+            LogUtil.d(TAG, "checkForUpdate: No database. No version check needed.");
             return null;
         }
 

@@ -23,11 +23,11 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 
 import java.lang.reflect.Constructor;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 /**
@@ -59,7 +59,7 @@ public class HomePageAdapter extends FragmentPagerAdapter {
             final Constructor<?> constructor = Class.forName(cn).getConstructor();
             return (Fragment) constructor.newInstance();
         } catch (Exception e) {
-            Log.e(TAG, "getItem: cannot instantiate fragment.", e);
+            LogUtil.e(TAG, "getItem: cannot instantiate fragment.", e);
         }
 
         return null;

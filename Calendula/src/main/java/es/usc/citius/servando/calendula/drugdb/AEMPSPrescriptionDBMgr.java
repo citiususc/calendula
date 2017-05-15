@@ -20,7 +20,6 @@ package es.usc.citius.servando.calendula.drugdb;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
@@ -34,6 +33,7 @@ import java.util.concurrent.Callable;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ZipUtil;
 
 /**
@@ -113,7 +113,7 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
         final String basePath = downloadPath.replaceAll("/[^/]*$", "");
         final String uncompressedPath = basePath + "/AEMPS.sql";
 
-        Log.d(TAG, "setup: uncompressing " + downloadPath + " into " + uncompressedPath);
+        LogUtil.d(TAG, "setup: uncompressing " + downloadPath + " into " + uncompressedPath);
         ZipUtil.unzip(new File(downloadPath), new File(basePath));
 
         TransactionManager.callInTransaction(connection, new Callable<Object>() {
@@ -137,7 +137,7 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
                 progressUpdateBy = lines / 20;
                 updateProgress(l, 0);
 
-                Log.d(TAG, "call: reading from " + uncompressedPath);
+                LogUtil.d(TAG, "call: reading from " + uncompressedPath);
                 br = new BufferedReader(new InputStreamReader(new FileInputStream(uncompressedPath)));
 
                 SQLiteDatabase database = DB.helper().getWritableDatabase();
@@ -155,18 +155,18 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
             }
         });
 
-        Log.d(TAG, "setup: cleaning up...");
+        LogUtil.d(TAG, "setup: cleaning up...");
         try {
             boolean delete = new File(downloadPath).delete();
             if (!delete) {
-                Log.i(TAG, "setup: couldn't delete file " + downloadPath);
+                LogUtil.i(TAG, "setup: couldn't delete file " + downloadPath);
             }
             delete = new File(uncompressedPath).delete();
             if (!delete) {
-                Log.i(TAG, "setup: couldn't delete file " + uncompressedPath);
+                LogUtil.i(TAG, "setup: couldn't delete file " + uncompressedPath);
             }
         } catch (Exception e) {
-            Log.e(TAG, "setup: couldn't finish cleanup: ", e);
+            LogUtil.e(TAG, "setup: couldn't finish cleanup: ", e);
         }
     }
 

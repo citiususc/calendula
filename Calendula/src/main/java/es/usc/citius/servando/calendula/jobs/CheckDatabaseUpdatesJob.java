@@ -24,7 +24,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.evernote.android.job.JobRequest;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -35,6 +34,7 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.download.DBVersionManager;
 import es.usc.citius.servando.calendula.drugdb.download.UpdateDatabaseService;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
@@ -43,7 +43,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
  */
 public class CheckDatabaseUpdatesJob extends CalendulaJob {
 
-    public final static String TAG = "CheckDatabaseUpdatesJob";
+    private static final String TAG = "CheckDatabaseUpdJob";
 
     private static final Integer PERIOD_DAYS = 7;
     private static final String UPDATE_NOTIFICATION_TAG = "Calendula.notifications.update_notification";
@@ -78,7 +78,7 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
     @NonNull
     @Override
     protected Result onRunJob(Params params) {
-        Log.d(TAG, "onRunJob: Job started");
+        LogUtil.d(TAG, "onRunJob: Job started");
         checkForUpdate(getContext());
         return Result.SUCCESS;
     }

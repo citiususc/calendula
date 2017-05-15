@@ -26,7 +26,6 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +55,7 @@ import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub.DailyAgendaItemStubElement;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
@@ -265,7 +265,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public boolean isShowingSomething() {
 
-        Log.d(TAG, "isShowingSomething, expanded: " + expanded);
+        LogUtil.d(TAG, "isShowingSomething, expanded: " + expanded);
 
         if (expanded && items.size() > 0)
             return true;
@@ -273,7 +273,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         boolean result = false;
         for (DailyAgendaItemStub item : items) {
             if (isDisplayable(item)) {
-                Log.d(TAG, "Item is displayable: " + item.toString());
+                LogUtil.d(TAG, "Item is displayable: " + item.toString());
                 result = true;
             }
         }
@@ -282,7 +282,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     public void toggleCollapseMode() {
-        Log.d("RVAdapter", "toggleCollapseMode");
+        LogUtil.d(TAG, "toggleCollapseMode");
         expanded = !expanded;
 
         boolean willSHowSomething = isShowingSomething();
@@ -497,7 +497,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
         @Override
         public void onClick(View view) {
-            Log.d("Recycler", "Click row, listener is null? " + (listener == null));
+            LogUtil.d(TAG, "Click row, listener is null? " + (listener == null));
             if (view.getId() == R.id.check_all_button || view.getId() == R.id.action_container) {
                 hideCheckAllButton();
             } else if (listener != null) {

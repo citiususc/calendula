@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -60,6 +59,7 @@ import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Database helper class used to manage the creation and upgrading of your database. This class also usually provides
@@ -67,9 +67,9 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
  */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
-    public static final String TAG = "DatabaseHelper";
     // any time you make changes to your database objects, you may have to increase the database version
     public static final int DATABASE_VERSION = 12;
+    private static final String TAG = "DatabaseHelper";
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // List of persisted classes to simplify table creation
@@ -134,17 +134,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db, ConnectionSource connectionSource) {
         try {
-            Log.i(DatabaseHelper.class.getName(), "onCreate");
+            LogUtil.i(TAG, "onCreate");
 
             for (Class<?> c : persistedClasses) {
-                Log.d(TAG, "Creating table for " + c.getSimpleName());
+                LogUtil.d(TAG, "Creating table for " + c.getSimpleName());
                 TableUtils.createTable(connectionSource, c);
             }
 
             createDefaultPatient();
 
         } catch (SQLException e) {
-            Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
+            LogUtil.e(TAG, "Can't create database", e);
             throw new RuntimeException(e);
         }
     }
@@ -156,8 +156,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, ConnectionSource connectionSource, int oldVersion, int newVersion) {
         try {
-            Log.i(DatabaseHelper.class.getName(), "onUpgrade");
-            Log.d(DatabaseHelper.class.getName(), "OldVersion: " + oldVersion + ", newVersion: " + newVersion);
+            LogUtil.i(TAG, "onUpgrade");
+            LogUtil.d(TAG, "OldVersion: " + oldVersion + ", newVersion: " + newVersion);
 
             if (oldVersion < 6) {
                 oldVersion = 6;
@@ -211,9 +211,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             }
 
         } catch (Exception e) {
-            Log.e(DatabaseHelper.class.getName(), "Can't upgrade databases", e);
+            LogUtil.e(TAG, "Can't upgrade databases", e);
             try {
-                Log.d(DatabaseHelper.class.getName(), "Will try to recreate db...");
+                LogUtil.d(TAG, "Will try to recreate db...");
                 dropAndCreateAllTables();
             } catch (Exception ex) {
                 throw new RuntimeException(e);
@@ -327,29 +327,29 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     public void dropAndCreateAllTables() {
 
-        Log.i(DatabaseHelper.class.getName(), "Dropping all tables...");
+        LogUtil.i(TAG, "Dropping all tables...");
         for (Class<?> c : persistedClasses) {
-            Log.d(TAG, "Dropping table " + c.getSimpleName());
+            LogUtil.d(TAG, "Dropping table " + c.getSimpleName());
             try {
                 TableUtils.dropTable(connectionSource, c, true);
             } catch (SQLException e) {
                 // ignore
-                Log.e(TAG, "Erro dropping table " + c.getSimpleName());
+                LogUtil.e(TAG, "Erro dropping table " + c.getSimpleName());
             }
 
         }
 
         try {
 
-            Log.i(DatabaseHelper.class.getName(), "Creating tables...");
+            LogUtil.i(TAG, "Creating tables...");
             for (Class<?> c : persistedClasses) {
-                Log.d(TAG, "Creating table " + c.getSimpleName());
+                LogUtil.d(TAG, "Creating table " + c.getSimpleName());
                 TableUtils.createTable(connectionSource, c);
             }
             createDefaultPatient();
 
         } catch (SQLException e) {
-            Log.e(DatabaseHelper.class.getName(), "Can't recreate database", e);
+            LogUtil.e(TAG, "Can't recreate database", e);
             throw new RuntimeException(e);
         }
     }
@@ -445,7 +445,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             public Void call() throws Exception {
                 // iterate over schedules and replace days[] with rrule
                 List<Schedule> schedules = getSchedulesDao().queryForAll();
-                Log.d(TAG, "Upgrade " + schedules.size() + " schedules");
+                LogUtil.d(TAG, "Upgrade " + schedules.size() + " schedules");
                 for (Schedule s : schedules) {
                     if (s.rule() == null) {
                         s.setRepetition(new RepetitionRule(RepetitionRule.DEFAULT_ICAL_VALUE));

@@ -19,7 +19,6 @@
 package es.usc.citius.servando.calendula.database;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedQuery;
@@ -36,13 +35,14 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by joseangel.pineiro on 3/26/15.
  */
 public class ScheduleDao extends GenericDao<Schedule, Long> {
 
-    private final static String TAG = "ScheduleDao";
+    private static final String TAG = "ScheduleDao";
 
     public ScheduleDao(DatabaseHelper db) {
         super(db);
@@ -141,7 +141,7 @@ public class ScheduleDao extends GenericDao<Schedule, Long> {
                     .prepare();
             return dao.query(q);
         } catch (SQLException e) {
-            Log.e(TAG, "findByMedicineAndState: ", e);
+            LogUtil.e(TAG, "findByMedicineAndState: ", e);
             throw new RuntimeException("Error finding schedules", e);
         }
     }

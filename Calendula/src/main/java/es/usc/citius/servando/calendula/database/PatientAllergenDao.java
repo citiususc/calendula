@@ -33,7 +33,7 @@ import es.usc.citius.servando.calendula.persistence.PatientAllergen;
  */
 public class PatientAllergenDao extends GenericDao<PatientAllergen, Long> {
 
-    public static final String TAG = "HtmlCacheDAO";
+    private static final String TAG = "HtmlCacheDAO";
 
     private Dao<PatientAllergen, Long> daoInstance = null;
 

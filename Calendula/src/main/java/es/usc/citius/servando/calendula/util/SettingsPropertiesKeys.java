@@ -25,7 +25,7 @@ package es.usc.citius.servando.calendula.util;
 public class SettingsPropertiesKeys {
 
     public static final String DATABASE_LOCATION = "db.url";
-    public static final String GENERATE_TEST_DATA="test.generate.testdata";
+    public static final String GENERATE_TEST_DATA = "test.generate.testdata";
 
     private SettingsPropertiesKeys() {
     }

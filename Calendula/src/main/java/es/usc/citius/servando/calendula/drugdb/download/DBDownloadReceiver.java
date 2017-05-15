@@ -23,9 +23,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.util.Pair;
 
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
@@ -35,7 +35,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
  */
 public class DBDownloadReceiver extends BroadcastReceiver {
 
-    public static final String TAG = DBDownloadReceiver.class.getName();
+    private static final String TAG = "DBDownloadReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -53,12 +53,12 @@ public class DBDownloadReceiver extends BroadcastReceiver {
             Pair<Integer, String> status = DownloadDatabaseHelper.instance().downloadStatus(id, context);
             if (status != null && status.first == DownloadManager.STATUS_SUCCESSFUL) {
                 String path = status.second;
-                Log.d(TAG, "onReceive: valid download " + id + ", " + path + ", " + intent.getExtras().getString(DownloadManager.COLUMN_URI));
+                LogUtil.d(TAG, "onReceive: valid download " + id + ", " + path + ", " + intent.getExtras().getString(DownloadManager.COLUMN_URI));
                 final DBInstallType dbInstallType = DBInstallType.valueOf(type);
                 InstallDatabaseService.startSetup(context, path, databaseInfo, dbInstallType);
 
             } else {
-                Log.d(TAG, "onReceive: invalid download " + id);
+                LogUtil.d(TAG, "onReceive: invalid download " + id);
                 DownloadDatabaseHelper.instance().onDownloadFailed(context);
             }
         }

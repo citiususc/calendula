@@ -27,12 +27,10 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,6 +80,7 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Snack;
@@ -202,7 +201,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         String value = PreferenceUtils.getString(PreferenceKeys.DRUGDB_CURRENT_DB, none);
         enableSearch = !value.equals(none) && !value.equals(settingUp);
 
-        Log.d(getTag(), "Arguments:  " + (getArguments() != null) + ", savedState: " + (savedInstanceState != null));
+        LogUtil.d(TAG, "Arguments:  " + (getArguments() != null) + ", savedState: " + (savedInstanceState != null));
         if (getArguments() != null) {
             mIntentAction = getArguments().getString(CalendulaApp.INTENT_EXTRA_ACTION);
             mMedicineId = getArguments().getLong(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, -1);
@@ -309,7 +308,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     }
 
     public void scrollToMedPresentation(View view) {
-        Log.d(getTag(), "Scroll to: " + view.getLeft());
+        LogUtil.d(TAG, "Scroll to: " + view.getLeft());
 
         int amount = view.getLeft();
         if (amount < (0.8 * presentationScroll.getWidth())) {
@@ -327,7 +326,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     }
 
     public void setMedicne(Medicine r) {
-        Log.d(getTag(), "Medicine set: " + r.name());
+        LogUtil.d(TAG, "Medicine set: " + r.name());
         mMedicine = r;
         mNameTextView.setText(mMedicine.name());
         mPresentationTv.setText(": " + mMedicine.presentation().getName(getResources()));
@@ -418,7 +417,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        Log.d(getTag(), "Activity " + activity.getClass().getName() + ", " + (activity instanceof OnMedicineEditListener));
+        LogUtil.d(TAG, "Activity " + activity.getClass().getName() + ", " + (activity instanceof OnMedicineEditListener));
         // If the container activity has implemented
         // the callback interface, set it as listener
         if (activity instanceof OnMedicineEditListener) {
@@ -554,7 +553,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                     break;
                 case R.id.med_presentation_4:
                     iv.setImageDrawable(iconFor(Presentation.PILLS));
-                    Log.d(getTag(), "Pill");
+                    LogUtil.d(TAG, "Pill");
                     break;
                 case R.id.med_presentation_5:
                     iv.setImageDrawable(iconFor(Presentation.SYRUP));
@@ -602,43 +601,43 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
             case R.id.med_presentation_2:
                 selectedPresentation = Presentation.CAPSULES;
-                Log.d(getTag(), "Capsule");
+                LogUtil.d(TAG, "Capsule");
                 break;
             case R.id.med_presentation_3:
                 selectedPresentation = Presentation.EFFERVESCENT;
-                Log.d(getTag(), "Effervescent");
+                LogUtil.d(TAG, "Effervescent");
                 break;
             case R.id.med_presentation_4:
                 selectedPresentation = Presentation.PILLS;
-                Log.d(getTag(), "Pill");
+                LogUtil.d(TAG, "Pill");
                 break;
             case R.id.med_presentation_5:
                 selectedPresentation = Presentation.SYRUP;
-                Log.d(getTag(), "Syrup");
+                LogUtil.d(TAG, "Syrup");
                 break;
             case R.id.med_presentation_6:
                 selectedPresentation = Presentation.DROPS;
-                Log.d(getTag(), "Drops");
+                LogUtil.d(TAG, "Drops");
                 break;
             case R.id.med_presentation_7:
                 selectedPresentation = Presentation.SPRAY;
-                Log.d(getTag(), "Spray");
+                LogUtil.d(TAG, "Spray");
                 break;
             case R.id.med_presentation_8:
                 selectedPresentation = Presentation.INHALER;
-                Log.d(getTag(), "Drops");
+                LogUtil.d(TAG, "Drops");
                 break;
             case R.id.med_presentation_9:
                 selectedPresentation = Presentation.INJECTIONS;
-                Log.d(getTag(), "Injection");
+                LogUtil.d(TAG, "Injection");
                 break;
             case R.id.med_presentation_10:
                 selectedPresentation = Presentation.POMADE;
-                Log.d(getTag(), "Pomade");
+                LogUtil.d(TAG, "Pomade");
                 break;
             case R.id.med_presentation_11:
                 selectedPresentation = Presentation.PATCHES;
-                Log.d(getTag(), "Patches");
+                LogUtil.d(TAG, "Patches");
                 break;
         }
 
@@ -715,7 +714,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Log.d(TAG, "onClick: resetting stock...");
+                            LogUtil.d(TAG, "onClick: resetting stock...");
                             setDefaultStock();
                             updateStockText();
                         }
@@ -818,7 +817,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             boolean ret = false;
             if (others != null && others.size() > 0) {
                 if (others.size() > 1) //should not happen
-                    Log.e(TAG, "checkIfDuplicate: multiple duplicates detected for medicine: " + m);
+                    LogUtil.e(TAG, "checkIfDuplicate: multiple duplicates detected for medicine: " + m);
                 final Medicine other = others.get(0);
                 ret = !other.getId().equals(m.getId());
             }
@@ -827,7 +826,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             }
             return ret;
         } catch (SQLException e) {
-            Log.e(TAG, "checkIfDuplicate: ", e);
+            LogUtil.e(TAG, "checkIfDuplicate: ", e);
             return false;
         }
     }
@@ -860,10 +859,10 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         @Override
         protected Boolean doInBackground(Void... params) {
             if (stock >= 0 && mMedicine != null) {
-                Log.d(TAG, "updateStockText: medicina ok");
+                LogUtil.d(TAG, "updateStockText: medicina ok");
                 List<Schedule> schedules = DB.schedules().findByMedicine(mMedicine);
                 if (!schedules.isEmpty()) {
-                    Log.d(TAG, "updateStockText: pautas " + schedules.size());
+                    LogUtil.d(TAG, "updateStockText: pautas " + schedules.size());
                     LocalDate estimatedEnd = StockUtils.getEstimatedStockEnd(schedules, stock);
                     text = StockUtils.getReadableStockDuration(estimatedEnd, getContext());
                     return true;

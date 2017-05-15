@@ -20,7 +20,6 @@ package es.usc.citius.servando.calendula.util;
 
 
 import android.support.v4.util.Pair;
-import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
@@ -44,6 +43,7 @@ import es.usc.citius.servando.calendula.persistence.PickupInfo;
  */
 public class PickupUtils {
 
+    private static final String TAG = "PickupUtils";
     private final int MAX_DAYS = 10;
 
     List<PickupInfo> pickups;
@@ -139,7 +139,7 @@ public class PickupUtils {
             Collections.sort(sorted);
             for (LocalDate day : sorted) {
                 List<PickupInfo> pks = bestDays.get(day);
-                Log.d("PickupUtils", day.toString("dd/MM/YYYY") + ": " + pks.size());
+                LogUtil.d(TAG, day.toString("dd/MM/YYYY") + ": " + pks.size());
                 if (pks.size() >= bestDayCount) {
                     bestDayCount = pks.size();
                     bestOption = day;

@@ -29,7 +29,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
 
@@ -39,6 +38,7 @@ import java.net.URI;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.NetworkUtils;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
@@ -50,7 +50,7 @@ import es.usc.citius.servando.calendula.util.SettingsPropertiesKeys;
  */
 public class DownloadDatabaseHelper {
 
-    public static final String TAG = "DownloadDatabaseHelper";
+    private static final String TAG = "DownloadDatabaseHelper";
     private static final String downloadSuffix = ".db";
 
     private static DownloadDatabaseHelper instance;
@@ -66,7 +66,7 @@ public class DownloadDatabaseHelper {
 
     public void showDownloadDialog(final Context dialogCtx, final String database, final DownloadDatabaseDialogCallback callback) {
 
-        Log.d(TAG, "ShowDownloadDatabase");
+        LogUtil.d(TAG, "ShowDownloadDatabase");
         final Context appContext = dialogCtx.getApplicationContext();
         AlertDialog.Builder builder = new AlertDialog.Builder(dialogCtx);
         builder.setTitle(R.string.download_db_dialog_title);
@@ -117,7 +117,7 @@ public class DownloadDatabaseHelper {
 
     public Pair<Integer, String> downloadStatus(long downloadId, Context context) {
         final DownloadManager dMgr = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-        Log.d(TAG, "Checking download status for id: " + downloadId);
+        LogUtil.d(TAG, "Checking download status for id: " + downloadId);
         // Verify if download was successful
         Cursor c = dMgr.query(new DownloadManager.Query().setFilterById(downloadId));
         if (c.moveToFirst()) {
@@ -125,7 +125,7 @@ public class DownloadDatabaseHelper {
             String title = c.getString(c.getColumnIndex(DownloadManager.COLUMN_TITLE));
             String path = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
             if (status == DownloadManager.STATUS_SUCCESSFUL) {
-                Log.d(TAG, "File was downloading properly. " + title);
+                LogUtil.d(TAG, "File was downloading properly. " + title);
                 try {
                     // convert uri to file path
                     path = new File(new URI(path).getPath()).getAbsolutePath();
@@ -135,7 +135,7 @@ public class DownloadDatabaseHelper {
                 return new Pair<>(status, path);
             } else {
                 int reason = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_REASON));
-                Log.d(TAG, "Download not correct, status [" + status + "] reason [" + reason + "]  " + title);
+                LogUtil.d(TAG, "Download not correct, status [" + status + "] reason [" + reason + "]  " + title);
                 return new Pair<>(status, null);
             }
         }
@@ -145,10 +145,10 @@ public class DownloadDatabaseHelper {
     public boolean isDBDownloadingOrInstalling(Context context) {
         long downloadId = PreferenceUtils.getLong(PreferenceKeys.DRUGDB_DOWNLOAD_ID, -1);
         Pair<Integer, String> status = downloadStatus(downloadId, context);
-        Log.d(TAG, "isDBDownloadingOrInstalling: " + status + ", " + InstallDatabaseService.isRunning);
+        LogUtil.d(TAG, "isDBDownloadingOrInstalling: " + status + ", " + InstallDatabaseService.isRunning);
         int st = status != null ? status.first : DownloadManager.STATUS_FAILED;
         boolean iroi = InstallDatabaseService.isRunning || (st != DownloadManager.STATUS_FAILED && st != DownloadManager.STATUS_SUCCESSFUL);
-        Log.d(TAG, "isDBDownloadingOrInstalling: " + iroi);
+        LogUtil.d(TAG, "isDBDownloadingOrInstalling: " + iroi);
         return iroi;
 
     }
@@ -163,7 +163,7 @@ public class DownloadDatabaseHelper {
         File f = new File(path);
         if (f.exists()) {
             f.delete();
-            Log.d(TAG, "removePreviousDownloads: deleted file " + path);
+            LogUtil.d(TAG, "removePreviousDownloads: deleted file " + path);
         }
     }
 
@@ -206,7 +206,7 @@ public class DownloadDatabaseHelper {
                 try {//get version
                     final String dbVersion = DBVersionManager.getLastDBVersion(dbName);
                     final String url = ctx.getString(R.string.database_file_location, downloadUrl, dbName, dbVersion);
-                    Log.d(TAG, "doInBackground: Downloading database from " + url);
+                    LogUtil.d(TAG, "doInBackground: Downloading database from " + url);
 
 
                     // remove previous downloads and cancel notifications
@@ -230,11 +230,11 @@ public class DownloadDatabaseHelper {
                             .putString(PreferenceKeys.DRUGDB_DOWNLOAD_TYPE.key(), type.toString())
                             .apply();
                 } catch (Exception e) {
-                    Log.e(TAG, "doInBackground: ", e);
+                    LogUtil.e(TAG, "doInBackground: ", e);
                     return false;
                 }
             } else {
-                Log.e(TAG, "PrescriptionDBMgr for " + database + " is null");
+                LogUtil.e(TAG, "PrescriptionDBMgr for " + database + " is null");
                 return false;
             }
 

@@ -44,7 +44,7 @@ import es.usc.citius.servando.calendula.util.Strings;
  */
 public class ScheduleConfirmationEndFragment extends Fragment {
 
-    public static final String TAG = ScheduleConfirmationEndFragment.class.getName();
+    private static final String TAG = "SchedulConfEndFragment";
 
     List<PrescriptionWrapper> prescriptions;
 

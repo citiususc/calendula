@@ -19,7 +19,6 @@
 package es.usc.citius.servando.calendula.fragments.dosePickers;
 
 
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
@@ -31,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 
 /**
@@ -39,6 +39,7 @@ import es.usc.citius.servando.calendula.R;
 public class PillDosePickerFragment extends DosePickerFragment {
 
     public static final int MAX_DISPLAY_PILLS = 3;
+    private static final String TAG = "PillDosePickerFragm";
     NumberPicker leftPicker;
     NumberPicker rightPicker;
     LinearLayout graphicsLayout;
@@ -184,7 +185,7 @@ public class PillDosePickerFragment extends DosePickerFragment {
     @Override
     protected double getSelectedDose() {
         double dose = leftValues[leftPicker.getValue()] + rightValues[rightPicker.getValue()];
-        Log.d("VALUE ", leftValues[leftPicker.getValue()] + "." + rightValues[rightPicker.getValue()]);
+        LogUtil.d(TAG, leftValues[leftPicker.getValue()] + "." + rightValues[rightPicker.getValue()]);
         return dose;
     }
 

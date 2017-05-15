@@ -20,11 +20,12 @@ package es.usc.citius.servando.calendula.modules;
 
 import android.content.Context;
 import android.support.v4.util.ArrayMap;
-import android.util.Log;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 import static java.util.Collections.addAll;
 
@@ -34,7 +35,7 @@ import static java.util.Collections.addAll;
 
 public class ModuleManager {
 
-    private final static String TAG = "ModuleManager";
+    private static final String TAG = "ModuleManager";
     private static ModuleManager theInstance = null;
     private Map<String, CalendulaModule> modules;
 
@@ -49,7 +50,7 @@ public class ModuleManager {
 
     public static ModuleManager getInstance() {
         if (theInstance == null) {
-            Log.d(TAG, "getInstance: ModuleManager initialized");
+            LogUtil.d(TAG, "getInstance: ModuleManager initialized");
             theInstance = new ModuleManager();
         }
         return theInstance;
@@ -63,9 +64,9 @@ public class ModuleManager {
         try {
             modules.put(module.getId(), module);
             module.onApplicationStartup(ctx);
-            Log.v(TAG, "Module ran: " + module.getId());
+            LogUtil.v(TAG, "Module ran: " + module.getId());
         } catch (Exception e) {
-            Log.e(TAG, "run: Error when enabling module \"" + module.getId() + "\": ", e);
+            LogUtil.e(TAG, "run: Error when enabling module \"" + module.getId() + "\": ", e);
         }
     }
 
@@ -83,13 +84,13 @@ public class ModuleManager {
 
     public void runDefaultModules(Context ctx) {
         final List<CalendulaModule> modules = ModuleRegistry.getDefaultModules();
-        Log.d(TAG, "runModules: Loading default module configuration");
+        LogUtil.d(TAG, "runModules: Loading default module configuration");
         run(modules, ctx);
     }
 
     public void runModules(final String configName, Context ctx) {
         final List<CalendulaModule> modules = ModuleRegistry.getModulesForConfig(configName);
-        Log.d(TAG, "runModules: Loading module configuration: " + configName);
+        LogUtil.d(TAG, "runModules: Loading module configuration: " + configName);
         if (modules == null)
             throw new IllegalArgumentException("Module config " + configName + "does not exist or is empty");
         run(modules, ctx);
