@@ -179,7 +179,7 @@ public class DailyAgenda {
             if (item.schedule().enabledForDate(date)) {
                 dsi = new DailyScheduleItem(item);
                 dsi.setDate(LocalDate.now().plusDays(i));
-                dsi.setTakenToday(taken);
+                dsi.setTakenToday(false);
                 dsi.setPatient(p);
                 dsi.save();
             }
