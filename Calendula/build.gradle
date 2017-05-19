@@ -56,6 +56,10 @@ def getDate() {
     return formattedDate
 }
 
+def getCustomProguardFiles() {
+    return fileTree(dir: "proguard", include: ["*.pro"]).asList().toArray()
+}
+
 android {
     compileSdkVersion 25
     buildToolsVersion '25'
@@ -90,8 +94,10 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            testProguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
+            proguardFiles getCustomProguardFiles()
+            testProguardFiles getDefaultProguardFile('proguard-android.txt')
+            testProguardFiles getCustomProguardFiles()
             signingConfig signingConfigs.release
         }
         debug {
