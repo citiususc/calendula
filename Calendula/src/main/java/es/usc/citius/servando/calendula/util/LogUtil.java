@@ -16,33 +16,25 @@ public class LogUtil {
 
     public static void d(final String tag, String message) {
         if (ENABLE_LOGS) {
-            if (Log.isLoggable(tag, Log.DEBUG)) {
                 Log.d(tag, message);
-            }
         }
     }
 
     public static void d(final String tag, String message, Throwable cause) {
         if (ENABLE_LOGS) {
-            if (Log.isLoggable(tag, Log.DEBUG)) {
                 Log.d(tag, message, cause);
-            }
         }
     }
 
     public static void v(final String tag, String message) {
         if (ENABLE_LOGS) {
-            if (Log.isLoggable(tag, Log.VERBOSE)) {
                 Log.v(tag, message);
-            }
         }
     }
 
     public static void v(final String tag, String message, Throwable cause) {
         if (ENABLE_LOGS) {
-            if (Log.isLoggable(tag, Log.VERBOSE)) {
                 Log.v(tag, message, cause);
-            }
         }
     }
 
