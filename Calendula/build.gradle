@@ -142,7 +142,7 @@ dependencies {
     compile 'com.google.code.gson:gson'
     compile 'com.nispok:snackbar:2.9.0'
     compile 'com.doomonafireball.betterpickers:library:1.5.5'
-    compile 'com.github.filippudak.progresspieview:library:1.0.+'
+    compile 'com.github.filippudak.progresspieview:library:1.0.4'
     compile 'com.github.amlcurran.showcaseview:library:5.0.0'
 
     // support
