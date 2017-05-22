@@ -47,24 +47,24 @@
 
 
     <!-- Patients -->
-    <string name="prefkey_patients_active">active_patient</string>
+    <string name="prefkey_patients_active" translatable="false">active_patient</string>
 
     <!-- Settings -->
-    <string name="prefkey_settings_alarm_insistent">alarm_insistent</string>
-    <string name="prefkey_settings_alarm_reminder_window">alarm_reminder_window</string>
-    <string name="prefkey_settings_alarm_repeat_enabled">alarm_repeat_enabled</string>
-    <string name="prefkey_settings_alarm_repeat_frequency">alarm_repeat_frequency</string>
-    <string name="prefkey_settings_alarm_notifications">alarm_notifications</string>
-    <string name="prefkey_settings_alarm_pickup_notifications">alarm_pickup_notifications</string>
-    <string name="prefkey_settings_notification_tone">pref_notification_tone</string>
-    <string name="prefkey_settings_stock_alert_days">stock_alert_days</string>
-    <string name="prefkey_settings_database_update">prescriptions_database_update</string>
+    <string name="prefkey_settings_alarm_insistent" translatable="false">alarm_insistent</string>
+    <string name="prefkey_settings_alarm_reminder_window" translatable="false">alarm_reminder_window</string>
+    <string name="prefkey_settings_alarm_repeat_enabled" translatable="false">alarm_repeat_enabled</string>
+    <string name="prefkey_settings_alarm_repeat_frequency" translatable="false">alarm_repeat_frequency</string>
+    <string name="prefkey_settings_alarm_notifications" translatable="false">alarm_notifications</string>
+    <string name="prefkey_settings_alarm_pickup_notifications" translatable="false">alarm_pickup_notifications</string>
+    <string name="prefkey_settings_notification_tone" translatable="false">pref_notification_tone</string>
+    <string name="prefkey_settings_stock_alert_days" translatable="false">stock_alert_days</string>
+    <string name="prefkey_settings_database_update" translatable="false">prescriptions_database_update</string>
 
     <!-- Schedules -->
-    <string name="prefkey_schedules_help_shown">PREFERENCE_SCHEDULE_HELP_SHOWN</string>
+    <string name="prefkey_schedules_help_shown" translatable="false">PREFERENCE_SCHEDULE_HELP_SHOWN</string>
 
     <!-- Test data module -->
-    <string name="prefkey_testdata_generated">test_data_generated</string>
+    <string name="prefkey_testdata_generated" translatable="false">test_data_generated</string>
 
 
 </resources>
