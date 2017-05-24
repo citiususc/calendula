@@ -17,7 +17,6 @@
         android:id="@+id/anim_image"
         android:layout_width="333dp"
         android:layout_height="match_parent"
-        android:layout_above="@+id/delay_btn"
         android:layout_centerHorizontal="true"
         android:layout_centerInParent="false"
         android:layout_marginBottom="200dp"
