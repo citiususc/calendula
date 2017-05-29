@@ -28,6 +28,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
 
+import java.lang.ref.WeakReference;
 import java.util.Calendar;
 
 /**
@@ -44,7 +45,7 @@ public class CustomDigitalClock extends AppCompatTextView {
     Calendar mCalendar;
     String mFormat;
     boolean showSeconds = false;
-    private FormatChangeObserver mFormatChangeObserver = new FormatChangeObserver();
+    private WeakReference<FormatChangeObserver> mFormatChangeObserver = new WeakReference<>(new FormatChangeObserver());
     private Runnable mTicker;
     private Handler mHandler;
     private boolean mTickerStopped = false;
@@ -113,7 +114,8 @@ public class CustomDigitalClock extends AppCompatTextView {
             mCalendar = Calendar.getInstance();
         }
 
-        getContext().getContentResolver().registerContentObserver(Settings.System.CONTENT_URI, true, mFormatChangeObserver);
+
+        getContext().getContentResolver().registerContentObserver(Settings.System.CONTENT_URI, true, mFormatChangeObserver.get());
 
         setFormat();
     }
