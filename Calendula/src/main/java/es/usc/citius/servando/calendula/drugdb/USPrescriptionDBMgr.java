@@ -45,7 +45,7 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
 
     @Override
     public String getProspectURL(Prescription p) {
-        return "http://www.accessdata.fda.gov/spl/data/#ID#/#ID#.xml".replaceAll("#ID#", p.getpID());
+        return "http://www.accessdata.fda.gov/spl/data/#ID#/#ID#.xml".replaceAll("#ID#", p.getPID());
     }
 
 
@@ -63,7 +63,7 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
 
         Prescription p = new Prescription();
         p.setCode(values[0]);
-        p.setpID(values[0]);
+        p.setPID(values[0]);
         p.setName(values[1]);
         p.setDose("0");
         p.setContent(values[2]);

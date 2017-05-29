@@ -550,7 +550,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
                     if (m.isBoundToPrescription()) {
                         Prescription p = DB.drugDB().prescriptions().findByCn(m.cn());
-                        if (p.getAffectsDriving()) {
+                        if (p.isAffectsDriving()) {
                             AlertManager.createAlert(new DrivingCautionAlert(m));
                         }
                     }

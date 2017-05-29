@@ -18,15 +18,14 @@
 
 package es.usc.citius.servando.calendula.drugdb.model.persistence;
 
-import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import com.j256.ormlite.field.DatabaseField;
 
 import es.usc.citius.servando.calendula.util.Strings;
 
 /**
  * This class was generated automatically.
  * Please check consistency and completion.
- * Replace {} with the appropriate classes and generate methods as needed.
  */
 @DatabaseTable(tableName = "Prescription")
 public class Prescription {
@@ -36,6 +35,7 @@ public class Prescription {
     public static final String COLUMN_CODE = "Code";
     public static final String COLUMN_CONTENT = "Content";
     public static final String COLUMN_CONTENT_UNIT = "ContentUnit";
+    public static final String COLUMN_DCP_CODE = "DCPCode";
     public static final String COLUMN_DOSE = "Dose";
     public static final String COLUMN_GENERIC = "Generic";
     public static final String COLUMN_HOMOGENEOUS_GROUP = "HomogeneousGroup";
@@ -57,7 +57,9 @@ public class Prescription {
     @DatabaseField(columnName = COLUMN_CONTENT)
     private String content;
     @DatabaseField(columnName = COLUMN_CONTENT_UNIT)
-    private Long contentUnit;
+    private String contentUnit;
+    @DatabaseField(columnName = COLUMN_DCP_CODE)
+    private String dCPCode;
     @DatabaseField(columnName = COLUMN_DOSE)
     private String dose;
     @DatabaseField(columnName = COLUMN_GENERIC)
@@ -81,11 +83,12 @@ public class Prescription {
     public Prescription() {
     }
 
-    public Prescription(Boolean affectsDriving, String code, String content, Long contentUnit, String dose, Boolean generic, String homogeneousGroup, String name, String pID, String packageType, Float packagingUnits, String presentationForm) {
+    public Prescription(Boolean affectsDriving, String code, String content, String contentUnit, String dCPCode, String dose, Boolean generic, String homogeneousGroup, String name, String pID, String packageType, Float packagingUnits, String presentationForm) {
         this.affectsDriving = affectsDriving;
         this.code = code;
         this.content = content;
         this.contentUnit = contentUnit;
+        this.dCPCode = dCPCode;
         this.dose = dose;
         this.generic = generic;
         this.homogeneousGroup = homogeneousGroup;
@@ -104,7 +107,7 @@ public class Prescription {
         this.id = id;
     }
 
-    public Boolean getAffectsDriving() {
+    public Boolean isAffectsDriving() {
         return affectsDriving;
     }
 
@@ -128,12 +131,20 @@ public class Prescription {
         this.content = content;
     }
 
-    public Long getContentUnit() {
+    public String getContentUnit() {
         return contentUnit;
     }
 
-    public void setContentUnit(Long contentUnit) {
+    public void setContentUnit(String contentUnit) {
         this.contentUnit = contentUnit;
+    }
+
+    public String getDCPCode() {
+        return dCPCode;
+    }
+
+    public void setDCPCode(String dCPCode) {
+        this.dCPCode = dCPCode;
     }
 
     public String getDose() {
@@ -144,7 +155,7 @@ public class Prescription {
         this.dose = dose;
     }
 
-    public Boolean getGeneric() {
+    public Boolean isGeneric() {
         return generic;
     }
 
@@ -168,11 +179,11 @@ public class Prescription {
         this.name = name;
     }
 
-    public String getpID() {
+    public String getPID() {
         return pID;
     }
 
-    public void setpID(String pID) {
+    public void setPID(String pID) {
         this.pID = pID;
     }
 
