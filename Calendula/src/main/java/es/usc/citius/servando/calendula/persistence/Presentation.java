@@ -101,7 +101,7 @@ public enum Presentation {
     }
 
 //
-//    public static Presentation expected(String name, String content) {
+//    public static Presentation expectedPresentation(String name, String content) {
 //        String n = name.toLowerCase() + " " + content.toLowerCase();
 //        if (n.contains("comprimidos")) {
 //            return Presentation.PILLS;

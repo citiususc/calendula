@@ -346,7 +346,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     public void setPrescription(Prescription p) {
         mNameTextView.setText(Strings.toProperCase(dbMgr.shortName(p)));
         mPrescription = p;
-        Presentation pr = DBRegistry.instance().current().expected(p);
+        Presentation pr = DBRegistry.instance().current().expectedPresentation(p);
         if (pr != null) {
             mPresentationTv.setText(": " + pr.getName(getResources()));
             selectedPresentation = pr;

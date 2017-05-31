@@ -59,9 +59,9 @@ public abstract class PrescriptionDBMgr {
 
     public abstract String getProspectURL(Prescription p);
 
-    public abstract Presentation expected(Prescription p);
+    public abstract Presentation expectedPresentation(Prescription p);
 
-    public abstract Presentation expected(String name, String content);
+    public abstract Presentation expectedPresentation(String name, String content);
 
     public abstract String shortName(Prescription p);
 

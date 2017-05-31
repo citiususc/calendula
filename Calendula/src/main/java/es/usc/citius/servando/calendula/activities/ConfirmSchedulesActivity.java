@@ -469,7 +469,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                                             if (m == null) {
                                                 m = new Medicine(Strings.firstPart(w.group.getName()));
                                                 m.setHomogeneousGroup(w.group.getHomogeneousGroupID());
-                                                Presentation pres = DBRegistry.instance().current().expected(w.group.getName(), w.group.getName());
+                                                Presentation pres = DBRegistry.instance().current().expectedPresentation(w.group.getName(), w.group.getName());
                                                 m.setPresentation(pres != null ? pres : Presentation.PILLS);
                                                 m.setPatient(patient);
                                                 m.setDatabase(DBRegistry.instance().current().id());

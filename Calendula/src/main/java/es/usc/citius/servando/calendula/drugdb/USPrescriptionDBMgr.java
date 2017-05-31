@@ -75,14 +75,14 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
     }
 
     @Override
-    public Presentation expected(Prescription p) {
+    public Presentation expectedPresentation(Prescription p) {
         String name = p.getName();
         String content = p.getContent();
-        return expected(name, content);
+        return expectedPresentation(name, content);
     }
 
     @Override
-    public Presentation expected(String name, String content) {
+    public Presentation expectedPresentation(String name, String content) {
 
         String n = name.toLowerCase() + " " + content.toLowerCase();
         if (n.contains("tablet")) {

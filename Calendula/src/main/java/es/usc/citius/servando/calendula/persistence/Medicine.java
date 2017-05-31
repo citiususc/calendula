@@ -104,7 +104,7 @@ public class Medicine implements Comparable<Medicine> {
         Medicine m = new Medicine();
         m.setCn(String.valueOf(p.getCode()));
         m.setName(p.shortName());
-        Presentation pre = DBRegistry.instance().current().expected(p);
+        Presentation pre = DBRegistry.instance().current().expectedPresentation(p);
         m.setPresentation(pre != null ? pre : Presentation.PILLS);
         m.setDatabase(DBRegistry.instance().current().id());
         return m;

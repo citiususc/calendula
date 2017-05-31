@@ -827,7 +827,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                 final Prescription p = mData.get(position);
 
                 String name = dbMgr.shortName(p);
-                Presentation pres = dbMgr.expected(p);
+                Presentation pres = dbMgr.expectedPresentation(p);
 
                 final String search = lastSearch.toLowerCase();
                 final int searchLength = lastSearch.length();
