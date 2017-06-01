@@ -53,6 +53,7 @@ public class RoutinesActivityEditTest extends ActivityInstrumentationTestCase2<R
         setActivityIntent(i);
 
         mActivity = getActivity();
+        TestUtils.unlockScreen(mActivity);
     }
 
     @Test

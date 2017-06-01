@@ -49,6 +49,7 @@ public class MedicinesActivityEditTest extends ActivityInstrumentationTestCase2<
 
 
         mActivity = getActivity();
+        TestUtils.unlockScreen(mActivity);
     }
 
     @Test

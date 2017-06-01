@@ -40,6 +40,7 @@ public class RoutinesActivityCreateTest extends ActivityInstrumentationTestCase2
         DB.init(getInstrumentation().getContext());
         DB.dropAndCreateDatabase();
         mActivity = getActivity();
+        TestUtils.unlockScreen(mActivity);
     }
 
     @Test

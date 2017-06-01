@@ -74,6 +74,7 @@ public class ScheduleCreationActivityTest extends ActivityInstrumentationTestCas
 
         // set edit intent
         mActivity = getActivity();
+        TestUtils.unlockScreen(mActivity);
     }
 
     @Test

@@ -38,6 +38,7 @@ public class MedicinesActivityCreateTest extends ActivityInstrumentationTestCase
         DB.dropAndCreateDatabase();
 
         mActivity = getActivity();
+        TestUtils.unlockScreen(mActivity);
     }
 
 

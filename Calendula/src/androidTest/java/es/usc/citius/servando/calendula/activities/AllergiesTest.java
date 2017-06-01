@@ -18,10 +18,12 @@
 
 package es.usc.citius.servando.calendula.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.WindowManager;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -80,6 +82,8 @@ public class AllergiesTest {
         PreferenceUtils.edit().remove(PreferenceKeys.ALLERGIES_WARNING_SHOWN.key()).commit();
 
         rule.launchActivity(new Intent());
+
+        TestUtils.unlockScreen(rule.getActivity());
     }
 
     @Test
