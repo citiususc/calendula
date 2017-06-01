@@ -1,0 +1,25 @@
+general:
+  branches:
+    ignore:
+      - gh-pages
+      - translations
+      - /release-.*/
+
+machine:
+  environment:
+    QEMU_AUDIO_DRV: none
+
+test:
+  pre:
+    - emulator -avd circleci-android22 -no-window:
+        background: true
+        parallel: true
+  override:
+    - ./gradlew assembleCiDebug
+    - circle-android wait-for-boot
+    - adb shell input keyevent 82:
+        background: true
+    - ./gradlew connectedCiDebugAndroidTest
+    - cp -r Calendula/build/outputs $CIRCLE_ARTIFACTS
+    - cp -r Calendula/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+    - adb logcat -d > logcat.txt && cp logcat.txt $CIRCLE_ARTIFACTS
