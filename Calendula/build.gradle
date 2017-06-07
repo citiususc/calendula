@@ -120,22 +120,24 @@ android {
         }
     }
 
+    flavorDimensions "buildType"
+
     productFlavors {
         develop {
             applicationIdSuffix ".dev"
+            dimension "buildType"
         }
         product {
-
+            dimension "buildType"
         }
         ci {
-
+            dimension "buildType"
         }
     }
 
     applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            output.outputFile = new File(output.outputFile.parent,
-                    output.outputFile.name.replace(".apk", "-${variant.versionName}.apk"))
+        variant.outputs.all {
+            outputFileName = "${variant.name}-${variant.versionName}.apk"
         }
     }
     compileOptions.incremental = false
