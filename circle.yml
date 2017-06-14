@@ -5,6 +5,10 @@ general:
       - translations
       - /release-.*/
 
+dependencies:
+  override:
+    - export TERM="dumb"; ./gradlew compileCiDebugAndroidTestSources
+
 machine:
   environment:
     QEMU_AUDIO_DRV: none
