@@ -24,6 +24,6 @@ test:
     - adb shell input keyevent 82:
         background: true
     - ./gradlew connectedCiDebugAndroidTest
-    - cp -r Calendula/build/outputs/logs/* $CIRCLE_ARTIFACTS
-    - cp -r Calendula/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+    - cp -r Calendula/build/outputs $CIRCLE_ARTIFACTS
     - adb logcat -d > logcat.txt && cp logcat.txt $CIRCLE_ARTIFACTS
+    - cp -r Calendula/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
