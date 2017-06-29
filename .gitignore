@@ -46,3 +46,5 @@ Calendula/google-services.json
 captures/
 
 *google-services.json
+
+hs_err_*.log
