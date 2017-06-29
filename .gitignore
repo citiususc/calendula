@@ -40,11 +40,10 @@ libraries/*.iml
 *~
 *.swp
 
+Calendula/google-services/
 Calendula/google-services.json
 
 # captures
 captures/
-
-*google-services.json
 
 hs_err_*.log
