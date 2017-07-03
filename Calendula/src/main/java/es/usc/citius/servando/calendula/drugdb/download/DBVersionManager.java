@@ -62,10 +62,11 @@ public class DBVersionManager {
         final String downloadUrl = SettingsProperties.instance().get(SettingsPropertiesKeys.DATABASE_LOCATION);
         final String url = downloadUrl + VERSION_FILE;
 
-        final String result = HttpDownloadUtil.downloadFileToText(url).trim();
-        LogUtil.d(TAG, "getLastDBVersion: json is: " + result);
-
         try {
+
+            final String result = HttpDownloadUtil.downloadFileToText(url).trim();
+            LogUtil.d(TAG, "getLastDBVersion: json is: " + result);
+
             Type type = new TypeToken<Map<String, Map<Integer, String>>>() {
             }.getType();
             Map<String, Map<Integer, String>> versions = new Gson().fromJson(result, type);

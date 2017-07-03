@@ -63,6 +63,8 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
     public JobRequest getRequest() {
         return new JobRequest.Builder(getTag())
                 .setPeriodic(Duration.standardDays(PERIOD_DAYS).getMillis())
+                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
+                .setRequirementsEnforced(true)
                 .setPersisted(true)
                 .build();
     }
@@ -79,7 +81,14 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
     @Override
     protected Result onRunJob(Params params) {
         LogUtil.d(TAG, "onRunJob: Job started");
-        checkForUpdate(getContext());
+
+        try {
+            checkForUpdate(getContext());
+        } catch (Exception e) {
+            LogUtil.e(TAG, "onRunJob: ", e);
+            return Result.FAILURE;
+        }
+
         return Result.SUCCESS;
     }
 
