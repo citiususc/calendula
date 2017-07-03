@@ -29,7 +29,7 @@ import com.nispok.snackbar.enums.SnackbarType;
  */
 public class Snack {
 
-    public static void show(String string, Activity activity, com.nispok.snackbar.Snackbar.SnackbarDuration duration) {
+    public static void show(final String string, final Activity activity, final Snackbar.SnackbarDuration duration) {
 
         SnackbarManager.show(com.nispok.snackbar.Snackbar.with(activity.getApplicationContext())
                         .type(SnackbarType.MULTI_LINE)
@@ -38,18 +38,28 @@ public class Snack {
                 , activity);
     }
 
-    public static void show(String string, Activity activity) {
+    public static void show(final String string, final Activity activity) {
         show(string, activity, Snackbar.SnackbarDuration.LENGTH_SHORT);
     }
 
-    public static void show(int string, Activity activity) {
+    public static void show(final int string, final Activity activity) {
         show(activity.getResources().getString(string), activity, Snackbar.SnackbarDuration.LENGTH_SHORT);
     }
 
-    public static void showIfUnobstructed(int string, Activity activity) {
+    public static void show(final int string, final Activity activity, final Snackbar.SnackbarDuration duration) {
+        show(activity.getResources().getString(string), activity, duration);
+    }
+
+    public static void showIfUnobstructed(final int string, final Activity activity) {
         Snackbar current = SnackbarManager.getCurrentSnackbar();
         if (current == null || !current.isShowing())
-            show(string, activity);
+            show(activity.getResources().getString(string), activity, Snackbar.SnackbarDuration.LENGTH_SHORT);
+    }
+
+    public static void showIfUnobstructed(final int string, final Activity activity, final Snackbar.SnackbarDuration duration) {
+        Snackbar current = SnackbarManager.getCurrentSnackbar();
+        if (current == null || !current.isShowing())
+            show(activity.getResources().getString(string), activity, duration);
     }
 
 }
