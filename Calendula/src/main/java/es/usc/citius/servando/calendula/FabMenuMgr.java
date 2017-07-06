@@ -19,11 +19,10 @@
 package es.usc.citius.servando.calendula;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.res.ColorStateList;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -38,11 +37,12 @@ import es.usc.citius.servando.calendula.activities.ScanActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.activities.SchedulesHelpActivity;
 import es.usc.citius.servando.calendula.adapters.HomePages;
+import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.fragments.ScheduleTypeFragment;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
-import es.usc.citius.servando.calendula.util.ScreenUtils;
+import es.usc.citius.servando.calendula.util.view.ExpandableFAB;
 
 /**
  * Helper to manage the home screen floating action button behaviour
@@ -50,53 +50,29 @@ import es.usc.citius.servando.calendula.util.ScreenUtils;
 public class FabMenuMgr implements View.OnClickListener {
 
 
-    LeftDrawerMgr drawerMgr;
-    FloatingActionsMenu fabMenu;
-    FloatingActionButton fab;
-    HomePagerActivity activity;
-    List<FloatingActionButton> scheduleActions;
-    FloatingActionButton scanQrAction;
+    private LeftDrawerMgr drawerMgr;
+    private ExpandableFAB fabMenu;
+    private HomePagerActivity activity;
+    private List<View> fabMenuSubViews;
+    private List<FloatingActionButton> fabMenuButtons;
 
     private int currentPage = 0;
 
 
-    public FabMenuMgr(FloatingActionButton fab, FloatingActionsMenu fabMenu, LeftDrawerMgr drawerMgr, HomePagerActivity a) {
-        this.fab = fab;
-        this.fabMenu = fabMenu;
+    public FabMenuMgr(ExpandableFAB fab, LeftDrawerMgr drawerMgr, HomePagerActivity a) {
+        this.fabMenu = fab;
         this.activity = a;
         this.drawerMgr = drawerMgr;
-        this.scheduleActions = getScheduleActions();
-
-
-        fabMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-            @Override
-            public void onMenuExpanded() {
-                if (!PreferenceUtils.getBoolean(PreferenceKeys.SCHEDULES_HELP_SHOWN, false)) {
-                    activity.launchActivityDelayed(SchedulesHelpActivity.class, 600);
-                }
-            }
-
-            @Override
-            public void onMenuCollapsed() {
-
-            }
-        });
-
     }
 
     public void init() {
-
-        for (FloatingActionButton f : scheduleActions) {
-            f.setOnClickListener(this);
-        }
-
-        fab.setOnClickListener(this);
-        fab.setIconDrawable(new IconicsDrawable(activity)
+        fabMenu.setOnClickListener(this);
+        fabMenu.setImageDrawable(new IconicsDrawable(activity)
                 .icon(GoogleMaterial.Icon.gmd_plus)
                 .paddingDp(5)
                 .sizeDp(24)
-                .color(Color.parseColor("#263238")));
-
+                .colorRes(R.color.fab_default_icon_color));
+        fabMenu.setSubViews(getScheduleActions());
         onViewPagerItemChange(0);
     }
 
@@ -105,35 +81,15 @@ public class FabMenuMgr implements View.OnClickListener {
         this.currentPage = currentPage;
         HomePages page = HomePages.values()[currentPage];
 
-        fab.setColorNormal(Color.parseColor("#ecf0f1"));
-        fab.setColorPressed(Color.parseColor("#e7e7e7"));
-
-//        fab.setColorNormalResId(getFabColor(currentPage));
-//        fab.setColorPressedResId(getFabPressedColor(currentPage));
-
         switch (page) {
-
             case HOME:
-                fabMenu.setVisibility(View.GONE);
-                fab.setVisibility(View.GONE);
+                fabMenu.hide();
                 break;
             case ROUTINES:
             case MEDICINES:
-                for (FloatingActionButton f : scheduleActions) {
-                    f.setVisibility(View.GONE);
-                }
-                fabMenu.setVisibility(View.GONE);
-                fab.setVisibility(View.VISIBLE);
-                fab.bringToFront();
-                break;
-
             case SCHEDULES:
-                for (FloatingActionButton f : scheduleActions) {
-                    f.setVisibility(View.VISIBLE);
-                }
-                fab.setVisibility(View.GONE);
-                fabMenu.setVisibility(View.VISIBLE);
-                fabMenu.bringToFront();
+                fabMenu.collapse();
+                fabMenu.show();
                 break;
         }
     }
@@ -148,16 +104,16 @@ public class FabMenuMgr implements View.OnClickListener {
                 break;
 
             // schedules
-            case R.id.action_a:
+            case R.id.fab_action_routines_button:
                 startSchedulesActivity(ScheduleTypeFragment.TYPE_ROUTINES);
                 break;
-            case R.id.action_b:
+            case R.id.fab_action_interval_button:
                 startSchedulesActivity(ScheduleTypeFragment.TYPE_HOURLY);
                 break;
-            case R.id.action_c:
+            case R.id.fab_action_period_button:
                 startSchedulesActivity(ScheduleTypeFragment.TYPE_PERIOD);
                 break;
-            case R.id.action_d:
+            case R.id.fab_action_qr_button:
                 startScanActivity();
                 break;
 
@@ -166,69 +122,56 @@ public class FabMenuMgr implements View.OnClickListener {
 
     }
 
-//    public int getFabColor(int page) {
-//        switch (page) {
-//            case 1:
-//                return R.color.android_orange;
-//            case 2:
-//                return R.color.android_pink_dark;
-//            case 3:
-//                return R.color.android_green;
-//            default:
-//                return R.color.android_blue_darker;
-//        }
-//    }
-//
-//    public int getFabPressedColor(int page) {
-//        switch (page) {
-//            case 1:
-//                return R.color.android_orange_dark;
-//            case 2:
-//                return R.color.android_pink;
-//            case 3:
-//                return R.color.android_green_dark;
-//            default:
-//                return R.color.android_blue_dark;
-//        }
-//    }
-
     public void onPatientUpdate(Patient p) {
-        for (FloatingActionButton f : scheduleActions) {
-            f.setColorNormal(p.color());
-            f.setColorPressed(ScreenUtils.equivalentNoAlpha(p.color(), 0.7f));
+        for (FloatingActionButton fabMenuButton : fabMenuButtons) {
+            fabMenuButton.setBackgroundTintList(ColorStateList.valueOf(p.color()));
         }
     }
 
     public void onPharmacyModeChanged(boolean enabled) {
-        if (enabled && !scheduleActions.contains(scanQrAction)) {
-            scheduleActions.add(scanQrAction);
-            scanQrAction.setVisibility(View.VISIBLE);
-        } else if (!enabled && scheduleActions.contains(scanQrAction)) {
-            scanQrAction.setVisibility(View.GONE);
-            scheduleActions.remove(scanQrAction);
-        }
-        fabMenu.invalidate();
+        fabMenu.setSubViews(getScheduleActions());
         onViewPagerItemChange(currentPage);
     }
 
-    private List<FloatingActionButton> getScheduleActions() {
-        ArrayList<FloatingActionButton> actions = new ArrayList<>();
+    private List<View> getScheduleActions() {
+        fabMenuSubViews = new ArrayList<>();
+        fabMenuButtons = new ArrayList<>();
 
-        FloatingActionButton actionA = (FloatingActionButton) fabMenu.findViewById(R.id.action_a);
-        FloatingActionButton actionB = (FloatingActionButton) fabMenu.findViewById(R.id.action_b);
-        FloatingActionButton actionC = (FloatingActionButton) fabMenu.findViewById(R.id.action_c);
-
-        actions.add(actionA);
-        actions.add(actionB);
-        actions.add(actionC);
-        scanQrAction = (FloatingActionButton) fabMenu.findViewById(R.id.action_d);
         if (CalendulaApp.isPharmaModeEnabled()) {
-            scanQrAction.setVisibility(View.VISIBLE);
-            actions.add(scanQrAction);
-        } else {
-            scanQrAction.setVisibility(View.GONE);
+            final View fabActionQrView = activity.findViewById(R.id.fab_action_qr);
+            fabMenuSubViews.add(fabActionQrView);
+            final FloatingActionButton fabActionQr = (FloatingActionButton) activity.findViewById(R.id.fab_action_qr_button);
+            fabActionQr.setOnClickListener(this);
+            fabActionQr.setBackgroundTintList(ColorStateList.valueOf(DB.patients().getActive(activity).color()));
+            fabMenuButtons.add(fabActionQr);
         }
-        return actions;
+
+        final View fabActionIntervalView = activity.findViewById(R.id.fab_action_interval);
+        final View fabActionRoutinesView = activity.findViewById(R.id.fab_action_routines);
+        final View fabActionPeriodView = activity.findViewById(R.id.fab_action_period);
+
+        fabMenuSubViews.add(fabActionPeriodView);
+        fabMenuSubViews.add(fabActionIntervalView);
+        fabMenuSubViews.add(fabActionRoutinesView);
+
+        final FloatingActionButton fabActionInterval = (FloatingActionButton) activity.findViewById(R.id.fab_action_interval_button);
+        final FloatingActionButton fabActionRoutines = (FloatingActionButton) activity.findViewById(R.id.fab_action_routines_button);
+        final FloatingActionButton fabActionPeriod = (FloatingActionButton) activity.findViewById(R.id.fab_action_period_button);
+
+        fabActionInterval.setOnClickListener(this);
+        fabActionRoutines.setOnClickListener(this);
+        fabActionPeriod.setOnClickListener(this);
+
+        fabActionInterval.setBackgroundTintList(ColorStateList.valueOf(DB.patients().getActive(activity).color()));
+        fabActionRoutines.setBackgroundTintList(ColorStateList.valueOf(DB.patients().getActive(activity).color()));
+        fabActionPeriod.setBackgroundTintList(ColorStateList.valueOf(DB.patients().getActive(activity).color()));
+
+        fabMenuButtons.add(fabActionPeriod);
+        fabMenuButtons.add(fabActionInterval);
+        fabMenuButtons.add(fabActionRoutines);
+
+
+        return fabMenuSubViews;
     }
 
     private void onClickAdd() {
@@ -243,6 +186,11 @@ public class FabMenuMgr implements View.OnClickListener {
                 launchActivity(MedicinesActivity.class);
                 break;
             case SCHEDULES:
+                if (!PreferenceUtils.getBoolean(PreferenceKeys.SCHEDULES_HELP_SHOWN, false)) {
+                    activity.launchActivityDelayed(SchedulesHelpActivity.class, 600);
+                }
+                fabMenu.toggle();
+                break;
         }
     }
 

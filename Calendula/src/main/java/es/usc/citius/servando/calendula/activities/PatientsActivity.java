@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
@@ -37,8 +38,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -112,6 +113,11 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
                 startActivity(intent);
             }
         });
+        fab.setImageDrawable(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_plus)
+                .paddingDp(5)
+                .sizeDp(24)
+                .colorRes(R.color.fab_default_icon_color));
 
         gridView = (GridView) findViewById(R.id.grid);
         adapter = new PatientAdapter(this);

@@ -17,6 +17,7 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -56,17 +57,20 @@
         android:verticalSpacing="10dp"/>
 
 
-    <com.getbase.floatingactionbutton.AddFloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
-                                                              android:id="@+id/add_button"
-                                                              android:layout_width="wrap_content"
-                                                              android:layout_height="wrap_content"
-                                                              android:layout_alignParentBottom="true"
-                                                              android:layout_alignParentRight="true"
-                                                              android:layout_margin="10dp"
-                                                              android:transitionName="fab"
-                                                              fab:fab_colorNormal="#efefef"
-                                                              fab:fab_colorPressed="#b7b7b7"
-                                                              fab:fab_labelStyle="@style/menu_labels_style"
-                                                              fab:fab_plusIconColor="@color/black"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/fab_vertical_margin"
+        android:layout_marginEnd="@dimen/fab_horizontal_margin"
+        android:layout_marginRight="@dimen/fab_horizontal_margin"
+        android:src="@drawable/ic_action_add"
+        android:transitionName="fab"
+        app:backgroundTint="@color/fab_default_color"
+        app:elevation="@dimen/fab_elevation"
+        />
 
 </RelativeLayout>

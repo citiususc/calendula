@@ -137,5 +137,7 @@
     <color name="alarm_activity_bg_overlay">#44000000</color>
 
     <color name="transparent_black">#6000</color>
+    <color name="fab_default_color">#e7e7e7</color>
+    <color name="fab_default_icon_color">#263238</color>
 
 </resources>

@@ -22,11 +22,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,7 +38,6 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -45,6 +46,7 @@ import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.listeners.ClickEventHook;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -93,7 +95,7 @@ public class AllergiesActivity extends CalendulaActivity {
     private static final String TAG = "AllergiesActivity";
     // main view
     @BindView(R.id.add_button)
-    protected AddFloatingActionButton addButton;
+    protected FloatingActionButton addButton;
     @BindView(R.id.allergies_recycler)
     protected RecyclerView allergiesRecycler;
     @BindView(R.id.textview_no_allergies_placeholder)
@@ -127,6 +129,12 @@ public class AllergiesActivity extends CalendulaActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_allergies);
         ButterKnife.bind(this);
+
+        addButton.setImageDrawable(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_plus)
+                .paddingDp(5)
+                .sizeDp(24)
+                .colorRes(R.color.fab_default_icon_color));
 
         //setup toolbar and status bar
         final Patient patient = DB.patients().getActive(this);

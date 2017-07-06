@@ -31,6 +31,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.FloatingActionButton;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -53,7 +54,6 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -235,12 +235,12 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
     }
 
     void setSwitchFab() {
-        fab.setIconDrawable(iconSwitch);
+        fab.setImageDrawable(iconSwitch);
 
     }
 
     void setCloseFab() {
-        fab.setIconDrawable(iconClose);
+        fab.setImageDrawable(iconClose);
     }
 
     void hideAvatarSelector() {

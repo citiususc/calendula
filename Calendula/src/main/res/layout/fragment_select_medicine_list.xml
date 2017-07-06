@@ -17,8 +17,9 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent">
 
     <ListView
         android:id="@+id/medicines_list"
@@ -27,18 +28,21 @@
         android:background="@color/white"
         android:divider="#E0EAEF"
         android:dividerHeight="0dp"
-        android:scrollbars="none"/>
+        android:scrollbars="none" />
 
-    <com.getbase.floatingactionbutton.AddFloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
-                                                              android:id="@+id/add_medicine_button"
-                                                              android:layout_width="wrap_content"
-                                                              android:layout_height="wrap_content"
-                                                              android:layout_alignParentBottom="true"
-                                                              android:layout_alignParentRight="true"
-                                                              android:layout_margin="10dp"
-                                                              fab:fab_colorNormal="#efefef"
-                                                              fab:fab_colorPressed="#b7b7b7"
-                                                              fab:fab_labelStyle="@style/menu_labels_style"
-                                                              fab:fab_plusIconColor="@color/black"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_medicine_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/fab_vertical_margin"
+        android:layout_marginEnd="@dimen/fab_horizontal_margin"
+        android:layout_marginRight="@dimen/fab_horizontal_margin"
+        android:src="@drawable/ic_action_add"
+        app:backgroundTint="@color/fab_default_color"
+        app:elevation="@dimen/fab_elevation" />
 
 </RelativeLayout>

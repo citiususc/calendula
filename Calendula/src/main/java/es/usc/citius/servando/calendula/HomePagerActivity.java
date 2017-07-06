@@ -33,6 +33,7 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -46,15 +47,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import butterknife.BindView;
@@ -90,6 +91,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.medicine.StockUtils;
 import es.usc.citius.servando.calendula.util.view.DisableableAppBarLayoutBehavior;
+import es.usc.citius.servando.calendula.util.view.ExpandableFAB;
 
 public class HomePagerActivity extends CalendulaActivity implements
         RoutinesListFragment.OnRoutineSelectedListener,
@@ -110,13 +112,13 @@ public class HomePagerActivity extends CalendulaActivity implements
     @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout toolbarLayout;
     @BindView(R.id.add_button)
-    FloatingActionButton fab;
+    ExpandableFAB fab;
     @BindView(R.id.user_info_fragment)
     View userInfoFragment;
     @BindView(R.id.main_content)
     CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.fab_menu)
-    FloatingActionsMenu addButton;
+//    @BindView(R.id.fab_menu)
+//    FloatingActionsMenu addButton;
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
     @BindView(R.id.container)
@@ -379,8 +381,8 @@ public class HomePagerActivity extends CalendulaActivity implements
         activePatient = DB.patients().getActive(this);
         updateScrim(0);
 
-        // Setup fab
-        fabMgr = new FabMenuMgr(fab, addButton, drawerMgr, this);
+
+        fabMgr = new FabMenuMgr(fab, drawerMgr, this);
         fabMgr.init();
 
         fabMgr.onPatientUpdate(activePatient);

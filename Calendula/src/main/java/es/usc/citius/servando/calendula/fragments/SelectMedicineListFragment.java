@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.sql.SQLException;
@@ -72,7 +74,8 @@ public class SelectMedicineListFragment extends Fragment {
         if (med != null)
             selectedId = med.getId();
 
-        rootView.findViewById(R.id.add_medicine_button).setOnClickListener(new View.OnClickListener() {
+        final FloatingActionButton addButton = (FloatingActionButton) rootView.findViewById(R.id.add_medicine_button);
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), MedicinesActivity.class);
@@ -80,6 +83,11 @@ public class SelectMedicineListFragment extends Fragment {
                 startActivity(i);
             }
         });
+        addButton.setImageDrawable(new IconicsDrawable(getContext())
+                .icon(GoogleMaterial.Icon.gmd_plus)
+                .paddingDp(5)
+                .sizeDp(24)
+                .colorRes(R.color.fab_default_icon_color));
 
         mMedicines = DB.medicines().findAllForActivePatient(getContext());
         Collections.sort(mMedicines);

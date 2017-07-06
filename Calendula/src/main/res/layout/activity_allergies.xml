@@ -3,6 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:paddingTop="@dimen/status_bar_height">
 
     <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -41,18 +42,21 @@
         android:text="@string/allergies_placeholder"
         android:visibility="gone"/>
 
-    <com.getbase.floatingactionbutton.AddFloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
-                                                              android:id="@+id/add_button"
-                                                              android:layout_width="wrap_content"
-                                                              android:layout_height="wrap_content"
-                                                              android:layout_alignParentBottom="true"
-                                                              android:layout_alignParentRight="true"
-                                                              android:layout_margin="10dp"
-                                                              fab:fab_colorNormal="#efefef"
-                                                              fab:fab_colorPressed="#b7b7b7"
-                                                              fab:fab_icon="@drawable/ic_done_black_48dp"
-                                                              fab:fab_labelStyle="@style/menu_labels_style"
-                                                              fab:fab_plusIconColor="@color/black"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/fab_vertical_margin"
+        android:layout_marginEnd="@dimen/fab_horizontal_margin"
+        android:layout_marginRight="@dimen/fab_horizontal_margin"
+        android:src="@drawable/ic_action_add"
+        app:backgroundTint="@color/fab_default_color"
+        app:elevation="@dimen/fab_elevation"
+        />
+
 
     <ProgressBar
         android:id="@+id/main_progress_bar"

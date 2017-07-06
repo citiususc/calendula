@@ -200,17 +200,21 @@
         android:background="@drawable/presentation_box_shadow_top"/>
 
 
-    <com.getbase.floatingactionbutton.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
-                                                           android:id="@+id/avatar_change"
-                                                           android:layout_width="60dp"
-                                                           android:layout_height="60dp"
-                                                           android:layout_alignParentRight="true"
-                                                           android:layout_below="@+id/top"
-                                                           android:layout_marginRight="30dp"
-                                                           android:layout_marginTop="-35dp"
-                                                           android:transitionName="fab"
-                                                           fab:fab_colorNormal="#efefef"
-                                                           fab:fab_colorPressed="#b7b7b7"
-                                                           fab:fab_icon="@drawable/ic_autorenew_white_48dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/avatar_change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|right"
+        android:layout_below="@+id/top"
+        android:layout_marginRight="@dimen/fab_separator_right_margin"
+        android:layout_marginTop="-30dp"
+        android:src="@drawable/ic_autorenew_white_48dp"
+        app:backgroundTint="@color/fab_default_color"
+        app:elevation="@dimen/fab_elevation"
+        android:transitionName="fab"/>
+
 
 </RelativeLayout>

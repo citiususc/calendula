@@ -252,9 +252,6 @@ dependencies {
     // Dialogs with material style
     compile 'com.github.javiersantos:MaterialStyledDialogs:2.0'
 
-    // Floating Action Button
-    compile 'com.getbase:floatingactionbutton:1.9.0'
-
     // GIF ImageView
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
 
