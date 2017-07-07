@@ -261,5 +261,8 @@ dependencies {
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     androidTestCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
+    // Stetho
+    compile 'com.facebook.stetho:stetho:1.5.0'
+
 
 }

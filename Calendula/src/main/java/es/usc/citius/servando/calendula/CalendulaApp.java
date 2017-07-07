@@ -22,6 +22,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 
+import com.facebook.stetho.Stetho;
 import com.squareup.leakcanary.LeakCanary;
 
 import java.io.File;
@@ -126,6 +127,10 @@ public class CalendulaApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if(BuildConfig.DEBUG){
+            Stetho.initializeWithDefaults(this);
+        }
 
         if (LeakCanary.isInAnalyzerProcess(CalendulaApp.this)) {
             // This process is dedicated to LeakCanary for heap analysis.
