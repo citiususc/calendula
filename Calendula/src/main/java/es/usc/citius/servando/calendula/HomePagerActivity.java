@@ -29,8 +29,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.MenuRes;
+import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -80,6 +82,7 @@ import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
+import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.medicine.StockUtils;
 
 public class HomePagerActivity extends CalendulaActivity implements
@@ -99,6 +102,7 @@ public class HomePagerActivity extends CalendulaActivity implements
     CollapsingToolbarLayout toolbarLayout;
     HomeProfileMgr homeProfileMgr;
     View userInfoFragment;
+    CoordinatorLayout coordinatorLayout;
     FloatingActionsMenu addButton;
     FabMenuMgr fabMgr;
     TextView toolbarTitle;
@@ -321,9 +325,8 @@ public class HomePagerActivity extends CalendulaActivity implements
         }
     }
 
-    void showMessage(String text) {
-        Snackbar.make(appBarLayout, text, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+    public void showSnackbar(@StringRes final int text) {
+        Snack.show(text, coordinatorLayout, Snackbar.LENGTH_SHORT);
     }
 
     Fragment getViewPagerFragment(HomePages page) {
@@ -341,6 +344,8 @@ public class HomePagerActivity extends CalendulaActivity implements
         setupStatusBar(Color.TRANSPARENT);
         subscribeToEvents();
         handler = new Handler();
+
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.

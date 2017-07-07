@@ -19,6 +19,7 @@
 package es.usc.citius.servando.calendula.util;
 
 import android.app.Activity;
+import android.support.annotation.StringRes;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -32,15 +33,6 @@ public class Snack {
 
 
     private static boolean shown = false;
-
-
-    public static void show(final String string, final Activity activity, final int duration) {
-
-        final ViewGroup rootView = (ViewGroup) ((ViewGroup) activity
-                .findViewById(android.R.id.content)).getChildAt(0);
-
-        show(string, rootView, duration);
-    }
 
     public static void show(final String string, final View rootView, final int duration) {
         final Snackbar snackbar = Snackbar.make(rootView, string, duration);
@@ -58,6 +50,19 @@ public class Snack {
             }
         });
         snackbar.show();
+    }
+
+
+    public static void show(final String string, final Activity activity, final int duration) {
+
+        final ViewGroup rootView = (ViewGroup) ((ViewGroup) activity
+                .findViewById(android.R.id.content)).getChildAt(0);
+
+        show(string, rootView, duration);
+    }
+
+    public static void show(@StringRes final int string, final View rootView, final int duration) {
+        show(rootView.getResources().getString(string), rootView, duration);
     }
 
     public static void show(final String string, final Activity activity) {
