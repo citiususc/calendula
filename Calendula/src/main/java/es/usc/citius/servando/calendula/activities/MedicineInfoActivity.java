@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -41,9 +42,6 @@ import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
-import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.SnackbarManager;
-import com.nispok.snackbar.enums.SnackbarType;
 
 import java.util.List;
 
@@ -64,6 +62,7 @@ import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.Snack;
 
 public class MedicineInfoActivity extends CalendulaActivity {
 
@@ -170,13 +169,7 @@ public class MedicineInfoActivity extends CalendulaActivity {
                 if (med.getId() == medicine.getId()) {
 
                     if (medicine.cn() == null && med.cn() != null) {
-                        SnackbarManager.show(Snackbar.with(getApplicationContext())
-                                        .type(SnackbarType.MULTI_LINE)
-                                        .color(getResources().getColor(R.color.android_green_dark))
-                                        .textColor(getResources().getColor(R.color.white))
-                                        .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
-                                        .text(R.string.message_med_linked_success)
-                                , this);
+                        Snack.show(R.string.message_med_linked_success, this, Snackbar.LENGTH_SHORT);
                     }
                     ((MedInfoFragment) getViewPagerFragment(0)).notifyDataChange();
                     ((AlertListFragment) getViewPagerFragment(1)).notifyDataChange();

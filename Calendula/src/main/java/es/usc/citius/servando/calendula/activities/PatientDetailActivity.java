@@ -30,6 +30,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -56,7 +57,6 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.nispok.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -227,7 +227,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         String qrData = i.getStringExtra("qr_data");
         if (qrData != null) {
             PatientLinkWrapper p = new Gson().fromJson(qrData, PatientLinkWrapper.class);
-            Snack.show("Usuario vinculado correctamente!", this, Snackbar.SnackbarDuration.LENGTH_LONG);
+            Snack.show("Usuario vinculado correctamente!", this, Snackbar.LENGTH_LONG);
             SharedPreferences prefs = PreferenceUtils.instance().preferences();
             prefs.edit().putString("remote_token" + patientId, p.token).apply();
             LogUtil.d(TAG, p.toString());

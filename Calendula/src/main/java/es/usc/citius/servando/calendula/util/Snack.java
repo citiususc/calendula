@@ -19,46 +19,66 @@
 package es.usc.citius.servando.calendula.util;
 
 import android.app.Activity;
+import android.support.design.widget.BaseTransientBottomBar;
+import android.support.design.widget.Snackbar;
+import android.view.View;
+import android.view.ViewGroup;
 
-import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.SnackbarManager;
-import com.nispok.snackbar.enums.SnackbarType;
 
 /**
  * Created by joseangel.pineiro on 2/17/15.
  */
 public class Snack {
 
-    public static void show(final String string, final Activity activity, final Snackbar.SnackbarDuration duration) {
 
-        SnackbarManager.show(com.nispok.snackbar.Snackbar.with(activity.getApplicationContext())
-                        .type(SnackbarType.MULTI_LINE)
-                        .duration(duration)
-                        .text(string)
-                , activity);
+    private static boolean shown = false;
+
+
+    public static void show(final String string, final Activity activity, final int duration) {
+
+        final ViewGroup rootView = (ViewGroup) ((ViewGroup) activity
+                .findViewById(android.R.id.content)).getChildAt(0);
+
+        show(string, rootView, duration);
+    }
+
+    public static void show(final String string, final View rootView, final int duration) {
+        final Snackbar snackbar = Snackbar.make(rootView, string, duration);
+        snackbar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                super.onDismissed(transientBottomBar, event);
+                shown = false;
+            }
+
+            @Override
+            public void onShown(Snackbar transientBottomBar) {
+                super.onShown(transientBottomBar);
+                shown = true;
+            }
+        });
+        snackbar.show();
     }
 
     public static void show(final String string, final Activity activity) {
-        show(string, activity, Snackbar.SnackbarDuration.LENGTH_SHORT);
+        show(string, activity, Snackbar.LENGTH_SHORT);
     }
 
     public static void show(final int string, final Activity activity) {
-        show(activity.getResources().getString(string), activity, Snackbar.SnackbarDuration.LENGTH_SHORT);
+        show(activity.getResources().getString(string), activity, Snackbar.LENGTH_SHORT);
     }
 
-    public static void show(final int string, final Activity activity, final Snackbar.SnackbarDuration duration) {
+    public static void show(final int string, final Activity activity, final int duration) {
         show(activity.getResources().getString(string), activity, duration);
     }
 
     public static void showIfUnobstructed(final int string, final Activity activity) {
-        Snackbar current = SnackbarManager.getCurrentSnackbar();
-        if (current == null || !current.isShowing())
-            show(activity.getResources().getString(string), activity, Snackbar.SnackbarDuration.LENGTH_SHORT);
+        if (!shown)
+            show(activity.getResources().getString(string), activity, Snackbar.LENGTH_SHORT);
     }
 
-    public static void showIfUnobstructed(final int string, final Activity activity, final Snackbar.SnackbarDuration duration) {
-        Snackbar current = SnackbarManager.getCurrentSnackbar();
-        if (current == null || !current.isShowing())
+    public static void showIfUnobstructed(final int string, final Activity activity, final int duration) {
+        if (!shown)
             show(activity.getResources().getString(string), activity, duration);
     }
 

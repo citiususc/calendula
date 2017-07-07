@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -39,9 +40,6 @@ import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.j256.ormlite.misc.TransactionManager;
-import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.SnackbarManager;
-import com.nispok.snackbar.enums.SnackbarType;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -460,15 +458,15 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
     }
 
     private void showSnackBar(int string) {
-        SnackbarManager.show(
-                Snackbar.with(getApplicationContext())
-                        .actionLabel("OK")
-                        .actionColor(getResources().getColor(R.color.android_orange_darker))
-                        .type(SnackbarType.MULTI_LINE)
-                        .textColor(getResources().getColor(R.color.white_80)) // change the text color
-                        .color(getResources().getColor(R.color.android_orange_dark)) // change the background color
-                        .text(getResources().getString(string)), this);
-
+        final Snackbar snackbar = Snackbar.make(mViewPager, string, Snackbar.LENGTH_SHORT);
+        snackbar.setAction("OK", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar.dismiss();
+            }
+        });
+        snackbar.setActionTextColor(getResources().getColor(R.color.android_orange_darker));
+        snackbar.show();
     }
 
     /**
