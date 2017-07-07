@@ -54,6 +54,8 @@ import org.joda.time.DateTime;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.activities.CalendarActivity;
 import es.usc.citius.servando.calendula.activities.ConfirmActivity;
 import es.usc.citius.servando.calendula.activities.LeftDrawerMgr;
@@ -98,29 +100,35 @@ public class HomePagerActivity extends CalendulaActivity implements
             R.id.action_sort, R.id.action_expand, R.id.action_calendar, R.id.action_schedules_help
     };
 
+
+    @BindView(R.id.appbar)
     public AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout toolbarLayout;
-    HomeProfileMgr homeProfileMgr;
+    @BindView(R.id.add_button)
+    FloatingActionButton fab;
+    @BindView(R.id.user_info_fragment)
     View userInfoFragment;
+    @BindView(R.id.main_content)
     CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.fab_menu)
     FloatingActionsMenu addButton;
-    FabMenuMgr fabMgr;
+    @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
-    Drawable icAgendaMore;
-    Drawable icAgendaLess;
+    @BindView(R.id.container)
+    ViewPager mViewPager;
+    @BindView(R.id.sliding_tabs)
+    TabLayout tabLayout;
 
-    //menu items
-    MenuItem expandItem;
-
-    boolean appBarLayoutExpanded = true;
-    boolean active = false;
+    private boolean appBarLayoutExpanded = true;
+    private boolean active = false;
+    private Drawable icAgendaMore;
+    private Drawable icAgendaLess;
+    private MenuItem expandItem;
+    private FabMenuMgr fabMgr;
+    private HomeProfileMgr homeProfileMgr;
     private HomePageAdapter mSectionsPagerAdapter;
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
     private LeftDrawerMgr drawerMgr;
-    private FloatingActionButton fab;
     private Patient activePatient;
     private int pendingRefresh = -2;
     private Queue<Object> pendingEvents = new LinkedList<>();
@@ -339,38 +347,31 @@ public class HomePagerActivity extends CalendulaActivity implements
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
         setupToolbar(null, Color.TRANSPARENT);
         initializeDrawer(savedInstanceState);
         setupStatusBar(Color.TRANSPARENT);
         subscribeToEvents();
         handler = new Handler();
 
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
-
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new HomePageAdapter(getSupportFragmentManager(), this, this);
-        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(getPageChangeListener());
         mViewPager.setOffscreenPageLimit(5);
 
         // Set up home profile
         homeProfileMgr = new HomeProfileMgr();
-        userInfoFragment = findViewById(R.id.user_info_fragment);
         homeProfileMgr.init(userInfoFragment, this);
 
         activePatient = DB.patients().getActive(this);
         updateScrim(0);
 
         // Setup fab
-        addButton = (FloatingActionsMenu) findViewById(R.id.fab_menu);
-        fab = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.add_button);
         fabMgr = new FabMenuMgr(fab, addButton, drawerMgr, this);
         fabMgr.init();
 
@@ -498,7 +499,6 @@ public class HomePagerActivity extends CalendulaActivity implements
 
     private void setupTabLayout() {
 
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
@@ -543,8 +543,7 @@ public class HomePagerActivity extends CalendulaActivity implements
     }
 
     private void updateScrim(int position) {
-        @ColorInt
-        final int color = position == HomePages.HOME.ordinal() ? R.color.transparent_black : activePatient.color();
+        @ColorInt final int color = position == HomePages.HOME.ordinal() ? R.color.transparent_black : activePatient.color();
 
         if (previousColor != -1) {
             ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), previousColor, color);
