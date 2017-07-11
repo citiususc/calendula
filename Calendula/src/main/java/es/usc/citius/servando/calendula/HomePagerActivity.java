@@ -36,6 +36,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
@@ -543,7 +544,7 @@ public class HomePagerActivity extends CalendulaActivity implements
     }
 
     private void updateScrim(int position) {
-        @ColorInt final int color = position == HomePages.HOME.ordinal() ? R.color.transparent_black : activePatient.color();
+        @ColorInt final int color = (position == HomePages.HOME.ordinal()) ? ContextCompat.getColor(this,R.color.transparent_black) : activePatient.color();
 
         if (previousColor != -1) {
             ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), previousColor, color);

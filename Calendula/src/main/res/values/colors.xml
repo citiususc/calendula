@@ -135,6 +135,6 @@
     <color name="alarm_activity_bg_color">#e36c4c</color>
     <color name="alarm_activity_bg_overlay">#44000000</color>
 
-    <color name="transparent_black">#3000</color>
+    <color name="transparent_black">#6000</color>
 
 </resources>
