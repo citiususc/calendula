@@ -88,6 +88,7 @@ import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.medicine.StockUtils;
+import es.usc.citius.servando.calendula.util.view.DisableableAppBarLayoutBehavior;
 
 public class HomePagerActivity extends CalendulaActivity implements
         RoutinesListFragment.OnRoutineSelectedListener,
@@ -534,8 +535,13 @@ public class HomePagerActivity extends CalendulaActivity implements
                 fabMgr.onViewPagerItemChange(position);
                 if (position == HomePages.HOME.ordinal() && !((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).isExpanded()) {
                     appBarLayout.setExpanded(true);
+                    CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+                    ((DisableableAppBarLayoutBehavior) layoutParams.getBehavior()).setEnabled(true);
+
                 } else {
                     appBarLayout.setExpanded(false);
+                    CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+                    ((DisableableAppBarLayoutBehavior) layoutParams.getBehavior()).setEnabled(false);
                 }
 
                 invalidateOptionsMenu();
