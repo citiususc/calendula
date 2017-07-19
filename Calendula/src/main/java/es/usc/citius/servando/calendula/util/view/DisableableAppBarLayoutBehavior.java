@@ -1,6 +1,7 @@
 package es.usc.citius.servando.calendula.util.view;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
@@ -17,11 +18,6 @@ public class DisableableAppBarLayoutBehavior extends AppBarLayout.Behavior {
         super(context, attrs);
     }
 
-    public void setEnabled(boolean enabled) {
-        mEnabled = enabled;
-    }
-
-
     @Override
     public boolean onStartNestedScroll(CoordinatorLayout parent, AppBarLayout child, View directTargetChild, View target, int nestedScrollAxes) {
         return mEnabled && super.onStartNestedScroll(parent, child, directTargetChild, target, nestedScrollAxes);
@@ -29,5 +25,19 @@ public class DisableableAppBarLayoutBehavior extends AppBarLayout.Behavior {
 
     public boolean isEnabled() {
         return mEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        mEnabled = enabled;
+        if (!enabled) {
+            setDragCallback(new DragCallback() {
+                @Override
+                public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
+                    return false;
+                }
+            });
+        } else {
+            setDragCallback(null);
+        }
     }
 }
