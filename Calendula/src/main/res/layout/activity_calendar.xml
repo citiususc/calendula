@@ -58,7 +58,7 @@
                     app:layout_collapseParallaxMultiplier="0.4">
 
                     <ImageView
-                        android:id="@+id/imageView5"
+                        android:id="@+id/top_background"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:background="#37474f"/>
@@ -66,8 +66,8 @@
                     <ImageView
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:layout_alignBottom="@+id/imageView5"
-                        android:layout_alignTop="@+id/imageView5"
+                        android:layout_alignBottom="@+id/top_background"
+                        android:layout_alignTop="@+id/top_background"
                         android:alpha="0.3"
                         android:scaleType="centerCrop"
                         android:src="@drawable/clock"/>

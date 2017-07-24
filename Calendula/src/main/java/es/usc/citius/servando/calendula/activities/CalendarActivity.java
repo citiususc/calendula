@@ -65,6 +65,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
@@ -80,29 +83,41 @@ public class CalendarActivity extends CalendulaActivity {
 
     public static final int ACTION_SHOW_REMINDERS = 1;
     private static final String TAG = "CalendarActivity";
-    static PickupUtils pickupUtils;
-    private static DateFormat dtf2 = new SimpleDateFormat("dd/MMM");
-    DateTime from;
-    DateTime to;
-    String df;
-    Patient patient;
-    Patient selectedPatient;
-    int selectedPatientIdx = 0;
-    long selectedPatientId;
-    List<Patient> pats;
-    Date selectedDate = null;
-    CharSequence bestDayText;
+    private static final DateFormat dtf2 = new SimpleDateFormat("dd/MMM");
+    private static PickupUtils pickupUtils;
+
+    @BindView(R.id.pickup_list_container)
     View bottomSheet;
+    @BindView(R.id.routine_name_title)
     TextView title;
+    @BindView(R.id.appbar)
     AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout toolbarLayout;
+    @BindView(R.id.routine_name)
     TextView subtitle;
+    @BindView(R.id.patient_avatar_title)
     ImageView avatar;
-    CaldroidFragment caldroidFragment;
+    @BindView(R.id.top_background)
     View topBg;
+    @BindView(R.id.nestedScrollView)
     NestedScrollView nestedScrollView;
+    @BindView(R.id.collapsed_title_container)
     View titleCollapsedContainer;
+
+    private DateTime from;
+    private DateTime to;
+    private String df;
+    private Patient patient;
+    private Patient selectedPatient;
+    private int selectedPatientIdx = 0;
+    private long selectedPatientId;
+    private List<Patient> pats;
+    private Date selectedDate = null;
+    private CharSequence bestDayText;
+    private CaldroidFragment caldroidFragment;
     private Pair<LocalDate, List<PickupInfo>> bestDay;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,7 +147,53 @@ public class CalendarActivity extends CalendulaActivity {
         }
     }
 
-    public CharSequence addPickupList(CharSequence msg, List<PickupInfo> pks) {
+    @Override
+    public void onBackPressed() {
+        if (bottomSheet.getVisibility() == View.VISIBLE) {
+            hideBottomSheet();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @OnClick(R.id.close_pickup_list)
+    void hideBottomSheet() {
+        LinearLayout list = (LinearLayout) findViewById(R.id.pickup_list);
+        list.removeAllViews();
+        appBarLayout.setExpanded(true, true);
+        bottomSheet.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_calendar);
+        ButterKnife.bind(this);
+
+        pats = DB.patients().findAll();
+        patient = DB.patients().getActive(this);
+
+        setupStatusBar(Color.TRANSPARENT);
+        setupToolbar("", Color.TRANSPARENT, Color.WHITE);
+        toolbar.setTitleTextColor(Color.WHITE);
+
+        df = getString(R.string.pickup_date_format);
+        from = DateTime.now().minusMonths(3);
+        to = DateTime.now().plusMonths(3);
+        bottomSheet.setVisibility(View.INVISIBLE);
+
+        setupPatientSpinner();
+        onPatientUpdate();
+        checkIntent();
+    }
+
+    @Override
+    protected void onDestroy() {
+        selectedDate = null;
+        super.onDestroy();
+    }
+
+    private CharSequence addPickupList(CharSequence msg, List<PickupInfo> pks) {
 
         Paint textPaint = new Paint();
         //obviously, we have to set textSize into Paint object
@@ -154,27 +215,11 @@ public class CalendarActivity extends CalendulaActivity {
         return msg;
     }
 
-    public void showBottomSheet() {
+    private void showBottomSheet() {
         bottomSheet.setVisibility(View.VISIBLE);
     }
 
-    public void hideBottomSheet() {
-        LinearLayout list = (LinearLayout) findViewById(R.id.pickup_list);
-        list.removeAllViews();
-        appBarLayout.setExpanded(true, true);
-        bottomSheet.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (bottomSheet.getVisibility() == View.VISIBLE) {
-            hideBottomSheet();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    public CharSequence getBestDayText() {
+    private CharSequence getBestDayText() {
 
         final List<PickupInfo> urgent = pickupUtils.urgentMeds();
         Pair<LocalDate, List<PickupInfo>> best = pickupUtils.getBestDay();
@@ -244,7 +289,7 @@ public class CalendarActivity extends CalendulaActivity {
         return msg;
     }
 
-    void setupNewCalendar() {
+    private void setupNewCalendar() {
         caldroidFragment = new CaldroidSampleCustomFragment();
         Bundle args = new Bundle();
         DateTime now = DateTime.now();
@@ -309,51 +354,6 @@ public class CalendarActivity extends CalendulaActivity {
         }
 
         caldroidFragment.refreshView();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar);
-
-        pats = DB.patients().findAll();
-        patient = DB.patients().getActive(this);
-
-        setupStatusBar(Color.TRANSPARENT);
-        setupToolbar("", Color.TRANSPARENT, Color.WHITE);
-        toolbar.setTitleTextColor(Color.WHITE);
-
-        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        titleCollapsedContainer = findViewById(R.id.collapsed_title_container);
-
-        topBg = findViewById(R.id.imageView5);
-        subtitle = (TextView) findViewById(R.id.routine_name);
-        title = (TextView) findViewById(R.id.routine_name_title);
-        avatar = (ImageView) findViewById(R.id.patient_avatar_title);
-        nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
-
-        df = getString(R.string.pickup_date_format);
-        from = DateTime.now().minusMonths(3);
-        to = DateTime.now().plusMonths(3);
-        bottomSheet = findViewById(R.id.pickup_list_container);
-        bottomSheet.setVisibility(View.INVISIBLE);
-
-        setupPatientSpinner();
-        onPatientUpdate();
-        findViewById(R.id.close_pickup_list).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideBottomSheet();
-            }
-        });
-        checkIntent();
-    }
-
-    @Override
-    protected void onDestroy() {
-        selectedDate = null;
-        super.onDestroy();
     }
 
     private void setupPatientSpinner() {
