@@ -359,7 +359,7 @@ public class CalendarActivity extends CalendulaActivity {
     private void setupPatientSpinner() {
         String[] names = new String[pats.size() + 1];
 
-        names[0] = "Todos";
+        names[0] = getString(R.string.calendar_patient_all);
         for (int i = 0; i < pats.size(); i++) {
             names[i + 1] = pats.get(i).name();
         }

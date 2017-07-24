@@ -382,7 +382,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
 
     private void addCalendarItem() {
         drawer.addItemAtPosition(new PrimaryDrawerItem()
-                .withName("Dispensación")
+                .withName(R.string.title_activity_pickup_calendar_short)
                 .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_calendar_check, R.color.black).alpha(110))
                 .withEnabled(true)
                 .withIdentifier(CALENDAR), 7);
