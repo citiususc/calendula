@@ -434,4 +434,7 @@ If you choose not to download it, some of your medicines' information may be los
 <string name="sort_by_alerts">"Alerts"</string>
     <string name="title_activity_pickup_calendar_short">Pickups</string>
     <string name="calendar_patient_all">All</string>
+    <string name="calendar_updating">Updating calendar…</string>
+    <string name="best_date_recommendation_title">Advice</string>
+
 </resources>

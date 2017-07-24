@@ -522,7 +522,7 @@ public class CalendarActivity extends CalendulaActivity {
             super.onPreExecute();
             dialog = new ProgressDialog(CalendarActivity.this);
             dialog.setIndeterminate(true);
-            dialog.setMessage("Actualizando calendario...");
+            dialog.setMessage(getString(R.string.calendar_updating));
             dialog.show();
         }
 
