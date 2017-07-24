@@ -163,4 +163,10 @@
 
     <string name="database_file_location" translatable="false">%1$s%2$s/%2$s-%3$s.db</string>
 
+    <string-array name="calendar_pickup_reminder_values">
+        <item>@string/calendar_pickup_reminder_one_day_before</item>
+        <item>@string/calendar_pickup_reminder_two_days_before</item>
+        <item>@string/calendar_pickup_reminder_three_days_before</item>
+    </string-array>
+
 </resources>

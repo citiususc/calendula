@@ -438,4 +438,14 @@ Si eliges no descargarla, puede perderse alguna información de tus medicamentos
 <string name="calendar_patient_all">"Todos"</string>
 <string name="calendar_updating">"Actualizando calendario…"</string>
 <string name="best_date_recommendation_title">"Recomendación"</string>
+    <string name="best_single_day_message">Acude a la farmacia %1$s y así podrás recoger %2$s medicamentos a la vez:</string>
+    <string name="best_single_day_message_one_med">Acude a la farmacia %1$s para recoger:</string>
+    <string name="best_single_day_message_after_pending">Después, podrías acudir de nuevo el %1$s y así recoger %2$s medicamentos a la vez:</string>
+    <string name="best_single_day_message_after_pending_one_med">Después, podrías acudir de nuevo %1$s y recoger:</string>
+    <string name="pending_meds_msg">Hay medicación en la farmacia pendiente de retirar. Por favor, acude en cuanto sea posible:</string>
+    <string name="best_date_format">\'de\' EEEE dd \'de\' MMMM</string>
+    <string name="best_date_reminder">Recordatorio</string>
+    <string name="calendar_pickup_reminder_one_day_before">1 día antes</string>
+    <string name="calendar_pickup_reminder_two_days_before">2 días antes</string>
+    <string name="calendar_pickup_reminder_three_days_before">3 días antes</string>
 </resources>

@@ -17,43 +17,20 @@
   -->
 
 <resources>
-
+    <string name="scan_dose_changed_msg">Dose has changed</string>
+    <string name="scan_dose_zero_msg">The specified schedule is ambiguous. Please adjust it manually.</string>
+    <string name="scan_existing_schedule">Existing schedule (it will be updated)</string>
+    <string name="scan_frequency_changed_msg">Frequency has changed from %1$s to %2$s times by day</string>
+    <string name="scan_interval_changed_msg">Interval has changed  from %1$s to %2$s</string>
+    <string name="scan_new_schedule">New schedule!</string>
+    <string name="scan_prescriptions">prescriptions</string>
+    <string name="scan_reading_qr">Reading QR…</string>
     <string name="scan_review_prescriptions_start">Start</string>
     <string name="scan_review_prescriptions_title">Review prescriptions</string>
-    <string name="scan_review_title">Review</string>
     <string name="scan_review_text">Please check carefully the scanned prescriptions, modify them if necessary, and confirm when you agree.</string>
-    <string name="scan_prescriptions">prescriptions</string>
-
-    <string name="scan_dose_zero_msg">The specified schedule is ambiguous. Please adjust it manually.</string>
-    <string name="scan_dose_changed_msg">Dose has changed</string>
-    <string name="scan_interval_changed_msg">Interval has changed  from %1$s to %2$s</string>
-    <string name="scan_frequency_changed_msg">Frequency has changed from %1$s to %2$s times by day</string>
-    <string name="scan_schedule_ends_msg">Esta pauta dura %1$s días. Compruebe las fechas de inicio y fin</string>
-
-
-    <string name="scan_reading_qr">Reading QR…</string>
-    <string name="scan_new_schedule">New schedule!</string>
-    <string name="scan_existing_schedule">Existing schedule (it will be updated)</string>
+    <string name="scan_review_title">Review</string>
     <string name="scan_schedule_changed">This schedule has changed:</string>
-
+    <string name="scan_schedule_ends_msg">Esta pauta dura %1$s días. Compruebe las fechas de inicio y fin</string>
     <string name="scan_schedules_to_create">%1$s schedules will be created</string>
     <string name="scan_schedules_to_update">%1$s schedules will be updated</string>
-
-    <string name="best_single_day_messge">Acude a la farmacia %1$s y así podrás recoger %2$s medicamentos a la vez:</string>
-    <string name="best_single_day_messge_one_med">Acude a la farmacia %1$s para recoger:</string>
-    <string name="best_single_day_messge_after_pending">Después, podrías acudir de nuevo el %1$s y así recoger %2$s medicamentos a la vez:</string>
-    <string name="best_single_day_messge_after_pending_one_med">Después, podrías acudir de nuevo %1$s y recoger:</string>
-    <string name="pending_meds_msg">Hay medicación en la farmacia pendiente de retirar. Por favor, acude en cuanto sea posible:</string>
-
-
-    <string name="best_date_format">\'de\' EEEE dd \'de\' MMMM</string>
-
-    <string name="best_date_reminder">Recordatorio</string>
-
-    <string-array name="calendar_pickup_reminder_values">
-        <item>1 día antes</item>
-        <item>2 dias antes</item>
-        <item>3 dias antes</item>
-    </string-array>
-
 </resources>
