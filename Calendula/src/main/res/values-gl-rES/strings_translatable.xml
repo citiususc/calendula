@@ -431,5 +431,8 @@ Se escolles non facelo, algunha información das túas medicinas pode perderse."
 <string name="sort_by_presentation">"Presentación"</string>
 <string name="action_sort">"Ordenar"</string>
 <string name="sort_by_alerts">"Alertas"</string>
-<string name="best_date_recommendation_title">Recomendación</string>
+<string name="title_activity_pickup_calendar_short">"Dispensación"</string>
+<string name="calendar_patient_all">"Todos"</string>
+<string name="calendar_updating">"Actualizando calendario…"</string>
+<string name="best_date_recommendation_title">"Recomendación"</string>
 </resources>

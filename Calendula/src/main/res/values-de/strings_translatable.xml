@@ -88,6 +88,10 @@
 <item quantity="one">"Einheit"</item>
 <item quantity="other">"Einheiten"</item>
 </plurals>
+<plurals name="effervescent_units">
+<item quantity="one">"Packung"</item>
+<item quantity="other">"Packungen"</item>
+</plurals>
 <string name="never">"Nie"</string>
 <string name="every_day">"Jeden Tag"</string>
 <string name="once_a_day">"Einmal täglich"</string>
@@ -221,7 +225,7 @@ Danke."</string>
 Routinen sind Zeiten zu denen Sie Ihre Medikamente einnehmen müssen, etwa zum Frühstück oder Abendessen. Sie können sie wiederverwenden um Einnahmepläne schnelle erstellen zu können."</string>
 <string name="medicines_list_empty_text">"Bisher gibt es keine Medikamente.
 
-Fügen Sie Medikamente zur Verwaltung hinzu und Sie werden Zugriff auf Beipackzettel und Warnhinweise haben."</string>
+Fügen Sie Ihre Medikamente zur Tasche hinzu und Sie werden Zugriff auf Beipackzettel und Warnhinweise haben."</string>
 <string name="schedules_list_empty_text">"Bisher gibt es keine Einnahmepläne.
 
 Fügen Sie Einnahmepläne hier hinzu und lassen Sie sich einfach von uns erinnern."</string>
@@ -281,20 +285,22 @@ Für die Entwicklung dieses Projektes verwenden wir mehrere Open Source Biblioth
 <string name="medicine_save_error_message">"Beim Speichern des Medikaments ist ein Fehler aufgetreten."</string>
 <string name="message_schedule_medicine_allergy">"Dieses Medikament kann nicht dem Einnahmeplan hinzugefügt werden, da Sie allergisch auf auf einen der Inhaltsstoffe reagieren könnten."</string>
 <string name="title_allergies_detected_dialog">"Warnhinweis"</string>
-<string name="message_allergies_detected_dialog">"Eines der Medikamente in Ihrer Medikamentenverwaltung enthält das Allergen das Sie gerade hinzugefügt haben. Bitte sehen Sie sich das nocheinmal sorgfältig an."</string>
-<string name="error_duplicate_medicine">"Dieses Medikament ist bereits in Ihrer Medikamentenverwaltung."</string>
+<string name="message_allergies_detected_dialog">"Manche der Medikamente in Ihrer Medikamententasche enthält das Allergen das Sie gerade hinzugefügt haben. Bitte sehen Sie sich das noch einmal sorgfältig an."</string>
+<string name="error_duplicate_medicine">"Dieses Medikament ist bereits in Ihrer Medikamententasche."</string>
 <string name="allergies_group_elements_number">"%1$d Elemente"</string>
 <string name="allergies_selected_number">"%1$d ausgewählt"</string>
 <string name="message_allergy_add_multiple_success">"Ihre Allergieinformation wurde gespeichert."</string>
 <string name="title_allergies_database_required">"Datenbank benötigt"</string>
 <string name="allergies_group_elements_selected">"%1$d Elemente (%2$d ausgewählt)"</string>
-<string name="add_custom_med_button_text">"\"%1$s\" zur Medikamentenverwaltung hinzufügen"</string>
+<string name="add_custom_med_button_text">"\"%1$s\" zur Medikamententasche hinzufügen"</string>
 <string name="medicine_search_not_found_msg">"Entschuldigung, wir konnten nichts mit diesem Namen finden"</string>
 <string name="medicine_search_empty_list_msg">"Geben Sie einen Medikamentennamen oder Code ein um mit der Suche zu beginnen, oder scannen Sie einen Barcode auf einer Verpackung..."</string>
 <string name="search_hint">"Suche..."</string>
+<string name="database_us_display">"US Datenbank"</string>
 <string name="pref_stock_alert_title">"Warne mich wenn das Medikament aufgebraucht ist"</string>
 <string name="permission_dialog_go_to_settings">"Wir konnten diese Aktion nicht ausführen, da Sie die vorausgegangene Anfrage auf den Speicher zuzugreifen abgelehnt haben. Sie können die Berechtigung in der App Info Ansicht erteilen."</string>
 <string name="permission_dialog_ok">"Zur App Info Ansicht gehen"</string>
+<string name="title_alert_allergy">"Für dieses Medikament gibt es Allergiekonflikte"</string>
 <string name="description_alert_allergy">"Sie haben angegeben, dass Sie allergisch gegen manche der Bestandteile dieses Medikaments sind. Allergene:"</string>
 <string name="default_user_name">"Benutzer"</string>
 <string name="relation_user_possession_thing">"%1$ss %2$s"</string>
@@ -345,11 +351,8 @@ Für die Entwicklung dieses Projektes verwenden wir mehrere Open Source Biblioth
 <string name="intro_routines_text">"
         Als Routine wird die Verknüpfung der Medikamenteneinnahme mit regelmäßig stattfindenden Alltagsaktivitäten bzw. mit Zeitpunkten bezeichnet. Mit einer solchen Routine wiederum kann Calendula die Einnahme eines oder mehrerer Medikamente verbinden.
     "</string>
-<string name="intro_meds_title">"Medikamentenverwaltung"</string>
-<string name="intro_meds_text">"
-        Mit der Medikamentenverwaltung können alle einzunehmenden Medikamente verwaltet und organisiert werden. Außerdem besteht die Möglichkeit, automatisch Merkblätter von der 
-        Agencia Española de Medicamentos y Productos Sanitarios, der spanischen Arzneimittelbehörde, zu beziehen. 
-    "</string>
+<string name="intro_meds_title">"Medikamententasche"</string>
+<string name="intro_meds_text">"Behalten Sie die Kontrolle über Ihre Medikamente indem Sie die Medikamententasche verwenden und so einfachen Zugriff auf Packungsbeilagen von offiziellen Medizindatenbanken erhalten."</string>
 <string name="intro_schedules_title">"Pläne"</string>
 <string name="intro_schedules_text">"
         Die Medikamentenpläne verknüpfen die Medikamenteneinahmen mit Routinen unter Berücksichtigung etwaiger Wiederholungen (etwa stündlich oder täglich) oder Einnahmepausen.
@@ -362,12 +365,9 @@ Für die Entwicklung dieses Projektes verwenden wir mehrere Open Source Biblioth
 Die Benachrichtigungseinstellungen können im Optionenmenü angepasst werden.
     "</string>
 <string name="intro_multipat_title">"Mehrere Patienten/-innen"</string>
-<string name="intro_multipat_text">"
-        Calendula erlaubt die Verwaltung der Medikamenteneinnahme mehrerer Personen.
-        
+<string name="intro_multipat_text">"Calendula erlaubt es Ihnen die Medikation mehrerer Patienten zu verwalten, mit eigenen Medikamententaschen, Routinen und Einnahmeplänen.
 
-Alle Einnahmen werden im Homescreen angezeigt.
-    "</string>
+Sie werden alle ihre Einnahmen auf dem Startbildschirm sehen."</string>
 <string name="title_activity_settings">"Einstellungen"</string>
 <string name="pref_header_general">"Allgemein"</string>
 <string name="pref_title_display_name">"Angezeigter Name"</string>
@@ -389,10 +389,12 @@ Alle Einnahmen werden im Homescreen angezeigt.
 <string name="pref_alarm_reminder_two_hours">"2 Stunden"</string>
 <string name="pref_enable_databases_title">"Medikamentendatenbank aktivieren"</string>
 <string name="pref_available_databases_title">"Ausgewählte Datenbank"</string>
+<string name="pref_header_stock">"Bestandskontrolle"</string>
 <string name="pref_stock_do_not_warn">"Nicht benachrichtigen"</string>
 <string name="pref_stock_warn_one_week">"In weniger als 1 Woche"</string>
 <string name="pref_stock_warn_two_weeks">"In weniger als 2 Wochen"</string>
 <string name="pref_stock_warn_three_weeks">"In weniger als 3 Wochen"</string>
+<string name="database_aemps_display">"AEMPS Datenbank"</string>
 <string name="database_setting_up">"Einrichtung läuft..."</string>
 <string name="calendar_date_tomorrow">"am morgigen Tag"</string>
 <string name="delays_one_min">"1 Min."</string>
@@ -406,6 +408,7 @@ Alle Einnahmen werden im Homescreen angezeigt.
 <string name="title_database_update_available">"Datenbank Update verfügbar"</string>
 <string name="text_database_update_available">"Es gibt ein Update für die Medikamentendatenbank. Möchten Sie es herunterladen und installieren?"</string>
 <string name="action_download_update">"Tappen um das Update herunterzuladen und zu installieren!"</string>
+<string name="text_database_update_data_lost">"Manche der Medikamente in Ihrer Medikamententasche wurden beim letzten Update aus der Datenbank entfernt. Sie bleiben weiterhin in Ihrer Medikamententasche, aber Sie werden nicht mehr die Packungsbeilagen, usw. ansehen können."</string>
 <string name="preference_check_for_updates">"Auf Updates überprüfen"</string>
 <string name="database_update_not_available">"Kein Datenbank-Update verfügbar"</string>
 <string name="title_database_update_required">"Datenbank-Update notwendig"</string>
