@@ -237,7 +237,7 @@ public class CalendarActivity extends CalendulaActivity {
 
             LogUtil.d(TAG, "there are not urgent meds, but there are others to pickup");
             if (next.size() > 1) {
-                msg = new SpannableString(getString(R.string.best_single_day_message, best.first.toString(getString(R.string.best_date_format)), next.size()) + "\n\n");
+                msg = new SpannableString(getString(R.string.best_single_day_message, best.first.toString(getString(R.string.best_date_format)), Integer.toString(next.size())) + "\n\n");
             } else {
                 msg = new SpannableString(getString(R.string.best_single_day_message_one_med, best.first.toString(getString(R.string.best_date_format))) + "\n\n");
             }
@@ -259,7 +259,7 @@ public class CalendarActivity extends CalendulaActivity {
                     List<PickupInfo> all = new ArrayList<>();
                     all.addAll(urgent);
                     all.addAll(next);
-                    msg = new SpannableString(getString(R.string.best_single_day_message, bestStr, all.size()) + "\n\n");
+                    msg = new SpannableString(getString(R.string.best_single_day_message, bestStr, Integer.toString(all.size())) + "\n\n");
                     msg = addPickupList(msg, all);
                 }
                 // and the others date is not near
@@ -271,7 +271,7 @@ public class CalendarActivity extends CalendulaActivity {
                     msg = TextUtils.concat(msg, new SpannableString("\n"));
                     if (next.size() > 1) {
                         LogUtil.d(TAG, " size > 1");
-                        msg = TextUtils.concat(msg, getString(R.string.best_single_day_message_after_pending, bestStr, next.size()) + "\n\n");
+                        msg = TextUtils.concat(msg, getString(R.string.best_single_day_message_after_pending, bestStr, Integer.toString(next.size())) + "\n\n");
                     } else {
                         LogUtil.d(TAG, " size <= 1");
                         msg = TextUtils.concat(msg, getString(R.string.best_single_day_message_after_pending_one_med, bestStr) + "\n\n");
