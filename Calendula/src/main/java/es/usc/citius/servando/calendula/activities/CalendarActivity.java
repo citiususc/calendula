@@ -226,7 +226,7 @@ public class CalendarActivity extends CalendulaActivity {
 
         final List<PickupInfo> next = (best == null || best.first == null) ? new ArrayList<PickupInfo>() : best.second;
 
-        CharSequence msg = new SpannableString("No hai medicinas que recoger");
+        CharSequence msg = new SpannableString(getString(R.string.calendar_no_medicines_to_pick_up));
         LocalDate today = LocalDate.now();
 
         // there are not urgent meds, but there are others to pickup
