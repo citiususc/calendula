@@ -30,7 +30,6 @@ repositories {
     mavenCentral()
     jcenter()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-    maven { url "http://dl.bintray.com/journeyapps/maven" }
     maven { url 'https://jitpack.io' }
 }
 
