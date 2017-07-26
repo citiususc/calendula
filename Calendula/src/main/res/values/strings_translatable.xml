@@ -436,15 +436,14 @@ If you choose not to download it, some of your medicines' information may be los
 <string name="calendar_patient_all">"All"</string>
 <string name="calendar_updating">"Updating calendar…"</string>
 <string name="best_date_recommendation_title">"Advice"</string>
-    <string name="best_single_day_message">Visit your pharmacy %1$s and you will be able to pick up %2$s medicines at the same time:</string>
-    <string name="best_single_day_message_one_med">Visit your pharmacy %1$s to pick up:</string>
-    <string name="best_single_day_message_after_pending">Afterwards, you could go again %1$s to pick up %2$s medicines at the same time:</string>
-    <string name="best_single_day_message_after_pending_one_med">Afterwards, you could go again %1$s and pick up:</string>
-    <string name="pending_meds_msg">"There's medicines pending pick-up. Please visit your pharmacy as soon as possible:"</string>
-    <string name="best_date_format">\'de\' EEEE dd \'de\' MMMM</string>
-    <string name="best_date_reminder">Reminder</string>
-    <string name="calendar_pickup_reminder_one_day_before">1 day before</string>
-    <string name="calendar_pickup_reminder_two_days_before">2 days before</string>
-    <string name="calendar_pickup_reminder_three_days_before">3 days before</string>
-    <string name="calendar_no_medicines_to_pick_up">There\'s no medicines to pick up</string>
+<string name="best_single_day_message">"Visit your pharmacy %1$s and you will be able to pick up %2$s medicines at the same time:"</string>
+<string name="best_single_day_message_one_med">"Visit your pharmacy %1$s to pick up:"</string>
+<string name="best_single_day_message_after_pending">"Afterwards, you could go again %1$s to pick up %2$s medicines at the same time:"</string>
+<string name="best_single_day_message_after_pending_one_med">"Afterwards, you could go again %1$s and pick up:"</string>
+<string name="pending_meds_msg">"There's medicines pending pick-up. Please visit your pharmacy as soon as possible:"</string>
+<string name="best_date_format">"'on' MMMM d '('EEEE')'"</string>
+<string name="best_date_reminder">"Reminder"</string>
+<string name="calendar_pickup_reminder_one_day_before">"1 day before"</string>
+<string name="calendar_pickup_reminder_two_days_before">"2 days before"</string>
+<string name="calendar_pickup_reminder_three_days_before">"3 days before"</string>
 </resources>
