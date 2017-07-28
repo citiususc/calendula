@@ -5,9 +5,12 @@ Calendula is an Android assistant for personal medication management, aimed at t
 
 > The app is available for download on Google Play
 >
->[![](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=es.usc.citius.servando.calendula)
->
-
+><table>
+>    <tr>
+>        <td align="center"><a href="https://play.google.com/store/apps/details?id=es.usc.citius.servando.calendula"><img src="https://play.google.com/intl/en_us/badges/images/badge_new.png" alt="Get it on Google Play" ></a></td>
+>        <td align="center"><a href="https://f-droid.org/packages/es.usc.citius.servando.calendula/"><img src="https://gitlab.com/fdroid/artwork/raw/master/badge/get-it-on.png" alt="Get it on F-Droid" height="68"></a></td>
+>    </tr>
+></table>
 Visit our web page for more info  [https://citius.usc.es/calendula/](https://citius.usc.es/calendula/)
 
 ## Getting Started
