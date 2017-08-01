@@ -481,7 +481,6 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
 
                                         Schedule s = c.getSchedule();
                                         Schedule prev = DB.schedules().findByMedicineAndPatient(m, patient);
-                                        // TODO: find by med and patient
                                         if (prev != null) {
                                             LogUtil.d(TAG, "Found previous schedule for med " + m.getId());
                                             updateSchedule(prev, s, c.getScheduleItems());

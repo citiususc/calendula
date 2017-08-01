@@ -71,7 +71,6 @@ public enum PreferenceKeys {
     // Schedules
     SCHEDULES_HELP_SHOWN(R.string.prefkey_schedules_help_shown);
 
-    // TODO: 11/05/17 port the rest of keys here
     @StringRes
     private final int stringId;
 
