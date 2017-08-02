@@ -39,6 +39,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -125,7 +126,6 @@ public class HomePagerActivity extends CalendulaActivity implements
     private boolean active = false;
     private Drawable icAgendaMore;
     private Drawable icAgendaLess;
-    private MenuItem expandItem;
     private FabMenuMgr fabMgr;
     private HomeProfileMgr homeProfileMgr;
     private HomePageAdapter mSectionsPagerAdapter;
@@ -134,6 +134,8 @@ public class HomePagerActivity extends CalendulaActivity implements
     private int pendingRefresh = -2;
     private Queue<Object> pendingEvents = new LinkedList<>();
     private Handler handler;
+
+    private SparseArray<MenuItem> menuItems;
 
     @ColorInt
     private int previousColor = -1;
@@ -156,8 +158,11 @@ public class HomePagerActivity extends CalendulaActivity implements
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
-        expandItem = menu.findItem(R.id.action_expand);
-        menu.findItem(R.id.action_sort).setIcon(IconUtils.icon(getApplicationContext(), CommunityMaterial.Icon.cmd_sort, R.color.white));
+        menuItems = new SparseArray<>(menu.size());
+        for(int menuItem : MENU_ITEMS){
+            menuItems.put(menuItem, menu.findItem(menuItem));
+        }
+        menuItems.get(R.id.action_sort).setIcon(IconUtils.icon(getApplicationContext(), CommunityMaterial.Icon.cmd_sort, R.color.white));
         return true;
     }
 
@@ -169,21 +174,21 @@ public class HomePagerActivity extends CalendulaActivity implements
 
         // hide all items first
         for (int menuItem : MENU_ITEMS) {
-            menu.findItem(menuItem).setVisible(false);
+            menuItems.get(menuItem).setVisible(false);
         }
 
         // show items relevant to the current page
         switch (page) {
             case HOME:
                 final boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).isExpanded();
-                menu.findItem(R.id.action_expand).setVisible(true);
-                menu.findItem(R.id.action_expand).setIcon(!expanded ? icAgendaMore : icAgendaLess);
+                menuItems.get(R.id.action_expand).setVisible(true);
+                menuItems.get(R.id.action_expand).setIcon(!expanded ? icAgendaMore : icAgendaLess);
                 break;
             case MEDICINES:
-                menu.findItem(R.id.action_sort).setVisible(true);
+                menuItems.get(R.id.action_sort).setVisible(true);
                 break;
             case SCHEDULES:
-                menu.findItem(R.id.action_schedules_help).setVisible(true);
+                menuItems.get(R.id.action_schedules_help).setVisible(true);
                 break;
         }
         return super.onPrepareOptionsMenu(menu);
@@ -480,7 +485,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                         dialog.dismiss();
                         if (!expanded) {
                             appBarLayout.setExpanded(expanded);
-                            expandItem.setIcon(expanded ? icAgendaMore : icAgendaLess);
+                            menuItems.get(R.id.action_expand).setIcon(expanded ? icAgendaMore : icAgendaLess);
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
