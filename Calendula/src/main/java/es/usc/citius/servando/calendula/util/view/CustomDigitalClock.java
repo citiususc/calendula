@@ -19,7 +19,6 @@
 package es.usc.citius.servando.calendula.util.view;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -28,7 +27,6 @@ import android.support.v7.widget.AppCompatTextView;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
 
-import java.lang.ref.WeakReference;
 import java.util.Calendar;
 
 /**
@@ -45,7 +43,7 @@ public class CustomDigitalClock extends AppCompatTextView {
     Calendar mCalendar;
     String mFormat;
     boolean showSeconds = false;
-    private WeakReference<FormatChangeObserver> mFormatChangeObserver = new WeakReference<>(new FormatChangeObserver());
+    private FormatChangeObserver formatChangeObserver;
     private Runnable mTicker;
     private Handler mHandler;
     private boolean mTickerStopped = false;
@@ -53,11 +51,13 @@ public class CustomDigitalClock extends AppCompatTextView {
     public CustomDigitalClock(Context context) {
         super(context);
         initClock(context);
+        formatChangeObserver = new FormatChangeObserver();
     }
 
     public CustomDigitalClock(Context context, AttributeSet attrs) {
         super(context, attrs);
         initClock(context);
+        formatChangeObserver = new FormatChangeObserver();
     }
 
     public void setShowSeconds(boolean showSeconds) {
@@ -71,7 +71,9 @@ public class CustomDigitalClock extends AppCompatTextView {
         super.onAttachedToWindow();
         mHandler = new Handler();
 
-        /**
+        getContext().getContentResolver().registerContentObserver(Settings.System.CONTENT_URI, true, formatChangeObserver);
+
+        /*
          * requests a tick on the next hard-second boundary
          */
         mTicker = new Runnable() {
@@ -88,10 +90,7 @@ public class CustomDigitalClock extends AppCompatTextView {
                 //
                 // String text = Html.fromHtml("<b>" + hour + "</b>:" + min).toString();
                 // setText(text);
-                if (showSeconds)
-                    setText("Ahora - " + DateFormat.format(mFormat, mCalendar));
-                else
-                    setText(DateFormat.format(mFormat, mCalendar));
+                setText(DateFormat.format(mFormat, mCalendar));
                 invalidate();
                 long now = SystemClock.uptimeMillis();
                 long next = now + (1000 - now % 1000);
@@ -105,18 +104,15 @@ public class CustomDigitalClock extends AppCompatTextView {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mTickerStopped = true;
+        getContext().getContentResolver().
+                unregisterContentObserver(formatChangeObserver);
     }
 
     private void initClock(Context context) {
-        Resources r = context.getResources();
 
         if (mCalendar == null) {
             mCalendar = Calendar.getInstance();
         }
-
-
-        getContext().getContentResolver().registerContentObserver(Settings.System.CONTENT_URI, true, mFormatChangeObserver.get());
-
         setFormat();
     }
 
