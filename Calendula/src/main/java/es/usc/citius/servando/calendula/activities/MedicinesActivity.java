@@ -106,6 +106,7 @@ import es.usc.citius.servando.calendula.util.Strings;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
+// TODO: 8/11/17 require database for barcode scanning
 public class MedicinesActivity extends CalendulaActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
 
     public static final int MIN_SEARCH_LEN = 3;

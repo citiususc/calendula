@@ -447,4 +447,5 @@ If you choose not to download it, some of your medicines' information may be los
 <string name="calendar_pickup_reminder_two_days_before">"2 days before"</string>
 <string name="calendar_pickup_reminder_three_days_before">"3 days before"</string>
     <string name="calendar_no_medicines_to_pick_up">There\'s no medicines to pick up</string>
+    <string name="ok">OK</string>
 </resources>

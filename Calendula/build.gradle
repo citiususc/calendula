@@ -61,11 +61,11 @@ def getCustomProguardFiles() {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25'
+    compileSdkVersion 26
+    buildToolsVersion '25.0.3'
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 29
         versionName "2.5-SNAPSHOT"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -145,124 +145,149 @@ android {
 
 dependencies {
 
-    compile 'com.google.code.gson:gson'
-    compile 'com.doomonafireball.betterpickers:library:1.5.5'
-    compile 'com.github.filippudak.progresspieview:library:1.0.4'
-    compile 'com.github.amlcurran.showcaseview:library:5.0.0'
+    /********** DEBUGGING **********/
+    // Chrome debug bridge
+    compile 'com.facebook.stetho:stetho:1.5.0'
 
-    // support
+    // Memory leak debugging
+    //  1.5.2 held back because of a bug with gradle 3.0
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    alphaCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    betaCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    androidTestCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+
+
+    /********** SUPPORT **********/
+    // Support libs
     compile "com.android.support:appcompat-v7:$libVersions.android.support"
     compile "com.android.support:cardview-v7:$libVersions.android.support"
-    compile "com.android.support:recyclerview-v7:$libVersions.android.support"
-    compile "com.android.support:palette-v7:$libVersions.android.support"
-    compile "com.android.support:support-v4:$libVersions.android.support"
     compile "com.android.support:design:$libVersions.android.support"
+    compile "com.android.support:palette-v7:$libVersions.android.support"
+    compile "com.android.support:recyclerview-v7:$libVersions.android.support"
     compile "com.android.support:support-annotations:$libVersions.android.support"
+    compile "com.android.support:support-v4:$libVersions.android.support"
 
-    // view/resource binding
-    compile 'com.jakewharton:butterknife:8.4.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    // Testing dependencies
+    //  Made explicit to avoid conflicts with other testing libs
+    androidTestCompile "com.android.support:appcompat-v7:$libVersions.android.support"
+    androidTestCompile "com.android.support:design:$libVersions.android.support"
+    androidTestCompile "com.android.support:recyclerview-v7:$libVersions.android.support"
+    androidTestCompile "com.android.support:support-annotations:$libVersions.android.support"
+    androidTestCompile "com.android.support:support-v4:$libVersions.android.support"
 
-    // round image view
-    compile 'com.makeramen:roundedimageview:1.5.0'
 
-    // Time and date handling
-    compile 'joda-time:joda-time:2.8.2'
-    compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.1.0'
+    /********** TESTING **********/
+    // JUnit
+    testCompile 'junit:junit:4.12'
 
-    // Floating action button
-    compile 'com.melnykov:floatingactionbutton:1.1.0'
+    // Mockito
+    testCompile "org.mockito:mockito-core:2.8.47"
 
-    // calendar view
-    compile 'com.squareup:android-times-square:1.6.4@aar'
-    compile 'com.roomorama:caldroid:3.0.1'
-    compile 'com.github.sundeepk:compact-calendar-view:1.8.4'
+    // Support testing
+    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:3.0.0'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.0'
+    androidTestCompile 'com.android.support.test:rules:1.0.0'
+    androidTestCompile 'com.android.support.test:runner:1.0.0'
 
-    // Tab strip
-    //compile 'com.ogaclejapan.smarttablayout:library:1.1.0@aar'
-    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
+
+    /********** UTILITIES **********/
+    // HTML parsing
+    compile 'org.jsoup:jsoup:1.10.2'
 
     // Event bus
     compile 'de.greenrobot:eventbus:2.2.1'
 
-    // qr scanning
-    compile 'com.journeyapps:zxing-android-embedded:3.4.0@aar'
-    //compile 'com.journeyapps:zxing-android-integration:2.0.1@aar'
-    compile 'com.google.zxing:core:3.0.1'
+    // Jobs
+    compile 'com.evernote:android-job:1.1.11'
 
-    // ormlite
-    compile 'com.j256.ormlite:ormlite-android:4.45'
+    // JSON serializing-deserializing
+    compile 'com.google.code.gson:gson:2.8.1'
 
-    // testing support, to avoid version problems
-    androidTestCompile "com.android.support:appcompat-v7:$libVersions.android.support"
-    androidTestCompile "com.android.support:recyclerview-v7:$libVersions.android.support"
-    androidTestCompile "com.android.support:support-v4:$libVersions.android.support"
-    androidTestCompile "com.android.support:design:$libVersions.android.support"
-    androidTestCompile "com.android.support:support-annotations:$libVersions.android.support"
+    // Lang utilities
+    //  Used for Levenshtein distance, etc
+    compile 'org.apache.commons:commons-lang3:3.6'
 
-    // testing
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
-    androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2'
-    androidTestCompile 'com.android.support.test:rules:0.5'
+    // QR code scanning
+    compile 'com.google.zxing:core:3.3.0'
+    compile 'com.journeyapps:zxing-android-embedded:3.5.0@aar'
 
-    testCompile 'junit:junit:4.12'
-    testCompile "org.mockito:mockito-core:1.9.5"
-
-    compile 'com.getbase:floatingactionbutton:1.9.0'
-
-    // google rfc 2445
+    // Recurrence processing
     compile files('libs/rfc2445.jar')
 
-    compile('com.mikepenz:materialdrawer:4.4.1@aar') {
-        transitive = true
-    }
-    compile 'com.mikepenz:iconics-core:2.7.1@aar'
-    compile 'com.mikepenz:google-material-typeface:2.1.2.1@aar'
-    compile 'com.mikepenz:community-material-typeface:1.2.65.1@aar'
-    compile('com.mikepenz:materialize:0.2.7@aar') {
-        transitive = true
-    }
+    // SQLite ORM
+    compile 'com.j256.ormlite:ormlite-android:5.0'
+
+    // Time and date handling
+    compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.6.0'
+    compile 'joda-time:joda-time:2.9.7'
+
+    // View/resource binding
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile 'com.jakewharton:butterknife:8.8.1'
+
+
+    /********** VIEWS AND VIEW UTILITIES **********/
+    // About page with libraries
     compile('com.mikepenz:aboutlibraries:5.2.5@aar') {
         transitive = true
     }
 
-    //
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.heinrichreimersoftware:material-intro:1.5.8'
+    // Calendar views
+    compile 'com.roomorama:caldroid:3.0.1'
+    compile 'com.squareup:android-times-square:1.6.4@aar'
 
-    // html parsing
-    compile 'org.jsoup:jsoup:1.7.2'
+    // Circular progress "pie" view
+    //  Used for pill picker
+    compile 'com.github.filippudak.progresspieview:library:1.0.4'
 
-    // material dialogs
+    // Dialogs with material style
     compile 'com.github.javiersantos:MaterialStyledDialogs:2.0'
 
-    // jobs
-    compile 'com.evernote:android-job:1.1.3'
+    // Floating Action Button
+    compile 'com.getbase:floatingactionbutton:1.9.0'
 
-    // recyclerview adapters
+    // GIF ImageView
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
+
+    // Icons
+    compile 'com.mikepenz:community-material-typeface:1.2.65.1@aar'
+    compile 'com.mikepenz:google-material-typeface:2.1.2.1@aar'
+    compile 'com.mikepenz:iconics-core:2.7.1@aar'
+
+    // Image loading
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
+    // Intro slides
+    compile 'com.heinrichreimersoftware:material-intro:1.5.8'
+
+    // Material style utilities
+    compile('com.mikepenz:materialize:0.2.7@aar') {
+        transitive = true
+    }
+
+    // Picker DialogFragments
+    //  TODO change to codecamp source
+    compile 'com.doomonafireball.betterpickers:library:1.5.5'
+
+    // Round image view
+    compile 'com.makeramen:roundedimageview:1.5.0'
+
+    // Tab strip
+    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
+
+    // Sliding left drawer
+    compile('com.mikepenz:materialdrawer:4.4.1@aar') {
+        transitive = true
+    }
+
+    // Recyclerview adapters
     compile('com.mikepenz:fastadapter:2.1.5@aar') {
         transitive = true
     }
     compile 'com.mikepenz:fastadapter-commons:2.1.0@aar'
     compile 'com.mikepenz:fastadapter-extensions:2.1.0@aar'
 
-    // levenshtein distance etc
-    compile 'org.apache.commons:commons-lang3:3.5'
-
-    // gif imageview
-    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
-
-    // memory leak debugging
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    alphaCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    betaCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    androidTestCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-
-    // Stetho
-    compile 'com.facebook.stetho:stetho:1.5.0'
-
-
+    
 }

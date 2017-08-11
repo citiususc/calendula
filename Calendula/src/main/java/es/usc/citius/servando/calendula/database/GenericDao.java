@@ -21,10 +21,12 @@ package es.usc.citius.servando.calendula.database;
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.CloseableWrappedIterable;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.DatabaseResultsMapper;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.dao.ObjectCache;
 import com.j256.ormlite.dao.RawRowMapper;
+import com.j256.ormlite.dao.RawRowObjectMapper;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.FieldType;
 import com.j256.ormlite.stmt.DeleteBuilder;
@@ -39,6 +41,7 @@ import com.j256.ormlite.support.DatabaseConnection;
 import com.j256.ormlite.support.DatabaseResults;
 import com.j256.ormlite.table.ObjectFactory;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
@@ -290,7 +293,7 @@ public abstract class GenericDao<T, I> implements Dao<T, I> {
     }
 
     @Override
-    public void closeLastIterator() throws SQLException {
+    public void closeLastIterator() throws IOException {
         dao.closeLastIterator();
     }
 
@@ -439,18 +442,6 @@ public abstract class GenericDao<T, I> implements Dao<T, I> {
     }
 
     @Override
-    @Deprecated
-    public boolean isAutoCommit() throws SQLException {
-        return dao.isAutoCommit();
-    }
-
-    @Override
-    @Deprecated
-    public void setAutoCommit(boolean autoCommit) throws SQLException {
-        dao.setAutoCommit(autoCommit);
-    }
-
-    @Override
     public boolean isAutoCommit(DatabaseConnection connection) throws SQLException {
         return dao.isAutoCommit(connection);
     }
@@ -480,4 +471,38 @@ public abstract class GenericDao<T, I> implements Dao<T, I> {
     }
 
 
+    @Override
+    public int create(Collection<T> datas) throws SQLException {
+        return dao.create(datas);
+    }
+
+    @Override
+    public <UO> GenericRawResults<UO> queryRaw(String query, DataType[] columnTypes, RawRowObjectMapper<UO> mapper, String... arguments) throws SQLException {
+        return dao.queryRaw(query, columnTypes, mapper, arguments);
+    }
+
+    @Override
+    public <UO> GenericRawResults<UO> queryRaw(String query, DatabaseResultsMapper<UO> mapper, String... arguments) throws SQLException {
+        return dao.queryRaw(query, mapper, arguments);
+    }
+
+    @Override
+    public void registerObserver(DaoObserver observer) {
+        dao.registerObserver(observer);
+    }
+
+    @Override
+    public void unregisterObserver(DaoObserver observer) {
+        dao.unregisterObserver(observer);
+    }
+
+    @Override
+    public String getTableName() {
+        return null;
+    }
+
+    @Override
+    public void notifyChanges() {
+
+    }
 }
