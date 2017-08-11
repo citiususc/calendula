@@ -194,38 +194,38 @@ dependencies {
 
     /********** UTILITIES **********/
     // HTML parsing
-    compile 'org.jsoup:jsoup:1.7.2'
+    compile 'org.jsoup:jsoup:1.10.2'
 
     // Event bus
     compile 'de.greenrobot:eventbus:2.2.1'
 
     // Jobs
-    compile 'com.evernote:android-job:1.1.3'
+    compile 'com.evernote:android-job:1.1.11'
 
     // JSON serializing-deserializing
-    compile 'com.google.code.gson:gson'
+    compile 'com.google.code.gson:gson:2.8.1'
 
     // Lang utilities
     //  Used for Levenshtein distance, etc
-    compile 'org.apache.commons:commons-lang3:3.5'
+    compile 'org.apache.commons:commons-lang3:3.6'
 
     // QR code scanning
-    compile 'com.google.zxing:core:3.0.1'
-    compile 'com.journeyapps:zxing-android-embedded:3.4.0@aar'
+    compile 'com.google.zxing:core:3.3.0'
+    compile 'com.journeyapps:zxing-android-embedded:3.5.0@aar'
 
     // Recurrence processing
     compile files('libs/rfc2445.jar')
 
     // SQLite ORM
-    compile 'com.j256.ormlite:ormlite-android:4.45'
+    compile 'com.j256.ormlite:ormlite-android:5.0'
 
     // Time and date handling
-    compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.1.0'
-    compile 'joda-time:joda-time:2.8.2'
+    compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.6.0'
+    compile 'joda-time:joda-time:2.9.7'
 
     // View/resource binding
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-    compile 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile 'com.jakewharton:butterknife:8.8.1'
 
 
     /********** VIEWS AND VIEW UTILITIES **********/
