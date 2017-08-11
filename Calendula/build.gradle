@@ -148,7 +148,6 @@ dependencies {
     compile 'com.google.code.gson:gson'
     compile 'com.doomonafireball.betterpickers:library:1.5.5'
     compile 'com.github.filippudak.progresspieview:library:1.0.4'
-    compile 'com.github.amlcurran.showcaseview:library:5.0.0'
 
     // support
     compile "com.android.support:appcompat-v7:$libVersions.android.support"
@@ -170,16 +169,11 @@ dependencies {
     compile 'joda-time:joda-time:2.8.2'
     compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.1.0'
 
-    // Floating action button
-    compile 'com.melnykov:floatingactionbutton:1.1.0'
-
     // calendar view
     compile 'com.squareup:android-times-square:1.6.4@aar'
     compile 'com.roomorama:caldroid:3.0.1'
-    compile 'com.github.sundeepk:compact-calendar-view:1.8.4'
 
     // Tab strip
-    //compile 'com.ogaclejapan.smarttablayout:library:1.1.0@aar'
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
 
     // Event bus
@@ -187,7 +181,6 @@ dependencies {
 
     // qr scanning
     compile 'com.journeyapps:zxing-android-embedded:3.4.0@aar'
-    //compile 'com.journeyapps:zxing-android-integration:2.0.1@aar'
     compile 'com.google.zxing:core:3.0.1'
 
     // ormlite
