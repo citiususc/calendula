@@ -10,7 +10,7 @@ buildscript {
     ext {
         libVersions = [
                 android: [
-                        support: '25.4.0'
+                        support: '26.0.1'
                 ]
         ]
     }
