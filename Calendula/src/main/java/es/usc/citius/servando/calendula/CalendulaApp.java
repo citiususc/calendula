@@ -18,9 +18,9 @@
 
 package es.usc.citius.servando.calendula;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.support.multidex.MultiDexApplication;
 
 import com.facebook.stetho.Stetho;
 import com.squareup.leakcanary.LeakCanary;
@@ -42,7 +42,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 /**
  * Created by castrelo on 4/10/14.
  */
-public class CalendulaApp extends Application {
+public class CalendulaApp extends MultiDexApplication {
 
     // INTENTS
     public static final String INTENT_EXTRA_ACTION = "action";
@@ -128,7 +128,7 @@ public class CalendulaApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        if(BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
         }
 
