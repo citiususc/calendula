@@ -47,11 +47,11 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.doomonafireball.betterpickers.numberpicker.NumberPickerBuilder;
-import com.doomonafireball.betterpickers.numberpicker.NumberPickerDialogFragment;
-import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
-import com.doomonafireball.betterpickers.recurrencepicker.EventRecurrence;
-import com.doomonafireball.betterpickers.recurrencepicker.RecurrencePickerDialog;
+import com.codetroopers.betterpickers.numberpicker.NumberPickerBuilder;
+import com.codetroopers.betterpickers.numberpicker.NumberPickerDialogFragment;
+import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment;
+import com.codetroopers.betterpickers.recurrencepicker.EventRecurrence;
+import com.codetroopers.betterpickers.recurrencepicker.RecurrencePickerDialogFragment;
 import com.google.ical.values.DateTimeValueImpl;
 import com.google.ical.values.DateValue;
 import com.google.ical.values.Frequency;
@@ -60,6 +60,8 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -90,8 +92,8 @@ import es.usc.citius.servando.calendula.util.LogUtil;
  * Created by joseangel.pineiro on 12/11/13.
  */
 public class ScheduleImportFragment extends Fragment
-        implements NumberPickerDialogFragment.NumberPickerDialogHandler,
-        RecurrencePickerDialog.OnRecurrenceSetListener, RadialTimePickerDialog.OnTimeSetListener {
+        implements NumberPickerDialogFragment.NumberPickerDialogHandlerV2,
+        RecurrencePickerDialogFragment.OnRecurrenceSetListener, RadialTimePickerDialogFragment.OnTimeSetListener {
 
     public static final String ARG_PRESCRIPTION = "ARG_PRESCRIPTION";
     public static final int REF_DIALOG_HOURLY_INTERVAL = 1;
@@ -280,39 +282,38 @@ public class ScheduleImportFragment extends Fragment
     }
 
     @Override
-    public void onDialogNumberSet(int reference, int number, double decimal, boolean isNegative,
-                                  double fullNumber) {
+    public void onDialogNumberSet(int reference, BigInteger number, double decimal, boolean isNegative, BigDecimal fullNumber) {
 
         if (reference == REF_DIALOG_ROUTINE_INTERVAL) {
-            intervalEditText.setText("" + number);
-            schedule.rule().setInterval(number);
+            intervalEditText.setText(Integer.toString(number.intValue()));
+            schedule.rule().setInterval(number.intValue());
         } else if (reference == REF_DIALOG_HOURLY_INTERVAL) {
-            hourlyIntervalEditText.setText("" + number);
+            hourlyIntervalEditText.setText(Integer.toString(number.intValue()));
             schedule.rule().setFrequency(Frequency.HOURLY);
-            schedule.rule().setInterval(number);
+            schedule.rule().setInterval(number.intValue());
         } else if (reference == REF_DIALOG_CYCLE_DAYS) {
             periodValue.setText(String.valueOf(number));
-            cycleDays = number;
+            cycleDays = number.intValue();
             if (cycleRest > 0) {
                 schedule.setCycle(cycleDays, cycleRest);
             }
         } else if (reference == REF_DIALOG_CYCLE_REST) {
             periodRest.setText(String.valueOf(number));
-            cycleRest = number;
+            cycleRest = number.intValue();
             if (cycleDays > 0) {
                 schedule.setCycle(cycleDays, cycleRest);
             }
         }
     }
 
-    @Override
-    public void onTimeSet(RadialTimePickerDialog radialTimePickerDialog, int hour,
-                          int minute) {
 
+    @Override
+    public void onTimeSet(RadialTimePickerDialogFragment dialog, int hour, int minute) {
         String time = new LocalTime(hour, minute).toString("kk:mm");
         hourlyIntervalFrom.setText(getString(R.string.first_intake) + ": " + time);
         schedule.setStartTime(new LocalTime(hour, minute));
     }
+
 
     @Override
     public void onRecurrenceSet(String s) {
@@ -526,8 +527,8 @@ public class ScheduleImportFragment extends Fragment
     void showIntervalPickerDIalog() {
         NumberPickerBuilder npb =
                 new NumberPickerBuilder().setDecimalVisibility(NumberPicker.INVISIBLE)
-                        .setMinNumber(1)
-                        .setMaxNumber(31)
+                        .setMinNumber(BigDecimal.ONE)
+                        .setMaxNumber(BigDecimal.valueOf(31))
                         .setPlusMinusVisibility(NumberPicker.INVISIBLE)
                         .setFragmentManager(getChildFragmentManager())
                         .setTargetFragment(this).setReference(REF_DIALOG_ROUTINE_INTERVAL)
@@ -555,16 +556,16 @@ public class ScheduleImportFragment extends Fragment
     }
 
     void showRecurrencePickerDialog() {
-        RecurrencePickerDialog dialog = new RecurrencePickerDialog();
+        RecurrencePickerDialogFragment dialog = new RecurrencePickerDialogFragment();
 
         DateTime start = schedule.start() != null ? schedule.start().toDateTimeAtStartOfDay()
                 : DateTime.now().withTimeAtStartOfDay();
 
         Bundle b = new Bundle();
 
-        b.putString(RecurrencePickerDialog.BUNDLE_RRULE,
+        b.putString(RecurrencePickerDialogFragment.BUNDLE_RRULE,
                 schedule.rule().toIcal().replace("RRULE:", ""));
-        b.putLong(RecurrencePickerDialog.BUNDLE_START_TIME_MILLIS, DateTime.now().getMillis());
+        b.putLong(RecurrencePickerDialogFragment.BUNDLE_START_TIME_MILLIS, DateTime.now().getMillis());
         //b.putString(RecurrencePickerDialog.BUNDLE_TIME_ZONE, t.timezone);
 
         dialog.setArguments(b);
@@ -1052,8 +1053,8 @@ public class ScheduleImportFragment extends Fragment
             public void onClick(View v) {
                 NumberPickerBuilder npb =
                         new NumberPickerBuilder().setDecimalVisibility(NumberPicker.INVISIBLE)
-                                .setMinNumber(1)
-                                .setMaxNumber(100)
+                                .setMinNumber(BigDecimal.ONE)
+                                .setMaxNumber(BigDecimal.valueOf(100))
                                 .setPlusMinusVisibility(NumberPicker.INVISIBLE)
                                 .setFragmentManager(getChildFragmentManager())
                                 .setTargetFragment(ScheduleImportFragment.this)
@@ -1068,8 +1069,8 @@ public class ScheduleImportFragment extends Fragment
             public void onClick(View v) {
                 NumberPickerBuilder npb =
                         new NumberPickerBuilder().setDecimalVisibility(NumberPicker.INVISIBLE)
-                                .setMinNumber(1)
-                                .setMaxNumber(100)
+                                .setMinNumber(BigDecimal.ONE)
+                                .setMaxNumber(BigDecimal.valueOf(100))
                                 .setPlusMinusVisibility(NumberPicker.INVISIBLE)
                                 .setFragmentManager(getChildFragmentManager())
                                 .setTargetFragment(ScheduleImportFragment.this)
@@ -1101,9 +1102,9 @@ public class ScheduleImportFragment extends Fragment
 
                 DateTime time = schedule.startTime().toDateTimeToday();
 
-                RadialTimePickerDialog timePickerDialog =
-                        RadialTimePickerDialog.newInstance(ScheduleImportFragment.this,
-                                time.getHourOfDay(), time.getMinuteOfHour(), true);
+                RadialTimePickerDialogFragment timePickerDialog = new RadialTimePickerDialogFragment()
+                        .setOnTimeSetListener(ScheduleImportFragment.this)
+                        .setStartTime(time.getHourOfDay(), time.getMinuteOfHour());
                 timePickerDialog.show(getChildFragmentManager(), "111");
             }
         });

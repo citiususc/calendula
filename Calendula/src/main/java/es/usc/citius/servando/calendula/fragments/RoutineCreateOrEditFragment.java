@@ -31,13 +31,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
-import com.doomonafireball.betterpickers.timepicker.TimePickerBuilder;
-import com.doomonafireball.betterpickers.timepicker.TimePickerDialogFragment;
+import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment;
+import com.codetroopers.betterpickers.timepicker.TimePickerBuilder;
+import com.codetroopers.betterpickers.timepicker.TimePickerDialogFragment;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
@@ -49,15 +52,22 @@ import es.usc.citius.servando.calendula.util.Snack;
 /**
  * Created by joseangel.pineiro
  */
-public class RoutineCreateOrEditFragment extends DialogFragment implements RadialTimePickerDialog.OnTimeSetListener, TimePickerDialogFragment.TimePickerDialogHandler {
+public class RoutineCreateOrEditFragment extends DialogFragment implements RadialTimePickerDialogFragment.OnTimeSetListener, TimePickerDialogFragment.TimePickerDialogHandler {
 
     private static final String TAG = "RoutineCoEFragment";
+
     OnRoutineEditListener mRoutineEditCallback;
     Routine mRoutine;
 
+
+    @BindView(R.id.button2)
     Button timeButton;
+    @BindView(R.id.routine_edit_name)
     TextView mNameTextView;
+
     Button mConfirmButton;
+
+    Unbinder unbinder = null;
 
     int hour;
     int minute;
@@ -67,11 +77,9 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_or_edit_routine, container, false);
+        ButterKnife.bind(this, rootView);
 
         pColor = DB.patients().getActive(getActivity()).color();
-
-        mNameTextView = (TextView) rootView.findViewById(R.id.routine_edit_name);
-        timeButton = (Button) rootView.findViewById(R.id.button2);
 
         timeButton.setTextColor(pColor);
 
@@ -107,9 +115,10 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
                 float density = getResources().getDisplayMetrics().densityDpi;
                 LogUtil.d(TAG, "Density: " + density);
                 if (density >= DisplayMetrics.DENSITY_XHIGH) {
-                    RadialTimePickerDialog timePickerDialog = RadialTimePickerDialog
-                            .newInstance(RoutineCreateOrEditFragment.this, hour, minute, true);
-                    timePickerDialog.show(getChildFragmentManager(), "111");
+                    RadialTimePickerDialogFragment timePickerFragment = new RadialTimePickerDialogFragment()
+                            .setOnTimeSetListener(RoutineCreateOrEditFragment.this)
+                            .setStartTime(hour, minute);
+                    timePickerFragment.show(getActivity().getSupportFragmentManager(), "TIME_PICKER_FRAGMENT");
                 } else {
                     TimePickerBuilder tpb = new TimePickerBuilder()
                             .setFragmentManager(getChildFragmentManager())
@@ -146,6 +155,15 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
         super.onSaveInstanceState(outState);
         if (mRoutine != null)
             outState.putLong(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, mRoutine.getId());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (unbinder != null) {
+            unbinder.unbind();
+            unbinder = null;
+        }
     }
 
     public void onEdit() {
@@ -229,15 +247,15 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
     }
 
     @Override
-    public void onTimeSet(RadialTimePickerDialog dialog, int hourOfDay, int minute) {
-        this.hour = hourOfDay;
-        this.minute = minute;
-        updateTime();
+    public void onDialogTimeSet(int ref, int hour, int minute) {
+        onTimeSet(null, hour, minute);
     }
 
     @Override
-    public void onDialogTimeSet(int ref, int hour, int minute) {
-        onTimeSet(null, hour, minute);
+    public void onTimeSet(RadialTimePickerDialogFragment dialog, int hourOfDay, int minute) {
+        this.hour = hourOfDay;
+        this.minute = minute;
+        updateTime();
     }
 
     void updateTime() {

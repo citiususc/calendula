@@ -21,8 +21,8 @@ package es.usc.citius.servando.calendula.persistence;
 import android.content.Context;
 import android.text.format.Time;
 
-import com.doomonafireball.betterpickers.recurrencepicker.EventRecurrence;
-import com.doomonafireball.betterpickers.recurrencepicker.EventRecurrenceFormatter;
+import com.codetroopers.betterpickers.recurrencepicker.EventRecurrence;
+import com.codetroopers.betterpickers.recurrencepicker.EventRecurrenceFormatter;
 import com.google.ical.values.DateValue;
 import com.google.ical.values.Frequency;
 import com.j256.ormlite.field.DatabaseField;

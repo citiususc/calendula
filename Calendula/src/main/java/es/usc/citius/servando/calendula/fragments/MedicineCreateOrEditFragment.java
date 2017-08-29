@@ -46,8 +46,8 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.doomonafireball.betterpickers.numberpicker.NumberPickerBuilder;
-import com.doomonafireball.betterpickers.numberpicker.NumberPickerDialogFragment;
+import com.codetroopers.betterpickers.numberpicker.NumberPickerBuilder;
+import com.codetroopers.betterpickers.numberpicker.NumberPickerDialogFragment;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.j256.ormlite.stmt.PreparedQuery;
@@ -57,6 +57,8 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.joda.time.LocalDate;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +93,7 @@ import es.usc.citius.servando.calendula.util.medicine.StockUtils;
  * Created by joseangel.pineiro on 12/4/13.
  */
 public class MedicineCreateOrEditFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener,
-        NumberPickerDialogFragment.NumberPickerDialogHandler {
+        NumberPickerDialogFragment.NumberPickerDialogHandlerV2 {
 
 
     private static final int DIALOG_STOCK_ADD = 1;
@@ -498,9 +500,8 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     }
 
     @Override
-    public void onDialogNumberSet(int reference, int number, double decimal, boolean isNegative, double fullNumber) {
-
-        float amount = (float) fullNumber;
+    public void onDialogNumberSet(int reference, BigInteger number, double decimal, boolean isNegative, BigDecimal fullNumber) {
+        float amount = fullNumber.floatValue();
         if (reference == DIALOG_STOCK_ADD) {
             stock = (stock == -1) ? amount : (stock + amount);
         } else if (reference == DIALOG_STOCK_REMOVE) {
@@ -523,7 +524,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     void showStockDialog(int ref) {
         NumberPickerBuilder npb =
                 new NumberPickerBuilder()
-                        .setMinNumber(1)
+                        .setMinNumber(BigDecimal.ONE)
                         //.setLabelText(ref == DIALOG_STOCK_ADD ? "Increase stock by" : "Decrease stock by")
                         .setDecimalVisibility(NumberPicker.VISIBLE)
                         .setPlusMinusVisibility(NumberPicker.INVISIBLE)
