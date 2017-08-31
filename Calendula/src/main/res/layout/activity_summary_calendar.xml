@@ -26,7 +26,7 @@
                                        android:layout_height="56dp"
                                        android:layout_marginTop="@dimen/status_bar_height"
                                        android:background="@color/dark_grey_home"
-                                       android:title="Calendar"
+                                       android:title="@string/title_activity_calendar"
                                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                                        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 

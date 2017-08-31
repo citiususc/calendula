@@ -167,7 +167,7 @@
                 android:layout_marginLeft="72dp"
                 android:layout_marginTop="25dp"
                 android:gravity="center_vertical"
-                android:text="Stock"
+                android:text="@string/stock"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/dark_grey_text"
                 android:textSize="20sp"/>

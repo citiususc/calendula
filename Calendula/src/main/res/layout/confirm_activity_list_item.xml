@@ -19,6 +19,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:background="@color/transparent"
                 android:paddingLeft="10dp">
 
@@ -47,7 +48,7 @@
         android:fontFamily="sans-serif-light"
         android:gravity="center_vertical"
         android:paddingBottom="3dp"
-        android:text="Ibuprofeno"
+        tools:text="Ibuprofeno"
         android:textColor="#222"
         android:textSize="19dp"
         android:textStyle="bold"/>
@@ -63,7 +64,7 @@
         android:alpha="0.7"
         android:fontFamily="sans-serif-condensed"
         android:gravity="top"
-        android:text="1 capsule"
+        tools:text="1 capsule"
         android:textColor="#111"
         android:textSize="17dp"/>
 
@@ -77,7 +78,7 @@
         android:alpha="0.7"
         android:fontFamily="sans-serif-light"
         android:gravity="top"
-        android:text="Not taken yet"
+        tools:text="Not taken yet"
         android:textColor="#555"
         android:textSize="13dp"/>
 

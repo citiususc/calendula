@@ -106,7 +106,7 @@
                                                    android:layout_marginTop="@dimen/status_bar_height"
                                                    android:gravity="top"
                                                    android:minHeight="?attr/actionBarSize"
-                                                   android:title="Patients"
+                                                   android:title="@string/title_activity_patients"
                                                    app:layout_collapseMode="pin"
                                                    app:layout_scrollFlags="scroll|enterAlways|snap"
                                                    app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -205,7 +205,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginRight="16dp"
                         android:layout_marginTop="15dp"
-                        android:text="Close"
+                        android:text="@string/material_drawer_close"
                         android:textSize="15dp"/>
 
                 </RelativeLayout>
@@ -235,7 +235,7 @@
             android:layout_height="fill_parent"
             android:fontFamily="sans-serif-condensed"
             android:gravity="center"
-            android:text="Almorzo"
+            tools:text="Almorzo"
             android:textColor="@color/agenda_item_title"
             android:textSize="20dp"
             android:textStyle="bold"

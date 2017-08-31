@@ -21,6 +21,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:paddingLeft="6dp"
                 android:paddingRight="6dp"
                 android:paddingTop="6dp">
@@ -54,7 +55,7 @@
                 android:paddingRight="5dp"
                 android:paddingTop="5dp"
                 android:singleLine="false"
-                android:text="Medicine name that needs two rows"
+                tools:text="Medicine name that needs two rows"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#222"
                 android:textSize="16sp"/>
@@ -70,7 +71,7 @@
                 android:paddingBottom="2dp"
                 android:paddingTop="0dp"
                 android:singleLine="true"
-                android:text="100 microgramos"
+                tools:text="100 microgramos"
                 android:textColor="#999"
                 android:textSize="15dp"
                 android:textStyle="bold"/>
@@ -86,7 +87,7 @@
                 android:paddingBottom="2dp"
                 android:paddingTop="0dp"
                 android:singleLine="false"
-                android:text="50 frascos de 100 ml, comprimidos recubiertos con película EFG"
+                tools:text="50 frascos de 100 ml, comprimidos recubiertos con película EFG"
                 android:textColor="#000"
                 android:textSize="15dp"/>
 
@@ -100,7 +101,7 @@
                 android:paddingBottom="2dp"
                 android:paddingTop="5dp"
                 android:singleLine="false"
-                android:text="Med description large name Med description large name Med description large name"
+                tools:text="Med description large name Med description large name Med description large name"
                 android:textAllCaps="false"
                 android:textColor="#222"
                 android:textSize="14dp"
@@ -131,7 +132,7 @@
             android:background="@drawable/medicine_search_cn_bg"
             android:gravity="center_horizontal"
             android:padding="3dp"
-            android:text="123456"
+            tools:text="123456"
             android:textColor="#fff"
             android:textSize="12dp"
             android:textStyle="bold"/>

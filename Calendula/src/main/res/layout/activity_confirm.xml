@@ -19,7 +19,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent"
+                xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/main_content"
@@ -93,7 +94,7 @@
                     android:layout_marginBottom="70dp"
                     android:gravity="center"
                     android:paddingTop="60dp"
-                    android:text="hace 5 minutos"
+                    tools:text="hace 5 minutos"
                     android:textColor="#ffffff"
                     android:textSize="20dp"
                     android:textStyle="bold"
@@ -136,7 +137,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="5dp"
                             android:gravity="bottom"
-                            android:text="08:"
+                            tools:text="08:"
                             android:textColor="#111"
                             android:textSize="20dp"/>
 
@@ -147,7 +148,7 @@
                             android:layout_centerVertical="true"
                             android:layout_toRightOf="@+id/routines_list_item_hour"
                             android:gravity="bottom"
-                            android:text="00"
+                            tools:text="00"
                             android:textColor="#111"
                             android:textSize="20dp"/>
 
@@ -158,7 +159,7 @@
                             android:layout_gravity="left"
                             android:layout_toRightOf="@+id/routines_list_item_minute"
                             android:gravity="bottom"
-                            android:text=" h"
+                            tools:text=" h"
                             android:textColor="#111"
                             android:textSize="20dp"
                             android:visibility="gone"/>
@@ -173,7 +174,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_toRightOf="@+id/patient_avatar"
                         android:fontFamily="sans-serif-condensed"
-                        android:text="Almorzo"
+                        tools:text="Almorzo"
                         android:textColor="@color/agenda_item_title"
                         android:textSize="20dp"
                         android:textStyle="bold"
@@ -202,7 +203,7 @@
                                                    android:layout_gravity="top"
                                                    android:gravity="top"
                                                    android:minHeight="65dp"
-                                                   android:title="Patients"
+                                                   android:title="@string/title_activity_patients"
                                                    app:layout_collapseMode="pin"
                                                    app:layout_scrollFlags="scroll|enterAlways|snap"
                                                    app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -263,7 +264,7 @@
             android:layout_toRightOf="@+id/patient_avatar_title"
             android:fontFamily="sans-serif-condensed"
             android:gravity="center_vertical"
-            android:text="Ángel"
+            tools:text="Ángel"
             android:textColor="#fff"
             android:textSize="20dp"
             android:textStyle="bold"/>

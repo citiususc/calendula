@@ -28,7 +28,7 @@
                                        android:id="@+id/toolbar"
                                        android:layout_width="match_parent"
                                        android:layout_height="65dp"
-                                       android:title="Routines"
+                                       android:title="@string/title_activity_routines"
                                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                                        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -83,7 +83,7 @@
         android:paddingLeft="26dp"
         android:paddingRight="26dp"
         android:singleLine="true"
-        android:text="Ibuprofeno 500 dsa dsadsa dsadsadas dsadas"
+        tools:text="Ibuprofeno 500 dsa dsadsa dsadsadas dsadas"
         android:textColor="#fff"
         android:textSize="18sp"/>
 
@@ -103,7 +103,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:gravity="center|bottom"
-        android:text="Confirm prescription"
+        tools:text="Confirm prescription"
         android:textColor="#fff"
         android:textSize="14sp"/>
 

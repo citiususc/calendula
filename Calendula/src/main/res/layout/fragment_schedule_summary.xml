@@ -18,7 +18,8 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
         android:id="@+id/summaryTitle"
@@ -67,7 +68,7 @@
         android:layout_below="@+id/sched_summary_medname"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
-        android:text="Every day"
+        tools:text="Every day"
         android:textColor="@color/dark_grey_text"
         android:textSize="18dp"/>
 
@@ -78,7 +79,7 @@
         android:layout_below="@+id/sched_summary_medi_days"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="Three times a day"
+        tools:text="Three times a day"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/android_blue"
         android:textSize="18dp"

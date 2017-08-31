@@ -19,6 +19,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:background="@color/white">
 
     <RelativeLayout
@@ -43,7 +44,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-light"
             android:gravity="center"
-            android:text="Lunch"
+            tools:text="Lunch"
             android:textColor="@color/android_blue_dark"
             android:textSize="20sp"/>
 
@@ -56,7 +57,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-condensed"
             android:gravity="center"
-            android:text="Ángel"
+            tools:text="Ángel"
             android:textColor="#444"
             android:textSize="22dp"/>
 
@@ -68,7 +69,7 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:paddingRight="0dp"
-            android:text="12:45"
+            tools:text="12:45"
             android:textColor="@color/android_blue_dark"
             android:textSize="30sp"/>
 
@@ -144,7 +145,7 @@
         android:padding="7dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_arrow_back_black_48dp"
-        android:text="Close"
+        android:text="@string/material_drawer_close"
         android:textSize="15sp"
         android:visibility="gone"/>
 
@@ -160,7 +161,7 @@
         android:padding="7dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_history_black_48dp"
-        android:text="Delay"
+        android:text="@string/delay"
         android:textSize="15sp"
         android:visibility="visible"/>
 

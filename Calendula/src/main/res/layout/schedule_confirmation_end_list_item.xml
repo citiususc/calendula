@@ -19,13 +19,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
+              xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical">
 
     <TextView
         android:id="@+id/med_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ibuprofeno"
+        tools:text="Ibuprofeno"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#666"
         android:textSize="18dp"/>
@@ -36,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:padding="2dp"
-        android:text="Every day"
+        tools:text="Every day"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#111"/>
 

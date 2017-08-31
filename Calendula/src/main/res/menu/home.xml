@@ -42,21 +42,21 @@
         android:id="@+id/action_expand"
         android:icon="@drawable/ic_unfold_less_white_48dp"
         android:orderInCategory="100"
-        android:title="Expand"
+        android:title="@string/expand"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/action_calendar"
         android:icon="@drawable/ic_event_white_48dp"
         android:orderInCategory="100"
-        android:title="Show pickups"
+        android:title="@string/show_pickups"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/action_schedules_help"
         android:icon="@drawable/ic_help_white_48dp"
         android:orderInCategory="100"
-        android:title="Help"
+        android:title="@string/help"
         app:showAsAction="always"/>
 
     <!--<item-->

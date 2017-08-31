@@ -18,7 +18,8 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -150,7 +151,7 @@
                 android:ellipsize="end"
                 android:fontFamily="sans-serif-condensed"
                 android:gravity="bottom"
-                android:text="Breakfast"
+                tools:text="Breakfast"
                 android:textAllCaps="false"
                 android:textColor="@color/agenda_item_title"
                 android:textSize="20dp"
@@ -183,7 +184,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
                     android:gravity="bottom"
-                    android:text="08:"
+                    tools:text="08:"
                     android:textColor="#111"
                     android:textSize="20dp"/>
 
@@ -194,7 +195,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/routines_list_item_hour"
                     android:gravity="bottom"
-                    android:text="00"
+                    tools:text="00"
                     android:textColor="#111"
                     android:textSize="20dp"/>
 
@@ -205,7 +206,7 @@
                     android:layout_gravity="left"
                     android:layout_toRightOf="@+id/routines_list_item_minute"
                     android:gravity="bottom"
-                    android:text=" h"
+                    tools:text=" h"
                     android:textColor="#111"
                     android:textSize="20dp"
                     android:visibility="gone"/>

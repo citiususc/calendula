@@ -21,6 +21,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -43,7 +44,7 @@
             android:ems="10"
             android:gravity="center"
             android:inputType="numberDecimal"
-            android:text="1"
+            tools:text="1"
             android:textAlignment="gravity"
             android:textSize="20sp"
             android:textStyle="bold"/>

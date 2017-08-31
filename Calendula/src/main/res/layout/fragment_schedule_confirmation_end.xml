@@ -21,6 +21,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            xmlns:tools="http://schemas.android.com/tools"
             android:background="#fff">
 
     <RelativeLayout
@@ -41,7 +42,7 @@
             android:layout_toRightOf="@+id/imageView7"
             android:gravity="center_vertical|left"
             android:paddingRight="26dp"
-            android:text="1 schedules will be created"
+            tools:text="1 schedules will be created"
             android:textColor="#222"
             android:textSize="20sp"/>
 
@@ -65,7 +66,7 @@
             android:layout_marginTop="26dp"
             android:gravity="center_vertical|left"
             android:paddingRight="26dp"
-            android:text="2 schedules will be updated"
+            tools:text="2 schedules will be updated"
             android:textColor="#222"
             android:textSize="20sp"/>
 
