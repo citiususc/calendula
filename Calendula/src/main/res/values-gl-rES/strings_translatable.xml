@@ -445,4 +445,10 @@ Se escolles non facelo, algunha información das túas medicinas pode perderse."
 <string name="calendar_pickup_reminder_one_day_before">"1 día antes"</string>
 <string name="calendar_pickup_reminder_two_days_before">"2 días antes"</string>
 <string name="calendar_pickup_reminder_three_days_before">"3 días antes"</string>
+<string name="calendar_no_medicines_to_pick_up">"Non hai medicamentos para recoller"</string>
+<string name="ok">"OK"</string>
+<string name="stock">"Stock"</string>
+<string name="expand">"Expandir"</string>
+<string name="show_pickups">"Ver dispensación"</string>
+<string name="help">"Axuda"</string>
 </resources>
