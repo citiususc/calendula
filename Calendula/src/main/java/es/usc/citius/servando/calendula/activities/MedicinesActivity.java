@@ -100,13 +100,14 @@ import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
-// TODO: 8/11/17 require database for barcode scanning
 public class MedicinesActivity extends CalendulaActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
 
     public static final int MIN_SEARCH_LEN = 3;
@@ -415,8 +416,19 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                 .colorRes(R.color.black)
                 .actionBar();
 
-        barcodeBtn.setCompoundDrawables(null, null, icBarcode, null);
-        barcodeBtn.setCompoundDrawablePadding(10);
+        if (!PreferenceUtils.getString(PreferenceKeys.DRUGDB_CURRENT_DB, CalendulaApp.getContext().getString(R.string.database_none_id))
+                .equals(CalendulaApp.getContext().getString(R.string.database_none_id))) {
+            barcodeBtn.setCompoundDrawables(null, null, icBarcode, null);
+            barcodeBtn.setCompoundDrawablePadding(10);
+            barcodeBtn.setVisibility(View.VISIBLE);
+            barcodeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    doScan();
+                }
+            });
+        }
+
         closeSearchButton.setImageDrawable(icClose);
         backButton.setImageDrawable(icBack);
         addCustomMedBtn.setVisibility(View.GONE);
@@ -430,12 +442,6 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         } else {
             hideSearchView();
         }
-        barcodeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                doScan();
-            }
-        });
     }
 
     @Override

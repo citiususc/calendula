@@ -160,12 +160,12 @@
 
             <Button
                 android:id="@+id/barcode_scan_btn"
-                android:background="@drawable/shape_list_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/shape_list_item"
                 android:padding="10dp"
-                android:text="@string/scan_barcode"/>
-
+                android:text="@string/scan_barcode"
+                android:visibility="gone"/>
 
 
         </LinearLayout>
