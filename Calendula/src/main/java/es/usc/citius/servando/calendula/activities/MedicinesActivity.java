@@ -18,39 +18,17 @@
 
 package es.usc.citius.servando.calendula.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.util.LongSparseArray;
-import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,18 +37,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.j256.ormlite.dao.CloseableIterator;
-import com.j256.ormlite.stmt.PreparedQuery;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
-
-import org.apache.commons.lang3.StringUtils;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -78,7 +47,6 @@ import java.util.concurrent.Callable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
@@ -86,35 +54,24 @@ import es.usc.citius.servando.calendula.allergies.AllergenFacade;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.drugdb.DBRegistry;
-import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
-import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.DrivingCautionAlert;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
-import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
-import es.usc.citius.servando.calendula.util.PreferenceKeys;
-import es.usc.citius.servando.calendula.util.PreferenceUtils;
-import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
-import es.usc.citius.servando.calendula.util.Strings;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
-import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 public class MedicinesActivity extends CalendulaActivity implements MedicineCreateOrEditFragment.OnMedicineEditListener {
 
-    public static final int MIN_SEARCH_LEN = 3;
+    public static final String EXTRA_SEARCH_TEXT = "MedicinesActivity.extras.SEARCH_TEXT";
     private static final String TAG = "MedicinesActivity";
-
-//    RoutinesListFragment listFragment;
-//    RoutineCreateOrEditFragment editFragment;
+    private static final int REQUEST_CODE_GET_MED = 1314;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -129,43 +86,17 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
      */
     @BindView(R.id.pager)
     ViewPager mViewPager;
-
     String qrData;
     Long mMedicineId;
     MenuItem removeItem;
-
-    @BindView(R.id.search_view)
-    View searchView;
-    @BindView(R.id.search_edit_text)
-    EditText searchEditText;
-    @BindView(R.id.close_search_button)
-    ImageButton closeSearchButton;
-    @BindView(R.id.back_button)
-    ImageButton backButton;
-    @BindView(R.id.textView10)
-    TextView emptyListText;
     @BindView(R.id.add_button)
-    FloatingActionButton addButton;
-    @BindView(R.id.search_list)
-    ListView searchList;
-    @BindView(R.id.main_progress_bar)
-    ProgressBar progressBar;
-    @BindView(R.id.add_custom_med_btn)
-    Button addCustomMedBtn;
-    @BindView(R.id.barcode_scan_btn)
-    Button barcodeBtn;
-
-
-    Button addCustomMedFooter;
-
-    ArrayAdapter<Prescription> adapter;
-
+    FloatingActionButton fab;
     int color;
-    PrescriptionDBMgr dbMgr;
+
+    private Prescription prescriptionToSet = null;
+    private String prescriptionNameToSet = null;
     private String intentAction;
     private String intentSearchText = null;
-
-    private String lastSearch = "";
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -188,38 +119,8 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         }
     }
 
-    public void showSearchView(final String text) {
-        // TODO: 08/02/17 move search to separate activity and use startActivityFromResult 
-        addButton.setVisibility(View.GONE);
-        searchView.setVisibility(View.VISIBLE);
-        searchEditText.requestFocus();
-        if (text != null) {
-            searchEditText.setText(text);
-            searchEditText.setSelection(text.length());
-            adapter.getFilter().filter(text);
-        }
-
-        searchEditText.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                keyboard.showSoftInput(searchEditText, 0);
-            }
-        }, 300);
-
-    }
-
-    public void hideSearchView() {
-        searchView.setBackgroundColor(color);
-        searchView.setVisibility(View.GONE);
-        addButton.setVisibility(View.VISIBLE);
-        InputMethodManager imm = (InputMethodManager) getSystemService(
-                Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
-    }
-
     public boolean isSearchViewShowing() {
-        return searchView.getVisibility() == View.VISIBLE;
+        return false; //FIXME
     }
 
     @Override
@@ -270,24 +171,13 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         finish();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (searchView.getVisibility() == View.VISIBLE && mMedicineId != -1) {
-            hideSearchView();
-        } else {
-            super.onBackPressed();
-        }
+    public void showSearchView(@Nullable final String searchText) {
+        LogUtil.d(TAG, "showSearchView() called with: searchText = [" + searchText + "]");
+        Intent i = new Intent(this, MedicinesSearchActivity.class);
+        i.putExtra(MedicinesSearchActivity.EXTRA_SEARCH_TERM, searchText);
+        startActivityForResult(i, REQUEST_CODE_GET_MED);
     }
 
-    public void doScan() {
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-        integrator.setOrientationLocked(true);
-        integrator.setTimeout(30 * 1000);
-        integrator.setBeepEnabled(false);
-        integrator.setPrompt(getString(R.string.scan_barcode));
-        integrator.initiateScan();
-    }
 
     Fragment getViewPagerFragment(int position) {
         return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
@@ -302,10 +192,6 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         color = DB.patients().getActive(this).color();
         setupToolbar(null, color);
         setupStatusBar(color);
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE,
-                android.graphics.PorterDuff.Mode.MULTIPLY);
-
-        dbMgr = DBRegistry.instance().current();
 
         processIntent();
 
@@ -316,170 +202,48 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        adapter = new AutoCompleteAdapter(this, R.layout.med_drop_down_item);
-        searchList.setAdapter(adapter);
-        searchList.setEmptyView(findViewById(android.R.id.empty));
 
-        View footerView = getLayoutInflater().inflate(R.layout.medicine_search_footer, null, false);
-        addCustomMedFooter = (Button) footerView.findViewById(R.id.add_custom_med_btn);
-        searchList.addFooterView(footerView);
-
-        addCustomMedFooter.setCompoundDrawables(new IconicsDrawable(this)
-                .icon(CommunityMaterial.Icon.cmd_plus)
-                .color(color)
-                .sizeDp(25).paddingDp(5), null, null, null);
-
-        ((ImageView) findViewById(R.id.med_list_empty_icon)).setImageDrawable(new IconicsDrawable(this)
-                .icon(CommunityMaterial.Icon.cmd_magnify)
-                .colorRes(R.color.black_20)
-                .sizeDp(80).paddingDp(5)
-        );
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        addCustomMedFooter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addCustomMed();
-            }
-        });
-
-        addButton.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).onEdit();
             }
         });
 
-        closeSearchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSearchView("");
-            }
-        });
+        title.setBackgroundColor(color);
 
-        searchEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                LogUtil.d(TAG, "afterTextChanged: " + s.toString());
-                progressBar.setVisibility(View.VISIBLE);
-                addCustomMedFooter.setVisibility(View.GONE);
-                String filter = searchEditText.getText().toString();
-                adapter.getFilter().filter(filter);
-            }
-        });
-
-        searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Prescription p = (Prescription) parent.getItemAtPosition(position);
-                hideSearchView();
-                ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).setPrescription(p);
-            }
-        });
-
-        searchList.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                KeyboardUtils.hideKeyboard(MedicinesActivity.this);
-                return false;
-            }
-        });
-
-        Drawable icClose = new IconicsDrawable(this)
-                .icon(CommunityMaterial.Icon.cmd_close_circle)
-                .colorRes(R.color.white)
-                .actionBar();
-
-        Drawable icBack = new IconicsDrawable(this)
-                .icon(CommunityMaterial.Icon.cmd_arrow_left)
-                .colorRes(R.color.white)
-                .actionBar();
-
-        Drawable icBarcode = new IconicsDrawable(this)
-                .icon(CommunityMaterial.Icon.cmd_barcode)
-                .colorRes(R.color.black)
-                .actionBar();
-
-        if (!PreferenceUtils.getString(PreferenceKeys.DRUGDB_CURRENT_DB, CalendulaApp.getContext().getString(R.string.database_none_id))
-                .equals(CalendulaApp.getContext().getString(R.string.database_none_id))) {
-            barcodeBtn.setCompoundDrawables(null, null, icBarcode, null);
-            barcodeBtn.setCompoundDrawablePadding(10);
-            barcodeBtn.setVisibility(View.VISIBLE);
-            barcodeBtn.setOnClickListener(new View.OnClickListener() {
+        if (mMedicineId == -1 || intentSearchText != null) {
+            mViewPager.post(new Runnable() {
                 @Override
-                public void onClick(View v) {
-                    doScan();
+                public void run() {
+                    showSearchView(intentSearchText);
                 }
             });
         }
 
-        closeSearchButton.setImageDrawable(icClose);
-        backButton.setImageDrawable(icBack);
-        addCustomMedBtn.setVisibility(View.GONE);
-        title.setBackgroundColor(color);
-        searchView.setBackgroundColor(color);
-        searchList.setDivider(null);
-        searchList.setDividerHeight(0);
-
-        if (mMedicineId == -1 || intentSearchText != null) {
-            showSearchView(intentSearchText);
-        } else {
-            hideSearchView();
-        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            String contents = data.getStringExtra("SCAN_RESULT");
-            String format = data.getStringExtra("SCAN_RESULT_FORMAT");
-            // Handle successful scan
-            LogUtil.d(TAG, "onActivityResult: " + contents + ", " + format);
-            if (contents != null) {
-                final Prescription p = getPrescriptionFromBarcode(contents);
-                if (p != null) {
-                    new Handler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            //hideSearchView();
-                            //((MedicineCreateOrEditFragment) getViewPagerFragment(0)).setPrescription(p);
-                            searchEditText.setText(p.getCode());
-                        }
-                    });
+        LogUtil.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
+        if (requestCode == REQUEST_CODE_GET_MED) {
+            if (resultCode == RESULT_OK) {
+                final String prescriptionName = data.getStringExtra(MedicinesSearchActivity.RETURN_EXTRA_PRESCRIPTION_NAME);
+                if (prescriptionName != null) {
+                    ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).setMedicineName(prescriptionName);
                 } else {
-                    LogUtil.d(TAG, "onCreate: " + p);
-                    Toast.makeText(this, R.string.medicine_not_found_error, Toast.LENGTH_SHORT).show();
+                    final Prescription p = data.getParcelableExtra(MedicinesSearchActivity.RETURN_EXTRA_PRESCRIPTION);
+                    if (p != null) {
+                        ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).setPrescription(p);
+                    } else {
+                        LogUtil.e(TAG, "onActivityResult: result was OK but no prescription extras received ");
+                    }
                 }
-            } else {
-                Toast.makeText(this, R.string.medicine_not_found_error, Toast.LENGTH_SHORT).show();
             }
-        } else if (resultCode == RESULT_CANCELED) {
-            // Handle cancel
-            LogUtil.d(TAG, "onActivityResult: Cancel");
+        } else {
+            LogUtil.w(TAG, "onActivityResult: invalid request code " + requestCode + ", ignoring");
         }
-    }
-
-    @OnClick(R.id.add_custom_med_btn)
-    protected void addCustomMed() {
-        hideSearchView();
-        ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).setMedicineName(searchEditText.getText().toString().trim());
     }
 
     @Override
@@ -488,17 +252,10 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         overridePendingTransition(0, 0);
     }
 
-    private Prescription getPrescriptionFromBarcode(String barcode) {
-        int len = barcode.length();
-        String cn = len > 6 ? barcode.substring(len - 7, len - 1) : null;
-        LogUtil.d(TAG, "getPrescriptionFromBarcode: " + cn);
-        return DB.drugDB().prescriptions().findByCn(cn);
-    }
-
     private void processIntent() {
         mMedicineId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, -1);
         intentAction = getIntent().getStringExtra(CalendulaApp.INTENT_EXTRA_ACTION);
-        intentSearchText = getIntent().getStringExtra("search_text");
+        intentSearchText = getIntent().getStringExtra(EXTRA_SEARCH_TEXT);
         qrData = getIntent().getStringExtra("qr_data");
     }
 
@@ -647,249 +404,4 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
     }
 
-    // Search adapter
-    public class AutoCompleteAdapter extends ArrayAdapter<Prescription> implements Filterable {
-        int hColor = Color.parseColor("#000000");
-        int cnColor = Color.WHITE;//ScreenUtils.equivalentNoAlpha(color,0.8f);
-        int cnHColor = hColor;
-        Drawable icProspect;
-        private List<Prescription> mData;
-        final Filter filter = new Filter() {
-
-            private boolean exactMatch;
-
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                FilterResults filterResults = new FilterResults();
-                if (constraint != null && constraint.length() >= MIN_SEARCH_LEN && !TextUtils.isEmpty(constraint)) {
-                    try {
-                        exactMatch = false;
-                        final String search = constraint.toString().toLowerCase().trim();
-                        final String preFilter = search.subSequence(0, MIN_SEARCH_LEN).toString();
-
-                        // preliminary filter with the first characters of the search (exact)
-                        final PreparedQuery<Prescription> prepare = DB.drugDB().prescriptions().queryBuilder()
-                                .where().like(Prescription.COLUMN_NAME, "%" + preFilter + "%")
-                                .or().like(Prescription.COLUMN_CODE, "%" + search + "%")
-                                .prepare();
-                        final CloseableIterator<Prescription> preIt = DB.drugDB().prescriptions().iterator(prepare);
-                        final List<Prescription> prescriptions = new ArrayList<>(500);
-                        final LongSparseArray<Pair<Integer, Integer>> metaInfo = new LongSparseArray<>(500);
-
-                        final PrescriptionDBMgr current = DBRegistry.instance().current();
-
-                        while (preIt.hasNext()) {
-                            Prescription p = preIt.next();
-
-                            if (p.getCode().contains(search)) {
-                                prescriptions.add(p);
-                                if (p.getCode().equals(search)) {
-                                    exactMatch = true;
-                                }
-                            } else {
-                                final String name = current.shortName(p).toLowerCase();
-
-                                final int idx = name.indexOf(preFilter);
-                                // check if the pre-filter is in the short name
-                                if (idx >= 0) {
-                                    final String sub = name.substring(idx, Math.min(idx + search.length(), name.length()));
-                                    final int distance = StringUtils.getLevenshteinDistance(search, sub);
-                                    // add to results only if distance is less than 2
-                                    if (distance <= 2) {
-                                        prescriptions.add(p);
-                                        metaInfo.put(p.getId(), new Pair<>(distance, idx));
-                                    }
-                                }
-                            }
-                        }
-                        preIt.close();
-
-                        // sort results by distance, then by index, then by name
-                        // give priority to code matches over name matches
-                        Collections.sort(prescriptions, new Comparator<Prescription>() {
-                            @Override
-                            public int compare(Prescription o1, Prescription o2) {
-                                final Pair<Integer, Integer> meta1 = metaInfo.get(o1.getId());
-                                final Pair<Integer, Integer> meta2 = metaInfo.get(o2.getId());
-
-                                if (meta1 == null || (meta2 == null)) {
-                                    // null means it was a code match (no distance info)
-                                    // code match has priority over name match
-                                    if (meta2 != null) {
-                                        return -1;
-                                    } else if (meta1 != null) {
-                                        return 1;
-                                    } else {
-                                        return current.shortName(o1).compareTo(current.shortName(o2));
-                                    }
-                                } else {
-                                    final int i = meta1.first.compareTo(meta2.first);
-                                    if (i == 0) {
-                                        final int i2 = meta1.second.compareTo(meta2.second);
-                                        if (i2 == 0) {
-                                            return current.shortName(o1).compareTo(current.shortName(o2));
-                                        }
-                                        return i2;
-                                    }
-                                    return i;
-                                }
-                            }
-                        });
-
-                        if (!prescriptions.isEmpty()) {
-                            final Prescription first = prescriptions.get(0);
-                            if (metaInfo.get(first.getId()) != null && metaInfo.get(first.getId()).first == 0) {
-                                // Check if any word in the first result with distance 0
-                                // is exactly the constraint.
-                                // We need to check this because even if distance is 0 the matching
-                                // may have been done with only part of a word.
-                                final String sn = current.shortName(first).trim().toLowerCase();
-                                if (sn.equals(search)) {
-                                    exactMatch = true;
-                                } else {
-                                    final String[] split = sn.split("\\s+");
-                                    for (String s : split) {
-                                        if (s.equals(search)) {
-                                            exactMatch = true;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        //Fetcher.fetchNames(constraint.toString());
-                        filterResults.values = prescriptions;
-                        filterResults.count = prescriptions.size();
-                    } catch (Exception e) {
-                        LogUtil.e(TAG, "Exception occurred while searching for prescriptions", e);
-                        filterResults.values = new ArrayList<>();
-                        filterResults.count = 0;
-                    }
-                } else {
-                    filterResults.values = new ArrayList<>();
-                    filterResults.count = 0;
-                }
-
-                LogUtil.d(TAG, "performFiltering: Results: " + filterResults.count);
-
-                return filterResults;
-            }
-
-            @Override
-            @SuppressWarnings("unchecked")
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                mData = (List<Prescription>) results.values;
-                notifyDataSetChanged();
-                lastSearch = constraint.toString();
-                progressBar.setVisibility(View.GONE);
-                if (results.count == 0) {
-                    if (constraint.length() >= MIN_SEARCH_LEN && !TextUtils.isEmpty(constraint)) {
-                        addCustomMedBtn.setText(getString(R.string.add_custom_med_button_text, constraint));
-                        addCustomMedBtn.setVisibility(View.VISIBLE);
-                        emptyListText.setText(getString(R.string.medicine_search_not_found_msg));
-                    } else {
-                        addCustomMedBtn.setVisibility(View.GONE);
-                        emptyListText.setText(getString(R.string.medicine_search_empty_list_msg));
-                    }
-                } else {
-                    if (!exactMatch) {
-                        addCustomMedFooter.setText(getString(R.string.add_custom_med_button_text, constraint));
-                        addCustomMedFooter.setVisibility(View.VISIBLE);
-                    }
-                    addCustomMedBtn.setVisibility(View.GONE);
-                }
-            }
-        };
-
-        public AutoCompleteAdapter(Context context, int textViewResourceId) {
-            super(context, textViewResourceId);
-            mData = new ArrayList<>();
-            icProspect = new IconicsDrawable(getContext())
-                    .icon(CommunityMaterial.Icon.cmd_link_variant)
-                    .color(color)
-                    .paddingDp(10)
-                    .sizeDp(40);
-        }
-
-        @Override
-        public int getCount() {
-            return mData.size();
-        }
-
-        @Override
-        public Prescription getItem(int index) {
-            return mData.get(index);
-        }
-
-        @Override
-        public View getView(int position, View item, ViewGroup parent) {
-
-            if (item == null) {
-                final LayoutInflater inflater = getLayoutInflater();
-                item = inflater.inflate(R.layout.med_drop_down_item, null);
-            }
-            if (mData.size() > position) {
-
-                final Prescription p = mData.get(position);
-
-                String name = dbMgr.shortName(p);
-                Presentation pres = dbMgr.expectedPresentation(p);
-
-                final String search = lastSearch.toLowerCase();
-                final int searchLength = lastSearch.length();
-                final String lowerCode = p.getCode().toLowerCase();
-                final String lowerName = name.toLowerCase();
-
-                ImageButton prospectIcon = ((ImageButton) item.findViewById(R.id.prospect_icon));
-                TextView cnView = (TextView) item.findViewById(R.id.prescription_cn);
-                TextView nameView = (TextView) item.findViewById(R.id.text1);
-                TextView doseView = (TextView) item.findViewById(R.id.text2);
-                TextView contentView = (TextView) item.findViewById(R.id.text3);
-                ImageView prView = ((ImageView) item.findViewById(R.id.presentation_image));
-
-                cnView.setTextColor(cnColor);
-                if (lowerCode.contains(search)) {
-                    cnView.setText(Strings.getHighlighted(p.getCode(), search, cnHColor));
-                    nameView.setText(Strings.toProperCase(name));
-                } else {
-                    cnView.setText(p.getCode());
-                    if (lowerName.contains(search)) {
-                        nameView.setText(Strings.getHighlighted(name, search, hColor));
-                    } else {
-                        String minSearch = search.substring(0, MIN_SEARCH_LEN);
-                        int index = lowerName.indexOf(minSearch);
-                        if (index >= 0) {
-                            nameView.setText(Strings.getHighlighted(name, index, Math.min(index + searchLength, name.length() - 1), hColor));
-                        } else {
-                            nameView.setText(Strings.toProperCase(name));
-                        }
-                    }
-                }
-
-                doseView.setText(p.getDose());
-                contentView.setText(p.getContent());
-                prospectIcon.setImageDrawable(icProspect);
-
-                prospectIcon.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ProspectUtils.openProspect(p, MedicinesActivity.this, true);
-                    }
-                });
-
-                prView.setImageDrawable(new IconicsDrawable(getContext())
-                        .icon(pres == null ? CommunityMaterial.Icon.cmd_help : Presentation.iconFor(pres))
-                        .color(ScreenUtils.equivalentNoAlpha(color, 0.8f))
-                        .paddingDp(10)
-                        .sizeDp(72));
-            }
-            return item;
-        }
-
-        @Override
-        public Filter getFilter() {
-            return filter;
-        }
-    }
 }
