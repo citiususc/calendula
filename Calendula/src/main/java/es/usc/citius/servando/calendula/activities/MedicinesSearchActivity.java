@@ -29,7 +29,6 @@ import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -92,12 +91,9 @@ public class MedicinesSearchActivity extends CalendulaActivity {
 
 
     Button addCustomMedFooter;
-
-    private ArrayAdapter<Prescription> adapter;
-
     int color;
     PrescriptionDBMgr dbMgr;
-
+    private MedicinesSearchAutoCompleteAdapter adapter;
 
     public void doScan() {
         IntentIntegrator integrator = new IntentIntegrator(this);
@@ -230,7 +226,7 @@ public class MedicinesSearchActivity extends CalendulaActivity {
         searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Prescription p = (Prescription) parent.getItemAtPosition(position);
+                Prescription p = ((MedicinesSearchAutoCompleteAdapter.PrescriptionSearchWrapper) parent.getItemAtPosition(position)).getPrescription();
                 Intent i = new Intent();
                 i.putExtra(RETURN_EXTRA_PRESCRIPTION, p);
                 setResult(RESULT_OK, i);
