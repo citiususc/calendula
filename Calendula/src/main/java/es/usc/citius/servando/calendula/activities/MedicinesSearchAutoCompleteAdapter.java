@@ -52,8 +52,10 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
     private static final int MAX_LEVENSHTEIN_DISTANCE = 2;
 
     private final Filter filter;
+    private final PrescriptionDBMgr currentDBMgr;
     private final MedicinesSearchActivity medicinesSearchActivity;
     private final Drawable icProspect;
+    private final Comparator<PrescriptionSearchWrapper> searchSortComparator = new SearchSortComparator();
 
     private List<PrescriptionSearchWrapper> mData;
 
@@ -67,6 +69,7 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
                 .paddingDp(10)
                 .sizeDp(40);
         this.filter = new MedicinesAutoCompleteFilter();
+        this.currentDBMgr = DBRegistry.instance().current();
     }
 
     @Override
@@ -79,6 +82,7 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
         return mData.get(index);
     }
 
+    @NonNull
     @Override
     public View getView(int position, View item, @NonNull ViewGroup parent) {
 
@@ -107,16 +111,14 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
 
             // highlight the matches
             switch (wrapper.matchType) {
-                case EXACT_NAME:
-                case FUZZY_NAME:
+                case NAME:
                     nameView.setText(Strings.getHighlighted(name, match, HIGHLIGHT_COLOR));
                     cnView.setText(prescription.getCode());
                     break;
-                case EXACT_CODE:
+                case CODE:
                     cnView.setText(Strings.getHighlighted(prescription.getCode(), match, HIGHLIGHT_COLOR));
                     nameView.setText(name);
                     break;
-
             }
 
             // setup the rest of the views
@@ -150,24 +152,66 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
         private final Prescription prescription;
         private final MatchType matchType;
         private final String match;
+        private final Integer distance;
+        private final Integer matchIndex;
 
-        public PrescriptionSearchWrapper(Prescription prescription, MatchType matchType, String match) {
+        public PrescriptionSearchWrapper(Prescription prescription, MatchType matchType, String match, Integer distance, Integer matchIndex) {
             this.prescription = prescription;
             this.matchType = matchType;
             this.match = match;
+            this.distance = distance;
+            this.matchIndex = matchIndex;
         }
 
         public Prescription getPrescription() {
+            // Prescription should be readable for the ListView to print this adapter's info
             return prescription;
         }
 
-        private enum MatchType {
-            EXACT_NAME, EXACT_CODE, FUZZY_NAME
+        private enum MatchType implements Comparable<MatchType> {
+            CODE, NAME
+        }
+    }
+
+    /**
+     * Sorts results in the following order:
+     * <ul>
+     * <li>Code matches take precedence over name matches</li>
+     * <li>Name matches will be sorted by distance, then by index</li>
+     * <li>Code matches will be sorted by index</li>
+     * <li>Finally, ties will be sorted by alphabetical order of the prescription's name</li>
+     * </ul>
+     */
+    private class SearchSortComparator implements Comparator<PrescriptionSearchWrapper> {
+        @Override
+        public int compare(PrescriptionSearchWrapper o1, PrescriptionSearchWrapper o2) {
+            // if the matches are not of the same type, code matches take precedence over name matches
+            final int typeOrder = o1.matchType.compareTo(o2.matchType);
+            if (typeOrder != 0) {
+                return typeOrder;
+            }
+            // sort by distance only if it's a name match (codes are always distance 0)
+            if (o1.matchType == PrescriptionSearchWrapper.MatchType.NAME) {
+                final int distanceOrder = o1.distance.compareTo(o2.distance);
+                if (distanceOrder != 0) {
+                    return distanceOrder;
+                }
+            }
+            // sort by match index
+            final int indexOrder = o1.matchIndex.compareTo(o2.matchIndex);
+            if (indexOrder != 0) {
+                return indexOrder;
+            }
+            // finally sort by prescription name
+            return currentDBMgr.shortName(o1.prescription).compareTo(currentDBMgr.shortName(o2.prescription));
         }
     }
 
     private class MedicinesAutoCompleteFilter extends Filter {
 
+        /**
+         * Determines if we show the "Add custom med" button. Only shown if there's no exact matches for the search.
+         */
         private boolean anyExactMatch;
 
         @Override
@@ -188,67 +232,37 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
                     final List<PrescriptionSearchWrapper> resultArray = new ArrayList<>(500);
                     final LongSparseArray<Pair<Integer, Integer>> metaInfo = new LongSparseArray<>(500);
 
-                    final PrescriptionDBMgr current = DBRegistry.instance().current();
 
                     while (preIt.hasNext()) {
                         Prescription p = preIt.next();
 
-                        if (p.getCode().contains(search)) {
-                            resultArray.add(new PrescriptionSearchWrapper(p, PrescriptionSearchWrapper.MatchType.EXACT_CODE, search));
+                        final int codeIndex = p.getCode().indexOf(search);
+                        if (codeIndex != -1) {
+                            // code matches are only exact, fuzzy id searches make no sense
+                            resultArray.add(new PrescriptionSearchWrapper(p, PrescriptionSearchWrapper.MatchType.CODE, search, 0, codeIndex));
                             if (p.getCode().equals(search)) {
                                 anyExactMatch = true;
                             }
                         } else {
-                            final String name = current.shortName(p).toLowerCase();
+                            final String name = currentDBMgr.shortName(p).toLowerCase();
 
-                            final int idx = name.indexOf(preFilter);
+                            final int nameIndex = name.indexOf(preFilter);
                             // check if the pre-filter is in the short name
-                            if (idx >= 0) {
-                                final String sub = name.substring(idx, Math.min(idx + search.length(), name.length()));
+                            if (nameIndex != -1) {
+                                final String sub = name.substring(nameIndex, Math.min(nameIndex + search.length(), name.length()));
                                 final int distance = LevenshteinDistance.getDefaultInstance().apply(search, sub);
                                 // add to results only if distance is less than 2
                                 if (distance <= MAX_LEVENSHTEIN_DISTANCE) {
-                                    resultArray.add(new PrescriptionSearchWrapper(p, distance == 0 ? PrescriptionSearchWrapper.MatchType.EXACT_NAME : PrescriptionSearchWrapper.MatchType.FUZZY_NAME, sub));
-                                    metaInfo.put(p.getId(), new Pair<>(distance, idx));
+                                    resultArray.add(new PrescriptionSearchWrapper(p, PrescriptionSearchWrapper.MatchType.NAME, sub, distance, nameIndex));
+                                    metaInfo.put(p.getId(), new Pair<>(distance, nameIndex));
                                 }
                             }
                         }
                     }
                     preIt.close();
 
-                    // sort results by distance, then by index, then by name
-                    // give priority to code matches over name matches
-                    Collections.sort(resultArray, new Comparator<PrescriptionSearchWrapper>() {
-                        @Override
-                        public int compare(PrescriptionSearchWrapper o1, PrescriptionSearchWrapper o2) {
-                            final Prescription p1 = o1.prescription;
-                            final Pair<Integer, Integer> meta1 = metaInfo.get(p1.getId());
-                            final Prescription p2 = o2.prescription;
-                            final Pair<Integer, Integer> meta2 = metaInfo.get(p2.getId());
-
-                            if (meta1 == null || (meta2 == null)) {
-                                // null means it was a code match (no distance info)
-                                // code match has priority over name match
-                                if (meta2 != null) {
-                                    return -1;
-                                } else if (meta1 != null) {
-                                    return 1;
-                                } else {
-                                    return current.shortName(p1).compareTo(current.shortName(p2));
-                                }
-                            } else {
-                                final int i = meta1.first.compareTo(meta2.first);
-                                if (i == 0) {
-                                    final int i2 = meta1.second.compareTo(meta2.second);
-                                    if (i2 == 0) {
-                                        return current.shortName(p1).compareTo(current.shortName(p2));
-                                    }
-                                    return i2;
-                                }
-                                return i;
-                            }
-                        }
-                    });
+                    // sort results
+                    Collections.sort(resultArray, searchSortComparator);
 
                     if (!resultArray.isEmpty()) {
                         final Prescription first = resultArray.get(0).prescription;
@@ -257,7 +271,7 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
                             // is exactly the constraint.
                             // We need to check this because even if distance is 0 the matching
                             // may have been done with only part of a word.
-                            final String sn = current.shortName(first).trim().toLowerCase();
+                            final String sn = currentDBMgr.shortName(first).trim().toLowerCase();
                             if (sn.equals(search)) {
                                 anyExactMatch = true;
                             } else {
