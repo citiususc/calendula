@@ -229,9 +229,7 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
                             .or().like(Prescription.COLUMN_CODE, "%" + search + "%")
                             .prepare();
                     final CloseableIterator<Prescription> preIt = DB.drugDB().prescriptions().iterator(prepare);
-                    final List<PrescriptionSearchWrapper> resultArray = new ArrayList<>(500);
-                    final LongSparseArray<Pair<Integer, Integer>> metaInfo = new LongSparseArray<>(500);
-
+                    final List<PrescriptionSearchWrapper> resultData = new ArrayList<>(500);
 
                     while (preIt.hasNext()) {
                         Prescription p = preIt.next();
@@ -239,7 +237,7 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
                         final int codeIndex = p.getCode().indexOf(search);
                         if (codeIndex != -1) {
                             // code matches are only exact, fuzzy id searches make no sense
-                            resultArray.add(new PrescriptionSearchWrapper(p, PrescriptionSearchWrapper.MatchType.CODE, search, 0, codeIndex));
+                            resultData.add(new PrescriptionSearchWrapper(p, PrescriptionSearchWrapper.MatchType.CODE, search, 0, codeIndex));
                             if (p.getCode().equals(search)) {
                                 anyExactMatch = true;
                             }
@@ -253,8 +251,7 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
                                 final int distance = LevenshteinDistance.getDefaultInstance().apply(search, sub);
                                 // add to results only if distance is less than 2
                                 if (distance <= MAX_LEVENSHTEIN_DISTANCE) {
-                                    resultArray.add(new PrescriptionSearchWrapper(p, PrescriptionSearchWrapper.MatchType.NAME, sub, distance, nameIndex));
-                                    metaInfo.put(p.getId(), new Pair<>(distance, nameIndex));
+                                    resultData.add(new PrescriptionSearchWrapper(p, PrescriptionSearchWrapper.MatchType.NAME, sub, distance, nameIndex));
                                 }
                             }
                         }
@@ -262,33 +259,28 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
                     preIt.close();
 
                     // sort results
-                    Collections.sort(resultArray, searchSortComparator);
+                    Collections.sort(resultData, searchSortComparator);
 
-                    if (!resultArray.isEmpty()) {
-                        final Prescription first = resultArray.get(0).prescription;
-                        if (metaInfo.get(first.getId()) != null && metaInfo.get(first.getId()).first == 0) {
+                    if (!resultData.isEmpty()) {
+                        final PrescriptionSearchWrapper firstResult = resultData.get(0);
+                        if (firstResult.matchType == PrescriptionSearchWrapper.MatchType.NAME && firstResult.distance == 0) {
                             // Check if any word in the first result with distance 0
                             // is exactly the constraint.
                             // We need to check this because even if distance is 0 the matching
                             // may have been done with only part of a word.
-                            final String sn = currentDBMgr.shortName(first).trim().toLowerCase();
-                            if (sn.equals(search)) {
-                                anyExactMatch = true;
-                            } else {
-                                final String[] split = sn.split("\\s+");
-                                for (String s : split) {
-                                    if (s.equals(search)) {
-                                        anyExactMatch = true;
-                                        break;
-                                    }
+                            final String sn = currentDBMgr.shortName(firstResult.getPrescription()).trim().toLowerCase();
+                            final String[] split = sn.split("\\s+");
+                            for (String s : split) {
+                                if (s.equals(search)) {
+                                    anyExactMatch = true;
+                                    break;
                                 }
                             }
                         }
                     }
 
-                    //Fetcher.fetchNames(constraint.toString());
-                    filterResults.values = resultArray;
-                    filterResults.count = resultArray.size();
+                    filterResults.values = resultData;
+                    filterResults.count = resultData.size();
                 } catch (Exception e) {
                     LogUtil.e(TAG, "Exception occurred while searching for prescriptions", e);
                     filterResults.values = new ArrayList<>();
