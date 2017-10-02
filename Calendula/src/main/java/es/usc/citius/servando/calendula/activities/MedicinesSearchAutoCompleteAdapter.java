@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,26 +49,28 @@ import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
  */
 public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSearchAutoCompleteAdapter.PrescriptionSearchWrapper> implements Filterable {
 
+    static final int MIN_SEARCH_LEN = 3;
     private static final int HIGHLIGHT_COLOR = Color.BLACK;
-    private static final int MIN_SEARCH_LEN = 3;
-    private static final String TAG = "AutoCompleteAdapter";
     private static final int MAX_LEVENSHTEIN_DISTANCE = 2;
+    private static final String TAG = "MedicinesSearchAutoComp";
 
-    private final Filter filter;
-    private final PrescriptionDBMgr currentDBMgr;
-    private final MedicinesSearchActivity medicinesSearchActivity;
-    private final Drawable icProspect;
     private final Comparator<PrescriptionSearchWrapper> searchSortComparator = new SearchSortComparator();
+    private final Drawable icProspect;
+    private final Filter filter;
+    private final int patientColor;
+    private final MedicineSearchListener resultListener;
+    private final PrescriptionDBMgr currentDBMgr;
 
     private List<PrescriptionSearchWrapper> mData;
 
-    MedicinesSearchAutoCompleteAdapter(MedicinesSearchActivity medicinesSearchActivity, Context context, int textViewResourceId) {
+    MedicinesSearchAutoCompleteAdapter(Context context, int textViewResourceId, @Nullable MedicineSearchListener listener) {
         super(context, textViewResourceId);
-        this.medicinesSearchActivity = medicinesSearchActivity;
+        this.resultListener = listener;
         this.mData = new ArrayList<>();
+        this.patientColor = DB.patients().getActive(context).color();
         this.icProspect = new IconicsDrawable(getContext())
                 .icon(CommunityMaterial.Icon.cmd_link_variant)
-                .color(medicinesSearchActivity.color)
+                .color(patientColor)
                 .paddingDp(10)
                 .sizeDp(40);
         this.filter = new MedicinesAutoCompleteFilter();
@@ -91,7 +94,7 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
 
         ViewHolder holder;
         if (item == null) {
-            final LayoutInflater inflater = medicinesSearchActivity.getLayoutInflater();
+            final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             item = inflater.inflate(R.layout.med_drop_down_item, parent, false);
             holder = new ViewHolder(item);
             item.setTag(holder);
@@ -105,8 +108,8 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
             final PrescriptionSearchWrapper wrapper = mData.get(position);
             final Prescription prescription = wrapper.prescription;
             final String match = wrapper.match;
-            final String name = medicinesSearchActivity.dbMgr.shortName(prescription);
-            final Presentation expectedPresentation = medicinesSearchActivity.dbMgr.expectedPresentation(prescription);
+            final String name = currentDBMgr.shortName(prescription);
+            final Presentation expectedPresentation = currentDBMgr.expectedPresentation(prescription);
 
 
             // highlight the matches
@@ -129,13 +132,13 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
             holder.prospectIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ProspectUtils.openProspect(prescription, medicinesSearchActivity, true);
+                    ProspectUtils.openProspect(prescription, getContext(), true);
                 }
             });
 
             holder.prView.setImageDrawable(new IconicsDrawable(getContext())
                     .icon(expectedPresentation == null ? CommunityMaterial.Icon.cmd_help : Presentation.iconFor(expectedPresentation))
-                    .color(ScreenUtils.equivalentNoAlpha(medicinesSearchActivity.color, 0.8f))
+                    .color(ScreenUtils.equivalentNoAlpha(patientColor, 0.8f))
                     .paddingDp(10)
                     .sizeDp(72));
         }
@@ -146,6 +149,10 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
     @Override
     public Filter getFilter() {
         return filter;
+    }
+
+    public interface MedicineSearchListener {
+        public void onFilterResults(@NonNull final String constraint, final boolean anyExactMatch, final int resultCount);
     }
 
     static class ViewHolder {
@@ -334,22 +341,8 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
         protected void publishResults(CharSequence constraint, FilterResults results) {
             mData = (List<PrescriptionSearchWrapper>) results.values;
             notifyDataSetChanged();
-            medicinesSearchActivity.progressBar.setVisibility(View.GONE);
-            if (results.count == 0) {
-                if (constraint.length() >= MIN_SEARCH_LEN) {
-                    medicinesSearchActivity.addCustomMedBtn.setText(medicinesSearchActivity.getString(R.string.add_custom_med_button_text, constraint));
-                    medicinesSearchActivity.addCustomMedBtn.setVisibility(View.VISIBLE);
-                    medicinesSearchActivity.emptyListText.setText(medicinesSearchActivity.getString(R.string.medicine_search_not_found_msg));
-                } else {
-                    medicinesSearchActivity.addCustomMedBtn.setVisibility(View.GONE);
-                    medicinesSearchActivity.emptyListText.setText(medicinesSearchActivity.getString(R.string.medicine_search_empty_list_msg));
-                }
-            } else {
-                if (!anyExactMatch) {
-                    medicinesSearchActivity.addCustomMedFooter.setText(medicinesSearchActivity.getString(R.string.add_custom_med_button_text, constraint));
-                    medicinesSearchActivity.addCustomMedFooter.setVisibility(View.VISIBLE);
-                }
-                medicinesSearchActivity.addCustomMedBtn.setVisibility(View.GONE);
+            if (resultListener != null) {
+                resultListener.onFilterResults(constraint.toString(), anyExactMatch, results.count);
             }
         }
     }

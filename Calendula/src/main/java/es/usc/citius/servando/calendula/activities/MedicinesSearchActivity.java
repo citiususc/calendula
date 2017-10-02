@@ -24,6 +24,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
@@ -62,7 +63,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
-public class MedicinesSearchActivity extends CalendulaActivity {
+public class MedicinesSearchActivity extends CalendulaActivity implements MedicinesSearchAutoCompleteAdapter.MedicineSearchListener {
 
     public static final String EXTRA_SEARCH_TERM = "MedicinesSearchActivity.extras.EXTRA_SEARCH_TERM";
     public static final String RETURN_EXTRA_PRESCRIPTION = "MedicineSearchActivity.return.extras.PRESCRIPTION";
@@ -144,6 +145,28 @@ public class MedicinesSearchActivity extends CalendulaActivity {
     }
 
     @Override
+    @UiThread
+    public void onFilterResults(@NonNull String constraint, boolean anyExactMatch, int resultCount) {
+        progressBar.setVisibility(View.GONE);
+        if (resultCount == 0) {
+            if (constraint.length() >= MedicinesSearchAutoCompleteAdapter.MIN_SEARCH_LEN) {
+                addCustomMedBtn.setText(getString(R.string.add_custom_med_button_text, constraint));
+                addCustomMedBtn.setVisibility(View.VISIBLE);
+                emptyListText.setText(getString(R.string.medicine_search_not_found_msg));
+            } else {
+                addCustomMedBtn.setVisibility(View.GONE);
+                emptyListText.setText(getString(R.string.medicine_search_empty_list_msg));
+            }
+        } else {
+            if (!anyExactMatch) {
+                addCustomMedFooter.setText(getString(R.string.add_custom_med_button_text, constraint));
+                addCustomMedFooter.setVisibility(View.VISIBLE);
+            }
+            addCustomMedBtn.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicines_search);
@@ -157,7 +180,7 @@ public class MedicinesSearchActivity extends CalendulaActivity {
 
         dbMgr = DBRegistry.instance().current();
 
-        adapter = new MedicinesSearchAutoCompleteAdapter(this, this, R.layout.med_drop_down_item);
+        adapter = new MedicinesSearchAutoCompleteAdapter(this, R.layout.med_drop_down_item, this);
         searchList.setAdapter(adapter);
         searchList.setEmptyView(findViewById(android.R.id.empty));
 
