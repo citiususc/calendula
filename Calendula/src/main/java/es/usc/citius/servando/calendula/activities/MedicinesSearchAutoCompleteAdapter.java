@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.support.v4.util.LongSparseArray;
-import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +26,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
@@ -86,20 +86,18 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
     @Override
     public View getView(int position, View item, @NonNull ViewGroup parent) {
 
+
+        ViewHolder holder;
         if (item == null) {
             final LayoutInflater inflater = medicinesSearchActivity.getLayoutInflater();
             item = inflater.inflate(R.layout.med_drop_down_item, parent, false);
+            holder = new ViewHolder(item);
+            item.setTag(holder);
+        } else {
+            holder = (ViewHolder) item.getTag();
         }
 
         if (mData.size() > position) {
-
-            // views to fill in
-            final ImageButton prospectIcon = ((ImageButton) item.findViewById(R.id.prospect_icon));
-            final TextView cnView = (TextView) item.findViewById(R.id.prescription_cn);
-            final TextView nameView = (TextView) item.findViewById(R.id.text1);
-            final TextView doseView = (TextView) item.findViewById(R.id.text2);
-            final TextView contentView = (TextView) item.findViewById(R.id.text3);
-            final ImageView prView = ((ImageView) item.findViewById(R.id.presentation_image));
 
             // Wrapper and data
             final PrescriptionSearchWrapper wrapper = mData.get(position);
@@ -112,28 +110,28 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
             // highlight the matches
             switch (wrapper.matchType) {
                 case NAME:
-                    nameView.setText(Strings.getHighlighted(name, match, HIGHLIGHT_COLOR));
-                    cnView.setText(prescription.getCode());
+                    holder.nameView.setText(Strings.getHighlighted(name, match, HIGHLIGHT_COLOR));
+                    holder.cnView.setText(prescription.getCode());
                     break;
                 case CODE:
-                    cnView.setText(Strings.getHighlighted(prescription.getCode(), match, HIGHLIGHT_COLOR));
-                    nameView.setText(name);
+                    holder.cnView.setText(Strings.getHighlighted(prescription.getCode(), match, HIGHLIGHT_COLOR));
+                    holder.nameView.setText(name);
                     break;
             }
 
             // setup the rest of the views
-            doseView.setText(prescription.getDose());
-            contentView.setText(prescription.getContent());
-            prospectIcon.setImageDrawable(icProspect);
+            holder.doseView.setText(prescription.getDose());
+            holder.contentView.setText(prescription.getContent());
+            holder.prospectIcon.setImageDrawable(icProspect);
 
-            prospectIcon.setOnClickListener(new View.OnClickListener() {
+            holder.prospectIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ProspectUtils.openProspect(prescription, medicinesSearchActivity, true);
                 }
             });
 
-            prView.setImageDrawable(new IconicsDrawable(getContext())
+            holder.prView.setImageDrawable(new IconicsDrawable(getContext())
                     .icon(expectedPresentation == null ? CommunityMaterial.Icon.cmd_help : Presentation.iconFor(expectedPresentation))
                     .color(ScreenUtils.equivalentNoAlpha(medicinesSearchActivity.color, 0.8f))
                     .paddingDp(10)
@@ -146,6 +144,26 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
     @Override
     public Filter getFilter() {
         return filter;
+    }
+
+    static class ViewHolder {
+
+        @BindView(R.id.prospect_icon)
+        ImageButton prospectIcon;
+        @BindView(R.id.prescription_cn)
+        TextView cnView;
+        @BindView(R.id.text1)
+        TextView nameView;
+        @BindView(R.id.text2)
+        TextView doseView;
+        @BindView(R.id.text3)
+        TextView contentView;
+        @BindView(R.id.presentation_image)
+        ImageView prView;
+
+        public ViewHolder(View rootView) {
+            ButterKnife.bind(this, rootView);
+        }
     }
 
     static class PrescriptionSearchWrapper {
