@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -32,6 +33,7 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
+import es.usc.citius.servando.calendula.drugdb.model.database.PrescriptionDAO;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.LogUtil;
@@ -227,6 +229,9 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
 
     private class MedicinesAutoCompleteFilter extends Filter {
 
+        final QueryBuilder<Prescription, Long> queryBuilder = DB.drugDB().prescriptions().queryBuilder();
+        final PrescriptionDAO prescriptionDAO = DB.drugDB().prescriptions();
+
         /**
          * Determines if we show the "Add custom med" button. Only shown if there's no exact matches for the search.
          */
@@ -235,51 +240,61 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults filterResults = new FilterResults();
+            anyExactMatch = false;
+
             if (constraint != null && constraint.length() >= MIN_SEARCH_LEN) {
                 try {
-                    anyExactMatch = false;
+
                     final String search = constraint.toString().toLowerCase().trim();
                     final String preFilter = search.subSequence(0, MIN_SEARCH_LEN).toString();
-
-                    // preliminary filter with the first characters of the search (exact)
-                    final PreparedQuery<Prescription> prepare = DB.drugDB().prescriptions().queryBuilder()
-                            .where().like(Prescription.COLUMN_NAME, "%" + preFilter + "%")
-                            .or().like(Prescription.COLUMN_CODE, "%" + search + "%")
-                            .prepare();
-                    final CloseableIterator<Prescription> preIt = DB.drugDB().prescriptions().iterator(prepare);
                     final List<PrescriptionSearchWrapper> resultData = new ArrayList<>(500);
 
-                    while (preIt.hasNext()) {
-                        Prescription p = preIt.next();
 
+                    // 1: Match by code (full search constraint and exact match)
+                    queryBuilder.reset();
+                    final PreparedQuery<Prescription> codeQuery = queryBuilder
+                            .where().like(Prescription.COLUMN_CODE, "%" + search + "%")
+                            .prepare();
+                    final CloseableIterator<Prescription> codeIterator = prescriptionDAO.iterator(codeQuery);
+                    while (codeIterator.hasNext()) {
+                        Prescription p = codeIterator.next();
                         final int codeIndex = p.getCode().indexOf(search);
-                        if (codeIndex != -1) {
-                            // code matches are only exact, fuzzy id searches make no sense
-                            resultData.add(new PrescriptionSearchWrapper(p, PrescriptionSearchWrapper.MatchType.CODE, search, 0, codeIndex));
-                            if (p.getCode().equals(search)) {
-                                anyExactMatch = true;
-                            }
-                        } else {
-                            final String name = currentDBMgr.shortName(p).toLowerCase();
+                        resultData.add(new PrescriptionSearchWrapper(p, PrescriptionSearchWrapper.MatchType.CODE, search, 0, codeIndex));
+                        if (p.getCode().equals(search)) {
+                            anyExactMatch = true;
+                        }
 
-                            final int nameIndex = name.indexOf(preFilter);
-                            // check if the pre-filter is in the short name
-                            if (nameIndex != -1) {
-                                final String sub = name.substring(nameIndex, Math.min(nameIndex + search.length(), name.length()));
-                                final int distance = LevenshteinDistance.getDefaultInstance().apply(search, sub);
-                                // add to results only if distance is less than 2
-                                if (distance <= MAX_LEVENSHTEIN_DISTANCE) {
-                                    resultData.add(new PrescriptionSearchWrapper(p, PrescriptionSearchWrapper.MatchType.NAME, sub, distance, nameIndex));
-                                }
+                    }
+                    codeIterator.close();
+
+                    // 2. Match by name (pre-search with MIN_SEARCH_LEN, and then fuzzy)
+                    queryBuilder.reset();
+                    final PreparedQuery<Prescription> nameQuery = queryBuilder
+                            .where().like(Prescription.COLUMN_NAME, "%" + preFilter + "%")
+                            .prepare();
+                    final CloseableIterator<Prescription> nameIterator = prescriptionDAO.iterator(nameQuery);
+                    while (nameIterator.hasNext()) {
+                        Prescription p = nameIterator.next();
+                        final String name = currentDBMgr.shortName(p).toLowerCase();
+
+                        final int nameIndex = name.indexOf(preFilter);
+                        // check if the pre-filter is in the short name
+                        if (nameIndex != -1) {
+                            final String sub = name.substring(nameIndex, Math.min(nameIndex + search.length(), name.length()));
+                            final int distance = LevenshteinDistance.getDefaultInstance().apply(search, sub);
+                            // add to results only if distance is less than 2
+                            if (distance <= MAX_LEVENSHTEIN_DISTANCE) {
+                                resultData.add(new PrescriptionSearchWrapper(p, PrescriptionSearchWrapper.MatchType.NAME, sub, distance, nameIndex));
                             }
                         }
                     }
-                    preIt.close();
+                    nameIterator.close();
 
-                    // sort results
+                    // 3. Sort results
                     Collections.sort(resultData, searchSortComparator);
 
-                    if (!resultData.isEmpty()) {
+                    // Check if first result is an exact match
+                    if (!anyExactMatch && !resultData.isEmpty()) {
                         final PrescriptionSearchWrapper firstResult = resultData.get(0);
                         if (firstResult.matchType == PrescriptionSearchWrapper.MatchType.NAME && firstResult.distance == 0) {
                             // Check if any word in the first result with distance 0
