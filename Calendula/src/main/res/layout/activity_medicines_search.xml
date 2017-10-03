@@ -30,6 +30,7 @@
                                        android:background="@color/dark_grey_home"
                                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                                        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
     <RelativeLayout
         android:id="@+id/search_view"
         android:layout_width="match_parent"
@@ -130,7 +131,8 @@
             android:layout_height="56dp"
             android:layout_alignParentRight="true"
             android:padding="15dp"
-            android:src="@drawable/ic_cancel_white_48dp"/>
+            android:src="@drawable/ic_cancel_white_48dp"
+            android:visibility="gone"/>
 
 
         <ProgressBar

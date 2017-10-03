@@ -75,7 +75,7 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
     @BindView(R.id.search_edit_text)
     EditText searchEditText;
     @BindView(R.id.close_search_button)
-    ImageButton closeSearchButton;
+    ImageButton clearSearchButton;
     @BindView(R.id.back_button)
     ImageButton backButton;
     @BindView(R.id.textView10)
@@ -165,6 +165,16 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
         }
     }
 
+    @OnClick(R.id.close_search_button)
+    void resetSearch() {
+        searchEditText.setText("");
+        adapter.clear();
+        addCustomMedBtn.setVisibility(View.GONE);
+        addCustomMedFooter.setVisibility(View.GONE);
+        emptyListText.setText(getString(R.string.medicine_search_empty_list_msg));
+        progressBar.setVisibility(View.GONE);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -210,13 +220,6 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
             }
         });
 
-        closeSearchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -231,6 +234,7 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
             @Override
             public void afterTextChanged(Editable s) {
                 LogUtil.d(TAG, "afterTextChanged: " + s.toString());
+                clearSearchButton.setVisibility(s.length() > 0 ? View.VISIBLE : View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
                 addCustomMedFooter.setVisibility(View.GONE);
                 String filter = searchEditText.getText().toString();
@@ -294,7 +298,7 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
         }
 
 
-        closeSearchButton.setImageDrawable(icClose);
+        clearSearchButton.setImageDrawable(icClose);
         backButton.setImageDrawable(icBack);
         addCustomMedBtn.setVisibility(View.GONE);
         searchView.setBackgroundColor(patientColor);
