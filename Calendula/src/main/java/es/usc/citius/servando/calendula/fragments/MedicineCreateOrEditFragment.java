@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -71,7 +70,6 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
-import es.usc.citius.servando.calendula.activities.SettingsActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
@@ -185,10 +183,8 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             @Override
             public void onClick(View view) {
                 final MedicinesActivity medicinesActivity = (MedicinesActivity) getActivity();
-                if (!medicinesActivity.isSearchViewShowing()) {
-                    CharSequence text = mNameTextView.getText();
-                    medicinesActivity.showSearchView(text != null ? text.toString() : null);
-                }
+                CharSequence text = mNameTextView.getText();
+                medicinesActivity.showSearchView(text != null ? text.toString() : null);
             }
         });
 
@@ -642,43 +638,37 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     @OnClick(R.id.btn_stock_add)
     protected void addStock() {
         final MedicinesActivity medicinesActivity = (MedicinesActivity) getActivity();
-        if (!medicinesActivity.isSearchViewShowing()) {
-            showStockDialog(DIALOG_STOCK_ADD);
-        }
+        showStockDialog(DIALOG_STOCK_ADD);
     }
 
     @OnClick(R.id.btn_stock_remove)
     protected void removeStock() {
         final MedicinesActivity medicinesActivity = (MedicinesActivity) getActivity();
-        if (!medicinesActivity.isSearchViewShowing()) {
-            showStockDialog(DIALOG_STOCK_REMOVE);
-        }
+        showStockDialog(DIALOG_STOCK_REMOVE);
     }
 
     @OnClick(R.id.btn_stock_reset)
     protected void resetStock() {
         final MedicinesActivity medicinesActivity = (MedicinesActivity) getActivity();
-        if (!medicinesActivity.isSearchViewShowing()) {
-            new MaterialStyledDialog.Builder(getContext())
-                    .setStyle(Style.HEADER_WITH_ICON)
-                    .setIcon(IconUtils.icon(getContext(), mMedicine.presentation().icon(), R.color.white, 100))
-                    .setHeaderColor(R.color.android_orange_dark)
-                    .withDialogAnimation(true)
-                    .setTitle(R.string.title_reset_stock)
-                    .setDescription(getString(R.string.message_reset_stock, mMedicine.name()))
-                    .setCancelable(true)
-                    .setNegativeText(R.string.cancel)
-                    .setPositiveText(R.string.reset)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            LogUtil.d(TAG, "onClick: resetting stock...");
-                            setDefaultStock();
-                            updateStockText();
-                        }
-                    })
-                    .show();
-        }
+        new MaterialStyledDialog.Builder(getContext())
+                .setStyle(Style.HEADER_WITH_ICON)
+                .setIcon(IconUtils.icon(getContext(), mMedicine.presentation().icon(), R.color.white, 100))
+                .setHeaderColor(R.color.android_orange_dark)
+                .withDialogAnimation(true)
+                .setTitle(R.string.title_reset_stock)
+                .setDescription(getString(R.string.message_reset_stock, mMedicine.name()))
+                .setCancelable(true)
+                .setNegativeText(R.string.cancel)
+                .setPositiveText(R.string.reset)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        LogUtil.d(TAG, "onClick: resetting stock...");
+                        setDefaultStock();
+                        updateStockText();
+                    }
+                })
+                .show();
     }
 
     private void setupStockViews() {

@@ -119,10 +119,6 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         }
     }
 
-    public boolean isSearchViewShowing() {
-        return false; //FIXME
-    }
-
     @Override
     public void onMedicineEdited(final Medicine m) {
         // check for allergies
