@@ -43,6 +43,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
+import com.google.zxing.client.android.Intents;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -54,8 +55,6 @@ import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.drugdb.DBRegistry;
-import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
@@ -89,11 +88,13 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
     Button addCustomMedBtn;
     @BindView(R.id.barcode_scan_btn)
     Button barcodeBtn;
+    @BindView(android.R.id.empty)
+    View emptyView;
+    @BindView(R.id.med_list_empty_icon)
+    ImageView emptyIcon;
 
 
-    Button addCustomMedFooter;
-    int color;
-    PrescriptionDBMgr dbMgr;
+    private Button addCustomMedFooter;
     private MedicinesSearchAutoCompleteAdapter adapter;
 
     public void doScan() {
@@ -113,7 +114,6 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
     }
 
     public void askForDatabase() {
-
         new MaterialStyledDialog.Builder(this)
                 .setStyle(Style.HEADER_WITH_ICON)
                 .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_database, R.color.white, 100))
@@ -141,7 +141,6 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
                     }
                 })
                 .show();
-
     }
 
     @Override
@@ -172,17 +171,15 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
         setContentView(R.layout.activity_medicines_search);
         ButterKnife.bind(this);
 
-        color = DB.patients().getActive(this).color();
-        setupToolbar(null, color);
-        setupStatusBar(color);
+        final int patientColor = DB.patients().getActive(this).color();
+        setupToolbar(null, patientColor);
+        setupStatusBar(patientColor);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE,
                 android.graphics.PorterDuff.Mode.MULTIPLY);
 
-        dbMgr = DBRegistry.instance().current();
-
         adapter = new MedicinesSearchAutoCompleteAdapter(this, R.layout.med_drop_down_item, this);
         searchList.setAdapter(adapter);
-        searchList.setEmptyView(findViewById(android.R.id.empty));
+        searchList.setEmptyView(emptyView);
 
         View footerView = getLayoutInflater().inflate(R.layout.medicine_search_footer, null, false);
         addCustomMedFooter = (Button) footerView.findViewById(R.id.add_custom_med_btn);
@@ -190,10 +187,10 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
 
         addCustomMedFooter.setCompoundDrawables(new IconicsDrawable(this)
                 .icon(CommunityMaterial.Icon.cmd_plus)
-                .color(color)
+                .color(patientColor)
                 .sizeDp(25).paddingDp(5), null, null, null);
 
-        ((ImageView) findViewById(R.id.med_list_empty_icon)).setImageDrawable(new IconicsDrawable(this)
+        emptyIcon.setImageDrawable(new IconicsDrawable(this)
                 .icon(CommunityMaterial.Icon.cmd_magnify)
                 .colorRes(R.color.black_20)
                 .sizeDp(80).paddingDp(5)
@@ -275,13 +272,12 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
                 .colorRes(R.color.white)
                 .actionBar();
 
-        Drawable icBarcode = new IconicsDrawable(this)
-                .icon(CommunityMaterial.Icon.cmd_barcode)
-                .colorRes(R.color.black)
-                .actionBar();
-
         if (!PreferenceUtils.getString(PreferenceKeys.DRUGDB_CURRENT_DB, CalendulaApp.getContext().getString(R.string.database_none_id))
                 .equals(CalendulaApp.getContext().getString(R.string.database_none_id))) {
+            Drawable icBarcode = new IconicsDrawable(this)
+                    .icon(CommunityMaterial.Icon.cmd_barcode)
+                    .colorRes(R.color.black)
+                    .actionBar();
             barcodeBtn.setCompoundDrawables(null, null, icBarcode, null);
             barcodeBtn.setCompoundDrawablePadding(10);
             barcodeBtn.setVisibility(View.VISIBLE);
@@ -301,7 +297,7 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
         closeSearchButton.setImageDrawable(icClose);
         backButton.setImageDrawable(icBack);
         addCustomMedBtn.setVisibility(View.GONE);
-        searchView.setBackgroundColor(color);
+        searchView.setBackgroundColor(patientColor);
         searchList.setDivider(null);
         searchList.setDividerHeight(0);
     }
@@ -310,8 +306,8 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            String contents = data.getStringExtra("SCAN_RESULT");
-            String format = data.getStringExtra("SCAN_RESULT_FORMAT");
+            String contents = data.getStringExtra(Intents.Scan.RESULT);
+            String format = data.getStringExtra(Intents.Scan.RESULT_FORMAT);
             // Handle successful scan
             LogUtil.d(TAG, "onActivityResult: " + contents + ", " + format);
             if (contents != null) {
