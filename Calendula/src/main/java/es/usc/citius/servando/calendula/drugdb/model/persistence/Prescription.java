@@ -18,6 +18,9 @@
 
 package es.usc.citius.servando.calendula.drugdb.model.persistence;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.j256.ormlite.table.DatabaseTable;
 import com.j256.ormlite.field.DatabaseField;
 
@@ -28,7 +31,7 @@ import es.usc.citius.servando.calendula.util.Strings;
  * Please check consistency and completion.
  */
 @DatabaseTable(tableName = "Prescription")
-public class Prescription {
+public class Prescription implements Parcelable {
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_AFFECTS_DRIVING = "AffectsDriving";
@@ -224,4 +227,57 @@ public class Prescription {
             return name;
         }
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.id);
+        dest.writeValue(this.affectsDriving);
+        dest.writeString(this.code);
+        dest.writeString(this.content);
+        dest.writeString(this.contentUnit);
+        dest.writeString(this.dCPCode);
+        dest.writeString(this.dose);
+        dest.writeValue(this.generic);
+        dest.writeString(this.homogeneousGroup);
+        dest.writeString(this.name);
+        dest.writeString(this.pID);
+        dest.writeString(this.packageType);
+        dest.writeValue(this.packagingUnits);
+        dest.writeString(this.presentationForm);
+    }
+
+    protected Prescription(Parcel in) {
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.affectsDriving = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.code = in.readString();
+        this.content = in.readString();
+        this.contentUnit = in.readString();
+        this.dCPCode = in.readString();
+        this.dose = in.readString();
+        this.generic = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.homogeneousGroup = in.readString();
+        this.name = in.readString();
+        this.pID = in.readString();
+        this.packageType = in.readString();
+        this.packagingUnits = (Float) in.readValue(Float.class.getClassLoader());
+        this.presentationForm = in.readString();
+    }
+
+    public static final Parcelable.Creator<Prescription> CREATOR = new Parcelable.Creator<Prescription>() {
+        @Override
+        public Prescription createFromParcel(Parcel source) {
+            return new Prescription(source);
+        }
+
+        @Override
+        public Prescription[] newArray(int size) {
+            return new Prescription[size];
+        }
+    };
 }

@@ -452,4 +452,5 @@ If you choose not to download it, some of your medicines' information may be los
 <string name="expand">"Expand"</string>
 <string name="show_pickups">"Show pickups"</string>
 <string name="help">"Help"</string>
+    <string name="title_activity_medicines_search">Medicine search</string>
 </resources>

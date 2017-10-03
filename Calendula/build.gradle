@@ -211,6 +211,7 @@ dependencies {
     // Lang utilities
     //  Used for Levenshtein distance, etc
     compile 'org.apache.commons:commons-lang3:3.6'
+    compile 'org.apache.commons:commons-text:1.1'
 
     // QR code scanning
     compile 'com.google.zxing:core:3.3.0'

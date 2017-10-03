@@ -55,12 +55,9 @@ public class ScreenUtils {
     private static final String TAG = "ScreenUtils";
     private static Palette p;
 
-    public static PointF getDpSize(Activity activity) {
-
+    public static PointF getDpSize(Context context) {
         PointF p = new PointF();
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        display.getMetrics(outMetrics);
+        DisplayMetrics outMetrics = context.getResources().getDisplayMetrics();
         p.set(outMetrics.widthPixels / outMetrics.density, outMetrics.heightPixels / outMetrics.density);
         return p;
     }

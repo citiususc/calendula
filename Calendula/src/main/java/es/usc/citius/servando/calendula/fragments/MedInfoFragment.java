@@ -198,7 +198,7 @@ public class MedInfoFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getActivity(), MedicinesActivity.class);
-                    intent.putExtra("search_text", m.name());
+                    intent.putExtra(MedicinesActivity.EXTRA_SEARCH_TEXT, m.name());
                     intent.putExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, m.getId());
                     startActivity(intent);
                 }

@@ -244,7 +244,6 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         setupStockViews();
         if (mIntentAction == null) {
             mNameTextView.requestFocus();
-            askForPrescriptionUsage();
         } else if ("add_stock".equals(mIntentAction)) {
             showStockDialog(DIALOG_STOCK_ADD);
         }
@@ -428,48 +427,6 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         if (activity instanceof ScheduleCreationActivity) {
             this.showConfirmButton = false;
         }
-    }
-
-    public void askForPrescriptionUsage() {
-
-        SharedPreferences prefs = PreferenceUtils.instance().preferences();
-        boolean adviceShown = prefs.getBoolean(PreferenceKeys.MEDICINES_USE_PRESCRIPTIONS_SHOWN.key(), false);
-        boolean dbEnabled = !prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), getString(R.string.database_none_id)).equals(getString(R.string.database_none_id));
-
-        if (!adviceShown && !dbEnabled) {
-            new MaterialStyledDialog.Builder(getActivity())
-                    .setStyle(Style.HEADER_WITH_ICON)
-                    .setIcon(IconUtils.icon(getActivity(), CommunityMaterial.Icon.cmd_database, R.color.white, 100))
-                    .setHeaderColor(R.color.android_blue)
-                    .withDialogAnimation(true)
-                    .setTitle(R.string.enable_prescriptions_dialog_title)
-                    .setDescription(R.string.enable_prescriptions_dialog_message)
-                    .setCancelable(false)
-                    .setPositiveText(getString(R.string.enable_prescriptions_dialog_yes))
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Intent i = new Intent(getActivity(), SettingsActivity.class);
-                            i.putExtra(SettingsActivity.EXTRA_SHOW_DB_DIALOG, true);
-                            startActivity(i);
-                        }
-                    })
-                    .setNegativeText(R.string.enable_prescriptions_dialog_no)
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            dialog.cancel();
-                        }
-                    })
-                    .show();
-
-        } else {
-            if (mMedicine == null) {
-                showSoftInput();
-            }
-        }
-        prefs.edit().putBoolean(PreferenceKeys.MEDICINES_USE_PRESCRIPTIONS_SHOWN.key(), true).apply();
-
     }
 
     @Override
