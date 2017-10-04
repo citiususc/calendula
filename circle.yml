@@ -9,6 +9,10 @@ machine:
   environment:
     QEMU_AUDIO_DRV: none
 
+dependencies:
+  pre:
+      - echo y | android update sdk --no-ui --all --filter "build-tools-26.0.2"
+
 test:
   pre:
     - emulator -avd circleci-android22 -no-window:
