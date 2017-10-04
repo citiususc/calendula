@@ -12,12 +12,15 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.TestUtils;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class MedicinesActivityCreateTest extends ActivityInstrumentationTestCase2<MedicinesActivity> {
 
@@ -37,6 +40,14 @@ public class MedicinesActivityCreateTest extends ActivityInstrumentationTestCase
         DB.init(getInstrumentation().getContext());
         DB.dropAndCreateDatabase();
 
+        // reset preferences
+        PreferenceUtils.edit()
+                .remove(PreferenceKeys.MEDICINES_USE_PRESCRIPTIONS_SHOWN.key())
+                .remove(PreferenceKeys.DRUGDB_ENABLE_DRUGDB.key())
+                .remove(PreferenceKeys.DRUGDB_CURRENT_DB.key())
+                .remove(PreferenceKeys.DRUGDB_LAST_VALID.key())
+                .commit();
+
         mActivity = getActivity();
         TestUtils.unlockScreen(mActivity);
     }
@@ -51,6 +62,11 @@ public class MedicinesActivityCreateTest extends ActivityInstrumentationTestCase
     public void testCreateMedicine() {
 
         assertEquals(DB.medicines().count(), 0);
+
+
+        // dismiss "use prescriptions DB" dialog
+        onView(withText(R.string.enable_prescriptions_dialog_no))
+                .perform(click());
 
         // type name
         onView(withId(R.id.search_edit_text))
