@@ -31,6 +31,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.ColorInt;
 import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -168,7 +169,7 @@ public class ScreenUtils {
 
     }
 
-    public static void setStatusBarColor(Activity activity, int color) {
+    public static void setStatusBarColor(Activity activity, @ColorInt int color) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = activity.getWindow();

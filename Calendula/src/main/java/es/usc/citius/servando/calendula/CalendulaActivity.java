@@ -21,6 +21,8 @@ package es.usc.citius.servando.calendula;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -50,7 +52,7 @@ public abstract class CalendulaActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    protected CalendulaActivity setupToolbar(String title, int color, int iconColor) {
+    protected CalendulaActivity setupToolbar(@Nullable String title, @ColorInt int color, @ColorInt int iconColor) {
         // set up the toolbar
         toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(color);
@@ -69,11 +71,11 @@ public abstract class CalendulaActivity extends AppCompatActivity {
         return this;
     }
 
-    protected CalendulaActivity setupToolbar(String title, int color) {
+    protected CalendulaActivity setupToolbar(@Nullable String title, @ColorInt int color) {
         return setupToolbar(title, color, Color.WHITE);
     }
 
-    protected CalendulaActivity setupStatusBar(int color) {
+    protected CalendulaActivity setupStatusBar(@ColorInt int color) {
         ScreenUtils.setStatusBarColor(this, color);
         return this;
     }
@@ -88,7 +90,7 @@ public abstract class CalendulaActivity extends AppCompatActivity {
         return this;
     }
 
-    protected Drawable getNavigationIcon(int iconColor) {
+    protected Drawable getNavigationIcon(@ColorInt int iconColor) {
         return new IconicsDrawable(this, GoogleMaterial.Icon.gmd_arrow_back)
                 .color(iconColor)
                 .actionBar();
