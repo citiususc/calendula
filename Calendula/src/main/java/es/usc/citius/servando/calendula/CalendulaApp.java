@@ -33,6 +33,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
 import java.util.Locale;
 
 import es.usc.citius.servando.calendula.database.DB;
@@ -72,12 +73,15 @@ public class CalendulaApp extends MultiDexApplication {
     private static final String TAG = "CalendulaApp";
     public static boolean disableReceivers = false;
     private static boolean isOpen;
-    private static EventBus eventBus = EventBus.getDefault();
+    private static WeakReference<EventBus> eventBusRef;
     private static Context mContext;
 
 
     public static EventBus eventBus() {
-        return eventBus;
+        if (eventBusRef == null || eventBusRef.get() == null) {
+            eventBusRef = new WeakReference<>(EventBus.getDefault());
+        }
+        return eventBusRef.get();
     }
 
     public static boolean isOpen() {
