@@ -271,7 +271,7 @@ public class AllergiesActivity extends CalendulaActivity {
 
             @Override
             public void onClick(View view, int i, FastAdapter fastAdapter, AbstractItem item) {
-                LogUtil.d(TAG, "onEvent() called with: view = [" + view + ", i = [" + i + "], fastAdapter = [" + fastAdapter + "], item = [" + item + "]");
+                LogUtil.d(TAG, "onClick() called with: view = [" + view + ", i = [" + i + "], fastAdapter = [" + fastAdapter + "], item = [" + item + "]");
                 switch (view.getId()) {
                     case R.id.delete_button:
                         // check if group or item

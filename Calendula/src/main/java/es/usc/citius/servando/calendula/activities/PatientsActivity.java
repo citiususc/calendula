@@ -41,6 +41,8 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -81,15 +83,15 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
     }
 
     // Method called from the event bus
-    @SuppressWarnings("unused")
-    public void onEvent(PersistenceEvents.UserCreateEvent event) {
+    @Subscribe
+    public void handleUserCreation(final PersistenceEvents.UserCreateEvent event) {
         this.patients = DB.patients().findAll();
         this.adapter.notifyDataSetChanged();
     }
 
     // Method called from the event bus
-    @SuppressWarnings("unused")
-    public void onEvent(PersistenceEvents.ActiveUserChangeEvent event) {
+    @Subscribe
+    public void handleActiveUserChange(final PersistenceEvents.ActiveUserChangeEvent event) {
         this.adapter.notifyDataSetChanged();
     }
 

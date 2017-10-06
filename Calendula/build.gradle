@@ -200,7 +200,7 @@ dependencies {
     compile 'org.jsoup:jsoup:1.10.2'
 
     // Event bus
-    compile 'de.greenrobot:eventbus:2.2.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
 
     // Jobs
     compile 'com.evernote:android-job:1.1.11'

@@ -41,6 +41,8 @@ import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
@@ -119,10 +121,9 @@ public class RoutinesListFragment extends Fragment {
 
     // Method called from the event bus
     @SuppressWarnings("unused")
-    public void onEvent(Object evt) {
-        if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
-            notifyDataChange();
-        }
+    @Subscribe
+    public void handleActiveUserChange(final PersistenceEvents.ActiveUserChangeEvent event) {
+        notifyDataChange();
     }
 
     void showDeleteConfirmationDialog(final Routine r) {

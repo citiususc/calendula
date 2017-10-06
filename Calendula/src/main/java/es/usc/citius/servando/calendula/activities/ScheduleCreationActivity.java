@@ -41,6 +41,7 @@ import android.widget.Toast;
 import com.astuetz.PagerSlidingTabStrip;
 import com.j256.ormlite.misc.TransactionManager;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
@@ -310,7 +311,8 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
 
     }
 
-    public void onEvent(PersistenceEvents.MedicineAddedEvent event) {
+    @Subscribe
+    public void handleMedicineAdded(final PersistenceEvents.MedicineAddedEvent event) {
         LogUtil.d(TAG, event.id + " ----");
         ((SelectMedicineListFragment) getViewPagerFragment(0)).setSelectedMed(event.id);
     }

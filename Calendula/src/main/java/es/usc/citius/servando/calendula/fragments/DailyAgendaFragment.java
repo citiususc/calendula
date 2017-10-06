@@ -38,6 +38,7 @@ import android.widget.ImageView;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.joda.time.LocalDate;
@@ -359,17 +360,14 @@ public class DailyAgendaFragment extends Fragment {
     }
 
     // Method called from the event bus
-    @SuppressWarnings("unused")
-    public void onEvent(final Object evt) {
-        if (evt instanceof HomeProfileMgr.BackgroundUpdatedEvent) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    onBackgroundChange(HomeProfileMgr.colorForCurrent(getActivity()));
-                }
-            }, 500);
-
-        }
+    @Subscribe
+    public void handleBackgroundUpdatedEvent(final HomeProfileMgr.BackgroundUpdatedEvent event) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onBackgroundChange(HomeProfileMgr.colorForCurrent(getActivity()));
+            }
+        }, 500);
     }
 
     private void setupRecyclerView() {

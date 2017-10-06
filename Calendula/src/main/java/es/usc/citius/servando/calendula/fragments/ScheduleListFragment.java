@@ -38,6 +38,8 @@ import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -127,10 +129,9 @@ public class ScheduleListFragment extends Fragment {
 
     // Method called from the event bus
     @SuppressWarnings("unused")
-    public void onEvent(Object evt) {
-        if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
-            notifyDataChange();
-        }
+    @Subscribe
+    public void handleActiveUserChange(final PersistenceEvents.ActiveUserChangeEvent event) {
+        notifyDataChange();
     }
 
     void showDeleteConfirmationDialog(final Schedule s) {

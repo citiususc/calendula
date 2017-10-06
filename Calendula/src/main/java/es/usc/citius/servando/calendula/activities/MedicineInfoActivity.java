@@ -43,6 +43,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -157,16 +159,15 @@ public class MedicineInfoActivity extends CalendulaActivity {
     }
 
     // Method called from the event bus
-    @SuppressWarnings("unused")
-    public void onEvent(Object evt) {
-        if (evt instanceof PersistenceEvents.ModelCreateOrUpdateEvent) {
-            Class<?> cls = ((PersistenceEvents.ModelCreateOrUpdateEvent) evt).clazz;
-            Object model = ((PersistenceEvents.ModelCreateOrUpdateEvent) evt).model;
+    @Subscribe
+    public void handleEvent(final PersistenceEvents.ModelCreateOrUpdateEvent event) {
+        Class<?> cls = event.clazz;
+        Object model = event.model;
             if (cls.equals(Medicine.class) && model != null) {
 
                 Medicine med = (Medicine) model;
 
-                if (med.getId() == medicine.getId()) {
+                if (med.getId().equals(medicine.getId())) {
 
                     if (medicine.cn() == null && med.cn() != null) {
                         Snack.show(R.string.message_med_linked_success, this, Snackbar.LENGTH_SHORT);
@@ -178,8 +179,6 @@ public class MedicineInfoActivity extends CalendulaActivity {
 
                 }
             }
-
-        }
     }
 
     Fragment getViewPagerFragment(int position) {

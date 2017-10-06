@@ -51,6 +51,7 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.joda.time.DateTime;
 
 import java.util.LinkedList;
@@ -279,32 +280,32 @@ public class HomePagerActivity extends CalendulaActivity implements
     }
 
     // Method called from the event bus
-    @SuppressWarnings("unused")
-    public void onEvent(final Object evt) {
+    @Subscribe
+    public void handleEvent(final Object event) {
         if (active) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
 
-                    if (evt instanceof PersistenceEvents.ModelCreateOrUpdateEvent) {
-                        PersistenceEvents.ModelCreateOrUpdateEvent event = (PersistenceEvents.ModelCreateOrUpdateEvent) evt;
-                        LogUtil.d(TAG, "onEvent: " + event.clazz.getName());
+                    if (event instanceof PersistenceEvents.ModelCreateOrUpdateEvent) {
+                        PersistenceEvents.ModelCreateOrUpdateEvent modelCreateOrUpdateEvent = (PersistenceEvents.ModelCreateOrUpdateEvent) event;
+                        LogUtil.d(TAG, "handleEvent: " + modelCreateOrUpdateEvent.clazz.getName());
                         ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).notifyDataChange();
                         ((RoutinesListFragment) getViewPagerFragment(HomePages.ROUTINES)).notifyDataChange();
                         ((MedicinesListFragment) getViewPagerFragment(HomePages.MEDICINES)).notifyDataChange();
                         ((ScheduleListFragment) getViewPagerFragment(HomePages.SCHEDULES)).notifyDataChange();
-                    } else if (evt instanceof PersistenceEvents.IntakeConfirmedEvent) {
+                    } else if (event instanceof PersistenceEvents.IntakeConfirmedEvent) {
                         // dismiss "take all" button, update checkboxes
                         ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).notifyDataChange();
                         // stock info may need to be updated
                         ((MedicinesListFragment) getViewPagerFragment(HomePages.MEDICINES)).notifyDataChange();
-                    } else if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
-                        activePatient = ((PersistenceEvents.ActiveUserChangeEvent) evt).patient;
+                    } else if (event instanceof PersistenceEvents.ActiveUserChangeEvent) {
+                        activePatient = ((PersistenceEvents.ActiveUserChangeEvent) event).patient;
                         updateTitle(mViewPager.getCurrentItem());
                         toolbarLayout.setContentScrimColor(activePatient.color());
                         fabMgr.onPatientUpdate(activePatient);
-                    } else if (evt instanceof PersistenceEvents.UserUpdateEvent) {
-                        Patient p = ((PersistenceEvents.UserUpdateEvent) evt).patient;
+                    } else if (event instanceof PersistenceEvents.UserUpdateEvent) {
+                        Patient p = ((PersistenceEvents.UserUpdateEvent) event).patient;
                         ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).onUserUpdate();
                         drawerMgr.onPatientUpdated(p);
                         if (DB.patients().isActive(p, HomePagerActivity.this)) {
@@ -313,19 +314,19 @@ public class HomePagerActivity extends CalendulaActivity implements
                             toolbarLayout.setContentScrimColor(activePatient.color());
                             fabMgr.onPatientUpdate(activePatient);
                         }
-                    } else if (evt instanceof PersistenceEvents.UserCreateEvent) {
-                        Patient created = ((PersistenceEvents.UserCreateEvent) evt).patient;
+                    } else if (event instanceof PersistenceEvents.UserCreateEvent) {
+                        Patient created = ((PersistenceEvents.UserCreateEvent) event).patient;
                         drawerMgr.onPatientCreated(created);
-                    } else if (evt instanceof HomeProfileMgr.BackgroundUpdatedEvent) {
+                    } else if (event instanceof HomeProfileMgr.BackgroundUpdatedEvent) {
                         ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).refresh();
-                    } else if (evt instanceof ConfirmActivity.ConfirmStateChangeEvent) {
-                        pendingRefresh = ((ConfirmActivity.ConfirmStateChangeEvent) evt).position;
+                    } else if (event instanceof ConfirmActivity.ConfirmStateChangeEvent) {
+                        pendingRefresh = ((ConfirmActivity.ConfirmStateChangeEvent) event).position;
                         ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).refreshPosition(pendingRefresh);
-                    } else if (evt instanceof DailyAgenda.AgendaUpdatedEvent) {
+                    } else if (event instanceof DailyAgenda.AgendaUpdatedEvent) {
                         ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).notifyDataChange();
                         homeProfileMgr.updateDate();
-                    } else if (evt instanceof StockRunningOutEvent) {
-                        final StockRunningOutEvent sro = (StockRunningOutEvent) evt;
+                    } else if (event instanceof StockRunningOutEvent) {
+                        final StockRunningOutEvent sro = (StockRunningOutEvent) event;
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -336,7 +337,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                 }
             });
         } else {
-            pendingEvents.add(evt);
+            pendingEvents.add(event);
         }
     }
 
@@ -458,7 +459,7 @@ public class HomePagerActivity extends CalendulaActivity implements
         // process pending events
         while (!pendingEvents.isEmpty()) {
             LogUtil.d(TAG, "Processing pending event...");
-            onEvent(pendingEvents.poll());
+            handleEvent(pendingEvents.poll());
         }
     }
 

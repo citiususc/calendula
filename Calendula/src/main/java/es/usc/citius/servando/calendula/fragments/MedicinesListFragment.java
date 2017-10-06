@@ -47,6 +47,8 @@ import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.listeners.ClickEventHook;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -158,18 +160,21 @@ public class MedicinesListFragment extends Fragment {
 
     // Method called from the event bus
     @SuppressWarnings("unused")
-    public void onEvent(Object evt) {
-        if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
-            notifyDataChange();
-        } else if (evt instanceof PersistenceEvents.ModelCreateOrUpdateEvent) {
-            if (((PersistenceEvents.ModelCreateOrUpdateEvent) evt).clazz.equals(Medicine.class)) {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        notifyDataChange();
-                    }
-                });
-            }
+    @Subscribe
+    public void handleActiveUserChange(final PersistenceEvents.ActiveUserChangeEvent event) {
+        notifyDataChange();
+    }
+
+    @SuppressWarnings("unused")
+    @Subscribe
+    public void handleModelCreateOrUpdate(final PersistenceEvents.ModelCreateOrUpdateEvent event) {
+        if (event.clazz.equals(Medicine.class)) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    notifyDataChange();
+                }
+            });
         }
     }
 
