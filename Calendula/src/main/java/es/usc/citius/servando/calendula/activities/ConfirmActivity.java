@@ -171,7 +171,7 @@ public class ConfirmActivity extends CalendulaActivity {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 if (fromNotification) {
-                    startActivity(new Intent(this, HomePagerActivity.class));
+                    startActivity(new Intent(this, StartActivity.class));
                     finish();
                 } else {
                     supportFinishAfterTransition();

@@ -65,4 +65,22 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="@string/prefkey_privacy"
+        android:title="@string/pref_header_privacy">
+
+        <Preference
+            android:key="@string/prefkey_pin_lock"
+            android:summary="@string/pref_summary_pin_lock_unset"
+            android:title="@string/pref_title_pin_lock"/>
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:enabled="false"
+            android:key="@string/prefkey_fingerprint_enabled"
+            android:title="@string/pref_fingerprint_enable_title"
+            />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

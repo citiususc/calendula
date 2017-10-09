@@ -66,5 +66,11 @@
     <!-- Test data module -->
     <string name="prefkey_testdata_generated" translatable="false">test_data_generated</string>
 
+    <!-- Unlock PIN -->
+    <string name="prefkey_privacy">pref_key_privacy</string>
+    <string name="prefkey_pin_lock" translatable="false">pref_pin_lock</string>
+    <string name="prefkey_unlock_pin_hash" translatable="false">unlock_pin_hash</string>
+    <string name="prefkey_unlock_pin_salt" translatable="false">unlock_pin_salt</string>
+    <string name="prefkey_fingerprint_enabled" translatable="false">fingerprint_enabled</string>
 
 </resources>
