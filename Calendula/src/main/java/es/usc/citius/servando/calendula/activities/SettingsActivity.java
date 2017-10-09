@@ -37,13 +37,13 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -222,7 +222,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 PermissionUtils.markedPermissionAsAsked(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    CheckBoxPreference ins = (CheckBoxPreference) findPreference(PreferenceKeys.SETTINGS_ALARM_INSISTENT.key());
+                    SwitchPreference ins = (SwitchPreference) findPreference(PreferenceKeys.SETTINGS_ALARM_INSISTENT.key());
                     ins.setChecked(true);
                 }
                 break;
@@ -230,7 +230,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 PermissionUtils.markedPermissionAsAsked(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    CheckBoxPreference ins = (CheckBoxPreference) findPreference(PreferenceKeys.DRUGDB_ENABLE_DRUGDB.key());
+                    SwitchPreference ins = (SwitchPreference) findPreference(PreferenceKeys.DRUGDB_ENABLE_DRUGDB.key());
                     ins.setChecked(true);
                     showDatabaseDialog();
                     break;
@@ -338,7 +338,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    CheckBoxPreference ins = (CheckBoxPreference) findPreference(PreferenceKeys.DRUGDB_ENABLE_DRUGDB.key());
+                    SwitchPreference ins = (SwitchPreference) findPreference(PreferenceKeys.DRUGDB_ENABLE_DRUGDB.key());
                     if (ins.isChecked()) {
                         showDatabaseDialog();
                     } else {

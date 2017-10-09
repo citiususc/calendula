@@ -42,7 +42,7 @@
         android:key="pref_key_prescriptions"
         android:title="@string/pref_header_prescriptions">
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="@string/prefkey_drugdb_enable_drugdb"
             android:title="@string/pref_enable_databases_title"/>

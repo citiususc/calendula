@@ -20,12 +20,12 @@
 
     <!-- A 'parent' preference, which enables/disables child preferences (below)
          when checked/unchecked. -->
-    <CheckBoxPreference
+    <SwitchPreference
         android:defaultValue="true"
         android:key="@string/prefkey_settings_alarm_notifications"
         android:title="@string/pref_title_new_alarm_notification"/>
 
-    <CheckBoxPreference
+    <SwitchPreference
         android:defaultValue="true"
         android:dependency="@string/prefkey_settings_alarm_notifications"
         android:key="@string/prefkey_settings_alarm_repeat_enabled"
@@ -61,7 +61,7 @@
     <!--android:positiveButtonText="@null"-->
     <!--android:title="@string/pref_check_window_margin" />-->
 
-    <CheckBoxPreference
+    <SwitchPreference
         android:defaultValue="false"
         android:dependency="@string/prefkey_settings_alarm_notifications"
         android:key="@string/prefkey_settings_alarm_insistent"
@@ -74,7 +74,7 @@
         android:summary="@string/pref_notification_tone_sum"
         android:title="@string/pref_notification_tone"/>
 
-    <CheckBoxPreference
+    <SwitchPreference
         android:defaultValue="true"
         android:key="@string/prefkey_settings_alarm_pickup_notifications"
         android:title="@string/pref_title_pickup_notification"/>
