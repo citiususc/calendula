@@ -451,4 +451,41 @@ Se escolles non facelo, algunha información das túas medicinas pode perderse."
 <string name="expand">"Expandir"</string>
 <string name="show_pickups">"Ver dispensación"</string>
 <string name="help">"Axuda"</string>
+<string name="title_activity_medicines_search">"Busca de medicamentos"</string>
+<string name="fingerprint_setup_dialog_message">"Queres desbloquear Calendula coa túa pegada dactilar?"</string>
+<string name="fingerprint_setup_dialog_success">"Desbloqueo con pegada activado!"</string>
+<string name="fingerprint_setup_dialog_title">"Usar pegada dactilar para desbloquear"</string>
+
+<!-- Fuzzy -->
+<string name="fingerprint_unlock_dialog_failed_message">"Por favor asegúrate de que o sensor esté limpo e inténtao de novo."</string>
+<string name="fingerprint_unlock_dialog_failed_title">"A autenticación con pegada fallou."</string>
+<string name="fingerprint_unlock_dialog_successful_message">"Por favor espera uns intres…"</string>
+<string name="fingerprint_unlock_dialog_successful_title">"Autenticación exitosa"</string>
+<string name="fingerprint_unlock_dialog_title">"Usar pegada dactilar para desbloquear"</string>
+
+<!-- Fuzzy -->
+<string name="fingerprint_unlock_dialog_use_pin">"Usar PIN"</string>
+<string name="pin_actions_dialog_cancel">"Cancelar"</string>
+<string name="pin_actions_dialog_delete">"Borrar"</string>
+<string name="pin_actions_dialog_message">"A aplicación está bloqueada cun PIN. Que queres facer?"</string>
+<string name="pin_actions_dialog_modify">"Modificar"</string>
+<string name="pin_actions_dialog_title">"Bloqueo con PIN"</string>
+<string name="pin_delete_dialog_message">"Seguro que queres borrar o bloqueo con PIN?"</string>
+<string name="pin_delete_dialog_title">"Borrar bloqueo con PIN?"</string>
+<string name="pin_forgot_pin">"Esqueciches o teu PIN?"</string>
+<string name="pin_recovery_description">"Se esqueciches o teu PIN, podes iniciar sesión de novo para acceder á aplicación. Continuar?"</string>
+<string name="pin_recovery_title">"Recuperación de PIN"</string>
+<string name="pin_use_fingerprint">"Usar pegada dactilar"</string>
+<string name="pref_fingerprint_enable_title">"Desbloqueo con pegada dactilar"</string>
+<string name="pref_header_privacy">"Privacidade"</string>
+<string name="pref_summary_pin_lock_set">"PIN configurado"</string>
+<string name="pref_summary_pin_lock_unset">"PIN non configurado"</string>
+<string name="pref_title_pin_lock">"Bloqueo de aplicación"</string>
+<string name="text_pinlock_auth_error">"O PIN introducido non é correcto. Por favor inténtao de novo."</string>
+<string name="text_pinlock_auth_prompt">"Por favor introduce o teu PIN para continuar"</string>
+<string name="text_pinlock_match_error">"Os PINs introducidos non coinciden. Por favor inténtao de novo."</string>
+<string name="text_pinlock_new_prompt">"Por favor introduce un PIN de catro díxitos"</string>
+<string name="text_pinlock_or_fingerprint_auth_prompt">"Por favor introduce o teu PIN ou usa a túa pegada para continuar."</string>
+<string name="text_pinlock_repeat_prompt">"Agora, introduce o mesmo PIN de novo…"</string>
+<string name="use_fingerprint_message">"ou usa a túa pegada para autenticarte"</string>
 </resources>
