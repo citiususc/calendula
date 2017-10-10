@@ -218,4 +218,11 @@
         <item name="android:background">@drawable/shape_list_item</item>
     </style>
 
+    <style name="KeypadButtonStyle" parent="@style/Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_margin">1dp</item>
+        <item name="background">@color/white_20</item>
+    </style>
+
 </resources>

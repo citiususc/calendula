@@ -20,6 +20,7 @@ package es.usc.citius.servando.calendula.activities;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -44,12 +45,20 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -65,7 +74,11 @@ import es.usc.citius.servando.calendula.drugdb.download.InstallDatabaseService;
 import es.usc.citius.servando.calendula.jobs.CheckDatabaseUpdatesJob;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.modules.modules.StockModule;
+import es.usc.citius.servando.calendula.pinlock.PINManager;
+import es.usc.citius.servando.calendula.pinlock.PinLockActivity;
+import es.usc.citius.servando.calendula.pinlock.fingerprint.FingerprintHelper;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
+import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PermissionUtils;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
@@ -274,6 +287,36 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    void showEnableFingerPrintDialog() {
+        FingerprintHelper fpHelper = new FingerprintHelper(this);
+        if (!fpHelper.fingerPrintEnabled() && fpHelper.canUseFingerPrint()) {
+            new MaterialStyledDialog.Builder(this)
+                    .setHeaderDrawable(IconUtils.icon(this, CommunityMaterial.Icon.cmd_fingerprint, R.color.white, 48))
+                    .setHeaderScaleType(ImageView.ScaleType.CENTER_INSIDE)
+                    .setTitle(R.string.fingerprint_setup_dialog_title)
+                    .setDescription(R.string.fingerprint_setup_dialog_message)
+                    .setCancelable(true)
+                    .setPositiveText(R.string.dialog_yes_option)
+                    .setNegativeText(R.string.dialog_no_option)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            PreferenceUtils.edit().putBoolean(PreferenceKeys.FINGERPRINT_ENABLED.key(), true).apply();
+                            Toast.makeText(thisActivity, R.string.fingerprint_setup_dialog_success, Toast.LENGTH_SHORT).show();
+                            refreshFingerprintPreference();
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .build().show();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -378,6 +421,22 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     protected void onDestroy() {
         unregisterReceiver(onDBSetupComplete);
         super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PinLockActivity.REQUEST_PIN && resultCode == Activity.RESULT_OK) {
+            String pin = data.getStringExtra(PinLockActivity.EXTRA_PIN);
+            boolean r = PINManager.savePIN(pin);
+            if (r) {
+                Preference lockPref = findPreference(PreferenceKeys.UNLOCK_PIN.key());
+                lockPref.setSummary(getString(R.string.pref_summary_pin_lock_set));
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    showEnableFingerPrintDialog();
+                }
+            }
+        }
     }
 
     /**
@@ -508,8 +567,32 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             PreferenceScreen preferenceScreen = getPreferenceScreen();
             preferenceScreen.removePreference(alarmPk);
         }
+
+        // PIN lock
+        findPreference(PreferenceKeys.UNLOCK_PIN.key()).setOnPreferenceClickListener(new PINPrefListener());
+        if (PINManager.isPINSet()) {
+            Preference lockPref = findPreference(PreferenceKeys.UNLOCK_PIN.key());
+            lockPref.setSummary(getString(R.string.pref_summary_pin_lock_set));
+        }
+
+        // hide / disable fingerprint preference as needed
+        refreshFingerprintPreference();
     }
 
+    private void refreshFingerprintPreference() {
+        final SwitchPreference fingerprintPreference = (SwitchPreference) findPreference(PreferenceKeys.FINGERPRINT_ENABLED.key());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && new FingerprintHelper(this).canUseFingerPrint()) {
+            fingerprintPreference.setChecked(PreferenceUtils.getBoolean(PreferenceKeys.FINGERPRINT_ENABLED, false));
+            if (PINManager.isPINSet()) {
+                fingerprintPreference.setEnabled(true);
+            } else {
+                fingerprintPreference.setEnabled(false);
+            }
+        } else {
+            final PreferenceCategory privacy = (PreferenceCategory) findPreference(PreferenceKeys.PRIVACY.key());
+            privacy.removePreference(fingerprintPreference);
+        }
+    }
 
     private boolean checkPreferenceAskForPermission(Object o, int reqCode) {
         boolean val = (boolean) o;
@@ -542,6 +625,86 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private class PINPrefListener implements Preference.OnPreferenceClickListener {
+
+
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            if (PINManager.isPINSet()) {
+                showPinDialog();
+            } else {
+                Intent i = new Intent(thisActivity, PinLockActivity.class);
+                startActivityForResult(i, PinLockActivity.REQUEST_PIN);
+            }
+            return true;
+        }
+
+        private void showPinDialog() {
+            new MaterialStyledDialog.Builder(SettingsActivity.this)
+                    .setTitle(getString(R.string.pin_actions_dialog_title))
+                    .setDescription(R.string.pin_actions_dialog_message)
+                    .setHeaderColor(R.color.android_green)
+                    .setStyle(Style.HEADER_WITH_ICON)
+                    .withDialogAnimation(true)
+                    .setIcon(IconUtils.icon(SettingsActivity.this, GoogleMaterial.Icon.gmd_key, R.color.white, 100))
+                    .setPositiveText(R.string.pin_actions_dialog_delete)
+                    .setNegativeText(R.string.pin_actions_dialog_modify)
+                    .setNeutralText(R.string.pin_actions_dialog_cancel)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            showDeleteConfirmDialog();
+                            dialog.dismiss();
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Intent i = new Intent(thisActivity, PinLockActivity.class);
+                            startActivityForResult(i, PinLockActivity.REQUEST_PIN);
+                            dialog.dismiss();
+                        }
+                    })
+                    .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .show();
+        }
+
+        private void showDeleteConfirmDialog() {
+            new MaterialStyledDialog.Builder(SettingsActivity.this)
+                    .setTitle(getString(R.string.pin_delete_dialog_title))
+                    .setDescription(R.string.pin_delete_dialog_message)
+                    .setHeaderColor(R.color.android_red_dark)
+                    .setStyle(Style.HEADER_WITH_ICON)
+                    .withDialogAnimation(true)
+                    .setIcon(IconUtils.icon(SettingsActivity.this, GoogleMaterial.Icon.gmd_key, R.color.white, 100))
+                    .setPositiveText(R.string.pin_actions_dialog_delete)
+                    .setNegativeText(R.string.pin_actions_dialog_cancel)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            PINManager.clearPIN();
+                            Preference lockPref = findPreference(PreferenceKeys.UNLOCK_PIN.key());
+                            lockPref.setSummary(getString(R.string.pref_summary_pin_lock_unset));
+                            PreferenceUtils.edit().remove(PreferenceKeys.FINGERPRINT_ENABLED.key()).commit();
+                            refreshFingerprintPreference();
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .show();
+        }
+
     }
 
 }

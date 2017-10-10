@@ -42,6 +42,7 @@
     <color name="android_blue_light">#5533B5E5</color>
     <color name="white_80">#EEFFFFFF</color>
     <color name="white_50">#55FFFFFF</color>
+    <color name="white_20">#22FFFFFF</color>
     <color name="black_20">#22000000</color>
     <color name="black_40">#44000000</color>
     <color name="black_80">#88000000</color>

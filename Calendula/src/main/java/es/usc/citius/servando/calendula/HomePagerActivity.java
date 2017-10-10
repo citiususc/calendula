@@ -415,12 +415,12 @@ public class HomePagerActivity extends CalendulaActivity implements
         appBarLayout.addOnOffsetChangedListener(mListener);
 
         icAgendaLess = new IconicsDrawable(this)
-                .icon(CommunityMaterial.Icon.cmd_unfold_less)
+                .icon(CommunityMaterial.Icon.cmd_unfold_less_horizontal)
                 .color(Color.WHITE)
                 .sizeDp(24);
 
         icAgendaMore = new IconicsDrawable(this)
-                .icon(CommunityMaterial.Icon.cmd_unfold_more)
+                .icon(CommunityMaterial.Icon.cmd_unfold_more_horizontal)
                 .color(Color.WHITE)
                 .sizeDp(24);
 

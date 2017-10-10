@@ -167,6 +167,7 @@ dependencies {
     compile "com.android.support:appcompat-v7:$libVersions.android.support"
     compile "com.android.support:cardview-v7:$libVersions.android.support"
     compile "com.android.support:design:$libVersions.android.support"
+    compile "com.android.support:gridlayout-v7:$libVersions.android.support"
     compile "com.android.support:palette-v7:$libVersions.android.support"
     compile "com.android.support:preference-v7:$libVersions.android.support"
     compile "com.android.support:recyclerview-v7:$libVersions.android.support"
@@ -257,7 +258,7 @@ dependencies {
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
 
     // Icons
-    compile 'com.mikepenz:community-material-typeface:1.2.65.1@aar'
+    compile 'com.mikepenz:community-material-typeface:1.9.32.2@aar'
     compile 'com.mikepenz:google-material-typeface:2.1.2.1@aar'
     compile 'com.mikepenz:iconics-core:2.7.1@aar'
 

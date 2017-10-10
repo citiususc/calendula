@@ -69,7 +69,13 @@ public enum PreferenceKeys {
     SETTINGS_NOTIFICATION_TONE(R.string.prefkey_settings_notification_tone),
     SETTINGS_STOCK_ALERT_DAYS(R.string.prefkey_settings_stock_alert_days),
     // Schedules
-    SCHEDULES_HELP_SHOWN(R.string.prefkey_schedules_help_shown);
+    SCHEDULES_HELP_SHOWN(R.string.prefkey_schedules_help_shown),
+    // Unlock PIN
+    PRIVACY(R.string.prefkey_privacy),
+    UNLOCK_PIN(R.string.prefkey_pin_lock),
+    UNLOCK_PIN_HASH(R.string.prefkey_unlock_pin_hash),
+    UNLOCK_PIN_SALT(R.string.prefkey_unlock_pin_salt),
+    FINGERPRINT_ENABLED(R.string.prefkey_fingerprint_enabled);
 
     @StringRes
     private final int stringId;
