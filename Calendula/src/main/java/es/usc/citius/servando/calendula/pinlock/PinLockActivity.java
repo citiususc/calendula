@@ -234,7 +234,6 @@ public class PinLockActivity extends CalendulaActivity {
 
         if (fpHelper.fingerPrintEnabled() && fpHelper.canUseFingerPrint()) {
             useFingerprintButton.setVisibility(View.VISIBLE);
-            useFingerprintSeparator.setVisibility(View.VISIBLE);
             launchFingerprintAuth();
         }
 

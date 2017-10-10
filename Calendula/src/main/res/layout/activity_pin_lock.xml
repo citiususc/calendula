@@ -115,6 +115,7 @@
                 android:layout_weight="1"
                 android:text="@string/pin_forgot_pin"
                 android:textColor="@color/white"
+                android:visibility="gone"
                 />
 
             <View
