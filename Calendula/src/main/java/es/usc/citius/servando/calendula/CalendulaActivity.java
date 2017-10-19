@@ -30,6 +30,8 @@ import android.view.MenuItem;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import org.greenrobot.eventbus.EventBus;
+
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 
@@ -86,7 +88,10 @@ public abstract class CalendulaActivity extends AppCompatActivity {
     }
 
     protected CalendulaActivity unsubscribeFromEvents() {
-        CalendulaApp.eventBus().unregister(this);
+        final EventBus eventBus = CalendulaApp.eventBus();
+        if (eventBus.isRegistered(this)) {
+            eventBus.unregister(this);
+        }
         return this;
     }
 
@@ -96,5 +101,9 @@ public abstract class CalendulaActivity extends AppCompatActivity {
                 .actionBar();
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unsubscribeFromEvents();
+    }
 }

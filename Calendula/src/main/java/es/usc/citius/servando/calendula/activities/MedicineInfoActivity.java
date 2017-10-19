@@ -234,13 +234,7 @@ public class MedicineInfoActivity extends CalendulaActivity {
             mViewPager.setCurrentItem(1);
         }
 
-        CalendulaApp.eventBus().register(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        CalendulaApp.eventBus().unregister(this);
+        subscribeToEvents();
     }
 
     @Override
