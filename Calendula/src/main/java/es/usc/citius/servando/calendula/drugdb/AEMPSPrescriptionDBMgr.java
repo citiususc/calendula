@@ -33,7 +33,6 @@ import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
-import es.usc.citius.servando.calendula.drugdb.model.persistence.PresentationForm;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ZipUtil;
@@ -55,7 +54,7 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
     public Presentation expectedPresentation(Prescription p) {
         // try to get presentation directly from database
         final Presentation presentation = expectedPresentation(p.getPresentationForm());
-        if(!presentation.equals(Presentation.UNKNOWN)){
+        if (!presentation.equals(Presentation.UNKNOWN)) {
             return presentation;
         }
         // if not successful, try to infer it from the name
@@ -153,7 +152,7 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
                 while ((line = br.readLine()) != null) {
                     if (l != null && i % progressUpdateBy == 0) {
                         int progress = (int) (((float) i / lines) * 100);
-                        l.onProgressUpdate(progress);
+                        updateProgress(l, progress);
                     }
                     // exec line content as raw sql
                     database.execSQL(line);
