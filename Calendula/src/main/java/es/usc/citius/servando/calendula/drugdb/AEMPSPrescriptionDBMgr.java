@@ -20,6 +20,7 @@ package es.usc.citius.servando.calendula.drugdb;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
@@ -32,6 +33,7 @@ import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.PresentationForm;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ZipUtil;
@@ -51,6 +53,12 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
 
     @Override
     public Presentation expectedPresentation(Prescription p) {
+        // try to get presentation directly from database
+        final Presentation presentation = expectedPresentation(p.getPresentationForm());
+        if(!presentation.equals(Presentation.UNKNOWN)){
+            return presentation;
+        }
+        // if not successful, try to infer it from the name
         String name = p.getName();
         String content = p.getContent();
         return expectedPresentation(name, content);
@@ -81,6 +89,7 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
         } else if (n.contains("parche")) {
             return Presentation.PATCHES;
         } else if (n.contains("suspension oral")) {
+            //FIXME
             if (!n.contains("polvo") && !n.contains("granulado")) {
                 return Presentation.SYRUP;
             } else if (!n.contains("polvo")) {
@@ -168,6 +177,55 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
         } catch (Exception e) {
             LogUtil.e(TAG, "setup: couldn't finish cleanup: ", e);
         }
+    }
+
+    private Presentation expectedPresentation(@NonNull final String presentationFormId) {
+
+        switch (presentationFormId) {
+            case "4": // Capsula
+            case "5": // Capsula liberacion modificada
+                return Presentation.CAPSULES;
+
+            case "10": // Comprimido
+            case "11": // Comprimido bucal / Para chupar
+            case "12": // Comprimido bucodispersable / Liotab
+            case "13": // Comprimido efervescente
+            case "14": // Comprimido liberacion modificada
+            case "15": // Comprimido masticable
+            case "16": // Comprimido sublingual
+                return Presentation.PILLS;
+
+            case "44": // Solución / Suspensión oral efervescente
+            case "45": // Polvo / Granulado liberación modificada
+                return Presentation.EFFERVESCENT;
+
+            case "18": // Crema
+            case "23": // Emulsion
+            case "24": // Gel
+            case "25": // Gel oftalmico
+            case "26": // Gel / Pasta / Liquido bucal
+            case "43": // Pasta
+            case "47": // Pomada
+            case "48": // Pomada oftalmica
+            case "71": // Pomada oftalmica / otica
+                return Presentation.POMADE;
+
+            case "32": // Inhalación endotraqueopulmonar
+            case "33": // Inhalacion pulmonar
+                return Presentation.INHALER;
+
+            case "34": // Inyectable
+            case "35": // Inyectable perfusion
+                return Presentation.INJECTIONS;
+
+            case "42": // Parche transdermico
+                return Presentation.PATCHES;
+
+            case "53": // Producto uso nasal
+                return Presentation.SPRAY;
+
+        }
+        return Presentation.UNKNOWN;
     }
 
     private void updateProgress(SetupProgressListener l, int progress) {
