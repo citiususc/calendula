@@ -96,4 +96,14 @@ public class PermissionUtils {
                 .putBoolean("asked-for" + permission, true)
                 .apply();
     }
+
+    public interface PermissionRequest {
+        public int reqCode();
+
+        public String[] permissions();
+
+        public void onPermissionGranted();
+
+        public void onPermissionDenied();
+    }
 }
