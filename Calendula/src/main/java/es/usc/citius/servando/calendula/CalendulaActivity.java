@@ -136,7 +136,11 @@ public abstract class CalendulaActivity extends AppCompatActivity {
                 PermissionUtils.requestPermissions(this, req.permissions(), req.reqCode());
             } else if (missingPermissions) {
                 showManualPermissionGrantDialog();
+            }else{
+                req.onPermissionGranted();
             }
+        }else{
+            req.onPermissionGranted();
         }
     }
 
