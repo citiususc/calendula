@@ -22,6 +22,7 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'idea'
 
 
@@ -293,6 +294,7 @@ dependencies {
     }
     compile 'com.mikepenz:fastadapter-commons:2.1.0@aar'
     compile 'com.mikepenz:fastadapter-extensions:2.1.0@aar'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    
+
 }
