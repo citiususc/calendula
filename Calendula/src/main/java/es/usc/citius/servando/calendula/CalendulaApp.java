@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.support.multidex.MultiDexApplication;
 
-import com.facebook.stetho.Stetho;
 import com.squareup.leakcanary.LeakCanary;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,6 +39,7 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.modules.modules.PharmacyModule;
 import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.util.debug.StethoHelper;
 
 /**
  * Created by castrelo on 4/10/14.
@@ -134,7 +134,7 @@ public class CalendulaApp extends MultiDexApplication {
         super.onCreate();
 
         if (BuildConfig.DEBUG) {
-            Stetho.initializeWithDefaults(this);
+            new StethoHelper().init(this);
         }
 
         if (LeakCanary.isInAnalyzerProcess(CalendulaApp.this)) {
