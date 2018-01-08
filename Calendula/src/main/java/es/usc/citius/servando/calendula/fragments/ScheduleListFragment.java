@@ -141,7 +141,7 @@ public class ScheduleListFragment extends Fragment {
                 .setHeaderColor(R.color.android_red)
                 .withDialogAnimation(true)
                 .setTitle(getString(R.string.remove_schedule_dialog_title))
-                .setDescription(String.format(getString(R.string.remove_schedule_message), s.medicine().name()))
+                .setDescription(String.format(getString(R.string.remove_schedule_message), s.medicine().getName()))
                 .setCancelable(true)
                 .setNeutralText(getString(R.string.dialog_no_option))
                 .setPositiveText(getString(R.string.dialog_yes_option))
@@ -177,7 +177,7 @@ public class ScheduleListFragment extends Fragment {
             public boolean onClick(View v, IAdapter<ScheduleListItem> adapter, ScheduleListItem item, int position) {
                 Schedule s = item.getSchedule();
                 if (mScheduleSelectedCallback != null && s != null) {
-                    LogUtil.d(TAG, "Click at " + s.medicine().name() + " schedule");
+                    LogUtil.d(TAG, "Click at " + s.medicine().getName() + " schedule");
                     mScheduleSelectedCallback.onScheduleSelected(s);
                 } else {
                     LogUtil.d(TAG, "No callback set");

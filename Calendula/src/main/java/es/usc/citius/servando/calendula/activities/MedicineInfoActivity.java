@@ -126,9 +126,9 @@ public class MedicineInfoActivity extends CalendulaActivity {
     public void showDeleteConfirmationDialog(final Medicine m) {
         String message;
         if (!DB.schedules().findByMedicine(m).isEmpty()) {
-            message = String.format(getString(R.string.remove_medicine_message_long), m.name());
+            message = String.format(getString(R.string.remove_medicine_message_long), m.getName());
         } else {
-            message = String.format(getString(R.string.remove_medicine_message_short), m.name());
+            message = String.format(getString(R.string.remove_medicine_message_short), m.getName());
         }
 
         new MaterialStyledDialog.Builder(this)
@@ -169,7 +169,7 @@ public class MedicineInfoActivity extends CalendulaActivity {
 
                 if (med.getId().equals(medicine.getId())) {
 
-                    if (medicine.cn() == null && med.cn() != null) {
+                    if (medicine.getCn() == null && med.getCn() != null) {
                         Snack.show(R.string.message_med_linked_success, this, Snackbar.LENGTH_SHORT);
                     }
                     ((MedInfoFragment) getViewPagerFragment(0)).notifyDataChange();
@@ -208,8 +208,8 @@ public class MedicineInfoActivity extends CalendulaActivity {
         mViewPager.addOnPageChangeListener(getPageChangeListener());
         mViewPager.setOffscreenPageLimit(5);
 
-        toolbarLayout.setContentScrimColor(activePatient.color());
-        toolbarLayout.setBackgroundColor(activePatient.color());
+        toolbarLayout.setContentScrimColor(activePatient.getColor());
+        toolbarLayout.setBackgroundColor(activePatient.getColor());
         updateMedDetails();
         // Setup the tabLayout
         setupTabLayout();
@@ -253,9 +253,9 @@ public class MedicineInfoActivity extends CalendulaActivity {
     }
 
     private void updateMedDetails() {
-        toolbarTitle.setText(getString(R.string.label_info_short) + " | " + medicine.name());
-        medName.setText(medicine.name());
-        medIcon.setImageDrawable(IconUtils.icon(this, medicine.presentation().icon(), R.color.white));
+        toolbarTitle.setText(getString(R.string.label_info_short) + " | " + medicine.getName());
+        medName.setText(medicine.getName());
+        medIcon.setImageDrawable(IconUtils.icon(this, medicine.getPresentation().icon(), R.color.white));
     }
 
     private void processIntent() {
@@ -312,9 +312,9 @@ public class MedicineInfoActivity extends CalendulaActivity {
             public void onPageSelected(int position) {
                 if (medicine != null) {
                     if (position == 0) {
-                        toolbarTitle.setText(getString(R.string.label_info_short) + " | " + medicine.name());
+                        toolbarTitle.setText(getString(R.string.label_info_short) + " | " + medicine.getName());
                     } else if (position == 1) {
-                        toolbarTitle.setText(getString(R.string.label_alerts_short) + " | " + medicine.name());
+                        toolbarTitle.setText(getString(R.string.label_alerts_short) + " | " + medicine.getName());
                     }
 
                 }

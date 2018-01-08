@@ -56,17 +56,17 @@ public class DBTest extends InstrumentationTestCase {
         assertNotNull(s.getId());
         assertNotNull(i.getId());
         assertNotNull(d.getId());
-        assertNotNull(pk.id());
+        assertNotNull(pk.getId());
 
-        assertEquals(DB.pickups().findByMedicine(m).get(0).from(), LocalDate.parse("2015-01-01"));
+        assertEquals(DB.pickups().findByMedicine(m).get(0).getFrom(), LocalDate.parse("2015-01-01"));
     }
 
     @Test
     public void testDaoFind() throws Exception {
 
         testDaoSave();
-        assertEquals(DB.routines().findOneBy(Routine.COLUMN_NAME, "Test").time(), new LocalTime(0, 0));
-        assertEquals(DB.medicines().findAll().get(0).name(), "TestMed");
+        assertEquals(DB.routines().findOneBy(Routine.COLUMN_NAME, "Test").getTime(), new LocalTime(0, 0));
+        assertEquals(DB.medicines().findAll().get(0).getName(), "TestMed");
         assertEquals(DB.schedules().findAll().get(0).items().size(), 1);
     }
 

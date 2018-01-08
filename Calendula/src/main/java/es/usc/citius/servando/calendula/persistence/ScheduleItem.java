@@ -71,7 +71,7 @@ public class ScheduleItem {
         this.id = id;
     }
 
-    public Routine routine() {
+    public Routine getRoutine() {
         return routine;
     }
 
@@ -79,7 +79,7 @@ public class ScheduleItem {
         this.routine = routine;
     }
 
-    public Schedule schedule() {
+    public Schedule getSchedule() {
         return schedule;
     }
 
@@ -87,7 +87,7 @@ public class ScheduleItem {
         this.schedule = schedule;
     }
 
-    public float dose() {
+    public float getDose() {
         return dose;
     }
 

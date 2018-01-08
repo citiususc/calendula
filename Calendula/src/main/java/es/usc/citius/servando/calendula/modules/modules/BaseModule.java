@@ -83,7 +83,7 @@ public class BaseModule extends CalendulaModule {
         try {
             if (DB.patients().countOf() == 1) {
                 Patient p = DB.patients().getDefault();
-                PreferenceUtils.edit().putLong(PreferenceKeys.PATIENTS_ACTIVE.key(), p.id()).apply();
+                PreferenceUtils.edit().putLong(PreferenceKeys.PATIENTS_ACTIVE.key(), p.getId()).apply();
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -121,11 +121,11 @@ public class DailyAgenda {
         int items = 0;
         // create a list with all day doses for schedules bound to routines
         for (Routine r : Routine.findAll()) {
-            for (ScheduleItem s : r.scheduleItems()) {
-                if (s.schedule().enabledForDate(date)) {
+            for (ScheduleItem s : r.getScheduleItems()) {
+                if (s.getSchedule().enabledForDate(date)) {
                     // create a dailyScheduleItem and save it
                     DailyScheduleItem dsi = new DailyScheduleItem(s);
-                    dsi.setPatient(s.schedule().patient());
+                    dsi.setPatient(s.getSchedule().patient());
                     dsi.setDate(date);
                     dsi.save();
                     items++;
@@ -167,7 +167,7 @@ public class DailyAgenda {
     public void addItem(Patient p, ScheduleItem item, boolean taken) {
         // add to daily schedule
         DailyScheduleItem dsi;
-        if (item.schedule().enabledForDate(LocalDate.now())) {
+        if (item.getSchedule().enabledForDate(LocalDate.now())) {
             dsi = new DailyScheduleItem(item);
             dsi.setPatient(p);
             dsi.setTakenToday(taken);
@@ -176,7 +176,7 @@ public class DailyAgenda {
 
         for (int i = 1; i <= NEXT_DAYS_TO_SHOW; i++) {
             LocalDate date = LocalDate.now().plusDays(i);
-            if (item.schedule().enabledForDate(date)) {
+            if (item.getSchedule().enabledForDate(date)) {
                 dsi = new DailyScheduleItem(item);
                 dsi.setDate(LocalDate.now().plusDays(i));
                 dsi.setTakenToday(false);

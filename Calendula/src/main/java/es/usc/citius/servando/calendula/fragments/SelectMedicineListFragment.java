@@ -69,7 +69,7 @@ public class SelectMedicineListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_select_medicine_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.medicines_list);
-        pColor = DB.patients().getActive(getActivity()).color();
+        pColor = DB.patients().getActive(getActivity()).getColor();
         Medicine med = ScheduleHelper.instance().getSelectedMed();
         if (med != null)
             selectedId = med.getId();
@@ -151,10 +151,10 @@ public class SelectMedicineListFragment extends Fragment {
         if (disabled) {
             tv.setTextColor(getResources().getColor(R.color.drawer_item_disabled));
         }
-        tv.setText(medicine.name());
+        tv.setText(medicine.getName());
 
         ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
-        icon.setImageDrawable(iconFor(medicine.presentation(), disabled));
+        icon.setImageDrawable(iconFor(medicine.getPresentation(), disabled));
 
         View overlay = item.findViewById(R.id.medicines_list_item_container);
         overlay.setTag(medicine);

@@ -60,8 +60,8 @@ public class ScheduleUtils {
     public static List<ScheduleItem> getRoutineScheduleItems(Routine routine, LocalDate date) {
         // iterate over routine items and filter by date
         List<ScheduleItem> doses = new ArrayList<>();
-        for (ScheduleItem scheduleItem : routine.scheduleItems()) {
-            if (scheduleItem.schedule().enabledForDate(date)) {
+        for (ScheduleItem scheduleItem : routine.getScheduleItems()) {
+            if (scheduleItem.getSchedule().enabledForDate(date)) {
                 doses.add(scheduleItem);
             }
         }

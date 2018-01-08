@@ -58,10 +58,10 @@ public class PickupUtils {
         Collections.sort(this.pickups, PickupInfo.PickupComparator.instance);
         pickupsMap.clear();
         for (PickupInfo pk : pickups) {
-            if (!pickupsMap.containsKey(pk.from())) {
-                pickupsMap.put(pk.from(), new ArrayList<PickupInfo>());
+            if (!pickupsMap.containsKey(pk.getFrom())) {
+                pickupsMap.put(pk.getFrom(), new ArrayList<PickupInfo>());
             }
-            pickupsMap.get(pk.from()).add(pk);
+            pickupsMap.get(pk.getFrom()).add(pk);
         }
     }
 
@@ -76,7 +76,7 @@ public class PickupUtils {
             urgentMeds = new ArrayList<>();
             LocalDate now = LocalDate.now();
             for (PickupInfo p : pickups) {
-                if (!p.taken() && p.to().isAfter(now) && p.from().plusDays(MAX_DAYS - 3).isBefore(now)) {
+                if (!p.isTaken() && p.getTo().isAfter(now) && p.getFrom().plusDays(MAX_DAYS - 3).isBefore(now)) {
                     urgentMeds.add(p);
                 }
             }
@@ -102,8 +102,8 @@ public class PickupUtils {
 
             // get the date of the first med we can take from 10 days ago
             for (PickupInfo p : pickups) {
-                if (p.from().isAfter(now) && !p.taken()) {
-                    first = p.from();
+                if (p.getFrom().isAfter(now) && !p.isTaken()) {
+                    first = p.getFrom();
                     break;
                 }
             }
@@ -118,11 +118,11 @@ public class PickupUtils {
                 // compute the number of meds we cant take for each day
                 for (PickupInfo p : pickups) {
                     // get the pickup take secure interval
-                    DateTime iStart = p.from().toDateTimeAtStartOfDay();
-                    DateTime iEnd = p.from().plusDays(MAX_DAYS - 1).toDateTimeAtStartOfDay();
+                    DateTime iStart = p.getFrom().toDateTimeAtStartOfDay();
+                    DateTime iEnd = p.getFrom().plusDays(MAX_DAYS - 1).toDateTimeAtStartOfDay();
                     Interval interval = new Interval(iStart, iEnd);
                     // add the pickup to the daily list if we can take it
-                    if (!p.taken() && interval.contains(d.toDateTimeAtStartOfDay())) {
+                    if (!p.isTaken() && interval.contains(d.toDateTimeAtStartOfDay())) {
                         if (!bestDays.containsKey(d)) {
                             bestDays.put(d, new ArrayList<PickupInfo>());
                         }
@@ -158,10 +158,10 @@ public class PickupUtils {
     }
 
     public Patient getPatient(PickupInfo p) {
-        Long id = p.medicine().getId();
+        Long id = p.getMedicine().getId();
         if (!colorCache.containsKey(id)) {
-            Medicine m = DB.medicines().findById(p.medicine().getId());
-            Patient patient = DB.patients().findById(m.patient().id());
+            Medicine m = DB.medicines().findById(p.getMedicine().getId());
+            Patient patient = DB.patients().findById(m.getPatient().getId());
             colorCache.put(id, patient);
         }
         return colorCache.get(id);

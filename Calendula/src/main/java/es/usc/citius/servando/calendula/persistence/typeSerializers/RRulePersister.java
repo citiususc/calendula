@@ -67,8 +67,8 @@ public class RRulePersister extends BaseDataType {
     public Object javaToSqlArg(FieldType fieldType, Object javaObject) throws SQLException {
         RepetitionRule rule = (RepetitionRule) javaObject;
         String ical = rule.toIcal();
-        if (rule.start() != null) {
-            ical += "$$$" + rule.start();
+        if (rule.getStart() != null) {
+            ical += "$$$" + rule.getStart();
         }
         return ical;
     }

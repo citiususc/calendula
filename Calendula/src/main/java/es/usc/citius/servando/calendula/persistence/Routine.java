@@ -89,7 +89,7 @@ public class Routine {
         this.id = id;
     }
 
-    public LocalTime time() {
+    public LocalTime getTime() {
         return time;
     }
 
@@ -97,7 +97,7 @@ public class Routine {
         this.time = time;
     }
 
-    public Patient patient() {
+    public Patient getPatient() {
         return patient;
     }
 
@@ -109,7 +109,7 @@ public class Routine {
     // DB queries
     // *************************************
 
-    public String name() {
+    public String getName() {
         return name;
     }
 
@@ -125,7 +125,7 @@ public class Routine {
         DB.routines().deleteCascade(this, false);
     }
 
-    public List<ScheduleItem> scheduleItems() {
+    public List<ScheduleItem> getScheduleItems() {
         return DB.scheduleItems().findByRoutine(this);
     }
 

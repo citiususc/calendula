@@ -39,8 +39,8 @@ public class Testing {
         List<Routine> routines = Routine.findAll();
 
         for (Routine routine : routines) {
-            Medicine med = routine.scheduleItems().get(0).schedule().medicine();
-            LogUtil.d(TAG, "Presentation of " + med.name() + ": " + med.presentation().name());
+            Medicine med = routine.getScheduleItems().get(0).getSchedule().medicine();
+            LogUtil.d(TAG, "Presentation of " + med.getName() + ": " + med.getPresentation().name());
         }
 
         Routine r = Routine.findByName("Breakfast");
@@ -49,7 +49,7 @@ public class Testing {
             // create and save routine
             r = new Routine(LocalTime.now(), "Lunch");
             r.save();
-        } else if (r.time() == null) {
+        } else if (r.getTime() == null) {
             r.setTime(LocalTime.now());
             r.save();
         }
@@ -74,22 +74,22 @@ public class Testing {
 
 
         for (Routine routine : routines) {
-            LogUtil.d(TAG, "Routine: " + Routine.findById(routine.getId()).name() + ", " + routine.time());
-            for (ScheduleItem i : routine.scheduleItems()) {
-                LogUtil.d(TAG, " -- ScheduleItem: " + i.getId() + ", " + i.schedule().getId() + ", " + i.schedule().medicine().name());
+            LogUtil.d(TAG, "Routine: " + Routine.findById(routine.getId()).getName() + ", " + routine.getTime());
+            for (ScheduleItem i : routine.getScheduleItems()) {
+                LogUtil.d(TAG, " -- ScheduleItem: " + i.getId() + ", " + i.getSchedule().getId() + ", " + i.getSchedule().medicine().getName());
             }
 
         }
 
         List<Medicine> medicines = Medicine.findAll();
         for (Medicine med : medicines) {
-            LogUtil.d(TAG, "Medicine: " + med.name());
+            LogUtil.d(TAG, "Medicine: " + med.getName());
         }
 
 
         List<Schedule> schedules = Schedule.findAll();
         for (Schedule schedule : schedules) {
-            LogUtil.d(TAG, "Schedule: " + schedule.medicine().name() + ", " + Arrays.toString(schedule.days()));
+            LogUtil.d(TAG, "Schedule: " + schedule.medicine().getName() + ", " + Arrays.toString(schedule.days()));
         }
 
 //        for (DailyScheduleItem d : DailyScheduleItem.fromDate(DateTime.now())) {

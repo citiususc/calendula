@@ -100,42 +100,6 @@ public enum Presentation {
         return r.getString(nameString);
     }
 
-//
-//    public static Presentation expectedPresentation(String name, String content) {
-//        String n = name.toLowerCase() + " " + content.toLowerCase();
-//        if (n.contains("comprimidos")) {
-//            return Presentation.PILLS;
-//        } else if (n.contains("capsulas") || n.contains("cápsulas")) {
-//            return Presentation.CAPSULES;
-//        } else if (n.contains("inhala")) {
-//            return Presentation.INHALER;
-//        } else if (n.contains("viales") || n.contains("jeringa") || n.contains("perfusi") || n.contains("inyectable")) {
-//            return Presentation.INJECTIONS;
-//        } else if (n.contains("gotas") || n.contains("colirio")) {
-//            return Presentation.DROPS;
-//        } else if (n.contains("sobres")) {
-//            return Presentation.EFFERVESCENT;
-//        } else if (n.contains("tubo") || n.contains("crema") || n.contains("pomada")) {
-//            return Presentation.POMADE;
-//        } else if (n.contains("pulverizacion nasal") || n.contains("pulverización nasal") || n.contains("spray")) {
-//            return Presentation.SPRAY;
-//        } else if (n.contains("jarabe")) {
-//            return Presentation.SYRUP;
-//        }else if (n.contains("parche")) {
-//                return Presentation.PATCHES;
-//        } else if (n.contains("suspension oral")) {
-//            if (!n.contains("polvo") && !n.contains("granulado")) {
-//                return Presentation.SYRUP;
-//            } else if (!n.contains("polvo")) {
-//                // granulado
-//            } else {
-//                // sobres
-//            }
-//        }
-//
-//        return null;
-//    }
-
     public String units(Resources r, double quantity) {
         final int intValue = Math.abs(quantity) == 1 ? 1 : 2;
         return r.getQuantityString(unitsString, intValue);

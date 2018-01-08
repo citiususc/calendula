@@ -156,7 +156,7 @@ public class TestDataModule extends CalendulaModule {
             p.setColor(Color.parseColor(PatientDetailActivity.COLORS[i % PatientDetailActivity.COLORS.length]));
             p.setDefault(false);
             DB.patients().save(p);
-            LogUtil.d(TAG, "Created patient " + p);
+            LogUtil.d(TAG, "Created getPatient " + p);
             patients.add(p);
         }
         DB.patients().setActive(patients.get(0));

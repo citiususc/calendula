@@ -75,7 +75,7 @@ public class ScheduleSummaryFragment extends Fragment {
 
     public void updateSummary() {
 
-        int color = DB.patients().getActive(getActivity()).color();
+        int color = DB.patients().getActive(getActivity()).getColor();
 
         LogUtil.d(TAG, "updateSummary ScheduleSUmmaryFragment");
         View rootView = getView();
@@ -92,18 +92,18 @@ public class ScheduleSummaryFragment extends Fragment {
         final Button showCalendarButton = (Button) rootView.findViewById(R.id.button_show_calendar);
 
         if (med != null) {
-            medNameTv.setText(med.name());
+            medNameTv.setText(med.getName());
         }
 
         medDaysTv.setText(s.toReadableString(getActivity()));
-        medIconImage.setImageDrawable(iconFor(med != null ? med.presentation() : Presentation.PILLS));
+        medIconImage.setImageDrawable(iconFor(med != null ? med.getPresentation() : Presentation.PILLS));
 
         if (s.type() != Schedule.SCHEDULE_TYPE_HOURLY) {
             String freq =
                     ScheduleUtils.getTimesStr(items != null ? items.size() : 0, getActivity());
             medDailyFreqTv.setText(freq);
         } else {
-            String freq = ScheduleUtils.getTimesStr(24 / s.rule().interval(), getActivity());
+            String freq = ScheduleUtils.getTimesStr(24 / s.rule().getInterval(), getActivity());
             medDailyFreqTv.setText(freq);
         }
 

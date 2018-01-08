@@ -181,7 +181,7 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
         setContentView(R.layout.activity_medicines_search);
         ButterKnife.bind(this);
 
-        final int patientColor = DB.patients().getActive(this).color();
+        final int patientColor = DB.patients().getActive(this).getColor();
         setupToolbar(null, patientColor);
         setupStatusBar(patientColor);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE,

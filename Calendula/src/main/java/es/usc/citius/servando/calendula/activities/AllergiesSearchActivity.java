@@ -209,7 +209,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
         setContentView(R.layout.activity_allergies_search);
         ButterKnife.bind(this);
 
-        int color = DB.patients().getActive(this).color();
+        int color = DB.patients().getActive(this).getColor();
         searchLayout.setBackgroundColor(color);
         setupStatusBar(color);
 

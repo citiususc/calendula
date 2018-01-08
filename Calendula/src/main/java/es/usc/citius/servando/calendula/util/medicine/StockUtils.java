@@ -68,7 +68,7 @@ public class StockUtils {
     }
 
     public static LocalDate getEstimatedStockEnd(Medicine m) {
-        return getEstimatedStockEnd(DB.schedules().findByMedicine(m), m.stock());
+        return getEstimatedStockEnd(DB.schedules().findByMedicine(m), m.getStock());
     }
 
 
@@ -98,7 +98,7 @@ public class StockUtils {
                     } else {
                         List<ScheduleItem> items = s.items();
                         for (ScheduleItem item : items) {
-                            virtualStock = virtualStock - item.dose();
+                            virtualStock = virtualStock - item.getDose();
                         }
                     }
                 }
@@ -114,14 +114,14 @@ public class StockUtils {
 
     public static void showStockRunningOutDialog(final Context context, final Medicine m, Long days) {
 
-        String msg = "Quedan " + m.stock().intValue() + " " + m.presentation().units(context.getResources(), m.stock()) + " de " + m.name() + ", y ";
+        String msg = "Quedan " + m.getStock().intValue() + " " + m.getPresentation().units(context.getResources(), m.getStock()) + " de " + m.getName() + ", y ";
         msg += "se acabarán en " + days + " días con la pauta actual.";
 
 
         new MaterialStyledDialog.Builder(context)
-                .setTitle("Se están acabando las existencias de " + m.name())
+                .setTitle("Se están acabando las existencias de " + m.getName())
                 .setStyle(Style.HEADER_WITH_ICON)
-                .setIcon(IconUtils.icon(context, m.presentation().icon(), R.color.white, 48))
+                .setIcon(IconUtils.icon(context, m.getPresentation().icon(), R.color.white, 48))
                 .setHeaderColor(R.color.android_orange_dark)
                 .withDialogAnimation(true)
                 .setDescription(msg)

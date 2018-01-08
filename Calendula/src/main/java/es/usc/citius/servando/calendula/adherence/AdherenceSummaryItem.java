@@ -50,16 +50,16 @@ public class AdherenceSummaryItem {
 
         LogUtil.d(TAG, item.toString());
 
-        Schedule s = item.boundToSchedule() ? item.schedule() : DB.schedules().findById(item.scheduleItem().schedule().getId());
-        ScheduleItem si = item.scheduleItem(); // only for items not bound to schedule
+        Schedule s = item.boundToSchedule() ? item.getSchedule() : DB.schedules().findById(item.getScheduleItem().getSchedule().getId());
+        ScheduleItem si = item.getScheduleItem(); // only for items not bound to schedule
         Medicine m = s.medicine();
-        patient = item.patient().id();
-        drug = m.cn();
-        dose = item.boundToSchedule() ? s.dose() : si.dose();
-        taken = item.takenToday();
-        canceledByUser = item.timeTaken() != null && !item.takenToday();
-        timeTaken = item.takenToday() ? item.date().toDateTime(item.timeTaken()).toString(DTF) : null;
-        dateTime = item.date().toDateTime(item.time()).toString(DTF);
+        patient = item.getPatient().getId();
+        drug = m.getCn();
+        dose = item.boundToSchedule() ? s.dose() : si.getDose();
+        taken = item.getTakenToday();
+        canceledByUser = item.getTimeTaken() != null && !item.getTakenToday();
+        timeTaken = item.getTakenToday() ? item.getDate().toDateTime(item.getTimeTaken()).toString(DTF) : null;
+        dateTime = item.getDate().toDateTime(item.getTime()).toString(DTF);
         scheduleId = s.getId();
         LogUtil.d(TAG, toString());
     }

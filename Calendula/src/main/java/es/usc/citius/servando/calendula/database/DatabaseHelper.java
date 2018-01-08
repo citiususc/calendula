@@ -397,22 +397,22 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
         // Assign all routines to the default patient
         UpdateBuilder<Routine, Long> rUpdateBuilder = getRoutinesDao().updateBuilder();
-        rUpdateBuilder.updateColumnValue(Routine.COLUMN_PATIENT, p.id());
+        rUpdateBuilder.updateColumnValue(Routine.COLUMN_PATIENT, p.getId());
         rUpdateBuilder.update();
 
         // Assign all schedules to the default patient
         UpdateBuilder<Schedule, Long> sUpdateBuilder = getSchedulesDao().updateBuilder();
-        sUpdateBuilder.updateColumnValue(Schedule.COLUMN_PATIENT, p.id());
+        sUpdateBuilder.updateColumnValue(Schedule.COLUMN_PATIENT, p.getId());
         sUpdateBuilder.update();
 
         // Assign all medicines to the default patient
         UpdateBuilder<Medicine, Long> mUpdateBuilder = getMedicinesDao().updateBuilder();
-        mUpdateBuilder.updateColumnValue(Medicine.COLUMN_PATIENT, p.id());
+        mUpdateBuilder.updateColumnValue(Medicine.COLUMN_PATIENT, p.getId());
         mUpdateBuilder.update();
 
         // Assign all DailyScheduleItems to the default patient, for today
         UpdateBuilder<DailyScheduleItem, Long> siUpdateBuilder = getDailyScheduleItemsDao().updateBuilder();
-        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_PATIENT, p.id());
+        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_PATIENT, p.getId());
         siUpdateBuilder.update();
 
         // date formatter changes on v11, so we can no use LocalDatePersister here

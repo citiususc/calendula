@@ -33,7 +33,6 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -53,9 +52,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import org.greenrobot.eventbus.Subscribe;
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 import butterknife.BindView;
@@ -304,7 +301,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                     } else if (event instanceof PersistenceEvents.ActiveUserChangeEvent) {
                         activePatient = ((PersistenceEvents.ActiveUserChangeEvent) event).patient;
                         updateTitle(mViewPager.getCurrentItem());
-                        toolbarLayout.setContentScrimColor(activePatient.color());
+                        toolbarLayout.setContentScrimColor(activePatient.getColor());
                         fabMgr.onPatientUpdate(activePatient);
                     } else if (event instanceof PersistenceEvents.UserUpdateEvent) {
                         Patient p = ((PersistenceEvents.UserUpdateEvent) event).patient;
@@ -313,7 +310,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                         if (DB.patients().isActive(p, HomePagerActivity.this)) {
                             activePatient = p;
                             updateTitle(mViewPager.getCurrentItem());
-                            toolbarLayout.setContentScrimColor(activePatient.color());
+                            toolbarLayout.setContentScrimColor(activePatient.getColor());
                             fabMgr.onPatientUpdate(activePatient);
                         }
                     } else if (event instanceof PersistenceEvents.UserCreateEvent) {
@@ -558,7 +555,7 @@ public class HomePagerActivity extends CalendulaActivity implements
     }
 
     private void updateScrim(int position) {
-        @ColorInt final int color = (position == HomePages.HOME.ordinal()) ? ContextCompat.getColor(this,R.color.transparent_black) : activePatient.color();
+        @ColorInt final int color = (position == HomePages.HOME.ordinal()) ? ContextCompat.getColor(this,R.color.transparent_black) : activePatient.getColor();
 
         if (previousColor != -1) {
             ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), previousColor, color);
@@ -583,7 +580,7 @@ public class HomePagerActivity extends CalendulaActivity implements
         if (page == HomePages.HOME.ordinal()) {
             title = getString(R.string.app_name);
         } else {
-            title = getString(R.string.relation_user_possession_thing, activePatient.name(), getString(HomePages.values()[page].title));
+            title = getString(R.string.relation_user_possession_thing, activePatient.getName(), getString(HomePages.values()[page].title));
         }
 
         toolbarTitle.setText(title);

@@ -116,7 +116,7 @@ public class WebViewActivity extends CalendulaActivity {
             toolbarSahdow = findViewById(R.id.tabs_shadow);
 
             //setup toolbar and statusbar
-            color = DB.patients().getActive(this).color();
+            color = DB.patients().getActive(this).getColor();
             String title = request.getTitle();
             setupToolbar(title, color);
             setupStatusBar(color);

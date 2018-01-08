@@ -219,8 +219,8 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
             for (ScheduleItem item : s.items()) {
                 DailyScheduleItem d = DailyScheduleItem.findByScheduleItem(item);
                 // if taken today, add to the list
-                if (d != null && d.takenToday()) {
-                    routinesTaken.add(item.routine().getId());
+                if (d != null && d.getTakenToday()) {
+                    routinesTaken.add(item.getRoutine().getId());
                 }
                 item.deleteCascade();
             }
@@ -228,14 +228,14 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
             // save new items
             for (ScheduleItem i : items) {
                 ScheduleItem item = new ScheduleItem();
-                item.setDose(i.dose());
-                item.setRoutine(i.routine());
+                item.setDose(i.getDose());
+                item.setRoutine(i.getRoutine());
                 item.setSchedule(s);
                 item.save();
                 // add to daily schedule
                 DailyScheduleItem dsi = new DailyScheduleItem(item);
                 dsi.setPatient(patient);
-                if (routinesTaken.contains(item.routine().getId())) {
+                if (routinesTaken.contains(item.getRoutine().getId())) {
                     dsi.setTakenToday(true);
                 }
                 dsi.save();
@@ -335,7 +335,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_schedules);
         patient = DB.patients().getActive(this);
-        color = patient.color();
+        color = patient.getColor();
         int dark = ScreenUtils.equivalentNoAlpha(color, Color.BLACK, 0.85f);
 
         findViewById(R.id.activity_layout).setBackgroundColor(dark);
@@ -501,7 +501,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                                                 PickupInfo pickupInfo = new PickupInfo();
                                                 pickupInfo.setTo(df.parseLocalDate(pkw.t));//.plusMonths(19));
                                                 pickupInfo.setFrom(df.parseLocalDate(pkw.f));//.plusMonths(19));
-                                                pickupInfo.taken(pkw.tk == 1);
+                                                pickupInfo.setTaken(pkw.tk == 1);
                                                 pickupInfo.setMedicine(m);
                                                 DB.pickups().save(pickupInfo);
                                             }

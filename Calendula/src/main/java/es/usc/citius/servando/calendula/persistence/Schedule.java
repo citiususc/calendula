@@ -182,7 +182,7 @@ public class Schedule {
     }
 
     public boolean[] days() {
-        return rrule.days();
+        return rrule.getDays();
     }
 
     public void setDays(boolean[] days) {
@@ -233,8 +233,8 @@ public class Schedule {
 
     public String toReadableString(Context ctx) {
 
-        if (rule().frequency() == Frequency.HOURLY) {
-            return ctx.getString(R.string.repeat_every_tostr, rule().interval(),
+        if (rule().getFrequency() == Frequency.HOURLY) {
+            return ctx.getString(R.string.repeat_every_tostr, rule().getInterval(),
                     ctx.getString(R.string.hours));
         } else if (type == SCHEDULE_TYPE_CYCLE) {
             return getCycleDays() + " + " + getCycleRest();
@@ -309,7 +309,7 @@ public class Schedule {
     //}
 
     public LocalDate end() {
-        DateValue v = rrule.iCalRule().getUntil();
+        DateValue v = rrule.getRRule().getUntil();
         return v != null ? new LocalDate(v.year(), v.month(), v.day()) : null;
     }
 
@@ -325,7 +325,7 @@ public class Schedule {
     }
 
     public DateValue until() {
-        return rrule.iCalRule().getUntil();
+        return rrule.getRRule().getUntil();
     }
 
     @Override

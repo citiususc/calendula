@@ -166,7 +166,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                         // remove days if changed
                         boolean[] days = s.days();
                         for (DailyScheduleItem dsi : DB.dailyScheduleItems().findBySchedule(s)) {
-                            if (days[dsi.date().getDayOfWeek() - 1]) {
+                            if (days[dsi.getDate().getDayOfWeek() - 1]) {
                                 DB.dailyScheduleItems().remove(dsi);
                             }
                         }
@@ -174,8 +174,8 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                         for (ScheduleItem item : s.items()) {
                             DailyScheduleItem d = DailyScheduleItem.findByScheduleItem(item);
                             // if taken today, add to the list
-                            if (d != null && d.takenToday()) {
-                                routinesTaken.add(item.routine().getId());
+                            if (d != null && d.getTakenToday()) {
+                                routinesTaken.add(item.getRoutine().getId());
                             }
                             item.deleteCascade();
                         }
@@ -184,12 +184,12 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                         for (ScheduleItem i : ScheduleHelper.instance().getScheduleItems()) {
 
                             ScheduleItem item = new ScheduleItem();
-                            item.setDose(i.dose());
-                            item.setRoutine(i.routine());
+                            item.setDose(i.getDose());
+                            item.setRoutine(i.getRoutine());
                             item.setSchedule(s);
                             item.save();
                             // add to daily schedule
-                            DailyAgenda.instance().addItem(patient, item, routinesTaken.contains(item.routine().getId()));
+                            DailyAgenda.instance().addItem(patient, item, routinesTaken.contains(item.getRoutine().getId()));
                         }
                     } else {
                         DB.dailyScheduleItems().removeAllFrom(s);
@@ -271,7 +271,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
 
         if (mScheduleId == -1) {
             String titleStart = getString(R.string.title_create_schedule_activity);
-            String medName = " (" + m.name() + ")";
+            String medName = " (" + m.getName() + ")";
             String fullTitle = titleStart + medName;
 
             SpannableString title = new SpannableString(fullTitle);
@@ -326,7 +326,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
         }
 
         for (ScheduleItem i : ScheduleHelper.instance().getScheduleItems()) {
-            if (i.routine() == null) {
+            if (i.getRoutine() == null) {
                 mViewPager.setCurrentItem(1);
                 showSnackBar(R.string.create_schedule_incomplete_items);
                 return false;
@@ -334,7 +334,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
         }
 
         for (ScheduleItem i : ScheduleHelper.instance().getScheduleItems()) {
-            if (i.dose() <= 0) {
+            if (i.getDose() <= 0) {
                 mViewPager.setCurrentItem(1);
                 showSnackBar(R.string.create_schedule_incomplete_doses);
                 return false;
@@ -352,7 +352,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
 
     void showDeleteConfirmationDialog(final Schedule s) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(String.format(getString(R.string.remove_medicine_message_short), s.medicine().name()))
+        builder.setMessage(String.format(getString(R.string.remove_medicine_message_short), s.medicine().getName()))
                 .setCancelable(true)
                 .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -379,7 +379,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedules);
 
-        pColor = DB.patients().getActive(this).color();
+        pColor = DB.patients().getActive(this).getColor();
         setupToolbar(null, pColor);
         setupStatusBar(pColor);
         subscribeToEvents();

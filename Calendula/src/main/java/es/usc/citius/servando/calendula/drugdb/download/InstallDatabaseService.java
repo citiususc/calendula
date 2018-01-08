@@ -102,7 +102,7 @@ public class InstallDatabaseService extends IntentService {
         boolean anyMissing = false;
         for (Medicine m : DB.medicines().findAll()) {
             if (m.isBoundToPrescription()) {
-                final String cn = m.cn();
+                final String cn = m.getCn();
                 final Prescription byCn = DB.drugDB().prescriptions().findByCn(cn);
                 if (byCn == null) {
                     anyMissing = true;

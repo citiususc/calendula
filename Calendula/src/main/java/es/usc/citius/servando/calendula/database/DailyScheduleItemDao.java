@@ -200,10 +200,10 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
         // get original value
         DailyScheduleItem original = findById(model.getId());
         // ensure checked status has changed
-        boolean updateStock = original.takenToday() != model.takenToday();
+        boolean updateStock = original.getTakenToday() != model.getTakenToday();
 
         if (updateStock) {
-            Schedule s = model.boundToSchedule() ? model.schedule() : model.scheduleItem().schedule();
+            Schedule s = model.boundToSchedule() ? model.getSchedule() : model.getScheduleItem().getSchedule();
             DB.schedules().refresh(s);
             Medicine m = s.medicine();
             DB.medicines().refresh(m);
@@ -212,12 +212,12 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
                 try {
                     float amount;
                     if (s.repeatsHourly()) {
-                        amount = model.takenToday() ? -s.dose() : s.dose();
+                        amount = model.getTakenToday() ? -s.dose() : s.dose();
                     } else {
-                        ScheduleItem si = model.scheduleItem();
-                        amount = model.takenToday() ? -si.dose() : si.dose();
+                        ScheduleItem si = model.getScheduleItem();
+                        amount = model.getTakenToday() ? -si.getDose() : si.getDose();
                     }
-                    m.setStock(m.stock() + amount);
+                    m.setStock(m.getStock() + amount);
                     DB.medicines().save(m);
 
                     if (fireEvent) {

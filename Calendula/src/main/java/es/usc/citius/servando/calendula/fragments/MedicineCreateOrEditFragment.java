@@ -176,7 +176,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             stockLayout.setVisibility(View.VISIBLE);
         }
 
-        pColor = DB.patients().getActive(getActivity()).color();
+        pColor = DB.patients().getActive(getActivity()).getColor();
         setupIcons(rootView);
 
         mNameTextView.setOnClickListener(new View.OnClickListener() {
@@ -323,15 +323,15 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     }
 
     public void setMedicne(Medicine r) {
-        LogUtil.d(TAG, "Medicine set: " + r.name());
+        LogUtil.d(TAG, "Medicine set: " + r.getName());
         mMedicine = r;
-        mNameTextView.setText(mMedicine.name());
-        mPresentationTv.setText(": " + mMedicine.presentation().getName(getResources()));
-        selectedPresentation = mMedicine.presentation();
-        selectPresentation(mMedicine.presentation());
+        mNameTextView.setText(mMedicine.getName());
+        mPresentationTv.setText(": " + mMedicine.getPresentation().getName(getResources()));
+        selectedPresentation = mMedicine.getPresentation();
+        selectPresentation(mMedicine.getPresentation());
 
-        if (r.cn() != null) {
-            Prescription p = DB.drugDB().prescriptions().findByCn(r.cn());
+        if (r.getCn() != null) {
+            Prescription p = DB.drugDB().prescriptions().findByCn(r.getCn());
             if (p != null) {
                 mPrescription = p;
 //                mDescriptionTv.setText(p.getName());
@@ -652,11 +652,11 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         final MedicinesActivity medicinesActivity = (MedicinesActivity) getActivity();
         new MaterialStyledDialog.Builder(getContext())
                 .setStyle(Style.HEADER_WITH_ICON)
-                .setIcon(IconUtils.icon(getContext(), mMedicine.presentation().icon(), R.color.white, 100))
+                .setIcon(IconUtils.icon(getContext(), mMedicine.getPresentation().icon(), R.color.white, 100))
                 .setHeaderColor(R.color.android_orange_dark)
                 .withDialogAnimation(true)
                 .setTitle(R.string.title_reset_stock)
-                .setDescription(getString(R.string.message_reset_stock, mMedicine.name()))
+                .setDescription(getString(R.string.message_reset_stock, mMedicine.getName()))
                 .setCancelable(true)
                 .setNegativeText(R.string.cancel)
                 .setPositiveText(R.string.reset)
@@ -703,7 +703,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             }
         });
 
-        stock = mMedicine != null && mMedicine.stock() != null ? mMedicine.stock() : -1;
+        stock = mMedicine != null && mMedicine.getStock() != null ? mMedicine.getStock() : -1;
 
         if (stock > -1) {
             stockSwitch.setChecked(true);
@@ -748,16 +748,16 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         try {
             List<Medicine> others;
             if (m.isBoundToPrescription()) {
-                final String cn = m.cn();
+                final String cn = m.getCn();
                 final PreparedQuery<Medicine> query = DB.medicines().queryBuilder().where()
-                        .eq(Medicine.COLUMN_PATIENT, m.patient())
+                        .eq(Medicine.COLUMN_PATIENT, m.getPatient())
                         .and().eq(Medicine.COLUMN_CN, cn).prepare();
                 others = DB.medicines().query(query);
             } else {
-                final String name = m.name();
-                final Presentation presentation = m.presentation();
+                final String name = m.getName();
+                final Presentation presentation = m.getPresentation();
                 final PreparedQuery<Medicine> query = DB.medicines().queryBuilder().where()
-                        .eq(Medicine.COLUMN_PATIENT, m.patient())
+                        .eq(Medicine.COLUMN_PATIENT, m.getPatient())
                         .and().eq(Medicine.COLUMN_NAME, name)
                         .and().eq(Medicine.COLUMN_PRESENTATION, presentation).prepare();
                 others = DB.medicines().query(query);

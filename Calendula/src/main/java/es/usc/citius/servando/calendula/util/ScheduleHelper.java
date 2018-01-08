@@ -124,7 +124,7 @@ public class ScheduleHelper {
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
         if (schedule != null && scheduleType == -1) {
-            if (schedule.rule().frequency() == Frequency.HOURLY) {
+            if (schedule.rule().getFrequency() == Frequency.HOURLY) {
                 this.setScheduleType(ScheduleTypeFragment.TYPE_HOURLY);
             } else if (schedule.type() == Schedule.SCHEDULE_TYPE_CYCLE) {
                 this.setScheduleType(ScheduleTypeFragment.TYPE_PERIOD);
@@ -149,7 +149,7 @@ public class ScheduleHelper {
     @Override
     public String toString() {
         return "ScheduleCreationHelper{" +
-                "selectedMed=" + selectedMed.name() +
+                "selectedMed=" + selectedMed.getName() +
                 ", selectedScheduleIdx=" + selectedScheduleIdx +
                 ", timesPerDay=" + timesPerDay +
                 ", scheduleItems=" + scheduleItems.size() +

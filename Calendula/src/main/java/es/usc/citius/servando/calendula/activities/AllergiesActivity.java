@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -138,8 +137,8 @@ public class AllergiesActivity extends CalendulaActivity {
 
         //setup toolbar and status bar
         final Patient patient = DB.patients().getActive(this);
-        color = patient.color();
-        final String name = patient.name();
+        color = patient.getColor();
+        final String name = patient.getName();
         setupToolbar(getString(R.string.relation_user_possession_thing, name, getString(R.string.title_activity_allergies)), color);
         setupStatusBar(color);
 

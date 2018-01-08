@@ -70,7 +70,7 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
     }
 
     public List<Medicine> findAll(Patient p) {
-        return findAll(p.id());
+        return findAll(p.getId());
     }
 
 
@@ -106,7 +106,7 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
         if (m.stockManagementEnabled() && m.getId() != null) {
 
             Medicine original = findById(m.getId());
-            boolean addedOrRemoved = original.stock() == null || !original.stock().equals(m.stock());
+            boolean addedOrRemoved = original.getStock() == null || !original.getStock().equals(m.getStock());
             super.save(m);
 
             if (addedOrRemoved) {
@@ -127,7 +127,7 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
         } else {
             // assign homogeneous group if possible
             if (m.isBoundToPrescription()) {
-                Prescription p = DB.drugDB().prescriptions().findByCn(m.cn());
+                Prescription p = DB.drugDB().prescriptions().findByCn(m.getCn());
                 if (p != null && p.getHomogeneousGroup() != null) {
                     m.setHomogeneousGroup(p.getHomogeneousGroup());
                 }

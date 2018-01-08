@@ -110,7 +110,7 @@ public class Medicine implements Comparable<Medicine> {
         return m;
     }
 
-    public String cn() {
+    public String getCn() {
         return cn;
     }
 
@@ -118,7 +118,7 @@ public class Medicine implements Comparable<Medicine> {
         this.cn = cn;
     }
 
-    public String homogeneousGroup() {
+    public String getHomogeneousGroup() {
         return homogeneousGroup;
     }
 
@@ -134,7 +134,7 @@ public class Medicine implements Comparable<Medicine> {
         this.id = id;
     }
 
-    public String name() {
+    public String getName() {
         return name;
     }
 
@@ -142,7 +142,7 @@ public class Medicine implements Comparable<Medicine> {
         this.name = name;
     }
 
-    public Presentation presentation() {
+    public Presentation getPresentation() {
         return presentation;
     }
 
@@ -150,11 +150,11 @@ public class Medicine implements Comparable<Medicine> {
         this.presentation = presentation;
     }
 
-    public Collection<PickupInfo> pickups() {
+    public Collection<PickupInfo> getPickups() {
         return DB.pickups().findByMedicine(this);
     }
 
-    public Patient patient() {
+    public Patient getPatient() {
         return patient;
     }
 
@@ -190,14 +190,14 @@ public class Medicine implements Comparable<Medicine> {
     public LocalDate nextPickupDate() {
 
         List<PickupInfo> pickupList = new ArrayList<>();
-        for (PickupInfo pickupInfo : pickups()) {
-            if (!pickupInfo.taken())
+        for (PickupInfo pickupInfo : getPickups()) {
+            if (!pickupInfo.isTaken())
                 pickupList.add(pickupInfo);
         }
 
         if (!pickupList.isEmpty()) {
             sort(pickupList, new PickupInfo.PickupComparator());
-            return pickupList.get(0).from();
+            return pickupList.get(0).getFrom();
         }
 
         return null;
@@ -212,7 +212,7 @@ public class Medicine implements Comparable<Medicine> {
         return cn != null && database != null && database.equals(PreferenceUtils.getString(PreferenceKeys.DRUGDB_CURRENT_DB, null));
     }
 
-    public Float stock() {
+    public Float getStock() {
         return stock;
     }
 

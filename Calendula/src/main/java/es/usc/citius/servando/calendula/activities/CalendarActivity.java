@@ -202,11 +202,11 @@ public class CalendarActivity extends CalendulaActivity {
 
         for (PickupInfo p : pks) {
             Patient patient = pickupUtils.getPatient(p);
-            int color = patient.color();
-            String str = "       " + p.medicine().name() + " (" + dtf2.format(p.from().toDate()) + " - " + dtf2.format(p.to().toDate()) + ")\n";
+            int color = patient.getColor();
+            String str = "       " + p.getMedicine().getName() + " (" + dtf2.format(p.getFrom().toDate()) + " - " + dtf2.format(p.getTo().toDate()) + ")\n";
             Spannable text = new SpannableString(str);
             text.setSpan(new ForegroundColorSpan(color), 0, str.length() - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            Drawable d = getResources().getDrawable(AvatarMgr.res(patient.avatar()));
+            Drawable d = getResources().getDrawable(AvatarMgr.res(patient.getAvatar()));
             d.setBounds(0, 0, fontMetrics.bottom, fontMetrics.bottom);
             ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE);
             text.setSpan(span, 0, 5, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -361,7 +361,7 @@ public class CalendarActivity extends CalendulaActivity {
 
         names[0] = getString(R.string.calendar_patient_all);
         for (int i = 0; i < pats.size(); i++) {
-            names[i + 1] = pats.get(i).name();
+            names[i + 1] = pats.get(i).getName();
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.toolbar_spinner_item, names);
@@ -396,10 +396,10 @@ public class CalendarActivity extends CalendulaActivity {
         } else {
             int pIndex = selectedPatientIdx - 1;
             selectedPatient = pats.get(pIndex);
-            topBg.setBackgroundColor(selectedPatient.color());
+            topBg.setBackgroundColor(selectedPatient.getColor());
 
-            selectedPatientId = selectedPatient.id();
-            avatar.setImageResource(AvatarMgr.res(selectedPatient.avatar()));
+            selectedPatientId = selectedPatient.getId();
+            avatar.setImageResource(AvatarMgr.res(selectedPatient.getAvatar()));
         }
 
         new UpdatePickupsTask().execute();
@@ -454,18 +454,18 @@ public class CalendarActivity extends CalendulaActivity {
             list.removeAllViews();
             for (final PickupInfo p : from) {
 
-                Medicine m = DB.medicines().findById(p.medicine().getId());
-                Patient pat = DB.patients().findById(m.patient().id());
+                Medicine m = DB.medicines().findById(p.getMedicine().getId());
+                Patient pat = DB.patients().findById(m.getPatient().getId());
 
-                if (selectedPatientIdx == 0 || pat.id() == selectedPatientId) {
+                if (selectedPatientIdx == 0 || pat.getId() == selectedPatientId) {
 
                     View v = i.inflate(R.layout.calendar_pickup_list_item, null);
                     TextView tv1 = ((TextView) v.findViewById(R.id.textView));
                     TextView tv2 = ((TextView) v.findViewById(R.id.textView2));
                     ImageView avatar = ((ImageView) v.findViewById(R.id.avatar));
-                    String interval = getResources().getString(R.string.pickup_interval, p.to().toString(df));
+                    String interval = getResources().getString(R.string.pickup_interval, p.getTo().toString(df));
 
-                    if (p.taken()) {
+                    if (p.isTaken()) {
                         interval += " ✔";
                         tv1.setAlpha(0.5f);
                     } else {
@@ -473,14 +473,14 @@ public class CalendarActivity extends CalendulaActivity {
                         tv2.setAlpha(1f);
                     }
 
-                    tv1.setText(p.medicine().name());
+                    tv1.setText(p.getMedicine().getName());
                     tv2.setText(interval);
-                    avatar.setImageResource(AvatarMgr.res(pat.avatar()));
+                    avatar.setImageResource(AvatarMgr.res(pat.getAvatar()));
 
                     tv1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            p.taken(!p.taken());
+                            p.setTaken(!p.isTaken());
                             DB.pickups().save(p);
                             showPickupsInfo(date);
                         }

@@ -87,8 +87,8 @@ public class MedicinesActivityCreateTest extends ActivityInstrumentationTestCase
 
         Medicine m = DB.medicines().findOneBy(Medicine.COLUMN_NAME, NAME);
         assertNotNull(m);
-        assertEquals(NAME, m.name());
-        assertEquals(Presentation.CAPSULES, m.presentation());
+        assertEquals(NAME, m.getName());
+        assertEquals(Presentation.CAPSULES, m.getPresentation());
     }
 
 

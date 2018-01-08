@@ -71,7 +71,7 @@ public class RepetitionRule {
         }
     }
 
-    public String start() {
+    public String getStart() {
         return start;
     }
 
@@ -79,11 +79,11 @@ public class RepetitionRule {
         this.start = start;
     }
 
-    public Frequency frequency() {
+    public Frequency getFrequency() {
         return rrule.getFreq();
     }
 
-    public int interval() {
+    public int getInterval() {
         return rrule.getInterval();
     }
 
@@ -109,7 +109,7 @@ public class RepetitionRule {
         this.days = null;
     }
 
-    public boolean[] days() {
+    public boolean[] getDays() {
         if (this.days == null) {
             this.days = new boolean[7];
             for (WeekdayNum w : rrule.getByDay()) {
@@ -147,7 +147,7 @@ public class RepetitionRule {
         }
     }
 
-    public RRule iCalRule() {
+    public RRule getRRule() {
         return rrule;
     }
 

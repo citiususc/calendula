@@ -79,7 +79,7 @@ public class RoutineDao extends GenericDao<Routine, Long> {
     }
 
     public List<Routine> findAll(Patient p) {
-        return findAll(p.id());
+        return findAll(p.getId());
     }
 
 
@@ -131,7 +131,7 @@ public class RoutineDao extends GenericDao<Routine, Long> {
         DB.transaction(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
-                Collection<ScheduleItem> items = r.scheduleItems();
+                Collection<ScheduleItem> items = r.getScheduleItems();
                 for (ScheduleItem i : items) {
                     i.deleteCascade();
                 }

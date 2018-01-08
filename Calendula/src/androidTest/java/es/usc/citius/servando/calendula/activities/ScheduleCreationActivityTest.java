@@ -153,7 +153,7 @@ public class ScheduleCreationActivityTest extends ActivityInstrumentationTestCas
         // schedule medicine is not null
         assertNotNull(s.medicine());
         // medicine is aspirin
-        assertEquals("Aspirin", s.medicine().name());
+        assertEquals("Aspirin", s.medicine().getName());
         // select days are mon, wed,fry and sun
         assertEquals(Arrays.toString(days), Arrays.toString(s.days()));
         // there are 3 schedule items
@@ -161,17 +161,17 @@ public class ScheduleCreationActivityTest extends ActivityInstrumentationTestCas
         // every schedule item...
         for (ScheduleItem i : items) {
             // has a routine
-            assertNotNull(i.routine());
+            assertNotNull(i.getRoutine());
             // and a schedule
-            assertNotNull(i.schedule());
+            assertNotNull(i.getSchedule());
             // has a dose of 1
-            assertEquals(1.0f, i.dose());
+            assertEquals(1.0f, i.getDose());
             // has an associated DailyScheduleItem
             DailyScheduleItem dsi = DB.dailyScheduleItems().findByScheduleItem(i);
             // which is not null
             assertNotNull(dsi);
             // and is not set as taken
-            assertFalse(dsi.takenToday());
+            assertFalse(dsi.getTakenToday());
         }
     }
 }

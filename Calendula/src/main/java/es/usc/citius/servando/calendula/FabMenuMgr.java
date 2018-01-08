@@ -124,7 +124,7 @@ public class FabMenuMgr implements View.OnClickListener {
 
     public void onPatientUpdate(Patient p) {
         for (FloatingActionButton fabMenuButton : fabMenuButtons) {
-            fabMenuButton.setBackgroundTintList(ColorStateList.valueOf(p.color()));
+            fabMenuButton.setBackgroundTintList(ColorStateList.valueOf(p.getColor()));
         }
     }
 
@@ -142,7 +142,7 @@ public class FabMenuMgr implements View.OnClickListener {
             fabMenuSubViews.add(fabActionQrView);
             final FloatingActionButton fabActionQr = (FloatingActionButton) activity.findViewById(R.id.fab_action_qr_button);
             fabActionQr.setOnClickListener(this);
-            fabActionQr.setBackgroundTintList(ColorStateList.valueOf(DB.patients().getActive(activity).color()));
+            fabActionQr.setBackgroundTintList(ColorStateList.valueOf(DB.patients().getActive(activity).getColor()));
             fabMenuButtons.add(fabActionQr);
         }
 
@@ -162,9 +162,9 @@ public class FabMenuMgr implements View.OnClickListener {
         fabActionRoutines.setOnClickListener(this);
         fabActionPeriod.setOnClickListener(this);
 
-        fabActionInterval.setBackgroundTintList(ColorStateList.valueOf(DB.patients().getActive(activity).color()));
-        fabActionRoutines.setBackgroundTintList(ColorStateList.valueOf(DB.patients().getActive(activity).color()));
-        fabActionPeriod.setBackgroundTintList(ColorStateList.valueOf(DB.patients().getActive(activity).color()));
+        fabActionInterval.setBackgroundTintList(ColorStateList.valueOf(DB.patients().getActive(activity).getColor()));
+        fabActionRoutines.setBackgroundTintList(ColorStateList.valueOf(DB.patients().getActive(activity).getColor()));
+        fabActionPeriod.setBackgroundTintList(ColorStateList.valueOf(DB.patients().getActive(activity).getColor()));
 
         fabMenuButtons.add(fabActionPeriod);
         fabMenuButtons.add(fabActionInterval);

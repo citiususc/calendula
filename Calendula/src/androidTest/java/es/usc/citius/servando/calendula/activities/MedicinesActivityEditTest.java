@@ -62,7 +62,7 @@ public class MedicinesActivityEditTest extends ActivityInstrumentationTestCase2<
     public void testEditMedicine() {
 
         assertEquals(1, DB.medicines().count());
-        assertEquals(MEDICINE_NAME, DB.medicines().findAll().get(0).name());
+        assertEquals(MEDICINE_NAME, DB.medicines().findAll().get(0).getName());
 
         TestUtils.sleep(1500);
         // select capsules presentation
@@ -78,7 +78,7 @@ public class MedicinesActivityEditTest extends ActivityInstrumentationTestCase2<
         Medicine m = DB.medicines().findOneBy(Medicine.COLUMN_NAME, MEDICINE_NAME);
         assertEquals(1, DB.medicines().count());
         assertNotNull(m);
-        assertEquals(Presentation.CAPSULES, m.presentation());
+        assertEquals(Presentation.CAPSULES, m.getPresentation());
     }
 
 

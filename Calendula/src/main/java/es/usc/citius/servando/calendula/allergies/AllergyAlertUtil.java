@@ -48,7 +48,7 @@ public class AllergyAlertUtil {
         LogUtil.d(TAG, "getAlertsForMedicine() called with: m = [" + m + "]");
         HashMap<String, Object> query = new HashMap<String, Object>() {{
             put(PatientAlert.COLUMN_TYPE, AllergyPatientAlert.class.getCanonicalName());
-            put(PatientAlert.COLUMN_PATIENT, m.patient());
+            put(PatientAlert.COLUMN_PATIENT, m.getPatient());
             put(PatientAlert.COLUMN_MEDICINE, m);
         }};
         return DB.alerts().queryForFieldValuesArgs(query);

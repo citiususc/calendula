@@ -79,7 +79,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
         View rootView = inflater.inflate(R.layout.fragment_create_or_edit_routine, container, false);
         ButterKnife.bind(this, rootView);
 
-        pColor = DB.patients().getActive(getActivity()).color();
+        pColor = DB.patients().getActive(getActivity()).getColor();
 
         timeButton.setTextColor(pColor);
 
@@ -139,8 +139,8 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
     public void setRoutine(long routineId) {
         if (routineId != -1) {
             mRoutine = Routine.findById(routineId);
-            hour = mRoutine.time().getHourOfDay();
-            minute = mRoutine.time().getMinuteOfHour();
+            hour = mRoutine.getTime().getHourOfDay();
+            minute = mRoutine.getTime().getMinuteOfHour();
             setRoutine(mRoutine);
         } else {
             DateTime now = DateTime.now();
@@ -203,10 +203,10 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
 
         String message;
 
-        if (r.scheduleItems().size() > 0) {
-            message = String.format(getString(R.string.remove_routine_message_long), r.name());
+        if (r.getScheduleItems().size() > 0) {
+            message = String.format(getString(R.string.remove_routine_message_long), r.getName());
         } else {
-            message = String.format(getString(R.string.remove_routine_message_short), r.name());
+            message = String.format(getString(R.string.remove_routine_message_short), r.getName());
         }
 
         builder.setMessage(message)
@@ -263,9 +263,9 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
     }
 
     private void setRoutine(Routine r) {
-        LogUtil.d(TAG, "Routine set: " + r.name());
+        LogUtil.d(TAG, "Routine set: " + r.getName());
         mRoutine = r;
-        mNameTextView.setText(mRoutine.name());
+        mNameTextView.setText(mRoutine.getName());
         updateTime();
     }
 

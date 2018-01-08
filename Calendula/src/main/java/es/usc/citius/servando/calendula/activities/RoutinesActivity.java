@@ -97,7 +97,7 @@ public class RoutinesActivity extends CalendulaActivity implements RoutineCreate
         setContentView(R.layout.activity_routines);
         ButterKnife.bind(this);
 
-        int color = DB.patients().getActive(this).color();
+        int color = DB.patients().getActive(this).getColor();
         setupToolbar(null, color);
         setupStatusBar(color);
 

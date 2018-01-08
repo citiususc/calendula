@@ -76,9 +76,9 @@ public class MedicineItem extends AbstractItem<MedicineItem, MedicineItem.Medici
         super.bindView(holder, payloads);
         Context ctx = holder.itemView.getContext();
 
-        holder.name.setText(medicine.name());
+        holder.name.setText(medicine.getName());
         holder.icon.setImageDrawable(new IconicsDrawable(ctx)
-                .icon(medicine.presentation().icon())
+                .icon(medicine.getPresentation().icon())
                 .colorRes(R.color.agenda_item_title)
                 .paddingDp(8)
                 .sizeDp(40));
@@ -91,8 +91,8 @@ public class MedicineItem extends AbstractItem<MedicineItem, MedicineItem.Medici
                 holder.stockInfo.setText("Próxima e-Receta: " + nextPickup);
             }
 
-            if (medicine.stock() != null && medicine.stock() >= 0) {
-                holder.stockInfo.setText(ctx.getString(R.string.stock_remaining_msg, medicine.stock().intValue(), medicine.presentation().units(ctx.getResources(), medicine.stock())));
+            if (medicine.getStock() != null && medicine.getStock() >= 0) {
+                holder.stockInfo.setText(ctx.getString(R.string.stock_remaining_msg, medicine.getStock().intValue(), medicine.getPresentation().units(ctx.getResources(), medicine.getStock())));
             }
         }
 

@@ -137,10 +137,10 @@ public class DailyAgendaFragment extends Fragment {
         // create stubs for hourly schedule items
         for (DailyScheduleItem dailyScheduleItem : daily) {
             if (dailyScheduleItem.boundToSchedule()) {
-                Schedule schedule = dailyScheduleItem.schedule();
+                Schedule schedule = dailyScheduleItem.getSchedule();
                 Medicine medicine = schedule.medicine();
-                LocalTime time = dailyScheduleItem.time();
-                LocalDate date = dailyScheduleItem.date();
+                LocalTime time = dailyScheduleItem.getTime();
+                LocalDate date = dailyScheduleItem.getDate();
 
                 // create a stub for this item
                 DailyAgendaItemStub stub = new DailyAgendaItemStub(date, time);
@@ -155,13 +155,13 @@ public class DailyAgendaFragment extends Fragment {
 
                 // create a element for the schedule item
                 DailyAgendaItemStubElement el = new DailyAgendaItemStubElement();
-                el.medName = medicine.name();
+                el.medName = medicine.getName();
                 el.dose = schedule.dose();
                 el.displayDose = schedule.displayDose();
-                el.res = medicine.presentation().getDrawable();
-                el.presentation = medicine.presentation();
+                el.res = medicine.getPresentation().getDrawable();
+                el.presentation = medicine.getPresentation();
                 el.minute = time.toString("mm");
-                el.taken = dailyScheduleItem.takenToday();
+                el.taken = dailyScheduleItem.getTakenToday();
                 stub.meds.add(el);
                 stubs.add(stub);
 
@@ -179,7 +179,7 @@ public class DailyAgendaFragment extends Fragment {
         final Map<LocalDate, Map<Routine, DailyAgendaItemStub>> dateStubs = new HashMap<>();
         // create stubs for routine items
         for (Routine routine : DB.routines().findAll()) {
-            for (ScheduleItem scheduleItem : routine.scheduleItems()) {
+            for (ScheduleItem scheduleItem : routine.getScheduleItems()) {
                 // get item from daily agenda if exists
                 List<DailyScheduleItem> dailyScheduleItems = DB.dailyScheduleItems().findAllByScheduleItem(scheduleItem);
 
@@ -190,7 +190,7 @@ public class DailyAgendaFragment extends Fragment {
                         break;
                     }
 
-                    LocalDate date = dailyScheduleItem.date();
+                    LocalDate date = dailyScheduleItem.getDate();
 
                     if (!dateStubs.containsKey(date)) {
                         dateStubs.put(date, new HashMap<Routine, DailyAgendaItemStub>());
@@ -200,15 +200,15 @@ public class DailyAgendaFragment extends Fragment {
 
                     DailyAgendaItemStub stub;
 
-                    LocalTime time = routine.time();
+                    LocalTime time = routine.getTime();
 
                     if (!routineStubs.containsKey(routine)) {
                         // create a new stub and add it to the list
-                        stub = new DailyAgendaItemStub(date, routine.time());
+                        stub = new DailyAgendaItemStub(date, routine.getTime());
                         stub.isRoutine = true;
                         stub.id = routine.getId();
-                        stub.patient = routine.patient();
-                        stub.title = routine.name();
+                        stub.patient = routine.getPatient();
+                        stub.title = routine.getName();
                         stub.time = time;
                         stub.meds = new ArrayList<>();
                         stub.hasEvents = true;
@@ -226,19 +226,19 @@ public class DailyAgendaFragment extends Fragment {
                         stub = routineStubs.get(routine);
                     }
 
-                    Schedule schedule = scheduleItem.schedule();
+                    Schedule schedule = scheduleItem.getSchedule();
                     Medicine medicine = schedule.medicine();
 
                     DailyAgendaItemStubElement el = new DailyAgendaItemStubElement();
                     // add element properties
-                    el.medName = medicine.name();
-                    el.dose = scheduleItem.dose();
+                    el.medName = medicine.getName();
+                    el.dose = scheduleItem.getDose();
                     el.scheduleItemId = scheduleItem.getId();
                     el.displayDose = scheduleItem.displayDose();
-                    el.res = medicine.presentation().getDrawable();
-                    el.presentation = medicine.presentation();
+                    el.res = medicine.getPresentation().getDrawable();
+                    el.presentation = medicine.getPresentation();
                     el.minute = time.toString("mm");
-                    el.taken = dailyScheduleItem.takenToday();
+                    el.taken = dailyScheduleItem.getTakenToday();
                     stub.meds.add(el);
                 }
             }

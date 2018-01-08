@@ -53,7 +53,7 @@ public class ScheduleDao extends GenericDao<Schedule, Long> {
     }
 
     public List<Schedule> findAll(Patient p) {
-        return findAll(p.id());
+        return findAll(p.getId());
     }
 
 
@@ -137,7 +137,7 @@ public class ScheduleDao extends GenericDao<Schedule, Long> {
             final PreparedQuery<Schedule> q = dao.queryBuilder().where()
                     .eq(Schedule.COLUMN_MEDICINE, m)
                     .and().eq(Schedule.COLUMN_STATE, s)
-                    .and().eq(Schedule.COLUMN_PATIENT, m.patient())
+                    .and().eq(Schedule.COLUMN_PATIENT, m.getPatient())
                     .prepare();
             return dao.query(q);
         } catch (SQLException e) {

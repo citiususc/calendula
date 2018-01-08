@@ -111,7 +111,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
                 .withIdentifier(PATIENT_ADD));
 
         for (Patient p : DB.patients().findAll()) {
-            LogUtil.d(TAG, "Adding patient to drawer: " + p.name());
+            LogUtil.d(TAG, "Adding patient to drawer: " + p.getName());
             profiles.add(genProfile(p));
         }
 
@@ -198,7 +198,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
         drawer = b.build();
 
         Patient p = DB.patients().getActive(home);
-        headerResult.setActiveProfile(p.id().intValue(), false);
+        headerResult.setActiveProfile(p.getId().intValue(), false);
         updateHeaderBackground(p);
 
         onPharmacyModeChanged(isPharmaEnabled);
@@ -320,7 +320,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
         //int colors[] = AvatarMgr.colorsFor(home.getResources(), p.avatar());
         LayerDrawable layers = (LayerDrawable) headerResult.getHeaderBackgroundView().getDrawable();
         ColorDrawable color = (ColorDrawable) layers.findDrawableByLayerId(R.id.color_layer);
-        color.setColor(ScreenUtils.equivalentNoAlpha(p.color(), 1f));
+        color.setColor(ScreenUtils.equivalentNoAlpha(p.getColor(), 1f));
     }
 
     public Drawer drawer() {
@@ -343,7 +343,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
                 Long id = (long) pr.getIdentifier();
                 boolean remove = true;
                 for (Patient pat : patients) {
-                    if (pat.id().equals(id)) {
+                    if (pat.getId().equals(id)) {
                         remove = false;
                         break;
                     }
@@ -357,12 +357,12 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
             }
         }
 
-        headerResult.setActiveProfile(p.id().intValue(), false);
+        headerResult.setActiveProfile(p.getId().intValue(), false);
 
-        if (p != null && !p.equals(currentPatient) || header().getActiveProfile().getIcon().getIconRes() != AvatarMgr.res(p.avatar())) {
-            headerResult.setActiveProfile(p.id().intValue(), false);
+        if (p != null && !p.equals(currentPatient) || header().getActiveProfile().getIcon().getIconRes() != AvatarMgr.res(p.getAvatar())) {
+            headerResult.setActiveProfile(p.getId().intValue(), false);
             IProfile profile = headerResult.getActiveProfile();
-            profile.withIcon(AvatarMgr.res(p.avatar()));
+            profile.withIcon(AvatarMgr.res(p.getAvatar()));
             headerResult.updateProfile(profile);
         }
         updateHeaderBackground(p);
@@ -407,10 +407,10 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
         }
 
         return new ProfileDrawerItem()
-                .withIdentifier(p.id().intValue())
-                .withName(p.name())
+                .withIdentifier(p.getId().intValue())
+                .withName(p.getName())
                 .withEmail(fakeMail)
-                .withIcon(AvatarMgr.res(p.avatar()))
+                .withIcon(AvatarMgr.res(p.getAvatar()))
                 .withNameShown(true);
     }
 

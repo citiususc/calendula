@@ -54,7 +54,7 @@ public class Patient {
     @DatabaseField(columnName = COLUMN_COLOR)
     private int color = Color.parseColor("#3498db"); // material blue 700 1976d2
 
-    public Long id() {
+    public Long getId() {
         return id;
     }
 
@@ -62,7 +62,7 @@ public class Patient {
         this.id = id;
     }
 
-    public String name() {
+    public String getName() {
         return name;
     }
 
@@ -78,7 +78,7 @@ public class Patient {
         this.isDefault = isDefault;
     }
 
-    public String avatar() {
+    public String getAvatar() {
         return avatar;
     }
 
@@ -91,7 +91,7 @@ public class Patient {
         this.color = color;
     }
 
-    public int color() {
+    public int getColor() {
         return color;
     }
 

@@ -70,7 +70,7 @@ public class ScanActivity extends CalendulaActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int color = DB.patients().getActive(this).color();
+        int color = DB.patients().getActive(this).getColor();
         setContentView(R.layout.activity_scan);
         setupStatusBar(color);
         findViewById(R.id.container).setBackgroundColor(color);

@@ -76,8 +76,8 @@ public class RoutinesActivityCreateTest extends ActivityInstrumentationTestCase2
         // find routine and do assertions
         Routine r = DB.routines().findOneBy(Routine.COLUMN_NAME, NAME);
         assertNotNull(r);
-        assertEquals(NAME, r.name());
-        assertEquals(new LocalTime(18, 30), r.time());
+        assertEquals(NAME, r.getName());
+        assertEquals(new LocalTime(18, 30), r.getTime());
     }
 
 

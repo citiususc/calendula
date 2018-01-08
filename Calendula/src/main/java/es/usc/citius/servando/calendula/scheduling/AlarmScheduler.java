@@ -118,7 +118,7 @@ public class AlarmScheduler {
 
         Routine routine = Routine.findById(params.routineId);
         if (routine != null) {
-            LogUtil.d(TAG, "onAlarmReceived: " + routine.getId() + ", " + routine.name());
+            LogUtil.d(TAG, "onAlarmReceived: " + routine.getId() + ", " + routine.getName());
             if (params.actionType == AlarmIntentParams.USER || isWithinDefaultMargins(routine, params.date())) {
                 LogUtil.d(TAG, "Routine alarm received, is user action: " + (params.actionType == AlarmIntentParams.USER));
                 onRoutineTime(routine, params, ctx);
@@ -174,7 +174,7 @@ public class AlarmScheduler {
     }
 
     public boolean isWithinDefaultMargins(Routine r, LocalDate date) {
-        return isWithinDefaultMargins(date.toDateTime(r.time()));
+        return isWithinDefaultMargins(date.toDateTime(r.getTime()));
     }
 
     public void onIntakeCancelled(Routine r, LocalDate date, Context ctx) {
@@ -193,7 +193,7 @@ public class AlarmScheduler {
 
     public void onIntakeConfirmAll(Routine r, LocalDate date, Context ctx) {
         // set time taken
-        for (ScheduleItem scheduleItem : r.scheduleItems()) {
+        for (ScheduleItem scheduleItem : r.getScheduleItems()) {
             DailyScheduleItem ds = DB.dailyScheduleItems().findByScheduleItemAndDate(scheduleItem, date);
             if (ds != null) {
                 LogUtil.d(TAG, "Confirming schedule item");
@@ -240,17 +240,17 @@ public class AlarmScheduler {
     }
 
     public void onCreateOrUpdateRoutine(Routine r, Context ctx) {
-        LogUtil.d(TAG, "onCreateOrUpdateRoutine: " + r.getId() + ", " + r.name());
+        LogUtil.d(TAG, "onCreateOrUpdateRoutine: " + r.getId() + ", " + r.getName());
         setFirstAlarm(r, LocalDate.now(), ctx);
     }
 
     public void onCreateOrUpdateSchedule(Schedule s, Context ctx) {
-        LogUtil.d(TAG, "onCreateOrUpdateSchedule: " + s.getId() + ", " + s.medicine().name());
+        LogUtil.d(TAG, "onCreateOrUpdateSchedule: " + s.getId() + ", " + s.medicine().getName());
         setAlarmsIfNeeded(s, LocalDate.now(), ctx);
     }
 
     public void onDeleteRoutine(Routine r, Context ctx) {
-        LogUtil.d(TAG, "onDeleteRoutine: " + r.getId() + ", " + r.name());
+        LogUtil.d(TAG, "onDeleteRoutine: " + r.getId() + ", " + r.getName());
         cancelAlarm(r, LocalDate.now(), ctx);
     }
 
@@ -264,7 +264,7 @@ public class AlarmScheduler {
      * Set an alarm for a routine
      */
     private void setFirstAlarm(Routine routine, LocalDate date, Context ctx) {
-        long timestamp = date.toDateTime(routine.time()).getMillis();
+        long timestamp = date.toDateTime(routine.getTime()).getMillis();
         PendingIntent routinePendingIntent = pendingIntent(ctx, routine, date, false, AlarmIntentParams.AUTO);
         setExactAlarm(ctx, timestamp, routinePendingIntent);
     }
@@ -337,8 +337,8 @@ public class AlarmScheduler {
     private void setAlarmsIfNeeded(Schedule schedule, LocalDate date, Context ctx) {
         if (!schedule.repeatsHourly()) {
             for (ScheduleItem scheduleItem : schedule.items()) {
-                if (scheduleItem.routine() != null && canBeScheduled(scheduleItem.routine().time().toDateTimeToday())) {
-                    setFirstAlarm(scheduleItem.routine(), date, ctx);
+                if (scheduleItem.getRoutine() != null && canBeScheduled(scheduleItem.getRoutine().getTime().toDateTimeToday())) {
+                    setFirstAlarm(scheduleItem.getRoutine(), date, ctx);
                 }
             }
         } else {
@@ -354,7 +354,7 @@ public class AlarmScheduler {
     private void onRoutineTime(Routine routine, AlarmIntentParams firstParams, Context ctx) {
 
         List<ScheduleItem> doses = new ArrayList<>();
-        List<ScheduleItem> rItems = routine.scheduleItems();
+        List<ScheduleItem> rItems = routine.getScheduleItems();
         boolean notify = false;
         // check if all items have timeTaken (cancelled notifications)
         for (ScheduleItem scheduleItem : rItems) {
@@ -363,8 +363,8 @@ public class AlarmScheduler {
             if (ds != null) {
                 LogUtil.d(TAG, "DailySchedule Item: " + ds.toString());
                 doses.add(scheduleItem);
-                if (ds.timeTaken() == null) {
-                    LogUtil.d(TAG, ds.scheduleItem().schedule().medicine().name() + " not checked or cancelled. Notify!");
+                if (ds.getTimeTaken() == null) {
+                    LogUtil.d(TAG, ds.getScheduleItem().getSchedule().medicine().getName() + " not checked or cancelled. Notify!");
                     notify = true;
                 }
             }
@@ -396,7 +396,7 @@ public class AlarmScheduler {
 
         DailyScheduleItem ds = DB.dailyScheduleItems().findBy(schedule, firstParams.date(), firstParams.scheduleTime());
 
-        if (ds != null && ds.timeTaken() == null) {
+        if (ds != null && ds.getTimeTaken() == null) {
             notify = true;
         }
 
@@ -450,9 +450,9 @@ public class AlarmScheduler {
     }
 
     private void cancelIntake(Routine r, LocalDate date) {
-        for (ScheduleItem scheduleItem : r.scheduleItems()) {
+        for (ScheduleItem scheduleItem : r.getScheduleItems()) {
             DailyScheduleItem ds = DB.dailyScheduleItems().findByScheduleItemAndDate(scheduleItem, date);
-            if (ds.timeTaken() == null) {
+            if (ds.getTimeTaken() == null) {
                 LogUtil.d(TAG, "Cancelling schedule item");
                 ds.setTimeTaken(LocalTime.now());
                 ds.save();
@@ -462,7 +462,7 @@ public class AlarmScheduler {
 
     private void cancelIntake(Schedule s, LocalTime t, LocalDate date) {
         DailyScheduleItem ds = DB.dailyScheduleItems().findBy(s, date, t);
-        if (ds != null && ds.timeTaken() == null) {
+        if (ds != null && ds.getTimeTaken() == null) {
             LogUtil.d(TAG, "Cancelling schedule item");
             ds.setTimeTaken(LocalTime.now());
             ds.save();

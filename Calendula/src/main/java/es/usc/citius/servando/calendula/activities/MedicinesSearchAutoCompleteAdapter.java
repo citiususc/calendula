@@ -67,7 +67,7 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
         super(context, textViewResourceId);
         this.resultListener = listener;
         this.mData = new ArrayList<>();
-        this.patientColor = DB.patients().getActive(context).color();
+        this.patientColor = DB.patients().getActive(context).getColor();
         this.icProspect = new IconicsDrawable(getContext())
                 .icon(CommunityMaterial.Icon.cmd_link_variant)
                 .color(patientColor)

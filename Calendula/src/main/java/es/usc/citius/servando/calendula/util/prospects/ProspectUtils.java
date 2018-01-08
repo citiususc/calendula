@@ -51,7 +51,7 @@ public class ProspectUtils {
         final Patient patient = DB.patients().getActive(context);
         Map<String, String> overrides = new HashMap<String, String>() {{
             put("###SCREEN_WIDTH###", (int) (ScreenUtils.getDpSize(context).x * 0.9) + "px");
-            put("###PATIENT_COLOR###", String.format("#%06X", (0xFFFFFF & patient.color())));
+            put("###PATIENT_COLOR###", String.format("#%06X", (0xFFFFFF & patient.getColor())));
         }};
 
         WebViewActivity.WebViewRequest request = new WebViewActivity.WebViewRequest(url);

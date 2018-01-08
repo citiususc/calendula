@@ -95,11 +95,11 @@ public class ReminderNotification {
         NotificationOptions options = new NotificationOptions();
         options.style = style;
         options.lost = lost;
-        options.when = r.time().toDateTimeToday().getMillis();
+        options.when = r.getTime().toDateTimeToday().getMillis();
         options.tag = NOTIFICATION_ROUTINE_TAG;
         options.notificationNumber = doses.size();
-        options.picture = getLargeIcon(context.getResources(), r.patient());
-        options.text = r.name() + " (" + doses.size() + " " + context.getString(R.string.home_menu_medicines).toLowerCase() + ")";
+        options.picture = getLargeIcon(context.getResources(), r.getPatient());
+        options.text = r.getName() + " (" + doses.size() + " " + context.getString(R.string.home_menu_medicines).toLowerCase() + ")";
 
         notify(context, routineNotificationId(r.getId().intValue()), title, intents, confirmAll, intent, options);
         showInsistentScreen(context, intent);
@@ -128,7 +128,7 @@ public class ReminderNotification {
         options.tag = NOTIFICATION_SCHEDULE_TAG;
         options.notificationNumber = 1;
         options.picture = getLargeIcon(context.getResources(), schedule.patient());
-        options.text = schedule.medicine().name() + " (" + schedule.toReadableString(context) + ")";
+        options.text = schedule.medicine().getName() + " (" + schedule.toReadableString(context) + ")";
         notify(context, scheduleNotificationId(schedule.getId().intValue()), title, intents, confirmAll, intent, options);
 
         showInsistentScreen(context, intent);
@@ -276,9 +276,9 @@ public class ReminderNotification {
             //String dfDose = timeFormatter.format(scheduleItem.dose());
 
             final SpannableStringBuilder SpItem = new SpannableStringBuilder();
-            final Medicine med = scheduleItem.schedule().medicine();
-            SpItem.append(med.name());
-            SpItem.append(":  " + scheduleItem.dose() + " " + med.presentation().units(ctx.getResources(), scheduleItem.dose()));
+            final Medicine med = scheduleItem.getSchedule().medicine();
+            SpItem.append(med.getName());
+            SpItem.append(":  " + scheduleItem.getDose() + " " + med.getPresentation().units(ctx.getResources(), scheduleItem.getDose()));
             style.addLine(SpItem);
         }
         String delayMinutesStr = PreferenceUtils.getString(PreferenceKeys.SETTINGS_ALARM_REPEAT_FREQUENCY, "15");
@@ -288,7 +288,7 @@ public class ReminderNotification {
             String repeatTime = DateTime.now().plusMinutes(delayMinutes).toString("HH:mm");
             style.setSummaryText(ctx.getResources().getString(R.string.notification_repeat_message, repeatTime));
         } else {
-            style.setSummaryText(doses.size() + " " + ctx.getString(R.string.medicine) + (doses.size() > 1 ? "s, " : ", ") + r.name());
+            style.setSummaryText(doses.size() + " " + ctx.getString(R.string.medicine) + (doses.size() > 1 ? "s, " : ", ") + r.getName());
         }
 
     }
@@ -297,8 +297,8 @@ public class ReminderNotification {
 
         final Medicine med = schedule.medicine();
         final SpannableStringBuilder SpItem = new SpannableStringBuilder();
-        SpItem.append(med.name());
-        SpItem.append("   " + schedule.dose() + " " + med.presentation().units(context.getResources(), schedule.dose()));
+        SpItem.append(med.getName());
+        SpItem.append("   " + schedule.dose() + " " + med.getPresentation().units(context.getResources(), schedule.dose()));
         style.addLine(SpItem);
 
         String delayMinutesStr = PreferenceUtils.getString(PreferenceKeys.SETTINGS_ALARM_REPEAT_FREQUENCY, "15");
@@ -308,8 +308,8 @@ public class ReminderNotification {
             String repeatTime = DateTime.now().plusMinutes(delayMinutes).toString("kk:mm");
             style.setSummaryText(context.getString(R.string.notification_repeat_message, repeatTime));
         } else {
-            style.setSummaryText(med.name() + "(" + context.getString(R.string.every) + " " + schedule.rule()
-                    .interval() + " " + context.getString(R.string.hours) + ")");
+            style.setSummaryText(med.getName() + "(" + context.getString(R.string.every) + " " + schedule.rule()
+                    .getInterval() + " " + context.getString(R.string.hours) + ")");
         }
     }
 
@@ -352,7 +352,7 @@ public class ReminderNotification {
     }
 
     private static Bitmap getLargeIcon(Resources r, Patient p) {
-        return BitmapFactory.decodeResource(r, AvatarMgr.res(p.avatar()));
+        return BitmapFactory.decodeResource(r, AvatarMgr.res(p.getAvatar()));
     }
 
 

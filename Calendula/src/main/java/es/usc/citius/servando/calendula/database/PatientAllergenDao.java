@@ -57,7 +57,7 @@ public class PatientAllergenDao extends GenericDao<PatientAllergen, Long> {
     }
 
     public List<PatientAllergen> findAll(Patient p) {
-        return findAll(p.id());
+        return findAll(p.getId());
     }
 
 

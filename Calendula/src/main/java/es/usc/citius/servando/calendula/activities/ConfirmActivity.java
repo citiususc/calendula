@@ -206,7 +206,7 @@ public class ConfirmActivity extends CalendulaActivity {
     }
 
     public String getDisplayableDose(double dose, String doseString, Medicine m) {
-        return doseString + " " + m.presentation().units(getResources(), dose);
+        return doseString + " " + m.getPresentation().units(getResources(), dose);
 
     }
 
@@ -262,7 +262,7 @@ public class ConfirmActivity extends CalendulaActivity {
     void onClickFab() {
         boolean somethingChecked = false;
         for (DailyScheduleItem item : items) {
-            if (!item.takenToday()) {
+            if (!item.getTakenToday()) {
                 item.setTakenToday(true);
                 DB.dailyScheduleItems().saveAndUpdateStock(item, true);
                 somethingChecked = true;
@@ -336,13 +336,13 @@ public class ConfirmActivity extends CalendulaActivity {
         Pair<DateTime, DateTime> interval = getCheckMarginInterval(dt);
         isDistant = !new Interval(interval.first, interval.second).contains(now);
 
-        color = AvatarMgr.colorsFor(getResources(), patient.avatar())[0];
+        color = AvatarMgr.colorsFor(getResources(), patient.getAvatar())[0];
         color = Color.parseColor("#263238");
 
         setupStatusBar(Color.TRANSPARENT);
         setupToolbar("", Color.TRANSPARENT, Color.WHITE);
         toolbar.setTitleTextColor(Color.WHITE);
-        findViewById(R.id.imageView5).setBackgroundColor(patient.color());
+        findViewById(R.id.imageView5).setBackgroundColor(patient.getColor());
         fab = (FloatingActionButton) findViewById(R.id.myFAB);
         listView = (RecyclerView) findViewById(R.id.listView);
         avatar = (ImageView) findViewById(R.id.patient_avatar);
@@ -358,10 +358,10 @@ public class ConfirmActivity extends CalendulaActivity {
         hour = (TextView) findViewById(R.id.routines_list_item_hour);
         minute = (TextView) findViewById(R.id.routines_list_item_minute);
         toolbarTitle = findViewById(R.id.toolbar_title);
-        avatar.setImageResource(AvatarMgr.res(patient.avatar()));
-        avatarTitle.setImageResource(AvatarMgr.res(patient.avatar()));
-        titleTitle.setText(patient.name());
-        title.setText((isRoutine ? routine.name() : schedule.toReadableString(this)));
+        avatar.setImageResource(AvatarMgr.res(patient.getAvatar()));
+        avatarTitle.setImageResource(AvatarMgr.res(patient.getAvatar()));
+        titleTitle.setText(patient.getName());
+        title.setText((isRoutine ? routine.getName() : schedule.toReadableString(this)));
         takeMadsMessage.setText(isInWindow ? getString(R.string.agenda_zoom_meds_time) : getString(R.string.meds_from) + " " + date.toString("EEEE dd"));
 
 
@@ -394,7 +394,7 @@ public class ConfirmActivity extends CalendulaActivity {
 
                 boolean somethingToCheck = false;
                 for (DailyScheduleItem item : items) {
-                    if (!item.takenToday()) {
+                    if (!item.getTakenToday()) {
                         somethingToCheck = true;
                         break;
                     }
@@ -418,7 +418,7 @@ public class ConfirmActivity extends CalendulaActivity {
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        toolbarLayout.setContentScrimColor(patient.color());
+        toolbarLayout.setContentScrimColor(patient.getColor());
         setupListView();
 
         if ("delay".equals(action)) {
@@ -451,7 +451,7 @@ public class ConfirmActivity extends CalendulaActivity {
         int checked = 0;
 
         for (DailyScheduleItem i : items) {
-            if (i.takenToday())
+            if (i.getTakenToday())
                 checked++;
         }
 
@@ -575,8 +575,8 @@ public class ConfirmActivity extends CalendulaActivity {
         if (routineId != -1) {
             isRoutine = true;
             routine = Routine.findById(routineId);
-            time = routine.time();
-            patient = routine.patient();
+            time = routine.getTime();
+            patient = routine.getPatient();
         } else {
             time = LocalTime.parse(timeStr, timeFormatter);
             schedule = Schedule.findById(scheduleId);
@@ -586,7 +586,7 @@ public class ConfirmActivity extends CalendulaActivity {
 
     private void loadItems() {
         if (isRoutine) {
-            List<ScheduleItem> rsi = routine.scheduleItems();
+            List<ScheduleItem> rsi = routine.getScheduleItems();
             LogUtil.d(TAG, rsi.size() + " items");
             for (ScheduleItem si : rsi) {
                 DailyScheduleItem item = DB.dailyScheduleItems().findByScheduleItemAndDate(si, date);
@@ -660,19 +660,19 @@ public class ConfirmActivity extends CalendulaActivity {
 
             h = (ConfirmItemViewHolder) holder;
             i = items.get(position);
-            si = i.scheduleItem();
-            sid = i.boundToSchedule() ? i.schedule().getId() : si.schedule().getId();
+            si = i.getScheduleItem();
+            sid = i.boundToSchedule() ? i.getSchedule().getId() : si.getSchedule().getId();
             s = DB.schedules().findById(sid);
             m = s.medicine();
-            p = m.presentation();
+            p = m.getPresentation();
 
             String status = getString(R.string.med_not_taken);
-            if (i.timeTaken() != null) {
-                status = (i.takenToday() ? getString(R.string.med_taken_at) : getString(R.string.med_cancelled_at)) + " " + i.timeTaken().toString("kk:mm") + "h";
+            if (i.getTimeTaken() != null) {
+                status = (i.getTakenToday() ? getString(R.string.med_taken_at) : getString(R.string.med_cancelled_at)) + " " + i.getTimeTaken().toString("kk:mm") + "h";
             }
 
-            h.med.setText(m.name());
-            h.dose.setText(getDisplayableDose(i.boundToSchedule() ? s.dose() : si.dose(), i.boundToSchedule() ? s.displayDose() : si.displayDose(), m));
+            h.med.setText(m.getName());
+            h.dose.setText(getDisplayableDose(i.boundToSchedule() ? s.dose() : si.getDose(), i.boundToSchedule() ? s.displayDose() : si.displayDose(), m));
             h.status.setText(status);
             h.dailyScheduleItem = i;
             updateCheckedStatus();
@@ -686,11 +686,11 @@ public class ConfirmActivity extends CalendulaActivity {
         void updateCheckedStatus() {
             Drawable medDrawable = new IconicsDrawable(ConfirmActivity.this)
                     .icon(p.icon())
-                    .color(i.takenToday() ? Color.parseColor("#81c784") : Color.parseColor("#11000000"))
+                    .color(i.getTakenToday() ? Color.parseColor("#81c784") : Color.parseColor("#11000000"))
                     .sizeDp(36)
                     .paddingDp(0);
 
-            Drawable checkDrawable = i.takenToday() ?
+            Drawable checkDrawable = i.getTakenToday() ?
                     getCheckedIcon(Color.parseColor("#81c784"))
                     : getUncheckedIcon(Color.parseColor("#11000000"));
 
@@ -721,7 +721,7 @@ public class ConfirmActivity extends CalendulaActivity {
 
             @Override
             public void onClick(View view) {
-                final boolean taken = dailyScheduleItem.takenToday();
+                final boolean taken = dailyScheduleItem.getTakenToday();
                 if (isDistant) {
                     showEnsureConfirmDialog(new DialogInterface.OnClickListener() {
                         @Override

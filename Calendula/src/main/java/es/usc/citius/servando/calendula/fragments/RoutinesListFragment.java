@@ -129,10 +129,10 @@ public class RoutinesListFragment extends Fragment {
     void showDeleteConfirmationDialog(final Routine r) {
 
         String message;
-        if (r.scheduleItems().size() > 0) {
-            message = String.format(getString(R.string.remove_routine_message_long), r.name());
+        if (r.getScheduleItems().size() > 0) {
+            message = String.format(getString(R.string.remove_routine_message_long), r.getName());
         } else {
-            message = String.format(getString(R.string.remove_routine_message_short), r.name());
+            message = String.format(getString(R.string.remove_routine_message_short), r.getName());
         }
 
         new MaterialStyledDialog.Builder(getActivity())
@@ -167,8 +167,8 @@ public class RoutinesListFragment extends Fragment {
 
     private View createRoutineListItem(LayoutInflater inflater, final Routine routine) {
 
-        int hour = routine.time().getHourOfDay();
-        int minute = routine.time().getMinuteOfHour();
+        int hour = routine.getTime().getHourOfDay();
+        int minute = routine.getTime().getMinuteOfHour();
 
         String strHour = String.valueOf(hour >= 10 ? hour : "0" + hour);
         String strMinute = ":" + String.valueOf(minute >= 10 ? minute : "0" + minute);
@@ -177,10 +177,10 @@ public class RoutinesListFragment extends Fragment {
 
         ((TextView) item.findViewById(R.id.routines_list_item_hour)).setText(strHour);
         ((TextView) item.findViewById(R.id.routines_list_item_minute)).setText(strMinute);
-        ((TextView) item.findViewById(R.id.routines_list_item_name)).setText(routine.name());
+        ((TextView) item.findViewById(R.id.routines_list_item_name)).setText(routine.getName());
         ((ImageButton) item.findViewById(R.id.imageButton2)).setImageDrawable(ic);
 
-        int items = routine.scheduleItems().size();
+        int items = routine.getScheduleItems().size();
 
         String schedules = items > 0 ? getString(R.string.schedules_for_med, items) : getString(R.string.schedules_for_med_none);
         ((TextView) item.findViewById(R.id.routines_list_item_subtitle)).setText(schedules);
@@ -192,7 +192,7 @@ public class RoutinesListFragment extends Fragment {
             public void onClick(View view) {
                 Routine r = (Routine) view.getTag();
                 if (mRoutineSelectedCallback != null && r != null) {
-                    LogUtil.d(TAG, "Click at " + r.name());
+                    LogUtil.d(TAG, "Click at " + r.getName());
                     mRoutineSelectedCallback.onRoutineSelected(r);
                 } else {
                     LogUtil.d(TAG, "No callback set");

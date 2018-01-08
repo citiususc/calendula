@@ -53,7 +53,7 @@ public class DrivingCautionAlert extends PatientAlert<DrivingCautionAlert, Drivi
      */
     public DrivingCautionAlert(Medicine m) {
         super();
-        setPatient(m.patient());
+        setPatient(m.getPatient());
         setMedicine(m);
         setType(DrivingCautionAlert.class.getCanonicalName());
         setLevel(Level.LOW);

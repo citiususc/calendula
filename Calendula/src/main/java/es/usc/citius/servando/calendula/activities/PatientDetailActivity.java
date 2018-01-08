@@ -186,11 +186,11 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
 
                 String text = patientName.getText().toString().trim();
 
-                if (!TextUtils.isEmpty(text) && !text.equals(patient.name())) {
+                if (!TextUtils.isEmpty(text) && !text.equals(patient.getName())) {
                     patient.setName(text);
                 }
 
-                if (!TextUtils.isEmpty(patient.name())) {
+                if (!TextUtils.isEmpty(patient.getName())) {
                     DB.patients().saveAndFireEvent(patient);
                     if (addRoutinesCheckBox.isChecked()) {
                         DefaultDataGenerator.generateDefaultRoutines(patient, this);
@@ -320,7 +320,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
 
 
         setSwitchFab();
-        setupToolbar(patient.name(), Color.TRANSPARENT);
+        setupToolbar(patient.getName(), Color.TRANSPARENT);
         setupStatusBar(Color.TRANSPARENT);
         setupAvatarList();
         setupColorChooser();
@@ -379,7 +379,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             final int color = Color.parseColor(hex);
             colorView.setBackgroundColor(color);
             colorView.setPadding(2, 2, 2, 2);
-            if (color == patient.color()) {
+            if (color == patient.getColor()) {
                 colorView.setImageDrawable(new IconicsDrawable(this)
                         .icon(CommunityMaterial.Icon.cmd_checkbox_marked_circle)
                         .paddingDp(30)
@@ -398,7 +398,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
                     patient.setColor(color);
                     setupColorChooser();
                     int x = (int) view.getX() + view.getWidth() / 2 - colorScroll.getScrollX();
-                    updateAvatar(patient.avatar(), 1, 400, x);
+                    updateAvatar(patient.getAvatar(), 1, 400, x);
                     colorList.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -441,7 +441,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             gridContainer.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    scrollToColor(patient.color());
+                    scrollToColor(patient.getColor());
                 }
             }, duration);
         }
@@ -510,14 +510,14 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
     }
 
     private void loadPatient() {
-        patientName.setText(patient.name());
-        top.setBackgroundColor(patient.color());
-        updateAvatar(patient.avatar(), 400, 400, patientAvatar.getWidth() / 2);
+        patientName.setText(patient.getName());
+        top.setBackgroundColor(patient.getColor());
+        updateAvatar(patient.getAvatar(), 400, 400, patientAvatar.getWidth() / 2);
     }
 
     private void updateAvatar(String avatar, int delay, final int duration, final int x) {
         patientAvatar.setImageResource(AvatarMgr.res(avatar));
-        color1 = patient.color();
+        color1 = patient.getColor();
         color2 = ScreenUtils.equivalentNoAlpha(color1, 0.7f);
         avatarBackgroundColor = color1;
         gridContainer.setBackgroundColor(getResources().getColor(R.color.dark_grey_home));
@@ -593,7 +593,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             v = (ImageView) view.findViewById(R.id.imageView);
             v.setImageResource(resource);
 
-            if (avatar.equals(patient.avatar())) {
+            if (avatar.equals(patient.getAvatar())) {
                 v.setBackgroundResource(R.drawable.avatar_list_item_bg);
             } else {
                 v.setBackgroundResource(R.color.transparent);

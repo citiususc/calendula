@@ -66,7 +66,7 @@ public class RoutinesActivityEditTest extends ActivityInstrumentationTestCase2<R
     public void testEditRoutine() {
 
         assertEquals(1, DB.routines().count());
-        assertEquals(NAME_BEFORE_EDIT, DB.routines().findAll().get(0).name());
+        assertEquals(NAME_BEFORE_EDIT, DB.routines().findAll().get(0).getName());
 
         // type name
         onView(withId(R.id.routine_edit_name)).perform(clearText()).perform(typeText(NAME_AFTER_EDIT));
@@ -93,8 +93,8 @@ public class RoutinesActivityEditTest extends ActivityInstrumentationTestCase2<R
         Routine r = DB.routines().findOneBy(Routine.COLUMN_NAME, NAME_AFTER_EDIT);
         assertEquals(1, DB.routines().count());
         assertNotNull(r);
-        assertEquals(NAME_AFTER_EDIT, r.name());
-        assertEquals(new LocalTime(20, 0), r.time());
+        assertEquals(NAME_AFTER_EDIT, r.getName());
+        assertEquals(new LocalTime(20, 0), r.getTime());
     }
 
 

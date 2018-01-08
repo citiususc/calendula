@@ -123,7 +123,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     public void onMedicineEdited(final Medicine m) {
         // check for allergies
         if (m.isBoundToPrescription()) {
-            final List<AllergenVO> vos = AllergenFacade.checkAllergies(this, DB.drugDB().prescriptions().findByCn(m.cn()));
+            final List<AllergenVO> vos = AllergenFacade.checkAllergies(this, DB.drugDB().prescriptions().findByCn(m.getCn()));
             if (!vos.isEmpty()) {
                 showAllergyDialog(new MaterialDialog.SingleButtonCallback() {
                     @Override
@@ -144,7 +144,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
         // check for allergies
         if (m.isBoundToPrescription()) {
-            final List<AllergenVO> vos = AllergenFacade.checkAllergies(this, DB.drugDB().prescriptions().findByCn(m.cn()));
+            final List<AllergenVO> vos = AllergenFacade.checkAllergies(this, DB.drugDB().prescriptions().findByCn(m.getCn()));
             if (!vos.isEmpty()) {
                 showAllergyDialog(new MaterialDialog.SingleButtonCallback() {
                     @Override
@@ -185,7 +185,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         setContentView(R.layout.activity_medicines);
         ButterKnife.bind(this);
 
-        color = DB.patients().getActive(this).color();
+        color = DB.patients().getActive(this).getColor();
         setupToolbar(null, color);
         setupStatusBar(color);
 
@@ -293,7 +293,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
      */
     private void removeOldAlerts(final Medicine m) throws SQLException {
         Medicine old = DB.medicines().findById(m.getId());
-        if (m.isBoundToPrescription() && !m.cn().equals(old.cn())) { // if prescription didn't change, don't check for alerts
+        if (m.isBoundToPrescription() && !m.getCn().equals(old.getCn())) { // if prescription didn't change, don't check for alerts
             AllergyAlertUtil.removeAllergyAlerts(m);
         }
     }
@@ -309,7 +309,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                     }
 
                     if (m.isBoundToPrescription()) {
-                        Prescription p = DB.drugDB().prescriptions().findByCn(m.cn());
+                        Prescription p = DB.drugDB().prescriptions().findByCn(m.getCn());
                         if (p.isAffectsDriving()) {
                             AlertManager.createAlert(new DrivingCautionAlert(m));
                         }

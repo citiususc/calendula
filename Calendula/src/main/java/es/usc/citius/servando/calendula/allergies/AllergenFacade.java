@@ -129,7 +129,7 @@ public class AllergenFacade {
         List<Medicine> patientMedicines = DB.medicines().findAllForActivePatient(ctx);
         for (Medicine m : patientMedicines) {
             if (m.isBoundToPrescription()) {
-                List<AllergenVO> prescriptionAllergens = findAllergensForPrescription(m.cn());
+                List<AllergenVO> prescriptionAllergens = findAllergensForPrescription(m.getCn());
                 if (prescriptionAllergens.contains(newAllergen))
                     medicines.add(m);
             }

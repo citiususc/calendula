@@ -61,7 +61,7 @@ public class MedicineSortUtil {
     private static class MedicineNameComparator implements Comparator<Medicine> {
         @Override
         public int compare(Medicine o1, Medicine o2) {
-            return o1.name().compareTo(o2.name());
+            return o1.getName().compareTo(o2.getName());
         }
     }
 
@@ -69,8 +69,8 @@ public class MedicineSortUtil {
 
         @Override
         public int compare(Medicine o1, Medicine o2) {
-            final Presentation p1 = o1.presentation();
-            final Presentation p2 = o2.presentation();
+            final Presentation p1 = o1.getPresentation();
+            final Presentation p2 = o2.getPresentation();
             return Integer.valueOf(p1.ordinal()).compareTo(p2.ordinal());
         }
     }

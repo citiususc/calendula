@@ -70,7 +70,7 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
         Patient item = (Patient) parent.getItemAtPosition(position);
 
         Intent intent = new Intent(this, PatientDetailActivity.class);
-        intent.putExtra("patient_id", item.id());
+        intent.putExtra("patient_id", item.getId());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -170,7 +170,7 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
     private void showRemovePatientDialog(final Patient p) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Deseas eliminar el paciente " + p.name() + "?")
+        builder.setMessage("Deseas eliminar el paciente " + p.getName() + "?")
                 .setCancelable(true)
                 .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -219,7 +219,7 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
 
         @Override
         public long getItemId(int position) {
-            return patients.get(position).id();
+            return patients.get(position).getId();
         }
 
         @Override
@@ -241,11 +241,11 @@ public class PatientsActivity extends CalendulaActivity implements GridView.OnIt
             TextView patientName = (TextView) view.findViewById(R.id.patient_name);
             ImageView lockIcon = (ImageView) view.findViewById(R.id.lock_icon);
             View activeIndicator = view.findViewById(R.id.active_indicator);
-            int color = p.color();
+            int color = p.getColor();
 
-            patientName.setText(p.name());
+            patientName.setText(p.getName());
             patientName.setBackgroundColor(color);
-            patientAvatar.setImageResource(AvatarMgr.res(p.avatar()));
+            patientAvatar.setImageResource(AvatarMgr.res(p.getAvatar()));
 
             if (isActive) {
                 activeIndicator.setVisibility(View.VISIBLE);

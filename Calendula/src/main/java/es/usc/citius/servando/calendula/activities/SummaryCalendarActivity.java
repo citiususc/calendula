@@ -66,9 +66,9 @@ public class SummaryCalendarActivity extends CalendulaActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        color = DB.patients().getActive(this).color();
+        color = DB.patients().getActive(this).getColor();
         setContentView(R.layout.activity_summary_calendar);
-        int color = DB.patients().getActive(this).color();
+        int color = DB.patients().getActive(this).getColor();
         setupToolbar(getString(R.string.title_activity_calendar), color);
         setupStatusBar(color);
         setupCalendar();
@@ -98,7 +98,7 @@ public class SummaryCalendarActivity extends CalendulaActivity {
 
             List<CalendarCellDecorator> decorators = new ArrayList<>();
 
-            DateValue v = r.iCalRule().getUntil();
+            DateValue v = r.getRRule().getUntil();
             Date start = date != null ? from.toDate() : null;
             Date end = v != null ? new LocalDate(v.year(), v.month(), v.day()).toDate() : null;
 

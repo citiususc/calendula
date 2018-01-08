@@ -168,7 +168,7 @@ public class ScheduleImportFragment extends Fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dbMgr = DBRegistry.instance().current();
-        color = DB.patients().getActive(getActivity()).color();
+        color = DB.patients().getActive(getActivity()).getColor();
         PrescriptionWrapper.Holder h = (PrescriptionWrapper.Holder) getArguments().getSerializable(ARG_PRESCRIPTION);
         prescriptionWrapper = PrescriptionWrapper.from(h);
 
@@ -389,9 +389,9 @@ public class ScheduleImportFragment extends Fragment
         if (s != null && !isNew && !s.repeatsHourly()) {
             List<ScheduleItem> items = s.items();
             for (ScheduleItem i : items) {
-                if (i.dose() != pw.s.d && pw.s.d > 0) {
+                if (i.getDose() != pw.s.d && pw.s.d > 0) {
                     // dose is different
-                    LogUtil.d(TAG, "Item dose is different [" + i.dose() + ", " + pw.s.d + ", " + items.size() + "]");
+                    LogUtil.d(TAG, "Item dose is different [" + i.getDose() + ", " + pw.s.d + ", " + items.size() + "]");
                     changes.add("• " + getString(R.string.scan_dose_changed_msg));
                     break;
                 }
@@ -410,9 +410,9 @@ public class ScheduleImportFragment extends Fragment
                 changes.add("• " + getString(R.string.scan_dose_changed_msg));
                 LogUtil.d(TAG, "Dose is different [" + s.dose() + ", " + pw.s.d + "]");
             }
-            if (s.rule().interval() != interval) {
-                changes.add("• " + getString(R.string.scan_interval_changed_msg, s.rule().interval(), interval));
-                LogUtil.d(TAG, "Interval is different[" + interval + ", " + s.rule().interval() + "]");
+            if (s.rule().getInterval() != interval) {
+                changes.add("• " + getString(R.string.scan_interval_changed_msg, s.rule().getInterval(), interval));
+                LogUtil.d(TAG, "Interval is different[" + interval + ", " + s.rule().getInterval() + "]");
             }
         }
 
@@ -594,7 +594,7 @@ public class ScheduleImportFragment extends Fragment
 
             if (i < sItems.size()) {
                 ScheduleItem toCopy = sItems.get(i);
-                s = new ScheduleItem(null, toCopy.routine(), toCopy.dose());
+                s = new ScheduleItem(null, toCopy.getRoutine(), toCopy.getDose());
             } else {
 
                 float dose = doses.length > 0 ? doses[0] : 1;
@@ -620,7 +620,7 @@ public class ScheduleImportFragment extends Fragment
         int j = 0;
         String[] routineNames = new String[routines.size() + 1];
         for (Routine r : routines) {
-            routineNames[j++] = r.name();
+            routineNames[j++] = r.getName();
         }
 
         routineNames[routineNames.length - 1] = getString(R.string.create_new_routine);
@@ -632,7 +632,7 @@ public class ScheduleImportFragment extends Fragment
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View entry = inflater.inflate(R.layout.schedule_timetable_entry, null);
 
-        updateEntryTime(r.routine(), entry);
+        updateEntryTime(r.getRoutine(), entry);
         setupScheduleEntrySpinners(entry, r, routineNames);
 
         if (enableDelete) {
@@ -662,10 +662,10 @@ public class ScheduleImportFragment extends Fragment
         String hourText;
         String minuteText;
         if (r != null) {
-            hourText = (r.time().getHourOfDay() < 10 ? "0" + r.time().getHourOfDay()
-                    : r.time().getHourOfDay()) + ":";
-            minuteText = (r.time().getMinuteOfHour() < 10 ? "0" + r.time().getMinuteOfHour()
-                    : r.time().getMinuteOfHour()) + "";
+            hourText = (r.getTime().getHourOfDay() < 10 ? "0" + r.getTime().getHourOfDay()
+                    : r.getTime().getHourOfDay()) + ":";
+            minuteText = (r.getTime().getMinuteOfHour() < 10 ? "0" + r.getTime().getMinuteOfHour()
+                    : r.getTime().getMinuteOfHour()) + "";
         } else {
             hourText = "--:";
             minuteText = "--";
@@ -701,11 +701,11 @@ public class ScheduleImportFragment extends Fragment
                         String names[] = getUpdatedRoutineNames();
                         updateRoutineSelectionAdapter(entryView, rSpinner, names);
 
-                        LogUtil.d(TAG, "Routine name: " + r.name());
-                        LogUtil.d(TAG, "Routine time: " + r.time().toString("hh:mm"));
+                        LogUtil.d(TAG, "Routine name: " + r.getName());
+                        LogUtil.d(TAG, "Routine time: " + r.getTime().toString("hh:mm"));
                         LogUtil.d(TAG, "Names: " + Arrays.toString(names));
 
-                        int selection = Arrays.asList(names).indexOf(r.name());
+                        int selection = Arrays.asList(names).indexOf(r.getName());
                         rSpinner.setSelection(selection);
 
                         updateEntryTime(r, entryView);
@@ -738,7 +738,7 @@ public class ScheduleImportFragment extends Fragment
                             LogUtil.d(TAG, "Set dose "
                                     + dose
                                     + " to item "
-                                    + item.routine().name()
+                                    + item.getRoutine().getName()
                                     + ", "
                                     + item.getId());
                             item.setDose((float) dose);
@@ -828,13 +828,13 @@ public class ScheduleImportFragment extends Fragment
     void setScheduleEnd(LocalDate end) {
         if (end == null) {
             buttonScheduleEnd.setText(getString(R.string.never));
-            schedule.rule().iCalRule().setUntil(null);
+            schedule.rule().getRRule().setUntil(null);
             clearEndButton.setVisibility(View.INVISIBLE);
         } else {
             DateValue v =
                     new DateTimeValueImpl(end.getYear(), end.getMonthOfYear(), end.getDayOfMonth(), 0,
                             0, 0);
-            schedule.rule().iCalRule().setUntil(v);
+            schedule.rule().getRRule().setUntil(v);
             buttonScheduleEnd.setText(
                     end.toString(getString(R.string.schedule_limits_date_format)));
             clearEndButton.setVisibility(View.VISIBLE);
@@ -907,7 +907,7 @@ public class ScheduleImportFragment extends Fragment
 
     private void updateColors(View rootView) {
 
-        int color = DB.patients().getActive(getActivity()).color();
+        int color = DB.patients().getActive(getActivity()).getColor();
 
         ((TextView) rootView.findViewById(R.id.textView3)).setTextColor(color);
         ((TextView) rootView.findViewById(R.id.textView2)).setTextColor(color);
@@ -992,11 +992,11 @@ public class ScheduleImportFragment extends Fragment
         String time = new LocalTime(t.getHourOfDay(), t.getMinuteOfHour()).toString("kk:mm");
         hourlyIntervalFrom.setText(getString(R.string.first_intake) + ": " + time);
 
-        if (schedule.rule().interval() < 1) {
+        if (schedule.rule().getInterval() < 1) {
             schedule.rule().setInterval(8);
         }
         schedule.rule().setFrequency(Frequency.HOURLY);
-        hourlyIntervalEditText.setText(String.valueOf(schedule.rule().interval()));
+        hourlyIntervalEditText.setText(String.valueOf(schedule.rule().getInterval()));
         hourlyIntervalRepeatDose.setText(schedule.displayDose());
     }
 
@@ -1085,7 +1085,7 @@ public class ScheduleImportFragment extends Fragment
         int repeatType = schedule.type();
         setRepeatType(repeatType, rootView, true);
         repeatTypeSpinner.setSelection(repeatType);
-        intervalEditText.setText(String.valueOf(schedule.rule().interval()));
+        intervalEditText.setText(String.valueOf(schedule.rule().getInterval()));
     }
 
     private void setupHourlyRepetitionLinsteners() {
@@ -1315,14 +1315,14 @@ public class ScheduleImportFragment extends Fragment
                     ruleText.setVisibility(View.GONE);
                     customRepeatBox.setVisibility(View.VISIBLE);
 
-                    int interval = schedule.rule().interval();
+                    int interval = schedule.rule().getInterval();
                     if (interval < 2) {
                         interval = 2;
                     }
                     schedule.rule().setInterval(interval);
-                    intervalEditText.setText(String.valueOf(schedule.rule().interval()));
+                    intervalEditText.setText(String.valueOf(schedule.rule().getInterval()));
 
-                    Frequency f = schedule.rule().frequency();
+                    Frequency f = schedule.rule().getFrequency();
 
                     if (f.equals(Frequency.WEEKLY)) {
                         freqSpinner.setSelection(1);
@@ -1343,7 +1343,7 @@ public class ScheduleImportFragment extends Fragment
 
         String text =
                 getString(R.string.schedule_custom_rule_text, schedule.toReadableString(getActivity()));
-        int count = schedule.rule().iCalRule().getCount();
+        int count = schedule.rule().getRRule().getCount();
         if (count > 0) {
             text += "<br><u>" + getString(R.string.schedules_stop_after, count) + "</u>";
         }
@@ -1395,8 +1395,8 @@ public class ScheduleImportFragment extends Fragment
         // set up the routine selection adapter
         updateRoutineSelectionAdapter(entryView, routineSpinner, routineNames);
 
-        if (scheduleItem != null && scheduleItem.routine() != null) {
-            String routineName = scheduleItem.routine().name();
+        if (scheduleItem != null && scheduleItem.getRoutine() != null) {
+            String routineName = scheduleItem.getRoutine().getName();
             int index = Arrays.asList(routineNames).indexOf(routineName);
             routineSpinner.setSelection(index);
         } else {
@@ -1427,7 +1427,7 @@ public class ScheduleImportFragment extends Fragment
                     showAddNewRoutineDialog(entryView);
                 }
                 LogUtil.d(TAG, "Updated routine to "
-                        + (r != null ? r.name() : "NULL")
+                        + (r != null ? r.getName() : "NULL")
                         + " on item "
                         + item.getId());
                 item.setRoutine(r);
@@ -1458,9 +1458,9 @@ public class ScheduleImportFragment extends Fragment
 
     private void logScheduleItems() {
         for (ScheduleItem si : sItems) {
-            LogUtil.d(TAG, (si.routine() != null ? si.routine().name() : "NONE")
+            LogUtil.d(TAG, (si.getRoutine() != null ? si.getRoutine().getName() : "NONE")
                     + ", "
-                    + si.dose()
+                    + si.getDose()
                     + " ****************************");
         }
     }
@@ -1479,7 +1479,7 @@ public class ScheduleImportFragment extends Fragment
             arguments.putSerializable("presentation", p);
         }
         if (item != null) {
-            arguments.putDouble("dose", item.dose());
+            arguments.putDouble("dose", item.getDose());
         } else if (s != null) {
             arguments.putDouble("dose", s.dose());
         }

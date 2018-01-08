@@ -56,18 +56,18 @@ public class PatientDao extends GenericDao<Patient, Long> {
     @Override
     public void saveAndFireEvent(Patient p) {
 
-        Object event = p.id() == null ? new PersistenceEvents.UserCreateEvent(p) : new PersistenceEvents.UserUpdateEvent(p);
+        Object event = p.getId() == null ? new PersistenceEvents.UserCreateEvent(p) : new PersistenceEvents.UserUpdateEvent(p);
         save(p);
         CalendulaApp.eventBus().post(event);
 
     }
 
-    /// Mange active patient through preferences
+    // Manage active patient through preferences
 
     public boolean isActive(Patient p, Context ctx) {
 
         Long activeId = PreferenceUtils.getLong(PreferenceKeys.PATIENTS_ACTIVE, -1);
-        return activeId.equals(p.id());
+        return activeId.equals(p.getId());
     }
 
     public Patient getActive(Context ctx) {
@@ -91,7 +91,7 @@ public class PatientDao extends GenericDao<Patient, Long> {
 
     public void setActive(Patient patient) {
         PreferenceUtils.edit()
-                .putLong(PreferenceKeys.PATIENTS_ACTIVE.key(), patient.id())
+                .putLong(PreferenceKeys.PATIENTS_ACTIVE.key(), patient.getId())
                 .apply();
         CalendulaApp.eventBus().post(new PersistenceEvents.ActiveUserChangeEvent(patient));
     }
@@ -99,7 +99,7 @@ public class PatientDao extends GenericDao<Patient, Long> {
     public void setActiveById(Long id) {
         Patient patient = findById(id);
         PreferenceUtils.edit()
-                .putLong(PreferenceKeys.PATIENTS_ACTIVE.key(), patient.id())
+                .putLong(PreferenceKeys.PATIENTS_ACTIVE.key(), patient.getId())
                 .apply();
         CalendulaApp.eventBus().post(new PersistenceEvents.ActiveUserChangeEvent(patient));
     }
@@ -115,14 +115,14 @@ public class PatientDao extends GenericDao<Patient, Long> {
 
     public void removeAllStuff(Patient p) {
         for (Medicine m : DB.medicines().findAll()) {
-            if (m.patient().id() == p.id()) {
+            if (m.getPatient().getId() == p.getId()) {
                 // this also remove schedules
                 DB.medicines().deleteCascade(m, true);
             }
         }
         // remove routines
         for (Routine r : DB.routines().findAll()) {
-            if (r.patient().id() == p.id()) {
+            if (r.getPatient().getId() == p.getId()) {
                 DB.routines().remove(r);
             }
         }

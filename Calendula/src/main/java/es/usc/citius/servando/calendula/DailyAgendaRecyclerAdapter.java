@@ -222,8 +222,8 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             }
 
             if (item.patient != null) {
-                viewHolder.avatarIcon.setImageResource(AvatarMgr.res(item.patient.avatar()));
-                viewHolder.patientIndicatorBand.setBackgroundColor(item.patient.color());
+                viewHolder.avatarIcon.setImageResource(AvatarMgr.res(item.patient.getAvatar()));
+                viewHolder.patientIndicatorBand.setBackgroundColor(item.patient.getColor());
                 final ViewGroup.LayoutParams layoutParams = viewHolder.patientIndicatorBand.getLayoutParams();
                 layoutParams.height = viewHolder.itemView.getLayoutParams().height;
                 viewHolder.patientIndicatorBand.setLayoutParams(layoutParams);
@@ -378,12 +378,12 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         if (!stub.isRoutine) {
             Schedule s = DB.schedules().findById(stub.id);
             DailyScheduleItem dsi = DB.dailyScheduleItems().findBy(s, stub.date, stub.time);
-            stub.meds.get(0).taken = dsi.takenToday();
+            stub.meds.get(0).taken = dsi.getTakenToday();
         } else {
             for (DailyAgendaItemStubElement el : stub.meds) {
                 ScheduleItem si = DB.scheduleItems().findById(el.scheduleItemId);
                 DailyScheduleItem dsi = DB.dailyScheduleItems().findByScheduleItemAndDate(si, stub.date);
-                el.taken = dsi.takenToday();
+                el.taken = dsi.getTakenToday();
             }
         }
     }

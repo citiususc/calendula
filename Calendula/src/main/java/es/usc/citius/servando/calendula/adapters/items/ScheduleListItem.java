@@ -84,14 +84,14 @@ public class ScheduleListItem extends AbstractItem<ScheduleListItem, ScheduleLis
         if (schedule.type() != Schedule.SCHEDULE_TYPE_HOURLY) {
             timeStr = ScheduleUtils.getTimesStr(items != null ? items.size() : 0, ctx);
         } else {
-            timeStr = ScheduleUtils.getTimesStr(24 / schedule.rule().interval(), ctx);
+            timeStr = ScheduleUtils.getTimesStr(24 / schedule.rule().getInterval(), ctx);
         }
 
-        LogUtil.d(TAG, "Schedule " + schedule.medicine().name() + " is scanned: " + schedule.scanned());
+        LogUtil.d(TAG, "Schedule " + schedule.medicine().getName() + " is scanned: " + schedule.scanned());
         String auto = schedule.scanned() ? " ↻" : "";
 
         holder.icon2.setImageDrawable(new IconicsDrawable(ctx)
-                .icon(schedule.medicine().presentation().icon())
+                .icon(schedule.medicine().getPresentation().icon())
                 .color(Color.WHITE)
                 .paddingDp(8)
                 .sizeDp(40));
@@ -104,7 +104,7 @@ public class ScheduleListItem extends AbstractItem<ScheduleListItem, ScheduleLis
                 .paddingDp(8)
                 .sizeDp(40));
 
-        holder.medName.setText(schedule.medicine().name() + auto);
+        holder.medName.setText(schedule.medicine().getName() + auto);
         holder.itemTimes.setText(timeStr);
         holder.itemDays.setText(schedule.toReadableString(ctx));
 

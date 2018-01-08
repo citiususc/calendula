@@ -92,9 +92,9 @@ public class PickupInfoDao extends GenericDao<PickupInfo, Long> {
             QueryBuilder<PickupInfo, Long> qb = dao.queryBuilder();
             Where w = qb.where();
             w.and(
-                    w.eq(PickupInfo.COLUMN_MEDICINE, pickupInfo.medicine()),
-                    w.eq(PickupInfo.COLUMN_FROM, pickupInfo.from()),
-                    w.eq(PickupInfo.COLUMN_TO, pickupInfo.to())
+                    w.eq(PickupInfo.COLUMN_MEDICINE, pickupInfo.getMedicine()),
+                    w.eq(PickupInfo.COLUMN_FROM, pickupInfo.getFrom()),
+                    w.eq(PickupInfo.COLUMN_TO, pickupInfo.getTo())
             );
             qb.setWhere(w);
             return qb.queryForFirst();

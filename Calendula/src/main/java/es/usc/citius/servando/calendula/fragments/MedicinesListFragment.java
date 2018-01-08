@@ -198,9 +198,9 @@ public class MedicinesListFragment extends Fragment {
     void showDeleteConfirmationDialog(final Medicine m) {
         String message;
         if (!DB.schedules().findByMedicine(m).isEmpty()) {
-            message = String.format(getString(R.string.remove_medicine_message_long), m.name());
+            message = String.format(getString(R.string.remove_medicine_message_long), m.getName());
         } else {
-            message = String.format(getString(R.string.remove_medicine_message_short), m.name());
+            message = String.format(getString(R.string.remove_medicine_message_short), m.getName());
         }
 
         new MaterialStyledDialog.Builder(getActivity())

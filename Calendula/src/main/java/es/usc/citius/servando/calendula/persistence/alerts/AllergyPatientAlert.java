@@ -55,7 +55,7 @@ public class AllergyPatientAlert extends PatientAlert<AllergyPatientAlert, Aller
         this();
         setLevel(Level.HIGH);
         setMedicine(medicine);
-        setPatient(medicine.patient());
+        setPatient(medicine.getPatient());
         setDetails(new AllergyAlertInfo(allergens));
     }
 

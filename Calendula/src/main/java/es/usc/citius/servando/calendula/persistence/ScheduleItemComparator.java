@@ -30,8 +30,8 @@ public class ScheduleItemComparator implements Comparator<ScheduleItem> {
     @Override
     public int compare(ScheduleItem a, ScheduleItem b) {
 
-        Routine routineA = a.routine();
-        Routine routineB = b.routine();
+        Routine routineA = a.getRoutine();
+        Routine routineB = b.getRoutine();
 
         if (routineA == null) {
             return 1;
@@ -39,16 +39,16 @@ public class ScheduleItemComparator implements Comparator<ScheduleItem> {
             return -1;
         }
 
-        if (routineA.time() == null && routineB.time() == null)
+        if (routineA.getTime() == null && routineB.getTime() == null)
             return 0;
-        else if (routineA.time() == null)
+        else if (routineA.getTime() == null)
             return -1;
-        else if (routineB.time() == null)
+        else if (routineB.getTime() == null)
             return 1;
-        else if (routineA.time().equals(LocalTime.MIDNIGHT))
+        else if (routineA.getTime().equals(LocalTime.MIDNIGHT))
             return 1;
         else
-            return routineA.time().compareTo(routineB.time());
+            return routineA.getTime().compareTo(routineB.getTime());
     }
 }
 
