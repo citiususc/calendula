@@ -98,7 +98,7 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
             }
         }
 
-        return null;
+        return Presentation.UNKNOWN;
     }
 
     @Override
