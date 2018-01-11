@@ -32,6 +32,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.MedicinesActivity;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.database.migrationHelpers.DrugModelMigrationHelper;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
@@ -200,6 +201,9 @@ public class InstallDatabaseService extends IntentService {
         Intent bcIntent = new Intent();
         bcIntent.setAction(ACTION_COMPLETE);
         sendBroadcast(bcIntent);
+
+        // TODO: 11/01/18 maybe move to a better place?
+        DrugModelMigrationHelper.linkMedsAfterUpdate();
     }
 
     private void onFailure() {
