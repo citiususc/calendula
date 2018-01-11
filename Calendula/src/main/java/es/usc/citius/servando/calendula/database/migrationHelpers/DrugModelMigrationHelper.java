@@ -35,6 +35,8 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionAct
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionExcipient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PresentationForm;
 import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
  * Helper that performs the migration to the new drug model
@@ -67,6 +69,9 @@ public class DrugModelMigrationHelper {
         for (Class<?> c : drugDbClasses) {
             TableUtils.createTable(connectionSource, c);
         }
+
+        // prompt the user to install DB again
+        PreferenceUtils.edit().remove(PreferenceKeys.MEDICINES_USE_PRESCRIPTIONS_SHOWN.key()).commit();
 
     }
 }
