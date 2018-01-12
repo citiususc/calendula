@@ -33,6 +33,7 @@
     <string name="prefkey_drugdb_download_db" translatable="false">download_mgr_download_db</string>
     <string name="prefkey_drugdb_download_version" translatable="false">download_mgr_download_version</string>
     <string name="prefkey_drugdb_download_type" translatable="false">download_mgr_download_type</string>
+    <string name="prefkey_drugdb_prompt">drugdb_update_prompt</string>
 
     <!-- Home -->
     <string name="prefkey_home_intro_shown" translatable="false">PREFERENCE_INTRO_SHOWN</string>

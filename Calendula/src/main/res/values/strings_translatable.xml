@@ -485,4 +485,10 @@ If you choose not to download it, some of your medicines' information may be los
 <string name="text_pinlock_or_fingerprint_auth_prompt">"Please input your PIN or use your fingerprint to continue"</string>
 <string name="text_pinlock_repeat_prompt">"Now, input the same PIN again…"</string>
 <string name="use_fingerprint_message">"or use your fingerprint to authenticate"</string>
+<string name="reinstall_prescriptions_dialog_message">"In order to provide you with better medicine information, the medicine database needs to be reinstalled through the Settings screen. If you don't reinstall it, you won't be able to access med leaflets or other extra functions anymore.
+
+Your schedules, medkit, routines and other basic functions are safe either way.
+
+Do you want to install the new database now?
+"</string>
 </resources>

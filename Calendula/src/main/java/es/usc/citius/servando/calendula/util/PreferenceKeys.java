@@ -45,6 +45,7 @@ public enum PreferenceKeys {
     DRUGDB_DOWNLOAD_DB(R.string.prefkey_drugdb_download_db),
     DRUGDB_DOWNLOAD_VERSION(R.string.prefkey_drugdb_download_version),
     DRUGDB_DOWNLOAD_TYPE(R.string.prefkey_drugdb_download_type),
+    DRUGDB_DB_PROMPT(R.string.prefkey_drugdb_prompt),
     // Home
     HOME_INTRO_SHOWN(R.string.prefkey_home_intro_shown),
     HOME_DAILYAGENDA_EXPANDED(R.string.prefkey_home_dailyagenda_expanded),

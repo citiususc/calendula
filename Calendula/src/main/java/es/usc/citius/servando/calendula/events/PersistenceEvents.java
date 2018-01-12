@@ -34,6 +34,9 @@ public class PersistenceEvents {
     public static ModelCreateOrUpdateEvent SCHEDULE_EVENT = new ModelCreateOrUpdateEvent(Schedule.class);
     public static ModelCreateOrUpdateEvent ALERT_EVENT = new ModelCreateOrUpdateEvent(PatientAlert.class);
 
+    public static class DatabaseUpdateEvent {
+
+    }
 
     public static class ModelCreateOrUpdateEvent {
         public Class<?> clazz;

@@ -21,9 +21,11 @@ package es.usc.citius.servando.calendula.database.migrationHelpers
 import android.database.sqlite.SQLiteDatabase
 import com.j256.ormlite.support.ConnectionSource
 import com.j256.ormlite.table.TableUtils
+import es.usc.citius.servando.calendula.CalendulaApp
 import es.usc.citius.servando.calendula.database.DB
 import es.usc.citius.servando.calendula.drugdb.DBRegistry
 import es.usc.citius.servando.calendula.drugdb.model.persistence.*
+import es.usc.citius.servando.calendula.events.PersistenceEvents
 import es.usc.citius.servando.calendula.util.LogUtil
 import es.usc.citius.servando.calendula.util.PreferenceKeys
 import es.usc.citius.servando.calendula.util.PreferenceUtils
@@ -62,6 +64,10 @@ object DrugModelMigrationHelper {
             TableUtils.createTable(connectionSource, c)
         }
 
+        // Prompt the user for DB reinstall/med relink if needed
+        PreferenceUtils.edit().putBoolean(PreferenceKeys.DRUGDB_DB_PROMPT.key(), true).commit()
+        CalendulaApp.eventBus().post(PersistenceEvents.DatabaseUpdateEvent())
+
     }
 
     @JvmStatic
@@ -75,7 +81,7 @@ object DrugModelMigrationHelper {
                 applicableMeds.forEach { med ->
                     val linkablePrescription = DB.drugDB().prescriptions().findByCn(med.cn)
                     if (linkablePrescription != null) {
-                        med.database=currentDB
+                        med.database = currentDB
                         med.name = linkablePrescription.shortName()
                         med.presentation = DBRegistry.instance().current().expectedPresentation(linkablePrescription)
                         DB.medicines().update(med)

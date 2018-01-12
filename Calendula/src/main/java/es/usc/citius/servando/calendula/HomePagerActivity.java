@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.MenuRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -46,6 +47,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -62,9 +67,11 @@ import es.usc.citius.servando.calendula.activities.ConfirmActivity;
 import es.usc.citius.servando.calendula.activities.LeftDrawerMgr;
 import es.usc.citius.servando.calendula.activities.MaterialIntroActivity;
 import es.usc.citius.servando.calendula.activities.MedicineInfoActivity;
+import es.usc.citius.servando.calendula.activities.MedicinesSearchActivity;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.activities.SchedulesHelpActivity;
+import es.usc.citius.servando.calendula.activities.SettingsActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
 import es.usc.citius.servando.calendula.adapters.HomePages;
 import es.usc.citius.servando.calendula.database.DB;
@@ -114,7 +121,7 @@ public class HomePagerActivity extends CalendulaActivity implements
     View userInfoFragment;
     @BindView(R.id.main_content)
     CoordinatorLayout coordinatorLayout;
-//    @BindView(R.id.fab_menu)
+    //    @BindView(R.id.fab_menu)
 //    FloatingActionsMenu addButton;
     @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
@@ -160,7 +167,7 @@ public class HomePagerActivity extends CalendulaActivity implements
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         menuItems = new SparseArray<>(menu.size());
-        for(int menuItem : MENU_ITEMS){
+        for (int menuItem : MENU_ITEMS) {
             menuItems.put(menuItem, menu.findItem(menuItem));
         }
         menuItems.get(R.id.action_sort).setIcon(IconUtils.icon(getApplicationContext(), CommunityMaterial.Icon.cmd_sort, R.color.white));
@@ -332,12 +339,51 @@ public class HomePagerActivity extends CalendulaActivity implements
                                 StockUtils.showStockRunningOutDialog(HomePagerActivity.this, sro.m, sro.days);
                             }
                         }, 1000);
+                    } else if (event instanceof PersistenceEvents.DatabaseUpdateEvent) {
+                        checkDatabaseUpdateNeeded();
                     }
                 }
             });
         } else {
             pendingEvents.add(event);
         }
+    }
+
+    /**
+     * If the app has been updated from an old Drug DB model, we need to re-install it and re-link the meds to their prescription.
+     */
+    public void checkDatabaseUpdateNeeded() {
+        final boolean needPrompt = PreferenceUtils.getBoolean(PreferenceKeys.DRUGDB_DB_PROMPT, false);
+        if (needPrompt) {
+            new MaterialStyledDialog.Builder(this)
+                    .setStyle(Style.HEADER_WITH_ICON)
+                    .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_database, R.color.white, 100))
+                    .setHeaderColor(R.color.android_blue)
+                    .withDialogAnimation(true)
+                    .setTitle(R.string.enable_prescriptions_dialog_title)
+                    .setDescription(R.string.reinstall_prescriptions_dialog_message)
+                    .setCancelable(false)
+                    .setPositiveText(getString(R.string.dialog_yes_option))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Intent i = new Intent(HomePagerActivity.this, SettingsActivity.class);
+                            i.putExtra(SettingsActivity.EXTRA_SHOW_DB_DIALOG, true);
+                            startActivity(i);
+                            PreferenceUtils.edit().remove(PreferenceKeys.DRUGDB_DB_PROMPT.key()).apply();
+                        }
+                    })
+                    .setNegativeText(R.string.dialog_no_option)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.cancel();
+                            PreferenceUtils.edit().remove(PreferenceKeys.DRUGDB_DB_PROMPT.key()).apply();
+                        }
+                    })
+                    .show();
+        }
+
     }
 
     public void showSnackbar(@StringRes final int text) {
@@ -441,6 +487,9 @@ public class HomePagerActivity extends CalendulaActivity implements
                 }
             }, 500);
         }
+
+        //check for DB update needed
+        checkDatabaseUpdateNeeded();
     }
 
     @Override
@@ -555,7 +604,7 @@ public class HomePagerActivity extends CalendulaActivity implements
     }
 
     private void updateScrim(int position) {
-        @ColorInt final int color = (position == HomePages.HOME.ordinal()) ? ContextCompat.getColor(this,R.color.transparent_black) : activePatient.getColor();
+        @ColorInt final int color = (position == HomePages.HOME.ordinal()) ? ContextCompat.getColor(this, R.color.transparent_black) : activePatient.getColor();
 
         if (previousColor != -1) {
             ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), previousColor, color);
