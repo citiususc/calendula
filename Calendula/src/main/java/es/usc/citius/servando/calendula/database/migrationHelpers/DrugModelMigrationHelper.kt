@@ -26,9 +26,11 @@ import es.usc.citius.servando.calendula.database.DB
 import es.usc.citius.servando.calendula.drugdb.DBRegistry
 import es.usc.citius.servando.calendula.drugdb.model.persistence.*
 import es.usc.citius.servando.calendula.events.PersistenceEvents
+import es.usc.citius.servando.calendula.persistence.alerts.DrivingCautionAlert
 import es.usc.citius.servando.calendula.util.LogUtil
 import es.usc.citius.servando.calendula.util.PreferenceKeys
 import es.usc.citius.servando.calendula.util.PreferenceUtils
+import es.usc.citius.servando.calendula.util.alerts.AlertManager
 import java.sql.SQLException
 
 /**
@@ -84,7 +86,10 @@ object DrugModelMigrationHelper {
                         med.database = currentDB
                         med.name = linkablePrescription.shortName()
                         med.presentation = DBRegistry.instance().current().expectedPresentation(linkablePrescription)
-                        DB.medicines().update(med)
+                        DB.medicines().saveAndFireEvent(med)
+                        if (linkablePrescription.isAffectsDriving) {
+                            AlertManager.createAlert(DrivingCautionAlert(med))
+                        }
                         LogUtil.d(TAG, "linkMedsAfterUpdate: linked med $med to prescription $linkablePrescription")
                     }
                 }
