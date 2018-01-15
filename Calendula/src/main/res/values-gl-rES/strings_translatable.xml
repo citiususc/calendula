@@ -1,22 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
-  ~
-  ~    Calendula is free software; you can redistribute it and/or modify
-  ~    it under the terms of the GNU General Public License as published by
-  ~    the Free Software Foundation; either version 3 of the License, or
-  ~    (at your option) any later version.
-  ~
-  ~    This program is distributed in the hope that it will be useful,
-  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~    GNU General Public License for more details.
-  ~
-  ~    You should have received a copy of the GNU General Public License
-  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-
 <resources>
 <string name="title_home">"Inicio"</string>
 <string name="action_settings">"Opcións"</string>
@@ -506,4 +488,9 @@ Se escolles non facelo, algunha información das túas medicinas pode perderse."
 <string name="text_pinlock_or_fingerprint_auth_prompt">"Por favor introduce o teu PIN ou usa a túa pegada para continuar."</string>
 <string name="text_pinlock_repeat_prompt">"Agora, introduce o mesmo PIN de novo…"</string>
 <string name="use_fingerprint_message">"ou usa a túa pegada para autenticarte"</string>
+<string name="reinstall_prescriptions_dialog_message">"Pra mellorar a información dispoñible da túa medicación, a base de datos de medicamentos debe ser reinstalada a través da pantalla de axustes. Se non a reinstalas, non poderás acceder aos prospectos ou outras funcións adicionais.
+
+Os teus medicamentos, pautas e rutinas, e outras funcións básicas, seguirán dispoñibles igualmente.
+
+Queres instalar a nova base de datos agora?"</string>
 </resources>
