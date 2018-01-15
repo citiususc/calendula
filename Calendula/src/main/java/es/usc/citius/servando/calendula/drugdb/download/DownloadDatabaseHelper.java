@@ -66,7 +66,7 @@ public class DownloadDatabaseHelper {
 
     public void showDownloadDialog(final Context dialogCtx, final String database, final DownloadDatabaseDialogCallback callback) {
 
-        LogUtil.d(TAG, "ShowDownloadDatabase");
+        LogUtil.d(TAG, "showDownloadDialog() called with: dialogCtx = [" + dialogCtx + "], database = [" + database + "], callback = [" + callback + "]");
         final Context appContext = dialogCtx.getApplicationContext();
         AlertDialog.Builder builder = new AlertDialog.Builder(dialogCtx);
         builder.setTitle(R.string.download_db_dialog_title);

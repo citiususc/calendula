@@ -144,9 +144,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             } else if (preference instanceof ListPreference) {
                 if (preference.getKey().equals(PreferenceKeys.DRUGDB_CURRENT_DB.key())) {
                     //Toast.makeText(ctx, "Value: " + stringValue + ", settingUp:" + settingUp, Toast.LENGTH_SHORT).show();
-                    if (!onUpdatePrescriptionsDatabasePreference((ListPreference) preference, stringValue)) {
-                        //return false;
-                    }
+                    onUpdatePrescriptionsDatabasePreference((ListPreference) preference, stringValue);
                     ListPreference listPreference = (ListPreference) preference;
                     int index = listPreference.findIndexOfValue(stringValue);
                     if (stringValue.equals(SETTING_UP)) {
@@ -342,7 +340,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             public void onReceive(Context ctxt, Intent intent) {
                 Preference p = findPreference(PreferenceKeys.DRUGDB_CURRENT_DB.key());
                 p.setEnabled(true);
-                bindPreferenceSummaryToValue(p, false);
+                bindPreferenceSummaryToValue(p, true);
                 settingUp = false;
             }
         };
@@ -453,12 +451,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
         // Trigger the listener immediately with the preference's current value.
-        //if(triggerListener) {
+        if(triggerListener) {
         sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
                 PreferenceUtils
                         .instance().preferences()
                         .getString(preference.getKey(), ""));
-        //}
+        }
     }
 
     private void showDatabaseDialog() {
@@ -504,7 +502,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         bindPreferenceSummaryToValue(findPreference(PreferenceKeys.SETTINGS_ALARM_REPEAT_FREQUENCY.key()), true);
         bindPreferenceSummaryToValue(findPreference(PreferenceKeys.SETTINGS_ALARM_REMINDER_WINDOW.key()), true);
         bindPreferenceSummaryToValue(findPreference(PreferenceKeys.SETTINGS_NOTIFICATION_TONE.key()), true);
-        bindPreferenceSummaryToValue(findPreference(PreferenceKeys.DRUGDB_CURRENT_DB.key()), true);
+        bindPreferenceSummaryToValue(findPreference(PreferenceKeys.DRUGDB_CURRENT_DB.key()), false);
 
         findPreference(PreferenceKeys.SETTINGS_ALARM_INSISTENT.key()).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
