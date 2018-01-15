@@ -72,14 +72,14 @@ public class ModuleRegistry {
 
     private static class ModuleLists {
         private static final Class<?>[] STABLE_MODULES = new Class<?>[]{
-                BaseModule.class // Base module is required. Do not remove!
+                BaseModule.class, // Base module is required. Do not remove!
+                StockModule.class
         };
 
         private static final Class<?>[] UNSTABLE_MODULES = ArrayUtils.addAll(
                 STABLE_MODULES,
                 PharmacyModule.class,
-                AllergiesModule.class,
-                StockModule.class);
+                AllergiesModule.class);
 
         private static final Class<?>[] BLEEDING_MODULES = ArrayUtils.addAll(
                 UNSTABLE_MODULES,
