@@ -99,7 +99,6 @@ import es.usc.citius.servando.calendula.util.view.CustomListPreference;
  */
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final int REQ_CODE_EXTERNAL_STORAGE_RINGTONE = 20;
-    public static final int REQ_CODE_EXTERNAL_STORAGE_MED_DB = 21;
 
     public static final String EXTRA_SHOW_DB_DIALOG = "show_database_dialog";
 
@@ -237,15 +236,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     ins.setChecked(true);
                 }
                 break;
-            case REQ_CODE_EXTERNAL_STORAGE_MED_DB:
-                PermissionUtils.markedPermissionAsAsked(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    SwitchPreference ins = (SwitchPreference) findPreference(PreferenceKeys.DRUGDB_ENABLE_DRUGDB.key());
-                    ins.setChecked(true);
-                    showDatabaseDialog();
-                    break;
-                }
         }
 
     }
@@ -379,16 +369,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    SwitchPreference ins = (SwitchPreference) findPreference(PreferenceKeys.DRUGDB_ENABLE_DRUGDB.key());
-                    if (ins.isChecked()) {
-                        showDatabaseDialog();
-                    } else {
-                        boolean permitted = checkPreferenceAskForPermission(true, REQ_CODE_EXTERNAL_STORAGE_MED_DB);
-                        if (permitted) {
-                            ins.setChecked(true);
-                            showDatabaseDialog();
-                        }
-                    }
+                    showDatabaseDialog();
                 }
             }, 500);
 
@@ -451,11 +432,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
         // Trigger the listener immediately with the preference's current value.
-        if(triggerListener) {
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceUtils
-                        .instance().preferences()
-                        .getString(preference.getKey(), ""));
+        if (triggerListener) {
+            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+                    PreferenceUtils
+                            .instance().preferences()
+                            .getString(preference.getKey(), ""));
         }
     }
 
@@ -502,28 +483,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         bindPreferenceSummaryToValue(findPreference(PreferenceKeys.SETTINGS_ALARM_REPEAT_FREQUENCY.key()), true);
         bindPreferenceSummaryToValue(findPreference(PreferenceKeys.SETTINGS_ALARM_REMINDER_WINDOW.key()), true);
         bindPreferenceSummaryToValue(findPreference(PreferenceKeys.SETTINGS_NOTIFICATION_TONE.key()), true);
-        bindPreferenceSummaryToValue(findPreference(PreferenceKeys.DRUGDB_CURRENT_DB.key()), false);
+        bindPreferenceSummaryToValue(findPreference(PreferenceKeys.DRUGDB_CURRENT_DB.key()), true);
 
         findPreference(PreferenceKeys.SETTINGS_ALARM_INSISTENT.key()).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
-                return checkPreferenceAskForPermission(o, REQ_CODE_EXTERNAL_STORAGE_RINGTONE);
-            }
-        });
-        findPreference(PreferenceKeys.DRUGDB_ENABLE_DRUGDB.key()).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object o) {
-                ListPreference p = (ListPreference) findPreference(PreferenceKeys.DRUGDB_CURRENT_DB.key());
-                if (settingUp) {
-                    // database cannot be disabled while it's setting up
-                    return false;
-                }
-                final boolean val = (boolean) o;
-                final boolean hasPermission = checkPreferenceAskForPermission(o, REQ_CODE_EXTERNAL_STORAGE_MED_DB);
-                if (val && hasPermission) {
-                    showDatabaseDialog();
-                }
-                return hasPermission;
+                return checkPreferenceAskForPermission(REQ_CODE_EXTERNAL_STORAGE_RINGTONE);
             }
         });
 
@@ -540,6 +505,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         dbPref.setEntryValues(registeredDbs.toArray(new String[registeredDbs.size()]));
 
         findPreference(PreferenceKeys.SETTINGS_DATABASE_UPDATE.key()).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            // TODO: 15/01/18 check for installed DB
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 new AsyncTask<Void, Void, Boolean>() {
@@ -592,10 +558,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         }
     }
 
-    private boolean checkPreferenceAskForPermission(Object o, int reqCode) {
-        boolean val = (boolean) o;
+    private boolean checkPreferenceAskForPermission(int reqCode) {
         String p = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-        if (val && PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(thisActivity, p)) {
+        if (PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(thisActivity, p)) {
             if (PermissionUtils.shouldAskForPermission(thisActivity, p))
                 PermissionUtils.requestPermissions(thisActivity, new String[]{p}, reqCode);
             else
