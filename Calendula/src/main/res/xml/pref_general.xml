@@ -42,14 +42,8 @@
         android:key="pref_key_prescriptions"
         android:title="@string/pref_header_prescriptions">
 
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="@string/prefkey_drugdb_enable_drugdb"
-            android:title="@string/pref_enable_databases_title"/>
-
         <es.usc.citius.servando.calendula.util.view.CustomListPreference
             android:defaultValue="@string/database_none_display"
-            android:dependency="drugdb_enable_db"
             android:entries="@array/pref_available_databases"
             android:entryValues="@array/pref_available_databases_values"
             android:key="@string/prefkey_drugdb_current_db"
@@ -58,7 +52,6 @@
             android:title="@string/pref_available_databases_title"/>
 
         <Preference
-            android:dependency="drugdb_enable_db"
             android:key="@string/prefkey_settings_database_update"
             android:title="@string/preference_check_for_updates"
             />

@@ -99,7 +99,6 @@ import es.usc.citius.servando.calendula.util.view.CustomListPreference;
  */
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final int REQ_CODE_EXTERNAL_STORAGE_RINGTONE = 20;
-    public static final int REQ_CODE_EXTERNAL_STORAGE_MED_DB = 21;
 
     public static final String EXTRA_SHOW_DB_DIALOG = "show_database_dialog";
 
@@ -114,8 +113,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
 
     static String lastValidDatabase;
-    static String NONE;
-    static String SETTING_UP;
+    static String DB_NONE;
+    static String DB_SETTING_UP;
     static boolean settingUp = false;
     BroadcastReceiver onDBSetupComplete;
     private SettingsActivity thisActivity;
@@ -147,12 +146,17 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     onUpdatePrescriptionsDatabasePreference((ListPreference) preference, stringValue);
                     ListPreference listPreference = (ListPreference) preference;
                     int index = listPreference.findIndexOfValue(stringValue);
-                    if (stringValue.equals(SETTING_UP)) {
+                    if (stringValue.equals(DB_SETTING_UP)) {
                         preference.setSummary(stringValue);
                         preference.setEnabled(false);
                     } else {
                         // Set the summary to reflect the new value.
                         preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : "Unknown");
+                    }
+                    if(stringValue.equals(DB_SETTING_UP) || stringValue.equals(DB_NONE)){
+                        findPreference(PreferenceKeys.SETTINGS_DATABASE_UPDATE.key()).setEnabled(false);
+                    }else {
+                        findPreference(PreferenceKeys.SETTINGS_DATABASE_UPDATE.key()).setEnabled(true);
                     }
                 } else {
                     // For list preferences, look up the correct display value in
@@ -237,28 +241,19 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     ins.setChecked(true);
                 }
                 break;
-            case REQ_CODE_EXTERNAL_STORAGE_MED_DB:
-                PermissionUtils.markedPermissionAsAsked(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    SwitchPreference ins = (SwitchPreference) findPreference(PreferenceKeys.DRUGDB_ENABLE_DRUGDB.key());
-                    ins.setChecked(true);
-                    showDatabaseDialog();
-                    break;
-                }
         }
 
     }
 
     boolean onUpdatePrescriptionsDatabasePreference(final ListPreference preference, final String stringValue) {
         LogUtil.d(TAG, "New value: " + stringValue);
-        if (!settingUp && !stringValue.equals(lastValidDatabase) && !NONE.equalsIgnoreCase(stringValue) && !SETTING_UP.equals(stringValue)) {
+        if (!settingUp && !stringValue.equals(lastValidDatabase) && !DB_NONE.equalsIgnoreCase(stringValue) && !DB_SETTING_UP.equals(stringValue)) {
             DownloadDatabaseHelper.instance().showDownloadDialog(thisActivity, stringValue, new DownloadDatabaseHelper.DownloadDatabaseDialogCallback() {
                 @Override
                 public void onDownloadAcceptedOrCancelled(boolean accepted) {
                     SharedPreferences settings = PreferenceUtils.instance().preferences();
                     SharedPreferences.Editor edit = settings.edit();
-                    final String val = accepted ? SETTING_UP : lastValidDatabase;
+                    final String val = accepted ? DB_SETTING_UP : lastValidDatabase;
                     edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), val);
                     edit.apply();
                     if (accepted) {
@@ -270,14 +265,14 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 }
             });
             return false;
-        } else if (stringValue.equalsIgnoreCase(NONE)) {
+        } else if (stringValue.equalsIgnoreCase(DB_NONE)) {
             try {
                 DBRegistry.instance().clear();
                 SharedPreferences settings = PreferenceUtils.instance().preferences();
                 SharedPreferences.Editor edit = settings.edit();
-                edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), NONE);
+                edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), DB_NONE);
                 edit.apply();
-                lastValidDatabase = NONE;
+                lastValidDatabase = DB_NONE;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -318,22 +313,22 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NONE = getString(R.string.database_none_id);
-        SETTING_UP = getString(R.string.database_setting_up);
+        DB_NONE = getString(R.string.database_none_id);
+        DB_SETTING_UP = getString(R.string.database_setting_up);
 
         SharedPreferences settings = PreferenceUtils.instance().preferences();
-        lastValidDatabase = settings.getString(PreferenceKeys.DRUGDB_LAST_VALID.key(), NONE);
+        lastValidDatabase = settings.getString(PreferenceKeys.DRUGDB_LAST_VALID.key(), DB_NONE);
 
-        settingUp = SETTING_UP.equals(settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), null));
+        settingUp = DB_SETTING_UP.equals(settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), null));
 
         if (settingUp && !DownloadDatabaseHelper.instance().isDBDownloadingOrInstalling(this)) {
             LogUtil.d(TAG, "onCreate: " + "Something weird happened. It seems like InstallDatabaseService was killed while working!");
-            settings.edit().putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), NONE).apply();
+            settings.edit().putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), DB_NONE).apply();
             settingUp = false;
         }
 
         LogUtil.d(TAG, "sa onCreate: prescriptions_database: " + settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), null));
-        LogUtil.d(TAG, "sa onCreate: SETTING_UP: " + SETTING_UP);
+        LogUtil.d(TAG, "sa onCreate: SETTING_UP: " + DB_SETTING_UP);
         LogUtil.d(TAG, "sa onCreate: setting_up: " + settingUp);
 
         onDBSetupComplete = new BroadcastReceiver() {
@@ -379,16 +374,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    SwitchPreference ins = (SwitchPreference) findPreference(PreferenceKeys.DRUGDB_ENABLE_DRUGDB.key());
-                    if (ins.isChecked()) {
-                        showDatabaseDialog();
-                    } else {
-                        boolean permitted = checkPreferenceAskForPermission(true, REQ_CODE_EXTERNAL_STORAGE_MED_DB);
-                        if (permitted) {
-                            ins.setChecked(true);
-                            showDatabaseDialog();
-                        }
-                    }
+                    showDatabaseDialog();
                 }
             }, 500);
 
@@ -451,11 +437,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
         // Trigger the listener immediately with the preference's current value.
-        if(triggerListener) {
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceUtils
-                        .instance().preferences()
-                        .getString(preference.getKey(), ""));
+        if (triggerListener) {
+            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+                    PreferenceUtils
+                            .instance().preferences()
+                            .getString(preference.getKey(), ""));
         }
     }
 
@@ -502,28 +488,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         bindPreferenceSummaryToValue(findPreference(PreferenceKeys.SETTINGS_ALARM_REPEAT_FREQUENCY.key()), true);
         bindPreferenceSummaryToValue(findPreference(PreferenceKeys.SETTINGS_ALARM_REMINDER_WINDOW.key()), true);
         bindPreferenceSummaryToValue(findPreference(PreferenceKeys.SETTINGS_NOTIFICATION_TONE.key()), true);
-        bindPreferenceSummaryToValue(findPreference(PreferenceKeys.DRUGDB_CURRENT_DB.key()), false);
+        bindPreferenceSummaryToValue(findPreference(PreferenceKeys.DRUGDB_CURRENT_DB.key()), true);
 
         findPreference(PreferenceKeys.SETTINGS_ALARM_INSISTENT.key()).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
-                return checkPreferenceAskForPermission(o, REQ_CODE_EXTERNAL_STORAGE_RINGTONE);
-            }
-        });
-        findPreference(PreferenceKeys.DRUGDB_ENABLE_DRUGDB.key()).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object o) {
-                ListPreference p = (ListPreference) findPreference(PreferenceKeys.DRUGDB_CURRENT_DB.key());
-                if (settingUp) {
-                    // database cannot be disabled while it's setting up
-                    return false;
-                }
-                final boolean val = (boolean) o;
-                final boolean hasPermission = checkPreferenceAskForPermission(o, REQ_CODE_EXTERNAL_STORAGE_MED_DB);
-                if (val && hasPermission) {
-                    showDatabaseDialog();
-                }
-                return hasPermission;
+                return checkPreferenceAskForPermission(REQ_CODE_EXTERNAL_STORAGE_RINGTONE);
             }
         });
 
@@ -592,10 +562,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         }
     }
 
-    private boolean checkPreferenceAskForPermission(Object o, int reqCode) {
-        boolean val = (boolean) o;
+    private boolean checkPreferenceAskForPermission(int reqCode) {
         String p = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-        if (val && PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(thisActivity, p)) {
+        if (PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(thisActivity, p)) {
             if (PermissionUtils.shouldAskForPermission(thisActivity, p))
                 PermissionUtils.requestPermissions(thisActivity, new String[]{p}, reqCode);
             else
