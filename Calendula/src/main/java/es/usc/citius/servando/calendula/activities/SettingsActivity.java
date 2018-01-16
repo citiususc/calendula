@@ -113,8 +113,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
 
     static String lastValidDatabase;
-    static String NONE;
-    static String SETTING_UP;
+    static String DB_NONE;
+    static String DB_SETTING_UP;
     static boolean settingUp = false;
     BroadcastReceiver onDBSetupComplete;
     private SettingsActivity thisActivity;
@@ -146,12 +146,17 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     onUpdatePrescriptionsDatabasePreference((ListPreference) preference, stringValue);
                     ListPreference listPreference = (ListPreference) preference;
                     int index = listPreference.findIndexOfValue(stringValue);
-                    if (stringValue.equals(SETTING_UP)) {
+                    if (stringValue.equals(DB_SETTING_UP)) {
                         preference.setSummary(stringValue);
                         preference.setEnabled(false);
                     } else {
                         // Set the summary to reflect the new value.
                         preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : "Unknown");
+                    }
+                    if(stringValue.equals(DB_SETTING_UP) || stringValue.equals(DB_NONE)){
+                        findPreference(PreferenceKeys.SETTINGS_DATABASE_UPDATE.key()).setEnabled(false);
+                    }else {
+                        findPreference(PreferenceKeys.SETTINGS_DATABASE_UPDATE.key()).setEnabled(true);
                     }
                 } else {
                     // For list preferences, look up the correct display value in
@@ -242,13 +247,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     boolean onUpdatePrescriptionsDatabasePreference(final ListPreference preference, final String stringValue) {
         LogUtil.d(TAG, "New value: " + stringValue);
-        if (!settingUp && !stringValue.equals(lastValidDatabase) && !NONE.equalsIgnoreCase(stringValue) && !SETTING_UP.equals(stringValue)) {
+        if (!settingUp && !stringValue.equals(lastValidDatabase) && !DB_NONE.equalsIgnoreCase(stringValue) && !DB_SETTING_UP.equals(stringValue)) {
             DownloadDatabaseHelper.instance().showDownloadDialog(thisActivity, stringValue, new DownloadDatabaseHelper.DownloadDatabaseDialogCallback() {
                 @Override
                 public void onDownloadAcceptedOrCancelled(boolean accepted) {
                     SharedPreferences settings = PreferenceUtils.instance().preferences();
                     SharedPreferences.Editor edit = settings.edit();
-                    final String val = accepted ? SETTING_UP : lastValidDatabase;
+                    final String val = accepted ? DB_SETTING_UP : lastValidDatabase;
                     edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), val);
                     edit.apply();
                     if (accepted) {
@@ -260,14 +265,14 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 }
             });
             return false;
-        } else if (stringValue.equalsIgnoreCase(NONE)) {
+        } else if (stringValue.equalsIgnoreCase(DB_NONE)) {
             try {
                 DBRegistry.instance().clear();
                 SharedPreferences settings = PreferenceUtils.instance().preferences();
                 SharedPreferences.Editor edit = settings.edit();
-                edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), NONE);
+                edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), DB_NONE);
                 edit.apply();
-                lastValidDatabase = NONE;
+                lastValidDatabase = DB_NONE;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -308,22 +313,22 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NONE = getString(R.string.database_none_id);
-        SETTING_UP = getString(R.string.database_setting_up);
+        DB_NONE = getString(R.string.database_none_id);
+        DB_SETTING_UP = getString(R.string.database_setting_up);
 
         SharedPreferences settings = PreferenceUtils.instance().preferences();
-        lastValidDatabase = settings.getString(PreferenceKeys.DRUGDB_LAST_VALID.key(), NONE);
+        lastValidDatabase = settings.getString(PreferenceKeys.DRUGDB_LAST_VALID.key(), DB_NONE);
 
-        settingUp = SETTING_UP.equals(settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), null));
+        settingUp = DB_SETTING_UP.equals(settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), null));
 
         if (settingUp && !DownloadDatabaseHelper.instance().isDBDownloadingOrInstalling(this)) {
             LogUtil.d(TAG, "onCreate: " + "Something weird happened. It seems like InstallDatabaseService was killed while working!");
-            settings.edit().putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), NONE).apply();
+            settings.edit().putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), DB_NONE).apply();
             settingUp = false;
         }
 
         LogUtil.d(TAG, "sa onCreate: prescriptions_database: " + settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), null));
-        LogUtil.d(TAG, "sa onCreate: SETTING_UP: " + SETTING_UP);
+        LogUtil.d(TAG, "sa onCreate: SETTING_UP: " + DB_SETTING_UP);
         LogUtil.d(TAG, "sa onCreate: setting_up: " + settingUp);
 
         onDBSetupComplete = new BroadcastReceiver() {
@@ -505,7 +510,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         dbPref.setEntryValues(registeredDbs.toArray(new String[registeredDbs.size()]));
 
         findPreference(PreferenceKeys.SETTINGS_DATABASE_UPDATE.key()).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            // TODO: 15/01/18 check for installed DB
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 new AsyncTask<Void, Void, Boolean>() {
