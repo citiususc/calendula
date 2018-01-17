@@ -335,7 +335,7 @@ public class ReminderNotification {
         final Intent delay = new Intent(context, ConfirmActivity.class);
         delay.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, "delay");
         delay.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
-        delay.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, date.toString("kk:mm"));
+        delay.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, time.toString("kk:mm"));
         delay.putExtra("date", date.toString(AlarmIntentParams.DATE_FORMAT));
 
         final Intent cancel = new Intent(context, NotificationEventReceiver.class);
