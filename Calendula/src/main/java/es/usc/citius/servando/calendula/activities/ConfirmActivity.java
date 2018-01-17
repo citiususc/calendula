@@ -548,15 +548,14 @@ public class ConfirmActivity extends CalendulaActivity {
 
     private void processIntent() {
         Intent i = getIntent();
-        Long routineId = i.getLongExtra("routine_id", -1);
-        Long scheduleId = i.getLongExtra("schedule_id", -1);
-        String dateStr = i.getStringExtra("date");
-        String timeStr = i.getStringExtra("schedule_time");
+        Long routineId = i.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
+        Long scheduleId = i.getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1);
+        String dateStr = i.getStringExtra(CalendulaApp.INTENT_EXTRA_DATE);
+        String timeStr = i.getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME);
 
-        String actionType = i.getIntExtra("actionType", AlarmIntentParams.AUTO) == AlarmIntentParams.USER ? "user" : "auto";
 
-        action = i.getStringExtra("action");
-        position = i.getIntExtra("position", -1);
+        action = i.getStringExtra(CalendulaApp.INTENT_EXTRA_ACTION);
+        position = i.getIntExtra(CalendulaApp.INTENT_EXTRA_POSITION, -1);
 
         fromNotification = position == -1;
 

@@ -56,7 +56,7 @@ public class PickupAlarmReceiver extends BroadcastReceiver {
     private void showNotification(Context ctx, String description) {
         String title = "Remember to pickup your meds";
         Intent i = new Intent(ctx, CalendarActivity.class);
-        i.putExtra("action", CalendarActivity.ACTION_SHOW_REMINDERS);
+        i.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendarActivity.ACTION_SHOW_REMINDERS);
         PickupNotification.notify(ctx, title, description, i);
     }
 

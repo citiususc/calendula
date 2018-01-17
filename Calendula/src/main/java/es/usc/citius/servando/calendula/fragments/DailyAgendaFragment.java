@@ -62,6 +62,7 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub.DailyAgendaItemStubElement;
 import es.usc.citius.servando.calendula.util.IconUtils;
@@ -395,14 +396,14 @@ public class DailyAgendaFragment extends Fragment {
     private void showConfirmActivity(View view, DailyAgendaItemStub item, int position) {
 
         Intent i = new Intent(getContext(), ConfirmActivity.class);
-        i.putExtra("position", position);
-        i.putExtra("date", item.date.toString("dd/MM/YYYY"));
+        i.putExtra(CalendulaApp.INTENT_EXTRA_POSITION, position);
+        i.putExtra(CalendulaApp.INTENT_EXTRA_DATE, item.date.toString("dd/MM/YYYY"));
 
         if (item.isRoutine) {
-            i.putExtra("routine_id", item.id);
+            i.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, item.id);
         } else {
-            i.putExtra("schedule_id", item.id);
-            i.putExtra("schedule_time", item.time.toString("kk:mm"));
+            i.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, item.id);
+            i.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, item.time.toString(AlarmIntentParams.TIME_FORMAT));
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

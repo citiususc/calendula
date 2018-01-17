@@ -86,7 +86,7 @@ public class AlarmScheduler {
         Bundle b = new Bundle();
         b.putParcelable(EXTRA_PARAMS, parcelable);
         intent.putExtra(EXTRA_PARAMS, b);
-        intent.putExtra("date", parcelable.date);
+        intent.putExtra(CalendulaApp.INTENT_EXTRA_DATE, parcelable.date);
     }
 
     public static AlarmIntentParams getAlarmParams(Intent intent) {
@@ -372,9 +372,8 @@ public class AlarmScheduler {
 
         if (notify) {
             final Intent intent = new Intent(ctx, ConfirmActivity.class);
-            intent.putExtra("routine_id", routine.getId());
-            intent.putExtra("date", firstParams.date);
-            intent.putExtra("actionType", firstParams.actionType);
+            intent.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, routine.getId());
+            intent.putExtra(CalendulaApp.INTENT_EXTRA_DATE, firstParams.date);
             ReminderNotification.notify(ctx, ctx.getResources().getString(R.string.meds_time), routine, doses, firstParams.date(), intent, false);
             LogUtil.d(TAG, "Show notification");
             boolean repeatAlarms = PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_REPEAT_ENABLED, false);
@@ -404,8 +403,7 @@ public class AlarmScheduler {
             final Intent intent = new Intent(ctx, ConfirmActivity.class);
             intent.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
             intent.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, firstParams.scheduleTime);
-            intent.putExtra("date", firstParams.date);
-            intent.putExtra("actionType", firstParams.actionType);
+            intent.putExtra(CalendulaApp.INTENT_EXTRA_DATE, firstParams.date);
 
             String title = ctx.getResources().getString(R.string.meds_time);
             ReminderNotification.notify(ctx, title, schedule, firstParams.date(), firstParams.scheduleTime(), intent, false);
@@ -428,8 +426,8 @@ public class AlarmScheduler {
 
         // show routine lost notification
         final Intent intent = new Intent(ctx, ConfirmActivity.class);
-        intent.putExtra("routine_id", routine.getId());
-        intent.putExtra("date", params.date);
+        intent.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, routine.getId());
+        intent.putExtra(CalendulaApp.INTENT_EXTRA_DATE, params.date);
         String title = ctx.getResources().getString(R.string.meds_time_lost);
         ReminderNotification.notify(ctx, title, routine, doses, params.date(), intent, true);
     }
@@ -444,7 +442,7 @@ public class AlarmScheduler {
         final Intent intent = new Intent(ctx, ConfirmActivity.class);
         intent.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
         intent.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, params.scheduleTime);
-        intent.putExtra("date", params.date);
+        intent.putExtra(CalendulaApp.INTENT_EXTRA_DATE, params.date);
         String title = ctx.getResources().getString(R.string.meds_time_lost);
         ReminderNotification.notify(ctx, title, schedule, params.date(), params.scheduleTime(), intent, true);
     }

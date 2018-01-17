@@ -69,6 +69,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import es.usc.citius.servando.calendula.CalendulaActivity;
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
@@ -432,7 +433,7 @@ public class CalendarActivity extends CalendulaActivity {
 
     private void checkIntent() {
 
-        int action = getIntent().getIntExtra("action", -1);
+        int action = getIntent().getIntExtra(CalendulaApp.INTENT_EXTRA_ACTION, -1);
         if (action == ACTION_SHOW_REMINDERS) {
             //onBestDaySelected();
         }

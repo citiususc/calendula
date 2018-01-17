@@ -54,6 +54,8 @@ public class CalendulaApp extends MultiDexApplication {
     public static final String INTENT_EXTRA_SCHEDULE_TIME = "schedule_time";
     public static final String INTENT_EXTRA_DELAY_ROUTINE_ID = "delay_routine_id";
     public static final String INTENT_EXTRA_DELAY_SCHEDULE_ID = "delay_schedule_id";
+    public static final String INTENT_EXTRA_DATE = "date";
+    public static final String INTENT_EXTRA_POSITION = "position";
     // ACTIONS
     public static final int ACTION_ROUTINE_TIME = 1;
     public static final int ACTION_DAILY_ALARM = 2;

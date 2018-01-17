@@ -53,7 +53,7 @@ public class NotificationEventReceiver extends BroadcastReceiver {
 
         LogUtil.d(TAG, "Notification event received - Action : " + action);
 
-        String dateStr = intent.getStringExtra("date");
+        String dateStr = intent.getStringExtra(CalendulaApp.INTENT_EXTRA_DATE);
         if (dateStr != null) {
             date = DateTimeFormat.forPattern(AlarmIntentParams.DATE_FORMAT).parseLocalDate(dateStr);
         } else {
@@ -75,7 +75,7 @@ public class NotificationEventReceiver extends BroadcastReceiver {
                 scheduleId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1);
                 scheduleTime = intent.getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME);
                 if (scheduleId != -1 && scheduleTime != null) {
-                    LocalTime t = DateTimeFormat.forPattern("kk:mm").parseLocalTime(scheduleTime);
+                    LocalTime t = DateTimeFormat.forPattern(AlarmIntentParams.TIME_FORMAT).parseLocalTime(scheduleTime);
                     AlarmScheduler.instance().onIntakeCancelled(Schedule.findById(scheduleId), t, date, context);
                     Toast.makeText(context, context.getString(R.string.reminder_cancelled_message), Toast.LENGTH_SHORT).show();
                 }
@@ -93,7 +93,7 @@ public class NotificationEventReceiver extends BroadcastReceiver {
                 scheduleId = intent.getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1);
                 scheduleTime = intent.getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME);
                 if (scheduleId != -1 && scheduleTime != null) {
-                    LocalTime t = DateTimeFormat.forPattern("kk:mm").parseLocalTime(scheduleTime);
+                    LocalTime t = DateTimeFormat.forPattern(AlarmIntentParams.TIME_FORMAT).parseLocalTime(scheduleTime);
                     AlarmScheduler.instance().onIntakeConfirmAll(Schedule.findById(scheduleId), t, date, context);
                     Toast.makeText(context, context.getString(R.string.all_meds_taken), Toast.LENGTH_SHORT).show();
                 }

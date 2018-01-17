@@ -119,7 +119,7 @@ public class ReminderNotification {
         final Intent confirmAll = new Intent(context, NotificationEventReceiver.class);
         confirmAll.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_CONFIRM_ALL_SCHEDULE);
         confirmAll.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
-        confirmAll.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, time.toString("kk:mm"));
+        confirmAll.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, time.toString(AlarmIntentParams.TIME_FORMAT));
 
         NotificationOptions options = new NotificationOptions();
         options.style = style;
@@ -319,13 +319,13 @@ public class ReminderNotification {
         final Intent delay = new Intent(context, ConfirmActivity.class);
         delay.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, "delay");
         delay.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, r.getId());
-        delay.putExtra("date", date.toString(AlarmIntentParams.DATE_FORMAT));
+        delay.putExtra(CalendulaApp.INTENT_EXTRA_DATE, date.toString(AlarmIntentParams.DATE_FORMAT));
 
         // delay intent sent on click delay button
         final Intent cancel = new Intent(context, NotificationEventReceiver.class);
         cancel.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_CANCEL_ROUTINE);
         cancel.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, r.getId());
-        cancel.putExtra("date", date.toString(AlarmIntentParams.DATE_FORMAT));
+        cancel.putExtra(CalendulaApp.INTENT_EXTRA_DATE, date.toString(AlarmIntentParams.DATE_FORMAT));
 
         return new Pair<>(delay, cancel);
     }
@@ -335,14 +335,14 @@ public class ReminderNotification {
         final Intent delay = new Intent(context, ConfirmActivity.class);
         delay.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, "delay");
         delay.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
-        delay.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, time.toString("kk:mm"));
-        delay.putExtra("date", date.toString(AlarmIntentParams.DATE_FORMAT));
+        delay.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, time.toString(AlarmIntentParams.TIME_FORMAT));
+        delay.putExtra(CalendulaApp.INTENT_EXTRA_DATE, date.toString(AlarmIntentParams.DATE_FORMAT));
 
         final Intent cancel = new Intent(context, NotificationEventReceiver.class);
         cancel.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_CANCEL_HOURLY_SCHEDULE);
         cancel.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
-        cancel.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, time.toString("kk:mm"));
-        cancel.putExtra("date", date.toString(AlarmIntentParams.DATE_FORMAT));
+        cancel.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, time.toString(AlarmIntentParams.TIME_FORMAT));
+        cancel.putExtra(CalendulaApp.INTENT_EXTRA_DATE, date.toString(AlarmIntentParams.DATE_FORMAT));
 
         return new Pair<>(delay, cancel);
     }
