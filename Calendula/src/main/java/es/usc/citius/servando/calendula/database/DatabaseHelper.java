@@ -120,7 +120,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     // the DAO object we use to access the patients table
     private Dao<Patient, Long> patientDao = null;
 
-    private Context ctx;
+    private final Context ctx;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -140,8 +140,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
                 LogUtil.d(TAG, "Creating table for " + c.getSimpleName());
                 TableUtils.createTable(connectionSource, c);
             }
-
-            createDefaultPatient();
 
         } catch (SQLException e) {
             LogUtil.e(TAG, "Can't create database", e);
@@ -371,7 +369,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         patientDao = null;
     }
 
-    private Patient createDefaultPatient() throws SQLException {
+    /**
+     * Creates a default patient.
+     *
+     * @return the created Patient
+     * @throws SQLException if anything goes wrong
+     */
+    public Patient createDefaultPatient() throws SQLException {
         // Create a default patient
         Patient p = new Patient();
         p.setName(ctx.getString(R.string.default_user_name));

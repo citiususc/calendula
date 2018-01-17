@@ -36,6 +36,7 @@ import org.joda.time.LocalTime;
 
 import java.io.IOException;
 
+import es.usc.citius.servando.calendula.DefaultDataGenerator;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
@@ -81,12 +82,13 @@ public class BaseModule extends CalendulaModule {
         DB.init(ctx);
         DBRegistry.init(ctx);
         try {
-            if (DB.patients().countOf() == 1) {
-                Patient p = DB.patients().getDefault();
-                PreferenceUtils.edit().putLong(PreferenceKeys.PATIENTS_ACTIVE.key(), p.getId()).apply();
+            if (DB.patients().count() == 0) {
+                final Patient defaultPatient = DB.helper().createDefaultPatient();
+                DefaultDataGenerator.generateDefaultRoutines(defaultPatient, ctx);
+                PreferenceUtils.edit().putLong(PreferenceKeys.PATIENTS_ACTIVE.key(), defaultPatient.getId()).apply();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.e(TAG, "initializeDatabase: ", e);
         }
 
     }
