@@ -64,6 +64,10 @@ public class AlertViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         this.listener = listener;
     }
 
+    public PatientAlert getItem(int position) {
+        return items.get(position);
+    }
+
     @Override
     public int getItemViewType(int position) {
         PatientAlert item = items.get(position);
