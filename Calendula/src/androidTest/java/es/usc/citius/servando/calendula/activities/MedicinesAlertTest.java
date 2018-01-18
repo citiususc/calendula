@@ -91,7 +91,7 @@ public class MedicinesAlertTest {
         m.setPatient(p);
         m.setDatabase("TEST");
         m.setPresentation(Presentation.UNKNOWN);
-        m.setName(p.getName());
+        m.setName(prescription.getName());
         DB.medicines().saveAndFireEvent(m);
         // TODO: 18/01/18 don't create manually when driving alerts are automatic!
         AlertManager.createAlert(new DrivingCautionAlert(m));
