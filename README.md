@@ -72,8 +72,6 @@ We try to follow [Material Design](https://material.google.com/#) principles. Ta
   |:---:|:---:|:---:|
   | <img src="https://tec.citius.usc.es/calendula/github-assets/aviso.png" width="230px"/> | <img src="https://tec.citius.usc.es/calendula/github-assets/navdrawer.png" width="230px"/> | <img src="https://tec.citius.usc.es/calendula/github-assets/profile.png" width="230px"/>
 
-
-We use <a href="http://www.freepik.com/free-vector/people-avatars_761436.htm">this vector pack at Freepik</a>, [an icon](http://www.flaticon.com/free-icon/baby_136272) made by <a href="http://www.flaticon.com/authors/madebyoliver" title="Madebyoliver">Madebyoliver</a>, and some animals icons ([dog](http://www.flaticon.com/free-icon/dog_194178) and [cat](http://www.flaticon.com/free-icon/cat_194179)) from Freepik for avatars.
 ## Future work ##
 
 We have a lot of development ideas, and we are open to newer ones. Below are some interesting features that could be very useful:
@@ -81,6 +79,13 @@ We have a lot of development ideas, and we are open to newer ones. Below are som
  * Information about nearby pharmacies, their locations and timetables
  * Trip assistant (how many pills I need for this weekend?)
  * Introducing [gamification](https://en.wikipedia.org/wiki/Gamification) concepts to improve adherence.
+
+
+## Artwork attribution
+We are using the the following resources in the app:
+* [People Vector Pack](http://www.freepik.com/free-vector/people-avatars_761436.htm) by [Freepik](http://www.freepik.com)
+* [Baby](http://www.flaticon.com/free-icon/baby_136272), [Dog](http://www.flaticon.com/free-icon/dog_194178) and [cat](http://www.flaticon.com/free-icon/cat_194179) icons by <a href="https://www.flaticon.com/" title="Flaticon">Flaticon</a> (<a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>)
+* [Alarm clock animation](https://dribbble.com/shots/1114887-Alarm-Clock-GIF) by  [Daan De Deckere](http://daandd.be/)
 
 
 ## Contributing ##
