@@ -211,11 +211,13 @@
         <activity
             android:name=".notifications.LockScreenAlarmActivity"
             android:label="@string/title_activity_allergies_search"
+            android:screenOrientation="portrait"
             android:launchMode="singleInstance"
             android:noHistory="true"
             android:showOnLockScreen="true"/>
 
-        <activity android:name=".pinlock.PinLockActivity"/>
+        <activity android:name=".pinlock.PinLockActivity"
+            />
 
     </application>
 

@@ -21,10 +21,24 @@
                 android:layout_height="match_parent"
                 android:background="@color/alarm_activity_bg_color">
 
+
+    <TextView
+        android:id="@+id/meds_time_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="80dp"
+        android:gravity="center"
+        android:text="@string/meds_time"
+        android:textColor="@color/white"
+        android:textSize="20dp"/>
+
+
     <ImageView
         android:id="@+id/confirm_button_bg"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
@@ -33,12 +47,14 @@
 
     <ImageView
         android:id="@+id/anim_image"
-        android:layout_width="333dp"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/confirm_button_bg"
+        android:layout_below="@id/meds_time_msg"
         android:layout_centerHorizontal="true"
-        android:layout_centerInParent="false"
-        android:layout_marginBottom="200dp"
-        android:layout_marginTop="100dp"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
         android:scaleType="fitCenter"
         android:src="@drawable/clock"/>
 
@@ -46,11 +62,11 @@
     <ImageButton
         android:id="@+id/confirm_btn"
         style="@style/Base.Widget.AppCompat.Button.Borderless"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="55dp"
+        android:layout_marginBottom="50dp"
         android:text="@string/confirm"/>
 
 </RelativeLayout>
