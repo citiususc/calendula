@@ -28,6 +28,7 @@ import android.view.View;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -99,6 +100,11 @@ public class MedicinesAlertTest {
         rule.launchActivity(new Intent());
 
         TestUtils.unlockScreen(rule.getActivity());
+    }
+
+    @After
+    public void tearDown(){
+        PreferenceUtils.edit().remove(PreferenceKeys.DRUGDB_CURRENT_DB.key()).apply();
     }
 
     @Test
