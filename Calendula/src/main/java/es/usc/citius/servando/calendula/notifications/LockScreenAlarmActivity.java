@@ -18,8 +18,10 @@
 
 package es.usc.citius.servando.calendula.notifications;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
@@ -56,6 +58,8 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
 
     private static final String TAG = "LockScreenAlarmAct";
 
+    public static final String STOP_SIGNAL = "finish_lock_screen_alarm_activity";
+
     // vibration pattern
     public static long[] VIB_PATTERN = new long[]{
             1000, // 1s delay
@@ -80,6 +84,8 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
     private ImageButton confirmButton;
     private View confirmButtonBackground;
     private Intent target = null;
+
+    private BroadcastReceiver finishReceiver;
 
     @Override
     public void onBackPressed() {
@@ -113,6 +119,8 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
             LogUtil.d(TAG, "Target " + (target != null));
         }
 
+        registerFinishReceiver();
+
         confirmButtonBackground = findViewById(R.id.confirm_button_bg);
         confirmButton = (ImageButton) findViewById(R.id.confirm_btn);
         confirmButton.setImageDrawable(IconUtils.icon(this, CommunityMaterial.Icon.cmd_alarm_off, R.color.white, 70, 10));
@@ -129,7 +137,32 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         stopPlayingAlarm();
+        unregisterFinishReceiver();
         super.onDestroy();
+    }
+
+    /**
+     * Registers a broadcast receiver that will finish the activity on STOP_SIGNAL. The objective
+     * is to stop the alarm after the user has confirmed or cancelled an intake, for example by
+     * clicking a notification action.
+     */
+    private void registerFinishReceiver() {
+        finishReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context arg0, Intent intent) {
+                String action = intent.getAction();
+                if (action.equals(STOP_SIGNAL)) {
+                    finish();
+                }
+            }
+        };
+        registerReceiver(finishReceiver, new IntentFilter(STOP_SIGNAL));
+    }
+
+    private void unregisterFinishReceiver() {
+        if (finishReceiver != null) {
+            unregisterReceiver(finishReceiver);
+        }
     }
 
     /**

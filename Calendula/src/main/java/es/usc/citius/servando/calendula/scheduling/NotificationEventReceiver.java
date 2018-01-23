@@ -29,9 +29,12 @@ import org.joda.time.format.DateTimeFormat;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.notifications.LockScreenAlarmActivity;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
  * This class receives our routine alarms
@@ -43,6 +46,8 @@ public class NotificationEventReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        boolean sendBroadcast = PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_INSISTENT, false);
 
         long routineId;
         long scheduleId;
@@ -100,8 +105,15 @@ public class NotificationEventReceiver extends BroadcastReceiver {
                 break;
 
             default:
+                sendBroadcast = false;
                 LogUtil.d(TAG, "Request not handled " + intent.toString());
                 break;
+        }
+
+        if (sendBroadcast) {
+            Intent broadcast = new Intent();
+            broadcast.setAction(LockScreenAlarmActivity.STOP_SIGNAL);
+            context.sendBroadcast(broadcast);
         }
 
     }
