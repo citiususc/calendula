@@ -20,6 +20,7 @@ package es.usc.citius.servando.calendula;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.support.multidex.MultiDexApplication;
 
 import com.squareup.leakcanary.LeakCanary;
@@ -135,20 +136,22 @@ public class CalendulaApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
-        if (BuildConfig.DEBUG) {
-            new StethoHelper().init(this);
-        }
+        if(!Build.FINGERPRINT.equals("robolectric")) {
+            if (BuildConfig.DEBUG ) {
+                new StethoHelper().init(this);
+            }
 
-        if (LeakCanary.isInAnalyzerProcess(CalendulaApp.this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            return;
+            if (LeakCanary.isInAnalyzerProcess(CalendulaApp.this) ) {
+                // This process is dedicated to LeakCanary for heap analysis.
+                return;
+            }
+
+            //initialize LeakCanary
+            LeakCanary.install(CalendulaApp.this);
         }
 
         final Context applicationContext = getApplicationContext();
         mContext = applicationContext;
-
-        //initialize LeakCanary
-        LeakCanary.install(CalendulaApp.this);
 
         LogUtil.d(TAG, "Application started");
 

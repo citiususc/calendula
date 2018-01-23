@@ -92,6 +92,12 @@ android {
         }
     }
 
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
 
     lintOptions {
         abortOnError false
@@ -160,7 +166,6 @@ dependencies {
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     androidTestCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
 
-
     /********** SUPPORT **********/
     // Multidex support
     compile 'com.android.support:multidex:1.0.2'
@@ -184,7 +189,6 @@ dependencies {
     androidTestCompile "com.android.support:support-annotations:$libVersions.android.support"
     androidTestCompile "com.android.support:support-v4:$libVersions.android.support"
 
-
     /********** TESTING **********/
     // JUnit
     testCompile 'junit:junit:4.12'
@@ -198,6 +202,9 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:1.0.0'
     androidTestCompile 'com.android.support.test:runner:1.0.0'
 
+    // Roboelectric
+    testCompile "org.robolectric:robolectric:3.6.1"
+    testCompile "org.robolectric:shadows-multidex:3.6.1"
 
     /********** UTILITIES **********/
     // HTML parsing
@@ -234,7 +241,6 @@ dependencies {
     // View/resource binding
     kapt 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.jakewharton:butterknife:8.8.1'
-
 
     /********** VIEWS AND VIEW UTILITIES **********/
     // About page with libraries
