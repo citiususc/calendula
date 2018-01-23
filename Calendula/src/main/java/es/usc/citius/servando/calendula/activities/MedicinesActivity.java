@@ -60,7 +60,6 @@ import es.usc.citius.servando.calendula.fragments.MedicineCreateOrEditFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
-import es.usc.citius.servando.calendula.persistence.alerts.DrivingCautionAlert;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
@@ -306,13 +305,6 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
                     DB.medicines().save(m);
                     if (allergies != null) {
                         createAllergyAlerts(m, allergies);
-                    }
-
-                    if (m.isBoundToPrescription()) {
-                        Prescription p = DB.drugDB().prescriptions().findByCn(m.getCn());
-                        if (p.isAffectsDriving()) {
-                            AlertManager.createAlert(new DrivingCautionAlert(m));
-                        }
                     }
 
                     DB.medicines().fireEvent();
