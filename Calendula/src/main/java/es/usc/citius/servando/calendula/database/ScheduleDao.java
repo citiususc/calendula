@@ -36,6 +36,7 @@ import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.util.alerts.StockAlertHandler;
 
 /**
  * Created by joseangel.pineiro on 3/26/15.
@@ -143,6 +144,14 @@ public class ScheduleDao extends GenericDao<Schedule, Long> {
         } catch (SQLException e) {
             LogUtil.e(TAG, "findByMedicineAndState: ", e);
             throw new RuntimeException("Error finding schedules", e);
+        }
+    }
+
+    @Override
+    public void save(Schedule model) {
+        super.save(model);
+        if (model.medicine() != null) {
+            StockAlertHandler.checkStockAlerts(model.medicine());
         }
     }
 }
