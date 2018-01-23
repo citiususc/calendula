@@ -23,6 +23,7 @@ test:
   override:
     - adb shell input keyevent 82:
         background: true
+    - ./gradlew testCiDebugUnitTest
     - ./gradlew connectedCiDebugAndroidTest
     - cp -r Calendula/build/outputs $CIRCLE_ARTIFACTS
     - adb logcat -d > logcat.txt && cp logcat.txt $CIRCLE_ARTIFACTS
