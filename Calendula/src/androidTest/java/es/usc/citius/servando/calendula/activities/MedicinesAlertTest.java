@@ -19,8 +19,6 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.content.Intent;
-import android.support.test.annotation.UiThreadTest;
-import android.support.test.espresso.ViewAssertion;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -53,7 +51,6 @@ import es.usc.citius.servando.calendula.util.CustomViewMatchers;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.TestUtils;
-import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -70,12 +67,15 @@ public class MedicinesAlertTest {
     public final ActivityTestRule<HomePagerActivity> rule =
             new ActivityTestRule<>(HomePagerActivity.class, true, false);
     private static final String PRESCRIPTION_CODE = "ALERT_TEST_PR_CODE";
+    private static final String DATABASE = "TEST_DB";
 
 
     @Before
     public void setup() throws SQLException {
         // drop database
         DB.dropAndCreateDatabase();
+        // set some vars
+        PreferenceUtils.edit().putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), DATABASE).apply();
         // create some allergens
         final Patient p = DB.patients().getDefault();
         Prescription prescription = DB.drugDB().prescriptions().findByCn(PRESCRIPTION_CODE);
@@ -84,18 +84,16 @@ public class MedicinesAlertTest {
             prescription.setAffectsDriving(true);
             prescription.setName("TEST PRESCRIPTION");
             prescription.setCode(PRESCRIPTION_CODE);
+            prescription.setDose("TEST_DOSE");
             DB.drugDB().prescriptions().save(prescription);
         }
         Medicine m = new Medicine();
         m.setCn(prescription.getCode());
         m.setPatient(p);
-        m.setDatabase("TEST");
+        m.setDatabase(PreferenceUtils.getString(PreferenceKeys.DRUGDB_CURRENT_DB, null));
         m.setPresentation(Presentation.UNKNOWN);
         m.setName(prescription.getName());
         DB.medicines().saveAndFireEvent(m);
-        // TODO: 18/01/18 don't create manually when driving alerts are automatic!
-        AlertManager.createAlert(new DrivingCautionAlert(m));
-
         PreferenceUtils.edit().putBoolean(PreferenceKeys.HOME_INTRO_SHOWN.key(), true).commit();
 
         rule.launchActivity(new Intent());
@@ -131,7 +129,7 @@ public class MedicinesAlertTest {
                 RecyclerView r = (RecyclerView) view;
                 AlertViewRecyclerAdapter a = (AlertViewRecyclerAdapter) r.getAdapter();
                 final PatientAlert patientAlert = a.getItem(0);
-                return  patientAlert instanceof DrivingCautionAlert;
+                return patientAlert instanceof DrivingCautionAlert;
             }
 
             @Override

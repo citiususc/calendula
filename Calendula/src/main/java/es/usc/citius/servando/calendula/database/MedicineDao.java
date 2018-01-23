@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
-import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.events.StockRunningOutEvent;
@@ -40,6 +39,7 @@ import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.Schedule;
+import es.usc.citius.servando.calendula.persistence.alerts.DrivingCautionAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.StockRunningOutAlert;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
@@ -103,37 +103,51 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
     @Override
     public void save(Medicine m) {
 
-        if (m.stockManagementEnabled() && m.getId() != null) {
+        Prescription p = null;
+        if (m.isBoundToPrescription()) {
+            p = DB.drugDB().prescriptions().findByCn(m.getCn());
+        }
 
-            Medicine original = findById(m.getId());
-            boolean addedOrRemoved = original.getStock() == null || !original.getStock().equals(m.getStock());
+        if (m.getId() != null) {
+            // update
             super.save(m);
-
-            if (addedOrRemoved) {
-                Long days = StockUtils.getEstimatedStockDays(m);
-                int stock_alert_days = Integer.parseInt(PreferenceUtils.getString(PreferenceKeys.SETTINGS_STOCK_ALERT_DAYS, "-1"));
-                List<PatientAlert> alerts = DB.alerts().findByMedicineAndType(m, StockRunningOutAlert.class.getCanonicalName());
-                if (days != null && days < stock_alert_days) {
-                    if (alerts.isEmpty()) {
-                        AlertManager.createAlert(new StockRunningOutAlert(m, LocalDate.now()));
-                        CalendulaApp.eventBus().post(new StockRunningOutEvent(m, days));
-                    }
-                } else if (days == null || days > stock_alert_days) {
-                    for (PatientAlert a : alerts) {
-                        DB.alerts().remove(a);
+            if (m.stockManagementEnabled()) {
+                //update
+                Medicine original = findById(m.getId());
+                boolean addedOrRemoved = original.getStock() == null || !original.getStock().equals(m.getStock());
+                if (addedOrRemoved) {
+                    Long days = StockUtils.getEstimatedStockDays(m);
+                    int stock_alert_days = Integer.parseInt(PreferenceUtils.getString(PreferenceKeys.SETTINGS_STOCK_ALERT_DAYS, "-1"));
+                    List<PatientAlert> alerts = DB.alerts().findByMedicineAndType(m, StockRunningOutAlert.class.getCanonicalName());
+                    if (days != null && days < stock_alert_days) {
+                        if (alerts.isEmpty()) {
+                            AlertManager.createAlert(new StockRunningOutAlert(m, LocalDate.now()));
+                            CalendulaApp.eventBus().post(new StockRunningOutEvent(m, days));
+                        }
+                    } else if (days == null || days > stock_alert_days) {
+                        for (PatientAlert a : alerts) {
+                            DB.alerts().remove(a);
+                        }
                     }
                 }
             }
         } else {
+            // creation
             // assign homogeneous group if possible
-            if (m.isBoundToPrescription()) {
-                Prescription p = DB.drugDB().prescriptions().findByCn(m.getCn());
-                if (p != null && p.getHomogeneousGroup() != null) {
-                    m.setHomogeneousGroup(p.getHomogeneousGroup());
-                }
+            if (p != null && p.getHomogeneousGroup() != null) {
+                m.setHomogeneousGroup(p.getHomogeneousGroup());
             }
             super.save(m);
         }
+
+        if (p != null && p.isAffectsDriving()) {
+            final List<PatientAlert> drivingAlerts = DB.alerts().findByMedicineAndType(m, DrivingCautionAlert.class.getCanonicalName());
+            if (drivingAlerts == null || drivingAlerts.isEmpty()) {
+                AlertManager.createAlert(new DrivingCautionAlert(m));
+            }
+        }
+
+
     }
 
     @Override
@@ -159,8 +173,12 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
                     DB.pickups().remove(p);
                 }
                 DB.medicines().remove(m);
-                //remove allergy alerts for this medicine
-                AllergyAlertUtil.removeAllergyAlerts(m);
+
+                //Remove alerts
+                final List<PatientAlert> alerts = DB.alerts().findBy(PatientAlert.COLUMN_MEDICINE, m);
+                for (PatientAlert alert : alerts) {
+                    AlertManager.removeAlert(alert);
+                }
 
                 return null;
             }
