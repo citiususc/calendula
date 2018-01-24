@@ -168,17 +168,13 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
                     .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_alert, R.color.black).alpha(110))
                     .withIdentifier(ALLERGIES));
         }
+        if (isPharmaEnabled) {
+            b.addDrawerItems(new PrimaryDrawerItem()
+                    .withName(R.string.home_menu_pharmacies)
+                    .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_map_marker_multiple, R.color.black).alpha(38))
+                    .withIdentifier(PHARMACIES));
+        }
         b.addDrawerItems(
-                new PrimaryDrawerItem()
-                        .withName(R.string.home_menu_pharmacies)
-                        .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_map_marker_multiple, R.color.black).alpha(38))
-                        .withEnabled(false)
-                        .withIdentifier(PHARMACIES),
-                new PrimaryDrawerItem()
-                        .withName(R.string.home_menu_plantrip)
-                        .withIcon(IconUtils.icon(home, GoogleMaterial.Icon.gmd_airplanemode_active, R.color.black).alpha(38))
-                        .withEnabled(false)
-                        .withIdentifier(TRAVELPLAN),
                 new DividerDrawerItem(),
                 new PrimaryDrawerItem()
                         .withName(R.string.drawer_help_option)
@@ -201,7 +197,9 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
         headerResult.setActiveProfile(p.getId().intValue(), false);
         updateHeaderBackground(p);
 
-        onPharmacyModeChanged(isPharmaEnabled);
+        if (isPharmaEnabled) {
+            onPharmacyModeChanged(isPharmaEnabled);
+        }
 
     }
 
