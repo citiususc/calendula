@@ -15,6 +15,8 @@ dependencies:
 
 test:
   override:
+    - export JVM_OPTS='-Xmx2048m'
+    - export JAVA_OPTS='-Xmx2048m'
     - adb shell input keyevent 82:
         background: true
     - ./gradlew assembleCiDebug
