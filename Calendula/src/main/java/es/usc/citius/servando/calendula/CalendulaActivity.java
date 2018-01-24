@@ -150,7 +150,7 @@ public abstract class CalendulaActivity extends AppCompatActivity {
         if (permissionRequestListeners.containsKey(requestCode)) {
             PermissionUtils.PermissionRequest req = permissionRequestListeners.get(requestCode);
             for (String p : req.permissions()) {
-                PermissionUtils.markedPermissionAsAsked(this, p);
+                PermissionUtils.markPermissionAsAsked(this, p);
             }
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 req.onPermissionGranted();

@@ -90,7 +90,7 @@ public class PermissionUtils {
                 .getBoolean("asked-for" + permission, false);
     }
 
-    public static void markedPermissionAsAsked(Activity activity, String permission) {
+    public static void markPermissionAsAsked(Activity activity, String permission) {
         PreferenceUtils
                 .edit()
                 .putBoolean("asked-for" + permission, true)

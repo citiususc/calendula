@@ -97,9 +97,8 @@ public class RingtonePreference extends android.preference.RingtonePreference {
         }
     }
 
-    @Override
-    protected void onClick() {
 
+    public void showDialog(){
         getEntriesAndValues();
         adapter = new SimpleListAdapter(getContext(), R.layout.ringtone_list_item, titles);
 
@@ -148,6 +147,11 @@ public class RingtonePreference extends android.preference.RingtonePreference {
             }
         }).show();
 
+    }
+
+    @Override
+    protected void onClick() {
+        //noop
     }
 
     public class SimpleListAdapter extends ArrayAdapter<String> {

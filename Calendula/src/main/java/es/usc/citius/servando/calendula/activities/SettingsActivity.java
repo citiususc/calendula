@@ -28,7 +28,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.media.Ringtone;
@@ -81,6 +80,7 @@ import es.usc.citius.servando.calendula.pinlock.fingerprint.FingerprintHelper;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.util.NotificationTonePreference;
 import es.usc.citius.servando.calendula.util.PermissionUtils;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
@@ -100,7 +100,9 @@ import es.usc.citius.servando.calendula.util.view.CustomListPreference;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
-    public static final int REQ_CODE_EXTERNAL_STORAGE_RINGTONE = 20;
+
+    public static final int REQ_CODE_EXTERNAL_STORAGE_INSISTENT_NOTIFICATION = 20;
+    public static final int REQ_CODE_EXTERNAL_STORAGE_NOTIFICATION = 21;
 
     public static final String EXTRA_SHOW_DB_DIALOG = "show_database_dialog";
 
@@ -153,9 +155,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                         // Set the summary to reflect the new value.
                         preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : "Unknown");
                     }
-                    if(stringValue.equals(DB_SETTING_UP) || stringValue.equals(DB_NONE)){
+                    if (stringValue.equals(DB_SETTING_UP) || stringValue.equals(DB_NONE)) {
                         findPreference(PreferenceKeys.SETTINGS_DATABASE_UPDATE.key()).setEnabled(false);
-                    }else {
+                    } else {
                         findPreference(PreferenceKeys.SETTINGS_DATABASE_UPDATE.key()).setEnabled(true);
                     }
                 } else {
@@ -233,13 +235,16 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case REQ_CODE_EXTERNAL_STORAGE_RINGTONE:
-                PermissionUtils.markedPermissionAsAsked(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            case REQ_CODE_EXTERNAL_STORAGE_INSISTENT_NOTIFICATION:
+                PermissionUtils.markPermissionAsAsked(this, Manifest.permission.READ_EXTERNAL_STORAGE);
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    SwitchPreference ins = (SwitchPreference) findPreference(PreferenceKeys.SETTINGS_ALARM_INSISTENT.key());
-                    ins.setChecked(true);
-                }
+                RingtonePreference r = (RingtonePreference) findPreference(PreferenceKeys.SETTINGS_INSISTENT_NOTIFICATION_TONE.key());
+                r.showDialog();
+                break;
+            case REQ_CODE_EXTERNAL_STORAGE_NOTIFICATION:
+                PermissionUtils.markPermissionAsAsked(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+                NotificationTonePreference n = (NotificationTonePreference) findPreference(PreferenceKeys.SETTINGS_NOTIFICATION_TONE.key());
+                n.showDialog();
                 break;
         }
 
@@ -491,10 +496,24 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         bindPreferenceSummaryToValue(findPreference(PreferenceKeys.SETTINGS_INSISTENT_NOTIFICATION_TONE.key()), true);
         bindPreferenceSummaryToValue(findPreference(PreferenceKeys.DRUGDB_CURRENT_DB.key()), true);
 
-        findPreference(PreferenceKeys.SETTINGS_ALARM_INSISTENT.key()).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        findPreference(PreferenceKeys.SETTINGS_NOTIFICATION_TONE.key()).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
-            public boolean onPreferenceChange(Preference preference, Object o) {
-                return checkPreferenceAskForPermission(REQ_CODE_EXTERNAL_STORAGE_RINGTONE);
+            public boolean onPreferenceClick(Preference preference) {
+                if (checkPreferenceAskForPermission(REQ_CODE_EXTERNAL_STORAGE_NOTIFICATION)) {
+                    // if we already asked, or we have permission, show the dialog
+                    ((NotificationTonePreference) preference).showDialog();
+                }
+                return true;
+            }
+        });
+
+        findPreference(PreferenceKeys.SETTINGS_INSISTENT_NOTIFICATION_TONE.key()).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if (checkPreferenceAskForPermission(REQ_CODE_EXTERNAL_STORAGE_INSISTENT_NOTIFICATION)) {
+                    ((RingtonePreference) preference).showDialog();
+                }
+                return true;
             }
         });
 
@@ -563,19 +582,27 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         }
     }
 
+    /**
+     * @param reqCode the request code
+     * @return <code>true</code> if the permission is granted, <code>false</code> otherwise
+     */
     private boolean checkPreferenceAskForPermission(int reqCode) {
-        String p = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-        if (PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(thisActivity, p)) {
-            if (PermissionUtils.shouldAskForPermission(thisActivity, p))
-                PermissionUtils.requestPermissions(thisActivity, new String[]{p}, reqCode);
-            else
-                showStupidUserDialog();
-            return false;
+        switch (reqCode) {
+            case REQ_CODE_EXTERNAL_STORAGE_NOTIFICATION:
+            case REQ_CODE_EXTERNAL_STORAGE_INSISTENT_NOTIFICATION:
+                String p = Manifest.permission.READ_EXTERNAL_STORAGE;
+                if (PermissionUtils.shouldAskForPermission(thisActivity, p)) {
+                    PermissionUtils.requestPermissions(thisActivity, new String[]{p}, reqCode);
+                    return false;
+                }
+                return true;
+            default:
+                LogUtil.e(TAG, "checkPreferenceAskForPermission: Invalid request code: " + reqCode);
+                return false;
         }
-        return true;
     }
 
-    private void showStupidUserDialog() {
+    private void showPermisionDeniedDialog() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(thisActivity);
         // "Remove " + m.name() + "?"
