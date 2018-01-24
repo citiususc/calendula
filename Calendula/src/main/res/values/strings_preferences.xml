@@ -56,6 +56,7 @@
     <string name="prefkey_settings_alarm_repeat_enabled" translatable="false">alarm_repeat_enabled</string>
     <string name="prefkey_settings_alarm_repeat_frequency" translatable="false">alarm_repeat_frequency</string>
     <string name="prefkey_settings_alarm_notifications" translatable="false">alarm_notifications</string>
+    <string name="prefkey_settings_insistent_notification_tone" translatable="false">pref_insistent_notification_tone</string>
     <string name="prefkey_settings_alarm_pickup_notifications" translatable="false">alarm_pickup_notifications</string>
     <string name="prefkey_settings_notification_tone" translatable="false">pref_notification_tone</string>
     <string name="prefkey_settings_stock_alert_days" translatable="false">stock_alert_days</string>

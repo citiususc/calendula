@@ -43,6 +43,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
@@ -83,6 +84,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PermissionUtils;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
+import es.usc.citius.servando.calendula.util.RingtonePreference;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.view.CustomListPreference;
 
@@ -128,18 +130,16 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         public boolean onPreferenceChange(final Preference preference, final Object value) {
             final String stringValue = value.toString();
 
-            if (preference instanceof es.usc.citius.servando.calendula.util.RingtonePreference) {
+
+            if (preference instanceof RingtonePreference) {
                 String p = Manifest.permission.WRITE_EXTERNAL_STORAGE;
                 if (PermissionUtils.useRunTimePermissions() && !PermissionUtils.hasPermission(thisActivity, p)) {
                     preference.setSummary("");
                 } else {
-                    Uri ringtoneUri = Uri.parse(stringValue);
-                    Ringtone ringtone = RingtoneManager.getRingtone(thisActivity, ringtoneUri);
+                    Ringtone ringtone = getTone(thisActivity, preference.getKey());
                     String name = ringtone != null ? ringtone.getTitle(thisActivity) : thisActivity.getString(R.string.pref_notification_tone_sum);
                     preference.setSummary(name);
                 }
-
-
             } else if (preference instanceof ListPreference) {
                 if (preference.getKey().equals(PreferenceKeys.DRUGDB_CURRENT_DB.key())) {
                     //Toast.makeText(ctx, "Value: " + stringValue + ", settingUp:" + settingUp, Toast.LENGTH_SHORT).show();
@@ -488,6 +488,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         bindPreferenceSummaryToValue(findPreference(PreferenceKeys.SETTINGS_ALARM_REPEAT_FREQUENCY.key()), true);
         bindPreferenceSummaryToValue(findPreference(PreferenceKeys.SETTINGS_ALARM_REMINDER_WINDOW.key()), true);
         bindPreferenceSummaryToValue(findPreference(PreferenceKeys.SETTINGS_NOTIFICATION_TONE.key()), true);
+        bindPreferenceSummaryToValue(findPreference(PreferenceKeys.SETTINGS_INSISTENT_NOTIFICATION_TONE.key()), true);
         bindPreferenceSummaryToValue(findPreference(PreferenceKeys.DRUGDB_CURRENT_DB.key()), true);
 
         findPreference(PreferenceKeys.SETTINGS_ALARM_INSISTENT.key()).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -672,6 +673,16 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     .show();
         }
 
+    }
+
+    private static Ringtone getTone(Context context, String preferenceKey) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String selectedRingtone = preferences.getString(preferenceKey, null);
+        if (selectedRingtone != null) {
+            Uri ringtoneUri = Uri.parse(selectedRingtone);
+            return RingtoneManager.getRingtone(context, ringtoneUri);
+        }
+        return null;
     }
 
 }

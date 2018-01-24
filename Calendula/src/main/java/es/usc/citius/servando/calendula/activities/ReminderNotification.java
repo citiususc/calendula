@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
@@ -348,7 +349,9 @@ public class ReminderNotification {
     }
 
     private static Uri getRingtoneUri() {
-        return Settings.System.DEFAULT_NOTIFICATION_URI;
+        String r = PreferenceUtils.getString(PreferenceKeys.SETTINGS_NOTIFICATION_TONE, null);
+        Uri sound = r != null ? Uri.parse(r) : RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        return sound != null ? sound : Settings.System.DEFAULT_NOTIFICATION_URI;
     }
 
     private static Bitmap getLargeIcon(Resources r, Patient p) {

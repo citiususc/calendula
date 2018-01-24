@@ -379,6 +379,7 @@ Sie werden alle ihre Einnahmen auf dem Startbildschirm sehen."</string>
 <string name="pref_title_sync_frequency">"Wiederhole alle"</string>
 <string name="pref_title_reminder_window">"Alarme abstellen nach"</string>
 <string name="pref_notification_tone">"Benachrichtigungston"</string>
+    <string name="pref_insistent_notification_tone">"Anhaltender Benachrichtigungston"</string>
 <string name="pref_notification_tone_sum">"Standard"</string>
 <string name="pref_alarm_repeat_five_min">"5 Min."</string>
 <string name="pref_alarm_repeat_fifteen_min">"15 Min."</string>

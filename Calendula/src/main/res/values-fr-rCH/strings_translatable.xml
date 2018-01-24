@@ -156,5 +156,6 @@ S'il vous plaît, lisez attentivement la notice d'emballage ou demandez conseil 
 <string name="pref_title_sync_frequency">"Répéter les rappels toutes les"</string>
 <string name="pref_title_reminder_window">"Arrêter les rappels après"</string>
 <string name="pref_notification_tone">"Sonnerie"</string>
+    <string name="pref_insistent_notification_tone">"Sonnerie de notification insistante"</string>
 <string name="pref_notification_tone_sum">"Par défaut"</string>
 </resources>

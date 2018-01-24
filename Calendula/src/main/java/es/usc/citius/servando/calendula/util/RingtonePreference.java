@@ -60,9 +60,6 @@ public class RingtonePreference extends android.preference.RingtonePreference {
         super(context, attrs);
     }
 
-    public void performClick() {
-        onClick();
-    }
 
     void stopRingtone() {
         if (ringtone != null && ringtone.isPlaying()) {
@@ -70,9 +67,13 @@ public class RingtonePreference extends android.preference.RingtonePreference {
         }
     }
 
+    public int getRingtoneType() {
+        return RingtoneManager.TYPE_RINGTONE;
+    }
+
     void getEntriesAndValues() {
         RingtoneManager manager = new RingtoneManager(getContext());
-        manager.setType(RingtoneManager.TYPE_RINGTONE);
+        manager.setType(getRingtoneType());
         List<CharSequence> _titles = new ArrayList<>();
         List<CharSequence> _values = new ArrayList<>();
 

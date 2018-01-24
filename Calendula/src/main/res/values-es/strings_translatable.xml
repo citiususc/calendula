@@ -382,6 +382,7 @@ Verás todas sus tomas en la pantalla de inicio."</string>
 <string name="pref_title_reminder_window">"Detener avisos después de"</string>
 <string name="pref_notification_tone">"Tono de aviso"</string>
 <string name="pref_notification_tone_sum">"Por defecto"</string>
+    <string name="pref_insistent_notification_tone">"Tono de aviso insistente"</string>
 <string name="pref_alarm_repeat_five_min">"5 min"</string>
 <string name="pref_alarm_repeat_fifteen_min">"15 min"</string>
 <string name="pref_alarm_repeat_thirty_min">"30 min"</string>

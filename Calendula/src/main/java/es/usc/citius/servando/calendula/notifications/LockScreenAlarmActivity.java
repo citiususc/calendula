@@ -226,7 +226,7 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
      * @return A ringtone for intake insistent alarms
      */
     private Uri getAlarmUri() {
-        String ringtonePref = PreferenceUtils.getString(PreferenceKeys.SETTINGS_NOTIFICATION_TONE, null);
+        String ringtonePref = PreferenceUtils.getString(PreferenceKeys.SETTINGS_INSISTENT_NOTIFICATION_TONE, null);
         return ringtonePref != null ? Uri.parse(ringtonePref) : RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
     }
 
