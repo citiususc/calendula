@@ -378,7 +378,6 @@ Verás todas a súas tomas na pantalla de inicio."</string>
 <string name="pref_title_sync_frequency">"Repetir avisos cada"</string>
 <string name="pref_title_reminder_window">"Deter avisos despois de"</string>
 <string name="pref_notification_tone">"Tono de aviso"</string>
-    <string name="pref_insistent_notification_tone">"Tono de aviso insistente"</string>
 <string name="pref_notification_tone_sum">"Por defecto"</string>
 <string name="pref_alarm_repeat_five_min">"5 min"</string>
 <string name="pref_alarm_repeat_fifteen_min">"15 min"</string>
@@ -494,4 +493,5 @@ Se escolles non facelo, algunha información das túas medicinas pode perderse."
 Os teus medicamentos, pautas e rutinas, e outras funcións básicas, seguirán dispoñibles igualmente.
 
 Queres instalar a nova base de datos agora?"</string>
+<string name="pref_insistent_notification_tone">"Tono de avisos insistentes"</string>
 </resources>
