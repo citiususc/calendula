@@ -43,7 +43,7 @@
         android:title="@string/pref_header_prescriptions">
 
         <es.usc.citius.servando.calendula.util.view.CustomListPreference
-            android:defaultValue="@string/database_none_display"
+            android:defaultValue="@string/database_none_id"
             android:entries="@array/pref_available_databases"
             android:entryValues="@array/pref_available_databases_values"
             android:key="@string/prefkey_drugdb_current_db"
