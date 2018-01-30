@@ -51,6 +51,7 @@ public class AvatarMgr {
     public static final String AVATAR_14 = "avatar_14";
     public static final String AVATAR_15 = "avatar_15";
 
+
     public static final Map<String, Integer> avatars;
     private static HashMap<String, int[]> cache = new HashMap<>();
 
@@ -82,6 +83,7 @@ public class AvatarMgr {
                 R.color.android_blue,
                 R.color.android_blue_light};
 
+        // TODO: 30/01/18 handle missing ID case
         if (!cache.containsKey(avatar) && avatars.containsKey(avatar)) {
             Bitmap bm = BitmapFactory.decodeResource(res, avatars.get(avatar));
             if (bm != null) {

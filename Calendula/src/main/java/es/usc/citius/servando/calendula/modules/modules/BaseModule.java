@@ -130,8 +130,6 @@ public class BaseModule extends CalendulaModule {
         //register custom fonts like this (or also provide a font definition file)
         Iconics.registerFont(new PresentationsTypeface());
 
-        updatePreferences(ctx);
-
         //initialize job engine
         JobManager.create(ctx).addJobCreator(new CalendulaJobCreator());
         //schedule jobs
@@ -141,45 +139,5 @@ public class BaseModule extends CalendulaModule {
         };
         CalendulaJobScheduler.scheduleJobs(jobs);
     }
-
-    /**
-     * When updating from an old version of the app (with the old DB format), checks if DB was enabled.
-     * If so, triggers the download and configuration of the new DB format, using the then-default database (AEMPS).
-     *
-     * @param ctx the context
-     */
-    private void updatePreferences(final Context ctx) {
-
-        if (PreferenceUtils.getBoolean(PreferenceKeys.MEDICINES_LEGACY_DB_ENABLED, false)) {
-            new MaterialStyledDialog.Builder(ctx)
-                    .setStyle(Style.HEADER_WITH_ICON)
-                    .setIcon(IconUtils.icon(ctx, CommunityMaterial.Icon.cmd_database, R.color.white, 100))
-                    .setHeaderColor(R.color.android_blue)
-                    .withDialogAnimation(true)
-                    .setTitle(R.string.title_database_update_required)
-                    .setDescription(R.string.message_database_update_required)
-                    .setCancelable(false)
-                    .setPositiveText(ctx.getString(R.string.download))
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Intent i = new Intent(ctx, UpdateDatabaseService.class);
-                            i.putExtra(UpdateDatabaseService.EXTRA_DATABASE_ID, ctx.getString(R.string.database_aemps_id));
-                            ctx.startService(i);
-                        }
-                    })
-                    .setNegativeText(R.string.cancel)
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            dialog.cancel();
-                        }
-                    })
-                    .show();
-        }
-
-        PreferenceUtils.edit().remove(PreferenceKeys.MEDICINES_LEGACY_DB_ENABLED.key()).apply();
-    }
-
 
 }
