@@ -34,6 +34,7 @@ import es.usc.citius.servando.calendula.R;
  */
 public class AvatarMgr {
 
+
     public static final String DEFAULT_AVATAR = "avatar_default";
     public static final String AVATAR_1 = "avatar_01";
     public static final String AVATAR_2 = "avatar_02";
@@ -53,6 +54,8 @@ public class AvatarMgr {
 
 
     public static final Map<String, Integer> avatars;
+
+    private static final String TAG = "AvatarMgr";
     private static HashMap<String, int[]> cache = new HashMap<>();
 
     static {
@@ -83,8 +86,12 @@ public class AvatarMgr {
                 R.color.android_blue,
                 R.color.android_blue_light};
 
-        // TODO: 30/01/18 handle missing ID case
-        if (!cache.containsKey(avatar) && avatars.containsKey(avatar)) {
+        if (!avatars.containsKey(avatar)) {
+            LogUtil.w(TAG, "colorsFor: Invalid avatar ID \"" + avatar + "\". Returning default colors.");
+            return colors;
+        }
+
+        if (!cache.containsKey(avatar)) {
             Bitmap bm = BitmapFactory.decodeResource(res, avatars.get(avatar));
             if (bm != null) {
                 Palette p = Palette.generate(bm);
@@ -102,6 +109,7 @@ public class AvatarMgr {
         if (avatars.containsKey(avatar)) {
             return avatars.get(avatar);
         }
+        LogUtil.w(TAG, "res: Invalid avatar ID \"" + avatar + "\". Returning default avatar.");
         return avatars.get(DEFAULT_AVATAR);
     }
 
