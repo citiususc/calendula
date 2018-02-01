@@ -66,6 +66,8 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.HomePagerActivity;
@@ -78,7 +80,6 @@ import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
-import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.IconUtils;
@@ -91,44 +92,61 @@ import es.usc.citius.servando.calendula.util.view.ArcTranslateAnimation;
 
 public class ConfirmActivity extends CalendulaActivity {
 
-    public static final int DEFAULT_CHECK_MARGIN = 3;
+    private static final int DEFAULT_CHECK_MARGIN = 3;
     private static final String TAG = "ConfirmActivity";
-    boolean isRoutine;
-    boolean stateChanged = false;
-    int position = -1;
-    int color;
-    Patient patient;
-    Routine routine;
-    Schedule schedule;
-    LocalTime time;
-    LocalDate date;
-    RecyclerView listView;
-    ImageView avatar;
-    TextView title;
-    ImageView avatarTitle;
-    TextView titleTitle;
-    TextView hour;
-    TextView minute;
-    TextView friendlyTime;
-    TextView takeMadsMessage;
-    IconicsDrawable uncheckedIcon;
-    IconicsDrawable checkedIcon;
-    FloatingActionButton fab;
-    String action;
+
+    @BindView(R.id.appbar)
     AppBarLayout appBarLayout;
-    ConfirmItemAdapter itemAdapter;
+    @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout toolbarLayout;
-    View toolbarTitle;
-    List<DailyScheduleItem> items = new ArrayList<>();
-    DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("kk:mm");
-    DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/YYYY");
-    boolean isToday;
-    boolean isInWindow;
-    boolean isDistant;
-    View chekAllOverlay;
+    @BindView(R.id.myFAB)
+    FloatingActionButton fab;
+    @BindView(R.id.patient_avatar)
+    ImageView avatar;
+    @BindView(R.id.patient_avatar_title)
+    ImageView avatarTitle;
+    @BindView(R.id.check_all_image)
     ImageView checkAllImage;
-    String relativeTime = "";
+    @BindView(R.id.listView)
+    RecyclerView listView;
+    @BindView(R.id.user_friendly_time)
+    TextView friendlyTime;
+    @BindView(R.id.routines_list_item_hour)
+    TextView hour;
+    @BindView(R.id.routines_list_item_minute)
+    TextView minute;
+    @BindView(R.id.textView3)
+    TextView takeMedsMessage;
+    @BindView(R.id.routine_name)
+    TextView title;
+    @BindView(R.id.routine_name_title)
+    TextView titleTitle;
+    @BindView(R.id.check_overlay)
+    View chekAllOverlay;
+    @BindView(R.id.toolbar_title)
+    View toolbarTitle;
+
     private boolean fromNotification = false;
+    private boolean isDistant;
+    private boolean isInWindow;
+    private boolean isRoutine;
+    private boolean isToday;
+    private boolean stateChanged = false;
+    private ConfirmItemAdapter itemAdapter;
+    private DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/YYYY");
+    private DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("kk:mm");
+    private IconicsDrawable checkedIcon;
+    private IconicsDrawable uncheckedIcon;
+    private int color;
+    private int position = -1;
+    private List<DailyScheduleItem> items = new ArrayList<>();
+    private LocalDate date;
+    private LocalTime time;
+    private Patient patient;
+    private Routine routine;
+    private Schedule schedule;
+    private String action;
+    private String relativeTime = "";
 
     /*
      * Returns the intake margin interval
@@ -324,6 +342,7 @@ public class ConfirmActivity extends CalendulaActivity {
         super.onCreate(savedInstanceState);
         processIntent();
         setContentView(R.layout.activity_confirm);
+        ButterKnife.bind(this);
 
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
@@ -342,28 +361,12 @@ public class ConfirmActivity extends CalendulaActivity {
         setupStatusBar(Color.TRANSPARENT);
         setupToolbar("", Color.TRANSPARENT, Color.WHITE);
         toolbar.setTitleTextColor(Color.WHITE);
-        findViewById(R.id.imageView5).setBackgroundColor(patient.getColor());
-        fab = (FloatingActionButton) findViewById(R.id.myFAB);
-        listView = (RecyclerView) findViewById(R.id.listView);
-        avatar = (ImageView) findViewById(R.id.patient_avatar);
-        title = (TextView) findViewById(R.id.routine_name);
-        takeMadsMessage = (TextView) findViewById(R.id.textView3);
-        chekAllOverlay = findViewById(R.id.check_overlay);
-        checkAllImage = (ImageView) findViewById(R.id.check_all_image);
 
-        avatarTitle = (ImageView) findViewById(R.id.patient_avatar_title);
-        titleTitle = (TextView) findViewById(R.id.routine_name_title);
-
-        friendlyTime = (TextView) findViewById(R.id.user_friendly_time);
-        hour = (TextView) findViewById(R.id.routines_list_item_hour);
-        minute = (TextView) findViewById(R.id.routines_list_item_minute);
-        toolbarTitle = findViewById(R.id.toolbar_title);
         avatar.setImageResource(AvatarMgr.res(patient.getAvatar()));
         avatarTitle.setImageResource(AvatarMgr.res(patient.getAvatar()));
         titleTitle.setText(patient.getName());
         title.setText((isRoutine ? routine.getName() : schedule.toReadableString(this)));
-        takeMadsMessage.setText(isInWindow ? getString(R.string.agenda_zoom_meds_time) : getString(R.string.meds_from) + " " + date.toString("EEEE dd"));
-
+        takeMedsMessage.setText(isInWindow ? getString(R.string.agenda_zoom_meds_time) : getString(R.string.meds_from) + " " + date.toString("EEEE dd"));
 
         relativeTime = DateUtils.getRelativeTimeSpanString(dt.getMillis(), now.getMillis(), 5 * DateUtils.MINUTE_IN_MILLIS, DateUtils.FORMAT_ABBREV_ALL).toString();
 
@@ -416,8 +419,6 @@ public class ConfirmActivity extends CalendulaActivity {
         });
 
 
-        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         toolbarLayout.setContentScrimColor(patient.getColor());
         setupListView();
 
@@ -637,7 +638,7 @@ public class ConfirmActivity extends CalendulaActivity {
         }
     }
 
-    private class ConfirmItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    class ConfirmItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
         ConfirmItemViewHolder h;
@@ -697,24 +698,24 @@ public class ConfirmActivity extends CalendulaActivity {
             h.icon.setImageDrawable(medDrawable);
         }
 
-        public class ConfirmItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        class ConfirmItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+            @BindView(R.id.med_item_name)
             TextView med;
+            @BindView(R.id.med_item_dose)
             TextView dose;
+            @BindView(R.id.med_item_status)
             TextView status;
+            @BindView(R.id.check_button)
             ImageButton check;
+            @BindView(R.id.imageView)
             ImageView icon;
 
             DailyScheduleItem dailyScheduleItem;
 
             public ConfirmItemViewHolder(View itemView) {
                 super(itemView);
-                med = (TextView) itemView.findViewById(R.id.med_item_name);
-                dose = (TextView) itemView.findViewById(R.id.med_item_dose);
-                status = (TextView) itemView.findViewById(R.id.med_item_status);
-                check = (ImageButton) itemView.findViewById(R.id.check_button);
-                icon = (ImageView) itemView.findViewById(R.id.imageView);
-                itemView.setOnClickListener(this);
+                ButterKnife.bind(this, itemView);
                 check.setOnClickListener(this);
             }
 
