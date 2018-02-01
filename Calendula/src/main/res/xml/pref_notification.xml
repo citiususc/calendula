@@ -58,14 +58,6 @@
         android:positiveButtonText="@null"
         android:title="@string/pref_title_reminder_window"/>
 
-    <!--<ListPreference-->
-    <!--android:defaultValue="3"-->
-    <!--android:entries="@array/pref_check_window_margin_titles"-->
-    <!--android:entryValues="@array/pref_check_window_margin_values"-->
-    <!--android:key="check_window_margin"-->
-    <!--android:negativeButtonText="@null"-->
-    <!--android:positiveButtonText="@null"-->
-    <!--android:title="@string/pref_check_window_margin" />-->
 
     <SwitchPreference
         android:defaultValue="false"
@@ -79,11 +71,6 @@
         android:key="@string/prefkey_settings_insistent_notification_tone"
         android:summary="@string/pref_notification_tone_sum"
         android:title="@string/pref_insistent_notification_tone"/>
-
-    <SwitchPreference
-        android:defaultValue="true"
-        android:key="@string/prefkey_settings_alarm_pickup_notifications"
-        android:title="@string/pref_title_pickup_notification"/>
 
 
 </PreferenceScreen>

@@ -19,9 +19,7 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -35,7 +33,6 @@ import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
@@ -46,7 +43,6 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.HomePagerActivity;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.adapters.HomePages;
@@ -96,8 +92,6 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
     }
 
     public void init(Bundle savedInstanceState) {
-
-        boolean isPharmaEnabled = CalendulaApp.isPharmaModeEnabled();
 
         ArrayList<IProfile> profiles = new ArrayList<>();
 
@@ -168,12 +162,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
                     .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_alert, R.color.black).alpha(110))
                     .withIdentifier(ALLERGIES));
         }
-        if (isPharmaEnabled) {
-            b.addDrawerItems(new PrimaryDrawerItem()
-                    .withName(R.string.home_menu_pharmacies)
-                    .withIcon(IconUtils.icon(home, CommunityMaterial.Icon.cmd_map_marker_multiple, R.color.black).alpha(38))
-                    .withIdentifier(PHARMACIES));
-        }
+
         b.addDrawerItems(
                 new DividerDrawerItem(),
                 new PrimaryDrawerItem()
@@ -196,11 +185,6 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
         Patient p = DB.patients().getActive(home);
         headerResult.setActiveProfile(p.getId().intValue(), false);
         updateHeaderBackground(p);
-
-        if (isPharmaEnabled) {
-            onPharmacyModeChanged(isPharmaEnabled);
-        }
-
     }
 
     @Override
@@ -251,25 +235,6 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
         }
         drawer.closeDrawer();
         return true;
-    }
-
-    public void onPharmacyModeChanged(boolean enabled) {
-        PrimaryDrawerItem item = (PrimaryDrawerItem) drawer.getDrawerItem(PHARMACIES);
-        BadgeStyle bs = new BadgeStyle();
-        if (enabled) {
-            addCalendarItem();
-            Drawable bg = new IconicsDrawable(home)
-                    .icon(GoogleMaterial.Icon.gmd_check)
-                    .color(home.getResources().getColor(R.color.dark_grey_text))
-                    .sizeDp(18);
-            bs.withBadgeBackground(bg);
-        } else {
-            drawer.removeItem(CALENDAR);
-            bs.withBadgeBackground(new ColorDrawable(Color.TRANSPARENT));
-        }
-        item.withBadgeStyle(bs);
-        item.withBadge(" ");
-        drawer.updateItem(item);
     }
 
     public void onPagerPositionChange(int pagerPosition) {

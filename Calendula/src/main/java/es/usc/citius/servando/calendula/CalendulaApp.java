@@ -38,7 +38,6 @@ import java.util.Locale;
 
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
-import es.usc.citius.servando.calendula.modules.modules.PharmacyModule;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.debug.StethoHelper;
 
@@ -75,7 +74,7 @@ public class CalendulaApp extends MultiDexApplication {
     public static final int RQ_DELAY_ROUTINE = 2;
     private static final String TAG = "CalendulaApp";
     public static boolean disableReceivers = false;
-    private static boolean isOpen;
+
     private static WeakReference<EventBus> eventBusRef;
     private static Context mContext;
 
@@ -85,18 +84,6 @@ public class CalendulaApp extends MultiDexApplication {
             eventBusRef = new WeakReference<>(EventBus.getDefault());
         }
         return eventBusRef.get();
-    }
-
-    public static boolean isOpen() {
-        return isOpen;
-    }
-
-    public static boolean isPharmaModeEnabled() {
-        return ModuleManager.isEnabled(PharmacyModule.ID);
-    }
-
-    public static void open(boolean isOpen) {
-        CalendulaApp.isOpen = isOpen;
     }
 
     public static Context getContext() {

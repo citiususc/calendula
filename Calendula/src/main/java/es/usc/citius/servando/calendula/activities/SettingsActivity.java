@@ -43,7 +43,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -66,7 +65,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.download.DownloadDatabaseHelper;
@@ -549,12 +547,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             }
         });
 
-
-        if (!CalendulaApp.isPharmaModeEnabled()) {
-            Preference alarmPk = findPreference(PreferenceKeys.SETTINGS_ALARM_PICKUP_NOTIFICATIONS.key());
-            PreferenceScreen preferenceScreen = getPreferenceScreen();
-            preferenceScreen.removePreference(alarmPk);
-        }
 
         // PIN lock
         findPreference(PreferenceKeys.UNLOCK_PIN.key()).setOnPreferenceClickListener(new PINPrefListener());
