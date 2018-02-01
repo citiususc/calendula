@@ -17,17 +17,15 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="es.usc.citius.servando.calendula"
-          android:versionCode="1"
-          android:versionName="1.0">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="es.usc.citius.servando.calendula">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
     <supports-screens
@@ -35,7 +33,7 @@
         android:normalScreens="true"
         android:resizeable="true"
         android:smallScreens="true"
-        android:xlargeScreens="true"/>
+        android:xlargeScreens="true" />
 
     <application
         android:name=".CalendulaApp"
@@ -47,18 +45,18 @@
 
         <activity
             android:name=".activities.MaterialIntroActivity"
-            android:theme="@style/Theme.Intro"/>
+            android:theme="@style/Theme.Intro" />
 
         <activity
             android:name=".activities.SchedulesHelpActivity"
-            android:theme="@style/Theme.Intro"/>
+            android:theme="@style/Theme.Intro" />
 
         <activity
             android:name=".activities.RoutinesActivity"
             android:label="@string/title_activity_routines"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".HomePagerActivity"
             android:label="@string/app_name"
@@ -75,31 +73,30 @@
             android:name=".activities.MedicineInfoActivity"
             android:label="@string/title_activity_medicines"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activities.MedicinesActivity"
             android:label="@string/title_activity_medicines"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.MedicinesSearchActivity"
             android:label="@string/title_activity_medicines_search"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.ScheduleCreationActivity"
             android:label="@string/title_activity_schedules"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.StartActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -107,59 +104,55 @@
             android:label="@string/title_activity_schedules"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity
-            android:name=".activities.SettingsActivity"
-            android:label="@string/title_activity_settings"/>
+            android:windowSoftInputMode="stateHidden" />
 
-        <receiver android:name=".scheduling.AlarmReceiver"/>
-        <receiver android:name=".scheduling.PickupAlarmReceiver"/>
-        <receiver android:name=".scheduling.NotificationEventReceiver"/>
+        <receiver android:name=".scheduling.AlarmReceiver" />
+        <receiver android:name=".scheduling.PickupAlarmReceiver" />
+        <receiver android:name=".scheduling.NotificationEventReceiver" />
         <receiver android:name=".scheduling.BootReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
         <receiver android:name=".drugdb.download.DBDownloadReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
 
         <meta-data
             android:name="AEMPS_DB_VERSION"
-            android:value="3"/> <!-- 3, 13/10/2015 -->
+            android:value="3" /> <!-- 3, 13/10/2015 -->
 
         <activity
             android:name=".activities.CalendarActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_calendar"/>
+            android:label="@string/title_activity_calendar" />
         <activity
             android:name=".activities.ScanActivity"
             android:configChanges="orientation|screenSize"
-            android:label="ScanActivity"/>
+            android:label="ScanActivity" />
         <activity
             android:name=".activities.UpdateFromFileActivity"
             android:configChanges="orientation|screenSize"
             android:label="Calendula">
             <intent-filter>
-                <data android:mimeType="text/plain"/>
+                <data android:mimeType="text/plain" />
 
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.ConfirmSchedulesActivity"
             android:label="@string/title_activity_confirm_schedules"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.PatientsActivity"
             android:label="@string/title_activity_patients"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activities.PatientDetailActivity"
             android:label="@string/title_activity_patient_detail"
@@ -168,56 +161,54 @@
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="es.usc.citius.servando.calendula.activities.PatientsActivity"/>
+                android:value="es.usc.citius.servando.calendula.activities.PatientsActivity" />
         </activity>
         <activity
             android:name=".activities.AboutActivity"
-            android:label="@string/title_activity_about">
-        </activity>
+            android:label="@string/title_activity_about" />
         <activity
             android:name=".activities.ConfirmActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme" />
 
         <service
             android:name=".scheduling.AlarmIntentService"
-            android:label="AlarmIntentService">
-        </service>
+            android:label="AlarmIntentService" />
 
         <service
             android:name=".drugdb.download.InstallDatabaseService"
-            android:exported="false">
-        </service>
+            android:exported="false" />
 
         <service
             android:name=".drugdb.download.UpdateDatabaseService"
-            android:exported="false"
-            />
+            android:exported="false" />
 
 
         <activity
             android:name=".activities.WebViewActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_webview"/>
+            android:label="@string/title_activity_webview" />
 
         <activity
             android:name=".activities.AllergiesActivity"
-            android:label="@string/title_activity_allergies"/>
+            android:label="@string/title_activity_allergies" />
         <activity
             android:name=".activities.AllergiesSearchActivity"
-            android:label="@string/title_activity_allergies_search"/>
+            android:label="@string/title_activity_allergies_search" />
 
         <activity
             android:name=".notifications.LockScreenAlarmActivity"
             android:label="@string/title_activity_allergies_search"
-            android:screenOrientation="portrait"
             android:launchMode="singleInstance"
             android:noHistory="true"
-            android:showOnLockScreen="true"/>
+            android:screenOrientation="portrait"
+            android:showOnLockScreen="true" />
 
-        <activity android:name=".pinlock.PinLockActivity"
-            />
+        <activity android:name=".pinlock.PinLockActivity" />
+
+        <activity
+            android:name=".activities.settings.CalendulaSettingsActivity"
+            android:theme="@style/SettingsActivityTheme" />
 
     </application>
 

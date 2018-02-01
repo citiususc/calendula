@@ -180,6 +180,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$libVersions.android.support"
     compile "com.android.support:support-annotations:$libVersions.android.support"
     compile "com.android.support:support-v4:$libVersions.android.support"
+    compile "com.android.support:preference-v14:$libVersions.android.support"
 
     // Testing dependencies
     //  Made explicit to avoid conflicts with other testing libs

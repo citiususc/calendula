@@ -225,4 +225,9 @@
         <item name="background">@color/white_20</item>
     </style>
 
+    <style name="SettingsActivityTheme" parent="AppTheme">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="background">@color/android_red</item>
+    </style>
+
 </resources>

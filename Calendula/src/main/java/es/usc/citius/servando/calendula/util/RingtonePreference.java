@@ -25,6 +25,7 @@ import android.database.Cursor;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.support.v7.preference.Preference;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,8 +43,9 @@ import es.usc.citius.servando.calendula.R;
 /**
  * Created by joseangel.pineiro on 2/23/15.
  */
-public class RingtonePreference extends android.preference.RingtonePreference {
+public class RingtonePreference extends Preference {
 
+    // TODO: 1/02/18 make this work in the new pref fragment (see commented code)
     private static final String TAG = "RingtonePreference";
     String[] titles;
     String[] values;
@@ -91,10 +93,10 @@ public class RingtonePreference extends android.preference.RingtonePreference {
         titles = _titles.toArray(new String[_titles.size()]);
         values = _values.toArray(new String[_values.size()]);
 
-        Uri value = onRestoreRingtone();
-        if (value != null) {
-            selectedIndex = _values.indexOf(value.toString());
-        }
+//        Uri value = onRestoreRingtone();
+//        if (value != null) {
+//            selectedIndex = _values.indexOf(value.toString());
+//        }
     }
 
 
@@ -134,7 +136,7 @@ public class RingtonePreference extends android.preference.RingtonePreference {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (selectedIndex != -1) {
-                    onSaveRingtone(Uri.parse(values[selectedIndex]));
+//                    onSaveRingtone(Uri.parse(values[selectedIndex]));
                     setSummary(titles[selectedIndex]);
                 }
                 stopRingtone();
