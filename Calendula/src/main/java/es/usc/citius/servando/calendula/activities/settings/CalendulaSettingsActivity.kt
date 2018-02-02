@@ -19,15 +19,45 @@
 package es.usc.citius.servando.calendula.activities.settings
 
 import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE
+import android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import android.support.v4.content.ContextCompat
+import android.support.v7.preference.Preference
+import android.support.v7.preference.PreferenceFragmentCompat
 import es.usc.citius.servando.calendula.CalendulaActivity
 import es.usc.citius.servando.calendula.R
+import es.usc.citius.servando.calendula.util.LogUtil
+import org.jetbrains.anko.toast
 
 
 /**
  * Created by alvaro.brey.vilas on 1/02/18.
  */
-class CalendulaSettingsActivity : CalendulaActivity() {
+class CalendulaSettingsActivity : CalendulaActivity(),
+    PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+
+
+    override fun onPreferenceStartFragment(
+        caller: PreferenceFragmentCompat?,
+        pref: Preference?
+    ): Boolean {
+        try {
+            pref?.let {
+                LogUtil.d(TAG, "onPreferenceStartFragment: pref fragment class is ${pref.fragment}")
+                val transaction = supportFragmentManager.beginTransaction()
+                val fragment = Class.forName(pref.fragment).newInstance() as Fragment
+                transaction.setTransition(TRANSIT_FRAGMENT_FADE)
+                transaction.replace(R.id.content_layout, fragment)
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }
+        } catch (e: Exception) {
+            LogUtil.d(TAG, "onPreferenceStartFragment: ", e)
+            toast(R.string.message_generic_error)
+        }
+        return true
+    }
 
     companion object {
         private const val TAG = "CalendulaSettingsActivity"
@@ -47,7 +77,7 @@ class CalendulaSettingsActivity : CalendulaActivity() {
         )
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.content_layout, CalendulaPrefsFragment()).commit()
+            .add(R.id.content_layout, CalendulaPrefsFragment()).commit()
     }
 
 }

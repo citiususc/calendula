@@ -23,6 +23,7 @@ buildscript {
 }
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'idea'
 
@@ -211,6 +212,9 @@ dependencies {
     // HTML parsing
     compile 'org.jsoup:jsoup:1.10.2'
 
+    // Anko
+    compile "org.jetbrains.anko:anko-commons:$libVersions.anko"
+
     // Event bus
     compile 'org.greenrobot:eventbus:3.0.0'
 
@@ -303,3 +307,4 @@ dependencies {
 
 
 }
+

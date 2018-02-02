@@ -18,13 +18,25 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ListPreference
-        android:defaultValue="7"
-        android:entries="@array/pref_stock"
-        android:entryValues="@array/pref_stock_values"
-        android:key="@string/prefkey_settings_stock_alert_days"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:title="@string/pref_stock_alert_title"/>
+
+    <PreferenceCategory
+        android:key="pref_key_prescriptions"
+        android:title="@string/pref_header_prescriptions">
+
+        <es.usc.citius.servando.calendula.util.view.CustomListPreference
+            android:defaultValue="@string/database_none_id"
+            android:entries="@array/pref_available_databases"
+            android:entryValues="@array/pref_available_databases_values"
+            android:key="@string/prefkey_drugdb_current_db"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/pref_available_databases_title"/>
+
+        <Preference
+            android:key="@string/prefkey_settings_database_update"
+            android:title="@string/preference_check_for_updates"
+            />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

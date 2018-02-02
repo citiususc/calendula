@@ -24,17 +24,19 @@ import es.usc.citius.servando.calendula.R
 import es.usc.citius.servando.calendula.util.LogUtil
 
 /**
+ * Instantiated via reflection, don't delete!
  * Created by alvaro.brey.vilas on 1/02/18.
  */
-class CalendulaPrefsFragment : PreferenceFragmentCompat() {
+class DatabasePrefsFragment : PreferenceFragmentCompat() {
 
     companion object {
-        private const val TAG = "CalendulaPrefsFragment"
+        private const val TAG = "DatabasePrefsFragment"
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+
         LogUtil.d(TAG, "onCreatePreferences called")
-        setPreferencesFromResource(R.xml.pref_main, rootKey)
+        addPreferencesFromResource(R.xml.pref_database)
     }
 
 }

@@ -25,6 +25,7 @@
     <string name="prefkey_confirm_check_window_margin" translatable="false">check_window_margin</string>
 
     <!-- Drug DB -->
+    <string name="prefkey_drugdb" translatable="false">pref_key_drugdb</string>
     <string name="prefkey_drugdb_current_db" translatable="false">prescriptions_database</string>
     <string name="prefkey_drugdb_enable_drugdb" translatable="false">drugdb_enable_db</string>
     <string name="prefkey_drugdb_last_valid" translatable="false">last_valid_database</string>
@@ -51,6 +52,7 @@
     <string name="prefkey_patients_active" translatable="false">active_patient</string>
 
     <!-- Settings -->
+    <string name="prefkey_notifications" translatable="false">pref_key_notifications</string>
     <string name="prefkey_settings_alarm_insistent" translatable="false">alarm_insistent</string>
     <string name="prefkey_settings_alarm_reminder_window" translatable="false">alarm_reminder_window</string>
     <string name="prefkey_settings_alarm_repeat_enabled" translatable="false">alarm_repeat_enabled</string>
