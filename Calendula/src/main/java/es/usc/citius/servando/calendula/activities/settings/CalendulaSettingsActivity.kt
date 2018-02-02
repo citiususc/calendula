@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula.activities.settings
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE
-import android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import android.support.v4.content.ContextCompat
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
@@ -53,7 +52,7 @@ class CalendulaSettingsActivity : CalendulaActivity(),
                 transaction.commit()
             }
         } catch (e: Exception) {
-            LogUtil.d(TAG, "onPreferenceStartFragment: ", e)
+            LogUtil.e(TAG, "onPreferenceStartFragment: ", e)
             toast(R.string.message_generic_error)
         }
         return true
@@ -61,8 +60,7 @@ class CalendulaSettingsActivity : CalendulaActivity(),
 
     companion object {
         private const val TAG = "CalendulaSettingsActivity"
-        @JvmField
-        val EXTRA_SHOW_DB_DIALOG = "show_db_dialog" //TODO actually do something with this
+        const val EXTRA_SHOW_DB_DIALOG = "show_db_dialog" //TODO actually do something with this
     }
 
 
@@ -77,7 +75,7 @@ class CalendulaSettingsActivity : CalendulaActivity(),
         )
 
         supportFragmentManager.beginTransaction()
-            .add(R.id.content_layout, CalendulaPrefsFragment()).commit()
+            .add(R.id.content_layout, MainPrefsFragment()).commit()
     }
 
 }

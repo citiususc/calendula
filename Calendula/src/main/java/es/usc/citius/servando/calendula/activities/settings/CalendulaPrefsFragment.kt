@@ -18,23 +18,23 @@
 
 package es.usc.citius.servando.calendula.activities.settings
 
-import android.os.Bundle
+import android.content.SharedPreferences
 import android.support.v7.preference.PreferenceFragmentCompat
-import es.usc.citius.servando.calendula.R
-import es.usc.citius.servando.calendula.util.LogUtil
+import es.usc.citius.servando.calendula.util.PreferenceUtils
 
 /**
- * Created by alvaro.brey.vilas on 1/02/18.
+ * Created by alvaro.brey.vilas on 2/02/18.
  */
-class CalendulaPrefsFragment : PreferenceFragmentCompat() {
+abstract class CalendulaPrefsFragment : PreferenceFragmentCompat(),
+    SharedPreferences.OnSharedPreferenceChangeListener {
 
-    companion object {
-        private const val TAG = "CalendulaPrefsFragment"
+    override fun onResume() {
+        super.onResume()
+        PreferenceUtils.instance().preferences().registerOnSharedPreferenceChangeListener(this)
     }
 
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        LogUtil.d(TAG, "onCreatePreferences called")
-        setPreferencesFromResource(R.xml.pref_main, rootKey)
+    override fun onPause() {
+        super.onPause()
+        PreferenceUtils.instance().preferences().unregisterOnSharedPreferenceChangeListener(this)
     }
-
 }

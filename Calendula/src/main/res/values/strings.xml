@@ -131,6 +131,7 @@
     <string name="database_none_id" translatable="false">None</string>
     <string name="database_aemps_id" translatable="false">AEMPS</string>
     <string name="database_us_id" translatable="false">US</string>
+    <string name="database_setting_up_id" translatable="false">DB_ID_SETTING_UP</string>
     <!--<string name="database_uk_id">UK</string>-->
 
     <string-array name="pref_alarm_repeat_values" translatable="false">
