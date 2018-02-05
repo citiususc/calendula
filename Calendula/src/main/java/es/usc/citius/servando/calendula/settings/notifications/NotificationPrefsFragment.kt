@@ -16,7 +16,7 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.activities.settings
+package es.usc.citius.servando.calendula.settings.notifications
 
 import android.os.Bundle
 import android.support.v7.preference.PreferenceFragmentCompat
@@ -24,17 +24,19 @@ import es.usc.citius.servando.calendula.R
 import es.usc.citius.servando.calendula.util.LogUtil
 
 /**
+ * Instantiated via reflection, don't delete!
+ *
  * Created by alvaro.brey.vilas on 1/02/18.
  */
-class MainPrefsFragment : PreferenceFragmentCompat() {
+class NotificationPrefsFragment : PreferenceFragmentCompat(){
 
     companion object {
-        private const val TAG = "MainPrefsFragment"
+        private const val TAG = "NotificationPrefsFragm"
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         LogUtil.d(TAG, "onCreatePreferences called")
-        setPreferencesFromResource(R.xml.pref_main, rootKey)
+        addPreferencesFromResource(R.xml.pref_notifications)
     }
 
 }

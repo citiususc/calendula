@@ -49,7 +49,7 @@ import java.util.List;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.HomePagerActivity;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.activities.settings.CalendulaSettingsActivity;
+import es.usc.citius.servando.calendula.settings.CalendulaSettingsActivity;
 import es.usc.citius.servando.calendula.adapters.HomePages;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.ModuleManager;

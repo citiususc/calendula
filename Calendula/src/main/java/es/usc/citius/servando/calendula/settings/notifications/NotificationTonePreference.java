@@ -16,27 +16,29 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.activities.settings
+package es.usc.citius.servando.calendula.settings.notifications;
 
-import android.os.Bundle
-import android.support.v7.preference.PreferenceFragmentCompat
-import es.usc.citius.servando.calendula.R
-import es.usc.citius.servando.calendula.util.LogUtil
+import android.content.Context;
+import android.media.RingtoneManager;
+import android.util.AttributeSet;
 
 /**
- * Instantiated via reflection, don't delete!
- *
- * Created by alvaro.brey.vilas on 1/02/18.
+ * Created by joseangel.pineiro on 2/23/15.
  */
-class NotificationPrefsFragment : PreferenceFragmentCompat(){
+public class NotificationTonePreference extends RingtonePreference {
 
-    companion object {
-        private const val TAG = "NotificationPrefsFragm"
+    public NotificationTonePreference(Context context) {
+        super(context);
+        getEntriesAndValues();
     }
 
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        LogUtil.d(TAG, "onCreatePreferences called")
-        addPreferencesFromResource(R.xml.pref_notifications)
+    public NotificationTonePreference(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
 
+
+    @Override
+    public int getRingtoneType() {
+        return RingtoneManager.TYPE_NOTIFICATION;
+    }
 }

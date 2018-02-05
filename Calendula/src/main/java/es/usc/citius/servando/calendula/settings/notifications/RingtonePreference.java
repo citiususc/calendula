@@ -16,7 +16,7 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.util;
+package es.usc.citius.servando.calendula.settings.notifications;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by joseangel.pineiro on 2/23/15.

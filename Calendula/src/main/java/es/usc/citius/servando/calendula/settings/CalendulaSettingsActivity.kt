@@ -16,7 +16,7 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.activities.settings
+package es.usc.citius.servando.calendula.settings
 
 import android.os.Bundle
 import android.support.v4.app.Fragment

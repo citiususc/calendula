@@ -16,7 +16,7 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.activities.settings.database
+package es.usc.citius.servando.calendula.settings.database
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -24,7 +24,7 @@ import android.support.annotation.StringRes
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
 import es.usc.citius.servando.calendula.R
-import es.usc.citius.servando.calendula.activities.settings.CalendulaPrefsFragment
+import es.usc.citius.servando.calendula.settings.CalendulaPrefsFragment
 import es.usc.citius.servando.calendula.drugdb.download.DownloadDatabaseHelper
 import es.usc.citius.servando.calendula.util.LogUtil
 import es.usc.citius.servando.calendula.util.PreferenceKeys

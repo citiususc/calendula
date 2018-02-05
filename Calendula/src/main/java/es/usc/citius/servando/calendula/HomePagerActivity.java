@@ -70,7 +70,7 @@ import es.usc.citius.servando.calendula.activities.MedicineInfoActivity;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.activities.SchedulesHelpActivity;
-import es.usc.citius.servando.calendula.activities.settings.CalendulaSettingsActivity;
+import es.usc.citius.servando.calendula.settings.CalendulaSettingsActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
 import es.usc.citius.servando.calendula.adapters.HomePages;
 import es.usc.citius.servando.calendula.database.DB;

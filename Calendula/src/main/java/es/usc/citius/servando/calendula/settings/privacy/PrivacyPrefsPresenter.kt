@@ -16,7 +16,7 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.activities.settings.privacy
+package es.usc.citius.servando.calendula.settings.privacy
 
 import android.app.Activity
 import android.content.Intent

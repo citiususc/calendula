@@ -207,7 +207,7 @@
         <activity android:name=".pinlock.PinLockActivity" />
 
         <activity
-            android:name=".activities.settings.CalendulaSettingsActivity"
+            android:name="es.usc.citius.servando.calendula.settings.CalendulaSettingsActivity"
             android:theme="@style/SettingsActivityTheme" />
 
     </application>

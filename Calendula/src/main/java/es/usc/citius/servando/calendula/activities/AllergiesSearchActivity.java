@@ -64,7 +64,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.activities.settings.CalendulaSettingsActivity;
+import es.usc.citius.servando.calendula.settings.CalendulaSettingsActivity;
 import es.usc.citius.servando.calendula.adapters.items.allergensearch.AllergenGroupItem;
 import es.usc.citius.servando.calendula.adapters.items.allergensearch.AllergenGroupSubItem;
 import es.usc.citius.servando.calendula.adapters.items.allergensearch.AllergenItem;

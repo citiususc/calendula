@@ -16,9 +16,9 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.activities.settings.database
+package es.usc.citius.servando.calendula.settings.privacy
 
-import android.content.Context
+import android.content.Intent
 import android.support.annotation.StringRes
 import es.usc.citius.servando.calendula.mvp.BasePresenter
 import es.usc.citius.servando.calendula.mvp.BaseView
@@ -26,22 +26,25 @@ import es.usc.citius.servando.calendula.mvp.BaseView
 /**
  * Created by alvaro.brey.vilas on 5/02/18.
  */
-interface DatabasePrefsContract {
-
+interface PrivacyPrefsContract {
 
     interface View : BaseView<Presenter> {
-        fun setDbList(dbIds: Array<String>, dbDisplayNames: Array<String>)
-        fun showSelectedDb(dbId: String)
-        fun resolveString(@StringRes stringRes: Int): String
-        fun showDatabaseDownloadChoice(dbId: String)
-        fun showDatabaseUpdateNotAvailable()
+
+        fun recordPIN()
+        fun showPINOptions()
+        fun showConfirmDeletePinChoice()
+        fun setPINPrefText(@StringRes pinPrefText: Int)
+        fun setFingerprintPrefEnabled(enabled: Boolean)
+        fun showEnableFingerprintDialog()
+
     }
 
     interface Presenter : BasePresenter {
-        fun currentDbUpdated(dbId: String)
-        fun selectNewDb(dbId: String): Boolean
-        fun onDbDownloadChoiceResult(result: Boolean)
-        fun checkDatabaseUpdate(ctx: Context)
-    }
 
+        fun onResult(request: Int, result: Int, data: Intent?)
+        fun onClickPINPref()
+        fun onClickDeletePIN()
+        fun onClickModifyPIN()
+        fun confirmDeletePIN()
+    }
 }

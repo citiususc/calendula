@@ -54,7 +54,7 @@ import butterknife.OnClick;
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.activities.settings.CalendulaSettingsActivity;
+import es.usc.citius.servando.calendula.settings.CalendulaSettingsActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.util.IconUtils;

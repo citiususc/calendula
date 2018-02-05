@@ -16,7 +16,7 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.activities.settings.database
+package es.usc.citius.servando.calendula.settings.database
 
 import android.content.Context
 import android.os.AsyncTask
