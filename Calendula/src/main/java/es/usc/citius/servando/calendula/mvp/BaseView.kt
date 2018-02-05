@@ -16,25 +16,11 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.activities.settings
-
-import android.content.SharedPreferences
-import android.support.v7.preference.PreferenceFragmentCompat
-import es.usc.citius.servando.calendula.util.PreferenceUtils
+package es.usc.citius.servando.calendula.mvp
 
 /**
- * A [PreferenceFragmentCompat] that registers and unregisters itself as a [SharedPreferences.OnSharedPreferenceChangeListener]
+ * Created by alvaro.brey.vilas on 5/02/18.
  */
-abstract class CalendulaPrefsFragment : PreferenceFragmentCompat(),
-    SharedPreferences.OnSharedPreferenceChangeListener {
-
-    override fun onResume() {
-        super.onResume()
-        PreferenceUtils.instance().preferences().registerOnSharedPreferenceChangeListener(this)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        PreferenceUtils.instance().preferences().unregisterOnSharedPreferenceChangeListener(this)
-    }
+interface BaseView<T : BasePresenter> {
+    var presenter: T
 }

@@ -23,7 +23,7 @@
         android:key="@string/prefkey_drugdb"
         android:title="@string/pref_header_prescriptions"
         android:icon="@drawable/ic_database_search_grey600_24dp"
-        app:fragment="es.usc.citius.servando.calendula.activities.settings.DatabasePrefsFragment"
+        app:fragment="es.usc.citius.servando.calendula.activities.settings.database.DatabasePrefsFragment"
         />
 
     <Preference
