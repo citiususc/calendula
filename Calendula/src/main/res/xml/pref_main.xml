@@ -30,7 +30,7 @@
         android:key="@string/prefkey_privacy"
         android:title="@string/pref_header_privacy"
         android:icon="@drawable/ic_lock_grey600_24dp"
-        app:fragment="es.usc.citius.servando.calendula.activities.settings.PrivacyPrefsFragment"
+        app:fragment="es.usc.citius.servando.calendula.activities.settings.privacy.PrivacyPrefsFragment"
         />
 
     <Preference
