@@ -18,6 +18,7 @@
 
 package es.usc.citius.servando.calendula.settings.database
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.annotation.StringRes
@@ -82,7 +83,6 @@ class DatabasePrefsFragment : CalendulaPrefsFragment(), DatabasePrefsContract.Vi
                 getString(R.string.database_none_id)
             )
         )
-
     }
 
     /**
@@ -127,6 +127,12 @@ class DatabasePrefsFragment : CalendulaPrefsFragment(), DatabasePrefsContract.Vi
 
     override fun showDatabaseUpdateNotAvailable() {
         activity.toast(R.string.database_update_not_available)
+    }
+
+    override fun getIntent(): Intent = activity.intent
+
+    override fun openDatabaseSelection() {
+        preferenceManager.showDialog(dbPref)
     }
 
 

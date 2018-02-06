@@ -19,6 +19,7 @@
 package es.usc.citius.servando.calendula.settings.database
 
 import android.content.Context
+import android.content.Intent
 import android.support.annotation.StringRes
 import es.usc.citius.servando.calendula.mvp.BasePresenter
 import es.usc.citius.servando.calendula.mvp.BaseView
@@ -35,6 +36,8 @@ interface DatabasePrefsContract {
         fun resolveString(@StringRes stringRes: Int): String
         fun showDatabaseDownloadChoice(dbId: String)
         fun showDatabaseUpdateNotAvailable()
+        fun getIntent(): Intent
+        fun openDatabaseSelection()
     }
 
     interface Presenter : BasePresenter {

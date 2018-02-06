@@ -23,6 +23,7 @@ import android.os.AsyncTask
 import es.usc.citius.servando.calendula.R
 import es.usc.citius.servando.calendula.drugdb.DBRegistry
 import es.usc.citius.servando.calendula.jobs.CheckDatabaseUpdatesJob
+import es.usc.citius.servando.calendula.settings.CalendulaSettingsActivity
 import es.usc.citius.servando.calendula.util.LogUtil
 import es.usc.citius.servando.calendula.util.PreferenceKeys
 import es.usc.citius.servando.calendula.util.PreferenceUtils
@@ -31,7 +32,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils
  * Created by alvaro.brey.vilas on 5/02/18.
  */
 class DatabasePrefsPresenter(
-    private val mDatabasePrefsView: DatabasePrefsContract.View,
+    private val view: DatabasePrefsContract.View,
     private var currentDbId: String
 ) :
     DatabasePrefsContract.Presenter {
@@ -47,23 +48,29 @@ class DatabasePrefsPresenter(
 
 
     init {
-        mDatabasePrefsView.presenter = this
-        noneDisplay = mDatabasePrefsView.resolveString(R.string.database_none_display)
-        noneId = mDatabasePrefsView.resolveString(R.string.database_none_id)
-        settingUpId = mDatabasePrefsView.resolveString(R.string.database_setting_up_id)
+        view.presenter = this
+        noneDisplay = view.resolveString(R.string.database_none_display)
+        noneId = view.resolveString(R.string.database_none_id)
+        settingUpId = view.resolveString(R.string.database_setting_up_id)
     }
 
 
     override fun start() {
         LogUtil.d(TAG, "start() called")
         val (entries, entryValues) = getActiveDbs()
-        mDatabasePrefsView.setDbList(entryValues, entries)
+        view.setDbList(entryValues, entries)
+        if (view.getIntent().getBooleanExtra(
+                CalendulaSettingsActivity.EXTRA_SHOW_DB_DIALOG,
+                false
+            )) {
+            view.openDatabaseSelection()
+        }
     }
 
     override fun currentDbUpdated(dbId: String) {
         LogUtil.d(TAG, "currentDbUpdated() called with dbId=$dbId")
         currentDbId = dbId
-        mDatabasePrefsView.showSelectedDb(currentDbId)
+        view.showSelectedDb(currentDbId)
     }
 
     private fun getActiveDbs(): Pair<Array<String>, Array<String>> {
@@ -89,7 +96,7 @@ class DatabasePrefsPresenter(
             // if there is no actual update just return true and skip checks
 
             if (dbId != noneId && noneId != settingUpId) {
-                mDatabasePrefsView.showDatabaseDownloadChoice(dbId)
+                view.showDatabaseDownloadChoice(dbId)
                 return false
             } else if (dbId == noneId) {
                 // if the db ID is "none", delete the current DB and let the pref update
@@ -114,7 +121,7 @@ class DatabasePrefsPresenter(
     }
 
     private fun notifyNoUpdate() {
-        mDatabasePrefsView.showDatabaseUpdateNotAvailable()
+        view.showDatabaseUpdateNotAvailable()
     }
 
     class CheckDbUpdateTask(private val presenter: DatabasePrefsPresenter) :

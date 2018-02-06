@@ -26,6 +26,7 @@ import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
 import es.usc.citius.servando.calendula.CalendulaActivity
 import es.usc.citius.servando.calendula.R
+import es.usc.citius.servando.calendula.settings.database.DatabasePrefsFragment
 import es.usc.citius.servando.calendula.util.LogUtil
 import org.jetbrains.anko.toast
 
@@ -74,8 +75,24 @@ class CalendulaSettingsActivity : CalendulaActivity(),
             ContextCompat.getColor(this, R.color.dark_grey_home)
         )
 
-        supportFragmentManager.beginTransaction()
-            .add(R.id.content_layout, MainPrefsFragment()).commit()
+        if (!processIntent()) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.content_layout, MainPrefsFragment()).commit()
+        }
+
+
+    }
+
+    /**
+     * @return `true` if the initialization of the Activity should be interrupted (not load the main fragment)
+     */
+    private fun processIntent(): Boolean {
+        if (intent.getBooleanExtra(EXTRA_SHOW_DB_DIALOG, false)) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.content_layout, DatabasePrefsFragment()).commit()
+            return  true
+        }
+        return false
     }
 
 }
