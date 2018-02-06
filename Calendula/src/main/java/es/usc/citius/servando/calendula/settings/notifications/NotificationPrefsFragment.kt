@@ -114,8 +114,16 @@ class NotificationPrefsFragment : CalendulaPrefsFragment(), NotificationPrefsCon
     }
 
     override fun hideStockPref() {
-        findPreference(PreferenceKeys.SETTINGS_STOCK_ALERT_DAYS.key()).isEnabled = false
-        findPreference(PreferenceKeys.SETTINGS_STOCK_ALERT_DAYS.key()).isVisible = false
+        val preference = findPreference(PreferenceKeys.SETTINGS_STOCK_ALERT_DAYS.key())
+        preference.isEnabled = false
+        preference.isVisible = false
+    }
+
+    override fun hidePickupPref() {
+        val preference =
+            findPreference(PreferenceKeys.SETTINGS_ALARM_PICKUP_NOTIFICATIONS.key())
+        preference.isEnabled = false
+        preference.isVisible = false
     }
 
     override fun setNotificationRingtoneText(text: String) {

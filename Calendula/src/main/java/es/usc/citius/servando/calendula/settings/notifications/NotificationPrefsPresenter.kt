@@ -23,6 +23,7 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.Settings
+import es.usc.citius.servando.calendula.CalendulaApp
 import es.usc.citius.servando.calendula.modules.ModuleManager
 import es.usc.citius.servando.calendula.modules.modules.StockModule
 import es.usc.citius.servando.calendula.util.LogUtil
@@ -52,6 +53,9 @@ class NotificationPrefsPresenter(
     override fun start() {
         if (!ModuleManager.isEnabled(StockModule.ID)) {
             view.hideStockPref()
+        }
+        if(!CalendulaApp.isPharmaModeEnabled()){
+            view.hidePickupPref()
         }
         updateRingtoneSummaries()
     }
