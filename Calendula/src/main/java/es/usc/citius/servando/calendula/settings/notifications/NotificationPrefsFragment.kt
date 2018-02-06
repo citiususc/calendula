@@ -18,25 +18,95 @@
 
 package es.usc.citius.servando.calendula.settings.notifications
 
+import android.content.Intent
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
+import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
 import es.usc.citius.servando.calendula.R
 import es.usc.citius.servando.calendula.util.LogUtil
+import es.usc.citius.servando.calendula.util.PreferenceKeys
+
 
 /**
  * Instantiated via reflection, don't delete!
  *
  * Created by alvaro.brey.vilas on 1/02/18.
  */
-class NotificationPrefsFragment : PreferenceFragmentCompat(){
+class NotificationPrefsFragment : PreferenceFragmentCompat(), NotificationPrefsContract.View {
 
     companion object {
         private const val TAG = "NotificationPrefsFragm"
     }
 
+    override lateinit var presenter: NotificationPrefsContract.Presenter
+
+    private val notificationPref by lazy { findPreference(PreferenceKeys.SETTINGS_NOTIFICATION_TONE.key()) }
+    private val insistentNotificationPref by lazy { findPreference(PreferenceKeys.SETTINGS_INSISTENT_NOTIFICATION_TONE.key()) }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.start()
+    }
+
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         LogUtil.d(TAG, "onCreatePreferences called")
         addPreferencesFromResource(R.xml.pref_notifications)
+
+        NotificationPrefsPresenter(this, RingtoneNameResolver(context))
     }
+
+    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
+        when (preference?.key) {
+            PreferenceKeys.SETTINGS_NOTIFICATION_TONE.key() -> {
+                presenter.selectNotificationRingtone()
+                return true
+            }
+            PreferenceKeys.SETTINGS_INSISTENT_NOTIFICATION_TONE.key() -> {
+                presenter.selectInsistentRingtone()
+                return true
+            }
+        }
+        return super.onPreferenceTreeClick(preference)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        presenter.onResult(requestCode, resultCode, data)
+    }
+
+
+    override fun requestRingtone(reqCode: Int, currentValue: Uri?) {
+        val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
+        intent.putExtra(
+            RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
+            Settings.System.DEFAULT_NOTIFICATION_URI
+        )
+        intent.putExtra(
+            RingtoneManager.EXTRA_RINGTONE_EXISTING_URI,
+            currentValue
+        )
+        startActivityForResult(intent, reqCode)
+    }
+
+    override fun hideStockPref() {
+        findPreference(PreferenceKeys.SETTINGS_STOCK_ALERT_DAYS.key()).isEnabled = false
+        findPreference(PreferenceKeys.SETTINGS_STOCK_ALERT_DAYS.key()).isVisible = false
+    }
+
+    override fun setNotificationRingtoneText(text: String) {
+        notificationPref.summary = text
+    }
+
+    override fun setInsistentRingtoneText(text: String) {
+        insistentNotificationPref.summary = text
+    }
+
 
 }

@@ -16,29 +16,22 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.settings.notifications;
+package es.usc.citius.servando.calendula.settings.notifications
 
-import android.content.Context;
-import android.media.RingtoneManager;
-import android.util.AttributeSet;
+import android.content.Context
+import android.media.RingtoneManager
+import android.net.Uri
+import java.lang.ref.WeakReference
 
 /**
- * Created by joseangel.pineiro on 2/23/15.
+ * Created by alvaro.brey.vilas on 5/02/18.
  */
-public class NotificationTonePreference extends RingtonePreference {
 
-    public NotificationTonePreference(Context context) {
-        super(context);
-        getEntriesAndValues();
-    }
+class RingtoneNameResolver(context: Context) {
 
-    public NotificationTonePreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+    private val contextRef = WeakReference(context)
 
-
-    @Override
-    public int getRingtoneType() {
-        return RingtoneManager.TYPE_NOTIFICATION;
+    fun resolveRingtoneName(uri: Uri?): String {
+        return RingtoneManager.getRingtone(contextRef.get(), uri).getTitle(contextRef.get())
     }
 }

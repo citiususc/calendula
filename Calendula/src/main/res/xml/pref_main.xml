@@ -23,21 +23,21 @@
         android:key="@string/prefkey_drugdb"
         android:title="@string/pref_header_prescriptions"
         android:icon="@drawable/ic_database_search_grey600_24dp"
-        app:fragment="es.usc.citius.servando.calendula.activities.settings.database.DatabasePrefsFragment"
+        app:fragment="es.usc.citius.servando.calendula.settings.database.DatabasePrefsFragment"
         />
 
     <Preference
         android:key="@string/prefkey_privacy"
         android:title="@string/pref_header_privacy"
         android:icon="@drawable/ic_lock_grey600_24dp"
-        app:fragment="es.usc.citius.servando.calendula.activities.settings.privacy.PrivacyPrefsFragment"
+        app:fragment="es.usc.citius.servando.calendula.settings.privacy.PrivacyPrefsFragment"
         />
 
     <Preference
         android:key="@string/prefkey_notifications"
         android:title="@string/pref_header_notifications"
         android:icon="@drawable/ic_bell_ring_grey600_24dp"
-        app:fragment="es.usc.citius.servando.calendula.activities.settings.NotificationPrefsFragment"
+        app:fragment="es.usc.citius.servando.calendula.settings.notifications.NotificationPrefsFragment"
         />
 
 </PreferenceScreen>

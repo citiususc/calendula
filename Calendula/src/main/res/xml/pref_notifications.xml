@@ -24,7 +24,7 @@
         android:key="@string/prefkey_settings_alarm_notifications"
         android:title="@string/pref_title_new_alarm_notification" />
 
-    <es.usc.citius.servando.calendula.settings.notifications.NotificationTonePreference
+    <Preference
         android:dependency="@string/prefkey_settings_alarm_notifications"
         android:key="@string/prefkey_settings_notification_tone"
         android:summary="@string/pref_notification_tone_sum"
@@ -66,7 +66,7 @@
         android:title="@string/pref_title_insistent_alarms" />
 
 
-    <es.usc.citius.servando.calendula.settings.notifications.RingtonePreference
+    <Preference
         android:dependency="@string/prefkey_settings_alarm_insistent"
         android:key="@string/prefkey_settings_insistent_notification_tone"
         android:summary="@string/pref_notification_tone_sum"

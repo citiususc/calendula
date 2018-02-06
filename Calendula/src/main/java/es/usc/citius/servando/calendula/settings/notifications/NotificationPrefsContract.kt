@@ -16,16 +16,28 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.mvp
+package es.usc.citius.servando.calendula.settings.notifications
+
+import android.content.Intent
+import android.net.Uri
+import es.usc.citius.servando.calendula.mvp.BasePresenter
+import es.usc.citius.servando.calendula.mvp.BaseView
 
 /**
  * Created by alvaro.brey.vilas on 5/02/18.
  */
-interface BasePresenter {
+interface NotificationPrefsContract {
 
-    /**
-     * Initialization logic for the view. Load default values, etc... Android views should call this on onResume().
-     */
-    fun start()
+    interface View : BaseView<Presenter> {
+        fun hideStockPref()
+        fun requestRingtone(reqCode: Int, currentValue: Uri?)
+        fun setNotificationRingtoneText(text: String)
+        fun setInsistentRingtoneText(text: String)
+    }
 
+    interface Presenter : BasePresenter {
+        fun onResult(reqCode: Int, result:Int, data: Intent?)
+        fun selectNotificationRingtone()
+        fun selectInsistentRingtone()
+    }
 }
