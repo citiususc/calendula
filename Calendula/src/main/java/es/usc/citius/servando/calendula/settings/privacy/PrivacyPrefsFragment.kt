@@ -19,16 +19,17 @@
 package es.usc.citius.servando.calendula.settings.privacy
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v14.preference.SwitchPreference
 import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceFragmentCompat
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog
 import com.github.javiersantos.materialstyleddialogs.enums.Style
 import com.mikepenz.google_material_typeface_library.GoogleMaterial
 import es.usc.citius.servando.calendula.R
 import es.usc.citius.servando.calendula.pinlock.PinLockActivity
 import es.usc.citius.servando.calendula.pinlock.fingerprint.FingerprintHelper
+import es.usc.citius.servando.calendula.settings.CalendulaPrefsFragment
 import es.usc.citius.servando.calendula.util.IconUtils
 import es.usc.citius.servando.calendula.util.LogUtil
 import es.usc.citius.servando.calendula.util.PreferenceKeys
@@ -39,7 +40,7 @@ import es.usc.citius.servando.calendula.util.PreferenceKeys
  *
  * Created by alvaro.brey.vilas on 1/02/18.
  */
-class PrivacyPrefsFragment : PreferenceFragmentCompat(), PrivacyPrefsContract.View {
+class PrivacyPrefsFragment : CalendulaPrefsFragment(), PrivacyPrefsContract.View {
 
 
     companion object {
@@ -47,6 +48,8 @@ class PrivacyPrefsFragment : PreferenceFragmentCompat(), PrivacyPrefsContract.Vi
     }
 
     override lateinit var presenter: PrivacyPrefsContract.Presenter
+    override val fragmentTitle: Int = R.string.pref_header_privacy
+
 
     private val pinPref: Preference by lazy { findPreference(PreferenceKeys.UNLOCK_PIN.key()) }
     private val fingerprintPref: SwitchPreference by lazy { findPreference(PreferenceKeys.FINGERPRINT_ENABLED.key()) as SwitchPreference }
@@ -75,6 +78,9 @@ class PrivacyPrefsFragment : PreferenceFragmentCompat(), PrivacyPrefsContract.Vi
         presenter.onResult(requestCode, resultCode, data)
     }
 
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        //noop
+    }
 
     override fun recordPIN() {
         val i = Intent(activity, PinLockActivity::class.java)

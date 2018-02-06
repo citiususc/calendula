@@ -19,7 +19,9 @@
 package es.usc.citius.servando.calendula.settings
 
 import android.content.SharedPreferences
+import android.support.annotation.StringRes
 import android.support.v7.preference.PreferenceFragmentCompat
+import es.usc.citius.servando.calendula.CalendulaActivity
 import es.usc.citius.servando.calendula.util.PreferenceUtils
 
 /**
@@ -31,10 +33,17 @@ abstract class CalendulaPrefsFragment : PreferenceFragmentCompat(),
     override fun onResume() {
         super.onResume()
         PreferenceUtils.instance().preferences().registerOnSharedPreferenceChangeListener(this)
+        (activity as CalendulaActivity).supportActionBar?.setTitle(fragmentTitle)
     }
 
     override fun onPause() {
         super.onPause()
         PreferenceUtils.instance().preferences().unregisterOnSharedPreferenceChangeListener(this)
     }
+
+    /**
+     * A [StringRes] resource that will be used to set the actionbar's title when navigating to this fragment
+     */
+    abstract val fragmentTitle: Int
+
 }

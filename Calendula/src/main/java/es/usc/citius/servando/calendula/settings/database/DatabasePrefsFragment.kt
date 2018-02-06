@@ -24,8 +24,8 @@ import android.support.annotation.StringRes
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
 import es.usc.citius.servando.calendula.R
-import es.usc.citius.servando.calendula.settings.CalendulaPrefsFragment
 import es.usc.citius.servando.calendula.drugdb.download.DownloadDatabaseHelper
+import es.usc.citius.servando.calendula.settings.CalendulaPrefsFragment
 import es.usc.citius.servando.calendula.util.LogUtil
 import es.usc.citius.servando.calendula.util.PreferenceKeys
 import es.usc.citius.servando.calendula.util.PreferenceUtils
@@ -38,10 +38,13 @@ import org.jetbrains.anko.toast
  */
 class DatabasePrefsFragment : CalendulaPrefsFragment(), DatabasePrefsContract.View {
 
-
     companion object {
         private const val TAG = "DatabasePrefsFragment"
     }
+
+    override lateinit var presenter: DatabasePrefsContract.Presenter
+    override val fragmentTitle: Int = R.string.pref_header_prescriptions
+
 
     private val dbPref: ListPreference by lazy {
         findPreference(getString(R.string.prefkey_drugdb_current_db)) as ListPreference
@@ -52,8 +55,6 @@ class DatabasePrefsFragment : CalendulaPrefsFragment(), DatabasePrefsContract.Vi
 
     private val noneId by lazy { getString(R.string.database_none_id) }
     private val settingUpId by lazy { getString(R.string.database_setting_up_id) }
-
-    override lateinit var presenter: DatabasePrefsContract.Presenter
 
 
     override fun onResume() {

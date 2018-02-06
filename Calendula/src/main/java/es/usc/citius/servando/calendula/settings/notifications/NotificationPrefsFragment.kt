@@ -19,13 +19,14 @@
 package es.usc.citius.servando.calendula.settings.notifications
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceFragmentCompat
 import es.usc.citius.servando.calendula.R
+import es.usc.citius.servando.calendula.settings.CalendulaPrefsFragment
 import es.usc.citius.servando.calendula.util.LogUtil
 import es.usc.citius.servando.calendula.util.PreferenceKeys
 
@@ -35,13 +36,15 @@ import es.usc.citius.servando.calendula.util.PreferenceKeys
  *
  * Created by alvaro.brey.vilas on 1/02/18.
  */
-class NotificationPrefsFragment : PreferenceFragmentCompat(), NotificationPrefsContract.View {
+class NotificationPrefsFragment : CalendulaPrefsFragment(), NotificationPrefsContract.View {
 
     companion object {
         private const val TAG = "NotificationPrefsFragm"
     }
 
     override lateinit var presenter: NotificationPrefsContract.Presenter
+    override val fragmentTitle: Int = R.string.pref_header_notifications
+
 
     private val notificationPref by lazy { findPreference(PreferenceKeys.SETTINGS_NOTIFICATION_TONE.key()) }
     private val insistentNotificationPref by lazy { findPreference(PreferenceKeys.SETTINGS_INSISTENT_NOTIFICATION_TONE.key()) }
@@ -50,7 +53,6 @@ class NotificationPrefsFragment : PreferenceFragmentCompat(), NotificationPrefsC
         super.onResume()
         presenter.start()
     }
-
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         LogUtil.d(TAG, "onCreatePreferences called")
@@ -76,6 +78,10 @@ class NotificationPrefsFragment : PreferenceFragmentCompat(), NotificationPrefsC
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         presenter.onResult(requestCode, resultCode, data)
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        //noop
     }
 
 
