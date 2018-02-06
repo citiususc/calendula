@@ -119,6 +119,7 @@ class DatabasePrefsPresenterTest {
         verify(dbPrefView, never()).showDatabaseDownloadChoice(kotlinAny())
     }
 
+    @Test
     fun selectNoneDb() {
         val updatePref: Boolean =
             dbPrefPresenter.selectNewDb(RuntimeEnvironment.application.getString(R.string.database_none_id))
