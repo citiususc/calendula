@@ -18,6 +18,7 @@
 
 package es.usc.citius.servando.calendula.settings.notifications
 
+import android.Manifest
 import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
@@ -34,10 +35,9 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils
  */
 class NotificationPrefsPresenter(
     val view: NotificationPrefsContract.View,
-    val rnameResolver: RingtoneNameResolver
+    private val ringtoneNameResolver: RingtoneNameResolver
 ) :
     NotificationPrefsContract.Presenter {
-
 
     companion object {
         private const val TAG = "NotifPrefsPresenter"
@@ -77,24 +77,35 @@ class NotificationPrefsPresenter(
         }
     }
 
+
     override fun selectNotificationRingtone() {
-
-        val currentUri: Uri? = uri(PreferenceKeys.SETTINGS_NOTIFICATION_TONE)
-        LogUtil.d(TAG, "selectNotificationRingtone: currentUri=$currentUri")
-
-        view.requestRingtone(REQ_CODE_NOTIF_RINGTONE, RingtoneManager.TYPE_NOTIFICATION, currentUri)
-
+        doRequestRingtone(
+            PreferenceKeys.SETTINGS_NOTIFICATION_TONE,
+            REQ_CODE_NOTIF_RINGTONE,
+            RingtoneManager.TYPE_NOTIFICATION
+        )
     }
 
     override fun selectInsistentRingtone() {
-
-        val currentUri: Uri? = uri(PreferenceKeys.SETTINGS_INSISTENT_NOTIFICATION_TONE)
-        LogUtil.d(TAG, "selectInsistentRingtone: currentUri=$currentUri")
-
-        view.requestRingtone(REQ_CODE_INSIST_RINGTONE, RingtoneManager.TYPE_ALARM, currentUri)
+        doRequestRingtone(
+            PreferenceKeys.SETTINGS_INSISTENT_NOTIFICATION_TONE,
+            REQ_CODE_INSIST_RINGTONE,
+            RingtoneManager.TYPE_ALARM
+        )
     }
 
-    private fun uri(key: PreferenceKeys): Uri? {
+
+    private fun doRequestRingtone(pref: PreferenceKeys, requestCode: Int, ringtoneType: Int) {
+        val currentUri: Uri? = findRingtoneUri(pref)
+        LogUtil.d(
+            TAG,
+            "callSelectRingtone: currentUri=$currentUri, pref=$pref, requestCode=$requestCode"
+        )
+
+        view.requestRingtone(requestCode, ringtoneType, currentUri)
+    }
+
+    private fun findRingtoneUri(key: PreferenceKeys): Uri? {
         val currentTone =
             PreferenceUtils.getString(key, "default")
         return when (currentTone) {
@@ -105,8 +116,20 @@ class NotificationPrefsPresenter(
     }
 
     private fun updateRingtoneSummaries() {
-        view.setNotificationRingtoneText(rnameResolver.resolveRingtoneName(uri(PreferenceKeys.SETTINGS_NOTIFICATION_TONE)))
-        view.setInsistentRingtoneText(rnameResolver.resolveRingtoneName(uri(PreferenceKeys.SETTINGS_INSISTENT_NOTIFICATION_TONE)))
+        view.setNotificationRingtoneText(
+            ringtoneNameResolver.resolveRingtoneName(
+                findRingtoneUri(
+                    PreferenceKeys.SETTINGS_NOTIFICATION_TONE
+                )
+            )
+        )
+        view.setInsistentRingtoneText(
+            ringtoneNameResolver.resolveRingtoneName(
+                findRingtoneUri(
+                    PreferenceKeys.SETTINGS_INSISTENT_NOTIFICATION_TONE
+                )
+            )
+        )
     }
 
 
