@@ -21,6 +21,7 @@ package es.usc.citius.servando.calendula.settings.notifications
 import android.content.Context
 import android.media.RingtoneManager
 import android.net.Uri
+import es.usc.citius.servando.calendula.R
 import java.lang.ref.WeakReference
 
 /**
@@ -31,7 +32,8 @@ class RingtoneNameResolver(context: Context) {
 
     private val contextRef = WeakReference(context)
 
-    fun resolveRingtoneName(uri: Uri?): String {
-        return RingtoneManager.getRingtone(contextRef.get(), uri).getTitle(contextRef.get())
+    fun resolveRingtoneName(uri: Uri?): String = when (uri) {
+        null -> contextRef.get()!!.getString(R.string.ringtone_none)
+        else -> RingtoneManager.getRingtone(contextRef.get(), uri).getTitle(contextRef.get())
     }
 }
