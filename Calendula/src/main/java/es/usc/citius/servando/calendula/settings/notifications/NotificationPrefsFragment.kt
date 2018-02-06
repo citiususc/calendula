@@ -79,19 +79,31 @@ class NotificationPrefsFragment : PreferenceFragmentCompat(), NotificationPrefsC
     }
 
 
-    override fun requestRingtone(reqCode: Int, currentValue: Uri?) {
+    override fun requestRingtone(reqCode: Int, ringtoneType: Int, currentValue: Uri?) {
         val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
+        // show default and silent ringtones
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
+
+        // select ringtone type (alarm or notification)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, ringtoneType)
+
+        // set default element
+        val defaultUri = when (ringtoneType) {
+            RingtoneManager.TYPE_ALARM -> Settings.System.DEFAULT_ALARM_ALERT_URI
+            else -> Settings.System.DEFAULT_NOTIFICATION_URI
+        }
         intent.putExtra(
             RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
-            Settings.System.DEFAULT_NOTIFICATION_URI
+            defaultUri
         )
+
+        // set the current value
         intent.putExtra(
             RingtoneManager.EXTRA_RINGTONE_EXISTING_URI,
             currentValue
         )
+
         startActivityForResult(intent, reqCode)
     }
 

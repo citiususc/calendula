@@ -30,13 +30,13 @@ interface NotificationPrefsContract {
 
     interface View : BaseView<Presenter> {
         fun hideStockPref()
-        fun requestRingtone(reqCode: Int, currentValue: Uri?)
+        fun requestRingtone(reqCode: Int, ringtoneType: Int, currentValue: Uri?)
         fun setNotificationRingtoneText(text: String)
         fun setInsistentRingtoneText(text: String)
     }
 
     interface Presenter : BasePresenter {
-        fun onResult(reqCode: Int, result:Int, data: Intent?)
+        fun onResult(reqCode: Int, result: Int, data: Intent?)
         fun selectNotificationRingtone()
         fun selectInsistentRingtone()
     }

@@ -82,7 +82,7 @@ class NotificationPrefsPresenter(
         val currentUri: Uri? = uri(PreferenceKeys.SETTINGS_NOTIFICATION_TONE)
         LogUtil.d(TAG, "selectNotificationRingtone: currentUri=$currentUri")
 
-        view.requestRingtone(REQ_CODE_NOTIF_RINGTONE, currentUri)
+        view.requestRingtone(REQ_CODE_NOTIF_RINGTONE, RingtoneManager.TYPE_NOTIFICATION, currentUri)
 
     }
 
@@ -91,7 +91,7 @@ class NotificationPrefsPresenter(
         val currentUri: Uri? = uri(PreferenceKeys.SETTINGS_INSISTENT_NOTIFICATION_TONE)
         LogUtil.d(TAG, "selectInsistentRingtone: currentUri=$currentUri")
 
-        view.requestRingtone(REQ_CODE_INSIST_RINGTONE, currentUri)
+        view.requestRingtone(REQ_CODE_INSIST_RINGTONE, RingtoneManager.TYPE_ALARM, currentUri)
     }
 
     private fun uri(key: PreferenceKeys): Uri? {
