@@ -1,31 +1,45 @@
-general:
-  branches:
-    ignore:
-      - gh-pages
-      - translations
-      - /release-.*/
-
-machine:
-  environment:
-    QEMU_AUDIO_DRV: none
-
-dependencies:
-  pre:
-      - echo y | android update sdk --no-ui --all --filter "build-tools-26.0.2"
-
-test:
-  override:
-    - export JVM_OPTS='-Xmx2048m'
-    - export JAVA_OPTS='-Xmx2048m'
-    - adb shell input keyevent 82:
-        background: true
-    - ./gradlew assembleCiDebug
-    - ./gradlew testCiDebugUnitTest
-    - emulator -avd circleci-android22 -no-window:
-        background: true
-        parallel: true
-    - circle-android wait-for-boot
-    - ./gradlew connectedCiDebugAndroidTest
-    - cp -r Calendula/build/outputs $CIRCLE_ARTIFACTS
-    - adb logcat -d > logcat.txt && cp logcat.txt $CIRCLE_ARTIFACTS
-    - cp -r Calendula/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+version: 2
+jobs:
+  build:
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-25-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "Calendula/build.gradle" }}
+#      - run:
+#         name: Install AVD
+#         command: |
+#            sdkmanager "system-images;android-25;google_apis;armeabi-v7a"
+#            echo no | avdmanager create avd --name test -k "system-images;android-25;google_apis;armeabi-v7a"
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies --no-daemon
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "Calendula/build.gradle" }}
+      - run:
+          name: Run Unit Tests
+          command: ./gradlew testCiDebugUnitTest --no-daemon
+#      - run:
+#          name: Launch Android Emulator
+#          command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && emulator64-arm -avd test -noaudio -no-boot-anim -no-window -accel on
+#          background: true
+#      - run:
+#          name: Wait For Emulator Bootup
+#          command: |
+#            circle-android wait-for-boot
+#            sleep 15
+#            adb shell input keyevent 82
+#      - run:
+#          name: Run Integration Tests
+#          command: ./gradlew connectedCiDebugAndroidTest --no-daemon
+      - store_artifacts:
+          path: Calendula/build/reports
+          destination: reports
+      - store_test_results:
+          path: Calendula/build/test-results

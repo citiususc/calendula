@@ -1,5 +1,5 @@
 ![Calendula](https://tec.citius.usc.es/calendula/github-assets/calendula_promo_google_play.png)
-# Calendula [![CircleCI](https://circleci.com/gh/citiususc/calendula/tree/develop.svg?style=shield)](https://circleci.com/gh/citiususc/calendula/tree/develop)
+# Calendula [![CircleCI](https://circleci.com/gh/citiususc/calendula/tree/master.svg?style=shield)](https://circleci.com/gh/citiususc/calendula/tree/master)
 
 Calendula is an Android assistant for personal medication management, aimed at those who have trouble following their medication regimen, forget to take their drugs, or have complex schedules that are difficult to remember.
 
