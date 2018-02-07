@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -112,14 +112,6 @@ public class ArcTranslateAnimation extends Animation {
     }
 
     @Override
-    protected void applyTransformation(float interpolatedTime, Transformation t) {
-        float dx = calcBezier(interpolatedTime, mStart.x, mControl.x, mEnd.x);
-        float dy = calcBezier(interpolatedTime, mStart.y, mControl.y, mEnd.y);
-
-        t.getMatrix().setTranslate(dx, dy);
-    }
-
-    @Override
     public void initialize(int width, int height, int parentWidth,
                            int parentHeight) {
         super.initialize(width, height, parentWidth, parentHeight);
@@ -135,6 +127,14 @@ public class ArcTranslateAnimation extends Animation {
         // use the cross of the
         // two tangents from p0,
         // p1)
+    }
+
+    @Override
+    protected void applyTransformation(float interpolatedTime, Transformation t) {
+        float dx = calcBezier(interpolatedTime, mStart.x, mControl.x, mEnd.x);
+        float dy = calcBezier(interpolatedTime, mStart.y, mControl.y, mEnd.y);
+
+        t.getMatrix().setTranslate(dx, dy);
     }
 
     /**

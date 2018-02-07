@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -23,13 +23,13 @@ import java.io.Serializable;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.persistence.HomogeneousGroup;
-import es.usc.citius.servando.calendula.persistence.Prescription;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.HomogeneousGroup;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 
 /**
  * Created by joseangel.pineiro on 10/6/15.
  */
-public class PrescriptionWrapper{
+public class PrescriptionWrapper {
     public String cn;
     public String g;
     public String sk;
@@ -40,7 +40,21 @@ public class PrescriptionWrapper{
     public boolean exists;
     public boolean isGroup = false;
 
-    public Holder holder(){
+    public static PrescriptionWrapper from(Holder h) {
+        PrescriptionWrapper pw = new PrescriptionWrapper();
+        pw.cn = h.cn;
+        pw.g = h.g;
+        pw.sk = h.sk;
+        pw.pk = h.pk;
+        pw.s = h.s;
+        pw.exists = h.exists;
+        pw.isGroup = h.isGroup;
+        pw.group = pw.g != null ? DB.drugDB().homogeneousGroups().findOneBy(HomogeneousGroup.COLUMN_HOMOGENEOUS_GROUP_ID, pw.g) : null;
+        pw.prescription = pw.cn != null ? DB.drugDB().prescriptions().findByCn(pw.cn) : null;
+        return pw;
+    }
+
+    public Holder holder() {
         Holder h = new Holder();
         h.cn = cn;
         h.g = g;
@@ -52,22 +66,7 @@ public class PrescriptionWrapper{
         return h;
     }
 
-    public static PrescriptionWrapper from(Holder h){
-        PrescriptionWrapper pw = new PrescriptionWrapper();
-        pw.cn = h.cn;
-        pw.g = h.g;
-        pw.sk = h.sk;
-        pw.pk = h.pk;
-        pw.s = h.s;
-        pw.exists = h.exists;
-        pw.isGroup = h.isGroup;
-        pw.group = pw.g != null ? DB.groups().findOneBy(HomogeneousGroup.COLUMN_GROUP, pw.g) : null;
-        pw.prescription = pw.cn != null ? Prescription.findByCn(pw.cn) : null;
-        return  pw;
-    }
-
-
-    public static class Holder implements Serializable{
+    public static class Holder implements Serializable {
         public String cn;
         public String g;
         public String sk;

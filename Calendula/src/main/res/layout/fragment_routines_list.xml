@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -17,47 +17,47 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-                android:background="#fcfcfc"
-    >
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:background="#fcfcfc">
 
     <ListView
         android:id="@+id/routines_list"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:background="#fcfcfc"
+        android:clipToPadding="false"
         android:divider="#E0EAEF"
         android:dividerHeight="0dp"
-        android:scrollbars="none" />
+        android:paddingBottom="96dp"
+        android:scrollbars="none"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:id="@android:id/empty"
-                  android:orientation="vertical"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
+                  android:layout_marginTop="50dp"
                   android:gravity="center_horizontal"
-                  android:layout_marginTop="50dp">
+                  android:orientation="vertical">
 
         <ImageView
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:id="@+id/imageView10"
-            android:src="@drawable/ic_intro_alarm"
-            android:alpha="0.3"/>
+            android:alpha="0.3"
+            android:src="@drawable/ic_intro_alarm"/>
 
         <TextView
+            android:id="@+id/textView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/routines_list_empty_text"
-            android:id="@+id/textView10"
-            android:padding="30dp"
             android:alpha="0.9"
+            android:gravity="center_horizontal"
+            android:padding="30dp"
+            android:text="@string/routines_list_empty_text"
             android:textAlignment="center"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#aaa"
-            android:textSize="16dp"
-            android:gravity="center_horizontal"/>
+            android:textSize="16dp"/>
 
     </LinearLayout>
 

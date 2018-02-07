@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ package es.usc.citius.servando.calendula.events;
 
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
+import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 
@@ -31,13 +32,29 @@ public class PersistenceEvents {
     public static ModelCreateOrUpdateEvent ROUTINE_EVENT = new ModelCreateOrUpdateEvent(Routine.class);
     public static ModelCreateOrUpdateEvent MEDICINE_EVENT = new ModelCreateOrUpdateEvent(Medicine.class);
     public static ModelCreateOrUpdateEvent SCHEDULE_EVENT = new ModelCreateOrUpdateEvent(Schedule.class);
+    public static ModelCreateOrUpdateEvent ALERT_EVENT = new ModelCreateOrUpdateEvent(PatientAlert.class);
 
+    public static class DatabaseUpdateEvent {
+
+    }
 
     public static class ModelCreateOrUpdateEvent {
         public Class<?> clazz;
+        public Object model;
 
         public ModelCreateOrUpdateEvent(Class<?> clazz) {
             this.clazz = clazz;
+        }
+    }
+
+    public static class IntakeConfirmedEvent {
+        public Long id;
+
+        public boolean isRoutine;
+
+        public IntakeConfirmedEvent(Long id, boolean routine) {
+            this.id = id;
+            this.isRoutine = routine;
         }
     }
 
@@ -52,6 +69,7 @@ public class PersistenceEvents {
 
     public static class UserCreateEvent {
         public Patient patient;
+
         public UserCreateEvent(Patient patient) {
             this.patient = patient;
         }
@@ -59,6 +77,7 @@ public class PersistenceEvents {
 
     public static class UserUpdateEvent {
         public Patient patient;
+
         public UserUpdateEvent(Patient patient) {
             this.patient = patient;
         }
@@ -66,11 +85,11 @@ public class PersistenceEvents {
 
     public static class ActiveUserChangeEvent {
         public Patient patient;
+
         public ActiveUserChangeEvent(Patient patient) {
             this.patient = patient;
         }
     }
-
 
 
 }

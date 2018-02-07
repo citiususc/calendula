@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ public class ScheduleItemDao extends GenericDao<ScheduleItem, Long> {
             @Override
             public Object call() throws Exception {
                 List<DailyScheduleItem> items = DB.dailyScheduleItems().findAllByScheduleItem(s);
-                for(DailyScheduleItem item : items) {
+                for (DailyScheduleItem item : items) {
                     DB.dailyScheduleItems().remove(item);
                 }
                 DB.scheduleItems().remove(s);

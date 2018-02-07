@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -17,28 +17,28 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true"
                 android:gravity="center">
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/imageView"
         android:scaleType="centerCrop"
-        android:src="@color/android_blue_dark" />
+        android:src="@color/android_blue_dark"/>
 
     <TextView
+        android:id="@+id/text"
         android:layout_width="fill_parent"
         android:layout_height="50dip"
-        android:text="@string/scan_reading_qr"
-        android:id="@+id/text"
+        android:layout_centerInParent="true"
         android:gravity="center"
+        android:text="@string/scan_reading_qr"
         android:textColor="#fff"
         android:textSize="20dp"
-        android:textStyle="bold"
-        android:layout_centerInParent="true"/>
+        android:textStyle="bold"/>
 
 </RelativeLayout>

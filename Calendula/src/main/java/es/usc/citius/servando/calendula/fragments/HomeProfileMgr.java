@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -22,50 +22,35 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.graphics.Palette;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
-import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.makeramen.RoundedImageView;
-import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Handler;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Snack;
-import pl.droidsonroids.gif.GifDrawable;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,6 +60,9 @@ public class HomeProfileMgr {
 
 
     public static final int BG_COUNT = 8;
+    public static final String BG_IMAGE_PATTERN = "home_bg_%d.webp";
+
+    private static HashMap<String, Integer> cache = new HashMap<>();
     int[] moodRes = new int[]{
             R.drawable.mood_1,
             R.drawable.mood_2,
@@ -89,7 +77,6 @@ public class HomeProfileMgr {
             R.color.android_blue,
             R.color.android_green
     };
-
     ImageView background;
     View profileImageContainer;
     TextView profileUsername;
@@ -98,32 +85,57 @@ public class HomeProfileMgr {
     TextView monthTv;
     TextView dayTv;
     ImageView moodImg;
-    View blurMask;
     RoundedImageView modFabButton;
     ListAdapter moodsAdapter;
     ImageView bottomShadow;
     String[] moods;
     int currentBgFileIdx = 0;
+    View profileInfo;
     private Activity context;
     private View rootView;
-    View profileInfo;
-    View santaContainer;
-    ImageView santaImv;
-    boolean santaMode = false;
-    ImageButton santaButton;
-    SharedPreferences preferences;
-    Toast t;
-    // "santa1.gif", "santa2.gif",
-    final List<String> images = Arrays.asList("house_smoke.gif", "santa3.gif", "santa4.gif", "santa5.gif", "christmas_tree.gif");
 
     public HomeProfileMgr() {
 
     }
 
-    public void init(View view, final Activity ctx){
+    public static int colorForCurrent(Context ctx) {
+
+        String path = getBackgroundPath();
+        int color = Color.BLACK;
+        if (!cache.containsKey(path)) {
+            Bitmap bm = getBitmapFromAsset(ctx, path);
+            if (bm != null) {
+                Palette p = Palette.generate(bm);
+                color = p.getVibrantColor(color);
+            }
+            cache.put(path, color);
+        }
+        return cache.get(path);
+    }
+
+    public static Bitmap getBitmapFromAsset(Context context, String filePath) {
+        AssetManager assetManager = context.getAssets();
+
+        InputStream istr;
+        Bitmap bitmap = null;
+        try {
+            istr = assetManager.open(filePath);
+            bitmap = BitmapFactory.decodeStream(istr);
+        } catch (IOException e) {
+            // handle exception
+        }
+
+        return bitmap;
+    }
+
+    static String getBackgroundPath() {
+        Integer idx = PreferenceUtils.getInt(PreferenceKeys.HOME_PROFILE_BACKGROUND_INDEX, 1);
+        return String.format(BG_IMAGE_PATTERN, idx);
+    }
+
+    public void init(View view, final Activity ctx) {
         this.context = ctx;
         this.rootView = view;
-        preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
 //        Animation in = AnimationUtils.loadAnimation(ctx, android.R.anim.fade_in);
 //        Animation out = AnimationUtils.loadAnimation(ctx, android.R.anim.fade_out);
@@ -133,14 +145,6 @@ public class HomeProfileMgr {
         //clock = (CustomDigitalClock) view.findViewById(R.id.home_clock);
         bottomShadow = (ImageView) view.findViewById(R.id.bottom_shadow);
         profileInfo = view.findViewById(R.id.profile_info);
-        blurMask = view.findViewById(R.id.blur_mask);
-        santaContainer = view.findViewById(R.id.santa_container);
-        santaImv = (ImageView) view.findViewById(R.id.image_santa);
-        santaButton = (ImageButton) view.findViewById(R.id.santa_mode_button);
-        santaButton.setImageDrawable(new IconicsDrawable(ctx, CommunityMaterial.Icon.cmd_pine_tree)
-                .sizeDp(36)
-                .paddingDp(5)
-                .colorRes(R.color.white));
 
         profileUsername = (TextView) view.findViewById(R.id.profile_username);
         profileContainer = (RelativeLayout) view.findViewById(R.id.profile_container);
@@ -170,50 +174,9 @@ public class HomeProfileMgr {
         background.setVisibility(View.INVISIBLE);
         bottomShadow.setVisibility(View.INVISIBLE);
 
-        boolean disableChristmasMode = preferences.getBoolean("disable_christmas_mode", false);
-        LocalDate today = LocalDate.now();
-        if(!disableChristmasMode && today.getMonthOfYear() == 12 && (today.getDayOfMonth() >= 23 && today.getDayOfMonth() <= 31)){
-            try {
-                int current = preferences.getInt("current_santa_image",0);
-                santaImv.setImageDrawable(new GifDrawable(ctx.getAssets(), images.get(current)));
-                santaContainer.setVisibility(View.VISIBLE);
-                blurMask.setAlpha(0.5f);
-                santaButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(t != null){
-                            t.cancel();
-                        }
-                        t = Toast.makeText(context, R.string.christmas_remove_message, Toast.LENGTH_SHORT);
-                        t.show();
-                        rotateChristmasImage();
-                    }
-                });
-                santaButton.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        santaContainer.setVisibility(View.GONE);
-                        preferences.edit().putBoolean("disable_christmas_mode", true).apply();
-                        t = Toast.makeText(context, R.string.done, Toast.LENGTH_SHORT);
-                        t.show();
-                        return true;
-                    }
-                });
-                if(!preferences.getBoolean("christmas_message_shown_2016",false)){
-                    showChristmasDialog();
-                    preferences.edit().putBoolean("christmas_message_shown_2016",true).apply();
-                }
-                santaMode = true;
-            }catch (Exception e){
-                santaContainer.setVisibility(View.GONE);
-            }
-        }else{
-            santaContainer.setVisibility(View.GONE);
-        }
-
         Picasso.with(context)
-            .load("file:///android_asset/" + getBackgroundPath(ctx))
-            .into(background);
+                .load("file:///android_asset/" + getBackgroundPath())
+                .into(background);
 
         background.post(new Runnable() {
             @Override
@@ -229,82 +192,18 @@ public class HomeProfileMgr {
             public void run() {
                 profileInfo.setVisibility(View.VISIBLE);
                 profileInfo.setAlpha(0);
-                profileInfo.animate().alpha(santaMode ? 0.5f : 1).setDuration(400);
+                profileInfo.animate().alpha(1).setDuration(400);
             }
-        },300);
+        }, 300);
 
     }
 
-
     public void updateModButton() {
-        int mood = PreferenceManager.getDefaultSharedPreferences(context).getInt("last_mood", 2);
+        int mood = PreferenceUtils.getInt(PreferenceKeys.HOME_LAST_MOOD, 2);
         int color = moodColor[mood];
         int res = moodRes[mood];
         modFabButton.setImageResource(color);
         moodImg.setImageResource(res);
-    }
-
-
-    private void showChristmasDialog(){
-
-        new MaterialStyledDialog.Builder(context)
-                .setTitle(R.string.christmas_dialog_title)
-                .setStyle(Style.HEADER_WITH_ICON)
-                .setIcon(IconUtils.icon(context, CommunityMaterial.Icon.cmd_pine_tree, R.color.white, 48))
-                .setHeaderColor(R.color.android_red)
-                .withDialogAnimation(false)
-                .setDescription(R.string.christmas_dialog_description)
-                .setPositiveText(R.string.christmas_dialog_positive)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-    }
-
-    private void rotateChristmasImage() {
-        try{
-            int current = preferences.getInt("current_santa_image",0);
-            int next = (current+1)%images.size();
-            santaImv.setImageDrawable(new GifDrawable(context.getAssets(), images.get(next)));
-            preferences.edit().putInt("current_santa_image",next).apply();
-        }catch (Exception e){}
-    }
-
-
-    public void updateBackground() {
-        Picasso.with(context)
-            .load("file:///android_asset/" + getRandomBackgroundPath())
-            .centerCrop()
-            .resize(background.getWidth(), background.getHeight())
-            .placeholder(background.getDrawable())
-            .into(background);
-
-        CalendulaApp.eventBus().post(new BackgroundUpdatedEvent());
-    }
-
-    void updateProfileInfo() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String displayName = preferences.getString("display_name", "Calendula");
-        profileUsername.setText(displayName);
-        updateDate();
-    }
-
-    public void updateDate() {
-        DateTime dt = DateTime.now();
-        String dayStr = dt.dayOfMonth().getAsShortText();
-        String monthStr = dt.monthOfYear().getAsShortText().toUpperCase();
-        dayTv.setText(dayStr);
-        monthTv.setText(monthStr);
-    }
-
-
-    static String getBackgroundPath(Context ctx){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
-        Integer idx = preferences.getInt("profile_background_idx", 1);
-        return "home_bg_" + idx + ".jpg";
     }
 
 //    Bitmap getBackgroundBitmap() {
@@ -319,15 +218,33 @@ public class HomeProfileMgr {
 //        return ScreenUtils.getResizedBitmap(context, getRandomBackgroundPath(), width, height);
 //    }
 
+    public void updateBackground() {
+        Picasso.with(context)
+                .load("file:///android_asset/" + getRandomBackgroundPath())
+                .centerCrop()
+                .resize(background.getWidth(), background.getHeight())
+                .placeholder(background.getDrawable())
+                .into(background);
+
+        CalendulaApp.eventBus().post(new BackgroundUpdatedEvent());
+    }
+
+    public void updateDate() {
+        DateTime dt = DateTime.now();
+        String dayStr = dt.dayOfMonth().getAsShortText();
+        String monthStr = dt.monthOfYear().getAsShortText().toUpperCase();
+        dayTv.setText(dayStr);
+        monthTv.setText(monthStr);
+    }
+
     public String getRandomBackgroundPath() {
         int rand = (((int) (Math.random() * 1000)) % BG_COUNT) + 1;
         if (rand == currentBgFileIdx) {
             rand = ((rand + 1) % BG_COUNT) + 1;
         }
         currentBgFileIdx = rand;
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        preferences.edit().putInt("profile_background_idx", rand).commit();
-        return "home_bg_" + rand + ".jpg";
+        PreferenceUtils.edit().putInt(PreferenceKeys.HOME_PROFILE_BACKGROUND_INDEX.key(), rand).apply();
+        return String.format(BG_IMAGE_PATTERN, rand);
 
     }
 
@@ -341,9 +258,8 @@ public class HomeProfileMgr {
                 .setAdapter(moodsAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
                         Snack.show("Mood saved!", context);
-                        preferences.edit().putInt("last_mood", which).commit();
+                        PreferenceUtils.edit().putInt(PreferenceKeys.HOME_LAST_MOOD.key(), which).apply();
                         updateModButton();
                     }
                 }).show();
@@ -355,6 +271,12 @@ public class HomeProfileMgr {
 
     public void onExpand() {
         profileInfo.animate().alpha(1);
+    }
+
+    void updateProfileInfo() {
+        String displayName = PreferenceUtils.getString(PreferenceKeys.HOME_DISPLAY_NAME, context.getString(R.string.app_name));
+        profileUsername.setText(displayName);
+        updateDate();
     }
 
     public class MoodListAdapter extends ArrayAdapter<String> {
@@ -385,39 +307,6 @@ public class HomeProfileMgr {
         }
     }
 
-
-    private static HashMap<String, Integer> cache = new HashMap<>();
-
-    public static int colorForCurrent(Context ctx){
-
-        String path = getBackgroundPath(ctx);
-        int color = Color.BLACK;
-        if(!cache.containsKey(path)) {
-            Bitmap bm = getBitmapFromAsset(ctx, path);
-            if(bm != null) {
-                Palette p = Palette.generate(bm);
-                color = p.getVibrantColor(color);
-            }
-            cache.put(path, color);
-        }
-        return cache.get(path);
+    public class BackgroundUpdatedEvent {
     }
-
-    public static Bitmap getBitmapFromAsset(Context context, String filePath) {
-        AssetManager assetManager = context.getAssets();
-
-        InputStream istr;
-        Bitmap bitmap = null;
-        try {
-            istr = assetManager.open(filePath);
-            bitmap = BitmapFactory.decodeStream(istr);
-        } catch (IOException e) {
-            // handle exception
-        }
-
-        return bitmap;
-    }
-
-
-    public class BackgroundUpdatedEvent {}
 }

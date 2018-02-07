@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -17,134 +16,279 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#fff">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="72dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center_vertical"
-        android:text="@string/medicine_name"
-        android:textColor="@color/dark_grey_text"
-        android:textSize="20sp" />
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff">
 
-    <TextView
-        android:id="@+id/medicine_edit_description"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/medicine_edit_name"
-        android:layout_marginLeft="72dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginTop="5dp"
-        android:gravity="center_vertical"
-        android:textColor="@color/android_blue"
-        android:textSize="13sp" />
-
-    <AutoCompleteTextView
-        android:id="@+id/medicine_edit_name"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_marginLeft="72dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginTop="20dp"
-        android:hint="@string/medicine_edit_name_hint"
-        android:imeOptions="actionDone"
-        android:inputType="text"
-        android:lines="1"
-        android:maxLines="1"
-        android:textColor="@color/dark_grey_home"
-        android:textSize="20sp" />
-
-    <ImageView
-        android:id="@+id/search_button"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignRight="@+id/medicine_edit_name"
-        android:layout_alignTop="@+id/medicine_edit_name"
-        android:layout_marginRight="10dp"
-        android:src="@drawable/ic_search_black_48dp" />
+        android:layout_height="match_parent"
+        android:background="#fff"
+        android:paddingBottom="60dp">
 
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="26dp"
-        android:layout_below="@+id/medicine_edit_description"
-        android:layout_marginLeft="72dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center_vertical"
-        android:text="@string/medicine_presentation"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/dark_grey_text"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="72dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center_vertical"
+            android:text="@string/medicine_name"
+            android:textColor="@color/dark_grey_text"
+            android:textSize="20sp"/>
+
+        <EditText
+            android:id="@+id/medicine_edit_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView"
+            android:layout_marginLeft="72dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="10dp"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/medicine_edit_name_hint"
+            android:inputType="text"
+            android:paddingBottom="15dp"
+            android:paddingTop="10dp"
+            android:textColor="#222"
+            android:textSize="20sp"
+            tools:text="Medicine Placeholder"/>
+
+        <ImageView
+            android:id="@+id/search_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignRight="@+id/medicine_edit_name"
+            android:layout_alignTop="@+id/medicine_edit_name"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_search_black_48dp"
+            android:visibility="gone"/>
 
 
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignTop="@+id/textView"
-        android:layout_marginLeft="16dp"
-        android:src="@drawable/ic_edit_black_48dp" />
-
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignTop="@+id/textView2"
-        android:layout_marginLeft="16dp"
-        android:src="@drawable/ic_visibility_black_48dp" />
-
-    <include
-        android:id="@+id/med_presentation"
-        layout="@layout/fragment_med_presentation"
-        android:layout_width="wrap_content"
-        android:layout_height="90dp"
-        android:layout_below="@+id/textView2"
-        android:layout_marginLeft="72dp"
-        android:layout_marginRight="42dp"
-        android:layout_marginTop="20dp" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="fill_parent"
-        android:layout_height="36dp"
-        android:layout_below="@+id/med_presentation"
-        android:layout_marginTop="20dp"
-        android:fontFamily="sans-serif-condensed"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/android_blue_dark"
-        android:textSize="18sp" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:layout_below="@+id/medicine_edit_name"
+            android:layout_marginLeft="72dp"
+            android:layout_marginTop="25dp"
+            android:gravity="center_vertical"
+            android:text="@string/medicine_presentation"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/dark_grey_text"
+            android:textSize="20sp"/>
 
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="26dp"
-        android:layout_height="100dp"
-        android:layout_alignBottom="@+id/med_presentation"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/med_presentation"
-        android:layout_marginRight="16dp"
-        android:alpha="0.3"
-        android:src="@drawable/ic_arrow_right_black_48dp" />
+        <ImageView
+            android:id="@+id/ic_med_name"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignTop="@+id/textView"
+            android:layout_marginLeft="16dp"
+            android:alpha="0.8"
+            android:src="@drawable/ic_edit_black_48dp"/>
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="26dp"
-        android:layout_height="100dp"
-        android:layout_alignBottom="@+id/med_presentation"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/med_presentation"
-        android:layout_marginLeft="46dp"
-        android:alpha="0.3"
-        android:src="@drawable/ic_arrow_left_black_48dp" />
+        <ImageView
+            android:id="@+id/ic_med_presentation"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignTop="@+id/textView2"
+            android:layout_marginLeft="16dp"
+            android:alpha="0.8"
+            android:src="@drawable/ic_visibility_black_48dp"/>
+
+        <include
+            android:id="@+id/med_presentation"
+            layout="@layout/fragment_med_presentation"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_below="@+id/textView2"
+            android:layout_marginLeft="72dp"
+            android:layout_marginRight="42dp"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/textView2"
+            android:layout_alignTop="@+id/textView2"
+            android:layout_marginLeft="0dp"
+            android:layout_toRightOf="@+id/textView2"
+            android:gravity="center_vertical"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/dark_grey_text"
+            android:textSize="20sp"/>
 
 
-</RelativeLayout>
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="100dp"
+            android:layout_alignBottom="@+id/med_presentation"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/med_presentation"
+            android:layout_marginRight="16dp"
+            android:alpha="0.3"
+            android:src="@drawable/ic_arrow_right_black_48dp"/>
+
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="100dp"
+            android:layout_alignBottom="@+id/med_presentation"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/med_presentation"
+            android:layout_marginLeft="46dp"
+            android:alpha="0.3"
+            android:src="@drawable/ic_arrow_left_black_48dp"/>
+
+        <RelativeLayout
+            android:id="@+id/stock_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/med_presentation"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/medicine_stock_title"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:layout_marginLeft="72dp"
+                android:layout_marginTop="25dp"
+                android:gravity="center_vertical"
+                android:text="@string/stock"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/dark_grey_text"
+                android:textSize="20sp"/>
+
+            <ImageView
+                android:id="@+id/ic_med_stock"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignTop="@+id/medicine_stock_title"
+                android:layout_marginLeft="16dp"
+                android:alpha="0.8"
+                android:src="@drawable/ic_edit_black_48dp"/>
+
+            <RelativeLayout
+                android:id="@+id/stock_info_line"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/medicine_stock_title">
+
+                <TextView
+                    android:id="@+id/stock_units"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="72dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toLeftOf="@+id/stock_buttons"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textIsSelectable="false"
+                    android:textSize="19sp"
+                    android:textStyle="bold"
+                    tools:text="I got 99 placeholders but stock ain't one"/>
+
+                <LinearLayout
+                    android:id="@+id/stock_buttons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="32dp"
+                    android:gravity="center_vertical|right"
+                    android:orientation="horizontal">
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:id="@+id/btn_stock_remove"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        app:iiv_background_color="@color/agenda_item_title"
+                        app:iiv_color="@color/white"
+                        app:iiv_corner_radius="23dp"
+                        app:iiv_icon="cmd-minus"
+                        app:iiv_padding="12dp"
+                        app:iiv_size="40dp"
+                        tools:layout_height="50dp"
+                        tools:layout_width="45dp"
+                        tools:src="@drawable/abc_ic_star_black_16dp"
+                        />
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:id="@+id/btn_stock_add"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        app:iiv_background_color="@color/agenda_item_title"
+                        app:iiv_color="@color/white"
+                        app:iiv_corner_radius="23dp"
+                        app:iiv_icon="cmd-plus"
+                        app:iiv_padding="12dp"
+                        app:iiv_size="40dp"
+                        tools:layout_height="50dp"
+                        tools:layout_width="45dp"
+                        tools:src="@drawable/abc_ic_star_black_16dp"
+                        />
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:id="@+id/btn_stock_reset"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        app:iiv_background_color="@color/agenda_item_title"
+                        app:iiv_color="@color/white"
+                        app:iiv_corner_radius="23dp"
+                        app:iiv_icon="cmd-reload"
+                        app:iiv_padding="12dp"
+                        app:iiv_size="40dp"
+                        tools:layout_height="50dp"
+                        tools:layout_width="45dp"
+                        tools:src="@drawable/abc_ic_star_black_16dp"
+                        />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/stock_estimated_duration"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/stock_info_line"
+                android:layout_marginLeft="72dp"
+                android:layout_marginRight="32dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="center_vertical"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/android_blue_dark"
+                android:textSize="16sp"
+                tools:text="Enough for two placeholders with the current placeholder"/>
+
+            <Switch
+                android:id="@+id/stock_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="false"
+                android:layout_alignTop="@+id/medicine_stock_title"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="32dp"
+                android:layout_toRightOf="@+id/medicine_stock_title"
+                android:checked="false"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+</ScrollView>

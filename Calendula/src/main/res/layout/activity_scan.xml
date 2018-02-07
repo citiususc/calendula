@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -18,44 +18,44 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true"
-                android:paddingTop="@dimen/status_bar_height"
-                android:background="@color/android_blue_dark">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/android_blue_dark"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true"
+                android:paddingTop="@dimen/status_bar_height">
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/imageView"
-        android:scaleType="fitCenter"
-        android:src="@drawable/qr_code_scan"
-        android:layout_marginTop="40dp"
         android:layout_marginBottom="100dp"
-        android:background="@null"
+        android:layout_marginTop="40dp"
         android:alpha="0.9"
-        android:padding="10dp"/>
+        android:background="@null"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/qr_code_scan"/>
 
     <Button
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/scan_qr"
-        android:id="@+id/button"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:layout_marginBottom="50dp"
-        android:textStyle="bold" />
+        android:text="@string/scan_qr"
+        android:textStyle="bold"/>
 
     <TextView
+        android:id="@+id/text"
         android:layout_width="fill_parent"
         android:layout_height="50dip"
-        android:text="@string/scan_prescriptions_title"
-        android:id="@+id/text"
+        android:layout_marginTop="20dp"
         android:gravity="center"
+        android:text="@string/scan_prescriptions_title"
         android:textColor="#fff"
         android:textSize="20dp"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"/>
+        android:textStyle="bold"/>
 
 </RelativeLayout>

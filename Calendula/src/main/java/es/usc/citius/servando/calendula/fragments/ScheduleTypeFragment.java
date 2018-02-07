@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -39,26 +39,23 @@ public class ScheduleTypeFragment extends Fragment {
     public static final int TYPE_HOURLY = 2;
     public static final int TYPE_PERIOD = 3;
 
-    public static final String TAG = ScheduleTypeFragment.class.getName();
-
-    public ScheduleTypeFragment()
-    {
-        // Required empty public constructor
-    }
-
+    private static final String TAG = "ScheduleTypeFragm";
     View optionRoutines;
     View optionHourly;
     View optionPeriod;
 
+    public ScheduleTypeFragment() {
+        // Required empty public constructor
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState)
-    {
+                             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_schedule_type, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
-    {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
         optionRoutines = view.findViewById(R.id.schedule_type_routines);
@@ -66,8 +63,8 @@ public class ScheduleTypeFragment extends Fragment {
         optionPeriod = view.findViewById(R.id.schedule_type_period);
 
         View.OnClickListener listener = new View.OnClickListener() {
-            @Override public void onClick(View v)
-            {
+            @Override
+            public void onClick(View v) {
                 onClickitem(v.getId());
             }
         };
@@ -77,26 +74,29 @@ public class ScheduleTypeFragment extends Fragment {
         optionHourly.setOnClickListener(listener);
 
         int type = ScheduleHelper.instance().getScheduleType();
-        if (type == ScheduleTypeFragment.TYPE_HOURLY)
-        {
+        if (type == ScheduleTypeFragment.TYPE_HOURLY) {
             onClickitem(R.id.schedule_type_hourly);
-        } else if (type == ScheduleTypeFragment.TYPE_ROUTINES)
-        {
+        } else if (type == ScheduleTypeFragment.TYPE_ROUTINES) {
             onClickitem(R.id.schedule_type_routines);
-        } else if (type == ScheduleTypeFragment.TYPE_PERIOD)
-        {
+        } else if (type == ScheduleTypeFragment.TYPE_PERIOD) {
             onClickitem(R.id.schedule_type_period);
         }
     }
 
-    private void onClickitem(int id)
-    {
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+
+        }
+    }
+
+    private void onClickitem(int id) {
         final int white = getResources().getColor(R.color.white);
         final int selected = Color.parseColor("#aaefefef");
 
         int type = 0;
-        switch (id)
-        {
+        switch (id) {
             case R.id.schedule_type_routines:
                 type = TYPE_ROUTINES;
                 optionRoutines.setBackgroundColor(selected);
@@ -120,15 +120,5 @@ public class ScheduleTypeFragment extends Fragment {
         }
         ScheduleHelper.instance().setScheduleType(type);
         ((ScheduleCreationActivity) getActivity()).onScheduleTypeSelected();
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser)
-    {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser)
-        {
-
-        }
     }
 }

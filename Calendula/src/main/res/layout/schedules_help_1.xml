@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -16,159 +16,150 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:paddingBottom="30dp"
-    android:paddingRight="16dp"
-    android:paddingLeft="16dp"
-    >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="30dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
 
 
-    <com.makeramen.RoundedImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/imageView2"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_marginLeft="46dp"
-        android:scaleType="centerCrop"
-        android:src="#55000000"
-        app:riv_border_width="0dip"
-        app:riv_corner_radius="30dip"
-        app:riv_oval="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:alpha="0.3"
-        android:layout_marginRight="5dp"/>
+    <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                                    android:id="@+id/imageView2"
+                                    android:layout_width="55dp"
+                                    android:layout_height="55dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginLeft="46dp"
+                                    android:layout_marginRight="5dp"
+                                    android:alpha="0.3"
+                                    android:scaleType="centerCrop"
+                                    android:src="#55000000"
+                                    app:riv_border_width="0dip"
+                                    app:riv_corner_radius="30dip"
+                                    app:riv_oval="true"/>
 
     <ImageView
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:src="@drawable/ic_autorenew_white_48dp"
-        android:padding="10dp"
-        android:layout_alignTop="@+id/imageView2"
-        android:layout_alignLeft="@+id/imageView2"
         android:id="@+id/imageView11"
-        android:alpha="0.3"
-        android:layout_marginRight="5dp"/>
-
-
-    <com.makeramen.RoundedImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/imageView3"
         android:layout_width="55dp"
         android:layout_height="55dp"
-        android:layout_marginLeft="46dp"
-        android:scaleType="centerCrop"
-        android:src="#55000000"
-        app:riv_border_width="0dip"
-        app:riv_corner_radius="30dip"
-        app:riv_oval="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="70dp"
+        android:layout_alignLeft="@+id/imageView2"
+        android:layout_alignTop="@+id/imageView2"
+        android:layout_marginRight="5dp"
         android:alpha="0.3"
-        android:layout_marginRight="5dp"/>
+        android:padding="10dp"
+        android:src="@drawable/ic_autorenew_white_48dp"/>
+
+
+    <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                                    android:id="@+id/imageView3"
+                                    android:layout_width="55dp"
+                                    android:layout_height="55dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginBottom="70dp"
+                                    android:layout_marginLeft="46dp"
+                                    android:layout_marginRight="5dp"
+                                    android:alpha="0.3"
+                                    android:scaleType="centerCrop"
+                                    android:src="#55000000"
+                                    app:riv_border_width="0dip"
+                                    app:riv_corner_radius="30dip"
+                                    app:riv_oval="true"/>
 
     <ImageView
         android:layout_width="55dp"
         android:layout_height="55dp"
-        android:src="@drawable/ic_history_white_48dp"
-        android:padding="10dp"
-        android:layout_alignTop="@+id/imageView3"
         android:layout_alignLeft="@+id/imageView3"
+        android:layout_alignTop="@+id/imageView3"
+        android:layout_marginRight="5dp"
         android:alpha="0.3"
-        android:layout_marginRight="5dp"/>
+        android:padding="10dp"
+        android:src="@drawable/ic_history_white_48dp"/>
 
 
-    <com.makeramen.RoundedImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/imageView4"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_marginLeft="46dp"
-        android:scaleType="centerCrop"
-        android:src="#55000000"
-        app:riv_border_width="0dip"
-        app:riv_corner_radius="30dip"
-        app:riv_oval="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="140dp"
-        android:layout_marginRight="5dp"/>
+    <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                                    android:id="@+id/imageView4"
+                                    android:layout_width="55dp"
+                                    android:layout_height="55dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginBottom="140dp"
+                                    android:layout_marginLeft="46dp"
+                                    android:layout_marginRight="5dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="#55000000"
+                                    app:riv_border_width="0dip"
+                                    app:riv_corner_radius="30dip"
+                                    app:riv_oval="true"/>
 
     <ImageView
         android:layout_width="55dp"
         android:layout_height="55dp"
-        android:src="@drawable/ic_alarm_white_48dp"
-        android:padding="10dp"
-        android:layout_alignTop="@+id/imageView4"
         android:layout_alignLeft="@+id/imageView4"
-        android:layout_marginRight="5dp"/>
+        android:layout_alignTop="@+id/imageView4"
+        android:layout_marginRight="5dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_alarm_white_48dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/schedule_type_routines_title"
-        android:id="@+id/textView12"
-        android:layout_alignParentTop="false"
+        android:layout_above="@+id/textView13"
         android:layout_alignParentLeft="false"
         android:layout_alignParentStart="false"
+        android:layout_alignParentTop="false"
         android:layout_marginTop="100dp"
-        android:layout_above="@+id/textView13"
-        android:textColor="#fff"
-        android:textStyle="bold"
         android:paddingLeft="10dp"
-        android:textSize="20dp"/>
+        android:text="@string/schedule_type_routines_title"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#fff"
+        android:textSize="20dp"
+        android:textStyle="bold"/>
 
     <TextView
+        android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/schedule_type_routines_help"
-        android:id="@+id/textView13"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/imageView11"
         android:layout_toStartOf="@+id/imageView11"
-        android:paddingRight="30dp"
-        android:paddingTop="20dp"
-        android:textColor="#fff"
         android:paddingBottom="10dp"
         android:paddingLeft="10dp"
+        android:paddingRight="30dp"
+        android:paddingTop="20dp"
+        android:text="@string/schedule_type_routines_help"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#fff"
         android:textSize="17dp"/>
-
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:id="@android:id/empty"
-                  android:orientation="vertical"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
+                  android:layout_marginTop="50dp"
                   android:gravity="center_horizontal"
-                  android:layout_marginTop="50dp">
+                  android:orientation="vertical">
 
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:id="@+id/imageView10"
-            android:src="@drawable/ic_intro_schedules"
-            />
+            android:src="@drawable/ic_intro_schedules"/>
 
         <TextView
+            android:id="@+id/textView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/schedule_type_help_title"
-            android:id="@+id/textView10"
-            android:padding="20dp"
             android:alpha="0.9"
+            android:gravity="center_horizontal"
+            android:padding="20dp"
+            android:text="@string/schedule_type_help_title"
             android:textAlignment="center"
-            android:textColor="#fff"
-            android:gravity="center_horizontal"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#fff"/>
 
     </LinearLayout>
 

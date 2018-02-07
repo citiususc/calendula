@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 package es.usc.citius.servando.calendula.database;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -37,13 +36,14 @@ import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by joseangel.pineiro on 3/26/15.
  */
 public class RoutineDao extends GenericDao<Routine, Long> {
 
-    public static final String TAG = "RoutineDao";
+    private static final String TAG = "RoutineDao";
 
     public RoutineDao(DatabaseHelper db) {
         super(db);
@@ -67,7 +67,7 @@ public class RoutineDao extends GenericDao<Routine, Long> {
     @Override
     public List<Routine> findAll() {
         try {
-            return dao.queryBuilder().orderBy(Routine.COLUMN_TIME,true).query();
+            return dao.queryBuilder().orderBy(Routine.COLUMN_TIME, true).query();
         } catch (SQLException e) {
             throw new RuntimeException("Error finding models", e);
         }
@@ -79,7 +79,7 @@ public class RoutineDao extends GenericDao<Routine, Long> {
     }
 
     public List<Routine> findAll(Patient p) {
-        return findAll(p.id());
+        return findAll(p.getId());
     }
 
 
@@ -98,7 +98,7 @@ public class RoutineDao extends GenericDao<Routine, Long> {
         try {
             QueryBuilder<Routine, Long> qb = dao.queryBuilder();
             Where w = qb.where();
-            w.and(w.eq(Routine.COLUMN_NAME, name),w.eq(Routine.COLUMN_PATIENT, p));
+            w.and(w.eq(Routine.COLUMN_NAME, name), w.eq(Routine.COLUMN_PATIENT, p));
             qb.setWhere(w);
             return qb.queryForFirst();
         } catch (SQLException e) {
@@ -121,7 +121,7 @@ public class RoutineDao extends GenericDao<Routine, Long> {
                     .between(Routine.COLUMN_TIME, time, endTime)
                     .query();
         } catch (Exception e) {
-            Log.e(TAG, "Error in findInHour", e);
+            LogUtil.e(TAG, "Error in findInHour", e);
             throw new RuntimeException(e);
         }
     }
@@ -131,7 +131,7 @@ public class RoutineDao extends GenericDao<Routine, Long> {
         DB.transaction(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
-                Collection<ScheduleItem> items = r.scheduleItems();
+                Collection<ScheduleItem> items = r.getScheduleItems();
                 for (ScheduleItem i : items) {
                     i.deleteCascade();
                 }

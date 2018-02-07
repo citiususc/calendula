@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -20,64 +20,70 @@
 
     <!-- A 'parent' preference, which enables/disables child preferences (below)
          when checked/unchecked. -->
-    <CheckBoxPreference
+    <SwitchPreference
         android:defaultValue="true"
-        android:key="alarm_notifications"
-        android:title="@string/pref_title_new_alarm_notification" />
+        android:key="@string/prefkey_settings_alarm_notifications"
+        android:title="@string/pref_title_new_alarm_notification"/>
 
-    <CheckBoxPreference
+    <es.usc.citius.servando.calendula.util.NotificationTonePreference
+        android:dependency="@string/prefkey_settings_alarm_notifications"
+        android:key="@string/prefkey_settings_notification_tone"
+        android:summary="@string/pref_notification_tone_sum"
+        android:title="@string/pref_notification_tone"/>
+
+    <SwitchPreference
         android:defaultValue="true"
-        android:dependency="alarm_notifications"
-        android:key="alarm_repeat_enabled"
-        android:title="@string/pref_title_repeat_alarms" />
+        android:dependency="@string/prefkey_settings_alarm_notifications"
+        android:key="@string/prefkey_settings_alarm_repeat_enabled"
+        android:title="@string/pref_title_repeat_alarms"/>
 
 
     <ListPreference
         android:defaultValue="15"
-        android:dependency="alarm_repeat_enabled"
+        android:dependency="@string/prefkey_settings_alarm_repeat_enabled"
         android:entries="@array/pref_alarm_repeat_titles"
         android:entryValues="@array/pref_alarm_repeat_values"
-        android:key="alarm_repeat_frequency"
+        android:key="@string/prefkey_settings_alarm_repeat_frequency"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
-        android:title="@string/pref_title_sync_frequency" />
+        android:title="@string/pref_title_sync_frequency"/>
 
     <ListPreference
         android:defaultValue="120"
-        android:dependency="alarm_repeat_enabled"
+        android:dependency="@string/prefkey_settings_alarm_repeat_enabled"
         android:entries="@array/pref_alarm_reminder_window_titles"
         android:entryValues="@array/pref_alarm_reminder_window_values"
-        android:key="alarm_reminder_window"
+        android:key="@string/prefkey_settings_alarm_reminder_window"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
-        android:title="@string/pref_title_reminder_window" />
+        android:title="@string/pref_title_reminder_window"/>
 
     <!--<ListPreference-->
-        <!--android:defaultValue="3"-->
-        <!--android:entries="@array/pref_check_window_margin_titles"-->
-        <!--android:entryValues="@array/pref_check_window_margin_values"-->
-        <!--android:key="check_window_margin"-->
-        <!--android:negativeButtonText="@null"-->
-        <!--android:positiveButtonText="@null"-->
-        <!--android:title="@string/pref_check_window_margin" />-->
+    <!--android:defaultValue="3"-->
+    <!--android:entries="@array/pref_check_window_margin_titles"-->
+    <!--android:entryValues="@array/pref_check_window_margin_values"-->
+    <!--android:key="check_window_margin"-->
+    <!--android:negativeButtonText="@null"-->
+    <!--android:positiveButtonText="@null"-->
+    <!--android:title="@string/pref_check_window_margin" />-->
 
-    <CheckBoxPreference
+    <SwitchPreference
         android:defaultValue="false"
-        android:dependency="alarm_notifications"
-        android:key="alarm_insistent"
-        android:title="@string/pref_title_insistent_alarms" />
+        android:dependency="@string/prefkey_settings_alarm_notifications"
+        android:key="@string/prefkey_settings_alarm_insistent"
+        android:title="@string/pref_title_insistent_alarms"/>
 
 
     <es.usc.citius.servando.calendula.util.RingtonePreference
-        android:dependency="alarm_insistent"
-        android:key="pref_notification_tone"
+        android:dependency="@string/prefkey_settings_alarm_insistent"
+        android:key="@string/prefkey_settings_insistent_notification_tone"
         android:summary="@string/pref_notification_tone_sum"
-        android:title="@string/pref_notification_tone" />
+        android:title="@string/pref_insistent_notification_tone"/>
 
-    <CheckBoxPreference
-        android:key="alarm_pickup_notifications"
-        android:title="@string/pref_title_pickup_notification"
-        android:defaultValue="true" />
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="@string/prefkey_settings_alarm_pickup_notifications"
+        android:title="@string/pref_title_pickup_notification"/>
 
 
 </PreferenceScreen>

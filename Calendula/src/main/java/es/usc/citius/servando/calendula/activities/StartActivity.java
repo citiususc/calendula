@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -24,15 +24,21 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import es.usc.citius.servando.calendula.HomePagerActivity;
+import es.usc.citius.servando.calendula.pinlock.PINManager;
+import es.usc.citius.servando.calendula.pinlock.PinLockActivity;
+import es.usc.citius.servando.calendula.pinlock.UnlockStateManager;
 
 
 public class StartActivity extends Activity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startActivity(new Intent(this,HomePagerActivity.class));
+        if (PINManager.isPINSet() && !UnlockStateManager.getInstance().isUnlocked()) {
+            startActivity(new Intent(this, PinLockActivity.class));
+        } else {
+            startActivity(new Intent(this, HomePagerActivity.class));
+        }
         finish();
     }
 }

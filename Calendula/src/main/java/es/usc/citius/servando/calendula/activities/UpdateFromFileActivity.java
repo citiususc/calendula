@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -24,8 +24,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -33,11 +31,13 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
+import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
-public class UpdateFromFileActivity extends ActionBarActivity {
+public class UpdateFromFileActivity extends CalendulaActivity {
 
-    public static final String TAG = "UpdateActivity";
+    private static final String TAG = "UpdateActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,21 +48,21 @@ public class UpdateFromFileActivity extends ActionBarActivity {
             getWindow().setStatusBarColor(getResources().getColor(R.color.android_blue_statusbar));
         }
 
-        try{
+        try {
             String fileContents = readFile();
-            Log.d(TAG, "Text from file: " + fileContents);
+            LogUtil.d(TAG, "Text from file: " + fileContents);
 
-            if(fileContents!=null){
+            if (fileContents != null) {
                 Intent intent = new Intent(getApplicationContext(), ConfirmSchedulesActivity.class);
                 Bundle b = new Bundle();
                 b.putString("qr_data", fileContents);
                 intent.putExtras(b);
                 startActivity(intent);
-            }else{
-                Toast.makeText(this,"El fichero de actualización no es válido!", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "El fichero de actualización no es válido!", Toast.LENGTH_LONG).show();
             }
             finish();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             finish();
         }
@@ -70,7 +70,7 @@ public class UpdateFromFileActivity extends ActionBarActivity {
     }
 
 
-    private String readFile(){
+    private String readFile() {
         Intent intent = getIntent();
         InputStream is = null;
         String fullPath = null;
@@ -85,22 +85,26 @@ public class UpdateFromFileActivity extends ActionBarActivity {
             String scheme = uri.getScheme();
             String name = null;
 
-            if (scheme.equals("file")) {
-                List<String> pathSegments = uri.getPathSegments();
-                if (pathSegments.size() > 0) {
-                    name = pathSegments.get(pathSegments.size() - 1);
-                }
-            } else if (scheme.equals("content")) {
-                Cursor cursor = getContentResolver().query(uri, new String[] {
-                        MediaStore.MediaColumns.DISPLAY_NAME
-                }, null, null, null);
-                cursor.moveToFirst();
-                int nameIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
-                if (nameIndex >= 0) {
-                    name = cursor.getString(nameIndex);
-                }
-            } else {
-                return null;
+            switch (scheme) {
+                case "file":
+                    List<String> pathSegments = uri.getPathSegments();
+                    if (pathSegments.size() > 0) {
+                        name = pathSegments.get(pathSegments.size() - 1);
+                    }
+                    break;
+                case "content":
+                    Cursor cursor = getContentResolver().query(uri, new String[]{
+                            MediaStore.MediaColumns.DISPLAY_NAME
+                    }, null, null, null);
+                    cursor.moveToFirst();
+                    int nameIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
+                    if (nameIndex >= 0) {
+                        name = cursor.getString(nameIndex);
+                    }
+                    cursor.close();
+                    break;
+                default:
+                    return null;
             }
 
             if (name == null) {
@@ -138,7 +142,7 @@ public class UpdateFromFileActivity extends ActionBarActivity {
             if (is != null) {
                 try {
                     is.close();
-                } catch (Exception e1) {
+                } catch (Exception ignored) {
                 }
             }
 

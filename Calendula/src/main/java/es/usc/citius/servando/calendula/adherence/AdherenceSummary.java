@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -30,11 +30,11 @@ public class AdherenceSummary {
 
     public List<AdherenceSummaryItem> items;
 
-    public AdherenceSummary(){
+    public AdherenceSummary() {
         items = new ArrayList<>();
     }
 
-    public AdherenceSummary with(List<DailyScheduleItem> ditems){
+    public AdherenceSummary with(List<DailyScheduleItem> ditems) {
         for (DailyScheduleItem i : ditems) {
             items.add(new AdherenceSummaryItem(i));
         }

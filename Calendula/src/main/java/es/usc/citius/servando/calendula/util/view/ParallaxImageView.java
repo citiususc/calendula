@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -21,11 +21,11 @@ package es.usc.citius.servando.calendula.util.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 
-public class ParallaxImageView extends ImageView {
+public class ParallaxImageView extends AppCompatImageView {
 
     private int mCurrentTranslation;
 
@@ -41,12 +41,12 @@ public class ParallaxImageView extends ImageView {
         super(context, attrs, defStyle);
     }
 
-    public void updateParallax(){
+    public void updateParallax() {
         int[] ls = new int[2];
         getLocationOnScreen(ls);
-        float top = (float)ls[1];
-        if(top > 0) {
-            mCurrentTranslation = -(int)(top*1.5);
+        float top = (float) ls[1];
+        if (top > 0) {
+            mCurrentTranslation = -(int) (top * 1.5);
             invalidate();
         }
     }

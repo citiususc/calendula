@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -32,14 +32,14 @@ import es.usc.citius.servando.calendula.persistence.Presentation;
  */
 public class DailyAgendaItemStub {
 
-    public static final String TAG = "DailyAgendaItemStub";
+    private static final String TAG = "DailyAgendaItemStub";
 
     public List<DailyAgendaItemStubElement> meds;
 
     public String title = "";
     public LocalTime time;
     public LocalDate date;
-    public Long id = -1l;
+    public Long id = -1L;
     public Patient patient;
 
     public boolean isSpacer = false;
@@ -57,27 +57,6 @@ public class DailyAgendaItemStub {
         return date.toDateTime(time);
     }
 
-    public static class DailyAgendaItemStubElement  implements Comparable<DailyAgendaItemStubElement> {
-
-        public int res;
-        public double dose;
-        public boolean taken;
-
-        public String medName;
-        public String minute;
-        public String displayDose;
-        public Long scheduleItemId = -1l;
-        public Presentation presentation;
-
-        @Override
-        public int compareTo(DailyAgendaItemStubElement other) {
-            int result = minute.compareTo(other.minute);
-            if (result == 0) result = taken ? 0 : 1;
-            if (result == 0) result = medName.compareTo(other.medName);
-            return result;
-        }
-    }
-
     @Override
     public String toString() {
         return "DailyAgendaItemStub{" +
@@ -88,6 +67,27 @@ public class DailyAgendaItemStub {
                 ", time=" + time.toString("kk:mm") +
                 ", date=" + date.toString("dd/MM") +
                 '}';
+    }
+
+    public static class DailyAgendaItemStubElement implements Comparable<DailyAgendaItemStubElement> {
+
+        public int res;
+        public double dose;
+        public boolean taken;
+
+        public String medName;
+        public String minute;
+        public String displayDose;
+        public Long scheduleItemId = -1L;
+        public Presentation presentation;
+
+        @Override
+        public int compareTo(DailyAgendaItemStubElement other) {
+            int result = minute.compareTo(other.minute);
+            if (result == 0) result = taken ? 0 : 1;
+            if (result == 0) result = medName.compareTo(other.medName);
+            return result;
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -21,35 +21,35 @@ package es.usc.citius.servando.calendula.scheduling;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * This class receives our routine alarms
  */
 public class AlarmReceiver extends BroadcastReceiver {
 
-    public static final String TAG = "AlarmReceiver.class";
+    private static final String TAG = "AlarmReceiver.class";
 
     @Override
-    public void onReceive(Context context, Intent intent)
-    {
+    public void onReceive(Context context, Intent intent) {
 
-        if (CalendulaApp.disableReceivers) { return; }
+        if (CalendulaApp.disableReceivers) {
+            return;
+        }
 
         AlarmIntentParams params = AlarmScheduler.getAlarmParams(intent);
 
-        if(params == null)
-        {
-            Log.w(TAG, "No extra params supplied");
+        if (params == null) {
+            LogUtil.w(TAG, "No extra params supplied");
             return;
-        }else{
-            Log.d(TAG, "Received alarm: " + params.action);
+        } else {
+            LogUtil.d(TAG, "Received alarm: " + params.action);
         }
 
         Intent serviceIntent = new Intent(context, AlarmIntentService.class);
-        AlarmScheduler.setAlarmParams(serviceIntent,params);
+        AlarmScheduler.setAlarmParams(serviceIntent, params);
         context.startService(serviceIntent);
     }
 }

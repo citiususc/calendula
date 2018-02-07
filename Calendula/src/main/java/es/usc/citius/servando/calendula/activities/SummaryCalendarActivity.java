@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -55,23 +55,23 @@ public class SummaryCalendarActivity extends CalendulaActivity {
     int color;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        color = DB.patients().getActive(this).color();
-        setContentView(R.layout.activity_summary_calendar);
-        int color = DB.patients().getActive(this).color();
-        setupToolbar(getString(R.string.title_activity_calendar),color);
-        setupStatusBar(color);
-        setupCalendar();
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             default:
                 finish();
                 return true;
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        color = DB.patients().getActive(this).getColor();
+        setContentView(R.layout.activity_summary_calendar);
+        int color = DB.patients().getActive(this).getColor();
+        setupToolbar(getString(R.string.title_activity_calendar), color);
+        setupStatusBar(color);
+        setupCalendar();
     }
 
     private void setupCalendar() {
@@ -98,7 +98,7 @@ public class SummaryCalendarActivity extends CalendulaActivity {
 
             List<CalendarCellDecorator> decorators = new ArrayList<>();
 
-            DateValue v = r.iCalRule().getUntil();
+            DateValue v = r.getRRule().getUntil();
             Date start = date != null ? from.toDate() : null;
             Date end = v != null ? new LocalDate(v.year(), v.month(), v.day()).toDate() : null;
 
@@ -121,7 +121,7 @@ public class SummaryCalendarActivity extends CalendulaActivity {
             //DateValue v = r.iCalRule().getUntil();
             //Date start = date != null ? from.toDate() : null;
             //Date end = v != null ? new LocalDate(v.year(), v.month(), v.day()).toDate() : null;
-            decorators.add(new HighlightDecorator(hdates, from.toDate(), to.toDate(),color));
+            decorators.add(new HighlightDecorator(hdates, from.toDate(), to.toDate(), color));
             calendar.setDecorators(decorators);
         }
 

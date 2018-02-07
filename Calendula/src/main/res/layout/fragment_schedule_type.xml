@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -17,10 +17,10 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#fff"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#fff"
+              android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/schedule_type_routines"
@@ -39,7 +39,7 @@
             android:text="@string/schedule_type_routines_title"
             android:textColor="@color/android_blue_dark"
             android:textSize="16dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_width="fill_parent"
@@ -50,15 +50,14 @@
             android:paddingTop="0dp"
             android:text="@string/schedule_type_routines_description"
             android:textColor="#222"
-            android:textSize="14dp" />
+            android:textSize="14dp"/>
 
         <TextView
-            android:id="@+id/textView6"
             android:layout_width="fill_parent"
             android:layout_height="1px"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="#E0EAEF" />
+            android:background="#E0EAEF"/>
     </LinearLayout>
 
     <LinearLayout
@@ -78,7 +77,7 @@
             android:text="@string/schedule_type_hourly_title"
             android:textColor="@color/android_blue_dark"
             android:textSize="16dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_width="fill_parent"
@@ -89,15 +88,14 @@
             android:paddingTop="0dp"
             android:text="@string/schedule_type_hourly_description"
             android:textColor="#222"
-            android:textSize="14dp" />
+            android:textSize="14dp"/>
 
         <TextView
-            android:id="@+id/textView6"
             android:layout_width="fill_parent"
             android:layout_height="1px"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="#E0EAEF" />
+            android:background="#E0EAEF"/>
     </LinearLayout>
 
     <LinearLayout
@@ -117,7 +115,7 @@
             android:text="@string/schedule_type_period_title"
             android:textColor="@color/android_blue_dark"
             android:textSize="16dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_width="fill_parent"
@@ -128,15 +126,14 @@
             android:paddingTop="0dp"
             android:text="@string/schedule_type_period_description"
             android:textColor="#222"
-            android:textSize="14dp" />
+            android:textSize="14dp"/>
 
         <TextView
-            android:id="@+id/textView6"
             android:layout_width="fill_parent"
             android:layout_height="1px"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="#E0EAEF" />
+            android:background="#E0EAEF"/>
     </LinearLayout>
 
 

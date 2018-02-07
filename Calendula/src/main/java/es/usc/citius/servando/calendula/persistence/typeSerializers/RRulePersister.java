@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -32,8 +32,14 @@ import es.usc.citius.servando.calendula.persistence.RepetitionRule;
  */
 public class RRulePersister extends BaseDataType {
 
+    private static final RRulePersister singleton = new RRulePersister();
+
     public RRulePersister() {
         super(SqlType.STRING, new Class<?>[]{RepetitionRule.class});
+    }
+
+    public static RRulePersister getSingleton() {
+        return singleton;
     }
 
     @Override
@@ -61,16 +67,9 @@ public class RRulePersister extends BaseDataType {
     public Object javaToSqlArg(FieldType fieldType, Object javaObject) throws SQLException {
         RepetitionRule rule = (RepetitionRule) javaObject;
         String ical = rule.toIcal();
-        if (rule.start() != null) {
-            ical += "$$$" + rule.start();
+        if (rule.getStart() != null) {
+            ical += "$$$" + rule.getStart();
         }
         return ical;
-    }
-
-
-    private static final RRulePersister singleton = new RRulePersister();
-
-    public static RRulePersister getSingleton() {
-        return singleton;
     }
 }

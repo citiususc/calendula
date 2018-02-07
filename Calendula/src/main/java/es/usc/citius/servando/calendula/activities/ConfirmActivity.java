@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -23,13 +23,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -38,7 +36,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,6 +43,8 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
@@ -83,6 +82,9 @@ import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.view.ArcTranslateAnimation;
@@ -133,8 +135,8 @@ public class ConfirmActivity extends CalendulaActivity {
      */
     public Pair<DateTime, DateTime> getCheckMarginInterval(DateTime intakeTime) {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String checkMarginStr = prefs.getString("check_window_margin", "" + DEFAULT_CHECK_MARGIN);
+        String checkMarginStr = PreferenceUtils.getString(PreferenceKeys.CONFIRM_CHECK_WINDOW_MARGIN, String.valueOf(DEFAULT_CHECK_MARGIN));
+
         int checkMargin = Integer.parseInt(checkMarginStr);
 
         DateTime start = intakeTime.minusMinutes(30);
@@ -169,7 +171,7 @@ public class ConfirmActivity extends CalendulaActivity {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 if (fromNotification) {
-                    startActivity(new Intent(this, HomePagerActivity.class));
+                    startActivity(new Intent(this, StartActivity.class));
                     finish();
                 } else {
                     supportFinishAfterTransition();
@@ -195,7 +197,7 @@ public class ConfirmActivity extends CalendulaActivity {
                             AlarmScheduler.instance().onUserDelayHourlySchedule(schedule, time, date, ConfirmActivity.this, minutes);
                         }
 
-                        String msg = ConfirmActivity.this.getString(R.string.alarm_delayed_message, minutes);
+                        String msg = ConfirmActivity.this.getString(R.string.alarm_delayed_message, String.valueOf(minutes));
                         Toast.makeText(ConfirmActivity.this, msg, Toast.LENGTH_SHORT).show();
                         supportFinishAfterTransition();
                     }
@@ -203,8 +205,8 @@ public class ConfirmActivity extends CalendulaActivity {
         builder.create().show();
     }
 
-    public String getDisplayableDose(String dose, Medicine m) {
-        return dose + " " + m.presentation().units(getResources());
+    public String getDisplayableDose(double dose, String doseString, Medicine m) {
+        return doseString + " " + m.getPresentation().units(getResources(), dose);
 
     }
 
@@ -260,9 +262,9 @@ public class ConfirmActivity extends CalendulaActivity {
     void onClickFab() {
         boolean somethingChecked = false;
         for (DailyScheduleItem item : items) {
-            if (!item.takenToday()) {
+            if (!item.getTakenToday()) {
                 item.setTakenToday(true);
-                item.save();
+                DB.dailyScheduleItems().saveAndUpdateStock(item, true);
                 somethingChecked = true;
             }
 
@@ -323,22 +325,24 @@ public class ConfirmActivity extends CalendulaActivity {
         processIntent();
         setContentView(R.layout.activity_confirm);
 
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 
         isToday = LocalDate.now().equals(date);
-        isInWindow = AlarmScheduler.isWithinDefaultMargins(date.toDateTime(time), this);
+        isInWindow = AlarmScheduler.isWithinDefaultMargins(date.toDateTime(time));
 
         DateTime dt = date.toDateTime(time);
         DateTime now = DateTime.now();
         Pair<DateTime, DateTime> interval = getCheckMarginInterval(dt);
         isDistant = !new Interval(interval.first, interval.second).contains(now);
 
-        color = AvatarMgr.colorsFor(getResources(), patient.avatar())[0];
+        color = AvatarMgr.colorsFor(getResources(), patient.getAvatar())[0];
         color = Color.parseColor("#263238");
 
         setupStatusBar(Color.TRANSPARENT);
         setupToolbar("", Color.TRANSPARENT, Color.WHITE);
         toolbar.setTitleTextColor(Color.WHITE);
-        findViewById(R.id.imageView5).setBackgroundColor(patient.color());
+        findViewById(R.id.imageView5).setBackgroundColor(patient.getColor());
         fab = (FloatingActionButton) findViewById(R.id.myFAB);
         listView = (RecyclerView) findViewById(R.id.listView);
         avatar = (ImageView) findViewById(R.id.patient_avatar);
@@ -354,10 +358,10 @@ public class ConfirmActivity extends CalendulaActivity {
         hour = (TextView) findViewById(R.id.routines_list_item_hour);
         minute = (TextView) findViewById(R.id.routines_list_item_minute);
         toolbarTitle = findViewById(R.id.toolbar_title);
-        avatar.setImageResource(AvatarMgr.res(patient.avatar()));
-        avatarTitle.setImageResource(AvatarMgr.res(patient.avatar()));
-        titleTitle.setText(patient.name());
-        title.setText((isRoutine ? routine.name() : schedule.toReadableString(this)));
+        avatar.setImageResource(AvatarMgr.res(patient.getAvatar()));
+        avatarTitle.setImageResource(AvatarMgr.res(patient.getAvatar()));
+        titleTitle.setText(patient.getName());
+        title.setText((isRoutine ? routine.getName() : schedule.toReadableString(this)));
         takeMadsMessage.setText(isInWindow ? getString(R.string.agenda_zoom_meds_time) : getString(R.string.meds_from) + " " + date.toString("EEEE dd"));
 
 
@@ -390,7 +394,7 @@ public class ConfirmActivity extends CalendulaActivity {
 
                 boolean somethingToCheck = false;
                 for (DailyScheduleItem item : items) {
-                    if (!item.takenToday()) {
+                    if (!item.getTakenToday()) {
                         somethingToCheck = true;
                         break;
                     }
@@ -414,7 +418,7 @@ public class ConfirmActivity extends CalendulaActivity {
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        toolbarLayout.setContentScrimColor(patient.color());
+        toolbarLayout.setContentScrimColor(patient.getColor());
         setupListView();
 
         if ("delay".equals(action)) {
@@ -447,7 +451,7 @@ public class ConfirmActivity extends CalendulaActivity {
         int checked = 0;
 
         for (DailyScheduleItem i : items) {
-            if (i.takenToday())
+            if (i.getTakenToday())
                 checked++;
         }
 
@@ -519,7 +523,7 @@ public class ConfirmActivity extends CalendulaActivity {
 
     private void showRipple(int x, int y, int duration) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            Log.d(TAG, "Ripple x,y [" + x + ", " + y + "]");
+            LogUtil.d(TAG, "Ripple x,y [" + x + ", " + y + "]");
             chekAllOverlay.setVisibility(View.INVISIBLE);
             // get the final radius for the clipping circle
             int finalRadius = (int) Math.hypot(chekAllOverlay.getWidth(), chekAllOverlay.getHeight());
@@ -544,15 +548,14 @@ public class ConfirmActivity extends CalendulaActivity {
 
     private void processIntent() {
         Intent i = getIntent();
-        Long routineId = i.getLongExtra("routine_id", -1);
-        Long scheduleId = i.getLongExtra("schedule_id", -1);
-        String dateStr = i.getStringExtra("date");
-        String timeStr = i.getStringExtra("schedule_time");
+        Long routineId = i.getLongExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, -1);
+        Long scheduleId = i.getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1);
+        String dateStr = i.getStringExtra(CalendulaApp.INTENT_EXTRA_DATE);
+        String timeStr = i.getStringExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME);
 
-        String actionType = i.getIntExtra("actionType", AlarmIntentParams.AUTO) == AlarmIntentParams.USER ? "user" : "auto";
 
-        action = i.getStringExtra("action");
-        position = i.getIntExtra("position", -1);
+        action = i.getStringExtra(CalendulaApp.INTENT_EXTRA_ACTION);
+        position = i.getIntExtra(CalendulaApp.INTENT_EXTRA_POSITION, -1);
 
         fromNotification = position == -1;
 
@@ -566,13 +569,13 @@ public class ConfirmActivity extends CalendulaActivity {
             finish();
         }
 
-        Log.d("Confirm", timeStr + ", " + dateStr + ", " + routineId + ", " + scheduleId + ", " + date);
+        LogUtil.d(TAG, timeStr + ", " + dateStr + ", " + routineId + ", " + scheduleId + ", " + date);
 
         if (routineId != -1) {
             isRoutine = true;
             routine = Routine.findById(routineId);
-            time = routine.time();
-            patient = routine.patient();
+            time = routine.getTime();
+            patient = routine.getPatient();
         } else {
             time = LocalTime.parse(timeStr, timeFormatter);
             schedule = Schedule.findById(scheduleId);
@@ -582,8 +585,8 @@ public class ConfirmActivity extends CalendulaActivity {
 
     private void loadItems() {
         if (isRoutine) {
-            List<ScheduleItem> rsi = routine.scheduleItems();
-            Log.d("Confirm", rsi.size() + " items");
+            List<ScheduleItem> rsi = routine.getScheduleItems();
+            LogUtil.d(TAG, rsi.size() + " items");
             for (ScheduleItem si : rsi) {
                 DailyScheduleItem item = DB.dailyScheduleItems().findByScheduleItemAndDate(si, date);
                 if (item != null)
@@ -594,7 +597,7 @@ public class ConfirmActivity extends CalendulaActivity {
         }
 
         for (DailyScheduleItem i : items) {
-            Log.d("Confirm", i != null ? i.toString() : "Null");
+            LogUtil.d(TAG, i != null ? i.toString() : "Null");
         }
     }
 
@@ -656,19 +659,19 @@ public class ConfirmActivity extends CalendulaActivity {
 
             h = (ConfirmItemViewHolder) holder;
             i = items.get(position);
-            si = i.scheduleItem();
-            sid = i.boundToSchedule() ? i.schedule().getId() : si.schedule().getId();
+            si = i.getScheduleItem();
+            sid = i.boundToSchedule() ? i.getSchedule().getId() : si.getSchedule().getId();
             s = DB.schedules().findById(sid);
             m = s.medicine();
-            p = m.presentation();
+            p = m.getPresentation();
 
             String status = getString(R.string.med_not_taken);
-            if (i.timeTaken() != null) {
-                status = (i.takenToday() ? getString(R.string.med_taken_at) : getString(R.string.med_cancelled_at)) + " " + i.timeTaken().toString("kk:mm") + "h";
+            if (i.getTimeTaken() != null) {
+                status = (i.getTakenToday() ? getString(R.string.med_taken_at) : getString(R.string.med_cancelled_at)) + " " + i.getTimeTaken().toString("kk:mm") + "h";
             }
 
-            h.med.setText(m.name());
-            h.dose.setText(getDisplayableDose(i.boundToSchedule() ? s.displayDose() : si.displayDose(), m));
+            h.med.setText(m.getName());
+            h.dose.setText(getDisplayableDose(i.boundToSchedule() ? s.dose() : si.getDose(), i.boundToSchedule() ? s.displayDose() : si.displayDose(), m));
             h.status.setText(status);
             h.dailyScheduleItem = i;
             updateCheckedStatus();
@@ -682,11 +685,11 @@ public class ConfirmActivity extends CalendulaActivity {
         void updateCheckedStatus() {
             Drawable medDrawable = new IconicsDrawable(ConfirmActivity.this)
                     .icon(p.icon())
-                    .color(i.takenToday() ? Color.parseColor("#81c784") : Color.parseColor("#11000000"))
+                    .color(i.getTakenToday() ? Color.parseColor("#81c784") : Color.parseColor("#11000000"))
                     .sizeDp(36)
                     .paddingDp(0);
 
-            Drawable checkDrawable = i.takenToday() ?
+            Drawable checkDrawable = i.getTakenToday() ?
                     getCheckedIcon(Color.parseColor("#81c784"))
                     : getUncheckedIcon(Color.parseColor("#11000000"));
 
@@ -717,13 +720,13 @@ public class ConfirmActivity extends CalendulaActivity {
 
             @Override
             public void onClick(View view) {
-                final boolean taken = dailyScheduleItem.takenToday();
+                final boolean taken = dailyScheduleItem.getTakenToday();
                 if (isDistant) {
                     showEnsureConfirmDialog(new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dailyScheduleItem.setTakenToday(!taken);
-                            dailyScheduleItem.save();
+                            DB.dailyScheduleItems().saveAndUpdateStock(dailyScheduleItem, true);
                             stateChanged = true;
                             onDailyAgendaItemCheck(check);
                             notifyItemChanged(getAdapterPosition());
@@ -732,7 +735,7 @@ public class ConfirmActivity extends CalendulaActivity {
                 } else {
 
                     dailyScheduleItem.setTakenToday(!taken);
-                    dailyScheduleItem.save();
+                    DB.dailyScheduleItems().saveAndUpdateStock(dailyScheduleItem, true);
                     stateChanged = true;
                     onDailyAgendaItemCheck(check);
                     notifyItemChanged(getAdapterPosition());
@@ -742,4 +745,6 @@ public class ConfirmActivity extends CalendulaActivity {
             }
         }
     }
+
+
 }

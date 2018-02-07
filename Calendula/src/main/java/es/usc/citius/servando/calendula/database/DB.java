@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -19,17 +19,19 @@
 package es.usc.citius.servando.calendula.database;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.j256.ormlite.misc.TransactionManager;
 
 import java.util.concurrent.Callable;
 
+import es.usc.citius.servando.calendula.drugdb.model.database.DrugDBModule;
+import es.usc.citius.servando.calendula.util.LogUtil;
+
 
 public class DB {
 
 
-    public static final String TAG = DB.class.getSimpleName();
+    private static final String TAG = "DB";
 
     // Database name
     public static String DB_NAME = "calendula.db";
@@ -51,14 +53,18 @@ public class DB {
     private static ScheduleItemDao ScheduleItems;
     // DailyScheduleItem DAO
     private static DailyScheduleItemDao DailyScheduleItems;
-    // Prescriptions DAO
-    private static PrescriptionDao Prescriptions;
-    // HomogeneousGroups DAO
-    private static HomogeneousGroupDao Groups;
     // Pickups DAO
     private static PickupInfoDao Pickups;
     // Patients DAO
     private static PatientDao Patients;
+    // Drug DB module
+    private static DrugDBModule DrugDB;
+    // Alerts DAO
+    private static PatientAlertDao PatientAlerts;
+    // Allergens DAO
+    private static PatientAllergenDao PatientAllergens;
+    // Allergy group DAO
+    private static AllergyGroupDao AllergyGroups;
 
     /**
      * Initialize database and DAOs
@@ -77,11 +83,13 @@ public class DB {
             Schedules = new ScheduleDao(db);
             ScheduleItems = new ScheduleItemDao(db);
             DailyScheduleItems = new DailyScheduleItemDao(db);
-            Prescriptions = new PrescriptionDao(db);
-            Groups = new HomogeneousGroupDao(db);
             Pickups = new PickupInfoDao(db);
             Patients = new PatientDao(db);
-            Log.v(TAG, "DB initialized " + DB.DB_NAME);
+            DrugDB = DrugDBModule.getInstance();
+            PatientAlerts = new PatientAlertDao(db);
+            PatientAllergens = new PatientAllergenDao(db);
+            AllergyGroups = new AllergyGroupDao(db);
+            LogUtil.v(TAG, "DB initialized " + DB.DB_NAME);
         }
 
     }
@@ -93,7 +101,7 @@ public class DB {
         initialized = false;
         db.close();
         manager.releaseHelper(db);
-        Log.v(TAG, "DB disposed");
+        LogUtil.v(TAG, "DB disposed");
     }
 
     public static DatabaseHelper helper() {
@@ -129,20 +137,28 @@ public class DB {
         return DailyScheduleItems;
     }
 
-    public static PrescriptionDao prescriptions() {
-        return Prescriptions;
-    }
-
-    public static HomogeneousGroupDao groups() {
-        return Groups;
-    }
-
     public static PickupInfoDao pickups() {
         return Pickups;
     }
 
     public static PatientDao patients() {
         return Patients;
+    }
+
+    public static DrugDBModule drugDB() {
+        return DrugDB;
+    }
+
+    public static PatientAlertDao alerts() {
+        return PatientAlerts;
+    }
+
+    public static PatientAllergenDao patientAllergens() {
+        return PatientAllergens;
+    }
+
+    public static AllergyGroupDao allergyGroups() {
+        return AllergyGroups;
     }
 
     public static void dropAndCreateDatabase() {

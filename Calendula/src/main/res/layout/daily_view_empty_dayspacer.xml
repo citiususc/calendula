@@ -2,7 +2,7 @@
 
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -19,30 +19,28 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:orientation="vertical"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/container"
-    >
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="vertical">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="match_parent"
-                  android:orientation="vertical"
-                  android:layout_height="match_parent">
+                  android:layout_height="match_parent"
+                  android:orientation="vertical">
 
         <es.usc.citius.servando.calendula.util.view.ParallaxImageView
             android:id="@+id/parallax_bg"
             android:layout_width="match_parent"
             android:layout_height="500dp"
-            android:scaleType="centerCrop"
-            android:visibility="visible"
             android:alpha="0.5"
+            android:background="@drawable/agenda_repeating_bg"
             android:cropToPadding="false"
-            android:background="@drawable/agenda_repeating_bg"/>
+            android:scaleType="centerCrop"
+            android:visibility="visible"/>
 
     </LinearLayout>
-
-
 
 
     <ImageView
@@ -56,42 +54,28 @@
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_alignParentTop="false"
+        android:layout_centerInParent="true"
+        android:capitalize="sentences"
         android:fontFamily="sans-serif-light"
         android:gravity="center"
-        android:text="martes, 20 Agosto"
-        android:capitalize="sentences"
+        tools:text="martes, 20 Agosto"
         android:textColor="#FFFFFF"
         android:textSize="22sp"
-        android:layout_centerInParent="true"
         android:textStyle="bold"/>
-
-    <FrameLayout
-        android:id="@+id/clock_container"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
-
-
-    </FrameLayout>
 
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="10dp"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/daily_view_list_item_tab_shadow_bottom"
-        android:alpha="0.3"/>
+        android:alpha="0.3"
+        android:background="@drawable/daily_view_list_item_tab_shadow_bottom"/>
 
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="10dp"
-        android:background="@drawable/daily_view_list_item_tab_shadow_top"
         android:layout_alignParentTop="true"
-        android:alpha="0.3"/>
+        android:alpha="0.3"
+        android:background="@drawable/daily_view_list_item_tab_shadow_top"/>
 
 
 </RelativeLayout>

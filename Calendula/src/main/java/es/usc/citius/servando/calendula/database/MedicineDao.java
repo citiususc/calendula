@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -29,11 +29,16 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
+import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 import es.usc.citius.servando.calendula.persistence.Schedule;
+import es.usc.citius.servando.calendula.util.alerts.AlertManager;
+import es.usc.citius.servando.calendula.util.alerts.DrivingAlertHandler;
+import es.usc.citius.servando.calendula.util.alerts.StockAlertHandler;
 
 /**
  * Created by joseangel.pineiro
@@ -59,7 +64,7 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
     }
 
     public List<Medicine> findAll(Patient p) {
-        return findAll(p.id());
+        return findAll(p.getId());
     }
 
 
@@ -73,9 +78,45 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
         }
     }
 
+    public List<Medicine> findAllByGroup(Long patientId, String[] groups) {
+        try {
+            return dao.queryBuilder()
+                    .where().eq(Medicine.COLUMN_PATIENT, patientId).and().in(Medicine.COLUMN_HG, (Object[]) groups)
+                    .query();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error finding models", e);
+        }
+    }
+
     @Override
     public void fireEvent() {
         CalendulaApp.eventBus().post(PersistenceEvents.MEDICINE_EVENT);
+    }
+
+
+    @Override
+    public void save(Medicine m) {
+        Prescription p = m.isBoundToPrescription() ? DB.drugDB().prescriptions().findByCn(m.getCn()) : null;
+        // on create, assign homogeneous group if possible
+        if (m.getId() == null) {
+            if (p != null && p.getHomogeneousGroup() != null) {
+                m.setHomogeneousGroup(p.getHomogeneousGroup());
+            }
+        }
+        // save the med
+        super.save(m);
+        // generate alerts if necessary
+        StockAlertHandler.checkStockAlerts(m);
+        DrivingAlertHandler.checkDrivingAlerts(m, p);
+    }
+
+    @Override
+    public void saveAndFireEvent(Medicine model) {
+        save(model);
+        PersistenceEvents.ModelCreateOrUpdateEvent e = new PersistenceEvents.ModelCreateOrUpdateEvent(Medicine.class);
+        e.model = model;
+        CalendulaApp.eventBus().post(e);
+
     }
 
     public void deleteCascade(final Medicine m, boolean fireEvent) {
@@ -92,6 +133,13 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
                     DB.pickups().remove(p);
                 }
                 DB.medicines().remove(m);
+
+                //Remove alerts
+                final List<PatientAlert> alerts = DB.alerts().findBy(PatientAlert.COLUMN_MEDICINE, m);
+                for (PatientAlert alert : alerts) {
+                    AlertManager.removeAlert(alert);
+                }
+
                 return null;
             }
         });
@@ -103,29 +151,25 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
     }
 
     public Medicine findByGroupAndPatient(Long group, Patient p) {
-        try
-        {
+        try {
             QueryBuilder<Medicine, Long> qb = dao.queryBuilder();
             Where w = qb.where();
-            w.and(w.eq(Medicine.COLUMN_HG, group),w.eq(Medicine.COLUMN_PATIENT, p));
+            w.and(w.eq(Medicine.COLUMN_HG, group), w.eq(Medicine.COLUMN_PATIENT, p));
             qb.setWhere(w);
             return qb.queryForFirst();
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new RuntimeException("Error finding med", e);
         }
     }
 
     public Medicine findByCnAndPatient(String cn, Patient p) {
-        try
-        {
+        try {
             QueryBuilder<Medicine, Long> qb = dao.queryBuilder();
             Where w = qb.where();
-            w.and(w.eq(Medicine.COLUMN_CN, cn),w.eq(Medicine.COLUMN_PATIENT, p));
+            w.and(w.eq(Medicine.COLUMN_CN, cn), w.eq(Medicine.COLUMN_PATIENT, p));
             qb.setWhere(w);
             return qb.queryForFirst();
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new RuntimeException("Error finding med", e);
         }
     }

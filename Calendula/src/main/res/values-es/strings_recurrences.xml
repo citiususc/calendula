@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -17,13 +16,13 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Specifies that a repeating event to repeat forever (based on the defined frequency) instead of ending at a future date[CHAR LIMIT=20] -->
     <string name="recurrence_end_continously">Indefinidamente</string>
     <!-- Specifies that a repeating event to repeat until a certain date[CHAR LIMIT=25] -->
-    <string name="recurrence_end_date_label">Hasta una fecha</string>
+    <string name="recurrence_end_date_label" tools:ignore="ExtraTranslation">Hasta una fecha</string>
     <!-- Specifies that a repeating event to repeat until a certain date[CHAR LIMIT=20] -->
-    <string name="recurrence_end_date">Hasta <xliff:g id="date">%s</xliff:g></string>
+    <string name="recurrence_end_date" tools:ignore="ExtraTranslation">Hasta <xliff:g id="date">%s</xliff:g></string>
     <!-- Specifies that a repeating event to repeat for a number of times. A repeating event can repeat forever, repeat in a certain frequency until a certain date, or repeat for a number of times. e.g. repeat 10 times and stop. This string is for the last case [CHAR LIMIT=25] -->
     <string name="recurrence_end_count_label">Hasta un número de dosis</string>
     <!-- Strings to describe how frequently to repeat an event (e.g. every 5 days) -->
@@ -62,7 +61,7 @@
     <!-- Part of a description of an repeating event. This part states the date when a repeating
     event ends. The part before the semi-colon describes how it repeats.
     e.g. Every 2 weeks; until 1/1/2030 [CHAR LIMIT=21] -->
-    <string name="endByDate">\u0020(hasta <xliff:g id="date">%s</xliff:g>)</string>
+    <string name="endByDate" tools:ignore="ExtraTranslation">\u0020(hasta <xliff:g id="date">%s</xliff:g>)</string>
     <!-- Part of a description of an repeating event. This part how many times the event repeats.
     The part before the semi-colon describes how it repeats.
     e.g. Every 2 weeks; for 15 times [CHAR LIMIT=15] -->
@@ -91,11 +90,11 @@
     <string name="yearly_plain">Anualmente</string>
 
     <!-- Repeat an monthly event on the same day of every month [CHAR LIMIT=20] -->
-    <string name="recurrence_month_pattern_by_day">el mismo día de cada mes</string>
+    <string name="recurrence_month_pattern_by_day" tools:ignore="ExtraTranslation">el mismo día de cada mes</string>
 
 
     <!-- Recurrence picker: How events are to be repeated. [CHAR LIMIT = 20] -->
-    <string-array name="recurrence_freq">
+    <string-array name="recurrence_freq" tools:ignore="ExtraTranslation">
         <item>Repetir diariamente</item>
         <item>Repetir semanalmente</item>
         <item>Repetir mensualmente</item>
@@ -107,7 +106,7 @@
     that were present in some languages.
     -->
     <!-- Repeat a monthly event on the same nth day of every Sunday. [CHAR LIMIT=30] -->
-    <string-array name="repeat_by_nth_sun">
+    <string-array name="repeat_by_nth_sun" tools:ignore="ExtraTranslation">
         <item>cada primer domingo</item>
         <item>cada segundo domingo</item>
         <item>cada tercer domingo</item>
@@ -115,7 +114,7 @@
         <item>cada último domingo</item>
     </string-array>
     <!-- Repeat a monthly event on the same nth day of every Monday. [CHAR LIMIT=30] -->
-    <string-array name="repeat_by_nth_mon">
+    <string-array name="repeat_by_nth_mon" tools:ignore="ExtraTranslation">
         <item>cada primer lunes</item>
         <item>cada segundo lunes</item>
         <item>cada tercer lunes</item>
@@ -123,7 +122,7 @@
         <item>cada último lunes</item>
     </string-array>
     <!-- Repeat a monthly event on the same nth day of every Tuesday. [CHAR LIMIT=30] -->
-    <string-array name="repeat_by_nth_tues">
+    <string-array name="repeat_by_nth_tues" tools:ignore="ExtraTranslation">
         <item>cada primer martes</item>
         <item>cada segundo martes</item>
         <item>cada tercer martes</item>
@@ -131,7 +130,7 @@
         <item>cada último martes</item>
     </string-array>
     <!-- Repeat a monthly event on the same nth day of every Wednesday. [CHAR LIMIT=30] -->
-    <string-array name="repeat_by_nth_wed">
+    <string-array name="repeat_by_nth_wed" tools:ignore="ExtraTranslation">
         <item>cada primer miércoles</item>
         <item>cada segundo miércoles</item>
         <item>cada tercer miércoles</item>
@@ -139,7 +138,7 @@
         <item>cada último miércoles</item>
     </string-array>
     <!-- Repeat a monthly event on the same nth day of every Thursday. [CHAR LIMIT=30] -->
-    <string-array name="repeat_by_nth_thurs">
+    <string-array name="repeat_by_nth_thurs" tools:ignore="ExtraTranslation">
         <item>cada primer jueves</item>
         <item>cada segundo jueves</item>
         <item>cada tercer jueves</item>
@@ -147,7 +146,7 @@
         <item>cada último jueves</item>
     </string-array>
     <!-- Repeat a monthly event on the same nth day of every Friday. [CHAR LIMIT=30] -->
-    <string-array name="repeat_by_nth_fri">
+    <string-array name="repeat_by_nth_fri" tools:ignore="ExtraTranslation">
         <item>cada primer viernes</item>
         <item>cada segundo viernes</item>
         <item>cada tercer viernes</item>
@@ -155,7 +154,7 @@
         <item>cada último viernes</item>
     </string-array>
     <!-- Repeat a monthly event on the same nth day of every Saturday. [CHAR LIMIT=30] -->
-    <string-array name="repeat_by_nth_sat">
+    <string-array name="repeat_by_nth_sat" tools:ignore="ExtraTranslation">
         <item>cada primer sábado</item>
         <item>cada segundo sábado</item>
         <item>cada tercer sábado</item>

@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -24,11 +24,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import java.lang.reflect.Constructor;
+
 import es.usc.citius.servando.calendula.R;
-import es.usc.citius.servando.calendula.fragments.DailyAgendaFragment;
-import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
-import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
-import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 /**
@@ -36,6 +35,7 @@ import es.usc.citius.servando.calendula.util.ScreenUtils;
  */
 public class HomePageAdapter extends FragmentPagerAdapter {
 
+    private static final String TAG = "HomePageAdapter";
     String[] titles;
     private float dpWidth;
 
@@ -54,23 +54,20 @@ public class HomePageAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        switch (position) {
-            case 0:
-                return new DailyAgendaFragment();
-            case 1:
-                return new RoutinesListFragment();
-            case 2:
-                return new MedicinesListFragment();
-            case 3:
-                return new ScheduleListFragment();
+        final String cn = HomePages.values()[position].className;
+        try {
+            final Constructor<?> constructor = Class.forName(cn).getConstructor();
+            return (Fragment) constructor.newInstance();
+        } catch (Exception e) {
+            LogUtil.e(TAG, "getItem: cannot instantiate fragment.", e);
         }
+
         return null;
     }
 
     @Override
     public int getCount() {
-        // Show 2 total pages. Home and agenda
-        return 4;
+        return HomePages.values().length;
     }
 
     @Override

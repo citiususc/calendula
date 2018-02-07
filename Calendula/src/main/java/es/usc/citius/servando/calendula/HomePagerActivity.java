@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -18,55 +18,65 @@
 
 package es.usc.citius.servando.calendula;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
+import android.support.annotation.ColorInt;
+import android.support.annotation.MenuRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.typeface.IIcon;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.joda.time.DateTime;
 
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.activities.CalendarActivity;
 import es.usc.citius.servando.calendula.activities.ConfirmActivity;
 import es.usc.citius.servando.calendula.activities.LeftDrawerMgr;
 import es.usc.citius.servando.calendula.activities.MaterialIntroActivity;
-import es.usc.citius.servando.calendula.activities.MedicinesActivity;
+import es.usc.citius.servando.calendula.activities.MedicineInfoActivity;
+import es.usc.citius.servando.calendula.activities.MedicinesSearchActivity;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.activities.SchedulesHelpActivity;
+import es.usc.citius.servando.calendula.activities.SettingsActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
+import es.usc.citius.servando.calendula.adapters.HomePages;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
+import es.usc.citius.servando.calendula.events.StockRunningOutEvent;
 import es.usc.citius.servando.calendula.fragments.DailyAgendaFragment;
 import es.usc.citius.servando.calendula.fragments.HomeProfileMgr;
 import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
@@ -77,41 +87,66 @@ import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
-import es.usc.citius.servando.calendula.services.PopulatePrescriptionDBService;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Snack;
+import es.usc.citius.servando.calendula.util.medicine.StockUtils;
+import es.usc.citius.servando.calendula.util.view.DisableableAppBarLayoutBehavior;
+import es.usc.citius.servando.calendula.util.view.ExpandableFAB;
 
 public class HomePagerActivity extends CalendulaActivity implements
         RoutinesListFragment.OnRoutineSelectedListener,
         MedicinesListFragment.OnMedicineSelectedListener,
         ScheduleListFragment.OnScheduleSelectedListener {
 
+    public static final int REQ_CODE_EXTERNAL_STORAGE = 10;
     private static final String TAG = "HomePagerActivity";
-    AppBarLayout appBarLayout;
+
+    @MenuRes
+    private static final int[] MENU_ITEMS = {
+            R.id.action_sort, R.id.action_expand, R.id.action_calendar, R.id.action_schedules_help
+    };
+
+
+    @BindView(R.id.appbar)
+    public AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout toolbarLayout;
-    HomeProfileMgr homeProfileMgr;
+    @BindView(R.id.add_button)
+    ExpandableFAB fab;
+    @BindView(R.id.user_info_fragment)
     View userInfoFragment;
-    FloatingActionsMenu addButton;
-    FabMenuMgr fabMgr;
+    @BindView(R.id.main_content)
+    CoordinatorLayout coordinatorLayout;
+    //    @BindView(R.id.fab_menu)
+//    FloatingActionsMenu addButton;
+    @BindView(R.id.toolbar_title)
     TextView toolbarTitle;
-    MenuItem expandItem;
-    MenuItem helpItem;
-    Drawable icAgendaMore;
-    Drawable icAgendaLess;
-    boolean appBarLayoutExpanded = true;
-    boolean active = false;
+    @BindView(R.id.container)
+    ViewPager mViewPager;
+    @BindView(R.id.sliding_tabs)
+    TabLayout tabLayout;
+
+    private boolean appBarLayoutExpanded = true;
+    private boolean active = false;
+    private Drawable icAgendaMore;
+    private Drawable icAgendaLess;
+    private FabMenuMgr fabMgr;
+    private HomeProfileMgr homeProfileMgr;
     private HomePageAdapter mSectionsPagerAdapter;
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
     private LeftDrawerMgr drawerMgr;
-    private FloatingActionButton fab;
     private Patient activePatient;
     private int pendingRefresh = -2;
     private Queue<Object> pendingEvents = new LinkedList<>();
     private Handler handler;
+
+    private SparseArray<MenuItem> menuItems;
+
+    @ColorInt
+    private int previousColor = -1;
 
     public void showPagerItem(int position) {
         showPagerItem(position, true);
@@ -131,29 +166,38 @@ public class HomePagerActivity extends CalendulaActivity implements
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
-        expandItem = menu.findItem(R.id.action_expand);
-        helpItem = menu.findItem(R.id.action_schedules_help);
-        helpItem.setVisible(false);
+        menuItems = new SparseArray<>(menu.size());
+        for (int menuItem : MENU_ITEMS) {
+            menuItems.put(menuItem, menu.findItem(menuItem));
+        }
+        menuItems.get(R.id.action_sort).setIcon(IconUtils.icon(getApplicationContext(), CommunityMaterial.Icon.cmd_sort, R.color.white));
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
-        int pageNum = mViewPager.getCurrentItem();
+        final int pageNum = mViewPager.getCurrentItem();
+        final HomePages page = HomePages.getPage(pageNum);
 
-        if (pageNum == 0) {
-            boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
-            menu.findItem(R.id.action_expand).setVisible(true);
-            menu.findItem(R.id.action_expand).setIcon(!expanded ? icAgendaMore : icAgendaLess);
-        } else {
-            menu.findItem(R.id.action_expand).setVisible(false);
+        // hide all items first
+        for (int menuItem : MENU_ITEMS) {
+            menuItems.get(menuItem).setVisible(false);
         }
 
-        if (pageNum == 2 && CalendulaApp.isPharmaModeEnabled(this)) {
-            menu.findItem(R.id.action_calendar).setVisible(true);
-        } else {
-            menu.findItem(R.id.action_calendar).setVisible(false);
+        // show items relevant to the current page
+        switch (page) {
+            case HOME:
+                final boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).isExpanded();
+                menuItems.get(R.id.action_expand).setVisible(true);
+                menuItems.get(R.id.action_expand).setIcon(!expanded ? icAgendaMore : icAgendaLess);
+                break;
+            case MEDICINES:
+                menuItems.get(R.id.action_sort).setVisible(true);
+                break;
+            case SCHEDULES:
+                menuItems.get(R.id.action_schedules_help).setVisible(true);
+                break;
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -167,7 +211,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                 return true;
             case R.id.action_expand:
 
-                final boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
+                final boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).isExpanded();
                 appBarLayout.setExpanded(expanded);
 
 
@@ -176,7 +220,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
+                        ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).toggleViewMode();
                     }
                 }, delay ? 500 : 0);
 
@@ -184,29 +228,13 @@ public class HomePagerActivity extends CalendulaActivity implements
                 return true;
             case R.id.action_schedules_help:
                 launchActivity(new Intent(this, SchedulesHelpActivity.class));
+                return true;
+            case R.id.action_sort:
+                ((MedicinesListFragment) getViewPagerFragment(HomePages.MEDICINES)).toggleSort();
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void enableOrDisablePharmacyMode() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        if (CalendulaApp.isPharmaModeEnabled(getApplicationContext())) {
-            prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, false).commit();
-            Snack.show("Acabas de deshabilitar el modo farmacia!", HomePagerActivity.this);
-            fabMgr.onPharmacyModeChanged(false);
-            drawerMgr.onPharmacyModeChanged(false);
-        } else {
-            prefs.edit().putBoolean(CalendulaApp.PHARMACY_MODE_ENABLED, true)
-                    .putBoolean("enable_prescriptions_db", true)
-                    .commit();
-            try {
-                DB.prescriptions().executeRaw("DELETE FROM Prescriptions;");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            new PopulatePrescriptionDatabaseTask().execute("");
-        }
     }
 
     public void launchActivityDelayed(final Class<?> activityClazz, int delay) {
@@ -234,7 +262,7 @@ public class HomePagerActivity extends CalendulaActivity implements
 
     @Override
     public void onMedicineSelected(Medicine m) {
-        Intent i = new Intent(this, MedicinesActivity.class);
+        Intent i = new Intent(this, MedicineInfoActivity.class);
         i.putExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, m.getId());
         launchActivity(i);
     }
@@ -258,77 +286,122 @@ public class HomePagerActivity extends CalendulaActivity implements
     }
 
     // Method called from the event bus
-    @SuppressWarnings("unused")
-    public void onEvent(final Object evt) {
+    @Subscribe
+    public void handleEvent(final Object event) {
         if (active) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
 
-                    if (evt instanceof PersistenceEvents.ModelCreateOrUpdateEvent) {
-                        PersistenceEvents.ModelCreateOrUpdateEvent event = (PersistenceEvents.ModelCreateOrUpdateEvent) evt;
-                        Log.d(TAG, "onEvent: " + event.clazz.getName());
-                        ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
-                        ((RoutinesListFragment) getViewPagerFragment(1)).notifyDataChange();
-                        ((MedicinesListFragment) getViewPagerFragment(2)).notifyDataChange();
-                        ((ScheduleListFragment) getViewPagerFragment(3)).notifyDataChange();
-                    } else if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
-                        activePatient = ((PersistenceEvents.ActiveUserChangeEvent) evt).patient;
+                    if (event instanceof PersistenceEvents.ModelCreateOrUpdateEvent) {
+                        PersistenceEvents.ModelCreateOrUpdateEvent modelCreateOrUpdateEvent = (PersistenceEvents.ModelCreateOrUpdateEvent) event;
+                        LogUtil.d(TAG, "handleEvent: " + modelCreateOrUpdateEvent.clazz.getName());
+                        ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).notifyDataChange();
+                        ((RoutinesListFragment) getViewPagerFragment(HomePages.ROUTINES)).notifyDataChange();
+                        ((MedicinesListFragment) getViewPagerFragment(HomePages.MEDICINES)).notifyDataChange();
+                        ((ScheduleListFragment) getViewPagerFragment(HomePages.SCHEDULES)).notifyDataChange();
+                    } else if (event instanceof PersistenceEvents.IntakeConfirmedEvent) {
+                        // dismiss "take all" button, update checkboxes
+                        ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).notifyDataChange();
+                        // stock info may need to be updated
+                        ((MedicinesListFragment) getViewPagerFragment(HomePages.MEDICINES)).notifyDataChange();
+                    } else if (event instanceof PersistenceEvents.ActiveUserChangeEvent) {
+                        activePatient = ((PersistenceEvents.ActiveUserChangeEvent) event).patient;
                         updateTitle(mViewPager.getCurrentItem());
-                        toolbarLayout.setContentScrimColor(activePatient.color());
+                        toolbarLayout.setContentScrimColor(activePatient.getColor());
                         fabMgr.onPatientUpdate(activePatient);
-                    } else if (evt instanceof PersistenceEvents.UserUpdateEvent) {
-                        Patient p = ((PersistenceEvents.UserUpdateEvent) evt).patient;
-                        ((DailyAgendaFragment) getViewPagerFragment(0)).onUserUpdate();
+                    } else if (event instanceof PersistenceEvents.UserUpdateEvent) {
+                        Patient p = ((PersistenceEvents.UserUpdateEvent) event).patient;
+                        ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).onUserUpdate();
                         drawerMgr.onPatientUpdated(p);
                         if (DB.patients().isActive(p, HomePagerActivity.this)) {
                             activePatient = p;
                             updateTitle(mViewPager.getCurrentItem());
-                            toolbarLayout.setContentScrimColor(activePatient.color());
+                            toolbarLayout.setContentScrimColor(activePatient.getColor());
                             fabMgr.onPatientUpdate(activePatient);
                         }
-                    } else if (evt instanceof PersistenceEvents.UserCreateEvent) {
-                        Patient created = ((PersistenceEvents.UserCreateEvent) evt).patient;
+                    } else if (event instanceof PersistenceEvents.UserCreateEvent) {
+                        Patient created = ((PersistenceEvents.UserCreateEvent) event).patient;
                         drawerMgr.onPatientCreated(created);
-                    } else if (evt instanceof HomeProfileMgr.BackgroundUpdatedEvent) {
-                        ((DailyAgendaFragment) getViewPagerFragment(0)).refresh();
-                    } else if (evt instanceof ConfirmActivity.ConfirmStateChangeEvent) {
-                        pendingRefresh = ((ConfirmActivity.ConfirmStateChangeEvent) evt).position;
-                        ((DailyAgendaFragment) getViewPagerFragment(0)).refreshPosition(pendingRefresh);
-                    } else if (evt instanceof DailyAgenda.AgendaUpdatedEvent) {
-                        ((DailyAgendaFragment) getViewPagerFragment(0)).notifyDataChange();
+                    } else if (event instanceof HomeProfileMgr.BackgroundUpdatedEvent) {
+                        ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).refresh();
+                    } else if (event instanceof ConfirmActivity.ConfirmStateChangeEvent) {
+                        pendingRefresh = ((ConfirmActivity.ConfirmStateChangeEvent) event).position;
+                        ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).refreshPosition(pendingRefresh);
+                    } else if (event instanceof DailyAgenda.AgendaUpdatedEvent) {
+                        ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).notifyDataChange();
                         homeProfileMgr.updateDate();
+                    } else if (event instanceof StockRunningOutEvent) {
+                        final StockRunningOutEvent sro = (StockRunningOutEvent) event;
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                StockUtils.showStockRunningOutDialog(HomePagerActivity.this, sro.m, sro.days);
+                            }
+                        }, 1000);
+                    } else if (event instanceof PersistenceEvents.DatabaseUpdateEvent) {
+                        checkDatabaseUpdateNeeded();
                     }
                 }
             });
         } else {
-            pendingEvents.add(evt);
+            pendingEvents.add(event);
         }
     }
 
-    void showMessage(String text) {
-        Snackbar.make(appBarLayout, text, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-    }
-
-    void updateAempsIfNeeded() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        int msgRes = R.string.updating_prescriptions_db_msg;
-        boolean dbEnabled = prefs.getBoolean("enable_prescriptions_db", false);
-        if (dbEnabled && PopulatePrescriptionDBService.isDbOutdated(this)) {
-            new PopulatePrescriptionDatabaseTask(msgRes).execute("");
+    /**
+     * If the app has been updated from an old Drug DB model, we need to re-install it and re-link the meds to their prescription.
+     */
+    public void checkDatabaseUpdateNeeded() {
+        final boolean needPrompt = PreferenceUtils.getBoolean(PreferenceKeys.DRUGDB_DB_PROMPT, false);
+        if (needPrompt) {
+            new MaterialStyledDialog.Builder(this)
+                    .setStyle(Style.HEADER_WITH_ICON)
+                    .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_database, R.color.white, 100))
+                    .setHeaderColor(R.color.android_blue)
+                    .withDialogAnimation(true)
+                    .setTitle(R.string.enable_prescriptions_dialog_title)
+                    .setDescription(R.string.reinstall_prescriptions_dialog_message)
+                    .setCancelable(false)
+                    .setPositiveText(getString(R.string.dialog_yes_option))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Intent i = new Intent(HomePagerActivity.this, SettingsActivity.class);
+                            i.putExtra(SettingsActivity.EXTRA_SHOW_DB_DIALOG, true);
+                            startActivity(i);
+                            PreferenceUtils.edit().remove(PreferenceKeys.DRUGDB_DB_PROMPT.key()).apply();
+                        }
+                    })
+                    .setNegativeText(R.string.dialog_no_option)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.cancel();
+                            PreferenceUtils.edit().remove(PreferenceKeys.DRUGDB_DB_PROMPT.key()).apply();
+                        }
+                    })
+                    .show();
         }
+
     }
 
-    Fragment getViewPagerFragment(int position) {
-        String tag = FragmentUtils.makeViewPagerFragmentName(R.id.container, position);
+    public void showSnackbar(@StringRes final int text) {
+        Snack.show(text, coordinatorLayout, Snackbar.LENGTH_SHORT);
+    }
+
+    Fragment getViewPagerFragment(HomePages page) {
+        String tag = FragmentUtils.makeViewPagerFragmentName(R.id.container, page.ordinal());
         return getSupportFragmentManager().findFragmentByTag(tag);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
         setupToolbar(null, Color.TRANSPARENT);
         initializeDrawer(savedInstanceState);
         setupStatusBar(Color.TRANSPARENT);
@@ -338,29 +411,21 @@ public class HomePagerActivity extends CalendulaActivity implements
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new HomePageAdapter(getSupportFragmentManager(), this, this);
-        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(getPageChangeListener());
         mViewPager.setOffscreenPageLimit(5);
 
         // Set up home profile
         homeProfileMgr = new HomeProfileMgr();
-        userInfoFragment = findViewById(R.id.user_info_fragment);
         homeProfileMgr.init(userInfoFragment, this);
 
         activePatient = DB.patients().getActive(this);
-        toolbarLayout.setContentScrimColor(activePatient.color());
+        updateScrim(0);
 
 
-        // Setup fab
-        addButton = (FloatingActionsMenu) findViewById(R.id.fab_menu);
-        fab = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.add_button);
-        fabMgr = new FabMenuMgr(fab, addButton, drawerMgr, this);
+        fabMgr = new FabMenuMgr(fab, drawerMgr, this);
         fabMgr.init();
 
         fabMgr.onPatientUpdate(activePatient);
@@ -373,20 +438,20 @@ public class HomePagerActivity extends CalendulaActivity implements
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
-                //Log.d(TAG, "Values: (" + toolbarLayout.getHeight()+ " + " +verticalOffset + ") < (2 * " + ViewCompat.getMinimumHeight(toolbarLayout) + ")");
+                //LogUtil.d(TAG, "Values: (" + toolbarLayout.getHeight()+ " + " +verticalOffset + ") < (2 * " + ViewCompat.getMinimumHeight(toolbarLayout) + ")");
 
                 if ((toolbarLayout.getHeight() + verticalOffset) < (1.8 * ViewCompat.getMinimumHeight(toolbarLayout))) {
                     homeProfileMgr.onCollapse();
                     toolbarTitle.animate().alpha(1);
                     appBarLayoutExpanded = false;
-                    Log.d(TAG, "OnCollapse");
+                    LogUtil.d(TAG, "OnCollapse");
                 } else {
                     appBarLayoutExpanded = true;
                     if (mViewPager.getCurrentItem() == 0) {
                         toolbarTitle.animate().alpha(0);
                     }
                     homeProfileMgr.onExpand();
-                    Log.d(TAG, "OnExpand");
+                    LogUtil.d(TAG, "OnExpand");
                 }
 
 
@@ -395,25 +460,16 @@ public class HomePagerActivity extends CalendulaActivity implements
         appBarLayout.addOnOffsetChangedListener(mListener);
 
         icAgendaLess = new IconicsDrawable(this)
-                .icon(CommunityMaterial.Icon.cmd_unfold_less)
+                .icon(CommunityMaterial.Icon.cmd_unfold_less_horizontal)
                 .color(Color.WHITE)
                 .sizeDp(24);
 
         icAgendaMore = new IconicsDrawable(this)
-                .icon(CommunityMaterial.Icon.cmd_unfold_more)
+                .icon(CommunityMaterial.Icon.cmd_unfold_more_horizontal)
                 .color(Color.WHITE)
                 .sizeDp(24);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                updateAempsIfNeeded();
-            }
-        }, 1500);
-
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        if (!prefs.getBoolean("PREFERENCE_INTRO_SHOWN", false)) {
+        if (!PreferenceUtils.getBoolean(PreferenceKeys.HOME_INTRO_SHOWN, false)) {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -431,6 +487,9 @@ public class HomePagerActivity extends CalendulaActivity implements
                 }
             }, 500);
         }
+
+        //check for DB update needed
+        checkDatabaseUpdateNeeded();
     }
 
     @Override
@@ -447,10 +506,13 @@ public class HomePagerActivity extends CalendulaActivity implements
 
         // process pending events
         while (!pendingEvents.isEmpty()) {
-            Log.d(TAG, "Processing pending event...");
-            onEvent(pendingEvents.poll());
+            LogUtil.d(TAG, "Processing pending event...");
+            handleEvent(pendingEvents.poll());
         }
     }
+
+
+    // Interface implementations
 
     @Override
     protected void onPause() {
@@ -458,12 +520,9 @@ public class HomePagerActivity extends CalendulaActivity implements
         super.onPause();
     }
 
-
-    // Interface implementations
-
     private void showInvalidNotificationError() {
 
-        final boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(0)).isExpanded();
+        final boolean expanded = ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).isExpanded();
 
         new AlertDialog.Builder(this)
                 .setTitle(R.string.notification_error_title)
@@ -476,17 +535,17 @@ public class HomePagerActivity extends CalendulaActivity implements
                         dialog.dismiss();
                         if (!expanded) {
                             appBarLayout.setExpanded(expanded);
-                            expandItem.setIcon(expanded ? icAgendaMore : icAgendaLess);
+                            menuItems.get(R.id.action_expand).setIcon(expanded ? icAgendaMore : icAgendaLess);
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ((DailyAgendaFragment) getViewPagerFragment(0)).toggleViewMode();
+                                    ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).toggleViewMode();
                                 }
                             }, 200);
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ((DailyAgendaFragment) getViewPagerFragment(0)).scrollTo(DateTime.now());
+                                    ((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).scrollTo(DateTime.now());
                                 }
                             }, 600);
                         }
@@ -496,20 +555,12 @@ public class HomePagerActivity extends CalendulaActivity implements
 
     private void setupTabLayout() {
 
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-        IIcon[] icons = new IIcon[]{
-                GoogleMaterial.Icon.gmd_home,
-                GoogleMaterial.Icon.gmd_alarm,
-                CommunityMaterial.Icon.cmd_pill,
-                GoogleMaterial.Icon.gmd_calendar,
-        };
 
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
 
             Drawable icon = new IconicsDrawable(this)
-                    .icon(icons[i])
+                    .icon(HomePages.values()[i].icon)
                     .alpha(80)
                     .paddingDp(2)
                     .color(Color.WHITE)
@@ -529,19 +580,20 @@ public class HomePagerActivity extends CalendulaActivity implements
             @Override
             public void onPageSelected(int position) {
                 updateTitle(position);
+                updateScrim(position);
                 fabMgr.onViewPagerItemChange(position);
-                if (position == 0) {
+                if (position == HomePages.HOME.ordinal() && !((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).isExpanded()) {
                     appBarLayout.setExpanded(true);
+                    CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+                    ((DisableableAppBarLayoutBehavior) layoutParams.getBehavior()).setEnabled(true);
+
                 } else {
                     appBarLayout.setExpanded(false);
+                    CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+                    ((DisableableAppBarLayoutBehavior) layoutParams.getBehavior()).setEnabled(false);
                 }
 
-                if (expandItem != null) {
-                    expandItem.setVisible(position == 0);
-                }
-                if (helpItem != null) {
-                    helpItem.setVisible(position == 3);
-                }
+                invalidateOptionsMenu();
             }
 
             @Override
@@ -551,23 +603,35 @@ public class HomePagerActivity extends CalendulaActivity implements
         };
     }
 
+    private void updateScrim(int position) {
+        @ColorInt final int color = (position == HomePages.HOME.ordinal()) ? ContextCompat.getColor(this, R.color.transparent_black) : activePatient.getColor();
+
+        if (previousColor != -1) {
+            ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), previousColor, color);
+            colorAnimation.setDuration(250); // milliseconds
+            colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                @Override
+                public void onAnimationUpdate(ValueAnimator animator) {
+                    toolbarLayout.setContentScrimColor((int) animator.getAnimatedValue());
+                }
+
+            });
+            colorAnimation.start();
+        } else {
+            toolbarLayout.setContentScrimColor(color);
+        }
+        previousColor = color;
+    }
+
     private void updateTitle(int page) {
         String title;
-
-        switch (page) {
-            case 1:
-                title = getString(R.string.title_activity_routines) + " de " + activePatient.name();
-                break;
-            case 2:
-                title = getString(R.string.title_activity_medicines) + " de " + activePatient.name();
-                break;
-            case 3:
-                title = getString(R.string.title_activity_schedules) + " de " + activePatient.name();
-                break;
-            default:
-                title = "Calendula";
-                break;
+        if (page == HomePages.HOME.ordinal()) {
+            title = getString(R.string.app_name);
+        } else {
+            title = getString(R.string.relation_user_possession_thing, activePatient.getName(), getString(HomePages.values()[page].title));
         }
+
         toolbarTitle.setText(title);
     }
 
@@ -581,46 +645,30 @@ public class HomePagerActivity extends CalendulaActivity implements
         this.overridePendingTransition(0, 0);
     }
 
-    public class PopulatePrescriptionDatabaseTask extends AsyncTask<String, String, Void> {
-
-
-        ProgressDialog dialog;
-        int msgResource = R.string.enable_prescriptions_progress_messgae;
-
-
-        public PopulatePrescriptionDatabaseTask() {
-        }
-
-        public PopulatePrescriptionDatabaseTask(int msgResource) {
-            this.msgResource = msgResource;
-        }
-
-        @Override
-        protected Void doInBackground(String... params) {
-            new PopulatePrescriptionDBService().updateIfNeeded(HomePagerActivity.this);
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog = new ProgressDialog(HomePagerActivity.this);
-            dialog.setIndeterminate(true);
-            dialog.setCancelable(false);
-            dialog.setMessage(getString(msgResource));
-            dialog.show();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (dialog.isShowing()) {
-                dialog.dismiss();
-            }
-            Snack.show("Acabas de habilitar el modo farmacia!", HomePagerActivity.this);
-            fabMgr.onPharmacyModeChanged(true);
-            drawerMgr.onPharmacyModeChanged(true);
+    /*
+    public void askForWEEPermissionsIfNeeded() {
+        String p = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        if(!PermissionUtils.hasAskedForPermission(this, p) && PermissionUtils.shouldAskForPermission(this, p)){
+            PermissionUtils.requestPermissions(this, new String[]{p}, REQ_CODE_EXTERNAL_STORAGE);
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQ_CODE_EXTERNAL_STORAGE: {
+                PermissionUtils.markedPermissionAsAsked(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(HomePagerActivity.this, "Granted   !", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(HomePagerActivity.this, "Refused   !", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
+
+    }
+    */
 
 }

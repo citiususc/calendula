@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -83,6 +83,18 @@ public class DailyScheduleItem {
         this.date = LocalDate.now();
     }
 
+    public static DailyScheduleItem findById(long id) {
+        return DB.dailyScheduleItems().findById(id);
+    }
+
+    public static List<DailyScheduleItem> findAll() {
+        return DB.dailyScheduleItems().findAll();
+    }
+
+    public static DailyScheduleItem findByScheduleItem(ScheduleItem item) {
+        return DB.dailyScheduleItems().findByScheduleItem(item);
+    }
+
     public Long getId() {
         return id;
     }
@@ -91,15 +103,15 @@ public class DailyScheduleItem {
         this.id = id;
     }
 
-    public LocalTime timeTaken() {
+    public LocalTime getTimeTaken() {
         return timeTaken;
     }
 
-    public ScheduleItem scheduleItem() {
+    public ScheduleItem getScheduleItem() {
         return scheduleItem;
     }
 
-    public Schedule schedule() {
+    public Schedule getSchedule() {
         return schedule;
     }
 
@@ -111,18 +123,18 @@ public class DailyScheduleItem {
         this.timeTaken = date;
     }
 
-    public LocalTime time() {
+    public LocalTime getTime() {
         if (boundToSchedule())
             return time;
 
-        return scheduleItem.routine().time();
+        return scheduleItem.getRoutine().getTime();
     }
 
     public void setTime(LocalTime time) {
         this.time = time;
     }
 
-    public boolean takenToday() {
+    public boolean getTakenToday() {
         return takenToday;
     }
 
@@ -139,7 +151,7 @@ public class DailyScheduleItem {
         }
     }
 
-    public LocalDate date() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -160,24 +172,11 @@ public class DailyScheduleItem {
                 '}';
     }
 
-    public static DailyScheduleItem findById(long id) {
-        return DB.dailyScheduleItems().findById(id);
-    }
-
-
-    public static List<DailyScheduleItem> findAll() {
-        return DB.dailyScheduleItems().findAll();
-    }
-
-    public static DailyScheduleItem findByScheduleItem(ScheduleItem item) {
-        return DB.dailyScheduleItems().findByScheduleItem(item);
-    }
-
     public void save() {
         DB.dailyScheduleItems().save(this);
     }
 
-    public Patient patient() {
+    public Patient getPatient() {
         return patient;
     }
 

@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -17,20 +16,20 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Specifies that a repeating event to repeat forever (based on the defined frequency) instead of ending at a future date[CHAR LIMIT=20] -->
     <string name="recurrence_end_continously">Indéfiniment</string>
     <!-- Specifies that a repeating event to repeat until a certain date[CHAR LIMIT=25] -->
-    <string name="recurrence_end_date_label">Jusqu\'à la date</string>
+    <string name="recurrence_end_date_label" tools:ignore="ExtraTranslation">Jusqu\'à la date</string>
     <!-- Specifies that a repeating event to repeat until a certain date[CHAR LIMIT=20] -->
-    <string name="recurrence_end_date">Jusqu\'à <xliff:g id="date">%s</xliff:g></string>
+    <string name="recurrence_end_date" tools:ignore="ExtraTranslation">Jusqu\'à <xliff:g id="date">%s</xliff:g></string>
     <!-- Specifies that a repeating event to repeat for a number of times. A repeating event can repeat forever, repeat in a certain frequency until a certain date, or repeat for a number of times. e.g. repeat 10 times and stop. This string is for the last case [CHAR LIMIT=25] -->
     <string name="recurrence_end_count_label">Jusqu\'au nombre de doses</string>
     <!-- Strings to describe how frequently to repeat an event (e.g. every 5 days) -->
     <plurals name="recurrence_interval_daily">
         <!-- Singular form [CHAR LIMIT=30] -->
 
-<!-- EN QUANTITY=ONE PONDRIA UNICAMENTE "Tous les jours" sin cifra, LO MISMO PARA SEMANA, MES Y AÑO -->
+        <!-- EN QUANTITY=ONE PONDRIA UNICAMENTE "Tous les jours" sin cifra, LO MISMO PARA SEMANA, MES Y AÑO -->
 
         <item quantity="one">Tous les <xliff:g id="count">%d</xliff:g> jours</item>
         <!-- Plural form [CHAR LIMIT=30] -->
@@ -65,17 +64,17 @@
     <!-- Part of a description of an repeating event. This part states the date when a repeating
     event ends. The part before the semi-colon describes how it repeats.
     e.g. Every 2 weeks; until 1/1/2030 [CHAR LIMIT=21] -->
-    <string name="endByDate">\u0020(jusqu\'à <xliff:g id="date">%s</xliff:g>)</string>
+    <string name="endByDate" tools:ignore="ExtraTranslation">\u0020(jusqu\'à <xliff:g id="date">%s</xliff:g>)</string>
     <!-- Part of a description of an repeating event. This part how many times the event repeats.
     The part before the semi-colon describes how it repeats.
     e.g. Every 2 weeks; for 15 times [CHAR LIMIT=15] -->
     <plurals name="endByCount">
-        <item quantity="one"> (une fois)</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity"> (une fois)</item>
         <item quantity="other">\u0020(<xliff:g id="number">%d</xliff:g> fois)</item>
     </plurals>
     <!-- A description for an event that repeats daily. For example, Every 2 days [CHAR LIMIT=15]-->
     <plurals name="daily">
-        <item quantity="one">Tous les jours</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">Tous les jours</item>
         <item quantity="other">Tous les <xliff:g id="number">%d</xliff:g> jours</item>
     </plurals>
     <!-- A label in a multiple-choice list for the specifying that an event
@@ -94,11 +93,11 @@
     <string name="yearly_plain">Annuellement</string>
 
     <!-- Repeat an monthly event on the same day of every month [CHAR LIMIT=20] -->
-    <string name="recurrence_month_pattern_by_day">le même jour de chaque mois</string>
+    <string name="recurrence_month_pattern_by_day" tools:ignore="ExtraTranslation">le même jour de chaque mois</string>
 
 
     <!-- Recurrence picker: How events are to be repeated. [CHAR LIMIT = 20] -->
-    <string-array name="recurrence_freq">
+    <string-array name="recurrence_freq" tools:ignore="ExtraTranslation">
         <item>Répéter tous les jours</item>
         <item>Répéter toutes les semaines</item>
         <item>Répéter tous les mois</item>
@@ -110,7 +109,7 @@
     that were present in some languages.
     -->
     <!-- Repeat a monthly event on the same nth day of every Sunday. [CHAR LIMIT=30] -->
-    <string-array name="repeat_by_nth_sun">
+    <string-array name="repeat_by_nth_sun" tools:ignore="ExtraTranslation">
         <item>chaque premier dimanche</item>
         <item>chaque deuxième dimanche</item>
         <item>chaque troisième dimanche</item>
@@ -118,7 +117,7 @@
         <item>chaque dernier dimanche</item>
     </string-array>
     <!-- Repeat a monthly event on the same nth day of every Monday. [CHAR LIMIT=30] -->
-    <string-array name="repeat_by_nth_mon">
+    <string-array name="repeat_by_nth_mon" tools:ignore="ExtraTranslation">
         <item>chaque premier lundi</item>
         <item>chaque deuxième lundi</item>
         <item>chaque troisième lundi</item>
@@ -126,7 +125,7 @@
         <item>chaque dernier lundi</item>
     </string-array>
     <!-- Repeat a monthly event on the same nth day of every Tuesday. [CHAR LIMIT=30] -->
-    <string-array name="repeat_by_nth_tues">
+    <string-array name="repeat_by_nth_tues" tools:ignore="ExtraTranslation">
         <item>chaque premier mardi</item>
         <item>chaque deuxième mardi</item>
         <item>chaque troisième mardi</item>
@@ -134,7 +133,7 @@
         <item>chaque dernier mardi</item>
     </string-array>
     <!-- Repeat a monthly event on the same nth day of every Wednesday. [CHAR LIMIT=30] -->
-    <string-array name="repeat_by_nth_wed">
+    <string-array name="repeat_by_nth_wed" tools:ignore="ExtraTranslation">
         <item>chaque premier mercredi</item>
         <item>chaque deuxième mercredi</item>
         <item>chaque troisième mercredi</item>
@@ -142,7 +141,7 @@
         <item>chaque dernier mercredi</item>
     </string-array>
     <!-- Repeat a monthly event on the same nth day of every Thursday. [CHAR LIMIT=30] -->
-    <string-array name="repeat_by_nth_thurs">
+    <string-array name="repeat_by_nth_thurs" tools:ignore="ExtraTranslation">
         <item>chaque premier jeudi</item>
         <item>chaque deuxième jeudi</item>
         <item>chaque troisième jeudi</item>
@@ -150,7 +149,7 @@
         <item>chaque dernier jeudi</item>
     </string-array>
     <!-- Repeat a monthly event on the same nth day of every Friday. [CHAR LIMIT=30] -->
-    <string-array name="repeat_by_nth_fri">
+    <string-array name="repeat_by_nth_fri" tools:ignore="ExtraTranslation">
         <item>chaque premier vendredi</item>
         <item>chaque deuxième vendredi</item>
         <item>chaque troisième vendredi</item>
@@ -158,7 +157,7 @@
         <item>chaque dernier vendredi</item>
     </string-array>
     <!-- Repeat a monthly event on the same nth day of every Saturday. [CHAR LIMIT=30] -->
-    <string-array name="repeat_by_nth_sat">
+    <string-array name="repeat_by_nth_sat" tools:ignore="ExtraTranslation">
         <item>chaque premier samedi</item>
         <item>chaque deuxième samedi</item>
         <item>chaque troisième samedi</item>

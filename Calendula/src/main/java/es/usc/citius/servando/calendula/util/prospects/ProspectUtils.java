@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 package es.usc.citius.servando.calendula.util.prospects;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 import org.joda.time.Duration;
@@ -29,8 +29,10 @@ import java.util.Map;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.WebViewActivity;
 import es.usc.citius.servando.calendula.database.DB;
+import es.usc.citius.servando.calendula.drugdb.DBRegistry;
+import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
+import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.persistence.Patient;
-import es.usc.citius.servando.calendula.persistence.Prescription;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 /**
@@ -38,33 +40,33 @@ import es.usc.citius.servando.calendula.util.ScreenUtils;
  */
 public class ProspectUtils {
 
-    public static final String PROSPECT_URL = "https://www.aemps.gob.es/cima/dochtml/p/#ID#/Prospecto_#ID#.html";
-
     public static final Duration PROSPECT_TTL = Duration.standardDays(30);
 
-    public static void openProspect(Prescription p, final Activity activity, boolean enableCache) {
-        final String url = PROSPECT_URL.replaceAll("#ID#", p.pid);
-        Intent i = new Intent(activity, WebViewActivity.class);
+    public static void openProspect(Prescription p, final Context context, boolean enableCache) {
+        PrescriptionDBMgr dbMgr = DBRegistry.instance().current();
+        final String url = dbMgr.getProspectURL(p);
 
-        final Patient patient = DB.patients().getActive(activity);
+        Intent i = new Intent(context, WebViewActivity.class);
+
+        final Patient patient = DB.patients().getActive(context);
         Map<String, String> overrides = new HashMap<String, String>() {{
-            put("###SCREEN_WIDTH###", (int) (ScreenUtils.getDpSize(activity).x * 0.9) + "px");
-            put("###PATIENT_COLOR###", String.format("#%06X", (0xFFFFFF & patient.color())));
+            put("###SCREEN_WIDTH###", (int) (ScreenUtils.getDpSize(context).x * 0.9) + "px");
+            put("###PATIENT_COLOR###", String.format("#%06X", (0xFFFFFF & patient.getColor())));
         }};
 
         WebViewActivity.WebViewRequest request = new WebViewActivity.WebViewRequest(url);
         request.setCustomCss("prospectView.css", overrides);
-        request.setConnectionErrorMessage(activity.getString(R.string.message_prospect_connection_error));
-        request.setNotFoundErrorMessage(activity.getString(R.string.message_prospect_not_found_error));
-        request.setLoadingMessage(activity.getString(R.string.message_prospect_loading));
-        request.setTitle(activity.getString(R.string.title_prospect_webview));
+        request.setConnectionErrorMessage(context.getString(R.string.message_prospect_connection_error));
+        request.setNotFoundErrorMessage(context.getString(R.string.message_prospect_not_found_error));
+        request.setLoadingMessage(context.getString(R.string.message_prospect_loading));
+        request.setTitle(context.getString(R.string.title_prospect_webview));
         request.setPostProcessorClassname(LeafletHtmlPostProcessor.class.getCanonicalName());
         if (enableCache)
             request.setCacheType(WebViewActivity.WebViewRequest.CacheType.DOWNLOAD_CACHE);
         request.setJavaScriptEnabled(true);
         request.setCacheTTL(PROSPECT_TTL);
         i.putExtra(WebViewActivity.PARAM_WEBVIEW_REQUEST, request);
-        activity.startActivity(i);
+        context.startActivity(i);
     }
 
 }

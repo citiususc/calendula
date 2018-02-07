@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -18,36 +17,36 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent">
+              android:layout_height="fill_parent"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Ibuprofeno"
         android:id="@+id/med_name"
-        android:textSize="18dp"
-        android:textColor="#666" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        tools:text="Ibuprofeno"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Every day"
+        android:textColor="#666"
+        android:textSize="18dp"/>
+
+    <TextView
         android:id="@+id/med_schedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:padding="2dp"
-        android:textColor="#111"  />
+        tools:text="Every day"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#111"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text=""
-        android:id="@+id/med_daily_schedule"
         android:layout_marginLeft="16dp"
         android:padding="2dp"
-        android:textColor="@color/android_blue_dark" />
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/android_blue_dark"/>
 </LinearLayout>

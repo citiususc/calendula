@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ public class PickupInfo {
     private Medicine medicine;
 
 
-    public Long id() {
+    public Long getId() {
         return id;
     }
 
@@ -65,7 +65,7 @@ public class PickupInfo {
         this.id = id;
     }
 
-    public LocalDate from() {
+    public LocalDate getFrom() {
         return from;
     }
 
@@ -73,7 +73,7 @@ public class PickupInfo {
         this.from = from;
     }
 
-    public LocalDate to() {
+    public LocalDate getTo() {
         return to;
     }
 
@@ -81,15 +81,15 @@ public class PickupInfo {
         this.to = to;
     }
 
-    public boolean taken() {
+    public boolean isTaken() {
         return taken;
     }
 
-    public void taken(boolean taken) {
+    public void setTaken(boolean taken) {
         this.taken = taken;
     }
 
-    public Medicine medicine() {
+    public Medicine getMedicine() {
         return medicine;
     }
 
@@ -111,8 +111,8 @@ public class PickupInfo {
 
         @Override
         public int compare(PickupInfo a, PickupInfo b) {
-            LocalDate fromA = a.from();
-            LocalDate fromB = b.from();
+            LocalDate fromA = a.getFrom();
+            LocalDate fromB = b.getFrom();
             return fromA.compareTo(fromB);
         }
     }

@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -29,13 +28,12 @@
     <color name="android_green_light_noalpha">#efB8DB57</color>
 
     <color name="android_orange">#FFBB33</color>
-    <color name="android_orange_dark">#FF8800</color>
+    <color name="android_orange_dark">#ff8800</color>
     <color name="android_orange_light">#55FFBB33</color>
     <color name="android_orange_lighter">#22FFBB33</color>
     <color name="android_red">#FF4444</color>
     <color name="android_red_dark">#CC0000</color>
     <color name="android_red_light">#55FF4444</color>
-    <color name="android_red_lighter">#22FF4444</color>
     <color name="android_blue">#33B5E5</color>
     <color name="android_blue_dark">#0099CC</color>
     <color name="android_blue_darker">#0077aa</color>
@@ -54,23 +52,13 @@
     <color name="android_orange_darker">#884411</color>
     <color name="list_item_active">#88ececec</color>
     <color name="list_item_inactive">#33ececec</color>
-    <color name="daily_view_bg_color">#aaefefef</color>
-    <color name="daily_view_content_bg_color">#fff</color>
 
 
     <!-- Other colors -->
-    <color name="splash_background">#ffb74d</color>
     <color name="white">#FFFFFF</color>
     <color name="dark_grey_home">#272727</color>
-    <color name="dark_grey_home_statusbar">#151515</color>
-    <color name="grey">#484848</color>
-    <color name="toolbar_dark_background">#0077aa</color>
-    <color name="green_hour_expanded_left">#2299CC00</color>
-    <color name="green_hour_expanded_right">#CC99CC00</color>
     <color name="list_item_active_background">#11fefefe</color>
     <color name="click_highlight">#2233B5E5</color>
-    <color name="drawerbg_default">#272727</color>
-    <color name="drawerbg">#3c3c3c</color>
 
     <color name="fab_light_normal">#efefef</color>
     <color name="fab_light_pressed">#b7b7b7</color>
@@ -78,10 +66,7 @@
     <color name="fab_dark_pressed">#373737</color>
 
     <!-- List items -->
-    <color name="list_item_selector_normal">#00111111</color>
     <color name="drawer_item_disabled">#22222222</color>
-    <color name="list_item_selector_pressed">#3333B5E5</color>
-    <color name="home_background_color">@color/dark_grey_home</color>
     <color name="dark_grey_text">#5e5e5e</color>
     <color name="light_grey">#55ABABAB</color>
     <color name="light_grey_pressed">#99989898</color>
@@ -91,10 +76,9 @@
     <!-- #ececec -->
     <!--<color name="actionbar_background_color">#161616</color>-->
     <color name="med_presentation_circle_bg">#aaefefef</color>
-    <color name="black_overlay">#66000000</color>
+    <color name="med_presentation_circle_bg_lighter">#bfffffff</color>
 
-    <color name="actionbar_background_color">#0099CC</color>
-    <color name="activity_background_color">#EFEFEF</color>
+
     <!--#006699-->
 
     <!-- CALENDAR -->
@@ -118,15 +102,15 @@
     <color name="material_drawer_accent">#FF4081</color>
 
     <!-- OVERWRITE THESE COLORS FOR A LIGHT THEME -->
-     <!--MaterialDrawer DEFAULT colors-->
+    <!--MaterialDrawer DEFAULT colors-->
     <color name="material_drawer_background">#F9F9F9</color>
-     <!--Material DEFAULT text / items colors-->
+    <!--Material DEFAULT text / items colors-->
     <color name="material_drawer_primary_text">#DE000000</color>
     <color name="material_drawer_primary_icon">#8A000000</color>
     <color name="material_drawer_secondary_text">#8A000000</color>
     <color name="material_drawer_hint_text">#42000000</color>
     <color name="material_drawer_divider">#1F222222</color>
-     <!--Material DEFAULT drawer colors-->
+    <!--Material DEFAULT drawer colors-->
     <color name="material_drawer_selected">#ececec</color>
     <color name="material_drawer_selected_text">@color/dark_grey_text</color>
     <color name="material_drawer_header_selection_text">#FFF</color>
@@ -149,5 +133,11 @@
     <color name="schedule_help_background">#3498db</color>
     <color name="schedule_help_background_dark">#2980b9</color>
 
+    <color name="alarm_activity_bg_color">#e36c4c</color>
+    <color name="alarm_activity_bg_overlay">#44000000</color>
+
+    <color name="transparent_black">#6000</color>
+    <color name="fab_default_color">#e7e7e7</color>
+    <color name="fab_default_icon_color">#263238</color>
 
 </resources>

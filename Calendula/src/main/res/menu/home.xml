@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!--<item android:id="@+id/action_settings"-->
     <!--android:title="@string/action_settings"-->
@@ -25,37 +25,44 @@
     <!--app:showAsAction="never" />-->
 
     <!--<item-->
-        <!--android:id="@+id/action_empty"-->
-        <!--android:icon="@drawable/abc_ic_clear_mtrl_alpha"-->
-        <!--android:orderInCategory="100"-->
-        <!--android:title="Show empty"-->
-        <!--app:showAsAction="always" />-->
+    <!--android:id="@+id/action_empty"-->
+    <!--android:icon="@drawable/abc_ic_clear_mtrl_alpha"-->
+    <!--android:orderInCategory="100"-->
+    <!--android:title="Show empty"-->
+    <!--app:showAsAction="always" />-->
+
+    <item
+        android:id="@+id/action_sort"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:orderInCategory="100"
+        android:title="@string/action_sort"
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/action_expand"
         android:icon="@drawable/ic_unfold_less_white_48dp"
         android:orderInCategory="100"
-        android:title="Expand"
-        app:showAsAction="always" />
+        android:title="@string/expand"
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/action_calendar"
-        android:title="Show pickups"
         android:icon="@drawable/ic_event_white_48dp"
         android:orderInCategory="100"
-        app:showAsAction="always" />
+        android:title="@string/show_pickups"
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/action_schedules_help"
         android:icon="@drawable/ic_help_white_48dp"
         android:orderInCategory="100"
-        android:title="Help"
-        app:showAsAction="always" />
+        android:title="@string/help"
+        app:showAsAction="always"/>
 
     <!--<item-->
-        <!--android:id="@+id/action_scan"-->
-        <!--android:title="Scan QR"-->
-        <!--android:icon="@drawable/ic_qrcode_white_48dp"-->
-        <!--android:orderInCategory="100"-->
-        <!--app:showAsAction="always" />-->
+    <!--android:id="@+id/action_scan"-->
+    <!--android:title="Scan QR"-->
+    <!--android:icon="@drawable/ic_qrcode_white_48dp"-->
+    <!--android:orderInCategory="100"-->
+    <!--app:showAsAction="always" />-->
 </menu>

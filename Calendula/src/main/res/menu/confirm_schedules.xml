@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
   -->
 
 <menu xmlns:tools="http://schemas.android.com/tools"
-    tools:context="es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity">
-    
+      tools:context="es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity">
+
     <!--<item android:id="@+id/action_type_routines"
         android:title="@string/action_settings"
         android:icon="@drawable/ic_alarm_white_48dp"

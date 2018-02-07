@@ -3,7 +3,7 @@
 
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -20,46 +20,49 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/daily_agenda_item_med_right"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="2dp"
-    android:paddingTop="2dp"
-    >
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp">
 
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginLeft="35dp"
-        android:cropToPadding="false"
-        android:scaleType="fitCenter"
-        android:background="@drawable/circle_white"
-        android:src="@drawable/ic_presentation_2"
         android:layout_centerVertical="true"
-        android:layout_marginTop="2dp"
-        android:layout_marginRight="2dp"
         android:layout_marginBottom="2dp"
-        android:visibility="visible"
-        android:padding="8dp"/>
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/circle_white"
+        android:cropToPadding="false"
+        android:padding="8dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_presentation_2"
+        android:visibility="visible"/>
 
 
     <TextView
         android:id="@+id/med_item_name"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_marginTop="0dp"
-        android:fontFamily="sans-serif-light"
-
-        android:gravity="center_vertical"
-        android:paddingBottom="3dp"
-        android:text="Ibuprofeno"
-        android:textColor="#222"
-        android:textSize="16dp"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="0dp"
+        android:layout_toLeftOf="@+id/ic_done"
         android:layout_toRightOf="@+id/imageView"
-        android:layout_marginLeft="10dp"/>
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:paddingBottom="3dp"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        tools:text="Ibuprofeno"
+        android:textColor="#222"
+        android:textSize="16dp"/>
 
     <TextView
         android:id="@+id/med_item_dose"
@@ -71,7 +74,7 @@
         android:layout_marginLeft="90dp"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center_vertical"
-        android:text="(1 capsule)"
+        tools:text="(1 capsule)"
         android:textColor="#000"
         android:visibility="gone"/>
 
@@ -83,9 +86,9 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="20dp"
+        android:alpha="0.7"
         android:src="@drawable/ic_done_black_48dp"
-        android:visibility="visible"
-        android:alpha="0.7"/>
+        android:visibility="visible"/>
 
     <ImageView
         android:id="@+id/imageView2"

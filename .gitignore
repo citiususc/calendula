@@ -8,6 +8,8 @@
 *.apk
 *.ap_
 
+!assets/apk/*.apk
+
 # files for the dex VM
 *.dex
 
@@ -38,4 +40,10 @@ libraries/*.iml
 *~
 *.swp
 
+Calendula/google-services/
 Calendula/google-services.json
+
+# captures
+captures/
+
+hs_err_*.log

@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -20,14 +20,12 @@ package es.usc.citius.servando.calendula.fragments;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,18 +33,29 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.activities.ReminderNotification;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
+import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Created by joseangel.pineiro on 12/2/13.
@@ -54,6 +63,7 @@ import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 public class RoutinesListFragment extends Fragment {
 
 
+    private static final String TAG = "RoutinesListFragment";
     List<Routine> mRoutines;
     OnRoutineSelectedListener mRoutineSelectedCallback;
     ArrayAdapter adapter;
@@ -68,9 +78,7 @@ public class RoutinesListFragment extends Fragment {
 
         View empty = rootView.findViewById(android.R.id.empty);
         listview.setEmptyView(empty);
-
-        mRoutines = DB.routines().findAllForActivePatient(getContext());
-
+        mRoutines = new ArrayList<>();
         ic = new IconicsDrawable(getContext())
                 .icon(CommunityMaterial.Icon.cmd_clock)
                 .colorRes(R.color.agenda_item_title)
@@ -79,14 +87,14 @@ public class RoutinesListFragment extends Fragment {
 
         adapter = new RoutinesListAdapter(getActivity(), R.layout.routines_list_item, mRoutines);
         listview.setAdapter(adapter);
-
+        new ReloadItemsTask().execute();
         return rootView;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.d(getTag(), "Activity " + activity.getClass().getName() + ", " + (activity instanceof OnRoutineSelectedListener));
+        LogUtil.d(TAG, "Activity " + activity.getClass().getName() + ", " + (activity instanceof OnRoutineSelectedListener));
         // If the container activity has implemented
         // the callback interface, set it as listener
         if (activity instanceof OnRoutineSelectedListener) {
@@ -94,10 +102,73 @@ public class RoutinesListFragment extends Fragment {
         }
     }
 
+    public void notifyDataChange() {
+        LogUtil.d(TAG, "Routines - Notify data change");
+        new ReloadItemsTask().execute();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        CalendulaApp.eventBus().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        CalendulaApp.eventBus().unregister(this);
+        super.onStop();
+    }
+
+    // Method called from the event bus
+    @SuppressWarnings("unused")
+    @Subscribe
+    public void handleActiveUserChange(final PersistenceEvents.ActiveUserChangeEvent event) {
+        notifyDataChange();
+    }
+
+    void showDeleteConfirmationDialog(final Routine r) {
+
+        String message;
+        if (r.getScheduleItems().size() > 0) {
+            message = String.format(getString(R.string.remove_routine_message_long), r.getName());
+        } else {
+            message = String.format(getString(R.string.remove_routine_message_short), r.getName());
+        }
+
+        new MaterialStyledDialog.Builder(getActivity())
+                .setTitle("")
+                .setStyle(Style.HEADER_WITH_ICON)
+                .setIcon(IconUtils.icon(getActivity(), CommunityMaterial.Icon.cmd_clock, R.color.white, 100))
+                .setHeaderColor(R.color.android_red)
+                .withDialogAnimation(true)
+                .setTitle(getString(R.string.remove_routine_dialog_title))
+                .setDescription(message)
+                .setCancelable(true)
+                .setNeutralText(getString(R.string.dialog_no_option))
+                .setPositiveText(getString(R.string.dialog_yes_option))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        AlarmScheduler.instance().onDeleteRoutine(r, getActivity());
+                        DB.routines().deleteCascade(r, true);
+                        ReminderNotification.cancel(getContext(), ReminderNotification.routineNotificationId(r.getId().intValue()));
+                        notifyDataChange();
+                    }
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
+
+    }
+
     private View createRoutineListItem(LayoutInflater inflater, final Routine routine) {
 
-        int hour = routine.time().getHourOfDay();
-        int minute = routine.time().getMinuteOfHour();
+        int hour = routine.getTime().getHourOfDay();
+        int minute = routine.getTime().getMinuteOfHour();
 
         String strHour = String.valueOf(hour >= 10 ? hour : "0" + hour);
         String strMinute = ":" + String.valueOf(minute >= 10 ? minute : "0" + minute);
@@ -106,12 +177,13 @@ public class RoutinesListFragment extends Fragment {
 
         ((TextView) item.findViewById(R.id.routines_list_item_hour)).setText(strHour);
         ((TextView) item.findViewById(R.id.routines_list_item_minute)).setText(strMinute);
-        ((TextView) item.findViewById(R.id.routines_list_item_name)).setText(routine.name());
+        ((TextView) item.findViewById(R.id.routines_list_item_name)).setText(routine.getName());
         ((ImageButton) item.findViewById(R.id.imageButton2)).setImageDrawable(ic);
 
-        int items = routine.scheduleItems().size();
+        int items = routine.getScheduleItems().size();
 
-        ((TextView) item.findViewById(R.id.routines_list_item_subtitle)).setText((items > 0 ? (""+items) : "Sin ") + " pautas asociadas");
+        String schedules = items > 0 ? getString(R.string.schedules_for_med, items) : getString(R.string.schedules_for_med_none);
+        ((TextView) item.findViewById(R.id.routines_list_item_subtitle)).setText(schedules);
         View overlay = item.findViewById(R.id.routine_list_item_container);
         overlay.setTag(routine);
 
@@ -120,10 +192,10 @@ public class RoutinesListFragment extends Fragment {
             public void onClick(View view) {
                 Routine r = (Routine) view.getTag();
                 if (mRoutineSelectedCallback != null && r != null) {
-                    Log.d(getTag(), "Click at " + r.name());
+                    LogUtil.d(TAG, "Click at " + r.getName());
                     mRoutineSelectedCallback.onRoutineSelected(r);
                 } else {
-                    Log.d(getTag(), "No callback set");
+                    LogUtil.d(TAG, "No callback set");
                 }
 
             }
@@ -141,48 +213,11 @@ public class RoutinesListFragment extends Fragment {
         return item;
     }
 
-    void showDeleteConfirmationDialog(final Routine r) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        String message;
-
-
-        if (r.scheduleItems().size() > 0) {
-            message = String.format(getString(R.string.remove_routine_message_long), r.name());
-            //message = "The routine " + r.name() + " has associated schedules that will be lost if you delete it. Do you want to remove it anyway?";
-        } else {
-            //message = "Remove " + r.name() + " routine?";
-            message = String.format(getString(R.string.remove_routine_message_short), r.name());
-        }
-
-        builder.setMessage(message)
-                .setCancelable(true)
-                .setTitle(getString(R.string.remove_routine_dialog_title))
-                .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // cancel routine alarm and delete it
-                        AlarmScheduler.instance().onDeleteRoutine(r, getActivity());
-                        DB.routines().deleteCascade(r, true);
-                        notifyDataChange();
-                    }
-                })
-                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-    public void notifyDataChange() {
-        Log.d(getTag(), "Routines - Notify data change");
-        new ReloadItemsTask().execute();
-    }
 
     // Container Activity must implement this interface
     public interface OnRoutineSelectedListener {
         void onRoutineSelected(Routine r);
+
         void onCreateRoutine();
     }
 
@@ -204,40 +239,15 @@ public class RoutinesListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            mRoutines = DB.routines().findAllForActivePatient(getContext());
-
+            mRoutines.clear();
+            mRoutines.addAll(DB.routines().findAllForActivePatient(getContext()));
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            adapter.clear();
-            for (Routine r : mRoutines) {
-                adapter.add(r);
-            }
             adapter.notifyDataSetChanged();
-        }
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        CalendulaApp.eventBus().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        CalendulaApp.eventBus().unregister(this);
-        super.onStop();
-    }
-
-    // Method called from the event bus
-    @SuppressWarnings("unused")
-    public void onEvent(Object evt) {
-        if(evt instanceof PersistenceEvents.ActiveUserChangeEvent){
-            notifyDataChange();
         }
     }
 

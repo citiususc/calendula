@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ import es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity;
  */
 public class ScheduleConfirmationStartFragment extends Fragment {
 
-    public static final String TAG = ScheduleConfirmationStartFragment.class.getName();
+    private static final String TAG = "ScheConfStartFragment";
 
 
     public static ScheduleConfirmationStartFragment newInstance() {
@@ -49,7 +49,7 @@ public class ScheduleConfirmationStartFragment extends Fragment {
         rootView.findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((ConfirmSchedulesActivity)getActivity()).next();
+                ((ConfirmSchedulesActivity) getActivity()).next();
             }
         });
         return rootView;

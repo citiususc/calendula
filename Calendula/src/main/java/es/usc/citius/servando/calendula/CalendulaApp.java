@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -18,20 +18,14 @@
 
 package es.usc.citius.servando.calendula;
 
-import android.app.AlarmManager;
-import android.app.Application;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.preference.PreferenceManager;
-import android.util.Log;
+import android.os.Build;
+import android.support.multidex.MultiDexApplication;
 
-import com.evernote.android.job.JobManager;
-import com.mikepenz.iconics.Iconics;
+import com.squareup.leakcanary.LeakCanary;
 
-import org.joda.time.LocalTime;
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,34 +33,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
 import java.util.Locale;
 
-import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
-import es.usc.citius.servando.calendula.database.PatientDao;
-import es.usc.citius.servando.calendula.jobs.CalendulaJobCreator;
-import es.usc.citius.servando.calendula.jobs.PurgeCacheJob;
-import es.usc.citius.servando.calendula.persistence.Patient;
-import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
-import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
-import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
-import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
-import es.usc.citius.servando.calendula.util.PresentationsTypeface;
+import es.usc.citius.servando.calendula.modules.ModuleManager;
+import es.usc.citius.servando.calendula.modules.modules.PharmacyModule;
+import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.util.debug.StethoHelper;
 
 /**
  * Created by castrelo on 4/10/14.
  */
-public class CalendulaApp extends Application {
-
-    public static boolean disableReceivers = false;
-
-    private static boolean isOpen;
-
-    public static final String PHARMACY_MODE_ENABLED = "PHARMACY_MODE_ENABLED";
-
-    // PREFERENCES
-    public static final String PREFERENCES_NAME = "CalendulaPreferences";
-    public static final String PREF_ALARM_SETTLED = "alarm_settled";
+public class CalendulaApp extends MultiDexApplication {
 
     // INTENTS
     public static final String INTENT_EXTRA_ACTION = "action";
@@ -76,6 +55,8 @@ public class CalendulaApp extends Application {
     public static final String INTENT_EXTRA_SCHEDULE_TIME = "schedule_time";
     public static final String INTENT_EXTRA_DELAY_ROUTINE_ID = "delay_routine_id";
     public static final String INTENT_EXTRA_DELAY_SCHEDULE_ID = "delay_schedule_id";
+    public static final String INTENT_EXTRA_DATE = "date";
+    public static final String INTENT_EXTRA_POSITION = "position";
     // ACTIONS
     public static final int ACTION_ROUTINE_TIME = 1;
     public static final int ACTION_DAILY_ALARM = 2;
@@ -87,97 +68,39 @@ public class CalendulaApp extends Application {
     public static final int ACTION_DELAY_HOURLY_SCHEDULE = 8;
     public static final int ACTION_CANCEL_HOURLY_SCHEDULE = 9;
     public static final int ACTION_CHECK_PICKUPS_ALARM = 10;
-
-
+    public static final int ACTION_CONFIRM_ALL_ROUTINE = 11;
+    public static final int ACTION_CONFIRM_ALL_SCHEDULE = 12;
     // REQUEST CODES
     public static final int RQ_SHOW_ROUTINE = 1;
     public static final int RQ_DELAY_ROUTINE = 2;
+    private static final String TAG = "CalendulaApp";
+    public static boolean disableReceivers = false;
+    private static boolean isOpen;
+    private static WeakReference<EventBus> eventBusRef;
+    private static Context mContext;
 
-    private static EventBus eventBus = EventBus.getDefault();
+
+    public static EventBus eventBus() {
+        if (eventBusRef == null || eventBusRef.get() == null) {
+            eventBusRef = new WeakReference<>(EventBus.getDefault());
+        }
+        return eventBusRef.get();
+    }
 
     public static boolean isOpen() {
         return isOpen;
+    }
+
+    public static boolean isPharmaModeEnabled() {
+        return ModuleManager.isEnabled(PharmacyModule.ID);
     }
 
     public static void open(boolean isOpen) {
         CalendulaApp.isOpen = isOpen;
     }
 
-    SharedPreferences prefs;
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        // initialize SQLite engine
-        initializeDatabase();
-
-        if (!prefs.getBoolean("DEFAULT_DATA_INSERTED", false)) {
-            DefaultDataGenerator.fillDBWithDummyData(getApplicationContext());
-            prefs.edit().putBoolean("DEFAULT_DATA_INSERTED", true).commit();
-        }
-
-        // initialize daily agenda
-        DailyAgenda.instance().setupForToday(this, false);
-        // setup alarm for daily agenda update
-        setupUpdateDailyAgendaAlarm();
-        //exportDatabase(this, DB_NAME, new File(Environment.getExternalStorageDirectory() + File.separator + DB_NAME));
-        //forceLocale(Locale.GERMAN);
-        //only required if you add a custom or generic font on your own
-        Iconics.init(getApplicationContext());
-        //register custom fonts like this (or also provide a font definition file)
-        Iconics.registerFont(new PresentationsTypeface());
-
-        //initialize job engine
-        JobManager.create(this).addJobCreator(new CalendulaJobCreator());
-        PurgeCacheJob.scheduleJob();
-    }
-
-
-
-    public static boolean isPharmaModeEnabled(Context ctx) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return prefs.getBoolean(PHARMACY_MODE_ENABLED, false);
-    }
-
-
-    private void forceLocale(Locale l) {
-        Locale locale = new Locale(l.getLanguage());
-        Locale.setDefault(locale);
-        Configuration config = getApplicationContext().getResources().getConfiguration();
-        config.locale = locale;
-        getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
-    }
-
-    public void initializeDatabase() {
-        DB.init(this);
-        try{
-            if(DB.patients().countOf() == 1) {
-                Patient p = DB.patients().getDefault();
-                prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).commit();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public void onTerminate() {
-        DB.dispose();
-        super.onTerminate();
-    }
-
-    public void setupUpdateDailyAgendaAlarm() {
-        // intent our receiver will receive
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        AlarmIntentParams params = AlarmIntentParams.forDailyUpdate();
-        AlarmScheduler.setAlarmParams(intent, params);
-        PendingIntent dailyAlarm = PendingIntent.getBroadcast(this, params.hashCode(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, new LocalTime(0, 0).toDateTimeToday().getMillis(), AlarmManager.INTERVAL_DAY, dailyAlarm);
-        }
+    public static Context getContext() {
+        return mContext;
     }
 
     public void exportDatabase(Context context, String databaseName, File out) {
@@ -185,7 +108,7 @@ public class CalendulaApp extends Application {
 
         // If the database already exists, return
         if (!dbPath.exists()) {
-            Log.d("APP", "Database not found");
+            LogUtil.d(TAG, "Database not found");
             return;
         }
 
@@ -205,18 +128,56 @@ public class CalendulaApp extends Application {
             output.close();
             inputStream.close();
         } catch (IOException e) {
-            Log.e("APP", "Failed to export database", e);
+            LogUtil.e(TAG, "Failed to export database", e);
         }
     }
 
-    public static EventBus eventBus() {
-        return eventBus;
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        if(!Build.FINGERPRINT.equals("robolectric")) {
+            if (BuildConfig.DEBUG ) {
+                new StethoHelper().init(this);
+            }
+
+            if (LeakCanary.isInAnalyzerProcess(CalendulaApp.this) ) {
+                // This process is dedicated to LeakCanary for heap analysis.
+                return;
+            }
+
+            //initialize LeakCanary
+            LeakCanary.install(CalendulaApp.this);
+        }
+
+        final Context applicationContext = getApplicationContext();
+        mContext = applicationContext;
+
+        LogUtil.d(TAG, "Application started");
+
+        try {
+            LogUtil.d(TAG, "Application flavor is \"" + BuildConfig.FLAVOR + "\"");
+            final String flavor = BuildConfig.FLAVOR.toUpperCase();
+            ModuleManager.getInstance().runModules(flavor, applicationContext);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            LogUtil.e(TAG, "onCreate: Error loading module configuration", e);
+            LogUtil.w(TAG, "onCreate: Loading default module configuration instead");
+            ModuleManager.getInstance().runDefaultModules(applicationContext);
+        }
+
     }
 
+    @Override
+    public void onTerminate() {
+        DB.dispose();
+        super.onTerminate();
+    }
 
-    public static String activePatientAuth(Context ctx) {
-        Long id = DB.patients().getActive(ctx).id();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return prefs.getString("remote_token" + id, null);
+    private void forceLocale(Locale l) {
+        Locale locale = new Locale(l.getLanguage());
+        Locale.setDefault(locale);
+        Configuration config = getApplicationContext().getResources().getConfiguration();
+        config.locale = locale;
+        getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
     }
 }

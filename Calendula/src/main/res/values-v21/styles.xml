@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -18,6 +17,7 @@
   -->
 
 <resources>
+
     <style name="AppTheme" parent="MaterialDrawerTheme.Light.TranslucentStatus">
         <!-- Set AppCompat’s actionBarStyle -->
         <!--<item name="actionBarStyle">@style/MyActionBar</item>-->
@@ -33,5 +33,9 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="siv_insetForeground">#01ffffff</item>
+    </style>
+
+    <style name="BlueProgressBar" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/android_blue</item>
     </style>
 </resources>

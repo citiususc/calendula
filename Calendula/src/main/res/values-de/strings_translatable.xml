@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="title_home">"Home"</string>
+<string name="action_settings">"Einstellungen"</string>
+<string name="action_remove">"Entfernen"</string>
+<string name="home_menu_routines">"Routinen"</string>
+<string name="home_menu_medicines">"Medikamente"</string>
+<string name="home_menu_pharmacies">"Apotheken"</string>
+<string name="home_menu_plantrip">"Reiseplanung"</string>
+<string name="medicine">"Medikamente"</string>
+<string name="drawer_help_option">"Tour"</string>
+<string name="drawer_settings_option">"Einstellungen"</string>
+<string name="drawer_about_option">"Über uns"</string>
+<string name="title_activity_routines">"Routinen"</string>
+<string name="title_edit_routine_activity">"Routinen bearbeiten"</string>
+<string name="title_create_routine_activity">"Routine erstellen"</string>
+<string name="title_activity_medicines">"Medizin"</string>
+<string name="title_edit_schedule_activity">"Einnahmeplan bearbeiten"</string>
+<string name="title_create_schedule_activity">"Einnahmeplan erstellen"</string>
+<string name="routine_name">"Name der Routine"</string>
+<string name="routine_time">"Zeit"</string>
+<string name="create_routine_button_text">"Routine erstellen"</string>
+<string name="create_new_routine">"Neue Routine erstellen…"</string>
+<string name="medicine_name">"Medikamentenname"</string>
+<string name="medicine_presentation">"Applikationsart"</string>
+<string name="create_medicine_button_text">"Medikament erstellen"</string>
+<string name="no_stock_info_msg">"Keine Bestandsinformation"</string>
+<string name="title_activity_schedules">"Pläne"</string>
+<string name="delay">"Verzögerung"</string>
+<string name="done">"Erledigt"</string>
+<string name="cancel">"Rückgängig"</string>
+<string name="confirm">"Bestätigen"</string>
+<string name="meds_time">"Bitte an die Medikamenteneinnahme denken"</string>
+<string name="meds_time_lost">"Alarm verpasst"</string>
+<string name="title_select_dose_dialog">"Dosierung festlegen"</string>
+<string name="doses_and_times">"Zeiten und Dosierungen"</string>
+<string name="schedule_repeat_days">"Wiederholen"</string>
+<string name="summary_title">"Kontrollieren und Bestätigen"</string>
+<string name="summary">"Zusammenfassung"</string>
+<string name="pills">"Tabletten"</string>
+<string name="capsules">"Kapseln"</string>
+<string name="inhaler">"Inhalator"</string>
+<string name="drops">"Tropfen"</string>
+<string name="pomade">"Creme"</string>
+<string name="syrup">"Sirup"</string>
+<string name="spray">"Spray"</string>
+<string name="patches">"Pflaster"</string>
+<string name="unknown">"Unbekannt"</string>
+<string name="effervescent">"Brausetablette/-pulver"</string>
+<string name="schedule">"Plan"</string>
+<plurals name="injections_units">
+<item quantity="one">"Injektion"</item>
+<item quantity="other">"Injektionen"</item>
+</plurals>
+<plurals name="pills_units">
+<item quantity="one">"Tablette"</item>
+<item quantity="other">"Tabletten"</item>
+</plurals>
+<plurals name="capsules_units">
+<item quantity="one">"Kapsel"</item>
+<item quantity="other">"Kapseln"</item>
+</plurals>
+<plurals name="inhaler_units">
+<item quantity="one">"Inhalationsstoß"</item>
+<item quantity="other">"Inhalationsstöße"</item>
+</plurals>
+<plurals name="spray_units">
+<item quantity="one">"Spraystoß"</item>
+<item quantity="other">"Spraystöße"</item>
+</plurals>
+<plurals name="drops_units">
+<item quantity="one">"Tropfen"</item>
+<item quantity="other">"Tropfen"</item>
+</plurals>
+<plurals name="pomade_units">
+<item quantity="one">"Anwendung"</item>
+<item quantity="other">"Anwendungen"</item>
+</plurals>
+<plurals name="syrup_units">
+<item quantity="one">"ml"</item>
+<item quantity="other">"ml"</item>
+</plurals>
+<plurals name="patches_units">
+<item quantity="one">"Pflaster"</item>
+<item quantity="other">"Pflaster"</item>
+</plurals>
+<plurals name="unknown_units">
+<item quantity="one">"Einheit"</item>
+<item quantity="other">"Einheiten"</item>
+</plurals>
+<plurals name="effervescent_units">
+<item quantity="one">"Packung"</item>
+<item quantity="other">"Packungen"</item>
+</plurals>
+<string name="never">"Nie"</string>
+<string name="every_day">"Jeden Tag"</string>
+<string name="once_a_day">"Einmal täglich"</string>
+<string name="twice_a_day">"Zweimal täglich"</string>
+<string name="tree_times_a_day">"Dreimal täglich"</string>
+<string name="four_times_a_day">"Viermal täglich"</string>
+<string name="times_a_day">"Mal pro Tag"</string>
+<string name="and">"und"</string>
+<string name="routine_breakfast">"Frühstück"</string>
+<string name="routine_lunch">"Mittagessen"</string>
+<string name="routine_dinner">"Abendessen"</string>
+<string name="schedule_timetable_time_column">"ZEIT"</string>
+<string name="schedule_timetable_dose_column">"DOSIERUNG"</string>
+<string name="take">"Einnahme"</string>
+<string name="first_intake">"Erste Einnahme um"</string>
+<string name="day_monday_short">"Mo"</string>
+<string name="day_tuesday_short">"Di"</string>
+<string name="day_wednesday_short">"Mi"</string>
+<string name="day_thursday_short">"Do"</string>
+<string name="day_friday_short">"Fr"</string>
+<string name="day_saturday_short">"Sa"</string>
+<string name="day_sunday_short">"So"</string>
+<string name="schedule_day_selector_mo">"MO"</string>
+<string name="schedule_day_selector_tu">"DI"</string>
+<string name="schedule_day_selector_we">"MI"</string>
+<string name="schedule_day_selector_th">"DO"</string>
+<string name="schedule_day_selector_fr">"FR"</string>
+<string name="schedule_day_selector_sa">"SA"</string>
+<string name="schedule_day_selector_su">"SO"</string>
+<string name="schedule_day_selector_none">"Nichts"</string>
+<string name="agenda_zoom_meds_time">"Es ist Zeit, Medikamente zu nehmen!"</string>
+<string name="create_schedule_unselected_med">"Medikament wählen, um einen Plan zu erstellen"</string>
+<string name="create_schedule_incomplete_items">"Bitte alle Einnahmen mit Routinen verknüpfen"</string>
+<string name="create_schedule_incomplete_doses">"Dosierungen müssen größer als Null sein"</string>
+<string name="home_no_pending_meds_message">"Es gibt keine ausstehenden Einnahmen für heute"</string>
+<string name="medicine_created_message">"Medikament erstellt!"</string>
+<string name="medicine_deleted_message">"Medikament gelöscht!"</string>
+<string name="medicine_edited_message">"Medikament aktualisiert!"</string>
+<string name="schedule_created_message">"Plan erstellt!"</string>
+<string name="cycle_period_cero_message">"Die zyklische Einahme und die Pause müssen größer als Null sein"</string>
+<string name="reminder_cancelled_message">"Erinnerung gelöscht"</string>
+<string name="remove_routine_message_long">"Die Routine %1$s hat assoziierte Pläne, die verloren gehen, wenn die Routine gelöscht wird. Trotzdem fortfahren?"</string>
+<string name="remove_medicine_message_long">"%1$s hat assoziierte Pläne die verloren gehen wenn Sie es löschen. Wollen Sie trotzdem löschen?"</string>
+<string name="remove_routine_message_short">"Routine %1$s entfernen?"</string>
+<string name="remove_medicine_message_short">"Entfernen von %1$s?"</string>
+<string name="remove_routine_dialog_title">"Routine entfernen"</string>
+<string name="remove_medicine_dialog_title">"Medikamente entfernen"</string>
+<string name="remove_schedule_dialog_title">"Plan entfernen"</string>
+<string name="remove_schedule_message">"Plan von %1$s entfernen?"</string>
+<string name="dialog_yes_option">"Ja"</string>
+<string name="dialog_no_option">"Nein"</string>
+<string name="medicine_no_name_error_message">"Bitte Namen eingeben"</string>
+<string name="medicine_unselected">"Noch nichts ausgewählt"</string>
+<string name="medicine_no_presentation_error_message">"Bitte eine Präsentation wählen"</string>
+<string name="tutorial_understood">"Verstanden"</string>
+<string name="notification_repeat_message">"Die Benachrichtigung wird wiederholt um %1$s"</string>
+<string name="notification_cancel_now">"Jetzt löschen"</string>
+<string name="notification_delay">"Verschieben"</string>
+<string name="alarm_delayed_message">"Alarm wird verschoben um %1$s Minuten"</string>
+<string name="moods_dialog_title">"Wie fühlen Sie sich?"</string>
+<string name="mood_very_bad">"Fühle mich sehr schlecht"</string>
+<string name="mood_bad">"Fühle mich schlecht"</string>
+<string name="mood_neutral">"Fühle nichts"</string>
+<string name="mood_good">"Fühle mich gut"</string>
+<string name="mood_very_good">"Fühle mich sehr gut"</string>
+<string name="search_med_hint">"Suche …"</string>
+<string name="pref_header_prescriptions">"Medikamentensuche"</string>
+<string name="medicine_edit_name_hint">"Hier schreiben …"</string>
+<string name="enable_prescriptions_dialog_message">"Durch Aktivierung des Suchassistenten können einfach Medikamente hinzugefügt und Beipackzettel angesehen werden. Die Aktivierung kann auch später über das Menü erfolgen."</string>
+<string name="enable_prescriptions_dialog_title">"Suchassistent"</string>
+<string name="enable_prescriptions_dialog_yes">"Aktivieren (empfohlen)"</string>
+<string name="enable_prescriptions_dialog_no">"Abbrechen"</string>
+<string name="driving_warning">"Dieses Medikament kann Ihre Fahrtüchtigkeit beeinflussen. 
+
+Lesen Sie bitte den Beipackzettel sorgfältig oder fragen Sie Ihren Arzt oder Apotheker. 
+
+Danke."</string>
+<string name="driving_warning_title">"Bitte vorsichtig sein"</string>
+<string name="driving_warning_show_prospect">"Bitte den Beipackzettel lesen"</string>
+<string name="driving_warning_gotit">"Verstanden"</string>
+<string name="dialog_interval_title">"Intervall"</string>
+<string name="every">"alle"</string>
+<string name="repeat_every_tostr">"Alle %1$s %2$s"</string>
+<string name="label_schedule_repeat_today">"Anfang"</string>
+<string name="button_schedule_repeat_today">"Heute"</string>
+<string name="label_schedule_repeat_until">"Ende"</string>
+<string name="button_schedule_repeat_until">"Nie"</string>
+<string name="schedule_limits_date_format">"dd. MMMM YYYY"</string>
+<string name="schedules_stop_after">"Ende nach %1$s Einnahmen"</string>
+<string name="schedule_repeat_period">"Periode + Unterbrechung"</string>
+<string name="schedule_repeat_type_everyday">"Täglich"</string>
+<string name="schedule_repeat_type_some_week_days">"Einige Tage pro Woche"</string>
+<string name="schedule_repeat_type_interval">"Intervall mässig"</string>
+<string name="schedule_repeat_frequency_days">"Tage"</string>
+<string name="schedule_repeat_frequency_weeks">"Wochen"</string>
+<string name="schedule_repeat_frequency_months">"Monate"</string>
+<string name="summary_show_calendar">"Kalender anzeigen"</string>
+<string name="hours">"Stunden"</string>
+<string name="schedule_help_no_type_selected">"Bitte einen Plantyp auswählen, um anschließend einen Plan zu erstellen"</string>
+<string name="schedule_type_routines_title">"Verknüpft mit Routinen"</string>
+<string name="schedule_type_hourly_title">"Stündliches Intervall"</string>
+<string name="schedule_type_period_title">"Perioden + Pausen"</string>
+<string name="schedule_type_common_periods">"Gängige Zyklen"</string>
+<string name="schedule_type_routines_description">"Beispiel: Alle drei Tage mit dem Frühstück/Mittagessen/Abendessen"</string>
+<string name="schedule_type_hourly_description">"Beispiel: Alle acht Stunden"</string>
+<string name="schedule_type_period_description">"Beispiel: 21 Tage + 7 Tage Pause"</string>
+<string name="schedule_help_cycle">"Wiederholungszyklus einrichten (Einnahme + Unterbrechungen)"</string>
+<string name="schedule_help_duration">"Es können ein Anfang und Ende der Gültigkeit des Plans bestimmt werden. Ohne Angabe wird der Plan stets wiederholt."</string>
+<string name="schedule_help_hourly">"Bitte den Wiederholungszeitraum, die Dosierung und den Zeitpunkt der ersten Einnahme angeben."</string>
+<string name="schedule_help_repeat">"Bitte angeben, an welchen Wochentagen eine Einnahme erfolgen soll. Bei täglicher Einnahme müssen keine Änderungen vorgenommen werden."</string>
+<string name="schedule_help_timesbyday">"Bitte angeben, wie häufig eine Einnahme pro Tag vorgesehen ist."</string>
+<string name="schedule_help_timetable">" Bitte jede Einnahme mit Routinen verknüpfen und die Dosierung jeder Einnahme angeben."</string>
+<string name="title_activity_calendar">"Aufstockkalender"</string>
+<string name="title_pickups_bottom_sheet">"Neue Medikamente besorgen am %1$s"</string>
+<string name="pickup_interval">"Bis %1$s"</string>
+<string name="pickup_date_format">"dd. MMMM YYYY"</string>
+<string name="title_activity_confirm_schedules">"Pläne bestätigen"</string>
+<string name="confirm_prescription_x_of_y">"Rezept %1$s von %2$s"</string>
+<string name="scan_prescriptions_title">"Rezept scannen"</string>
+<string name="scan_qr">"QR-Code scannen"</string>
+<string name="duration">"Zeitraum"</string>
+<string name="all_meds_taken">"Alle Medikamente eingenommen!"</string>
+<string name="create_schedule_select_med_before_dose">"Bitte zuerst ein Medikament auswählen"</string>
+<string name="title_activity_patients">"Patienten"</string>
+<string name="schedule_type_help_title">"Sie sind dabei einen Einnahmeplan zu erstellen. Wählen Sie den aus, der am besten zu Ihren Bedürfnissen passt."</string>
+<string name="schedule_type_routines_help">"Diese Art Einnahmeplan erlaubt es Einnahmen Ihren Routinen zuzuordnen, etwa \"Jeden Tag zum Frühstück und Abendessen, außer sonnatgs\", oder \"Alle 3 Tage beim Mittagessen\"."</string>
+<string name="schedule_type_hourly_help">"Stündliche Einnahmepläne sind für Einnahmen gedacht, die periodisch zu wiederholen sind, etwa: \"Alle 8 Stunden\". Stellen Sie die Zeit der ersten Einnahme ein und fahren Sie fort."</string>
+<string name="schedule_type_intervalrest_help">"Die Einnahme von Verhütungspillen und andere Medikamente bestehen aus Einnahme- und Pausenzeiten. Diese Art Einnahmeplan erlaubt es beide Zeiten einzustellen und vereinfacht derartige Einnahme."</string>
+<string name="routines_list_empty_text">"Bisher gibt es keine Routinen.
+
+Routinen sind Zeiten zu denen Sie Ihre Medikamente einnehmen müssen, etwa zum Frühstück oder Abendessen. Sie können sie wiederverwenden um Einnahmepläne schnelle erstellen zu können."</string>
+<string name="medicines_list_empty_text">"Bisher gibt es keine Medikamente.
+
+Fügen Sie Ihre Medikamente zur Tasche hinzu und Sie werden Zugriff auf Beipackzettel und Warnhinweise haben."</string>
+<string name="schedules_list_empty_text">"Bisher gibt es keine Einnahmepläne.
+
+Fügen Sie Einnahmepläne hier hinzu und lassen Sie sich einfach von uns erinnern."</string>
+<string name="about_description"><![CDATA[
+<br/><br/>
+Calendula wird entwickelt vom Research Centre for Information Technologies of the USC (<a href=\'http://citius.usc.es\'>CITIUS</a>)
+<br/><br/>
+Besuchen Sie unsere Webseite für weitere Informationen:
+<br/>
+<a href=\'http://citius.usc.es/calendula\'>citius.usc.es/calendula </a>
+<br/><br/>
+Calendula ist ein Open Source Project. Sie können Ideen und Vorschläge beisteuern, indem Sie unser Github Projekt besuchen oder uns eine E-Mail schreiben:
+<br/>
+<a href=\'https://github.com/citiususc/calendula\'>https://github.com/citiususc/calendula </a>
+ <br/>
+<a href=\'mailto:citius.calendula@usc.es\'>citius.calendula@usc.es</a>
+<br/><br/>
+Für die Entwicklung dieses Projektes verwenden wir mehrere Open Source Bibliotheken die folgend gelistet sind:
+"]]></string>
+<string name="message_generic_pageloaderror">"Beim Laden der Seite ist ein Fehler aufgetreten."</string>
+<string name="title_prospect_webview">"Merkblattansicht"</string>
+<string name="message_generic_pleasewait">"Bitte einen Moment warten …"</string>
+<string name="message_prospect_loading">"Das Merkblatt wird gleich fertig sein …"</string>
+<string name="message_prospect_connection_error">"Das Merkblatt konnte nicht geladen werden"</string>
+<string name="message_prospect_not_found_error">"Für dieses Medikament ist leider kein Merkblatt verfügbar"</string>
+<string name="intake_not_available">"Einnahme nicht verfügbar"</string>
+<string name="confirm_future_intake_warning">"Diese Einnahme steht in %1$s zur Verfügung. Wir werden Sie dann informieren!"</string>
+<string name="confirm_past_intake_warning">"Seit dieser Einnahme sind mehrere Stunden vergangen. Haben Sie ihre Medikamente eingenommen und wollen jetzt bestätigen?"</string>
+<string name="meds_from">"Medikamente von"</string>
+<string name="at_time_connector">"um"</string>
+<string name="med_taken_at">"Bestätigt um"</string>
+<string name="med_cancelled_at">"Gelöscht um"</string>
+<string name="med_not_taken">"Nicht eingenommen"</string>
+<string name="meds_confirm_ok">"Ja, eingenommen"</string>
+<string name="meds_confirm_cancel">"Nein"</string>
+<string name="meds_unconfirm_ok">"Nein"</string>
+<string name="meds_unconfirm_cancel">"Ja, eingenommen"</string>
+<string name="unconfirm_past_intake_warning">"Sie haben diese Einnahme %1$s bestätigt, haben Sie es eingenommen?"</string>
+<string name="action_share_link">"Teilen mit"</string>
+<string name="action_open_with_browser">"Mit Browser öffnen"</string>
+<string name="title_share_link">"Teilen mit..."</string>
+<string name="title_about">"Über"</string>
+<string name="home_menu_allergies">"Allergien"</string>
+<string name="title_activity_allergies">"Allergien"</string>
+<string name="message_allergy_add_failure">"Es gab einen Fehler beim Speichern ihrer Allergien Auswahl. "</string>
+<string name="remove_allergy_message_short">"Allergie %1$s entfernen?"</string>
+<string name="excipient">"Trägerstoff"</string>
+<string name="active_ingredient">"Wirkstoff"</string>
+<string name="delete_allergen_error">"Fehler beim Löschen der Allergieinformation."</string>
+<string name="allergies_placeholder">"Bisher wurden keine Allergien hinzugefügt!"</string>
+<string name="allergies_search_placeholder">"Fangen Sie an Ihre Allergie zu tippen um Vorschläge angezeigt zu bekommen."</string>
+<string name="allergies_search_placeholder_no_result">"Keine Ergebnisse für diese Suche"</string>
+<string name="notification_error_msg">"Scheinbar ist ein Problem mit der Benachrichtigung aufgetreten. Schauen Sie bitte in Ihrem Plan nach ob etwas ausstehend ist."</string>
+<string name="notification_error_title">"Huch..."</string>
+<string name="title_medicine_allergy_alert">"Für dieses Medikament wurden Allergien erkannt."</string>
+<string name="message_medicine_alert">"Dieses Medikament enthält Inhaltsstoffe gegen die Sie allergisch sind. Zu Ihrer Sicherheit ist es nicht möglich dieses Medikament ihrem Einnahmeplan hinzuzufügen."</string>
+<string name="medicine_save_error_message">"Beim Speichern des Medikaments ist ein Fehler aufgetreten."</string>
+<string name="message_schedule_medicine_allergy">"Dieses Medikament kann nicht dem Einnahmeplan hinzugefügt werden, da Sie allergisch auf auf einen der Inhaltsstoffe reagieren könnten."</string>
+<string name="title_allergies_detected_dialog">"Warnhinweis"</string>
+<string name="message_allergies_detected_dialog">"Manche der Medikamente in Ihrer Medikamententasche enthält das Allergen das Sie gerade hinzugefügt haben. Bitte sehen Sie sich das noch einmal sorgfältig an."</string>
+<string name="error_duplicate_medicine">"Dieses Medikament ist bereits in Ihrer Medikamententasche."</string>
+<string name="allergies_group_elements_number">"%1$d Elemente"</string>
+<string name="allergies_selected_number">"%1$d ausgewählt"</string>
+<string name="message_allergy_add_multiple_success">"Ihre Allergieinformation wurde gespeichert."</string>
+<string name="title_allergies_database_required">"Datenbank benötigt"</string>
+<string name="allergies_group_elements_selected">"%1$d Elemente (%2$d ausgewählt)"</string>
+<string name="add_custom_med_button_text">"\"%1$s\" zur Medikamententasche hinzufügen"</string>
+<string name="medicine_search_not_found_msg">"Entschuldigung, wir konnten nichts mit diesem Namen finden"</string>
+<string name="medicine_search_empty_list_msg">"Geben Sie einen Medikamentennamen oder Code ein um mit der Suche zu beginnen, oder scannen Sie einen Barcode auf einer Verpackung..."</string>
+<string name="search_hint">"Suche..."</string>
+<string name="database_us_display">"US Datenbank"</string>
+<string name="pref_stock_alert_title">"Warne mich wenn das Medikament aufgebraucht ist"</string>
+<string name="permission_dialog_go_to_settings">"Wir konnten diese Aktion nicht ausführen, da Sie die vorausgegangene Anfrage auf den Speicher zuzugreifen abgelehnt haben. Sie können die Berechtigung in der App Info Ansicht erteilen."</string>
+<string name="permission_dialog_ok">"Zur App Info Ansicht gehen"</string>
+<string name="title_alert_allergy">"Für dieses Medikament gibt es Allergiekonflikte"</string>
+<string name="description_alert_allergy">"Sie haben angegeben, dass Sie allergisch gegen manche der Bestandteile dieses Medikaments sind. Allergene:"</string>
+<string name="default_user_name">"Benutzer"</string>
+<string name="relation_user_possession_thing">"%1$ss %2$s"</string>
+<string name="schedules_for_med">"%1$d assoziierte Einnahmepläne"</string>
+<string name="schedules_for_med_none">"Keine assoziierten Einnahmepläne"</string>
+<string name="yesterday">"Gestern"</string>
+<string name="today">"Heute"</string>
+<string name="tomorrow">"Morgen"</string>
+<string name="message_delete_default_patient">"Das ist der Standardpatient, er kann nicht gelöscht werden. Möchten Sie alle zugehörigen Einnahmepläne, Medikamente und Routinen löschen?"</string>
+<string name="yes_delete_everything">"Ja, alles löschen"</string>
+<string name="default_user_data_deleted">"Benutzerdaten gelöscht!"</string>
+<string name="create_default_routines">"Erstelle Standardroutinen"</string>
+<string name="stock_running_out">"Vorrat geht zur Neige"</string>
+<string name="add_more_stock">"Mehr hinzufügen"</string>
+<string name="stock_remaining_msg">"%1$d %2$s verbleibend"</string>
+<string name="active_schedules_none">"Keine aktiven Einnahmepläne"</string>
+<string name="active_schedules_one">"1 aktiver Einnahmeplan"</string>
+<string name="active_schedules_number">"%1$d aktive Einnahmepläne"</string>
+<string name="stock_no_stock_info">"Es gibt keine Information zum Vorrat dieses Medikaments"</string>
+<string name="stock_no_data">"Keine Daten"</string>
+<string name="message_med_linked_success">"Medikament erfolgreich verknüpft!"</string>
+<string name="label_info_short">"Info"</string>
+<string name="medicine_not_found_error">"Medikament nicht gefunden"</string>
+<string name="message_link_real_prescription_short">"Link zum Medikament"</string>
+<string name="prospect">"Beipackzettel"</string>
+<string name="button_official_prospect">"Offizieller Beipackzettel"</string>
+<string name="stock_enough_for_days">"Genug für %1$d Tage (bei derzeitigen Einnahmeplänen)"</string>
+<string name="stock_enough_for_months_days">"Genug für %1$d Monate und %2$d Tage (bei aktuellen Einnahmeplänen)"</string>
+<string name="stock_enough_for_upper_limit">"Genug für mehr als drei Monate (bei aktuellen Einnahmeplänen)"</string>
+<string name="stock_depleted">"Vorrat ist aufgebraucht"</string>
+<string name="stock_depleted_msg">"Es gibt keinen Vorrat mehr für dieses Medikament."</string>
+<string name="message_allergies_experimental_warning">"Allergiemanagement ist ein experimentelles Feature. Denken Sie daran die Packungsbeilage Ihrer Medikamente zu lesen um sich über die Allergieinformationen zu informieren."</string>
+<string name="dialog_continue_option">"Fortfahren"</string>
+<string name="important_info">"Wichtige Information"</string>
+<string name="download_db_dialog_title">"Setze Medikamentendatenbank auf"</string>
+<string name="download_db_dialog_message">"Die Datenbank wird heruntergeladen und konfiguriert. Dies kann ein paar Sekunden dauern, aber Sie können die App in der Zwischenzeit weiter benutzen."</string>
+<string name="download_db_unexpected_error">"Fehler beim Herunterladen der Datenbank :("</string>
+<string name="install_db_notification_title">"Datenbank wird aufgesetzt"</string>
+<string name="install_db_notification_ticker">"Datenbank wird aufgesetzt"</string>
+<string name="install_db_notification_oncomplete">"Datenbankeinrichtung abgeschlossen"</string>
+<string name="install_db_notification_oncomplete_text">"Tappen um ein neues Medikament hinzuzufügen"</string>
+<string name="install_db_notification_content">"Einrichtung läuft"</string>
+<string name="install_db_notification_onfailure">"Einrichtung der Datenbank fehlgeschlagen"</string>
+<string name="install_db_notification_onfailure_content">"Während der Einrichtung der Medikamentendatenbank ist etwas schief gelaufen"</string>
+<string name="intro_title">"Willkommen bei Calendula!"</string>
+<string name="intro_description">"Rechtzeitig die richtigen Medikamente in der korrekten Dosierung einzunehmen, ist nicht einfach. Diese App soll dabei helfen."</string>
+<string name="intro_routines_title">"Routinen"</string>
+<string name="intro_routines_text">"
+        Als Routine wird die Verknüpfung der Medikamenteneinnahme mit regelmäßig stattfindenden Alltagsaktivitäten bzw. mit Zeitpunkten bezeichnet. Mit einer solchen Routine wiederum kann Calendula die Einnahme eines oder mehrerer Medikamente verbinden.
+    "</string>
+<string name="intro_meds_title">"Medikamententasche"</string>
+<string name="intro_meds_text">"Behalten Sie die Kontrolle über Ihre Medikamente indem Sie die Medikamententasche verwenden und so einfachen Zugriff auf Packungsbeilagen von offiziellen Medizindatenbanken erhalten."</string>
+<string name="intro_schedules_title">"Pläne"</string>
+<string name="intro_schedules_text">"
+        Die Medikamentenpläne verknüpfen die Medikamenteneinahmen mit Routinen unter Berücksichtigung etwaiger Wiederholungen (etwa stündlich oder täglich) oder Einnahmepausen.
+    "</string>
+<string name="intro_reminders_title">"Erinnerungen"</string>
+<string name="intro_reminders_text">"
+        Calendula wird an alle anstehenden Einnahmen erinnern.
+        
+
+Die Benachrichtigungseinstellungen können im Optionenmenü angepasst werden.
+    "</string>
+<string name="intro_multipat_title">"Mehrere Patienten/-innen"</string>
+<string name="intro_multipat_text">"Calendula erlaubt es Ihnen die Medikation mehrerer Patienten zu verwalten, mit eigenen Medikamententaschen, Routinen und Einnahmeplänen.
+
+Sie werden alle ihre Einnahmen auf dem Startbildschirm sehen."</string>
+<string name="title_activity_settings">"Einstellungen"</string>
+<string name="pref_header_general">"Allgemein"</string>
+<string name="pref_title_display_name">"Angezeigter Name"</string>
+<string name="pref_default_display_name">"Calendula"</string>
+<string name="pref_header_notifications">"Benachrichtigungen"</string>
+<string name="pref_title_new_alarm_notification">"Alarme für Medikamenteneinnahme"</string>
+<string name="pref_title_insistent_alarms">"Hartnäckige Benachrichtigungen"</string>
+<string name="pref_title_repeat_alarms">"Wiederhole Alarme"</string>
+<string name="pref_title_sync_frequency">"Wiederhole alle"</string>
+<string name="pref_title_reminder_window">"Alarme abstellen nach"</string>
+<string name="pref_notification_tone">"Benachrichtigungston"</string>
+<string name="pref_notification_tone_sum">"Standard"</string>
+<string name="pref_alarm_repeat_five_min">"5 Min."</string>
+<string name="pref_alarm_repeat_fifteen_min">"15 Min."</string>
+<string name="pref_alarm_repeat_thirty_min">"30 Min."</string>
+<string name="pref_alarm_repeat_sixty_min">"60 Min."</string>
+<string name="pref_alarm_reminder_thirty_min">"30 Min."</string>
+<string name="pref_alarm_reminder_one_hour">"1 Stunde"</string>
+<string name="pref_alarm_reminder_two_hours">"2 Stunden"</string>
+<string name="pref_enable_databases_title">"Medikamentendatenbank aktivieren"</string>
+<string name="pref_available_databases_title">"Ausgewählte Datenbank"</string>
+<string name="pref_header_stock">"Bestandskontrolle"</string>
+<string name="pref_stock_do_not_warn">"Nicht benachrichtigen"</string>
+<string name="pref_stock_warn_one_week">"In weniger als 1 Woche"</string>
+<string name="pref_stock_warn_two_weeks">"In weniger als 2 Wochen"</string>
+<string name="pref_stock_warn_three_weeks">"In weniger als 3 Wochen"</string>
+<string name="database_aemps_display">"AEMPS Datenbank"</string>
+<string name="database_setting_up">"Einrichtung läuft..."</string>
+<string name="calendar_date_tomorrow">"am morgigen Tag"</string>
+<string name="delays_one_min">"1 Min."</string>
+<string name="delays_thirty_min">"30 Min."</string>
+<string name="delays_fifteen_min">"15 Min."</string>
+<string name="delays_sixty_min">"60 Min."</string>
+<string name="text_take_medicines_now">"Nehmen Sie jetzt Ihre Medikamente"</string>
+<string name="message_patients_name_required">"Bitte einen Namen eingeben."</string>
+<string name="label_patient_name">"Name"</string>
+<string name="scan_barcode">"Barcode einscannen"</string>
+<string name="title_database_update_available">"Datenbank Update verfügbar"</string>
+<string name="text_database_update_available">"Es gibt ein Update für die Medikamentendatenbank. Möchten Sie es herunterladen und installieren?"</string>
+<string name="action_download_update">"Tappen um das Update herunterzuladen und zu installieren!"</string>
+<string name="text_database_update_data_lost">"Manche der Medikamente in Ihrer Medikamententasche wurden beim letzten Update aus der Datenbank entfernt. Sie bleiben weiterhin in Ihrer Medikamententasche, aber Sie werden nicht mehr die Packungsbeilagen, usw. ansehen können."</string>
+<string name="preference_check_for_updates">"Auf Updates überprüfen"</string>
+<string name="database_update_not_available">"Kein Datenbank-Update verfügbar"</string>
+<string name="title_database_update_required">"Datenbank-Update notwendig"</string>
+<string name="message_database_update_required">"Diese Version der App benötigt eine aktuellere Datenbank. Möchten Sie diese jetzt herunterladen und konfigurieren?
+Wenn Sie sich entscheiden den Download nicht zu starten werden ein paar Informationen zu Ihren Medikamenten verloren gehen."</string>
+<string name="download">"Download"</string>
+<string name="message_no_internet_error">"Keine Internetverbindung verfügbar! Bitte stellen Sie eine Verbindung her und versuchen Sie es erneut."</string>
+<string name="action_edit">"Editieren"</string>
+<string name="injections">"Injektionen"</string>
+<string name="reset">"Zurücksetzen"</string>
+<string name="edit_medicine">"Medikament bearbeiten"</string>
+<string name="sort_by">"Sortieren nach:"</string>
+<string name="sort_by_default">"Standard"</string>
+<string name="sort_by_name">"Name"</string>
+<string name="action_sort">"Art"</string>
+</resources>

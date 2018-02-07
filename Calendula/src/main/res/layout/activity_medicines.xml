@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -17,27 +17,27 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true"
                 android:paddingTop="@dimen/status_bar_height">
 
     <es.usc.citius.servando.calendula.util.view.NonSwipeableViewPager xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/textView2"
-        tools:context=".RoutinesActivity" />
+                                                                      android:id="@+id/pager"
+                                                                      android:layout_width="match_parent"
+                                                                      android:layout_height="match_parent"
+                                                                      android:layout_below="@+id/textView2"
+                                                                      tools:context=".RoutinesActivity"/>
 
-    <android.support.v7.widget.Toolbar
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/dark_grey_home"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+                                       android:id="@+id/toolbar"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="56dp"
+                                       android:background="@color/dark_grey_home"
+                                       app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                                       app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <ImageView
         android:id="@+id/tabs_shadow"
@@ -46,7 +46,7 @@
         android:layout_below="@+id/textView2"
         android:alpha="0.7"
         android:scaleType="fitXY"
-        android:src="@drawable/daily_view_list_item_tab_shadow_top" />
+        android:src="@drawable/daily_view_list_item_tab_shadow_top"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -61,36 +61,21 @@
         android:paddingTop="10dp"
         android:text="@string/create_medicine_button_text"
         android:textColor="#fff"
-        android:textSize="24sp" />
+        android:textSize="24sp"/>
 
-    <!--<com.melnykov.fab.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"-->
-        <!--android:id="@+id/add_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentEnd="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_gravity="bottom|right"-->
-        <!--android:layout_marginRight="38dp"-->
-        <!--android:layout_marginTop="83dp"-->
-        <!--android:src="@drawable/ic_done_white_36dp"-->
-       <!--fab:fab_colorNormal="#efefef"-->
-       <!--fab:fab_colorPressed="#b7b7b7"-->
-       <!--fab:fab_colorRipple="#b1b1b1" />-->
 
-    <com.getbase.floatingactionbutton.FloatingActionButton
-        xmlns:fab="http://schemas.android.com/apk/res-auto"
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_gravity="bottom|right"
-        android:layout_marginRight="38dp"
-        android:layout_marginTop="78dp"
-        fab:fab_icon="@drawable/ic_done_black_48dp"
-        fab:fab_colorNormal="#efefef"
-        fab:fab_colorPressed="#b7b7b7"
-        />
+        android:layout_marginRight="@dimen/fab_separator_right_margin"
+        android:layout_marginTop="@dimen/fab_separator_top_margin"
+        android:src="@drawable/ic_done_black_48dp"
+        app:backgroundTint="@color/fab_default_color"
+        app:elevation="@dimen/fab_elevation"/>
 
     <TextView
         android:id="@+id/textView"
@@ -103,70 +88,7 @@
         android:paddingLeft="72dp"
         android:text="@string/title_activity_medicines"
         android:textColor="#fff"
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
-    <RelativeLayout
-        android:id="@+id/search_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/android_blue_darker"
-        android:focusableInTouchMode="true"
-        android:visibility="gone">
-
-
-        <EditText
-            android:id="@+id/search_edit_text"
-            android:layout_width="fill_parent"
-            android:layout_height="56dp"
-            android:layout_alignBottom="@+id/imageView"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="72dp"
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:hint="@string/search_med_hint"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:textColor="#fff"
-            android:textColorHint="#ececec"
-            android:textCursorDrawable="@null"
-            android:textSize="20dp" />
-
-        <ListView
-            android:id="@+id/search_list"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/search_edit_text"
-            android:background="#fff" />
-
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:padding="15dp"
-            android:src="@drawable/ic_search_white_48dp" />
-
-        <ImageView
-            android:id="@+id/close_search_button"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_alignParentRight="true"
-            android:padding="15dp"
-            android:src="@drawable/ic_cancel_white_48dp" />
-
-        <ImageView
-            android:id="@+id/search_shadow"
-            android:layout_width="fill_parent"
-            android:layout_height="5dp"
-            android:layout_below="@+id/search_edit_text"
-            android:alpha="0.7"
-            android:scaleType="fitXY"
-            android:src="@drawable/daily_view_list_item_tab_shadow_top" />
-
-    </RelativeLayout>
 
 </RelativeLayout>

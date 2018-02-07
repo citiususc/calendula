@@ -1,5 +1,24 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.usc.citius.servando.calendula.activities;
 
+import android.content.res.Resources;
 import android.support.test.InstrumentationRegistry;
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -15,6 +34,7 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.DailyScheduleItem;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
@@ -23,7 +43,6 @@ import es.usc.citius.servando.calendula.util.TestUtils;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.swipeUp;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -53,22 +72,27 @@ public class ScheduleCreationActivityTest extends ActivityInstrumentationTestCas
         DB.dropAndCreateDatabase();
 
         // create and save some routines
-        r = new Routine(new LocalTime(9, 0), "Breakfast");
+        final Patient defaultPatient = DB.patients().getDefault();
+        r = new Routine(defaultPatient, new LocalTime(9, 0), "Breakfast");
         r.save();
-        r = new Routine(new LocalTime(13, 0), "Lunch");
+        r = new Routine(defaultPatient, new LocalTime(13, 0), "Lunch");
         r.save();
-        r = new Routine(new LocalTime(21, 0), "Dinner");
+        r = new Routine(defaultPatient, new LocalTime(21, 0), "Dinner");
         r.save();
         // create and save some meds
         m = new Medicine("Ibuprofen", Presentation.PILLS);
+        m.setPatient(defaultPatient);
         m.save();
         m = new Medicine("AAS", Presentation.CAPSULES);
+        m.setPatient(defaultPatient);
         m.save();
         m = new Medicine("Aspirin", Presentation.EFFERVESCENT);
+        m.setPatient(defaultPatient);
         m.save();
 
         // set edit intent
         mActivity = getActivity();
+        TestUtils.unlockScreen(mActivity);
     }
 
     @Test
@@ -104,8 +128,21 @@ public class ScheduleCreationActivityTest extends ActivityInstrumentationTestCas
         onView(withId(R.id.schedules_spinner)).perform(click());
         onView(withText(selected)).perform(click());
         TestUtils.sleep(100);
-        onView(withId(R.id.pager)).perform(swipeUp());
+
+
+        // click "next" button
+        onView(withId(R.id.schedule_help_button)).perform(click());
         TestUtils.sleep(500);
+
+        // Check 3 routines are displayed
+        onView(withText("Breakfast")).check(matches(isDisplayed()));
+        onView(withText("Lunch")).check(matches(isDisplayed()));
+        onView(withText("Dinner")).check(matches(isDisplayed()));
+
+        // click "next" button
+        onView(withId(R.id.schedule_help_button)).perform(click());
+        TestUtils.sleep(500);
+
         // unselect tu, thu and sat
         onView(withText(R.string.schedule_day_selector_tu)).perform(click());
         TestUtils.sleep(100);
@@ -113,16 +150,14 @@ public class ScheduleCreationActivityTest extends ActivityInstrumentationTestCas
         TestUtils.sleep(100);
         onView(withText(R.string.schedule_day_selector_sa)).perform(click());
 
-        // Check 3 routines are displayed
-        onView(withText("Breakfast")).check(matches(isDisplayed()));
-        onView(withText("Lunch")).check(matches(isDisplayed()));
-        onView(withText("Dinner")).check(matches(isDisplayed()));
 
         // go to summary page
         onView(allOf(isDescendantOfA(withId(R.id.tabs)), withText(R.string.summary))).perform(click());
         onView(withId(R.id.sched_summary_medi_dailyfreq)).check(matches(withText(selected)));
         onView(withId(R.id.sched_summary_medname)).check(matches(withText("Aspirin")));
-        onView(withId(R.id.sched_summary_medi_days)).check(matches(withText("Lun, Mie, Vie y Dom")));
+        Resources resources = mActivity.getResources();
+        String daySummary = String.format("%s, %s, %s %s %s", resources.getString(R.string.day_monday_short), resources.getString(R.string.day_wednesday_short), resources.getString(R.string.day_friday_short), resources.getString(R.string.and), resources.getString(R.string.day_sunday_short));
+        onView(withId(R.id.sched_summary_medi_days)).check(matches(withText(daySummary)));
 
         TestUtils.sleep(500);
         // click save
@@ -136,7 +171,7 @@ public class ScheduleCreationActivityTest extends ActivityInstrumentationTestCas
         // schedule medicine is not null
         assertNotNull(s.medicine());
         // medicine is aspirin
-        assertEquals("Aspirin", s.medicine().name());
+        assertEquals("Aspirin", s.medicine().getName());
         // select days are mon, wed,fry and sun
         assertEquals(Arrays.toString(days), Arrays.toString(s.days()));
         // there are 3 schedule items
@@ -144,17 +179,17 @@ public class ScheduleCreationActivityTest extends ActivityInstrumentationTestCas
         // every schedule item...
         for (ScheduleItem i : items) {
             // has a routine
-            assertNotNull(i.routine());
+            assertNotNull(i.getRoutine());
             // and a schedule
-            assertNotNull(i.schedule());
+            assertNotNull(i.getSchedule());
             // has a dose of 1
-            assertEquals(1.0f, i.dose());
+            assertEquals(1.0f, i.getDose());
             // has an associated DailyScheduleItem
             DailyScheduleItem dsi = DB.dailyScheduleItems().findByScheduleItem(i);
             // which is not null
             assertNotNull(dsi);
             // and is not set as taken
-            assertFalse(dsi.takenToday());
+            assertFalse(dsi.getTakenToday());
         }
     }
 }

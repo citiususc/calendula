@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -17,42 +16,41 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout android:id="@+id/daily_agenda_item_med_right"
-                xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
-                android:background="@color/transparent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-    >
+                xmlns:tools="http://schemas.android.com/tools"
+                android:background="@color/transparent"
+                android:paddingLeft="10dp">
 
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="50dp"
         android:layout_height="60dp"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
+        android:layout_marginRight="2dp"
         android:cropToPadding="false"
+        android:padding="8dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_presentation_2"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="2dp"
-        android:visibility="visible"
-        android:padding="8dp"/>
+        android:visibility="visible"/>
 
 
     <TextView
         android:id="@+id/med_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="26dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/imageView"
         android:fontFamily="sans-serif-light"
         android:gravity="center_vertical"
         android:paddingBottom="3dp"
-        android:text="Ibuprofeno"
+        tools:text="Ibuprofeno"
         android:textColor="#222"
         android:textSize="19dp"
-        android:layout_toRightOf="@+id/imageView"
-        android:layout_marginLeft="26dp"
-        android:layout_marginTop="10dp"
         android:textStyle="bold"/>
 
 
@@ -61,50 +59,49 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:fontFamily="sans-serif-condensed"
-        android:text="1 capsule"
-        android:textColor="#111"
-        android:textSize="17dp"
         android:layout_alignLeft="@+id/med_item_name"
         android:layout_below="@+id/med_item_name"
+        android:alpha="0.7"
+        android:fontFamily="sans-serif-condensed"
         android:gravity="top"
-        android:alpha="0.7"/>
+        tools:text="1 capsule"
+        android:textColor="#111"
+        android:textSize="17dp"/>
 
     <TextView
         android:id="@+id/med_item_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:textColor="#555"
-        android:textSize="13dp"
         android:layout_alignLeft="@+id/med_item_dose"
         android:layout_below="@+id/med_item_dose"
-        android:gravity="top"
-        android:alpha="0.7"
         android:layout_marginTop="3dp"
-        android:text="Not taken yet"/>
+        android:alpha="0.7"
+        android:fontFamily="sans-serif-light"
+        android:gravity="top"
+        tools:text="Not taken yet"
+        android:textColor="#555"
+        android:textSize="13dp"/>
 
     <ImageButton
         android:id="@+id/check_button"
-        android:src="@drawable/ic_done_black_48dp"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="26dp"
-        style="@style/Base.Widget.AppCompat.Button.Borderless"
-        android:visibility="visible"
-        />
+        android:src="@drawable/ic_done_black_48dp"
+        android:visibility="visible"/>
 
     <ImageView
+        android:id="@+id/imageView3"
         android:layout_width="fill_parent"
         android:layout_height="1px"
-        android:id="@+id/imageView3"
-        android:layout_alignParentBottom="false"
-        android:background="#ececec"
         android:layout_alignLeft="@+id/med_item_status"
+        android:layout_alignParentBottom="false"
+        android:layout_below="@+id/med_item_status"
         android:layout_marginTop="16dp"
-        android:layout_below="@+id/med_item_status"/>
+        android:background="#ececec"/>
 
 </RelativeLayout>

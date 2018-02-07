@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ public class AboutActivity extends CalendulaActivity {
         if (savedInstanceState == null) {
 
             Fragment fragment = new LibsBuilder()
-                    .withAboutAppName("Calendula")
+                    .withAboutAppName(getString(R.string.app_name))
                     .withAboutIconShown(true)
                     .withAboutVersionShown(true)
                     .withLicenseShown(true)

@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -88,26 +88,24 @@ public class PickupInfoDao extends GenericDao<PickupInfo, Long> {
     }
 
     public PickupInfo exists(PickupInfo pickupInfo) {
-        try
-        {
+        try {
             QueryBuilder<PickupInfo, Long> qb = dao.queryBuilder();
             Where w = qb.where();
             w.and(
-                    w.eq(PickupInfo.COLUMN_MEDICINE, pickupInfo.medicine()),
-                    w.eq(PickupInfo.COLUMN_FROM, pickupInfo.from()),
-                    w.eq(PickupInfo.COLUMN_TO, pickupInfo.to())
+                    w.eq(PickupInfo.COLUMN_MEDICINE, pickupInfo.getMedicine()),
+                    w.eq(PickupInfo.COLUMN_FROM, pickupInfo.getFrom()),
+                    w.eq(PickupInfo.COLUMN_TO, pickupInfo.getTo())
             );
             qb.setWhere(w);
             return qb.queryForFirst();
 
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new RuntimeException("Error finding scanned schedule", e);
         }
     }
 
     public List<PickupInfo> findByPatient(Patient p) {
-        try{
+        try {
 
             QueryBuilder<Medicine, Long> mqb = DB.medicines().queryBuilder();
             mqb.where().eq(Medicine.COLUMN_PATIENT, p);
@@ -118,20 +116,17 @@ public class PickupInfoDao extends GenericDao<PickupInfo, Long> {
 
             return qb.query();
 
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new RuntimeException("Error finding scanned pickups", e);
         }
     }
 
     public void removeByMed(Medicine med) {
-        try
-        {
+        try {
             DeleteBuilder<PickupInfo, Long> qb = dao.deleteBuilder();
             qb.setWhere(qb.where().eq(PickupInfo.COLUMN_MEDICINE, med));
             qb.delete();
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new RuntimeException("Error deleting pickups by medicine", e);
         }
     }

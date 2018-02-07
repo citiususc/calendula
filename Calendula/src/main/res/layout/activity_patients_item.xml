@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -17,21 +16,19 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v7.widget.CardView
-    android:id="@+id/card_view_friend"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    card_view:cardCornerRadius="0dp"
-    card_view:cardUseCompatPadding="true">
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    xmlns:tools="http://schemas.android.com/tools"
+                                    card_view:cardCornerRadius="0dp"
+                                    card_view:cardUseCompatPadding="true">
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <RelativeLayout
             android:id="@+id/patient_item"
@@ -43,8 +40,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="130dp"
                 android:background="@color/android_blue"
-                android:transitionName="background"
-                />
+                android:transitionName="background"/>
 
             <ImageView
                 android:id="@+id/patient_avatar"
@@ -71,12 +67,11 @@
             android:gravity="center"
             android:maxLines="1"
             android:padding="8dp"
-            android:text="Patient name"
+            tools:text="Patient name"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             android:textColor="@android:color/white"
-            android:transitionName="patient_name"
-            />
+            android:transitionName="patient_name"/>
 
         <FrameLayout
             android:id="@+id/active_indicator"
@@ -97,9 +92,9 @@
         </FrameLayout>
 
         <ImageView
+            android:id="@+id/lock_icon"
             android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:id="@+id/lock_icon"/>
+            android:layout_height="30dp"/>
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

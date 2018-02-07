@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -18,8 +17,9 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:id="@+id/schedules_list_item_container"
@@ -33,8 +33,7 @@
 
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="72dp"
-            android:background="#efefef"
-            />
+            android:background="#efefef"/>
 
         <ImageButton
             android:id="@+id/imageButton"
@@ -47,29 +46,29 @@
             android:layout_marginTop="16dp"
             android:background="@null"
             android:scaleType="fitStart"
-            android:src="@drawable/ic_presentation_2" />
+            android:src="@drawable/ic_presentation_2"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_margin="16dp"
+            android:layout_toLeftOf="@+id/imageView"
             android:layout_toRightOf="@+id/imageButton"
-            android:layout_margin="16dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/schedules_list_item_medname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/imageButton"
-                android:layout_marginLeft="26dp"
-                android:layout_toEndOf="@+id/imageButton"
-                android:layout_toRightOf="@+id/imageButton"
+                android:layout_margin="0dp"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
-                android:text="Atrovent"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#222"
-                android:textSize="18sp"
-                android:layout_margin="0dp"/>
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/schedules_list_item_times"
@@ -78,11 +77,11 @@
                 android:layout_alignLeft="@+id/schedules_list_item_days"
                 android:layout_alignStart="@+id/schedules_list_item_days"
                 android:layout_below="@+id/schedules_list_item_days"
-                android:gravity="top"
-                android:text="Three times a day"
-                android:textColor="#222"
                 android:layout_margin="0dp"
+                android:gravity="top"
                 android:paddingTop="2dp"
+                tools:text="Three times a day"
+                android:textColor="#222"
                 android:textSize="15dp"
                 android:textStyle="bold"/>
 
@@ -92,15 +91,14 @@
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/schedules_list_item_medname"
                 android:layout_below="@+id/schedules_list_item_medname"
-                android:layout_marginTop="0dp"
-                android:text="Every day"
-                android:textColor="@color/agenda_item_title"
-                android:textSize="15dp"
                 android:layout_margin="0dp"
-                android:paddingTop="2dp"/>
+                android:layout_marginTop="0dp"
+                android:paddingTop="2dp"
+                tools:text="Every day"
+                android:textColor="@color/agenda_item_title"
+                android:textSize="15dp"/>
 
         </LinearLayout>
-
 
 
         <ImageView
@@ -111,9 +109,8 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
-            android:visibility="visible"
             android:background="@drawable/circle_white"
-            />
+            android:visibility="visible"/>
 
     </RelativeLayout>
 

@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -16,17 +16,21 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+<preference-headers>
 
     <!-- These settings headers are only used on tablets. -->
 
-    <header
-        android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$GeneralPreferenceFragment"
-        android:title="@string/pref_header_general" />
+    <!--<header-->
+    <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$GeneralPreferenceFragment"-->
+    <!--android:title="@string/pref_header_general" />-->
 
-    <header
-        android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$NotificationPreferenceFragment"
-        android:title="@string/pref_header_notifications" />
+    <!--<header-->
+    <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$NotificationPreferenceFragment"-->
+    <!--android:title="@string/pref_header_notifications" />-->
+
+    <!--<header-->
+    <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$StockPreferenceFragment"-->
+    <!--android:title="@string/pref_header_stock" />-->
 
 
 </preference-headers>

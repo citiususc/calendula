@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -31,7 +32,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,10 +40,8 @@ import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.j256.ormlite.misc.TransactionManager;
-import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.SnackbarManager;
-import com.nispok.snackbar.enums.SnackbarType;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
@@ -67,6 +65,7 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
@@ -75,7 +74,7 @@ import es.usc.citius.servando.calendula.util.Snack;
 
 public class ScheduleCreationActivity extends CalendulaActivity implements ViewPager.OnPageChangeListener {
 
-    public static final String TAG = ScheduleCreationActivity.class.getName();
+    private static final String TAG = "ScheduleCreationAct";
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -100,79 +99,6 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
     boolean autoStepDone = false;
     int pColor;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_schedules);
-
-        pColor = DB.patients().getActive(this).color();
-        setupToolbar(null, pColor);
-        setupStatusBar(pColor);
-        subscribeToEvents();
-        processIntent();
-
-
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        TextView title = ((TextView) findViewById(R.id.textView2));
-        title.setBackgroundColor(pColor);
-        title.setText(getString(mScheduleId != -1 ? R.string.title_edit_schedule_activity : R.string.title_create_schedule_activity));
-
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOnPageChangeListener(this);
-        mViewPager.setOffscreenPageLimit(3);
-        tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-
-        tabs.setOnPageChangeListener(this);
-        tabs.setAllCaps(true);
-        tabs.setShouldExpand(true);
-        tabs.setDividerPadding(3);
-        tabs.setDividerColor(getResources().getColor(R.color.white_50));
-        tabs.setDividerColor(getResources().getColor(R.color.transparent));
-        tabs.setIndicatorHeight(ScreenUtils.dpToPx(getResources(),4));
-        tabs.setIndicatorColor(ScreenUtils.equivalentNoAlpha(pColor, 0.8f));
-        tabs.setTextColor(Color.parseColor("#222222"));
-        tabs.setUnderlineColor(ScreenUtils.equivalentNoAlpha(pColor, 0.5f));
-        tabs.setViewPager(mViewPager);
-
-        if (mSchedule != null) {
-            mViewPager.setCurrentItem(1);
-        }
-
-
-
-        findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveSchedule();
-            }
-        });
-
-
-    }
-
-    private void processIntent() {
-        mScheduleId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1);
-        int scheduleType = getIntent().getIntExtra("scheduleType", -1);
-        if (mScheduleId != -1) {
-            Schedule s = Schedule.findById(mScheduleId);
-            if (s != null) {
-                ScheduleHelper.instance().setSelectedMed(s.medicine());
-                ScheduleHelper.instance().setTimesPerDay(s.items().size());
-                ScheduleHelper.instance().setSelectedScheduleIdx(s.items().size() - 1);
-                ScheduleHelper.instance().setScheduleItems(s.items());
-                ScheduleHelper.instance().setSchedule(s);
-                mSchedule = s;
-            } else {
-                Snack.show("Schedule not found :(", this);
-            }
-        } else if (scheduleType != -1) {
-            ScheduleHelper.instance().setScheduleType(scheduleType);
-        }
-    }
-
     public void createSchedule() {
         try {
 
@@ -185,15 +111,16 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                     final Patient patient = DB.patients().getActive(getBaseContext());
                     s.setMedicine(ScheduleHelper.instance().getSelectedMed());
                     s.setPatient(patient);
+                    s.setState(Schedule.ScheduleState.ENABLED);
                     s.save();
 
-                    Log.d(TAG, "Saving schedule..." + s.toString());
+                    LogUtil.d(TAG, "Saving schedule..." + s.toString());
 
                     if (!s.repeatsHourly()) {
                         for (ScheduleItem item : ScheduleHelper.instance().getScheduleItems()) {
                             item.setSchedule(s);
                             item.save();
-                            Log.d(TAG, "Saving item..." + item.getId());
+                            LogUtil.d(TAG, "Saving item..." + item.getId());
                             // add to daily schedule
                             DailyAgenda.instance().addItem(patient, item, false);
                         }
@@ -211,7 +138,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
 
             ScheduleHelper.instance().clear();
             AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ScheduleCreationActivity.this);
-            Log.d(TAG, "Schedule saved successfully!");
+            LogUtil.d(TAG, "Schedule saved successfully!");
             Snack.show(R.string.schedule_created_message, this);
             CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
             finish();
@@ -220,7 +147,6 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
             e.printStackTrace();
         }
     }
-
 
     public void updateSchedule() {
         try {
@@ -234,13 +160,13 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                     s.setMedicine(ScheduleHelper.instance().getSelectedMed());
                     final Patient patient = s.patient();
 
-                    List<Long> routinesTaken = new ArrayList<Long>();
+                    List<Long> routinesTaken = new ArrayList<>();
 
                     if (!s.repeatsHourly()) {
                         // remove days if changed
                         boolean[] days = s.days();
                         for (DailyScheduleItem dsi : DB.dailyScheduleItems().findBySchedule(s)) {
-                            if(days[dsi.date().getDayOfWeek()-1]){
+                            if (days[dsi.getDate().getDayOfWeek() - 1]) {
                                 DB.dailyScheduleItems().remove(dsi);
                             }
                         }
@@ -248,8 +174,8 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                         for (ScheduleItem item : s.items()) {
                             DailyScheduleItem d = DailyScheduleItem.findByScheduleItem(item);
                             // if taken today, add to the list
-                            if (d!=null && d.takenToday()) {
-                                routinesTaken.add(item.routine().getId());
+                            if (d != null && d.getTakenToday()) {
+                                routinesTaken.add(item.getRoutine().getId());
                             }
                             item.deleteCascade();
                         }
@@ -258,12 +184,12 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                         for (ScheduleItem i : ScheduleHelper.instance().getScheduleItems()) {
 
                             ScheduleItem item = new ScheduleItem();
-                            item.setDose(i.dose());
-                            item.setRoutine(i.routine());
+                            item.setDose(i.getDose());
+                            item.setRoutine(i.getRoutine());
                             item.setSchedule(s);
                             item.save();
                             // add to daily schedule
-                            DailyAgenda.instance().addItem(patient, item,routinesTaken.contains(item.routine().getId()));
+                            DailyAgenda.instance().addItem(patient, item, routinesTaken.contains(item.getRoutine().getId()));
                         }
                     } else {
                         DB.dailyScheduleItems().removeAllFrom(s);
@@ -281,7 +207,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
 
             ScheduleHelper.instance().clear();
             AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ScheduleCreationActivity.this);
-            Log.d(TAG, "Schedule saved successfully!");
+            LogUtil.d(TAG, "Schedule saved successfully!");
             Toast.makeText(this, R.string.schedule_created_message, Toast.LENGTH_SHORT).show();
             finish();
         } catch (Exception e) {
@@ -289,7 +215,6 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
             e.printStackTrace();
         }
     }
-
 
     public void saveSchedule() {
 
@@ -304,60 +229,13 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
         }
     }
 
-
-    boolean validateBeforeSave() {
-
-        if (ScheduleHelper.instance().getSelectedMed() == null) {
-            mViewPager.setCurrentItem(0);
-            showSnackBar(R.string.create_schedule_unselected_med);
-            return false;
-        }
-
-        for (ScheduleItem i : ScheduleHelper.instance().getScheduleItems()) {
-            if (i.routine() == null) {
-                mViewPager.setCurrentItem(1);
-                showSnackBar(R.string.create_schedule_incomplete_items);
-                return false;
-            }
-        }
-
-        for (ScheduleItem i : ScheduleHelper.instance().getScheduleItems()) {
-            if (i.dose() <= 0) {
-                mViewPager.setCurrentItem(1);
-                showSnackBar(R.string.create_schedule_incomplete_doses);
-                return false;
-            }
-        }
-
-        if (ScheduleHelper.instance().getSchedule().type() == Schedule.SCHEDULE_TYPE_CYCLE && (
-                ScheduleHelper.instance().getSchedule().getCycleRest() <= 0
-                        || ScheduleHelper.instance().getSchedule().getCycleDays() <= 0)) {
-            showSnackBar(R.string.cycle_period_cero_message);
-            return false;
-        }
-        return true;
-    }
-
-
-    private void showSnackBar(int string) {
-        SnackbarManager.show(
-                Snackbar.with(getApplicationContext())
-                        .actionLabel("OK")
-                        .actionColor(getResources().getColor(R.color.android_orange_darker))
-                        .type(SnackbarType.MULTI_LINE)
-                        .textColor(getResources().getColor(R.color.white_80)) // change the text color
-                        .color(getResources().getColor(R.color.android_orange_dark)) // change the background color
-                        .text(getResources().getString(string)), this);
-
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.schedules, menu);
         removeItem = menu.findItem(R.id.action_remove);
-        removeItem.setVisible(mScheduleId != -1 ? true : false);
+        removeItem.setVisible(mScheduleId != -1);
         return true;
     }
 
@@ -393,7 +271,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
 
         if (mScheduleId == -1) {
             String titleStart = getString(R.string.title_create_schedule_activity);
-            String medName = " (" + m.name() + ")";
+            String medName = " (" + m.getName() + ")";
             String fullTitle = titleStart + medName;
 
             SpannableString title = new SpannableString(fullTitle);
@@ -418,27 +296,6 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
         Snack.show(getString(R.string.create_schedule_select_med_before_dose), this);
     }
 
-
-    void showDeleteConfirmationDialog(final Schedule s) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(String.format(getString(R.string.remove_medicine_message_short), s.medicine().name()))
-                .setCancelable(true)
-                .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        DB.schedules().deleteCascade(s, true);
-                        finish();
-                    }
-                })
-                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-
     @Override
     public void onPageScrolled(int i, float v, int i2) {
 
@@ -454,15 +311,126 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
 
     }
 
+    @Subscribe
+    public void handleMedicineAdded(final PersistenceEvents.MedicineAddedEvent event) {
+        LogUtil.d(TAG, event.id + " ----");
+        ((SelectMedicineListFragment) getViewPagerFragment(0)).setSelectedMed(event.id);
+    }
+
+    boolean validateBeforeSave() {
+
+        if (ScheduleHelper.instance().getSelectedMed() == null) {
+            mViewPager.setCurrentItem(0);
+            showSnackBar(R.string.create_schedule_unselected_med);
+            return false;
+        }
+
+        for (ScheduleItem i : ScheduleHelper.instance().getScheduleItems()) {
+            if (i.getRoutine() == null) {
+                mViewPager.setCurrentItem(1);
+                showSnackBar(R.string.create_schedule_incomplete_items);
+                return false;
+            }
+        }
+
+        for (ScheduleItem i : ScheduleHelper.instance().getScheduleItems()) {
+            if (i.getDose() <= 0) {
+                mViewPager.setCurrentItem(1);
+                showSnackBar(R.string.create_schedule_incomplete_doses);
+                return false;
+            }
+        }
+
+        if (ScheduleHelper.instance().getSchedule().type() == Schedule.SCHEDULE_TYPE_CYCLE && (
+                ScheduleHelper.instance().getSchedule().getCycleRest() <= 0
+                        || ScheduleHelper.instance().getSchedule().getCycleDays() <= 0)) {
+            showSnackBar(R.string.cycle_period_cero_message);
+            return false;
+        }
+        return true;
+    }
+
+    void showDeleteConfirmationDialog(final Schedule s) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(String.format(getString(R.string.remove_medicine_message_short), s.medicine().getName()))
+                .setCancelable(true)
+                .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        DB.schedules().deleteCascade(s, true);
+                        ReminderNotification.cancel(ScheduleCreationActivity.this, ReminderNotification.scheduleNotificationId(s.getId().intValue()));
+                        finish();
+                    }
+                })
+                .setNegativeButton(getString(R.string.dialog_no_option), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    Fragment getViewPagerFragment(int position) {
+        return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_schedules);
+
+        pColor = DB.patients().getActive(this).getColor();
+        setupToolbar(null, pColor);
+        setupStatusBar(pColor);
+        subscribeToEvents();
+        processIntent();
+
+
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        TextView title = ((TextView) findViewById(R.id.textView2));
+        title.setBackgroundColor(pColor);
+        title.setText(getString(mScheduleId != -1 ? R.string.title_edit_schedule_activity : R.string.title_create_schedule_activity));
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOnPageChangeListener(this);
+        mViewPager.setOffscreenPageLimit(3);
+        tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+
+        tabs.setOnPageChangeListener(this);
+        tabs.setAllCaps(true);
+        tabs.setShouldExpand(true);
+        tabs.setDividerPadding(3);
+        tabs.setDividerColor(getResources().getColor(R.color.white_50));
+        tabs.setDividerColor(getResources().getColor(R.color.transparent));
+        tabs.setIndicatorHeight(ScreenUtils.dpToPx(getResources(), 4));
+        tabs.setIndicatorColor(ScreenUtils.equivalentNoAlpha(pColor, 0.8f));
+        tabs.setTextColor(Color.parseColor("#222222"));
+        tabs.setUnderlineColor(ScreenUtils.equivalentNoAlpha(pColor, 0.5f));
+        tabs.setViewPager(mViewPager);
+
+        if (mSchedule != null) {
+            mViewPager.setCurrentItem(1);
+        }
+
+
+        findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveSchedule();
+            }
+        });
+
+
+    }
+
     @Override
     protected void onDestroy() {
         unsubscribeFromEvents();
         ScheduleHelper.instance().clear();
         super.onDestroy();
-    }
-
-    Fragment getViewPagerFragment(int position) {
-        return getSupportFragmentManager().findFragmentByTag(FragmentUtils.makeViewPagerFragmentName(R.id.pager, position));
     }
 
     @Override
@@ -471,9 +439,36 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
         overridePendingTransition(0, 0);
     }
 
-    public void onEvent(PersistenceEvents.MedicineAddedEvent event) {
-        Log.d("onEvent", event.id + " ----");
-        ((SelectMedicineListFragment) getViewPagerFragment(0)).setSelectedMed(event.id);
+    private void processIntent() {
+        mScheduleId = getIntent().getLongExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, -1);
+        int scheduleType = getIntent().getIntExtra("scheduleType", -1);
+        if (mScheduleId != -1) {
+            Schedule s = Schedule.findById(mScheduleId);
+            if (s != null) {
+                ScheduleHelper.instance().setSelectedMed(s.medicine());
+                ScheduleHelper.instance().setTimesPerDay(s.items().size());
+                ScheduleHelper.instance().setSelectedScheduleIdx(s.items().size() - 1);
+                ScheduleHelper.instance().setScheduleItems(s.items());
+                ScheduleHelper.instance().setSchedule(s);
+                mSchedule = s;
+            } else {
+                Snack.show("Schedule not found :(", this);
+            }
+        } else if (scheduleType != -1) {
+            ScheduleHelper.instance().setScheduleType(scheduleType);
+        }
+    }
+
+    private void showSnackBar(int string) {
+        final Snackbar snackbar = Snackbar.make(mViewPager, string, Snackbar.LENGTH_SHORT);
+        snackbar.setAction("OK", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar.dismiss();
+            }
+        });
+        snackbar.setActionTextColor(getResources().getColor(R.color.android_orange_darker));
+        snackbar.show();
     }
 
     /**

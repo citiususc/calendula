@@ -1,0 +1,31 @@
+general:
+  branches:
+    ignore:
+      - gh-pages
+      - translations
+      - /release-.*/
+
+machine:
+  environment:
+    QEMU_AUDIO_DRV: none
+
+dependencies:
+  pre:
+      - echo y | android update sdk --no-ui --all --filter "build-tools-26.0.2"
+
+test:
+  override:
+    - export JVM_OPTS='-Xmx2048m'
+    - export JAVA_OPTS='-Xmx2048m'
+    - adb shell input keyevent 82:
+        background: true
+    - ./gradlew assembleCiDebug
+    - ./gradlew testCiDebugUnitTest
+    - emulator -avd circleci-android22 -no-window:
+        background: true
+        parallel: true
+    - circle-android wait-for-boot
+    - ./gradlew connectedCiDebugAndroidTest
+    - cp -r Calendula/build/outputs $CIRCLE_ARTIFACTS
+    - adb logcat -d > logcat.txt && cp logcat.txt $CIRCLE_ARTIFACTS
+    - cp -r Calendula/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS

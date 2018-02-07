@@ -1,6 +1,22 @@
-package es.usc.citius.servando.calendula.util;
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import android.util.Log;
+package es.usc.citius.servando.calendula.util;
 
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
@@ -24,12 +40,9 @@ public class HtmlCacheManager {
 
 
     public static final Long DEFAULT_TTL_MILLIS = Duration.standardMinutes(5).getMillis(); //5 minutes
-
+    private static final String TAG = "HtmlCacheManager";
     private static HtmlCacheManager theInstance = null;
-
     private Dao<HtmlCacheEntry, Long> dao = null;
-
-    private final static String TAG = "HtmlCacheManager";
 
     private HtmlCacheManager() {
     }
@@ -41,47 +54,11 @@ public class HtmlCacheManager {
         return theInstance;
     }
 
-    private HtmlCacheEntry retrieve(final int hashCode) {
-        final Dao<HtmlCacheEntry, Long> dao = getDao();
-        try {
-            List<HtmlCacheEntry> htmlCacheEntries = dao.queryForEq(HtmlCacheEntry.COLUMN_HASHCODE, hashCode);
-            if (htmlCacheEntries.isEmpty()) {
-                return null;
-            } else if (htmlCacheEntries.size() > 1) {
-                Log.w(TAG, "Inconsistent state of cache: hashcode" + hashCode + " is not unique. Deleting all copies.");
-                for (HtmlCacheEntry entry : htmlCacheEntries) {
-                    remove(entry);
-                }
-                return null;
-            } else {
-                if (checkTtl(htmlCacheEntries.get(0))) {
-                    return htmlCacheEntries.get(0);
-                } else {
-                    Log.d(TAG, "retrieve: Deleting invalid entry with hashCode: " + hashCode);
-                    remove(htmlCacheEntries.get(0));
-                    return null;
-                }
-            }
-        } catch (SQLException e) {
-            Log.e(TAG, "retrieve: ", e);
-            return null;
-        }
-    }
-
-
-    private boolean checkTtl(HtmlCacheEntry entry) {
-        final Date timestamp = entry.getTimestamp();
-        long diff = DateTime.now().getMillis() - timestamp.getTime();
-
-        return diff < entry.getTtl();
-    }
-
     public boolean isCached(final String url) {
         final int hashCode = url.hashCode();
         HtmlCacheEntry entry = retrieve(hashCode);
         return entry != null;
     }
-
 
     public String get(final String url) {
         final int hashCode = url.hashCode();
@@ -100,10 +77,10 @@ public class HtmlCacheManager {
 
         HtmlCacheEntry newEntry = new HtmlCacheEntry(hashCode, new Date(DateTime.now().getMillis()), data, ttl);
         try {
-            Log.d(TAG, "put: writing entry: " + newEntry);
+            LogUtil.d(TAG, "put: writing entry: " + newEntry);
             return getDao().create(newEntry) == 1;
         } catch (SQLException e) {
-            Log.e(TAG, "put: ", e);
+            LogUtil.e(TAG, "put: ", e);
             return false;
         }
 
@@ -113,30 +90,11 @@ public class HtmlCacheManager {
         final int hashCode = url.hashCode();
         HtmlCacheEntry entry = retrieve(hashCode);
         if (entry != null) {
-            Log.d(TAG, "remove: removing entry: " + entry);
+            LogUtil.d(TAG, "remove: removing entry: " + entry);
             return remove(entry);
         } else {
-            Log.d(TAG, "remove: entry does not exist");
+            LogUtil.d(TAG, "remove: entry does not exist");
             return false;
-        }
-    }
-
-    private boolean remove(HtmlCacheEntry entry) {
-        try {
-            return getDao().delete(entry) == 1;
-        } catch (SQLException e) {
-            Log.e(TAG, "remove: ", e);
-            return false;
-        }
-    }
-
-    private void clearCache() {
-        try {
-            for (HtmlCacheEntry entry : getDao().queryForAll()) {
-                remove(entry);
-            }
-        } catch (SQLException e) {
-            Log.e(TAG, "clearCache: ", e);
         }
     }
 
@@ -164,10 +122,63 @@ public class HtmlCacheManager {
                     return count;
                 }
             });
-            Log.v(TAG, "purgeCache: purged " + count + " entries");
+            LogUtil.v(TAG, "purgeCache: purged " + count + " entries");
             return count;
         } catch (Exception e) {
             return -1;
+        }
+    }
+
+    private HtmlCacheEntry retrieve(final int hashCode) {
+        final Dao<HtmlCacheEntry, Long> dao = getDao();
+        try {
+            List<HtmlCacheEntry> htmlCacheEntries = dao.queryForEq(HtmlCacheEntry.COLUMN_HASHCODE, hashCode);
+            if (htmlCacheEntries.isEmpty()) {
+                return null;
+            } else if (htmlCacheEntries.size() > 1) {
+                LogUtil.w(TAG, "Inconsistent state of cache: hashcode" + hashCode + " is not unique. Deleting all copies.");
+                for (HtmlCacheEntry entry : htmlCacheEntries) {
+                    remove(entry);
+                }
+                return null;
+            } else {
+                if (checkTtl(htmlCacheEntries.get(0))) {
+                    return htmlCacheEntries.get(0);
+                } else {
+                    LogUtil.d(TAG, "retrieve: Deleting invalid entry with hashCode: " + hashCode);
+                    remove(htmlCacheEntries.get(0));
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            LogUtil.e(TAG, "retrieve: ", e);
+            return null;
+        }
+    }
+
+    private boolean checkTtl(HtmlCacheEntry entry) {
+        final Date timestamp = entry.getTimestamp();
+        long diff = DateTime.now().getMillis() - timestamp.getTime();
+
+        return diff < entry.getTtl();
+    }
+
+    private boolean remove(HtmlCacheEntry entry) {
+        try {
+            return getDao().delete(entry) == 1;
+        } catch (SQLException e) {
+            LogUtil.e(TAG, "remove: ", e);
+            return false;
+        }
+    }
+
+    private void clearCache() {
+        try {
+            for (HtmlCacheEntry entry : getDao().queryForAll()) {
+                remove(entry);
+            }
+        } catch (SQLException e) {
+            LogUtil.e(TAG, "clearCache: ", e);
         }
     }
 

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                                            xmlns:tools="http://schemas.android.com/tools"
+                                            android:id="@+id/nestedScrollView"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="#fff"
+                                            android:fillViewport="true"
+                                            android:fitsSystemWindows="true"
+                                            android:paddingTop="10dp"
+                                            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingRight="16dp">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp">
+
+                <ImageView
+                    android:id="@+id/ic_med_large_name"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignTop="@+id/textView"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/ic_edit_black_48dp"/>
+
+                <TextView
+                    android:id="@+id/med_large_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="72dp"
+                    android:layout_toRightOf="@+id/ic_med_large_name"
+                    android:gravity="center_vertical"
+                    android:textAllCaps="true"
+                    android:textColor="#000"
+                    android:textIsSelectable="false"
+                    android:textSize="19dp"
+                    android:textStyle="bold"
+                    tools:text="Medicine name here"/>
+
+                <TextView
+                    android:id="@+id/med_large_name_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="false"
+                    android:layout_below="@+id/med_large_name"
+                    android:layout_marginLeft="72dp"
+                    android:layout_toRightOf="@+id/ic_med_large_name"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/dark_grey_text"
+                    android:textSize="18dp"
+                    tools:text="Medicine extra info, maybe prompting to link to prescription"/>
+
+                <Button
+                    android:id="@+id/bind_medicine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/med_large_name_description"
+                    android:layout_below="@+id/med_large_name_description"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_list_item"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="@string/message_link_real_prescription_short"/>
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/stock_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/ic_med_stock"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignTop="@+id/textView"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/ic_edit_black_48dp"/>
+
+                <TextView
+                    android:id="@+id/med_stock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="72dp"
+                    android:layout_toRightOf="@+id/ic_med_stock"
+                    android:gravity="center_vertical"
+                    android:textAllCaps="false"
+                    android:textColor="#000"
+                    android:textIsSelectable="false"
+                    android:textSize="19dp"
+                    android:textStyle="bold"
+                    tools:text="Stock info"/>
+
+                <TextView
+                    android:id="@+id/med_stock_readable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="false"
+                    android:layout_below="@+id/ic_med_stock"
+                    android:layout_marginLeft="72dp"
+                    android:layout_toRightOf="@+id/ic_med_stock"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/dark_grey_text"
+                    android:textSize="18dp"
+                    tools:text="Text description of the  stock"/>
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp">
+
+                <ImageView
+                    android:id="@+id/ic_schedule_info"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignTop="@+id/textView"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/ic_edit_black_48dp"/>
+
+                <TextView
+                    android:id="@+id/schedule_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="72dp"
+                    android:layout_toRightOf="@+id/ic_schedule_info"
+                    android:gravity="center_vertical"
+                    android:textAllCaps="false"
+                    android:textColor="#000"
+                    android:textIsSelectable="false"
+                    android:textSize="19dp"
+                    android:textStyle="bold"
+                    tools:text="Schedules info"/>
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp">
+
+                <ImageView
+                    android:id="@+id/ic_prospect"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignTop="@+id/textView"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/ic_edit_black_48dp"/>
+
+                <TextView
+                    android:id="@+id/prospect_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="72dp"
+                    android:layout_toRightOf="@+id/ic_prospect"
+                    android:gravity="center_vertical"
+                    android:text="@string/prospect"
+                    android:textAllCaps="false"
+                    android:textColor="#000"
+                    android:textIsSelectable="false"
+                    android:textSize="19dp"
+                    android:textStyle="bold"/>
+
+                <ImageButton
+                    android:id="@+id/med_leaflet_butn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="100dp"
+                    android:layout_alignLeft="@+id/prospect_title"
+                    android:layout_below="@+id/prospect_title"
+                    android:layout_marginRight="26dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_list_item"/>
+
+                <ImageView
+                    android:id="@+id/ic_show_prospect"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="false"
+                    android:layout_below="@+id/prospect_title"
+                    android:layout_marginLeft="82dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_toRightOf="@+id/ic_prospect"
+                    android:gravity="center_vertical"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_help_white_48dp"
+                    android:textColor="@color/dark_grey_text"
+                    android:textSize="15dp"
+                    tools:src="@drawable/icp_capsule"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/med_leaflet_butn"
+                    android:layout_alignEnd="@+id/med_leaflet_butn"
+                    android:layout_alignRight="@+id/med_leaflet_butn"
+                    android:layout_alignTop="@+id/med_leaflet_butn"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toRightOf="@+id/ic_show_prospect"
+                    android:gravity="center"
+                    android:text="@string/button_official_prospect"
+                    android:textColor="#222"
+                    android:textSize="13dp"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</android.support.v4.widget.NestedScrollView>
+
+

@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -19,9 +19,9 @@
 package es.usc.citius.servando.calendula.scheduling;
 
 import android.content.Intent;
-import android.util.Log;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.WakeIntentService;
 
 /**
@@ -29,7 +29,7 @@ import es.usc.citius.servando.calendula.util.WakeIntentService;
  */
 public class AlarmIntentService extends WakeIntentService {
 
-    public static final String TAG = "AlarmIntentService";
+    private static final String TAG = "AlarmIntentService";
 
     public AlarmIntentService() {
         super("AlarmIntentService");
@@ -39,20 +39,19 @@ public class AlarmIntentService extends WakeIntentService {
     public void doReminderWork(Intent intent) {
 
 
-        Log.d(TAG, "Service started");
+        LogUtil.d(TAG, "Service started");
 
         // get intent params with alarm info
         AlarmIntentParams params = AlarmScheduler.getAlarmParams(intent);
 
-        if(params == null)
-        {
-            Log.w(TAG, "No extra params supplied");
+        if (params == null) {
+            LogUtil.w(TAG, "No extra params supplied");
             return;
         }
 
-        Log.d(TAG, "Alarm received: " + params.toString());
+        LogUtil.d(TAG, "Alarm received: " + params.toString());
 
-        if(params.action != CalendulaApp.ACTION_DAILY_ALARM) {
+        if (params.action != CalendulaApp.ACTION_DAILY_ALARM) {
             try {
                 params.date();
             } catch (Exception e) {
@@ -61,8 +60,7 @@ public class AlarmIntentService extends WakeIntentService {
             }
         }
 
-        switch (params.action)
-        {
+        switch (params.action) {
             case CalendulaApp.ACTION_ROUTINE_TIME:
             case CalendulaApp.ACTION_ROUTINE_DELAYED_TIME:
                 AlarmScheduler.instance().onAlarmReceived(params, this.getApplicationContext());
@@ -74,11 +72,11 @@ public class AlarmIntentService extends WakeIntentService {
                 break;
 
             case CalendulaApp.ACTION_DAILY_ALARM:
-                Log.d(TAG, "Received daily alarm");
+                LogUtil.d(TAG, "Received daily alarm");
                 DailyAgenda.instance().setupForToday(this.getApplicationContext(), false);
                 break;
             default:
-                Log.w(TAG, "Unknown action received");
+                LogUtil.w(TAG, "Unknown action received");
                 break;
         }
 

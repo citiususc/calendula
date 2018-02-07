@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
  */
 
 package es.usc.citius.servando.calendula.util;
+
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
@@ -91,7 +92,7 @@ public abstract class WakeIntentService extends IntentService {
                 PowerManager.WakeLock wakeLock = getLock(this);
                 if (wakeLock.isHeld())
                     wakeLock.release();
-            }catch (Exception e){
+            } catch (Exception e) {
                 // do nothing
             }
         }

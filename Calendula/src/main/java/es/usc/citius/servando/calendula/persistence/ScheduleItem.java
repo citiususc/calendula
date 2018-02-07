@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -71,7 +71,7 @@ public class ScheduleItem {
         this.id = id;
     }
 
-    public Routine routine() {
+    public Routine getRoutine() {
         return routine;
     }
 
@@ -79,7 +79,7 @@ public class ScheduleItem {
         this.routine = routine;
     }
 
-    public Schedule schedule() {
+    public Schedule getSchedule() {
         return schedule;
     }
 
@@ -87,7 +87,7 @@ public class ScheduleItem {
         this.schedule = schedule;
     }
 
-    public float dose() {
+    public float getDose() {
         return dose;
     }
 

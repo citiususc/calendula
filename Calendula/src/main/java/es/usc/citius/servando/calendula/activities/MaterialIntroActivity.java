@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -18,24 +18,24 @@
 
 package es.usc.citius.servando.calendula.activities;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
-public class MaterialIntroActivity extends IntroActivity{
+public class MaterialIntroActivity extends IntroActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
 
         setFullscreen(true);
         super.onCreate(savedInstanceState);
 
-        setSkipEnabled(false);
+        setSkipEnabled(true);
 
         addSlide(new SimpleSlide.Builder()
                 .layout(R.layout.intro_slide_1)
@@ -44,15 +44,15 @@ public class MaterialIntroActivity extends IntroActivity{
                 .build());
 
         addSlide(new SimpleSlide.Builder()
-                .layout(R.layout.intro_slide_2)
-                .background(R.color.intro_slide_2_light)
-                .backgroundDark(R.color.intro_slide_2_dark)
-                .build());
-
-        addSlide(new SimpleSlide.Builder()
                 .layout(R.layout.intro_slide_3)
                 .background(R.color.intro_slide_3_light)
                 .backgroundDark(R.color.intro_slide_3_dark)
+                .build());
+
+        addSlide(new SimpleSlide.Builder()
+                .layout(R.layout.intro_slide_2)
+                .background(R.color.intro_slide_2_light)
+                .backgroundDark(R.color.intro_slide_2_dark)
                 .build());
 
         addSlide(new SimpleSlide.Builder()
@@ -78,7 +78,6 @@ public class MaterialIntroActivity extends IntroActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        prefs.edit().putBoolean("PREFERENCE_INTRO_SHOWN", true).commit();
+        PreferenceUtils.edit().putBoolean(PreferenceKeys.HOME_INTRO_SHOWN.key(), true).apply();
     }
 }

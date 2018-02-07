@@ -2,7 +2,7 @@
 
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -19,29 +19,29 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="45dp"
-    android:orientation="vertical"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
                 android:background="#fff"
-                android:id="@+id/container">
+                android:orientation="vertical">
 
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="1px"
         android:layout_alignParentBottom="true"
-        android:background="#efefef" />
+        android:background="#efefef"/>
 
     <ImageView
-        android:id="@+id/current_hour_line"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_centerInParent="true"
-        android:src="@drawable/clock_no_bg"
-        android:scaleType="centerCrop"
+        android:layout_marginBottom="1px"
         android:alpha="0"
-        android:paddingRight="-200dp"
         android:background="#FAFAFA"
-        android:layout_marginBottom="1px"/>
+        android:paddingRight="-200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/clock_no_bg"/>
 
 
     <TextView
@@ -52,11 +52,10 @@
         android:layout_marginLeft="15dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center"
-        android:text="12"
+        tools:text="12"
         android:textColor="#acacac"
         android:textSize="16sp"
-        android:textStyle="normal" />
-
+        android:textStyle="normal"/>
 
 
 </RelativeLayout>

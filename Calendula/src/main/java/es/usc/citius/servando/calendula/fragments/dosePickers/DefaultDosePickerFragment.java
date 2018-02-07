@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -20,6 +20,9 @@ package es.usc.citius.servando.calendula.fragments.dosePickers;
 
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -35,6 +38,7 @@ public class DefaultDosePickerFragment extends DosePickerFragment {
 
     TextView unitsText;
     EditText text;
+    Presentation presentation;
 
     @Override
     protected int getLayoutResource() {
@@ -45,16 +49,37 @@ public class DefaultDosePickerFragment extends DosePickerFragment {
     protected void setupRootView(View rootView) {
         unitsText = (TextView) rootView.findViewById(R.id.units_text);
         text = (EditText) rootView.findViewById(R.id.editText);
+        text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(s.toString())) {
+                    double value = Double.parseDouble(s.toString().trim());
+                    unitsText.setText(presentation.units(getResources(), value));
+                }
+            }
+        });
     }
 
     @Override
     protected void setInitialValue(double initialDose) {
         Bundle args = getArguments();
         Presentation p = (Presentation) args.getSerializable("presentation");
-        p = p!=null ? p : Presentation.UNKNOWN;
-        unitsText.setText(p.units(getResources()));
-        text.setText(""+initialDose);
+        p = p != null ? p : Presentation.UNKNOWN;
+        presentation = p;
+        unitsText.setText(p.units(getResources(), initialDose));
+        text.setText(String.valueOf(initialDose));
     }
+
 
     @Override
     protected double getSelectedDose() {
@@ -65,7 +90,7 @@ public class DefaultDosePickerFragment extends DosePickerFragment {
     @Override
     protected void onCancel() {
         super.onCancel();
-        closeKeyboard(getActivity(),text.getWindowToken());
+        closeKeyboard(getActivity(), text.getWindowToken());
     }
 
     @Override

@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -20,13 +20,8 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="home_button_height">55dp</dimen>
-    <dimen name="home_button_text_size">25dp</dimen>
-    <dimen name="home_button_margin_right">40dp</dimen>
     <dimen name="normal_button_height">50dp</dimen>
     <dimen name="action_bar_height">56dp</dimen>
-    <dimen name="tabs_height">56dp</dimen>
-    <dimen name="tab_indicator_height">3dp</dimen>
 
     <dimen name="tabs_margin_top">56dp</dimen>
 
@@ -35,7 +30,6 @@
     <dimen name="fragment_tabs_margin_top">112dp</dimen>
 
     <dimen name="header_height">260dp</dimen>
-    <dimen name="header_height_empty">320dp</dimen>
     <dimen name="routine_label_from_schedule_creation">23sp</dimen>
 
 
@@ -48,5 +42,19 @@
     <dimen name="calendar_month_title_bottommargin">20dp</dimen>
     <dimen name="calendar_text_medium">16sp</dimen>
     <dimen name="calendar_text_small">12sp</dimen>
+    <dimen name="negative_status_bar_height">0dp</dimen>
+    <dimen name="sort_bar_height">56dp</dimen>
+    <dimen name="fab_vertical_margin">24dp</dimen>
+    <dimen name="fab_horizontal_margin">22dp</dimen>
+    <dimen name="fab_mini_vertical_margin">32dp</dimen>
+    <dimen name="fab_mini_horizontal_margin">30dp</dimen>
+    <dimen name="fab_elevation">6dp</dimen>
+    <dimen name="fab_sub_elevation">0dp</dimen>
+    <dimen name="fab_separator_right_margin">38dp</dimen>
+    <dimen name="fab_separator_top_margin">84dp</dimen>
+    <dimen name="fab_sub_action_size">45dp</dimen>
+    <dimen name="fab_expand_base_margin">14dp</dimen>
+    <dimen name="fab_expand_additive_margin">64dp</dimen>
+
 
 </resources>

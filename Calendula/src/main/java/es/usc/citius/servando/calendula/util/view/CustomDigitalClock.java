@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -19,14 +19,13 @@
 package es.usc.citius.servando.calendula.util.view;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import java.util.Calendar;
 
@@ -35,7 +34,7 @@ import java.util.Calendar;
  * private final static String m12 = "h:mm aa"; private final static String m24 = "k:mm";
  */
 
-public class CustomDigitalClock extends TextView {
+public class CustomDigitalClock extends AppCompatTextView {
 
     private final static String m12 = "kk:mm";
     private final static String m24 = "kk:mm";
@@ -43,31 +42,26 @@ public class CustomDigitalClock extends TextView {
     private final static String m24sec = "kk:mm:ss";
     Calendar mCalendar;
     String mFormat;
-    private FormatChangeObserver mFormatChangeObserver = new FormatChangeObserver();
+    boolean showSeconds = false;
+    private FormatChangeObserver formatChangeObserver;
     private Runnable mTicker;
     private Handler mHandler;
     private boolean mTickerStopped = false;
-    boolean showSeconds = false;
 
     public CustomDigitalClock(Context context) {
         super(context);
         initClock(context);
+        formatChangeObserver = new FormatChangeObserver();
     }
 
     public CustomDigitalClock(Context context, AttributeSet attrs) {
         super(context, attrs);
         initClock(context);
+        formatChangeObserver = new FormatChangeObserver();
     }
 
-    private void initClock(Context context) {
-        Resources r = context.getResources();
-
-        if (mCalendar == null) {
-            mCalendar = Calendar.getInstance();
-        }
-
-        getContext().getContentResolver().registerContentObserver(Settings.System.CONTENT_URI, true, mFormatChangeObserver);
-
+    public void setShowSeconds(boolean showSeconds) {
+        this.showSeconds = showSeconds;
         setFormat();
     }
 
@@ -77,7 +71,9 @@ public class CustomDigitalClock extends TextView {
         super.onAttachedToWindow();
         mHandler = new Handler();
 
-        /**
+        getContext().getContentResolver().registerContentObserver(Settings.System.CONTENT_URI, true, formatChangeObserver);
+
+        /*
          * requests a tick on the next hard-second boundary
          */
         mTicker = new Runnable() {
@@ -94,10 +90,7 @@ public class CustomDigitalClock extends TextView {
                 //
                 // String text = Html.fromHtml("<b>" + hour + "</b>:" + min).toString();
                 // setText(text);
-                if(showSeconds)
-                    setText("Ahora - " + DateFormat.format(mFormat, mCalendar));
-                else
-                    setText(DateFormat.format(mFormat, mCalendar));
+                setText(DateFormat.format(mFormat, mCalendar));
                 invalidate();
                 long now = SystemClock.uptimeMillis();
                 long next = now + (1000 - now % 1000);
@@ -111,6 +104,16 @@ public class CustomDigitalClock extends TextView {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mTickerStopped = true;
+        getContext().getContentResolver().
+                unregisterContentObserver(formatChangeObserver);
+    }
+
+    private void initClock(Context context) {
+
+        if (mCalendar == null) {
+            mCalendar = Calendar.getInstance();
+        }
+        setFormat();
     }
 
     /**
@@ -124,7 +127,7 @@ public class CustomDigitalClock extends TextView {
         if (get24HourMode()) {
             mFormat = showSeconds ? m24sec : m24;
         } else {
-            mFormat = showSeconds ? m12sec: m12;
+            mFormat = showSeconds ? m12sec : m12;
         }
     }
 
@@ -137,10 +140,5 @@ public class CustomDigitalClock extends TextView {
         public void onChange(boolean selfChange) {
             setFormat();
         }
-    }
-
-    public void setShowSeconds(boolean showSeconds) {
-        this.showSeconds = showSeconds;
-        setFormat();
     }
 }

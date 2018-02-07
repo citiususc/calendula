@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +42,7 @@ import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 
 
@@ -51,7 +51,7 @@ import es.usc.citius.servando.calendula.util.ScheduleHelper;
  */
 public class ScheduleSummaryFragment extends Fragment {
 
-    public static final String TAG = ScheduleSummaryFragment.class.getName();
+    private static final String TAG = "ScheduleSummaryFragm";
 
     public ScheduleSummaryFragment() {
         // Required empty public constructor
@@ -73,25 +73,18 @@ public class ScheduleSummaryFragment extends Fragment {
         }
     }
 
-    IconicsDrawable iconFor(Presentation p){
-        return new IconicsDrawable(getContext())
-                .icon(Presentation.iconFor(p))
-                .colorRes(R.color.agenda_item_title)
-                .sizeDp(60);
-    }
-
     public void updateSummary() {
 
-        int color = DB.patients().getActive(getActivity()).color();
+        int color = DB.patients().getActive(getActivity()).getColor();
 
-        Log.d(TAG, "updateSummary ScheduleSUmmaryFragment");
+        LogUtil.d(TAG, "updateSummary ScheduleSUmmaryFragment");
         View rootView = getView();
 
         Medicine med = ScheduleHelper.instance().getSelectedMed();
         Schedule s = ScheduleHelper.instance().getSchedule();
         List<ScheduleItem> items = ScheduleHelper.instance().getScheduleItems();
 
-        final TextView summaryTitle= (TextView) rootView.findViewById(R.id.summaryTitle);
+        final TextView summaryTitle = (TextView) rootView.findViewById(R.id.summaryTitle);
         final TextView medNameTv = (TextView) rootView.findViewById(R.id.sched_summary_medname);
         final TextView medDaysTv = (TextView) rootView.findViewById(R.id.sched_summary_medi_days);
         final TextView medDailyFreqTv = (TextView) rootView.findViewById(R.id.sched_summary_medi_dailyfreq);
@@ -99,18 +92,18 @@ public class ScheduleSummaryFragment extends Fragment {
         final Button showCalendarButton = (Button) rootView.findViewById(R.id.button_show_calendar);
 
         if (med != null) {
-            medNameTv.setText(med.name());
+            medNameTv.setText(med.getName());
         }
 
         medDaysTv.setText(s.toReadableString(getActivity()));
-        medIconImage.setImageDrawable(iconFor(med != null ? med.presentation() : Presentation.PILLS));
+        medIconImage.setImageDrawable(iconFor(med != null ? med.getPresentation() : Presentation.PILLS));
 
         if (s.type() != Schedule.SCHEDULE_TYPE_HOURLY) {
             String freq =
                     ScheduleUtils.getTimesStr(items != null ? items.size() : 0, getActivity());
             medDailyFreqTv.setText(freq);
         } else {
-            String freq = ScheduleUtils.getTimesStr(24 / s.rule().interval(), getActivity());
+            String freq = ScheduleUtils.getTimesStr(24 / s.rule().getInterval(), getActivity());
             medDailyFreqTv.setText(freq);
         }
 
@@ -148,6 +141,13 @@ public class ScheduleSummaryFragment extends Fragment {
         medIconImage.setVisibility(View.VISIBLE);
 
 
+    }
+
+    IconicsDrawable iconFor(Presentation p) {
+        return new IconicsDrawable(getContext())
+                .icon(Presentation.iconFor(p))
+                .colorRes(R.color.agenda_item_title)
+                .sizeDp(60);
     }
 
 

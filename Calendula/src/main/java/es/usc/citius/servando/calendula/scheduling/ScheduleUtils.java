@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -55,13 +55,13 @@ public class ScheduleUtils {
      * Obtains the doses (Schedule Items) that are attached to a routine
      *
      * @param routine The routine
-     * @return
+     * @return the schedule items
      */
     public static List<ScheduleItem> getRoutineScheduleItems(Routine routine, LocalDate date) {
         // iterate over routine items and filter by date
         List<ScheduleItem> doses = new ArrayList<>();
-        for (ScheduleItem scheduleItem : routine.scheduleItems()) {
-            if (scheduleItem.schedule().enabledForDate(date)) {
+        for (ScheduleItem scheduleItem : routine.getScheduleItems()) {
+            if (scheduleItem.getSchedule().enabledForDate(date)) {
                 doses.add(scheduleItem);
             }
         }
@@ -91,7 +91,7 @@ public class ScheduleUtils {
     public static String[] getSelectedDays(boolean[] days, Context ctx) {
 
         String[] dayNames = ctx.getResources().getStringArray(R.array.day_names);
-        ArrayList<String> sdays = new ArrayList<String>();
+        ArrayList<String> sdays = new ArrayList<>();
         for (int i = 0; i < days.length; i++) {
             if (days[i]) {
                 sdays.add(dayNames[i]);

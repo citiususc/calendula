@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -16,14 +16,12 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout
-    android:id="@+id/daily_agenda_fragment_root"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:addStatesFromChildren="false"
-    android:background="#ffffff">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:addStatesFromChildren="false"
+                android:background="#ffffff">
 
     <FrameLayout
         android:layout_width="fill_parent"
@@ -31,14 +29,13 @@
 
 
         <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv"
-                android:layout_gravity="fill_vertical"
-                android:fillViewport="true"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:clickable="true"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                />
+            android:id="@+id/rv"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="fill_vertical"
+            android:clickable="true"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     </FrameLayout>
 
@@ -48,12 +45,12 @@
         android:layout_height="fill_parent"
         android:background="#eeffffff"
         android:visibility="gone">
+
         <include layout="@layout/daily_view_empty_placeholder"/>
     </FrameLayout>
 
 
     <FrameLayout
-        android:id="@+id/zoom_container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@drawable/transparent_black_overlay_transition"
@@ -61,7 +58,6 @@
         android:visibility="invisible">
 
         <FrameLayout
-            android:id="@+id/content_wrapper"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginTop="@dimen/status_bar_height"
@@ -70,7 +66,6 @@
             android:visibility="visible">
 
             <FrameLayout
-                android:id="@+id/content"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="@drawable/shape_list_item"

@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -17,11 +17,10 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context="es.usc.citius.servando.calendula.activities.ReminderActivity">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:background="@color/white">
 
     <RelativeLayout
         android:id="@+id/zoom_avatar_container"
@@ -29,13 +28,12 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
+
         <ImageView
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:id="@+id/zoom_patient_avatar"
-            android:src="@drawable/avatar1"
             android:layout_marginTop="10dp"
-            />
+            android:src="@drawable/avatar1"/>
 
         <TextView
             android:id="@+id/routine_name"
@@ -43,39 +41,37 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/clock"
             android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-light"
             android:gravity="center"
-            android:text="Lunch"
+            tools:text="Lunch"
             android:textColor="@color/android_blue_dark"
-            android:textSize="20sp"
-            android:layout_marginTop="10dp"/>
+            android:textSize="20sp"/>
 
         <TextView
-            android:id="@+id/zoom_patient_name"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
-            android:text="Ángel"
-            android:textColor="#444"
-            android:textSize="22dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
+            android:layout_alignParentRight="true"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="5dp"
-            android:layout_alignParentRight="true"
-            android:fontFamily="sans-serif-condensed"/>
+            android:layout_marginTop="10dp"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center"
+            tools:text="Ángel"
+            android:textColor="#444"
+            android:textSize="22dp"/>
 
         <TextView
             android:id="@+id/clock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:text="12:45"
-            android:textColor="@color/android_blue_dark"
-            android:textSize="30sp"
-            android:paddingRight="0dp"
             android:layout_marginTop="20dp"
-            />
+            android:gravity="center"
+            android:paddingRight="0dp"
+            tools:text="12:45"
+            android:textColor="@color/android_blue_dark"
+            android:textSize="30sp"/>
 
     </RelativeLayout>
 
@@ -90,34 +86,27 @@
         android:gravity="center"
         android:text="@string/agenda_zoom_meds_time"
         android:textColor="#444"
-        android:textSize="20dp"
-        />
+        android:textSize="20dp"/>
 
     <ImageView
         android:id="@+id/spacer"
         android:layout_width="fill_parent"
         android:layout_height="1px"
+        android:layout_below="@+id/meds_time_view"
         android:layout_marginLeft="1dp"
         android:layout_marginRight="1dp"
         android:layout_marginTop="10dp"
-        android:background="#efefef"
-        android:layout_below="@+id/meds_time_view"/>
+        android:background="#efefef"/>
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/delay_button"
         android:layout_below="@+id/spacer"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/delays_spinner"
-        android:padding="10dp"
-        android:layout_above="@+id/delay_button">
-
-        <LinearLayout
-            android:id="@+id/reminder_list"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"></LinearLayout>
+        android:padding="10dp">
 
     </ScrollView>
 
@@ -131,10 +120,9 @@
         android:gravity="center_horizontal|center_vertical"
         android:spinnerMode="dialog"
         android:text="@string/delay"
-        android:visibility="visible" />
+        android:visibility="visible"/>
 
     <Button
-        android:id="@+id/reminder_done_button"
         style="@style/delay_button"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -143,7 +131,7 @@
         android:layout_marginLeft="5dp"
         android:gravity="center"
         android:text="@string/done"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
 
     <ImageButton
@@ -157,7 +145,7 @@
         android:padding="7dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_arrow_back_black_48dp"
-        android:text="Close"
+        android:text="@string/material_drawer_close"
         android:textSize="15sp"
         android:visibility="gone"/>
 
@@ -165,6 +153,7 @@
         android:id="@+id/delay_button"
         android:layout_width="45dp"
         android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="false"
@@ -172,9 +161,8 @@
         android:padding="7dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_history_black_48dp"
-        android:text="Delay"
+        android:text="@string/delay"
         android:textSize="15sp"
-        android:visibility="visible"
-        android:layout_alignParentBottom="true"/>
+        android:visibility="visible"/>
 
 </RelativeLayout>

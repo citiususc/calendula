@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ public class PresentationsTypeface implements ITypeface {
     @Override
     public HashMap<String, Character> getCharacters() {
         if (mChars == null) {
-            HashMap<String, Character> aChars = new HashMap<String, Character>();
+            HashMap<String, Character> aChars = new HashMap<>();
             for (Icon v : Icon.values()) {
                 aChars.put(v.name(), v.character);
             }
@@ -139,6 +139,8 @@ public class PresentationsTypeface implements ITypeface {
         ic_patch('\ue909');
 
 
+        // remember the typeface so we can use it later
+        private static ITypeface typeface;
         char character;
 
         Icon(char character) {
@@ -156,9 +158,6 @@ public class PresentationsTypeface implements ITypeface {
         public String getName() {
             return name();
         }
-
-        // remember the typeface so we can use it later
-        private static ITypeface typeface;
 
         public ITypeface getTypeface() {
             if (typeface == null) {

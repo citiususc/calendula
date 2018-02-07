@@ -2,7 +2,7 @@
 
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -19,8 +19,8 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <HorizontalScrollView
         android:id="@+id/med_presentation_scroll"
@@ -51,7 +51,7 @@
                 android:padding="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/icp_capsule"
-                android:tag="med_type" />
+                android:tag="med_type"/>
 
             <ImageView
                 android:id="@+id/med_presentation_3"
@@ -66,7 +66,7 @@
                 android:padding="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/icp_effervescent"
-                android:tag="med_type" />
+                android:tag="med_type"/>
 
             <ImageView
                 android:id="@+id/med_presentation_4"
@@ -81,7 +81,7 @@
                 android:padding="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/icp_pill"
-                android:tag="med_type" />
+                android:tag="med_type"/>
 
             <ImageView
                 android:id="@+id/med_presentation_5"
@@ -96,7 +96,7 @@
                 android:padding="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/icp_syrup"
-                android:tag="med_type" />
+                android:tag="med_type"/>
 
             <ImageView
                 android:id="@+id/med_presentation_6"
@@ -111,7 +111,7 @@
                 android:padding="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/icp_drop"
-                android:tag="med_type" />
+                android:tag="med_type"/>
 
             <ImageView
                 android:id="@+id/med_presentation_7"
@@ -126,7 +126,7 @@
                 android:padding="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/icp_nasalspray"
-                android:tag="med_type" />
+                android:tag="med_type"/>
 
             <ImageView
                 android:id="@+id/med_presentation_8"
@@ -141,7 +141,7 @@
                 android:padding="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/icp_inhaler"
-                android:tag="med_type" />
+                android:tag="med_type"/>
 
             <ImageView
                 android:id="@+id/med_presentation_10"
@@ -156,7 +156,7 @@
                 android:padding="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_ppomade"
-                android:tag="med_type" />
+                android:tag="med_type"/>
 
             <ImageView
                 android:id="@+id/med_presentation_9"
@@ -171,7 +171,7 @@
                 android:padding="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/icp_injection"
-                android:tag="med_type" />
+                android:tag="med_type"/>
 
             <ImageView
                 android:id="@+id/med_presentation_11"
@@ -186,14 +186,13 @@
                 android:padding="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/icp_patches"
-                android:tag="med_type" />
+                android:tag="med_type"/>
 
 
         </LinearLayout>
     </HorizontalScrollView>
 
     <ImageView
-        android:id="@+id/imageView3l"
         android:layout_width="1dp"
         android:layout_height="1dp"
         android:layout_margin="0dp"
@@ -201,10 +200,9 @@
         android:cropToPadding="false"
         android:scaleType="fitXY"
         android:src="@drawable/presentation_box_left"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <ImageView
-        android:id="@+id/imageView3r"
         android:layout_width="1dp"
         android:layout_height="1dp"
         android:layout_alignParentRight="true"
@@ -213,10 +211,9 @@
         android:cropToPadding="false"
         android:scaleType="fitXY"
         android:src="@drawable/presentation_box_right"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <ImageView
-        android:id="@+id/imageView4t"
         android:layout_width="1dp"
         android:layout_height="1dp"
         android:layout_margin="0dp"
@@ -225,10 +222,9 @@
         android:layout_marginTop="4dp"
         android:scaleType="fitXY"
         android:src="@drawable/presentation_box_shadow_top"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <ImageView
-        android:id="@+id/imageView4b"
         android:layout_width="1dp"
         android:layout_height="1dp"
         android:layout_alignParentBottom="false"
@@ -238,6 +234,6 @@
         android:layout_marginTop="113dp"
         android:scaleType="fitXY"
         android:src="@drawable/presentation_box_shadow_bottom"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
 </RelativeLayout>

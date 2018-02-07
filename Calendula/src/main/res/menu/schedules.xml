@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -17,17 +17,17 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/action_remove"
         android:orderInCategory="100"
         android:title="@string/action_remove"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 
-    <item android:id="@+id/action_read_from_qr"
-          android:titleCondensed="Automática"
-          android:title="Automática"
-          app:showAsAction="never"
-          android:checkable="true" />
+    <!--<item-->
+    <!--android:checkable="true"-->
+    <!--android:title="Automática"-->
+    <!--android:titleCondensed="Automática"-->
+    <!--app:showAsAction="never"/>-->
 </menu>

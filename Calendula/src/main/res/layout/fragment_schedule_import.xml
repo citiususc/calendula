@@ -2,7 +2,7 @@
 
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -19,718 +19,670 @@
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="fill_parent"
-    android:layout_width="fill_parent"
-    android:background="#fff"
-    android:id="@+id/schedule_scroll"
-    android:clickable="false"
-    android:fillViewport="false"
-    >
-
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      >
-
-      <RelativeLayout
-          android:id="@+id/schedule_new_indicator"
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:background="@color/android_green_light">
-
-          <ImageView
-              android:layout_width="25dp"
-              android:layout_height="25dp"
-              android:id="@+id/new_schedule_icon"
-              android:src="@drawable/ic_edit_black_48dp"
-              android:layout_marginLeft="20dp"
-              android:layout_marginTop="10dp"
-              android:layout_marginRight="20dp"
-              android:layout_marginBottom="10dp" />
-
-          <TextView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/scan_new_schedule"
-              android:id="@+id/new_schedule_text"
-              android:layout_alignTop="@+id/new_schedule_icon"
-              android:layout_toRightOf="@+id/new_schedule_icon"
-              android:layout_alignBottom="@+id/new_schedule_icon"
-              android:layout_alignParentRight="true"
-              android:layout_alignParentEnd="true"
-              android:layout_marginRight="20dp"
-              android:gravity="center_vertical"
-              android:textColor="#111" />
-
-      </RelativeLayout>
-
-
-      <RelativeLayout
-          android:id="@+id/schedule_changed_msg"
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:background="@color/android_orange_light"
-          android:layout_below="@+id/schedule_new_indicator"
-          android:visibility="gone">
-
-          <ImageView
-              android:layout_width="25dp"
-              android:layout_height="25dp"
-              android:id="@+id/imageView6"
-              android:src="@drawable/ic_visibility_black_48dp"
-              android:layout_marginLeft="20dp"
-              android:layout_marginTop="10dp"
-              android:layout_marginRight="20dp"
-              android:layout_marginBottom="10dp" />
-
-          <TextView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:id="@+id/textView8"
-              android:layout_alignTop="@+id/imageView6"
-              android:layout_toRightOf="@+id/imageView6"
-              android:layout_alignBottom="@+id/imageView6"
-              android:layout_alignParentRight="true"
-              android:layout_alignParentEnd="true"
-              android:layout_marginRight="20dp"
-              android:gravity="center_vertical"
-              android:textColor="#111"
-              android:text="@string/scan_schedule_changed" />
-
-          <LinearLayout
-              android:id="@+id/schedule_changes_list"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:layout_below="@+id/textView8"
-              android:layout_marginLeft="65dp"
-              android:layout_marginBottom="20dp"
-              android:layout_marginRight="20dp">
-
-          </LinearLayout>
-      </RelativeLayout>
-
-      <RelativeLayout
-        android:layout_width="fill_parent"
-        android:id="@+id/times_a_day_container"
-        android:layout_height="wrap_content"
-          android:layout_below="@+id/schedule_changed_msg">
-
-      <RelativeLayout
-          android:layout_width="fill_parent"
-          android:id="@+id/box_schedule_times_by_day"
-          android:layout_height="100dp"
-          >
-
-        <TextView
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/schedule_scroll"
             android:layout_width="fill_parent"
-            android:layout_height="40dp"
-            android:text="@string/schedule"
-            android:id="@+id/schedule_label"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:textSize="15dp"
-            android:textColor="#bfbfbf"
-            android:visibility="visible"
-            android:gravity="center_vertical"
-            android:paddingLeft="20dp"
-            android:focusableInTouchMode="true"
-            android:background="#aaefefef"
-            />
-
-        <Spinner
-            android:id="@+id/schedules_spinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/schedule_label"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:spinnerMode="dialog"
-            />
-      </RelativeLayout>
-
-      <RelativeLayout
-          android:layout_width="fill_parent"
-          android:id="@+id/box_schedule_timetable"
-          android:layout_below="@+id/box_schedule_times_by_day"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="20dp"
-          >
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="40dp"
-            android:text="@string/doses_and_times"
-            android:id="@+id/doses_and_times_label"
-            android:layout_alignParentTop="false"
-            android:layout_alignParentLeft="false"
-            android:textSize="15dp"
-            android:textColor="#bfbfbf"
-            android:visibility="visible"
-            android:gravity="center_vertical"
-            android:paddingLeft="20dp"
-            android:background="#aaefefef"
-            />
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@+id/doses_and_times_label"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="5dp"
-            android:id="@+id/linearLayout"
-            >
-
-          <RelativeLayout
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_weight="0.70"
-              android:layout_marginRight="2dp"
-              >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/schedule_timetable_time_column"
-                android:id="@+id/textView2"
-                android:textColor="@color/android_blue_dark"
-                android:textSize="12dp"
-                />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:id="@+id/imageView"
-                android:layout_below="@+id/textView2"
-                android:layout_alignParentLeft="true"
-                android:background="@color/android_blue"
-                />
-          </RelativeLayout>
-
-          <RelativeLayout
-              android:layout_width="100dp"
-              android:layout_height="match_parent"
-              android:layout_marginLeft="2dp"
-              >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/schedule_timetable_dose_column"
-                android:id="@+id/textView3"
-                android:textColor="@color/android_blue_dark"
-                android:textSize="12dp"
-                />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:id="@+id/imageView1"
-                android:layout_below="@+id/textView3"
-                android:layout_alignParentLeft="true"
-                android:background="@color/android_blue"
-                />
-
-          </RelativeLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_below="@+id/linearLayout"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:id="@+id/schedule_timetable_container"
-            >
-
-
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:id="@+id/timetable_divider"
-            android:layout_below="@id/schedule_timetable_container"
-            android:background="@color/android_blue"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:visibility="gone"
-            />
-      </RelativeLayout>
-      <RelativeLayout
-          android:layout_width="fill_parent"
-          android:id="@+id/box_hourinterval"
-          android:layout_height="140dp"
-          >
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="40dp"
-            android:text="@string/schedule"
-            android:id="@+id/hourinterval_label"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:textSize="15dp"
-            android:textColor="#bfbfbf"
-            android:visibility="visible"
-            android:gravity="center_vertical"
-            android:paddingLeft="20dp"
-            android:focusableInTouchMode="true"
-            android:background="#aaefefef"
-            />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_below="@+id/hourinterval_label"
-            android:id="@+id/hourly_interval_top"
-            android:layout_height="40dp"
-            android:gravity="center_horizontal"
-            >
-          <TextView
-              android:layout_width="45dp"
-              android:layout_height="40dp"
-              android:textAppearance="?android:attr/textAppearanceSmall"
-              android:text="@string/take"
-              android:layout_alignParentLeft="true"
-              android:layout_alignParentStart="true"
-              android:gravity="center"
-              android:textSize="15dp"
-              android:textColor="#444"
-              />
-          <Button
-              android:layout_width="65dp"
-              android:layout_height="40dp"
-              android:text="1"
-              android:id="@+id/repeat_dose"
-              style="?android:attr/borderlessButtonStyle"
-              android:textColor="@color/android_blue_dark"
-              android:textStyle="bold"
-              android:textSize="18dp"
-              />
-
-          <TextView
-              android:layout_width="45dp"
-              android:layout_height="40dp"
-              android:textAppearance="?android:attr/textAppearanceMedium"
-              android:text="@string/every"
-              android:layout_alignParentLeft="true"
-              android:layout_alignParentStart="true"
-              android:gravity="center"
-              android:textSize="15dp"
-              android:textColor="#444"
-              />
-
-          <Button
-              android:layout_width="65dp"
-              android:layout_height="40dp"
-              android:inputType="number"
-              android:ems="10"
-              style="?android:attr/borderlessButtonStyle"
-              android:id="@+id/hourinterval_edit_text"
-              android:layout_toRightOf="@+id/textView5"
-              android:layout_toEndOf="@+id/textView5"
-              android:text="8"
-              android:gravity="center"
-              android:textSize="18dp"
-              android:textColor="@color/android_blue_dark"
-              android:textStyle="bold"
-              />
-
-          <TextView
-              android:layout_width="45dp"
-              android:layout_height="40dp"
-              android:text="@string/hours"
-              android:layout_alignTop="@+id/hourinterval_edit_text"
-              android:layout_toRightOf="@+id/hourinterval_edit_text"
-              android:layout_toEndOf="@+id/hourinterval_edit_text"
-              android:gravity="center"
-              android:textColor="#444"
-              android:textSize="15dp"
-              />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_below="@+id/hourly_interval_top"
-            android:id="@+id/hourly_interval_bottom"
-            android:layout_height="40dp"
-            android:gravity="center"
-            >
-
-          <Button
-              android:layout_width="fill_parent"
-              android:layout_height="45dp"
-              android:inputType="number"
-              android:ems="10"
-              style="?android:attr/borderlessButtonStyle"
-              android:id="@+id/hourinterval_from_text"
-              android:layout_toRightOf="@+id/textView5"
-              android:layout_toEndOf="@+id/textView5"
-              android:text="@string/first_intake"
-              android:textSize="18dp"
-              android:textColor="@color/android_blue_dark"
-              android:textStyle="bold"
-              android:layout_margin="0dp"
-              android:gravity="center_horizontal|top"
-              />
-        </LinearLayout>
-
-
-      </RelativeLayout>
-
-    </RelativeLayout>
+            android:layout_height="fill_parent"
+            android:background="#fff"
+            android:clickable="false"
+            android:fillViewport="false">
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:id="@+id/box_schedule_repeat_container"
-        android:layout_below="@+id/times_a_day_container"
-        android:layout_height="wrap_content"
-        >
-
-      <RelativeLayout
-          android:layout_width="fill_parent"
-          android:id="@+id/box_schedule_repeat"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="10dp"
-          >
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="40dp"
-            android:text="@string/schedule_repeat_days"
-            android:id="@+id/repeat_label"
-            android:layout_alignParentTop="false"
-            android:layout_alignParentLeft="false"
-            android:textSize="15dp"
-            android:textColor="#bfbfbf"
-            android:visibility="visible"
-            android:gravity="center_vertical"
-            android:paddingLeft="20dp"
-            android:background="#aaefefef"
-            />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <RelativeLayout
+            android:id="@+id/schedule_new_indicator"
             android:layout_width="fill_parent"
-            android:id="@+id/repeat_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/repeat_label"
-            >
+            android:background="@color/android_green_light">
 
-          <include
-              android:id="@+id/custom_repeat_box"
-              android:layout_width="wrap_content"
-              android:layout_height="55dp"
-              layout="@layout/schedule_repetition_picker"
-              android:layout_marginTop="0dp"
-              android:layout_marginRight="0dp"
-              android:layout_marginLeft="0dp"
-              android:layout_marginBottom="0dp"
-              />
+            <ImageView
+                android:id="@+id/new_schedule_icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_edit_black_48dp"/>
 
-          <include
-
-              android:layout_width="wrap_content"
-              android:layout_height="50dp"
-              layout="@layout/schedule_day_selector"
-              android:layout_marginTop="5dp"
-              android:layout_marginRight="0dp"
-              android:layout_marginLeft="0dp"
-              android:layout_marginBottom="0dp"
-              android:id="@+id/day_selector_box"
-              android:layout_below="@+id/custom_repeat_box"
-              />
-
-          <TextView
-              android:layout_width="fill_parent"
-              android:layout_height="55dp"
-              android:text="@string/schedule_custom_rule_text"
-              android:gravity="center_vertical"
-              android:paddingLeft="26dp"
-              android:id="@+id/rule_text"
-              android:textColor="@color/android_blue_dark"
-              android:fontFamily="sans_serif_condensed"
-              android:textSize="15dp"
-              />
-
-        </RelativeLayout>
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:id="@+id/repeat_type_spinner"
-            android:layout_alignTop="@+id/repeat_label"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="0dp"
-            android:layout_marginRight="10dp"
-            android:spinnerMode="dialog"
-            android:layout_marginLeft="10dp"
-            />
-      </RelativeLayout>
-
-      <RelativeLayout
-          android:layout_width="fill_parent"
-          android:id="@+id/box_schedule_period"
-          android:layout_height="wrap_content"
-          >
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="40dp"
-            android:text="@string/schedule_repeat_period"
-            android:id="@+id/repeat_period_label"
-            android:layout_alignParentTop="false"
-            android:layout_alignParentLeft="false"
-            android:textSize="15dp"
-            android:textColor="#bfbfbf"
-            android:visibility="visible"
-            android:gravity="center_vertical"
-            android:paddingLeft="20dp"
-            android:background="#aaefefef"
-            />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_below="@+id/repeat_period_label"
-            android:id="@+id/hourly_interval_top"
-            android:layout_height="50dp"
-            android:gravity="center"
-            >
-
-          <Button
-              android:layout_width="70dp"
-              android:layout_height="50dp"
-              android:text="27"
-              android:id="@+id/period_value"
-              style="?android:attr/borderlessButtonStyle"
-              android:textColor="@color/android_blue_dark"
-              android:textStyle="bold"
-              android:textSize="20dp"
-              />
-
-          <TextView
-              android:layout_width="wrap_content"
-              android:layout_height="50dp"
-              android:textAppearance="?android:attr/textAppearanceMedium"
-              android:text="+"
-              android:layout_alignParentLeft="true"
-              android:layout_alignParentStart="true"
-              android:gravity="center"
-              android:textSize="20dp"
-              android:textColor="#444"
-              />
-
-          <Button
-              android:layout_width="60dp"
-              android:layout_height="50dp"
-              android:inputType="number"
-              android:ems="10"
-              style="?android:attr/borderlessButtonStyle"
-              android:id="@+id/period_rest"
-              android:layout_toRightOf="@+id/textView5"
-              android:layout_toEndOf="@+id/textView5"
-              android:text="8"
-              android:gravity="center"
-              android:textSize="20dp"
-              android:textColor="@color/android_blue_dark"
-              android:textStyle="bold"
-              />
-
-          <Spinner
-              android:layout_width="1dp"
-              android:visibility="invisible"
-              android:layout_height="1dp"
-              android:spinnerMode="dialog"
-              android:id="@+id/cycles_spinner"
-              />
-
-        </LinearLayout>
-        <ImageButton
-            android:layout_width="50dp"
-            android:src="@drawable/ic_arrow_drop_down_black_48dp"
-            android:layout_height="50dp"
-            android:id="@+id/cycles_spinner_trigger"
-            style="?android:attr/borderlessButtonStyle"
-            android:scaleType="fitCenter"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="10dp"
-            />
-
-
-      </RelativeLayout>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:id="@+id/box_schedule_duration"
-        android:layout_below="@+id/box_schedule_repeat_container"
-        android:layout_height="wrap_content"
-        >
-
-      <TextView
-          android:layout_width="fill_parent"
-          android:layout_height="40dp"
-          android:text="@string/duration"
-          android:id="@+id/duration_label"
-          android:layout_alignParentTop="false"
-          android:layout_alignParentLeft="false"
-          android:textSize="15dp"
-          android:textColor="#bfbfbf"
-          android:visibility="visible"
-          android:gravity="center_vertical"
-          android:paddingLeft="20dp"
-          android:background="#aaefefef"
-          />
-
-      <RelativeLayout
-          android:layout_width="fill_parent"
-          android:layout_below="@+id/duration_label"
-          android:layout_height="wrap_content"
-          >
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="90dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginLeft="16dp"
-            >
-
-          <TextView
-              android:layout_width="80dp"
-              android:layout_height="40dp"
-              android:textAppearance="?android:attr/textAppearanceSmall"
-              android:text="@string/label_schedule_repeat_today"
-              android:id="@+id/textView4"
-              android:layout_weight="1"
-              android:layout_marginLeft="10dp"
-              android:layout_gravity="center_vertical"
-              android:gravity="center_vertical"
-              android:textColor="#444"
-              android:textSize="15dp"
-              />
-
-          <Button
-              android:layout_width="wrap_content"
-              android:layout_height="40dp"
-              android:text="@string/button_schedule_repeat_today"
-              android:id="@+id/button_set_start"
-              android:textSize="15dp"
-              android:layout_weight="1"
-              android:layout_gravity="center_vertical"
-              android:layout_marginLeft="80dp"
-              style="?android:attr/borderlessButtonStyle"
-              android:layout_alignParentEnd="false"
-              android:textColor="@color/android_blue_dark"
-              android:gravity="start"
-              />
-
-          <TextView
-              android:layout_width="80dp"
-              android:layout_height="40dp"
-              android:textAppearance="?android:attr/textAppearanceSmall"
-              android:text="@string/label_schedule_repeat_until"
-              android:id="@+id/textView5"
-              android:layout_weight="1"
-              android:visibility="visible"
-              android:layout_below="@+id/textView4"
-              android:layout_marginLeft="10dp"
-              android:gravity="center_vertical"
-              android:textColor="#444"
-              android:textSize="15dp"
-              />
-
-          <Button
-              android:layout_width="wrap_content"
-              android:layout_height="40dp"
-              android:text="@string/button_schedule_repeat_until"
-              style="?android:attr/borderlessButtonStyle"
-              android:id="@+id/button_set_end"
-              android:textSize="15dp"
-              android:layout_weight="1"
-              android:layout_marginLeft="80dp"
-              android:layout_gravity="center_vertical"
-              android:visibility="visible"
-              android:layout_alignTop="@+id/textView5"
-              android:layout_alignParentEnd="false"
-              android:textColor="@color/android_blue_dark"
-              android:gravity="start"
-              />
-
-
-          <ImageButton
-              android:layout_width="40dp"
-              android:layout_height="40dp"
-              android:text="@string/button_schedule_repeat_today"
-              android:id="@+id/button_clear_start"
-              android:textSize="15dp"
-              android:layout_weight="1"
-              android:src="@drawable/ic_clear_black_48dp"
-              android:layout_gravity="center_vertical"
-              android:layout_alignParentRight="true"
-              style="?android:attr/borderlessButtonStyle"
-              android:layout_alignParentEnd="false"
-              android:textColor="@color/android_blue_dark"
-              android:gravity="start"
-              android:scaleType="fitCenter"
-              />
-
-          <ImageButton
-              android:layout_width="40dp"
-              android:layout_height="40dp"
-              android:text="@string/button_schedule_repeat_until"
-              style="?android:attr/borderlessButtonStyle"
-              android:id="@+id/button_clear_end"
-              android:textSize="15dp"
-              android:layout_weight="1"
-              android:layout_alignParentRight="true"
-              android:layout_gravity="center_vertical"
-              android:visibility="visible"
-              android:src="@drawable/ic_clear_black_48dp"
-              android:layout_alignTop="@+id/textView5"
-              android:layout_alignParentEnd="false"
-              android:textColor="@color/android_blue_dark"
-              android:gravity="start"
-              android:scaleType="fitCenter"
-              />
-
+            <TextView
+                android:id="@+id/new_schedule_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/new_schedule_icon"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/new_schedule_icon"
+                android:layout_marginRight="20dp"
+                android:layout_toRightOf="@+id/new_schedule_icon"
+                android:gravity="center_vertical"
+                android:text="@string/scan_new_schedule"
+                android:textColor="#111"/>
 
         </RelativeLayout>
 
 
-      </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/schedule_changed_msg"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/schedule_new_indicator"
+            android:background="@color/android_orange_light"
+            android:visibility="gone">
 
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_visibility_black_48dp"/>
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imageView6"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/imageView6"
+                android:layout_marginRight="20dp"
+                android:layout_toRightOf="@+id/imageView6"
+                android:gravity="center_vertical"
+                android:text="@string/scan_schedule_changed"
+                android:textColor="#111"/>
+
+            <LinearLayout
+                android:id="@+id/schedule_changes_list"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/textView8"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="65dp"
+                android:layout_marginRight="20dp"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/times_a_day_container"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/schedule_changed_msg">
+
+            <RelativeLayout
+                android:id="@+id/box_schedule_times_by_day"
+                android:layout_width="fill_parent"
+                android:layout_height="100dp">
+
+                <TextView
+                    android:id="@+id/schedule_label"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#aaefefef"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:text="@string/schedule"
+                    android:textColor="#bfbfbf"
+                    android:textSize="15dp"
+                    android:visibility="visible"/>
+
+                <Spinner
+                    android:id="@+id/schedules_spinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/schedule_label"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
+                    android:spinnerMode="dialog"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/box_schedule_timetable"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/box_schedule_times_by_day"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:id="@+id/doses_and_times_label"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentLeft="false"
+                    android:layout_alignParentTop="false"
+                    android:background="#aaefefef"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:text="@string/doses_and_times"
+                    android:textColor="#bfbfbf"
+                    android:textSize="15dp"
+                    android:visibility="visible"/>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/doses_and_times_label"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="2dp"
+                        android:layout_weight="0.70">
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/schedule_timetable_time_column"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textColor="@color/android_blue_dark"
+                            android:textSize="12dp"/>
+
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_below="@+id/textView2"
+                            android:background="@color/android_blue"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="2dp">
+
+                        <TextView
+                            android:id="@+id/textView3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/schedule_timetable_dose_column"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textColor="@color/android_blue_dark"
+                            android:textSize="12dp"/>
+
+                        <ImageView
+                            android:id="@+id/imageView1"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_below="@+id/textView3"
+                            android:background="@color/android_blue"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/schedule_timetable_container"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/linearLayout"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:orientation="vertical">
+
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/schedule_timetable_container"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/android_blue"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/box_hourinterval"
+                android:layout_width="fill_parent"
+                android:layout_height="140dp">
+
+                <TextView
+                    android:id="@+id/hourinterval_label"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#aaefefef"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:text="@string/schedule"
+                    android:textColor="#bfbfbf"
+                    android:textSize="15dp"
+                    android:visibility="visible"/>
+
+                <LinearLayout
+                    android:id="@+id/hourly_interval_top"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/hourinterval_label"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="45dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:gravity="center"
+                        android:text="@string/take"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="#444"
+                        android:textSize="15dp"/>
+
+                    <Button
+                        android:id="@+id/repeat_dose"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="65dp"
+                        android:layout_height="40dp"
+                        android:textColor="@color/android_blue_dark"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        tools:text="1"/>
+
+                    <TextView
+                        android:layout_width="45dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:gravity="center"
+                        android:text="@string/every"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="#444"
+                        android:textSize="15dp"/>
+
+                    <Button
+                        android:id="@+id/hourinterval_edit_text"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="65dp"
+                        android:layout_height="40dp"
+                        android:layout_toEndOf="@+id/textView5"
+                        android:layout_toRightOf="@+id/textView5"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:textColor="@color/android_blue_dark"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        tools:text="8"/>
+
+                    <TextView
+                        android:layout_width="45dp"
+                        android:layout_height="40dp"
+                        android:layout_alignTop="@+id/hourinterval_edit_text"
+                        android:layout_toEndOf="@+id/hourinterval_edit_text"
+                        android:layout_toRightOf="@+id/hourinterval_edit_text"
+                        android:gravity="center"
+                        android:text="@string/hours"
+                        android:textColor="#444"
+                        android:textSize="15dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/hourly_interval_top"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/hourinterval_from_text"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="fill_parent"
+                        android:layout_height="45dp"
+                        android:layout_margin="0dp"
+                        android:layout_toEndOf="@+id/textView5"
+                        android:layout_toRightOf="@+id/textView5"
+                        android:ems="10"
+                        android:gravity="center_horizontal|top"
+                        android:inputType="number"
+                        android:text="@string/first_intake"
+                        android:textColor="@color/android_blue_dark"
+                        android:textSize="18dp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/box_schedule_repeat_container"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/times_a_day_container">
+
+            <RelativeLayout
+                android:id="@+id/box_schedule_repeat"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:id="@+id/repeat_label"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentLeft="false"
+                    android:layout_alignParentTop="false"
+                    android:background="#aaefefef"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:text="@string/schedule_repeat_days"
+                    android:textColor="#bfbfbf"
+                    android:textSize="15dp"
+                    android:visibility="visible"/>
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/repeat_label">
+
+                    <include
+                        android:id="@+id/custom_repeat_box"
+                        layout="@layout/schedule_repetition_picker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="55dp"
+                        android:layout_marginBottom="0dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginTop="0dp"/>
+
+                    <include
+
+                        android:id="@+id/day_selector_box"
+                        layout="@layout/schedule_day_selector"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/custom_repeat_box"
+                        android:layout_marginBottom="0dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginTop="5dp"/>
+
+                    <TextView
+                        android:id="@+id/rule_text"
+                        android:layout_width="fill_parent"
+                        android:layout_height="55dp"
+                        android:fontFamily="sans_serif_condensed"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="26dp"
+                        android:text="@string/schedule_custom_rule_text"
+                        android:textColor="@color/android_blue_dark"
+                        android:textSize="15dp"/>
+
+                </RelativeLayout>
+
+                <Spinner
+                    android:id="@+id/repeat_type_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@+id/repeat_label"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="0dp"
+                    android:spinnerMode="dialog"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/box_schedule_period"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/repeat_period_label"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentLeft="false"
+                    android:layout_alignParentTop="false"
+                    android:background="#aaefefef"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:text="@string/schedule_repeat_period"
+                    android:textColor="#bfbfbf"
+                    android:textSize="15dp"
+                    android:visibility="visible"/>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/repeat_period_label"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/period_value"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="70dp"
+                        android:layout_height="50dp"
+                        android:textColor="@color/android_blue_dark"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        tools:text="27"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:gravity="center"
+                        android:text="+"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="#444"
+                        android:textSize="20dp"
+                        tools:ignore="HardcodedText"/>
+
+                    <Button
+                        android:id="@+id/period_rest"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="60dp"
+                        android:layout_height="50dp"
+                        android:layout_toEndOf="@+id/textView5"
+                        android:layout_toRightOf="@+id/textView5"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:inputType="number"
+                        tools:text="8"
+                        android:textColor="@color/android_blue_dark"
+                        android:textSize="20dp"
+                        android:textStyle="bold"/>
+
+                    <Spinner
+                        android:layout_width="1dp"
+                        android:layout_height="1dp"
+                        android:spinnerMode="dialog"
+                        android:visibility="invisible"/>
+
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/cycles_spinner_trigger"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_arrow_drop_down_black_48dp"/>
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/box_schedule_duration"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/box_schedule_repeat_container">
+
+            <TextView
+                android:id="@+id/duration_label"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentTop="false"
+                android:background="#aaefefef"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:text="@string/duration"
+                android:textColor="#bfbfbf"
+                android:textSize="15dp"
+                android:visibility="visible"/>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/duration_label">
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="90dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp">
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="80dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="@string/label_schedule_repeat_today"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="#444"
+                        android:textSize="15dp"/>
+
+                    <Button
+                        android:id="@+id/button_set_start"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="false"
+                        android:layout_alignParentRight="false"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="80dp"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="@string/button_schedule_repeat_today"
+                        android:textColor="@color/android_blue_dark"
+                        android:textSize="15dp"/>
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="80dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@+id/textView4"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="@string/label_schedule_repeat_until"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="#444"
+                        android:textSize="15dp"
+                        android:visibility="visible"/>
+
+                    <Button
+                        android:id="@+id/button_set_end"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="false"
+                        android:layout_alignParentRight="false"
+                        android:layout_alignTop="@+id/textView5"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="80dp"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="@string/button_schedule_repeat_until"
+                        android:textColor="@color/android_blue_dark"
+                        android:textSize="15dp"
+                        android:visibility="visible"/>
+
+
+                    <ImageButton
+                        android:id="@+id/button_clear_start"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="false"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_clear_black_48dp"
+                        android:text="@string/button_schedule_repeat_today"
+                        android:textColor="@color/android_blue_dark"
+                        android:textSize="15dp"/>
+
+                    <ImageButton
+                        android:id="@+id/button_clear_end"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="false"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignTop="@+id/textView5"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_clear_black_48dp"
+                        android:text="@string/button_schedule_repeat_until"
+                        android:textColor="@color/android_blue_dark"
+                        android:textSize="15dp"
+                        android:visibility="visible"/>
+
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/box_schedule_duration">
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="26dp"
+                android:layout_marginRight="26dp"
+                android:text="@string/dialog_continue_option"/>
+
+        </RelativeLayout>
 
     </RelativeLayout>
-
-      <RelativeLayout
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:layout_below="@+id/box_schedule_duration">
-
-          <Button
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="Continue"
-              android:id="@+id/button3"
-              android:layout_alignParentRight="true"
-              android:layout_alignParentBottom="false"
-              android:layout_marginRight="26dp"
-              android:layout_marginBottom="26dp" />
-
-      </RelativeLayout>
-
-  </RelativeLayout>
 </ScrollView>

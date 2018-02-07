@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -16,15 +16,14 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout
-    android:id="@+id/profile_container"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="300dp"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true"
-    android:layout_alignParentTop="true"
-    >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/profile_container"
+                android:layout_width="fill_parent"
+                android:layout_height="300dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true">
 
 
     <ImageView
@@ -32,60 +31,24 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
-        android:scaleType="centerCrop"
-        />
-
-
-
-    <RelativeLayout
-        android:id="@+id/santa_container"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentTop="true"
-        android:scaleType="centerCrop"
-        android:visibility="gone"
-        >
-        <ImageView
-            android:id="@+id/image_santa"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_alignParentTop="true"
-            android:scaleType="centerCrop"
-            />
-
-        <ImageButton
-            android:id="@+id/santa_mode_button"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="70dp"
-            android:background="@drawable/circle_white"
-            android:layout_marginRight="26dp"
-            android:layout_alignParentRight="true"
-            android:scaleType="centerInside"
-            />
-
-    </RelativeLayout>
+        android:scaleType="centerCrop"/>
 
     <ImageView
-        android:id="@+id/blur_mask"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:src="@drawable/blur_mask"
+        android:alpha="0.9"
         android:scaleType="centerCrop"
-        android:clickable="false"
-        android:alpha="0.9"/>
+        android:src="@drawable/blur_mask"/>
 
     <ImageView
         android:id="@+id/bottom_shadow"
-        android:clickable="false"
         android:layout_width="fill_parent"
-        android:layout_height="80dp"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
-        android:alpha="0.7"
+        android:alpha="0.5"
         android:scaleType="fitXY"
         android:src="@drawable/daily_view_list_item_tab_shadow_bottom"/>
+
 
     <RelativeLayout
         android:id="@+id/profile_info"
@@ -99,8 +62,7 @@
         <es.usc.citius.servando.calendula.util.view.CustomDigitalClock
             android:id="@+id/home_clock"
             style="@style/whiteTextWithShadow"
-            android:layout_width="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="false"
             android:layout_alignParentRight="false"
@@ -114,14 +76,13 @@
         <TextView
             android:id="@+id/profile_username"
             style="@style/whiteTextWithShadow"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/home_clock"
-            android:layout_centerVertical="true"
             android:layout_centerInParent="true"
             android:fontFamily="sans-serif-light"
             android:gravity="center"
-            android:text="Ángel Piñeiro"
+            tools:text="Ángel"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -133,6 +94,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="false"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="false"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="70dp"
             android:layout_marginLeft="24dp"
@@ -151,7 +113,7 @@
                 android:layout_toLeftOf="@+id/profile_image_container"
                 android:layout_toStartOf="@+id/profile_image_container"
                 android:gravity="center|top"
-                android:text="OCT"
+                tools:text="OCT"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white"
                 android:textSize="20sp"
@@ -166,11 +128,12 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="false"
                 android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/profile_username"
                 android:layout_toStartOf="@+id/profile_username"
                 android:fontFamily="sans-serif-light"
                 android:gravity="center|bottom"
                 android:padding="0dp"
-                android:text="12"
+                tools:text="12"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white"
                 android:textSize="35sp"/>
@@ -178,21 +141,20 @@
 
         </LinearLayout>
 
-        <com.makeramen.RoundedImageView
-            android:id="@+id/mod_circle"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_margin="24dp"
-            android:scaleType="centerCrop"
-            android:src="@color/android_blue"
-            android:visibility="gone"
-            app:riv_border_color="@color/white_50"
-            app:riv_border_width="1px"
-            app:riv_corner_radius="30dip"
-            app:riv_oval="true"/>
+        <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                                        android:id="@+id/mod_circle"
+                                        android:layout_width="45dp"
+                                        android:layout_height="45dp"
+                                        android:layout_alignParentBottom="true"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_margin="24dp"
+                                        android:scaleType="centerCrop"
+                                        android:src="@color/android_blue"
+                                        android:visibility="gone"
+                                        app:riv_border_color="@color/white_50"
+                                        app:riv_border_width="1px"
+                                        app:riv_corner_radius="30dip"
+                                        app:riv_oval="true"/>
 
         <ImageView
             android:id="@+id/mood_button"
@@ -211,11 +173,6 @@
 
 
     </RelativeLayout>
-
-
-
-
-
 
 
 </RelativeLayout>
