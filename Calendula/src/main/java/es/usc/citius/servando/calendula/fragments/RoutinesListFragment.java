@@ -33,6 +33,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -43,6 +44,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
@@ -76,9 +78,7 @@ public class RoutinesListFragment extends Fragment {
 
         View empty = rootView.findViewById(android.R.id.empty);
         listview.setEmptyView(empty);
-
-        mRoutines = DB.routines().findAllForActivePatient(getContext());
-
+        mRoutines = new ArrayList<>();
         ic = new IconicsDrawable(getContext())
                 .icon(CommunityMaterial.Icon.cmd_clock)
                 .colorRes(R.color.agenda_item_title)
@@ -87,7 +87,7 @@ public class RoutinesListFragment extends Fragment {
 
         adapter = new RoutinesListAdapter(getActivity(), R.layout.routines_list_item, mRoutines);
         listview.setAdapter(adapter);
-
+        new ReloadItemsTask().execute();
         return rootView;
     }
 
@@ -239,18 +239,14 @@ public class RoutinesListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            mRoutines = DB.routines().findAllForActivePatient(getContext());
-
+            mRoutines.clear();
+            mRoutines.addAll(DB.routines().findAllForActivePatient(getContext()));
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            adapter.clear();
-            for (Routine r : mRoutines) {
-                adapter.add(r);
-            }
             adapter.notifyDataSetChanged();
         }
     }
