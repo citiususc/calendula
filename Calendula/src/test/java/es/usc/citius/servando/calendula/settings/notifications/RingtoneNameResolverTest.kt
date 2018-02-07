@@ -18,10 +18,9 @@
 
 package es.usc.citius.servando.calendula.settings.notifications
 
-import android.media.RingtoneManager
 import es.usc.citius.servando.calendula.BuildConfig
 import es.usc.citius.servando.calendula.R
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -39,7 +38,7 @@ class RingtoneNameResolverTest {
     lateinit var resolver: RingtoneNameResolver
 
     @Before
-    fun setUp(){
+    fun setUp() {
         resolver = RingtoneNameResolver(RuntimeEnvironment.application)
     }
 
