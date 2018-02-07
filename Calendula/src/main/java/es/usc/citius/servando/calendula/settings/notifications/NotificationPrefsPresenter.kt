@@ -63,7 +63,7 @@ class NotificationPrefsPresenter(
 
     override fun onResult(reqCode: Int, result: Int, data: Intent?) {
         LogUtil.d(TAG, "onResult() called with reqCode=$reqCode, result=$result, data=$data")
-        if (reqCode == REQ_CODE_INSIST_RINGTONE || reqCode == REQ_CODE_NOTIF_RINGTONE && data != null) {
+        if ((reqCode == REQ_CODE_INSIST_RINGTONE || reqCode == REQ_CODE_NOTIF_RINGTONE) && data != null) {
             val ringtone: Uri? = data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
             val prefKey: PreferenceKeys = when (reqCode) {
                 REQ_CODE_NOTIF_RINGTONE -> PreferenceKeys.SETTINGS_NOTIFICATION_TONE
