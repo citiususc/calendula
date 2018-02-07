@@ -24,6 +24,7 @@ import es.usc.citius.servando.calendula.R
 import es.usc.citius.servando.calendula.drugdb.DBRegistry
 import es.usc.citius.servando.calendula.kotlinAny
 import es.usc.citius.servando.calendula.kotlinEq
+import es.usc.citius.servando.calendula.settings.CalendulaSettingsActivity
 import es.usc.citius.servando.calendula.util.PreferenceKeys
 import es.usc.citius.servando.calendula.util.PreferenceUtils
 import org.junit.Assert
@@ -99,6 +100,21 @@ class DatabasePrefsPresenterTest {
     }
 
     @Test
+    fun startWithDBIntent() {
+        Mockito.`when`(dbPrefView.getIntent())
+            .thenReturn(Intent().putExtra(CalendulaSettingsActivity.EXTRA_SHOW_DB_DIALOG, true))
+
+        dbPrefPresenter.start()
+
+        verify(dbPrefView).setDbList(
+            kotlinAny<Array<String>>(),
+            kotlinAny<Array<String>>()
+        )
+
+        verify(dbPrefView).openDatabaseSelection()
+    }
+
+    @Test
     fun currentDbUpdated() {
         dbPrefPresenter.currentDbUpdated(NEW_DB_ID)
 
@@ -153,4 +169,12 @@ class DatabasePrefsPresenterTest {
             PreferenceUtils.getString(PreferenceKeys.DRUGDB_CURRENT_DB, null)
         )
     }
+
+    @Test
+    fun checkDatabaseUpdate() {
+        //right now, just see it doesn't crash
+        dbPrefPresenter.checkDatabaseUpdate(RuntimeEnvironment.application)
+    }
+
+
 }

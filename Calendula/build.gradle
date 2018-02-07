@@ -63,6 +63,13 @@ def getCustomProguardFiles() {
     return fileTree(dir: "proguard", include: ["*.pro"]).asList().toArray()
 }
 
+// workaround for Kotlin coverage in Android Studio 3
+// see https://stackoverflow.com/questions/45819700/android-studio-3-0-gradle-3-0-0-beta2-breaks-kotlin-unit-test-coverage
+task copyTestClasses(type: Copy) {
+    from "build/tmp/kotlin-classes/developDebug"
+    into "build/intermediates/classes/develop/debug"
+}
+
 android {
     compileSdkVersion 25
     buildToolsVersion '26.0.2'
@@ -116,6 +123,7 @@ android {
         debug {
             debuggable true
             minifyEnabled false
+            testCoverageEnabled true
         }
         beta {
             minifyEnabled false
