@@ -204,7 +204,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     // Mockito
-    testImplementation "org.mockito:mockito-core:2.13.0"
+    testImplementation "org.mockito:mockito-inline:2.13.0"
     androidTestImplementation "org.mockito:mockito-android:2.13.0"
 
     // Support testing

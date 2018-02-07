@@ -42,8 +42,8 @@ class NotificationPrefsPresenter(
 
     companion object {
         private const val TAG = "NotifPrefsPresenter"
-        private const val REQ_CODE_NOTIF_RINGTONE = 40
-        private const val REQ_CODE_INSIST_RINGTONE = 41
+        const val REQ_CODE_NOTIF_RINGTONE = 40
+        const val REQ_CODE_INSIST_RINGTONE = 41
     }
 
     init {
