@@ -26,7 +26,7 @@ jobs:
           name: Run Unit Tests
           command: ./gradlew testCiDebugUnitTest --no-daemon
       - store_artifacts:
-          path: Calendula/build/reports/tests
+          path: Calendula/build/reports/
           destination: reports
       - store_test_results:
           path: Calendula/build/test-results
@@ -47,5 +47,5 @@ jobs:
           name: Generate Coverage Report
           command: ./gradlew jacocoTestReportCiDebug --no-daemon
       - store_artifacts:
-          path: Calendula/build/reports/jacoco
+          path: Calendula/build/reports/
           destination: reports
