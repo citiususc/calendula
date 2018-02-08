@@ -3,7 +3,7 @@
 
 Calendula is an Android assistant for personal medication management, aimed at those who have trouble following their medication regimen, forget to take their drugs, or have complex schedules that are difficult to remember.
 
-> The app is available for download on Google Play
+> The app is available for download on Google Play and F-Droid
 >
 ><table>
 >    <tr>
