@@ -25,6 +25,11 @@ jobs:
       - run:
           name: Run Unit Tests
           command: ./gradlew testCiDebugUnitTest --no-daemon
+      - store_artifacts:
+          path: Calendula/build/reports/tests
+          destination: reports
+      - store_test_results:
+          path: Calendula/build/test-results
 #      - run:
 #          name: Launch Android Emulator
 #          command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && emulator64-arm -avd test -noaudio -no-boot-anim -no-window -accel on
@@ -38,8 +43,9 @@ jobs:
 #      - run:
 #          name: Run Integration Tests
 #          command: ./gradlew connectedCiDebugAndroidTest --no-daemon
+      - run:
+          name: Generate Coverage Report
+          command: ./gradlew jacocoTestReportCiDebug --no-daemon
       - store_artifacts:
-          path: Calendula/build/reports
+          path: Calendula/build/reports/jacoco
           destination: reports
-      - store_test_results:
-          path: Calendula/build/test-results
