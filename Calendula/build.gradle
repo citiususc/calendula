@@ -139,12 +139,14 @@ android {
         develop {
             applicationIdSuffix ".dev"
             dimension "buildType"
+            minSdkVersion 21
         }
         product {
             dimension "buildType"
         }
         ci {
             dimension "buildType"
+            minSdkVersion 21
         }
     }
 
