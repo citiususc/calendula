@@ -64,6 +64,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.settings.CalendulaSettingsActivity;
 import es.usc.citius.servando.calendula.adapters.items.allergensearch.AllergenGroupItem;
 import es.usc.citius.servando.calendula.adapters.items.allergensearch.AllergenGroupSubItem;
 import es.usc.citius.servando.calendula.adapters.items.allergensearch.AllergenItem;
@@ -141,8 +142,8 @@ public class AllergiesSearchActivity extends CalendulaActivity {
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Intent i = new Intent(AllergiesSearchActivity.this, SettingsActivity.class);
-                            i.putExtra(SettingsActivity.EXTRA_SHOW_DB_DIALOG, true);
+                            Intent i = new Intent(AllergiesSearchActivity.this, CalendulaSettingsActivity.class);
+                            i.putExtra(CalendulaSettingsActivity.EXTRA_SHOW_DB_DIALOG, true);
                             finish();
                             startActivity(i);
                         }

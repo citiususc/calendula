@@ -23,6 +23,7 @@ buildscript {
 }
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'idea'
 
@@ -60,6 +61,13 @@ def getDate() {
 
 def getCustomProguardFiles() {
     return fileTree(dir: "proguard", include: ["*.pro"]).asList().toArray()
+}
+
+// workaround for Kotlin coverage in Android Studio 3
+// see https://stackoverflow.com/questions/45819700/android-studio-3-0-gradle-3-0-0-beta2-breaks-kotlin-unit-test-coverage
+task copyTestClasses(type: Copy) {
+    from "build/tmp/kotlin-classes/developDebug"
+    into "build/intermediates/classes/develop/debug"
 }
 
 android {
@@ -115,6 +123,7 @@ android {
         debug {
             debuggable true
             minifyEnabled false
+            testCoverageEnabled true
         }
         beta {
             minifyEnabled false
@@ -180,6 +189,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$libVersions.android.support"
     compile "com.android.support:support-annotations:$libVersions.android.support"
     compile "com.android.support:support-v4:$libVersions.android.support"
+    compile "com.android.support:preference-v14:$libVersions.android.support"
 
     // Testing dependencies
     //  Made explicit to avoid conflicts with other testing libs
@@ -194,13 +204,14 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     // Mockito
-    testCompile "org.mockito:mockito-core:2.8.47"
+    testImplementation "org.mockito:mockito-inline:2.13.0"
+    androidTestImplementation "org.mockito:mockito-android:2.13.0"
 
     // Support testing
-    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:3.0.0'
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.0'
-    androidTestCompile 'com.android.support.test:rules:1.0.0'
-    androidTestCompile 'com.android.support.test:runner:1.0.0'
+    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:3.0.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestCompile 'com.android.support.test:rules:1.0.1'
+    androidTestCompile 'com.android.support.test:runner:1.0.1'
 
     // Roboelectric
     testCompile "org.robolectric:robolectric:3.6.1"
@@ -209,6 +220,9 @@ dependencies {
     /********** UTILITIES **********/
     // HTML parsing
     compile 'org.jsoup:jsoup:1.10.2'
+
+    // Anko
+    compile "org.jetbrains.anko:anko-commons:$libVersions.anko"
 
     // Event bus
     compile 'org.greenrobot:eventbus:3.0.0'
@@ -302,3 +316,4 @@ dependencies {
 
 
 }
+

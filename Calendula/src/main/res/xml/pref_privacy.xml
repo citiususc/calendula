@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
@@ -16,21 +16,17 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<preference-headers>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- These settings headers are only used on tablets. -->
+    <Preference
+        android:key="@string/prefkey_pin_lock"
+        android:summary="@string/pref_summary_pin_lock_unset"
+        android:title="@string/pref_title_pin_lock" />
 
-    <!--<header-->
-    <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$GeneralPreferenceFragment"-->
-    <!--android:title="@string/pref_header_general" />-->
+    <SwitchPreference
+        android:defaultValue="false"
+        android:enabled="false"
+        android:key="@string/prefkey_fingerprint_enabled"
+        android:title="@string/pref_fingerprint_enable_title" />
 
-    <!--<header-->
-    <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$NotificationPreferenceFragment"-->
-    <!--android:title="@string/pref_header_notifications" />-->
-
-    <!--<header-->
-    <!--android:fragment="es.usc.citius.servando.calendula.activities.SettingsActivity$StockPreferenceFragment"-->
-    <!--android:title="@string/pref_header_stock" />-->
-
-
-</preference-headers>
+</PreferenceScreen>

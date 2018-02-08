@@ -16,27 +16,31 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.util.view;
+package es.usc.citius.servando.calendula.settings
 
-import android.content.Context;
-import android.preference.ListPreference;
-import android.util.AttributeSet;
+import android.os.Bundle
+import android.support.v7.preference.PreferenceFragmentCompat
+import es.usc.citius.servando.calendula.CalendulaActivity
+import es.usc.citius.servando.calendula.R
+import es.usc.citius.servando.calendula.util.LogUtil
 
 /**
- * Created by joseangel.pineiro on 10/11/16.
+ * Created by alvaro.brey.vilas on 1/02/18.
  */
-public class CustomListPreference extends ListPreference {
+class MainPrefsFragment : PreferenceFragmentCompat() {
 
-    public CustomListPreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    companion object {
+        private const val TAG = "MainPrefsFragment"
     }
 
-    public CustomListPreference(Context context) {
-        super(context);
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        LogUtil.d(TAG, "onCreatePreferences called")
+        setPreferencesFromResource(R.xml.pref_main, rootKey)
     }
 
-    public void show() {
-        showDialog(null);
+    override fun onResume() {
+        super.onResume()
+        (activity as CalendulaActivity).supportActionBar?.setTitle(R.string.title_activity_settings)
     }
 
 }

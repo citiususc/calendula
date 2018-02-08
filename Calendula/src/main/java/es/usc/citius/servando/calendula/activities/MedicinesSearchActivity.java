@@ -54,6 +54,7 @@ import butterknife.OnClick;
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.settings.CalendulaSettingsActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.util.IconUtils;
@@ -126,8 +127,8 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Intent i = new Intent(MedicinesSearchActivity.this, SettingsActivity.class);
-                        i.putExtra(SettingsActivity.EXTRA_SHOW_DB_DIALOG, true);
+                        Intent i = new Intent(MedicinesSearchActivity.this, CalendulaSettingsActivity.class);
+                        i.putExtra(CalendulaSettingsActivity.EXTRA_SHOW_DB_DIALOG, true);
                         startActivity(i);
                         PreferenceUtils.edit().putBoolean(PreferenceKeys.MEDICINES_USE_PRESCRIPTIONS_SHOWN.key(), true).apply();
                     }

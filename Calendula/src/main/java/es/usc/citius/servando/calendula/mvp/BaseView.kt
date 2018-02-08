@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -16,29 +16,11 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.util;
-
-import android.content.Context;
-import android.media.RingtoneManager;
-import android.util.AttributeSet;
+package es.usc.citius.servando.calendula.mvp
 
 /**
- * Created by joseangel.pineiro on 2/23/15.
+ * Created by alvaro.brey.vilas on 5/02/18.
  */
-public class NotificationTonePreference extends RingtonePreference {
-
-    public NotificationTonePreference(Context context) {
-        super(context);
-        getEntriesAndValues();
-    }
-
-    public NotificationTonePreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-
-    @Override
-    public int getRingtoneType() {
-        return RingtoneManager.TYPE_NOTIFICATION;
-    }
+interface BaseView<T : BasePresenter> {
+    var presenter: T
 }

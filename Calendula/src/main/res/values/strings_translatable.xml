@@ -492,4 +492,6 @@ Your schedules, medkit, routines and other basic functions are safe either way.
 Do you want to install the new database now?
 "</string>
 <string name="pref_insistent_notification_tone">"Insistent notifications ringtone"</string>
+    <string name="message_generic_error">Oops! There was an error.</string>
+    <string name="ringtone_none">None</string>
 </resources>
