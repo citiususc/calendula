@@ -8,6 +8,7 @@ buildscript {
     ext {
         kotlin_version = '1.2.21'
         libVersions = [
+                anko: '0.10.4',
                 android: [
                         support: '25.4.0'
                 ]

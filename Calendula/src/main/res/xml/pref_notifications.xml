@@ -18,14 +18,13 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- A 'parent' preference, which enables/disables child preferences (below)
-         when checked/unchecked. -->
+
     <SwitchPreference
         android:defaultValue="true"
         android:key="@string/prefkey_settings_alarm_notifications"
         android:title="@string/pref_title_new_alarm_notification"/>
 
-    <es.usc.citius.servando.calendula.util.NotificationTonePreference
+    <Preference
         android:dependency="@string/prefkey_settings_alarm_notifications"
         android:key="@string/prefkey_settings_notification_tone"
         android:summary="@string/pref_notification_tone_sum"
@@ -46,6 +45,7 @@
         android:key="@string/prefkey_settings_alarm_repeat_frequency"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
+        android:summary="%s"
         android:title="@string/pref_title_sync_frequency"/>
 
     <ListPreference
@@ -56,8 +56,8 @@
         android:key="@string/prefkey_settings_alarm_reminder_window"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
+        android:summary="%s"
         android:title="@string/pref_title_reminder_window"/>
-
 
     <SwitchPreference
         android:defaultValue="false"
@@ -66,11 +66,22 @@
         android:title="@string/pref_title_insistent_alarms"/>
 
 
-    <es.usc.citius.servando.calendula.util.RingtonePreference
+    <Preference
         android:dependency="@string/prefkey_settings_alarm_insistent"
         android:key="@string/prefkey_settings_insistent_notification_tone"
         android:summary="@string/pref_notification_tone_sum"
         android:title="@string/pref_insistent_notification_tone"/>
+
+
+    <ListPreference
+        android:defaultValue="7"
+        android:entries="@array/pref_stock"
+        android:entryValues="@array/pref_stock_values"
+        android:key="@string/prefkey_settings_stock_alert_days"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:summary="%s"
+        android:title="@string/pref_stock_alert_title"/>
 
 
 </PreferenceScreen>

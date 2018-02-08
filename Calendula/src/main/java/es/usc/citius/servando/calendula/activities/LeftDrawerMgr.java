@@ -50,6 +50,7 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.modules.modules.AllergiesModule;
 import es.usc.citius.servando.calendula.persistence.Patient;
+import es.usc.citius.servando.calendula.settings.CalendulaSettingsActivity;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
@@ -219,7 +220,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
                 drawer.setSelection(HOME, false);
                 break;
             case SETTINGS:
-                launchActivity(new Intent(home, SettingsActivity.class));
+                launchActivity(new Intent(home, CalendulaSettingsActivity.class));
                 drawer.setSelection(HOME, false);
                 break;
             case ABOUT:
