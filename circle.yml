@@ -49,3 +49,8 @@ jobs:
       - store_artifacts:
           path: Calendula/build/reports/
           destination: reports
+      - run:
+          name: Report coverage
+          command: |
+            wget 'https://oss.sonatype.org/service/local/repositories/releases/content/com/codacy/codacy-coverage-reporter/2.0.2/codacy-coverage-reporter-2.0.2-assembly.jar' -O coverage-reporter.jar
+            ./coverage-reporter.jar -l Java -r Calendula/build/reports/jacoco/ciDebug/jacoco.xml
