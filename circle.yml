@@ -23,6 +23,9 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "Calendula/build.gradle" }}
       - run:
+          name: Build
+          command: ./gradlew assembleCiDebug --no-daemon
+      - run:
           name: Run Unit Tests
           command: ./gradlew testCiDebugUnitTest --no-daemon
       - store_artifacts:
