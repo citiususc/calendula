@@ -25,6 +25,8 @@ import android.support.annotation.NonNull;
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,6 +35,7 @@ import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
+import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ZipUtil;
@@ -162,6 +165,8 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
                 return null;
             }
         });
+
+        EventBus.getDefault().post(new PersistenceEvents.DatabaseInstalledEvent());
 
         LogUtil.d(TAG, "setup: cleaning up...");
         try {

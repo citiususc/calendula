@@ -48,6 +48,9 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -56,6 +59,7 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
+import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.settings.CalendulaSettingsActivity;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
@@ -176,6 +180,24 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
         progressBar.setVisibility(View.GONE);
     }
 
+    @Subscribe
+    public void handleDbInstalled(PersistenceEvents.DatabaseInstalledEvent event) {
+        LogUtil.d(TAG, "handleDbInstalled() called with: event = [" + event + "]");
+        // enable barcode scan
+
+        if (!PreferenceUtils.getString(PreferenceKeys.DRUGDB_CURRENT_DB, CalendulaApp.getContext().getString(R.string.database_none_id))
+                .equals(CalendulaApp.getContext().getString(R.string.database_none_id))) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    enableBarcodeScan();
+                }
+            });
+        }
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -279,19 +301,7 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
 
         if (!PreferenceUtils.getString(PreferenceKeys.DRUGDB_CURRENT_DB, CalendulaApp.getContext().getString(R.string.database_none_id))
                 .equals(CalendulaApp.getContext().getString(R.string.database_none_id))) {
-            Drawable icBarcode = new IconicsDrawable(this)
-                    .icon(CommunityMaterial.Icon.cmd_barcode)
-                    .colorRes(R.color.black)
-                    .actionBar();
-            barcodeBtn.setCompoundDrawables(null, null, icBarcode, null);
-            barcodeBtn.setCompoundDrawablePadding(10);
-            barcodeBtn.setVisibility(View.VISIBLE);
-            barcodeBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    doScan();
-                }
-            });
+            enableBarcodeScan();
         } else {
             if (!PreferenceUtils.getBoolean(PreferenceKeys.MEDICINES_USE_PRESCRIPTIONS_SHOWN, false)) {
                 askForDatabase();
@@ -305,6 +315,22 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
         searchView.setBackgroundColor(patientColor);
         searchList.setDivider(null);
         searchList.setDividerHeight(0);
+    }
+
+    private void enableBarcodeScan() {
+        Drawable icBarcode = new IconicsDrawable(this)
+                .icon(CommunityMaterial.Icon.cmd_barcode)
+                .colorRes(R.color.black)
+                .actionBar();
+        barcodeBtn.setCompoundDrawables(null, null, icBarcode, null);
+        barcodeBtn.setCompoundDrawablePadding(10);
+        barcodeBtn.setVisibility(View.VISIBLE);
+        barcodeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doScan();
+            }
+        });
     }
 
     @Override
@@ -348,10 +374,17 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
         finish();
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
-        overridePendingTransition(0, 0);
+        EventBus.getDefault().unregister(this);
     }
 
     private Prescription getPrescriptionFromBarcode(String barcode) {
