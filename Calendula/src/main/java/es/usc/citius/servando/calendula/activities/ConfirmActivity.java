@@ -96,35 +96,35 @@ public class ConfirmActivity extends CalendulaActivity {
     private static final String TAG = "ConfirmActivity";
 
     @BindView(R.id.appbar)
-    AppBarLayout appBarLayout;
+    protected AppBarLayout appBarLayout;
     @BindView(R.id.collapsing_toolbar)
-    CollapsingToolbarLayout toolbarLayout;
+    protected CollapsingToolbarLayout toolbarLayout;
     @BindView(R.id.myFAB)
-    FloatingActionButton fab;
+    protected FloatingActionButton fab;
     @BindView(R.id.patient_avatar)
-    ImageView avatar;
+    protected ImageView avatar;
     @BindView(R.id.patient_avatar_title)
-    ImageView avatarTitle;
+    protected ImageView avatarTitle;
     @BindView(R.id.check_all_image)
-    ImageView checkAllImage;
+    protected ImageView checkAllImage;
     @BindView(R.id.listView)
-    RecyclerView listView;
+    protected RecyclerView listView;
     @BindView(R.id.user_friendly_time)
-    TextView friendlyTime;
+    protected TextView friendlyTime;
     @BindView(R.id.routines_list_item_hour)
-    TextView hour;
+    protected TextView hour;
     @BindView(R.id.routines_list_item_minute)
-    TextView minute;
+    protected TextView minute;
     @BindView(R.id.textView3)
-    TextView takeMedsMessage;
+    protected TextView takeMedsMessage;
     @BindView(R.id.routine_name)
-    TextView title;
+    protected TextView title;
     @BindView(R.id.routine_name_title)
-    TextView titleTitle;
+    protected TextView titleTitle;
     @BindView(R.id.check_overlay)
-    View chekAllOverlay;
+    protected View checkAllOverlay;
     @BindView(R.id.toolbar_title)
-    View toolbarTitle;
+    protected View toolbarTitle;
 
     private boolean fromNotification = false;
     private boolean isDistant;
@@ -213,6 +213,14 @@ public class ConfirmActivity extends CalendulaActivity {
                             AlarmScheduler.instance().onUserDelayRoutine(routine, date, ConfirmActivity.this, minutes);
                         } else {
                             AlarmScheduler.instance().onUserDelayHourlySchedule(schedule, time, date, ConfirmActivity.this, minutes);
+                        }
+
+                        // get cancelled items and uncancel them
+                        for (DailyScheduleItem item : items) {
+                            if (!item.getTakenToday() && item.getTimeTaken() != null) {
+                                item.setTimeTaken(null);
+                                DB.dailyScheduleItems().saveAndFireEvent(item);
+                            }
                         }
 
                         String msg = ConfirmActivity.this.getString(R.string.alarm_delayed_message, String.valueOf(minutes));
@@ -316,7 +324,7 @@ public class ConfirmActivity extends CalendulaActivity {
         int duration = 500;
         int arrowDuration = 400;
 
-        chekAllOverlay.postDelayed(new Runnable() {
+        checkAllOverlay.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -331,8 +339,8 @@ public class ConfirmActivity extends CalendulaActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             showRipple(x, y, duration);
         } else {
-            chekAllOverlay.setVisibility(View.VISIBLE);
-            chekAllOverlay.animate().alpha(1).setDuration(duration).start();
+            checkAllOverlay.setVisibility(View.VISIBLE);
+            checkAllOverlay.animate().alpha(1).setDuration(duration).start();
         }
         moveArrowsDown(arrowDuration);
     }
@@ -525,14 +533,14 @@ public class ConfirmActivity extends CalendulaActivity {
     private void showRipple(int x, int y, int duration) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             LogUtil.d(TAG, "Ripple x,y [" + x + ", " + y + "]");
-            chekAllOverlay.setVisibility(View.INVISIBLE);
+            checkAllOverlay.setVisibility(View.INVISIBLE);
             // get the final radius for the clipping circle
-            int finalRadius = (int) Math.hypot(chekAllOverlay.getWidth(), chekAllOverlay.getHeight());
+            int finalRadius = (int) Math.hypot(checkAllOverlay.getWidth(), checkAllOverlay.getHeight());
             // create the animator for this view (the start radius is zero)
-            Animator anim = ViewAnimationUtils.createCircularReveal(chekAllOverlay, x, y, fab.getWidth() / 2, finalRadius);
+            Animator anim = ViewAnimationUtils.createCircularReveal(checkAllOverlay, x, y, fab.getWidth() / 2, finalRadius);
             anim.setInterpolator(new DecelerateInterpolator());
             // make the view visible and start the animation
-            chekAllOverlay.setVisibility(View.VISIBLE);
+            checkAllOverlay.setVisibility(View.VISIBLE);
             anim.setDuration(duration).start();
         }
     }
