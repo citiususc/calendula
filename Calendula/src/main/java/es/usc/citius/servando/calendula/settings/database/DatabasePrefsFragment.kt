@@ -24,13 +24,13 @@ import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
+import android.widget.Toast
 import es.usc.citius.servando.calendula.R
 import es.usc.citius.servando.calendula.drugdb.download.DownloadDatabaseHelper
 import es.usc.citius.servando.calendula.settings.CalendulaPrefsFragment
 import es.usc.citius.servando.calendula.util.LogUtil
 import es.usc.citius.servando.calendula.util.PreferenceKeys
 import es.usc.citius.servando.calendula.util.PreferenceUtils
-import org.jetbrains.anko.toast
 
 
 /**
@@ -126,7 +126,7 @@ class DatabasePrefsFragment : CalendulaPrefsFragment(), DatabasePrefsContract.Vi
     }
 
     override fun showDatabaseUpdateNotAvailable() {
-        activity.toast(R.string.database_update_not_available)
+        Toast.makeText(context, R.string.database_update_not_available, Toast.LENGTH_SHORT).show()
     }
 
     override fun getIntent(): Intent = activity.intent

@@ -24,11 +24,11 @@ import android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE
 import android.support.v4.content.ContextCompat
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
+import android.widget.Toast
 import es.usc.citius.servando.calendula.CalendulaActivity
 import es.usc.citius.servando.calendula.R
 import es.usc.citius.servando.calendula.settings.database.DatabasePrefsFragment
 import es.usc.citius.servando.calendula.util.LogUtil
-import org.jetbrains.anko.toast
 
 
 /**
@@ -54,7 +54,7 @@ class CalendulaSettingsActivity : CalendulaActivity(),
             }
         } catch (e: Exception) {
             LogUtil.e(TAG, "onPreferenceStartFragment: ", e)
-            toast(R.string.message_generic_error)
+            Toast.makeText(this, R.string.message_generic_error, Toast.LENGTH_SHORT).show()
         }
         return true
     }

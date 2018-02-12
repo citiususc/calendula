@@ -219,9 +219,6 @@ dependencies {
     // HTML parsing
     implementation 'org.jsoup:jsoup:1.10.2'
 
-    // Anko
-    implementation "org.jetbrains.anko:anko-commons:$libVersions.anko"
-
     // Event bus
     implementation 'org.greenrobot:eventbus:3.0.0'
 
