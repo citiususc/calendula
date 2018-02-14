@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import org.joda.time.Duration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class WebViewRequest implements Parcelable {
     }
 
 
-    protected WebViewRequest(Parcel in) {
+    private WebViewRequest(Parcel in) {
         url = in.readString();
         title = in.readString();
         loadingMessage = in.readString();
@@ -59,9 +60,7 @@ public class WebViewRequest implements Parcelable {
         String[] cssFiles = new String[cssNumber];
         in.readStringArray(cssFiles);
         customCss = new ArrayList<>();
-        for (String cssFile : cssFiles) {
-            customCss.add(cssFile);
-        }
+        customCss.addAll(Arrays.asList(cssFiles));
         cacheTTL = Duration.parse(in.readString());
         // read overrides map
         customCssOverrides = new HashMap<>();
@@ -110,7 +109,7 @@ public class WebViewRequest implements Parcelable {
     }
 
     /**
-     * Set the title for the webview title bar. Can be <code>null</code>, no title will be displayed if so.
+     * Set the title for the WebView title bar. Can be <code>null</code>, no title will be displayed if so.
      *
      * @param title the title
      */
@@ -162,7 +161,7 @@ public class WebViewRequest implements Parcelable {
     }
 
     /**
-     * Enable/disable JavaScript for the webpage. Default is <code>false</code>.
+     * Enable/disable JavaScript for the web page. Default is <code>false</code>.
      *
      * @param javaScriptEnabled <code>true</code> if Javascript should be enabled
      */
@@ -202,7 +201,7 @@ public class WebViewRequest implements Parcelable {
     }
 
     /**
-     * Set if external links should be opened in the webview (<code>true</code>) or should launch an action intent (<code>false</code>).
+     * Set if external links should be opened in the WebView (<code>true</code>) or should launch an action intent (<code>false</code>).
      * Default value is <code>false</code>.
      *
      * @param externalLinksEnabled if external links should be enabled
@@ -216,7 +215,7 @@ public class WebViewRequest implements Parcelable {
     }
 
     /**
-     * Set cache type for the webview:
+     * Set cache type for the WebView:
      * - <code>NO_CACHE</code>: deactivate caching. Default value.
      * - <code>APP_CACHE</code>: HTML5 App Cache
      * - <code>DOWNLOAD_CACHE</code>: Cache full HTML document in database. Warning! Locally linked resources will be lost.
