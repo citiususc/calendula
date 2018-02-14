@@ -65,7 +65,7 @@ public class AllergiesTest {
 
 
     @Before
-    public void setup() throws SQLException {
+    public void setUp() throws SQLException {
         // drop database
         DB.dropAndCreateDatabase();
         // create some allergens

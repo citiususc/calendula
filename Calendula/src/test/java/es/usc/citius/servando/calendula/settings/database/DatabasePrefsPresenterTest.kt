@@ -59,7 +59,7 @@ class DatabasePrefsPresenterTest {
 
 
     @Before
-    fun setup() {
+    fun setUp() {
         MockitoAnnotations.initMocks(this)
 
         // do not return nulls
