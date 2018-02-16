@@ -131,37 +131,44 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
             @Override
             public Object call() throws Exception {
 
-                DBRegistry.instance().clear();
+                BufferedReader br = null;
 
-                BufferedReader br;
-                String line;
-                int progressUpdateBy;
-                int lines = 0;
-                int i = 0;
+                try {
+                    DBRegistry.instance().clear();
 
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(uncompressedPath)));
-                // count file lines (for progress updating)
-                while (br.readLine() != null) {
-                    lines++;
-                }
-                br.close();
-                progressUpdateBy = lines / 20;
-                updateProgress(l, 0);
+                    String line;
+                    int progressUpdateBy;
+                    int lines = 0;
+                    int i = 0;
 
-                LogUtil.d(TAG, "call: reading from " + uncompressedPath);
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(uncompressedPath)));
-
-                SQLiteDatabase database = DB.helper().getWritableDatabase();
-                while ((line = br.readLine()) != null) {
-                    if (l != null && i % progressUpdateBy == 0) {
-                        int progress = (int) (((float) i / lines) * 100);
-                        updateProgress(l, progress);
+                    br = new BufferedReader(new InputStreamReader(new FileInputStream(uncompressedPath)));
+                    // count file lines (for progress updating)
+                    while (br.readLine() != null) {
+                        lines++;
                     }
-                    // exec line content as raw sql
-                    database.execSQL(line);
-                    i++;
+                    br.close();
+                    progressUpdateBy = lines / 20;
+                    updateProgress(l, 0);
+
+                    LogUtil.d(TAG, "call: reading from " + uncompressedPath);
+                    br = new BufferedReader(new InputStreamReader(new FileInputStream(uncompressedPath)));
+
+                    SQLiteDatabase database = DB.helper().getWritableDatabase();
+                    while ((line = br.readLine()) != null) {
+                        if (l != null && i % progressUpdateBy == 0) {
+                            int progress = (int) (((float) i / lines) * 100);
+                            updateProgress(l, progress);
+                        }
+                        // exec line content as raw sql
+                        database.execSQL(line);
+                        i++;
+                    }
+                } catch (Exception e) {
+                    throw e;
+                } finally {
+                    if (br != null)
+                        br.close();
                 }
-                br.close();
                 return null;
             }
         });
