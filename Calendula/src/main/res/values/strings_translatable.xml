@@ -328,6 +328,7 @@ For this development, we use several open source libraries that are shown below:
 <string name="prospect">"Leaflet"</string>
 <string name="button_official_prospect">"Official leaflet"</string>
 <string name="stock_enough_for_days">"Enough for %1$d days with current schedules"</string>
+<string name="stock_enough_for_weeks_days">"Enough for %1$d weeks and %2$d days with current schedules"</string>
 <string name="stock_enough_for_months_days">"Enough for %1$d months and %2$d days with current schedules"</string>
 <string name="stock_enough_for_upper_limit">"Enough for more than three months with current schedules"</string>
 <string name="no_alerts_detected">"No alerts detected for this medicine"</string>

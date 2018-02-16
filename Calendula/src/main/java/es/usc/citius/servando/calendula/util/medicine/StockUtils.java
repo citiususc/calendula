@@ -58,7 +58,7 @@ public class StockUtils {
             if (days < 21) {
                 response = ctx.getString(R.string.stock_enough_for_days, days);
             } else {
-                response = ctx.getString(R.string.stock_enough_for_months_days, (int) (days / 7), (days % 7));
+                response = ctx.getString(R.string.stock_enough_for_weeks_days, (int) (days / 7), (days % 7));
             }
         } else {
             response = ctx.getString(R.string.stock_enough_for_upper_limit);
@@ -113,6 +113,8 @@ public class StockUtils {
     }
 
     public static void showStockRunningOutDialog(final Context context, final Medicine m, Long days) {
+
+        // TODO: 16/02/18 externalize these strings! 
 
         String msg = "Quedan " + m.getStock().intValue() + " " + m.getPresentation().units(context.getResources(), m.getStock()) + " de " + m.getName() + ", y ";
         msg += "se acabarán en " + days + " días con la pauta actual.";
