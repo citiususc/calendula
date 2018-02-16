@@ -100,10 +100,11 @@ public class CalendulaApp extends MultiDexApplication {
         }
 
         // Try to copy database file
+        InputStream inputStream = null;
+        OutputStream output = null;
         try {
-            final InputStream inputStream = new FileInputStream(dbPath);
-            final OutputStream output = new FileOutputStream(out);
-
+            inputStream = new FileInputStream(dbPath);
+            output = new FileOutputStream(out);
             byte[] buffer = new byte[8192];
             int length;
 
@@ -112,10 +113,15 @@ public class CalendulaApp extends MultiDexApplication {
             }
 
             output.flush();
-            output.close();
-            inputStream.close();
         } catch (IOException e) {
             LogUtil.e(TAG, "Failed to export database", e);
+        } finally {
+            try {
+                inputStream.close();
+                output.close();
+            } catch (Exception e) {
+                LogUtil.e(TAG, "exportDatabase: ", e);
+            }
         }
     }
 
@@ -123,12 +129,12 @@ public class CalendulaApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
-        if(!Build.FINGERPRINT.equals("robolectric")) {
-            if (BuildConfig.DEBUG ) {
+        if (!Build.FINGERPRINT.equals("robolectric")) {
+            if (BuildConfig.DEBUG) {
                 new StethoHelper().init(this);
             }
 
-            if (LeakCanary.isInAnalyzerProcess(CalendulaApp.this) ) {
+            if (LeakCanary.isInAnalyzerProcess(CalendulaApp.this)) {
                 // This process is dedicated to LeakCanary for heap analysis.
                 return;
             }
