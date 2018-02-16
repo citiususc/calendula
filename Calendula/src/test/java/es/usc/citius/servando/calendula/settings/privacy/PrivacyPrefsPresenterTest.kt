@@ -74,12 +74,8 @@ class PrivacyPrefsPresenterTest {
             .commit()
 
 
-        presenter = PrivacyPrefsPresenter(view, fpHelper)
-    }
-
-    @Test
-    fun isPresenterSet() {
-        Mockito.verify(view).presenter = presenter
+        presenter = PrivacyPrefsPresenter(fpHelper)
+        presenter.attachView(view)
     }
 
     @Test

@@ -47,7 +47,10 @@ class PrivacyPrefsFragment : CalendulaPrefsFragment(), PrivacyPrefsContract.View
         private const val TAG = "PrivacyPrefsFragment"
     }
 
-    override lateinit var presenter: PrivacyPrefsContract.Presenter
+
+    private lateinit var presenter: PrivacyPrefsContract.Presenter
+
+
     override val fragmentTitle: Int = R.string.pref_header_privacy
 
 
@@ -70,7 +73,8 @@ class PrivacyPrefsFragment : CalendulaPrefsFragment(), PrivacyPrefsContract.View
             true
         }
 
-        PrivacyPrefsPresenter(this, FingerprintHelper(context))
+        presenter = PrivacyPrefsPresenter(FingerprintHelper(context))
+        presenter.attachView(this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

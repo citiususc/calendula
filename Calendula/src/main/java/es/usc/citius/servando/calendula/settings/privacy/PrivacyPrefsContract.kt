@@ -20,15 +20,15 @@ package es.usc.citius.servando.calendula.settings.privacy
 
 import android.content.Intent
 import android.support.annotation.StringRes
-import es.usc.citius.servando.calendula.mvp.BasePresenter
-import es.usc.citius.servando.calendula.mvp.BaseView
+import es.usc.citius.servando.calendula.mvp.IPresenter
+import es.usc.citius.servando.calendula.mvp.IView
 
 /**
  * Created by alvaro.brey.vilas on 5/02/18.
  */
 interface PrivacyPrefsContract {
 
-    interface View : BaseView<Presenter> {
+    interface View : IView {
 
         fun recordPIN()
         fun showPINOptions()
@@ -39,7 +39,7 @@ interface PrivacyPrefsContract {
 
     }
 
-    interface Presenter : BasePresenter {
+    interface Presenter : IPresenter<View> {
 
         fun onResult(request: Int, result: Int, data: Intent?)
         fun onClickPINPref()

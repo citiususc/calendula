@@ -22,6 +22,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import es.usc.citius.servando.calendula.R
+import es.usc.citius.servando.calendula.mvp.BasePresenter
 import es.usc.citius.servando.calendula.pinlock.PINManager
 import es.usc.citius.servando.calendula.pinlock.PinLockActivity
 import es.usc.citius.servando.calendula.pinlock.fingerprint.FingerprintHelper
@@ -31,16 +32,12 @@ import es.usc.citius.servando.calendula.util.LogUtil
 /**
  * Created by alvaro.brey.vilas on 5/02/18.
  */
-class PrivacyPrefsPresenter(val view: PrivacyPrefsContract.View, val fpHelper: FingerprintHelper) :
-    PrivacyPrefsContract.Presenter {
+class PrivacyPrefsPresenter(val fpHelper: FingerprintHelper) :
+    PrivacyPrefsContract.Presenter, BasePresenter<PrivacyPrefsContract.View>() {
 
 
     companion object {
         private const val TAG = "PrivacyPrefsPresenter"
-    }
-
-    init {
-        view.presenter = this
     }
 
     override fun start() {

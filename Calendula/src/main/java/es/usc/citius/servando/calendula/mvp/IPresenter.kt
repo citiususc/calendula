@@ -19,8 +19,25 @@
 package es.usc.citius.servando.calendula.mvp
 
 /**
- * Created by alvaro.brey.vilas on 5/02/18.
+ * Interface for MVP presenters
  */
-interface BaseView<T : BasePresenter> {
-    var presenter: T
+
+interface IPresenter<in V : IView> {
+    /**
+     * Initialization logic for the view. Load default values, etc... Android views should call this on onResume().
+     */
+    fun start()
+
+    /**
+     * Notify view attachment to the presenter
+     */
+    fun attachView(view: V)
+
+    /**
+     * Notify view detachment to the presenter
+     */
+    fun detachView()
+
 }
+
+

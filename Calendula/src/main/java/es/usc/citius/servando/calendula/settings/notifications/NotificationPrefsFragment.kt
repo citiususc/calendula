@@ -42,8 +42,8 @@ class NotificationPrefsFragment : CalendulaPrefsFragment(), NotificationPrefsCon
         private const val TAG = "NotificationPrefsFragm"
     }
 
-    override lateinit var presenter: NotificationPrefsContract.Presenter
     override val fragmentTitle: Int = R.string.pref_header_notifications
+    private lateinit var presenter: NotificationPrefsContract.Presenter
 
 
     private val notificationPref by lazy { findPreference(PreferenceKeys.SETTINGS_NOTIFICATION_TONE.key()) }
@@ -57,8 +57,8 @@ class NotificationPrefsFragment : CalendulaPrefsFragment(), NotificationPrefsCon
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         LogUtil.d(TAG, "onCreatePreferences called")
         addPreferencesFromResource(R.xml.pref_notifications)
-
-        NotificationPrefsPresenter(this, RingtoneNameResolver(context))
+        presenter = NotificationPrefsPresenter(RingtoneNameResolver(context))
+        presenter.attachView(this)
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {

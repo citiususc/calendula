@@ -73,14 +73,10 @@ class NotificationPrefsPresenterTest {
         ).commit()
 
         presenter = NotificationPrefsPresenter(
-            view,
             resolver
         )
-    }
 
-    @Test
-    fun isPresenterSet() {
-        Mockito.verify(view).presenter = presenter
+        presenter.attachView(view)
     }
 
     @Test

@@ -24,6 +24,7 @@ import android.net.Uri
 import android.provider.Settings
 import es.usc.citius.servando.calendula.modules.ModuleManager
 import es.usc.citius.servando.calendula.modules.modules.StockModule
+import es.usc.citius.servando.calendula.mvp.BasePresenter
 import es.usc.citius.servando.calendula.util.LogUtil
 import es.usc.citius.servando.calendula.util.PreferenceKeys
 import es.usc.citius.servando.calendula.util.PreferenceUtils
@@ -33,10 +34,9 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils
  * Created by alvaro.brey.vilas on 5/02/18.
  */
 class NotificationPrefsPresenter(
-    val view: NotificationPrefsContract.View,
     private val ringtoneNameResolver: RingtoneNameResolver
 ) :
-    NotificationPrefsContract.Presenter {
+    NotificationPrefsContract.Presenter, BasePresenter<NotificationPrefsContract.View>() {
 
     companion object {
         private const val TAG = "NotifPrefsPresenter"
@@ -44,9 +44,6 @@ class NotificationPrefsPresenter(
         const val REQ_CODE_INSIST_RINGTONE = 41
     }
 
-    init {
-        view.presenter = this
-    }
 
     override fun start() {
         if (!ModuleManager.isEnabled(StockModule.ID)) {

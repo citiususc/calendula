@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
+ *    Copyright (C) 2016 CITIUS - USC
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -18,14 +18,37 @@
 
 package es.usc.citius.servando.calendula.mvp
 
-/**
- * Created by alvaro.brey.vilas on 5/02/18.
- */
-interface BasePresenter {
+import kotlin.reflect.KProperty
 
-    /**
-     * Initialization logic for the view. Load default values, etc... Android views should call this on onResume().
-     */
-    fun start()
+abstract class BasePresenter<V : IView> :
+    IPresenter<V> {
+
+    private var delegate = ViewDelegate<V>()
+    var view: V by delegate
+
+    override fun attachView(view: V) {
+        this.view = view
+    }
+
+    override fun detachView() {
+        this.delegate.view = null
+    }
+
+
+    fun isAttachedToView(): Boolean = this.delegate.view != null
+
+
+    private class ViewDelegate<V : IView> {
+
+        var view: V? = null
+
+        operator fun getValue(pres: BasePresenter<V>, prop: KProperty<*>): V {
+            return view ?: throw IllegalStateException("View cannot be null")
+        }
+
+        operator fun setValue(pres: BasePresenter<V>, prop: KProperty<*>, view: V) {
+            this.view = view
+        }
+    }
 
 }

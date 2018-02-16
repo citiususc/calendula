@@ -43,8 +43,8 @@ class DatabasePrefsFragment : CalendulaPrefsFragment(), DatabasePrefsContract.Vi
         private const val TAG = "DatabasePrefsFragment"
     }
 
-    override lateinit var presenter: DatabasePrefsContract.Presenter
     override val fragmentTitle: Int = R.string.pref_header_prescriptions
+    private lateinit var presenter: DatabasePrefsContract.Presenter
 
 
     private val dbPref: ListPreference by lazy {
@@ -76,14 +76,15 @@ class DatabasePrefsFragment : CalendulaPrefsFragment(), DatabasePrefsContract.Vi
             presenter.checkDatabaseUpdate(context)
             true
         }
-
-        DatabasePrefsPresenter(
-            this, PreferenceUtils.getString(
+        presenter = DatabasePrefsPresenter(
+            PreferenceUtils.getString(
                 PreferenceKeys.DRUGDB_CURRENT_DB,
                 getString(R.string.database_none_id)
             )
         )
+        presenter.attachView(this)
     }
+
 
     /**
      * From [SharedPreferences.OnSharedPreferenceChangeListener]

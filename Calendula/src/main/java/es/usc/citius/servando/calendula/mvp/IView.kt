@@ -16,28 +16,10 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.settings.notifications
+package es.usc.citius.servando.calendula.mvp
 
-import android.content.Intent
-import android.net.Uri
-import es.usc.citius.servando.calendula.mvp.IPresenter
-import es.usc.citius.servando.calendula.mvp.IView
 
 /**
- * Created by alvaro.brey.vilas on 5/02/18.
+ * Interface for MVP views
  */
-interface NotificationPrefsContract {
-
-    interface View : IView {
-        fun hideStockPref()
-        fun requestRingtone(reqCode: Int, ringtoneType: Int, currentValue: Uri?)
-        fun setNotificationRingtoneText(text: String)
-        fun setInsistentRingtoneText(text: String)
-    }
-
-    interface Presenter : IPresenter<View> {
-        fun onResult(reqCode: Int, result: Int, data: Intent?)
-        fun selectNotificationRingtone()
-        fun selectInsistentRingtone()
-    }
-}
+interface IView
