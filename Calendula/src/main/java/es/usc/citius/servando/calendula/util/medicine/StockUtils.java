@@ -114,20 +114,21 @@ public class StockUtils {
 
     public static void showStockRunningOutDialog(final Context context, final Medicine m, Long days) {
 
-        // TODO: 16/02/18 externalize these strings! 
 
-        String msg = "Quedan " + m.getStock().intValue() + " " + m.getPresentation().units(context.getResources(), m.getStock()) + " de " + m.getName() + ", y ";
-        msg += "se acabarán en " + days + " días con la pauta actual.";
-
+        String msg = context.getString(R.string.stock_running_out_dialog_message,
+                m.getStock().intValue(),
+                m.getPresentation().units(context.getResources(), m.getStock()),
+                m.getName(),
+                days);
 
         new MaterialStyledDialog.Builder(context)
-                .setTitle("Se están acabando las existencias de " + m.getName())
+                .setTitle(context.getString(R.string.stock_running_out_dialog_title, m.getName()))
                 .setStyle(Style.HEADER_WITH_ICON)
                 .setIcon(IconUtils.icon(context, m.getPresentation().icon(), R.color.white, 48))
                 .setHeaderColor(R.color.android_orange_dark)
                 .withDialogAnimation(true)
                 .setDescription(msg)
-                .setPositiveText("Gestionar stock")
+                .setPositiveText(R.string.manage_stock)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -136,7 +137,7 @@ public class StockUtils {
                         context.startActivity(i);
                     }
                 })
-                .setNeutralText("Entendido")
+                .setNeutralText(R.string.tutorial_understood)
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {

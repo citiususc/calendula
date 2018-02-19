@@ -331,6 +331,9 @@ For this development, we use several open source libraries that are shown below:
 <string name="stock_enough_for_weeks_days">"Enough for %1$d weeks and %2$d days with current schedules"</string>
 <string name="stock_enough_for_months_days">"Enough for %1$d months and %2$d days with current schedules"</string>
 <string name="stock_enough_for_upper_limit">"Enough for more than three months with current schedules"</string>
+<string name="stock_running_out_dialog_message">"There are %1$d %2$s of %3$s remaining, and the stock will run out in %4$d days with the current schedules."</string>
+<string name="stock_running_out_dialog_title">"Stock is running out for %1$s"</string>
+<string name="manage_stock">"Manage stock"</string>
 <string name="no_alerts_detected">"No alerts detected for this medicine"</string>
 <string name="stock_depleted">"Stock is depleted"</string>
 <string name="stock_depleted_msg">"There is no stock remaining for this medicine."</string>
