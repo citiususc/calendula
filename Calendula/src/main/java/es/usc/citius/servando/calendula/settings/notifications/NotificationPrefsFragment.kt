@@ -36,29 +36,27 @@ import es.usc.citius.servando.calendula.util.PreferenceKeys
  *
  * Created by alvaro.brey.vilas on 1/02/18.
  */
-class NotificationPrefsFragment : CalendulaPrefsFragment(), NotificationPrefsContract.View {
+class NotificationPrefsFragment :
+    CalendulaPrefsFragment<NotificationPrefsContract.View, NotificationPrefsContract.Presenter>(),
+    NotificationPrefsContract.View {
 
     companion object {
         private const val TAG = "NotificationPrefsFragm"
     }
 
     override val fragmentTitle: Int = R.string.pref_header_notifications
-    private lateinit var presenter: NotificationPrefsContract.Presenter
-
+    override val presenter: NotificationPrefsContract.Presenter by lazy {
+        NotificationPrefsPresenter(
+            RingtoneNameResolver(context)
+        )
+    }
 
     private val notificationPref by lazy { findPreference(PreferenceKeys.SETTINGS_NOTIFICATION_TONE.key()) }
     private val insistentNotificationPref by lazy { findPreference(PreferenceKeys.SETTINGS_INSISTENT_NOTIFICATION_TONE.key()) }
 
-    override fun onResume() {
-        super.onResume()
-        presenter.start()
-    }
-
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         LogUtil.d(TAG, "onCreatePreferences called")
         addPreferencesFromResource(R.xml.pref_notifications)
-        presenter = NotificationPrefsPresenter(RingtoneNameResolver(context))
-        presenter.attachView(this)
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {

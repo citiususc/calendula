@@ -19,21 +19,45 @@
 package es.usc.citius.servando.calendula.settings
 
 import android.content.SharedPreferences
+import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v7.preference.PreferenceFragmentCompat
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import es.usc.citius.servando.calendula.CalendulaActivity
+import es.usc.citius.servando.calendula.mvp.IPresenter
+import es.usc.citius.servando.calendula.mvp.IView
 import es.usc.citius.servando.calendula.util.PreferenceUtils
 
 /**
  * A [PreferenceFragmentCompat] that registers and unregisters itself as a [SharedPreferences.OnSharedPreferenceChangeListener]
  */
-abstract class CalendulaPrefsFragment : PreferenceFragmentCompat(),
-    SharedPreferences.OnSharedPreferenceChangeListener {
+abstract class CalendulaPrefsFragment<in V : IView, out P : IPresenter<V>> :
+    PreferenceFragmentCompat(), IView, SharedPreferences.OnSharedPreferenceChangeListener {
+
+    abstract val presenter: P
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater?,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        presenter.attachView(this as V)
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onDestroy() {
+        presenter.detachView()
+        super.onDestroy()
+    }
 
     override fun onResume() {
         super.onResume()
         PreferenceUtils.instance().preferences().registerOnSharedPreferenceChangeListener(this)
         (activity as CalendulaActivity).supportActionBar?.setTitle(fragmentTitle)
+        presenter.start()
     }
 
     override fun onPause() {
