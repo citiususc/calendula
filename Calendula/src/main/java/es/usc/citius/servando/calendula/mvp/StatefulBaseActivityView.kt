@@ -24,7 +24,7 @@ abstract class StatefulBaseActivityView<in V : IView, out P : StatefulPresenter<
     BaseActivityView<V, P>() {
 
     companion object {
-        private const val SAVED_STATE_KEY = "PRESENTER_SAVED_STATE"
+        private const val SAVED_STATE_KEY = "STATEFUL_BASE_ACTIVITY_VIEW_STATE_BUNDLE"
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
