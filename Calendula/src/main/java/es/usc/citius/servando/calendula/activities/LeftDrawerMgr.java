@@ -73,7 +73,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
     public static final int PHARMACIES = 9;
     public static final int ABOUT = 10;
 
-    public static final int PATIENT_ADD = 11;
+    public static final int PATIENT_ADD_PROFILE_ID = 15;
     public static final int CALENDAR = 12;
 
     public static final int ALLERGIES = 11;
@@ -94,33 +94,17 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
 
     public void init(Bundle savedInstanceState) {
 
-        ArrayList<IProfile> profiles = new ArrayList<>();
-
-        profiles.add(new ProfileSettingDrawerItem()
-                .withName("Añadir paciente")
-                .withDescription("Gestionar la pautas de otra persona")
-                .withIcon(new IconicsDrawable(home, GoogleMaterial.Icon.gmd_account_add)
-                        .sizeDp(24)
-                        .paddingDp(5)
-                        .colorRes(R.color.dark_grey_home))
-                .withIdentifier(PATIENT_ADD));
-
-        for (Patient p : DB.patients().findAll()) {
-            LogUtil.d(TAG, "Adding patient to drawer: " + p.getName());
-            profiles.add(genProfile(p));
-        }
 
         headerResult = new AccountHeaderBuilder()
                 .withActivity(home)
                 .withHeaderBackground(R.drawable.drawer_header)
                 .withHeaderBackgroundScaleType(ImageView.ScaleType.CENTER_CROP)
                 .withCompactStyle(false)
-                .withProfiles(profiles)
+                .withProfiles(genProfiles())
                 .withAlternativeProfileHeaderSwitching(true)
                 .withThreeSmallProfileImages(true)
                 .withOnAccountHeaderListener(this)
                 .withSavedInstance(savedInstanceState)
-                .withSelectionListEnabledForSingleProfile(false)
                 .build();
 
         //Create the drawer
@@ -259,7 +243,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
     @Override
     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
 
-        if (profile instanceof ProfileSettingDrawerItem) {
+        if (profile.getIdentifier() == PATIENT_ADD_PROFILE_ID) {
             Intent intent = new Intent(home, PatientDetailActivity.class);
             launchActivity(intent);
             return true;
@@ -307,7 +291,7 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
                 Long id = (long) pr.getIdentifier();
                 boolean remove = true;
                 for (Patient pat : patients) {
-                    if (pat.getId().equals(id)) {
+                    if (pat.getId().equals(id) || id == PATIENT_ADD_PROFILE_ID) {
                         remove = false;
                         break;
                     }
@@ -333,15 +317,11 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
     }
 
     public void onPatientCreated(Patient p) {
-
-        IProfile profile = genProfile(p);
-        headerResult.addProfiles(profile);
+        headerResult.setProfiles(genProfiles());
     }
 
     public void onPatientUpdated(Patient p) {
-        IProfile profile = genProfile(p);
-        headerResult.updateProfile(profile);
-
+        headerResult.setProfiles(genProfiles());
     }
 
     private void addCalendarItem() {
@@ -359,6 +339,24 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
 
     private void showAbout() {
         launchActivity(new Intent(home, AboutActivity.class));
+    }
+
+    private ArrayList<IProfile> genProfiles() {
+        ArrayList<IProfile> profiles = new ArrayList<>();
+
+        for (Patient p : DB.patients().findAll()) {
+            LogUtil.d(TAG, "Adding patient to drawer: " + p.getName());
+            profiles.add(genProfile(p));
+        }
+
+        profiles.add(new ProfileSettingDrawerItem()
+                .withName(home.getString(R.string.patient_add))
+                .withIcon(new IconicsDrawable(home, GoogleMaterial.Icon.gmd_account_add)
+                        .sizeDp(24)
+                        .paddingDp(1)
+                        .colorRes(R.color.dark_grey_home))
+                .withIdentifier(PATIENT_ADD_PROFILE_ID));
+        return profiles;
     }
 
     private IProfile genProfile(Patient p) {

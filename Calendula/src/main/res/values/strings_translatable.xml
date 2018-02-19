@@ -498,4 +498,5 @@ Do you want to install the new database now?
 <string name="pref_insistent_notification_tone">"Insistent notifications ringtone"</string>
     <string name="message_generic_error">Oops! There was an error.</string>
     <string name="ringtone_none">None</string>
+    <string name="patient_add">Add patient</string>
 </resources>
