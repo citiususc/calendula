@@ -56,6 +56,7 @@ public class AlertManager {
             case Level.LOW:
                 //nothing
             default:
+                break;
         }
         CalendulaApp.eventBus().post(PersistenceEvents.ALERT_EVENT);
 
