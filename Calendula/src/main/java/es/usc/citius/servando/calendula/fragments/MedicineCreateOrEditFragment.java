@@ -723,7 +723,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     private void updateStockControlsVisibility() {
         int visibility = stockSwitch.isChecked() ? View.VISIBLE : View.INVISIBLE;
         mStockUnits.setVisibility(visibility);
-        mStockEstimation.setVisibility(stockSwitch.isChecked() & estimatedStockText != null ? View.VISIBLE : View.INVISIBLE);
+        mStockEstimation.setVisibility((stockSwitch.isChecked() && (estimatedStockText != null)) ? View.VISIBLE : View.INVISIBLE);
         addBtn.setVisibility(visibility);
         rmBtn.setVisibility(visibility);
         int resetVisibility = stockSwitch.isChecked() && mMedicine != null && mMedicine.isBoundToPrescription() ? View.VISIBLE : View.GONE;

@@ -197,15 +197,16 @@ public class WebViewActivity extends CalendulaActivity {
                 i.putExtra(Intent.EXTRA_SUBJECT, webView.getTitle());
                 i.setType("text/plain");
                 startActivity(Intent.createChooser(i, getString(R.string.title_share_link)));
-                return true;
+                break;
             case R.id.action_open_with_browser:
                 Intent i1 = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(i1);
-                return true;
+                break;
             default:
                 onBackPressed();
-                return true;
+                break;
         }
+        return true;
     }
 
     /**
