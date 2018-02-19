@@ -147,21 +147,27 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
                         lines++;
                     }
                     br.close();
-                    progressUpdateBy = lines / 20;
-                    updateProgress(l, 0);
 
-                    LogUtil.d(TAG, "call: reading from " + uncompressedPath);
-                    br = new BufferedReader(new InputStreamReader(new FileInputStream(uncompressedPath)));
+                    if (lines > 0) {
+                        progressUpdateBy = lines / 20;
+                        updateProgress(l, 0);
 
-                    SQLiteDatabase database = DB.helper().getWritableDatabase();
-                    while ((line = br.readLine()) != null) {
-                        if (l != null && i % progressUpdateBy == 0) {
-                            int progress = (int) (((float) i / lines) * 100);
-                            updateProgress(l, progress);
+                        LogUtil.d(TAG, "call: reading from " + uncompressedPath);
+                        br = new BufferedReader(new InputStreamReader(new FileInputStream(uncompressedPath)));
+
+                        SQLiteDatabase database = DB.helper().getWritableDatabase();
+                        while ((line = br.readLine()) != null) {
+                            if (l != null && progressUpdateBy != 0 && i % progressUpdateBy == 0) {
+                                int progress = (int) (((float) i / lines) * 100);
+                                updateProgress(l, progress);
+                            }
+                            // exec line content as raw sql
+                            database.execSQL(line);
+                            i++;
                         }
-                        // exec line content as raw sql
-                        database.execSQL(line);
-                        i++;
+                    } else {
+                        LogUtil.e(TAG, "setup:  database file is empty");
+                        throw new IllegalArgumentException("Database file is empty");
                     }
                 } catch (Exception e) {
                     throw e;

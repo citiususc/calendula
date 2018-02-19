@@ -145,22 +145,27 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
                         lines++;
                     }
                     br.close();
-                    progressUpdateBy = lines / 20;
-                    updateProgress(l, 0);
 
-                    br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
+                    if (lines > 0) {
+                        progressUpdateBy = lines / 20;
+                        updateProgress(l, 0);
 
-                    while ((line = br.readLine()) != null) {
-                        if (l != null && i % progressUpdateBy == 0) {
-                            int progress = (int) (((float) i / lines) * 100);
-                            l.onProgressUpdate(progress);
+                        br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
+
+                        while ((line = br.readLine()) != null) {
+                            if (l != null && progressUpdateBy!=0 && i % progressUpdateBy == 0) {
+                                int progress = (int) (((float) i / lines) * 100);
+                                l.onProgressUpdate(progress);
+                            }
+                            // exec line content as raw sql
+                            Prescription prescription = fromCsv(line, "\\|");
+                            DB.drugDB().prescriptions().save(prescription);
+                            i++;
                         }
-                        // exec line content as raw sql
-                        Prescription prescription = fromCsv(line, "\\|");
-                        DB.drugDB().prescriptions().save(prescription);
-                        i++;
+                    } else {
+                        LogUtil.e(TAG, "setup:  database file is empty");
+                        throw new IllegalArgumentException("Database file is empty");
                     }
-                    br.close();
                 } catch (Exception e) {
                     throw e;
                 } finally {
