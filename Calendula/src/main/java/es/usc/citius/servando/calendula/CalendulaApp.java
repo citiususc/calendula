@@ -38,6 +38,7 @@ import java.util.Locale;
 
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
+import es.usc.citius.servando.calendula.util.CloseableUtil;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.debug.StethoHelper;
 
@@ -116,12 +117,7 @@ public class CalendulaApp extends MultiDexApplication {
         } catch (IOException e) {
             LogUtil.e(TAG, "Failed to export database", e);
         } finally {
-            try {
-                inputStream.close();
-                output.close();
-            } catch (Exception e) {
-                LogUtil.e(TAG, "exportDatabase: ", e);
-            }
+            CloseableUtil.closeQuietly(inputStream, output);
         }
     }
 
