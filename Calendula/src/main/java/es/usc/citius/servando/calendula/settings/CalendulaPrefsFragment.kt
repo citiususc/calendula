@@ -44,6 +44,7 @@ abstract class CalendulaPrefsFragment<in V : IView, out P : IPresenter<V>> :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        @Suppress("UNCHECKED_CAST")
         presenter.attachView(this as V)
         return super.onCreateView(inflater, container, savedInstanceState)
     }

@@ -28,6 +28,7 @@ abstract class BaseActivityView<in V : IView, out P : IPresenter<V>> : Calendula
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        @Suppress("UNCHECKED_CAST")
         presenter.attachView(this as V)
     }
 
