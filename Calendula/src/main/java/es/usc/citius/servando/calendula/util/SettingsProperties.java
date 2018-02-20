@@ -44,14 +44,17 @@ public class SettingsProperties {
         AssetManager assetManager = resources.getAssets();
 
         LogUtil.d(TAG, "Loading settings...");
+        InputStream inputStream = null;
         try {
-            InputStream inputStream = assetManager.open(SETTINGS_FILE_NAME);
+            inputStream = assetManager.open(SETTINGS_FILE_NAME);
             properties = new Properties();
             properties.load(inputStream);
             LogUtil.d(TAG, "SettingsProperties loaded successfully!" + properties.toString());
         } catch (IOException e) {
             properties = new Properties();
             throw e;
+        } finally {
+            CloseableUtil.closeQuietly(inputStream);
         }
     }
 

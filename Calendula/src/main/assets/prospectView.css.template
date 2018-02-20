@@ -1,0 +1,16 @@
+html{
+    padding: 1em;
+}
+
+img{
+    max-width: ###SCREEN_WIDTH### !important;
+    height: auto;
+}
+
+h1,h2,h3{
+    color: ###PATIENT_COLOR### !important;
+}
+
+strong{
+    font-weight: bold !important;
+}

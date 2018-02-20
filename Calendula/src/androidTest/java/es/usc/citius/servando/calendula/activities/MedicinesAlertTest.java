@@ -72,7 +72,7 @@ public class MedicinesAlertTest {
 
 
     @Before
-    public void setup() throws SQLException {
+    public void setUp() throws SQLException {
         // drop database
         DB.dropAndCreateDatabase();
         // set some vars

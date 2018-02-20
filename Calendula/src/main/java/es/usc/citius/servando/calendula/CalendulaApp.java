@@ -38,7 +38,7 @@ import java.util.Locale;
 
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
-import es.usc.citius.servando.calendula.modules.modules.PharmacyModule;
+import es.usc.citius.servando.calendula.util.CloseableUtil;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.debug.StethoHelper;
 
@@ -75,7 +75,7 @@ public class CalendulaApp extends MultiDexApplication {
     public static final int RQ_DELAY_ROUTINE = 2;
     private static final String TAG = "CalendulaApp";
     public static boolean disableReceivers = false;
-    private static boolean isOpen;
+
     private static WeakReference<EventBus> eventBusRef;
     private static Context mContext;
 
@@ -85,18 +85,6 @@ public class CalendulaApp extends MultiDexApplication {
             eventBusRef = new WeakReference<>(EventBus.getDefault());
         }
         return eventBusRef.get();
-    }
-
-    public static boolean isOpen() {
-        return isOpen;
-    }
-
-    public static boolean isPharmaModeEnabled() {
-        return ModuleManager.isEnabled(PharmacyModule.ID);
-    }
-
-    public static void open(boolean isOpen) {
-        CalendulaApp.isOpen = isOpen;
     }
 
     public static Context getContext() {
@@ -113,10 +101,11 @@ public class CalendulaApp extends MultiDexApplication {
         }
 
         // Try to copy database file
+        InputStream inputStream = null;
+        OutputStream output = null;
         try {
-            final InputStream inputStream = new FileInputStream(dbPath);
-            final OutputStream output = new FileOutputStream(out);
-
+            inputStream = new FileInputStream(dbPath);
+            output = new FileOutputStream(out);
             byte[] buffer = new byte[8192];
             int length;
 
@@ -125,10 +114,10 @@ public class CalendulaApp extends MultiDexApplication {
             }
 
             output.flush();
-            output.close();
-            inputStream.close();
         } catch (IOException e) {
             LogUtil.e(TAG, "Failed to export database", e);
+        } finally {
+            CloseableUtil.closeQuietly(inputStream, output);
         }
     }
 
@@ -136,12 +125,12 @@ public class CalendulaApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
-        if(!Build.FINGERPRINT.equals("robolectric")) {
-            if (BuildConfig.DEBUG ) {
+        if (!Build.FINGERPRINT.equals("robolectric")) {
+            if (BuildConfig.DEBUG) {
                 new StethoHelper().init(this);
             }
 
-            if (LeakCanary.isInAnalyzerProcess(CalendulaApp.this) ) {
+            if (LeakCanary.isInAnalyzerProcess(CalendulaApp.this)) {
                 // This process is dedicated to LeakCanary for heap analysis.
                 return;
             }

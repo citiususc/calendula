@@ -38,6 +38,10 @@ public class PersistenceEvents {
 
     }
 
+    public static class DatabaseInstalledEvent {
+
+    }
+
     public static class ModelCreateOrUpdateEvent {
         public Class<?> clazz;
         public Object model;

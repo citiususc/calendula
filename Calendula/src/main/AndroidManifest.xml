@@ -17,10 +17,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="es.usc.citius.servando.calendula"
-          android:versionCode="1"
-          android:versionName="1.0">
+          package="es.usc.citius.servando.calendula">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
@@ -42,8 +39,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        tools:replace="icon, label">
+        android:theme="@style/AppTheme">
 
         <activity
             android:name=".activities.MaterialIntroActivity"
@@ -75,8 +71,7 @@
             android:name=".activities.MedicineInfoActivity"
             android:label="@string/title_activity_medicines"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".activities.MedicinesActivity"
             android:label="@string/title_activity_medicines"
@@ -108,9 +103,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent"
             android:windowSoftInputMode="stateHidden"/>
-        <activity
-            android:name=".activities.SettingsActivity"
-            android:label="@string/title_activity_settings"/>
 
         <receiver android:name=".scheduling.AlarmReceiver"/>
         <receiver android:name=".scheduling.PickupAlarmReceiver"/>
@@ -158,8 +150,7 @@
         <activity
             android:name=".activities.PatientsActivity"
             android:label="@string/title_activity_patients"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".activities.PatientDetailActivity"
             android:label="@string/title_activity_patient_detail"
@@ -172,28 +163,23 @@
         </activity>
         <activity
             android:name=".activities.AboutActivity"
-            android:label="@string/title_activity_about">
-        </activity>
+            android:label="@string/title_activity_about"/>
         <activity
             android:name=".activities.ConfirmActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"/>
 
         <service
             android:name=".scheduling.AlarmIntentService"
-            android:label="AlarmIntentService">
-        </service>
+            android:label="AlarmIntentService"/>
 
         <service
             android:name=".drugdb.download.InstallDatabaseService"
-            android:exported="false">
-        </service>
+            android:exported="false"/>
 
         <service
             android:name=".drugdb.download.UpdateDatabaseService"
-            android:exported="false"
-            />
+            android:exported="false"/>
 
 
         <activity
@@ -211,13 +197,16 @@
         <activity
             android:name=".notifications.LockScreenAlarmActivity"
             android:label="@string/title_activity_allergies_search"
-            android:screenOrientation="portrait"
             android:launchMode="singleInstance"
             android:noHistory="true"
+            android:screenOrientation="portrait"
             android:showOnLockScreen="true"/>
 
-        <activity android:name=".pinlock.PinLockActivity"
-            />
+        <activity android:name=".pinlock.PinLockActivity"/>
+
+        <activity
+            android:name="es.usc.citius.servando.calendula.settings.CalendulaSettingsActivity"
+            android:theme="@style/SettingsActivityTheme"/>
 
     </application>
 

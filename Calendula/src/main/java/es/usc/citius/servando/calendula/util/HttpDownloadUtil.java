@@ -37,6 +37,8 @@ public class HttpDownloadUtil {
     private static final String TAG = "HttpDownloadUtil";
 
     public static boolean downloadFile(final String fileUrl, final File file) {
+        FileOutputStream fileOutput = null;
+        InputStream inputStream = null;
         try {
             URL url = new URL(fileUrl);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -44,8 +46,8 @@ public class HttpDownloadUtil {
             urlConnection.setDoOutput(true);
             urlConnection.connect();
 
-            FileOutputStream fileOutput = new FileOutputStream(file);
-            InputStream inputStream = urlConnection.getInputStream();
+            fileOutput = new FileOutputStream(file);
+            inputStream = urlConnection.getInputStream();
 
             byte[] buffer = new byte[1024];
             int bufferLength;
@@ -53,24 +55,24 @@ public class HttpDownloadUtil {
             while ((bufferLength = inputStream.read(buffer)) > 0) {
                 fileOutput.write(buffer, 0, bufferLength);
             }
-            fileOutput.close();
             return true;
-        } catch (MalformedURLException e) {
-            LogUtil.e(TAG, "downloadFile: ", e);
-            return false;
         } catch (IOException e) {
             LogUtil.e(TAG, "downloadFile: ", e);
             return false;
+        } finally {
+            CloseableUtil.closeQuietly(fileOutput, inputStream);
         }
     }
 
     public static String downloadFileToText(final String fileUrl) {
+
+        BufferedReader in = null;
         try {
             // Create a URL for the desired page
             URL url = new URL(fileUrl);
 
             // Read all the text returned by the server
-            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+            in = new BufferedReader(new InputStreamReader(url.openStream()));
             String str;
             StringBuilder sb = new StringBuilder();
             while ((str = in.readLine()) != null) {
@@ -81,6 +83,8 @@ public class HttpDownloadUtil {
         } catch (IOException e) {
             LogUtil.e(TAG, "downloadFileToText: ", e);
             return null;
+        } finally {
+            CloseableUtil.closeQuietly(in);
         }
     }
 

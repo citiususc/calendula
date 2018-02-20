@@ -25,7 +25,6 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.modules.modules.AllergiesModule;
 import es.usc.citius.servando.calendula.modules.modules.BaseModule;
-import es.usc.citius.servando.calendula.modules.modules.PharmacyModule;
 import es.usc.citius.servando.calendula.modules.modules.StockModule;
 import es.usc.citius.servando.calendula.modules.modules.TestDataModule;
 import es.usc.citius.servando.calendula.util.LogUtil;
@@ -78,7 +77,6 @@ public class ModuleRegistry {
 
         private static final Class<?>[] UNSTABLE_MODULES = ArrayUtils.addAll(
                 STABLE_MODULES,
-                PharmacyModule.class,
                 AllergiesModule.class);
 
         private static final Class<?>[] BLEEDING_MODULES = ArrayUtils.addAll(

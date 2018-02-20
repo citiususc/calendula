@@ -128,23 +128,9 @@ public class FabMenuMgr implements View.OnClickListener {
         }
     }
 
-    public void onPharmacyModeChanged(boolean enabled) {
-        fabMenu.setSubViews(getScheduleActions());
-        onViewPagerItemChange(currentPage);
-    }
-
     private List<View> getScheduleActions() {
         fabMenuSubViews = new ArrayList<>();
         fabMenuButtons = new ArrayList<>();
-
-        if (CalendulaApp.isPharmaModeEnabled()) {
-            final View fabActionQrView = activity.findViewById(R.id.fab_action_qr);
-            fabMenuSubViews.add(fabActionQrView);
-            final FloatingActionButton fabActionQr = (FloatingActionButton) activity.findViewById(R.id.fab_action_qr_button);
-            fabActionQr.setOnClickListener(this);
-            fabActionQr.setBackgroundTintList(ColorStateList.valueOf(DB.patients().getActive(activity).getColor()));
-            fabMenuButtons.add(fabActionQr);
-        }
 
         final View fabActionIntervalView = activity.findViewById(R.id.fab_action_interval);
         final View fabActionRoutinesView = activity.findViewById(R.id.fab_action_routines);

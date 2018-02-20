@@ -123,7 +123,6 @@ public class DBRegistry {
     }
 
     public void clear() throws SQLException {
-
         Class<?>[] medDbClasses = new Class<?>[]{
                 ActiveIngredient.class,
                 ContentUnit.class,
@@ -141,6 +140,7 @@ public class DBRegistry {
         for (Class<?> c : medDbClasses) {
             TableUtils.clearTable(connectionSource, c);
         }
+        LogUtil.d(TAG, "Drug DB cleared");
     }
 
 }
