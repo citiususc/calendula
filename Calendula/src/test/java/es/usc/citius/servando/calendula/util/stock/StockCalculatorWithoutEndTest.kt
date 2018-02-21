@@ -19,8 +19,8 @@
 package es.usc.citius.servando.calendula.util.stock
 
 import es.usc.citius.servando.calendula.kotlinAny
-import junit.framework.Assert
 import org.joda.time.DateTime
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
