@@ -92,7 +92,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Snack;
-import es.usc.citius.servando.calendula.util.medicine.StockUtils;
+import es.usc.citius.servando.calendula.util.stock.StockDisplayUtils;
 import es.usc.citius.servando.calendula.util.view.DisableableAppBarLayoutBehavior;
 import es.usc.citius.servando.calendula.util.view.ExpandableFAB;
 
@@ -335,7 +335,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                StockUtils.showStockRunningOutDialog(HomePagerActivity.this, sro.m, sro.days);
+                                StockDisplayUtils.showStockRunningOutDialog(HomePagerActivity.this, sro.m, sro.days);
                             }
                         }, 1000);
                     } else if (event instanceof PersistenceEvents.DatabaseUpdateEvent) {

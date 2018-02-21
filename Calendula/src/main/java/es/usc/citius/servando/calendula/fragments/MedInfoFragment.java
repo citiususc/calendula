@@ -53,7 +53,9 @@ import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.modules.modules.StockModule;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.IconUtils;
-import es.usc.citius.servando.calendula.util.medicine.StockUtils;
+import es.usc.citius.servando.calendula.util.stock.MedicineScheduleStockProvider;
+import es.usc.citius.servando.calendula.util.stock.StockCalculator;
+import es.usc.citius.servando.calendula.util.stock.StockDisplayUtils;
 import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 
@@ -211,8 +213,8 @@ public class MedInfoFragment extends Fragment {
                 final Float s = m.getStock();
                 final String stock = s.intValue() == s ? String.valueOf(s.intValue()) : String.valueOf(s);
                 stockInfo.setText(stock + " " + m.getPresentation().units(getResources(), s));
-                LocalDate d = StockUtils.getEstimatedStockEnd(m);
-                String msg = StockUtils.getReadableStockDuration(d, getContext());
+                final StockCalculator.StockEnd stockEnd = StockCalculator.calculateStockEnd(LocalDate.now(), new MedicineScheduleStockProvider(m), m.getStock());
+                String msg = StockDisplayUtils.getReadableStockDuration(stockEnd, getContext());
                 stockInfoEnd.setText(msg);
             } else {
                 stockInfo.setText(R.string.stock_no_data);
