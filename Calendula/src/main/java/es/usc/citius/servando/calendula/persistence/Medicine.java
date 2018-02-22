@@ -37,9 +37,6 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import static java.util.Collections.sort;
 
 
-/**
- * Created by joseangel.pineiro
- */
 @DatabaseTable(tableName = "Medicines")
 public class Medicine implements Comparable<Medicine> {
 

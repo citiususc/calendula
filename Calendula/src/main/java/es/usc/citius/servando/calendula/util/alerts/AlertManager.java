@@ -36,9 +36,6 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 
 import static es.usc.citius.servando.calendula.persistence.PatientAlert.Level;
 
-/**
- * Created by alvaro.brey.vilas on 21/11/16.
- */
 
 public class AlertManager {
 
@@ -56,6 +53,7 @@ public class AlertManager {
             case Level.LOW:
                 //nothing
             default:
+                break;
         }
         CalendulaApp.eventBus().post(PersistenceEvents.ALERT_EVENT);
 

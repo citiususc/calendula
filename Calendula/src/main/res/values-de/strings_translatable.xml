@@ -7,14 +7,14 @@
 <string name="home_menu_medicines">"Medikamente"</string>
 <string name="home_menu_pharmacies">"Apotheken"</string>
 <string name="home_menu_plantrip">"Reiseplanung"</string>
-<string name="medicine">"Medikamente"</string>
+<string name="medicine">"Medikament"</string>
 <string name="drawer_help_option">"Tour"</string>
 <string name="drawer_settings_option">"Einstellungen"</string>
 <string name="drawer_about_option">"Über uns"</string>
 <string name="title_activity_routines">"Routinen"</string>
 <string name="title_edit_routine_activity">"Routinen bearbeiten"</string>
 <string name="title_create_routine_activity">"Routine erstellen"</string>
-<string name="title_activity_medicines">"Medizin"</string>
+<string name="title_activity_medicines">"Medikamente"</string>
 <string name="title_edit_schedule_activity">"Einnahmeplan bearbeiten"</string>
 <string name="title_create_schedule_activity">"Einnahmeplan erstellen"</string>
 <string name="routine_name">"Name der Routine"</string>
@@ -24,7 +24,7 @@
 <string name="medicine_name">"Medikamentenname"</string>
 <string name="medicine_presentation">"Applikationsart"</string>
 <string name="create_medicine_button_text">"Medikament erstellen"</string>
-<string name="no_stock_info_msg">"Keine Bestandsinformation"</string>
+<string name="no_stock_info_msg">"Keine Information zum Vorrat"</string>
 <string name="title_activity_schedules">"Pläne"</string>
 <string name="delay">"Verzögerung"</string>
 <string name="done">"Erledigt"</string>
@@ -133,8 +133,8 @@
 <string name="schedule_created_message">"Plan erstellt!"</string>
 <string name="cycle_period_cero_message">"Die zyklische Einahme und die Pause müssen größer als Null sein"</string>
 <string name="reminder_cancelled_message">"Erinnerung gelöscht"</string>
-<string name="remove_routine_message_long">"Die Routine %1$s hat assoziierte Pläne, die verloren gehen, wenn die Routine gelöscht wird. Trotzdem fortfahren?"</string>
-<string name="remove_medicine_message_long">"%1$s hat assoziierte Pläne die verloren gehen wenn Sie es löschen. Wollen Sie trotzdem löschen?"</string>
+<string name="remove_routine_message_long">"Die Routine %1$s hat zugehörige Einnahmepläne, die verloren gehen, wenn die Routine gelöscht wird. Trotzdem fortfahren?"</string>
+<string name="remove_medicine_message_long">"%1$s hat zugehörige Einnahmepläne die verloren gehen wenn Sie es löschen. Wollen Sie trotzdem löschen?"</string>
 <string name="remove_routine_message_short">"Routine %1$s entfernen?"</string>
 <string name="remove_medicine_message_short">"Entfernen von %1$s?"</string>
 <string name="remove_routine_dialog_title">"Routine entfernen"</string>
@@ -184,7 +184,7 @@ Danke."</string>
 <string name="schedule_repeat_period">"Periode + Unterbrechung"</string>
 <string name="schedule_repeat_type_everyday">"Täglich"</string>
 <string name="schedule_repeat_type_some_week_days">"Einige Tage pro Woche"</string>
-<string name="schedule_repeat_type_interval">"Intervall mässig"</string>
+<string name="schedule_repeat_type_interval">"Intervall"</string>
 <string name="schedule_repeat_frequency_days">"Tage"</string>
 <string name="schedule_repeat_frequency_weeks">"Wochen"</string>
 <string name="schedule_repeat_frequency_months">"Monate"</string>
@@ -205,7 +205,7 @@ Danke."</string>
 <string name="schedule_help_timesbyday">"Bitte angeben, wie häufig eine Einnahme pro Tag vorgesehen ist."</string>
 <string name="schedule_help_timetable">" Bitte jede Einnahme mit Routinen verknüpfen und die Dosierung jeder Einnahme angeben."</string>
 <string name="title_activity_calendar">"Aufstockkalender"</string>
-<string name="title_pickups_bottom_sheet">"Neue Medikamente besorgen am %1$s"</string>
+<string name="title_pickups_bottom_sheet">"Neue Medikamente abholen am %1$s"</string>
 <string name="pickup_interval">"Bis %1$s"</string>
 <string name="pickup_date_format">"dd. MMMM YYYY"</string>
 <string name="title_activity_confirm_schedules">"Pläne bestätigen"</string>
@@ -237,7 +237,7 @@ Besuchen Sie unsere Webseite für weitere Informationen:
 <br/>
 <a href=\'http://citius.usc.es/calendula\'>citius.usc.es/calendula </a>
 <br/><br/>
-Calendula ist ein Open Source Project. Sie können Ideen und Vorschläge beisteuern, indem Sie unser Github Projekt besuchen oder uns eine E-Mail schreiben:
+Calendula ist ein Open Source Projekt. Sie können Ideen und Vorschläge beisteuern, indem Sie unser Github Projekt besuchen oder uns eine E-Mail schreiben:
 <br/>
 <a href=\'https://github.com/citiususc/calendula\'>https://github.com/citiususc/calendula </a>
  <br/>
@@ -291,6 +291,7 @@ Für die Entwicklung dieses Projektes verwenden wir mehrere Open Source Biblioth
 <string name="allergies_selected_number">"%1$d ausgewählt"</string>
 <string name="message_allergy_add_multiple_success">"Ihre Allergieinformation wurde gespeichert."</string>
 <string name="title_allergies_database_required">"Datenbank benötigt"</string>
+<string name="message_allergies_database_required">"Allergie-Management wird aktuell nur mit der AEMPS-Medikamenten-Datenbank unterstützt. Soll es aktiviert werden?"</string>
 <string name="allergies_group_elements_selected">"%1$d Elemente (%2$d ausgewählt)"</string>
 <string name="add_custom_med_button_text">"\"%1$s\" zur Medikamententasche hinzufügen"</string>
 <string name="medicine_search_not_found_msg">"Entschuldigung, wir konnten nichts mit diesem Namen finden"</string>
@@ -304,8 +305,8 @@ Für die Entwicklung dieses Projektes verwenden wir mehrere Open Source Biblioth
 <string name="description_alert_allergy">"Sie haben angegeben, dass Sie allergisch gegen manche der Bestandteile dieses Medikaments sind. Allergene:"</string>
 <string name="default_user_name">"Benutzer"</string>
 <string name="relation_user_possession_thing">"%1$ss %2$s"</string>
-<string name="schedules_for_med">"%1$d assoziierte Einnahmepläne"</string>
-<string name="schedules_for_med_none">"Keine assoziierten Einnahmepläne"</string>
+<string name="schedules_for_med">"%1$d zugehörige Einnahmepläne"</string>
+<string name="schedules_for_med_none">"Keine zugehörigen Einnahmepläne"</string>
 <string name="yesterday">"Gestern"</string>
 <string name="today">"Heute"</string>
 <string name="tomorrow">"Morgen"</string>
@@ -319,10 +320,12 @@ Für die Entwicklung dieses Projektes verwenden wir mehrere Open Source Biblioth
 <string name="active_schedules_none">"Keine aktiven Einnahmepläne"</string>
 <string name="active_schedules_one">"1 aktiver Einnahmeplan"</string>
 <string name="active_schedules_number">"%1$d aktive Einnahmepläne"</string>
+<string name="message_link_real_prescription">"Verknüpfung zum tatsächlichen Medikament um mehr Informationen zu erhalten."</string>
 <string name="stock_no_stock_info">"Es gibt keine Information zum Vorrat dieses Medikaments"</string>
 <string name="stock_no_data">"Keine Daten"</string>
 <string name="message_med_linked_success">"Medikament erfolgreich verknüpft!"</string>
 <string name="label_info_short">"Info"</string>
+<string name="label_alerts_short">"Warnungen"</string>
 <string name="medicine_not_found_error">"Medikament nicht gefunden"</string>
 <string name="message_link_real_prescription_short">"Link zum Medikament"</string>
 <string name="prospect">"Beipackzettel"</string>
@@ -330,9 +333,11 @@ Für die Entwicklung dieses Projektes verwenden wir mehrere Open Source Biblioth
 <string name="stock_enough_for_days">"Genug für %1$d Tage (bei derzeitigen Einnahmeplänen)"</string>
 <string name="stock_enough_for_months_days">"Genug für %1$d Monate und %2$d Tage (bei aktuellen Einnahmeplänen)"</string>
 <string name="stock_enough_for_upper_limit">"Genug für mehr als drei Monate (bei aktuellen Einnahmeplänen)"</string>
+<string name="no_alerts_detected">"Keine Warnungen für dieses Medikament erkannt"</string>
 <string name="stock_depleted">"Vorrat ist aufgebraucht"</string>
 <string name="stock_depleted_msg">"Es gibt keinen Vorrat mehr für dieses Medikament."</string>
 <string name="message_allergies_experimental_warning">"Allergiemanagement ist ein experimentelles Feature. Denken Sie daran die Packungsbeilage Ihrer Medikamente zu lesen um sich über die Allergieinformationen zu informieren."</string>
+<string name="dialog_get_me_out">"Bring mich hier raus!"</string>
 <string name="dialog_continue_option">"Fortfahren"</string>
 <string name="important_info">"Wichtige Information"</string>
 <string name="download_db_dialog_title">"Setze Medikamentendatenbank auf"</string>
@@ -346,24 +351,19 @@ Für die Entwicklung dieses Projektes verwenden wir mehrere Open Source Biblioth
 <string name="install_db_notification_onfailure">"Einrichtung der Datenbank fehlgeschlagen"</string>
 <string name="install_db_notification_onfailure_content">"Während der Einrichtung der Medikamentendatenbank ist etwas schief gelaufen"</string>
 <string name="intro_title">"Willkommen bei Calendula!"</string>
-<string name="intro_description">"Rechtzeitig die richtigen Medikamente in der korrekten Dosierung einzunehmen, ist nicht einfach. Diese App soll dabei helfen."</string>
+<string name="intro_description">"Rechtzeitig die richtigen Medikamente in der korrekten Dosierung einzunehmen ist nicht einfach. Diese App soll dabei helfen."</string>
 <string name="intro_routines_title">"Routinen"</string>
-<string name="intro_routines_text">"
-        Als Routine wird die Verknüpfung der Medikamenteneinnahme mit regelmäßig stattfindenden Alltagsaktivitäten bzw. mit Zeitpunkten bezeichnet. Mit einer solchen Routine wiederum kann Calendula die Einnahme eines oder mehrerer Medikamente verbinden.
-    "</string>
-<string name="intro_meds_title">"Medikamententasche"</string>
-<string name="intro_meds_text">"Behalten Sie die Kontrolle über Ihre Medikamente indem Sie die Medikamententasche verwenden und so einfachen Zugriff auf Packungsbeilagen von offiziellen Medizindatenbanken erhalten."</string>
-<string name="intro_schedules_title">"Pläne"</string>
-<string name="intro_schedules_text">"
-        Die Medikamentenpläne verknüpfen die Medikamenteneinahmen mit Routinen unter Berücksichtigung etwaiger Wiederholungen (etwa stündlich oder täglich) oder Einnahmepausen.
-    "</string>
-<string name="intro_reminders_title">"Erinnerungen"</string>
-<string name="intro_reminders_text">"
-        Calendula wird an alle anstehenden Einnahmen erinnern.
-        
+<string name="intro_routines_text">"Eine Routine ist eine Zeit am Tag zu der Sie üblicherweise Medikamente einnehmen.
 
-Die Benachrichtigungseinstellungen können im Optionenmenü angepasst werden.
-    "</string>
+Nehmen Sie mehrere Medikamente zum Frühstück oder Mittagessen ein? Erstellen Sie eine Routine für diese Zeit und Calendula wird Sie über Ihre Einnahmen mit einer einzigen Benachrichtigung erinnern."</string>
+<string name="intro_meds_title">"Medikamententasche"</string>
+<string name="intro_meds_text">"Behalten Sie die Kontrolle über Ihre Medikamente indem Sie die Medikamententasche verwenden und so einfachen Zugriff auf Packungsbeilagen von offiziellen Medikamentendatenbanken erhalten."</string>
+<string name="intro_schedules_title">"Pläne"</string>
+<string name="intro_schedules_text">"Erstellen Sie Ihren Einnahmeplan mit dem Einnahmeplan-Editor. Sie können Ihre Einnahmen mit Ihren Routinen verknüpfen und dabei Wiederholungen und vieles mehr einstellen!"</string>
+<string name="intro_reminders_title">"Erinnerungen"</string>
+<string name="intro_reminders_text">"Calendula wird Sie an alle anstehenden Einnahmen erinnern. Vergessen Sie nicht die Einnahme zu bestätigen oder Calendula benachrichtigt Sie erneut!
+
+Die Benachrichtigungen können im Einstellungsmenü angepasst werden."</string>
 <string name="intro_multipat_title">"Mehrere Patienten/-innen"</string>
 <string name="intro_multipat_text">"Calendula erlaubt es Ihnen die Medikation mehrerer Patienten zu verwalten, mit eigenen Medikamententaschen, Routinen und Einnahmeplänen.
 
@@ -373,11 +373,12 @@ Sie werden alle ihre Einnahmen auf dem Startbildschirm sehen."</string>
 <string name="pref_title_display_name">"Angezeigter Name"</string>
 <string name="pref_default_display_name">"Calendula"</string>
 <string name="pref_header_notifications">"Benachrichtigungen"</string>
-<string name="pref_title_new_alarm_notification">"Alarme für Medikamenteneinnahme"</string>
+<string name="pref_title_new_alarm_notification">"Alarm für Medikamenteneinnahme"</string>
+<string name="pref_title_pickup_notification">"Medizin Abholerinnerung"</string>
 <string name="pref_title_insistent_alarms">"Hartnäckige Benachrichtigungen"</string>
-<string name="pref_title_repeat_alarms">"Wiederhole Alarme"</string>
+<string name="pref_title_repeat_alarms">"Alarm wiederholen"</string>
 <string name="pref_title_sync_frequency">"Wiederhole alle"</string>
-<string name="pref_title_reminder_window">"Alarme abstellen nach"</string>
+<string name="pref_title_reminder_window">"Alarm abstellen nach"</string>
 <string name="pref_notification_tone">"Benachrichtigungston"</string>
 <string name="pref_notification_tone_sum">"Standard"</string>
 <string name="pref_alarm_repeat_five_min">"5 Min."</string>
@@ -389,13 +390,16 @@ Sie werden alle ihre Einnahmen auf dem Startbildschirm sehen."</string>
 <string name="pref_alarm_reminder_two_hours">"2 Stunden"</string>
 <string name="pref_enable_databases_title">"Medikamentendatenbank aktivieren"</string>
 <string name="pref_available_databases_title">"Ausgewählte Datenbank"</string>
-<string name="pref_header_stock">"Bestandskontrolle"</string>
+<string name="pref_header_stock">"Vorratskontrolle"</string>
 <string name="pref_stock_do_not_warn">"Nicht benachrichtigen"</string>
 <string name="pref_stock_warn_one_week">"In weniger als 1 Woche"</string>
 <string name="pref_stock_warn_two_weeks">"In weniger als 2 Wochen"</string>
 <string name="pref_stock_warn_three_weeks">"In weniger als 3 Wochen"</string>
+<string name="database_none_display">"Nichts"</string>
 <string name="database_aemps_display">"AEMPS Datenbank"</string>
+<string name="database_aemps_desc">"Agencia Española de Medicamentos y Productos Sanitarios Datenbank"</string>
 <string name="database_setting_up">"Einrichtung läuft..."</string>
+<string name="schedule_type_from_qr">"Von QR-Code"</string>
 <string name="calendar_date_tomorrow">"am morgigen Tag"</string>
 <string name="delays_one_min">"1 Min."</string>
 <string name="delays_thirty_min">"30 Min."</string>
@@ -409,6 +413,7 @@ Sie werden alle ihre Einnahmen auf dem Startbildschirm sehen."</string>
 <string name="text_database_update_available">"Es gibt ein Update für die Medikamentendatenbank. Möchten Sie es herunterladen und installieren?"</string>
 <string name="action_download_update">"Tappen um das Update herunterzuladen und zu installieren!"</string>
 <string name="text_database_update_data_lost">"Manche der Medikamente in Ihrer Medikamententasche wurden beim letzten Update aus der Datenbank entfernt. Sie bleiben weiterhin in Ihrer Medikamententasche, aber Sie werden nicht mehr die Packungsbeilagen, usw. ansehen können."</string>
+<string name="title_database_update_data_lost">"Zusatzinformationen bei Update verloren"</string>
 <string name="preference_check_for_updates">"Auf Updates überprüfen"</string>
 <string name="database_update_not_available">"Kein Datenbank-Update verfügbar"</string>
 <string name="title_database_update_required">"Datenbank-Update notwendig"</string>
@@ -418,10 +423,83 @@ Wenn Sie sich entscheiden den Download nicht zu starten werden ein paar Informat
 <string name="message_no_internet_error">"Keine Internetverbindung verfügbar! Bitte stellen Sie eine Verbindung her und versuchen Sie es erneut."</string>
 <string name="action_edit">"Editieren"</string>
 <string name="injections">"Injektionen"</string>
+<string name="title_reset_stock">"Vorrat zurücksetzen?"</string>
+<string name="message_reset_stock">"Der Vorrat für %1$s wird auf den Standardwert zurückgesetzt."</string>
 <string name="reset">"Zurücksetzen"</string>
 <string name="edit_medicine">"Medikament bearbeiten"</string>
 <string name="sort_by">"Sortieren nach:"</string>
 <string name="sort_by_default">"Standard"</string>
 <string name="sort_by_name">"Name"</string>
+<string name="sort_by_presentation">"Applikationsart"</string>
 <string name="action_sort">"Art"</string>
+<string name="sort_by_alerts">"Warnungen"</string>
+<string name="title_activity_pickup_calendar_short">"Abholungen"</string>
+<string name="calendar_patient_all">"Alle"</string>
+<string name="calendar_updating">"Kalender wird geupdatet..."</string>
+<string name="best_date_recommendation_title">"Empfehlung"</string>
+<string name="best_single_day_message">"Besuchen Sie die Apotheke %1$s und Sie können %2$s Medikamente gleichzeitig abholen:"</string>
+<string name="best_single_day_message_one_med">"Besuchen Sie die Apotheke %1$s um folgendes abzuholen:"</string>
+<string name="best_single_day_message_after_pending">"Anschließend können Sie erneut %1$s gehen um %2$s Medikamente gleichzeitig abzuholen:"</string>
+<string name="best_single_day_message_after_pending_one_med">"Anschließend können Sie erneut %1$s gehen und folgendes abholen:"</string>
+<string name="pending_meds_msg">"Es gibt Medikamente die noch nicht abgeholt wurden. Bitte besuchen Sie Ihre Apotheke so bald wie möglich:"</string>
+<string name="best_date_format">"'am' EEEE',' dd'.' MMMM"</string>
+<string name="best_date_reminder">"Erinnerung"</string>
+<string name="calendar_pickup_reminder_one_day_before">"1 Tag vorher"</string>
+<string name="calendar_pickup_reminder_two_days_before">"2 Tage vorher"</string>
+<string name="calendar_pickup_reminder_three_days_before">"3 Tage vorher"</string>
+<string name="calendar_no_medicines_to_pick_up">"Keine Medikamente müssen abgeholt werden"</string>
+<string name="ok">"OK"</string>
+<string name="stock">"Vorrat"</string>
+<string name="expand">"Erweitern"</string>
+<string name="show_pickups">"Abholungen anzeigen"</string>
+<string name="help">"Hilfe"</string>
+<string name="title_activity_medicines_search">"Medikamentensuche"</string>
+<string name="fingerprint_setup_dialog_message">"Wollen Sie Calendula mit Ihrem Fingerabdruck entsperren?"</string>
+<string name="fingerprint_setup_dialog_success">"Entsperren per Fingerabdruck aktiviert!"</string>
+<string name="fingerprint_setup_dialog_title">"Zum Entsperren Fingerabdruck benutzen"</string>
+<string name="fingerprint_unlock_dialog_failed_message">"Bitte stellen Sie sicher, dass der Fingerabdrucksensor sauber ist und versuchen Sie es erneut."</string>
+<string name="fingerprint_unlock_dialog_failed_title">"Fingerabdruck abgelehnt."</string>
+<string name="fingerprint_unlock_dialog_successful_message">"Bitte warten Sie einen Moment..."</string>
+<string name="fingerprint_unlock_dialog_successful_title">"Anmeldung erfolgreich"</string>
+<string name="fingerprint_unlock_dialog_title">"Fingerabdruck zum Entsperren benutzen"</string>
+<string name="fingerprint_unlock_dialog_use_pin">"Stattdessen PIN verwenden"</string>
+<string name="pin_actions_dialog_cancel">"Abbrechen"</string>
+<string name="pin_actions_dialog_delete">"Löschen"</string>
+<string name="pin_actions_dialog_message">"Die App ist mit einer PIN gesperrt. Was wollen Sie tun?"</string>
+<string name="pin_actions_dialog_modify">"Ändern"</string>
+<string name="pin_actions_dialog_title">"Sperr-PIN"</string>
+<string name="pin_delete_dialog_message">"Sind Sie sicher, dass Sie die Sperr-PIN löschen möchten?"</string>
+<string name="pin_delete_dialog_title">"Sperr-PIN löschen?"</string>
+<string name="pin_forgot_pin">"PIN vergessen?"</string>
+<string name="pin_recovery_description">"Wenn Sie Ihre PIN vergessen haben, können Sie sich nochmals einloggen, um Zugriff auf die App zu erhalten. Fortfahren?"</string>
+<string name="pin_recovery_title">"PIN Wiederherstellung"</string>
+<string name="pin_use_fingerprint">"Fingerabdruck verwenden"</string>
+<string name="pref_fingerprint_enable_title">"Entsperren per Fingerabdruck"</string>
+<string name="pref_header_privacy">"Privatsphäre"</string>
+<string name="pref_summary_pin_lock_set">"PIN gesetzt"</string>
+<string name="pref_summary_pin_lock_unset">"PIN nicht gesetzt"</string>
+<string name="pref_title_pin_lock">"App sperren"</string>
+<string name="text_pinlock_auth_error">"Die eingegebene PIN ist nicht richtig. Bitte erneut versuchen."</string>
+<string name="text_pinlock_auth_prompt">"Bitte geben Sie Ihre PIN ein um fortzufahren"</string>
+<string name="text_pinlock_match_error">"Die eingegebenen PINs stimmen nicht überein. Bitte erneut versuchen."</string>
+<string name="text_pinlock_new_prompt">"Bitte geben Sie eine 4-Ziffern-PIN ein"</string>
+<string name="text_pinlock_or_fingerprint_auth_prompt">"Bitte geben Sie Ihre PIN ein oder benutzen Sie Ihren Fingerabdruck um fortzufahren"</string>
+<string name="text_pinlock_repeat_prompt">"Nun bitte die selbe PIN erneut eingeben..."</string>
+<string name="use_fingerprint_message">"oder benutzen Sie Ihren Fingerabdruck zum Anmelden"</string>
+<string name="reinstall_prescriptions_dialog_message">"Um Ihnen bessere Informationen über die Medikamente bereitzustellen, muss die Medikamentendatenbank über das Einstellungsmenü neu installiert werden. Wenn Sie sie nicht neu installieren, werden Sie keinen Zugriff mehr auf Packungsbeilagen und andere Zusatzinformationen haben.
+
+Ihre Einnahmepläne, die Medikamententasche, Ihre Routinen und andere Daten sind in jedem Fall sicher.
+
+Wollen Sie nun die neue Datenbank installieren?
+
+"</string>
+<string name="pref_insistent_notification_tone">"Hartnäckiger Benachrichtigungston"</string>
+<string name="stock_enough_for_weeks_days">"Genug für %1$d Wochen und %2$d Tage mit den aktuellen Einnahmeplänen"</string>
+<string name="stock_running_out_dialog_message">"Es sind noch %1$d %2$s von %3$s übrig und der Vorrat wird mit den aktuellen Einnahmeplänen in %4$d Tagen erschöpft sein."</string>
+<string name="stock_running_out_dialog_title">"Vorrat für %1$s geht zur Neige"</string>
+<string name="manage_stock">"Vorrat verwalten"</string>
+<string name="message_generic_error">"Oh! Da ist ein Fehler aufgetreten."</string>
+<string name="ringtone_none">"Keiner"</string>
+<string name="patient_add">"Neuer Patient"</string>
+<string name="db_download_and_setup">"Herunterladen und installieren"</string>
 </resources>

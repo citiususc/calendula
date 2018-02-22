@@ -27,9 +27,6 @@ import java.sql.SQLException;
 
 import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 
-/**
- * Created by joseangel.pineiro
- */
 public class RRulePersister extends BaseDataType {
 
     private static final RRulePersister singleton = new RRulePersister();

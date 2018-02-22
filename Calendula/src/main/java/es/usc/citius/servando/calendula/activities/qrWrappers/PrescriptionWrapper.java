@@ -26,9 +26,6 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.HomogeneousGroup;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 
-/**
- * Created by joseangel.pineiro on 10/6/15.
- */
 public class PrescriptionWrapper {
     public String cn;
     public String g;

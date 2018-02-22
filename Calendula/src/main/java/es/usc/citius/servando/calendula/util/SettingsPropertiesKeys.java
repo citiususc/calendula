@@ -18,9 +18,6 @@
 
 package es.usc.citius.servando.calendula.util;
 
-/**
- * Created by alvaro.brey.vilas on 1/12/16.
- */
 
 public class SettingsPropertiesKeys {
 

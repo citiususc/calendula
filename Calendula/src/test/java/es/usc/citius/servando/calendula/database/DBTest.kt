@@ -30,9 +30,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
-/**
- * Created by alvaro.brey.vilas on 17/01/18.
- */
 
 
 @RunWith(RobolectricTestRunner::class)

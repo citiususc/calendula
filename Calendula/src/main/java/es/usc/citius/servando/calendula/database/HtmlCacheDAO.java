@@ -24,9 +24,6 @@ import java.sql.SQLException;
 
 import es.usc.citius.servando.calendula.persistence.HtmlCacheEntry;
 
-/**
- * Created by alvaro.brey on 3/26/15.
- */
 public class HtmlCacheDAO extends GenericDao<HtmlCacheEntry, Long> {
 
     private static final String TAG = "HtmlCacheDAO";

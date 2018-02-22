@@ -23,9 +23,6 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import es.usc.citius.servando.calendula.database.DB;
 
-/**
- * Created by joseangel.pineiro on 7/9/14.
- */
 @DatabaseTable(tableName = "ScheduleItems")
 public class ScheduleItem {
 

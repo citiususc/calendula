@@ -16,27 +16,32 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.util.view;
+package es.usc.citius.servando.calendula.settings.privacy
 
-import android.content.Context;
-import android.preference.ListPreference;
-import android.util.AttributeSet;
+import android.content.Intent
+import android.support.annotation.StringRes
+import es.usc.citius.servando.calendula.mvp.BasePresenter
+import es.usc.citius.servando.calendula.mvp.BaseView
 
-/**
- * Created by joseangel.pineiro on 10/11/16.
- */
-public class CustomListPreference extends ListPreference {
+interface PrivacyPrefsContract {
 
-    public CustomListPreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    interface View : BaseView<Presenter> {
+
+        fun recordPIN()
+        fun showPINOptions()
+        fun showConfirmDeletePinChoice()
+        fun setPINPrefText(@StringRes pinPrefText: Int)
+        fun setFingerprintPrefEnabled(enabled: Boolean)
+        fun showEnableFingerprintDialog()
+
     }
 
-    public CustomListPreference(Context context) {
-        super(context);
-    }
+    interface Presenter : BasePresenter {
 
-    public void show() {
-        showDialog(null);
+        fun onResult(request: Int, result: Int, data: Intent?)
+        fun onClickPINPref()
+        fun onClickDeletePIN()
+        fun onClickModifyPIN()
+        fun confirmDeletePIN()
     }
-
 }

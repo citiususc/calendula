@@ -28,7 +28,6 @@ import es.usc.citius.servando.calendula.R;
  * <p>
  * To access the key string use {@link #key()}.
  * <p>
- * Created by alvaro.brey.vilas on 05/01/17.
  */
 public enum PreferenceKeys {
 
@@ -65,7 +64,7 @@ public enum PreferenceKeys {
     SETTINGS_ALARM_REPEAT_ENABLED(R.string.prefkey_settings_alarm_repeat_enabled),
     SETTINGS_ALARM_REPEAT_FREQUENCY(R.string.prefkey_settings_alarm_repeat_frequency),
     SETTINGS_ALARM_NOTIFICATIONS(R.string.prefkey_settings_alarm_notifications),
-    SETTINGS_ALARM_PICKUP_NOTIFICATIONS(R.string.prefkey_settings_alarm_pickup_notifications),
+
     SETTINGS_DATABASE_UPDATE(R.string.prefkey_settings_database_update),
     SETTINGS_NOTIFICATION_TONE(R.string.prefkey_settings_notification_tone),
     SETTINGS_INSISTENT_NOTIFICATION_TONE(R.string.prefkey_settings_insistent_notification_tone),

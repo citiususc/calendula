@@ -33,9 +33,6 @@ import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 
-/**
- * Created by alvaro.brey.vilas on 23/11/16.
- */
 
 public class AllergyGroupSubItem extends AbstractExpandableItem<AllergyGroupItem, AllergyGroupSubItem.ViewHolder, AllergyGroupSubItem> implements Comparable<AllergyGroupSubItem> {
 

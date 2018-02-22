@@ -76,6 +76,7 @@ import es.usc.citius.servando.calendula.allergies.AllergenGroupWrapper;
 import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.AllergyGroup;
+import es.usc.citius.servando.calendula.settings.CalendulaSettingsActivity;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
@@ -141,8 +142,8 @@ public class AllergiesSearchActivity extends CalendulaActivity {
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Intent i = new Intent(AllergiesSearchActivity.this, SettingsActivity.class);
-                            i.putExtra(SettingsActivity.EXTRA_SHOW_DB_DIALOG, true);
+                            Intent i = new Intent(AllergiesSearchActivity.this, CalendulaSettingsActivity.class);
+                            i.putExtra(CalendulaSettingsActivity.EXTRA_SHOW_DB_DIALOG, true);
                             finish();
                             startActivity(i);
                         }

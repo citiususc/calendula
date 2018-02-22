@@ -23,8 +23,13 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "Calendula/build.gradle" }}
       - run:
+          name: Build
+          command: ./gradlew assembleCiDebug --no-daemon
+      - run:
           name: Run Unit Tests
           command: ./gradlew testCiDebugUnitTest --no-daemon
+          environment:
+            _JAVA_OPTIONS: "-Xmx2g"
       - store_artifacts:
           path: Calendula/build/reports/
           destination: reports
@@ -49,3 +54,8 @@ jobs:
       - store_artifacts:
           path: Calendula/build/reports/
           destination: reports
+      - run:
+          name: Report coverage
+          command: |
+            wget 'https://oss.sonatype.org/service/local/repositories/releases/content/com/codacy/codacy-coverage-reporter/2.0.2/codacy-coverage-reporter-2.0.2-assembly.jar' -O coverage-reporter.jar
+            java -cp coverage-reporter.jar com.codacy.CodacyCoverageReporter -l Java -r Calendula/build/reports/jacoco/ciDebug/jacoco.xml

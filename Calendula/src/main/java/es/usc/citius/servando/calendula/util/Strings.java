@@ -28,9 +28,6 @@ import android.text.style.StyleSpan;
 
 import java.util.Collection;
 
-/**
- * Created by joseangel.pineiro on 3/2/15.
- */
 public class Strings {
 
     private static final String TAG = "Strings";

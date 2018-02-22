@@ -22,14 +22,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.evernote.android.job.JobManager;
-import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
-import com.github.javiersantos.materialstyleddialogs.enums.Style;
-import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.Iconics;
 
 import org.joda.time.LocalTime;
@@ -37,10 +31,8 @@ import org.joda.time.LocalTime;
 import java.io.IOException;
 
 import es.usc.citius.servando.calendula.DefaultDataGenerator;
-import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
-import es.usc.citius.servando.calendula.drugdb.download.UpdateDatabaseService;
 import es.usc.citius.servando.calendula.jobs.CalendulaJob;
 import es.usc.citius.servando.calendula.jobs.CalendulaJobCreator;
 import es.usc.citius.servando.calendula.jobs.CalendulaJobScheduler;
@@ -52,16 +44,12 @@ import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
-import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.PresentationsTypeface;
 import es.usc.citius.servando.calendula.util.SettingsProperties;
 
-/**
- * Created by alvaro.brey.vilas on 30/11/16.
- */
 
 public class BaseModule extends CalendulaModule {
 

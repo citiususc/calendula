@@ -48,9 +48,6 @@ import java.io.InputStream;
 
 import es.usc.citius.servando.calendula.R;
 
-/**
- * Created by joseangel.pineiro on 11/20/13.
- */
 public class ScreenUtils {
 
     private static final String TAG = "ScreenUtils";
@@ -90,20 +87,19 @@ public class ScreenUtils {
 
 
     public static Bitmap getResizedBitmap(Context ctx, String pathOfInputImage, int dstWidth, int dstHeight) {
+
+        InputStream in = null;
         try {
-
-
             int inWidth = 0;
             int inHeight = 0;
 
-            InputStream in = ctx.getAssets().open(pathOfInputImage);
+            in = ctx.getAssets().open(pathOfInputImage);
 
             // decode image size (decode metadata only, not the whole image)
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(in, null, options);
             in.close();
-            in = null;
 
             // save width and height
             inWidth = options.outWidth;
@@ -130,6 +126,8 @@ public class ScreenUtils {
 
         } catch (IOException e) {
             LogUtil.e(TAG, e.getMessage(), e);
+        } finally {
+            CloseableUtil.closeQuietly(in);
         }
         return null;
     }

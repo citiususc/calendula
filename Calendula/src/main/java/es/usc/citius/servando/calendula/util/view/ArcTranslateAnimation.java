@@ -22,9 +22,6 @@ import android.graphics.PointF;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
-/**
- * Created by joseangel.pineiro on 11/24/15.
- */
 public class ArcTranslateAnimation extends Animation {
     private int mFromXType = ABSOLUTE;
     private int mToXType = ABSOLUTE;

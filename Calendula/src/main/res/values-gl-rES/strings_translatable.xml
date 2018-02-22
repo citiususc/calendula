@@ -494,4 +494,12 @@ Os teus medicamentos, pautas e rutinas, e outras funcións básicas, seguirán d
 
 Queres instalar a nova base de datos agora?"</string>
 <string name="pref_insistent_notification_tone">"Tono de avisos insistentes"</string>
+<string name="stock_enough_for_weeks_days">"Suficiente para %1$d semanas e %2$d días coas pautas actuais"</string>
+<string name="stock_running_out_dialog_message">"Quedan %1$d %2$s de %3$s, e agotaranse en %4$d días coas pautas actuais."</string>
+<string name="stock_running_out_dialog_title">"Queda pouco stock de %1$s"</string>
+<string name="manage_stock">"Administrar stock"</string>
+<string name="message_generic_error">"Ups! Houbo un erro."</string>
+<string name="ringtone_none">"Ningún"</string>
+<string name="patient_add">"Engadir paciente"</string>
+<string name="db_download_and_setup">"Descargar e instalar"</string>
 </resources>

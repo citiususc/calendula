@@ -39,9 +39,6 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.util.Strings;
 
 
-/**
- * Created by joseangel.pineiro on 12/11/13.
- */
 public class ScheduleConfirmationEndFragment extends Fragment {
 
     private static final String TAG = "SchedulConfEndFragment";

@@ -16,29 +16,21 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.modules.modules;
+package es.usc.citius.servando.calendula.settings.notifications
 
-import android.content.Context;
+import android.content.Context
+import android.media.RingtoneManager
+import android.net.Uri
+import es.usc.citius.servando.calendula.R
+import java.lang.ref.WeakReference
 
-import es.usc.citius.servando.calendula.modules.CalendulaModule;
 
-/**
- * Created by alvaro.brey.vilas on 12/12/16.
- */
+class RingtoneNameResolver(context: Context) {
 
-public class PharmacyModule extends CalendulaModule {
+    private val contextRef = WeakReference(context)
 
-    public static final String ID = "CALENDULA_PHARMACY_MODULE";
-
-    private static final String TAG = "PharmacyModule";
-
-    @Override
-    public String getId() {
-        return ID;
-    }
-
-    @Override
-    protected void onApplicationStartup(Context ctx) {
-        // stub
+    fun resolveRingtoneName(uri: Uri?): String = when (uri) {
+        null -> contextRef.get()!!.getString(R.string.ringtone_none)
+        else -> RingtoneManager.getRingtone(contextRef.get(), uri).getTitle(contextRef.get())
     }
 }

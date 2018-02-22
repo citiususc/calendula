@@ -29,9 +29,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-/**
- * Created by mikepenz on 01.11.14.
- */
 public class PresentationsTypeface implements ITypeface {
     private static final String TTF_FILE = "presentation_icons.ttf";
 

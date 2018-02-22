@@ -61,8 +61,6 @@ import es.usc.citius.servando.calendula.util.Strings;
 import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 /**
- * Created by alvaro.brey.vilas on 9/29/17.
- * <p>
  * Adapter for autocompleting medicine search.
  */
 public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSearchAutoCompleteAdapter.PrescriptionSearchWrapper> implements Filterable {

@@ -45,9 +45,6 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.SettingsProperties;
 import es.usc.citius.servando.calendula.util.SettingsPropertiesKeys;
 
-/**
- * Created by joseangel.pineiro on 9/2/15.
- */
 public class DownloadDatabaseHelper {
 
     private static final String TAG = "DownloadDatabaseHelper";
@@ -73,7 +70,7 @@ public class DownloadDatabaseHelper {
         builder.setCancelable(false);
         builder.setMessage(R.string.download_db_dialog_message)
                 .setCancelable(false)
-                .setPositiveButton("Download and setup", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.db_download_and_setup, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (NetworkUtils.isNetworkAvailable(appContext)) {
                             if (callback != null) {

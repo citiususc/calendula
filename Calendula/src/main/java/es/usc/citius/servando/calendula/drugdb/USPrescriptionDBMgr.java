@@ -24,6 +24,8 @@ import android.text.TextUtils;
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,12 +34,10 @@ import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
+import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by joseangel.pineiro on 9/8/15.
- */
 public class USPrescriptionDBMgr extends PrescriptionDBMgr {
 
     private static final String TAG = "USPrescriptionDBMgr";
@@ -125,39 +125,57 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
             @Override
             public Object call() throws Exception {
 
-                DBRegistry.instance().clear();
+                BufferedReader br = null;
 
-                BufferedReader br;
-                String line;
-                int progressUpdateBy;
-                int lines = 0;
-                int i = 0;
+                try {
 
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
-                // count file lines (for progress updating)
-                while (br.readLine() != null) {
-                    lines++;
-                }
-                br.close();
-                progressUpdateBy = lines / 20;
-                updateProgress(l, 0);
+                    DBRegistry.instance().clear();
 
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
+                    String line;
+                    int progressUpdateBy;
+                    int lines = 0;
+                    int i = 0;
 
-                while ((line = br.readLine()) != null) {
-                    if (l != null && i % progressUpdateBy == 0) {
-                        int progress = (int) (((float) i / lines) * 100);
-                        l.onProgressUpdate(progress);
+                    br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
+                    // count file lines (for progress updating)
+                    while (br.readLine() != null) {
+                        lines++;
                     }
-                    // exec line content as raw sql
-                    Prescription prescription = fromCsv(line, "\\|");
-                    DB.drugDB().prescriptions().save(prescription);
-                    i++;
+                    br.close();
+
+                    if (lines > 0) {
+                        progressUpdateBy = lines / 20;
+                        updateProgress(l, 0);
+
+                        br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
+
+                        while ((line = br.readLine()) != null) {
+                            if (l != null && progressUpdateBy!=0 && i % progressUpdateBy == 0) {
+                                int progress = (int) (((float) i / lines) * 100);
+                                l.onProgressUpdate(progress);
+                            }
+                            // exec line content as raw sql
+                            Prescription prescription = fromCsv(line, "\\|");
+                            DB.drugDB().prescriptions().save(prescription);
+                            i++;
+                        }
+                    } else {
+                        LogUtil.e(TAG, "setup:  database file is empty");
+                        throw new IllegalArgumentException("Database file is empty");
+                    }
+                } catch (Exception e) {
+                    throw e;
+                } finally {
+                    if (br != null) {
+                        br.close();
+                    }
                 }
-                br.close();
                 return null;
+
             }
         });
+
+        EventBus.getDefault().post(new PersistenceEvents.DatabaseInstalledEvent());
 
         LogUtil.d(TAG, "setup: cleaning up...");
         try {

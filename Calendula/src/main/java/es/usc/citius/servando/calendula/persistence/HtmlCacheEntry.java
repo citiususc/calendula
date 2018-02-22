@@ -24,9 +24,6 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Date;
 
-/**
- * Created by alvaro.brey on 31/10/16.
- */
 @DatabaseTable(tableName = "HtmlCache")
 public class HtmlCacheEntry {
 

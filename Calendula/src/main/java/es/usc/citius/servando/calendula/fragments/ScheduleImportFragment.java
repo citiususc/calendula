@@ -88,9 +88,6 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.persistence.ScheduleItemComparator;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by joseangel.pineiro on 12/11/13.
- */
 public class ScheduleImportFragment extends Fragment
         implements NumberPickerDialogFragment.NumberPickerDialogHandlerV2,
         RecurrencePickerDialogFragment.OnRecurrenceSetListener, RadialTimePickerDialogFragment.OnTimeSetListener {

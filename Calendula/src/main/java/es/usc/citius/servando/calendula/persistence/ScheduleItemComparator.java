@@ -22,9 +22,6 @@ import org.joda.time.LocalTime;
 
 import java.util.Comparator;
 
-/**
- * Created by joseangel.pineiro on 7/16/14.
- */
 public class ScheduleItemComparator implements Comparator<ScheduleItem> {
 
     @Override

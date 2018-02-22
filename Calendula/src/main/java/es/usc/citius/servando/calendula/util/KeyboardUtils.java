@@ -21,9 +21,6 @@ package es.usc.citius.servando.calendula.util;
 import android.app.Activity;
 import android.view.inputmethod.InputMethodManager;
 
-/**
- * Created by alvaro.brey.vilas on 7/11/16.
- */
 
 public class KeyboardUtils {
 

@@ -25,9 +25,6 @@ import com.j256.ormlite.support.DatabaseResults;
 
 import java.sql.SQLException;
 
-/**
- * Created by joseangel.pineiro on 10/9/14.
- */
 public class BooleanArrayPersister extends BaseDataType {
 
     private static final BooleanArrayPersister singleton = new BooleanArrayPersister();

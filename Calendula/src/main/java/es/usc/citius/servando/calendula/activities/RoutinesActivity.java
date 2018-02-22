@@ -57,11 +57,12 @@ public class RoutinesActivity extends CalendulaActivity implements RoutineCreate
         switch (item.getItemId()) {
             case R.id.action_remove:
                 routineFragment.showDeleteConfirmationDialog(Routine.findById(mRoutineId));
-                return true;
+                break;
             default:
                 finish();
-                return true;
+                break;
         }
+        return true;
     }
 
     @Override

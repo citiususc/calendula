@@ -45,9 +45,6 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
-/**
- * Created by joseangel.pineiro on 9/4/15.
- */
 public class DBRegistry {
 
     private static final String TAG = "DBRegistry";
@@ -123,7 +120,6 @@ public class DBRegistry {
     }
 
     public void clear() throws SQLException {
-
         Class<?>[] medDbClasses = new Class<?>[]{
                 ActiveIngredient.class,
                 ContentUnit.class,
@@ -141,6 +137,7 @@ public class DBRegistry {
         for (Class<?> c : medDbClasses) {
             TableUtils.clearTable(connectionSource, c);
         }
+        LogUtil.d(TAG, "Drug DB cleared");
     }
 
 }

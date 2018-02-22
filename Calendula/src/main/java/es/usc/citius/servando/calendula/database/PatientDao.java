@@ -32,9 +32,6 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
-/**
- * Created by joseangel.pineiro on 3/26/15.
- */
 public class PatientDao extends GenericDao<Patient, Long> {
 
 

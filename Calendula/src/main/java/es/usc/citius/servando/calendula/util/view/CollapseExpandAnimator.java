@@ -22,9 +22,6 @@ import android.animation.ValueAnimator;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-/**
- * Created by alvaro.brey.vilas on 22/02/17.
- */
 
 public class CollapseExpandAnimator {
 

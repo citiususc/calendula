@@ -22,9 +22,6 @@ import android.content.res.Resources;
 
 import es.usc.citius.servando.calendula.R;
 
-/**
- * Created by joseangel.pineiro on 11/19/13.
- */
 public class RandomColorChooser {
 
     private static final int[] primary_colors = {

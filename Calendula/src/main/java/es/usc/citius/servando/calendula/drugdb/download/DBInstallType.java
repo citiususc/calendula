@@ -18,9 +18,6 @@
 
 package es.usc.citius.servando.calendula.drugdb.download;
 
-/**
- * Created by alvaro.brey.vilas on 09/01/17.
- */
 public enum DBInstallType {
     SETUP, UPDATE
 }

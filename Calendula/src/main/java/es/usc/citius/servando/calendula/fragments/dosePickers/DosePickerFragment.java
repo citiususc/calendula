@@ -33,9 +33,6 @@ import android.view.inputmethod.InputMethodManager;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by joseangel.pineiro on 10/7/15.
- */
 public abstract class DosePickerFragment extends DialogFragment {
 
     private static final String TAG = "DosePickerFragment";

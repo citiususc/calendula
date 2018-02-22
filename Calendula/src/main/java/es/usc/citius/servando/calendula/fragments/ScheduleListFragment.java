@@ -55,9 +55,6 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by joseangel.pineiro on 12/2/13.
- */
 public class ScheduleListFragment extends Fragment {
 
     private static final String TAG = "ScheduleListFragment";

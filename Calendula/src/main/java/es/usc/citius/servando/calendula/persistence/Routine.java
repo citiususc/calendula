@@ -28,9 +28,6 @@ import java.util.List;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimePersister;
 
-/**
- * Created by joseangel.pineiro
- */
 @DatabaseTable(tableName = "Routines")
 public class Routine {
 

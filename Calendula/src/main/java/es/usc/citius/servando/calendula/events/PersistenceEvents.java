@@ -24,9 +24,6 @@ import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 
-/**
- * Created by joseangel.pineiro on 11/4/14.
- */
 public class PersistenceEvents {
 
     public static ModelCreateOrUpdateEvent ROUTINE_EVENT = new ModelCreateOrUpdateEvent(Routine.class);
@@ -35,6 +32,10 @@ public class PersistenceEvents {
     public static ModelCreateOrUpdateEvent ALERT_EVENT = new ModelCreateOrUpdateEvent(PatientAlert.class);
 
     public static class DatabaseUpdateEvent {
+
+    }
+
+    public static class DatabaseInstalledEvent {
 
     }
 

@@ -32,9 +32,6 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionExc
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by alvaro.brey.vilas on 15/11/16.
- */
 
 public class AllergenFacade {
 

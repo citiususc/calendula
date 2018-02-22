@@ -23,9 +23,6 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 
-/**
- * Created by alvaro.brey.vilas on 15/11/16.
- */
 
 public class AllergenConversionUtil {
 

@@ -39,9 +39,6 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.util.IconUtils;
 
-/**
- * Created by alvaro.brey.vilas on 22/11/16.
- */
 
 public class MedicineItem extends AbstractItem<MedicineItem, MedicineItem.MedicineViewHolder> {
 

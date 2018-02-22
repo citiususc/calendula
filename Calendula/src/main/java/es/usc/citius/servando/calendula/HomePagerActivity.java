@@ -67,11 +67,9 @@ import es.usc.citius.servando.calendula.activities.ConfirmActivity;
 import es.usc.citius.servando.calendula.activities.LeftDrawerMgr;
 import es.usc.citius.servando.calendula.activities.MaterialIntroActivity;
 import es.usc.citius.servando.calendula.activities.MedicineInfoActivity;
-import es.usc.citius.servando.calendula.activities.MedicinesSearchActivity;
 import es.usc.citius.servando.calendula.activities.RoutinesActivity;
 import es.usc.citius.servando.calendula.activities.ScheduleCreationActivity;
 import es.usc.citius.servando.calendula.activities.SchedulesHelpActivity;
-import es.usc.citius.servando.calendula.activities.SettingsActivity;
 import es.usc.citius.servando.calendula.adapters.HomePageAdapter;
 import es.usc.citius.servando.calendula.adapters.HomePages;
 import es.usc.citius.servando.calendula.database.DB;
@@ -87,13 +85,14 @@ import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
+import es.usc.citius.servando.calendula.settings.CalendulaSettingsActivity;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Snack;
-import es.usc.citius.servando.calendula.util.medicine.StockUtils;
+import es.usc.citius.servando.calendula.util.stock.StockDisplayUtils;
 import es.usc.citius.servando.calendula.util.view.DisableableAppBarLayoutBehavior;
 import es.usc.citius.servando.calendula.util.view.ExpandableFAB;
 
@@ -336,7 +335,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                StockUtils.showStockRunningOutDialog(HomePagerActivity.this, sro.m, sro.days);
+                                StockDisplayUtils.showStockRunningOutDialog(HomePagerActivity.this, sro.m, sro.days);
                             }
                         }, 1000);
                     } else if (event instanceof PersistenceEvents.DatabaseUpdateEvent) {
@@ -367,8 +366,8 @@ public class HomePagerActivity extends CalendulaActivity implements
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Intent i = new Intent(HomePagerActivity.this, SettingsActivity.class);
-                            i.putExtra(SettingsActivity.EXTRA_SHOW_DB_DIALOG, true);
+                            Intent i = new Intent(HomePagerActivity.this, CalendulaSettingsActivity.class);
+                            i.putExtra(CalendulaSettingsActivity.EXTRA_SHOW_DB_DIALOG, true);
                             startActivity(i);
                             PreferenceUtils.edit().remove(PreferenceKeys.DRUGDB_DB_PROMPT.key()).apply();
                         }

@@ -42,9 +42,6 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.SettingsProperties;
 import es.usc.citius.servando.calendula.util.SettingsPropertiesKeys;
 
-/**
- * Created by alvaro.brey.vilas on 04/01/17.
- */
 
 public class DBVersionManager {
 

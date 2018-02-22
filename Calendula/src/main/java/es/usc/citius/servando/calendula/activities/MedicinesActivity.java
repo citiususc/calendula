@@ -111,11 +111,12 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         switch (item.getItemId()) {
             case R.id.action_remove:
                 //noop
-                return true;
+                break;
             default:
                 finish();
-                return true;
+                break;
         }
+        return true;
     }
 
     @Override

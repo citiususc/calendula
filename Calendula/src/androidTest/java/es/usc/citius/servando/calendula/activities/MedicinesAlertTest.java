@@ -57,9 +57,6 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-/**
- * Created by alvaro.brey.vilas on 06/02/17.
- */
 
 @RunWith(AndroidJUnit4.class)
 public class MedicinesAlertTest {
@@ -72,7 +69,7 @@ public class MedicinesAlertTest {
 
 
     @Before
-    public void setup() throws SQLException {
+    public void setUp() throws SQLException {
         // drop database
         DB.dropAndCreateDatabase();
         // set some vars

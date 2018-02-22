@@ -16,18 +16,16 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.events;
+package es.usc.citius.servando.calendula
+
+import org.mockito.Mockito
 
 /**
- * Created by joseangel.pineiro on 8/27/15.
+ * Returns [Mockito.any] as nullable to avoid [IllegalStateException]
  */
-public class PharmaModeChangeEvent {
+fun <T> kotlinAny(): T = Mockito.any<T>()
 
-    public boolean enabled;
-
-    public PharmaModeChangeEvent(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-
-}
+/**
+ * Returns [Mockito.eq] as nullable to avoid [IllegalStateException]
+ */
+fun <T> kotlinEq(obj: T): T = Mockito.eq<T>(obj)

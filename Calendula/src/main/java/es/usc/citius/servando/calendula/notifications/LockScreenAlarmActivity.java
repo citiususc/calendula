@@ -32,6 +32,7 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -183,12 +184,14 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
         Uri uri = getAlarmUri();
         try {
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
-            mediaPlayer.setVolume(1, 1);
-            mediaPlayer.setScreenOnWhilePlaying(true);
-            mediaPlayer.setDataSource(this, uri);
-            mediaPlayer.prepare();
+            if (!TextUtils.isEmpty(uri.toString())) {
+                mediaPlayer = new MediaPlayer();
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+                mediaPlayer.setVolume(1, 1);
+                mediaPlayer.setScreenOnWhilePlaying(true);
+                mediaPlayer.setDataSource(this, uri);
+                mediaPlayer.prepare();
+            }
         } catch (Exception e) {
             LogUtil.e(TAG, "An error occurred while preparing media player", e);
             finish();
@@ -203,8 +206,8 @@ public class LockScreenAlarmActivity extends AppCompatActivity {
         setupMediaPlayer();
         if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
             mediaPlayer.start();
-            vibrator.vibrate(VIB_PATTERN, 0);
         }
+        vibrator.vibrate(VIB_PATTERN, 0);
     }
 
     /**

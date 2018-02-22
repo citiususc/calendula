@@ -28,9 +28,6 @@ import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
 import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
 
-/**
- * Created by alvaro.brey.vilas on 02/01/17.
- */
 public enum HomePages {
     // attention: order is important!!!
     HOME(DailyAgendaFragment.class.getName(), R.string.app_name, GoogleMaterial.Icon.gmd_home),

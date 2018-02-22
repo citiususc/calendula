@@ -26,9 +26,6 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
-/**
- * Created by alvaro.brey.vilas on 09/01/17.
- */
 
 public class UpdateDatabaseService extends IntentService {
 

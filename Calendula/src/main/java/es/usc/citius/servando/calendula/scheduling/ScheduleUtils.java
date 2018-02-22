@@ -29,9 +29,6 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
-/**
- * Created by joseangel.pineiro on 7/8/14.
- */
 public class ScheduleUtils {
 
     public static String getTimesStr(int items, Context ctx) {

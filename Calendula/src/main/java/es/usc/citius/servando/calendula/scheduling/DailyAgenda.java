@@ -40,9 +40,6 @@ import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by joseangel.pineiro on 10/10/14.
- */
 public class DailyAgenda {
 
     private static final String TAG = "DailyAgenda";
