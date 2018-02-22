@@ -36,9 +36,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.R;
 
-/**
- * Created by alvaro.brey.vilas on 23/11/16.
- */
 
 public class AllergyGroupItem extends AbstractExpandableItem<AllergyGroupItem, AllergyGroupItem.ViewHolder, AllergyGroupSubItem> implements Comparable<AllergyGroupItem> {
 

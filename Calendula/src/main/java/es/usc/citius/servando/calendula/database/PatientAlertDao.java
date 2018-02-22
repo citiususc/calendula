@@ -31,9 +31,6 @@ import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by alvaro.brey on 3/26/15.
- */
 public class PatientAlertDao extends GenericDao<PatientAlert, Long> {
 
     private static final String TAG = "AlertDao";

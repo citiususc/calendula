@@ -32,9 +32,6 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 
-/**
- * Created by joseangel.pineiro on 3/26/15.
- */
 public class PickupInfoDao extends GenericDao<PickupInfo, Long> {
 
     public PickupInfoDao(DatabaseHelper db) {

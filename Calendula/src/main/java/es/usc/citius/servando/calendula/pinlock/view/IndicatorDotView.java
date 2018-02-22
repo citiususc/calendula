@@ -36,9 +36,6 @@ import java.util.List;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.util.IconUtils;
 
-/**
- * Created by alvaro.brey.vilas on 8/3/17.
- */
 
 public class IndicatorDotView extends LinearLayout {
 

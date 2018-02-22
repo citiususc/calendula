@@ -25,9 +25,6 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.ActiveIngredien
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Excipient;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 
-/**
- * Created by alvaro.brey.vilas on 15/11/16.
- */
 
 public class AllergenVO implements Parcelable {
 

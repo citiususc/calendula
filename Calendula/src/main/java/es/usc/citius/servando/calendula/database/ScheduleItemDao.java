@@ -29,9 +29,6 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
-/**
- * Created by joseangel.pineiro on 3/26/15.
- */
 public class ScheduleItemDao extends GenericDao<ScheduleItem, Long> {
 
 

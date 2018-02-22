@@ -33,9 +33,6 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.database.HtmlCacheDAO;
 import es.usc.citius.servando.calendula.persistence.HtmlCacheEntry;
 
-/**
- * Created by alvaro.brey on 31/10/16.
- */
 public class HtmlCacheManager {
 
 

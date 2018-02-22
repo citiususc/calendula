@@ -33,9 +33,6 @@ import java.util.Random;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 
-/**
- * Created by joseangel.pineiro on 10/29/15.
- */
 public class IconUtils {
 
     private static Random random = new Random();

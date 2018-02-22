@@ -40,9 +40,6 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by alvaro.brey.vilas on 22/11/16.
- */
 
 public class ScheduleListItem extends AbstractItem<ScheduleListItem, ScheduleListItem.ScheduleViewHolder> {
 

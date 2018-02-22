@@ -53,15 +53,12 @@ import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.modules.modules.StockModule;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 import es.usc.citius.servando.calendula.util.stock.MedicineScheduleStockProvider;
 import es.usc.citius.servando.calendula.util.stock.StockCalculator;
 import es.usc.citius.servando.calendula.util.stock.StockDisplayUtils;
-import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
 
 
-/**
- * Created by joseangel.pineiro
- */
 public class MedInfoFragment extends Fragment {
 
     @BindView(R.id.ic_prospect)

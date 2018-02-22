@@ -28,9 +28,6 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.ConfirmSchedulesActivity;
 
 
-/**
- * Created by joseangel.pineiro on 12/11/13.
- */
 public class ScheduleConfirmationStartFragment extends Fragment {
 
     private static final String TAG = "ScheConfStartFragment";

@@ -29,10 +29,6 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 
 import static java.util.Collections.addAll;
 
-/**
- * Created by alvaro.brey.vilas on 30/11/16.
- */
-
 public class ModuleManager {
 
     private static final String TAG = "ModuleManager";

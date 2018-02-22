@@ -29,9 +29,6 @@ import es.usc.citius.servando.calendula.util.stock.MedicineScheduleStockProvider
 import es.usc.citius.servando.calendula.util.stock.StockCalculator
 import org.joda.time.LocalDate
 
-/**
- * Created by joseangel.pineiro on 1/23/18.
- */
 
 object StockAlertHandler {
 

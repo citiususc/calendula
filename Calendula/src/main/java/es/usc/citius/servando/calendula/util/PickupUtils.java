@@ -38,9 +38,6 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 
-/**
- * Created by joseangel.pineiro on 4/07/16.
- */
 public class PickupUtils {
 
     private static final String TAG = "PickupUtils";

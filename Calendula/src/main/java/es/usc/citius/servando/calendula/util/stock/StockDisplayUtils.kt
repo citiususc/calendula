@@ -29,9 +29,6 @@ import es.usc.citius.servando.calendula.persistence.Medicine
 import es.usc.citius.servando.calendula.util.IconUtils
 import es.usc.citius.servando.calendula.util.LogUtil
 
-/**
- * Created by joseangel.pineiro on 17/11/16.
- */
 object StockDisplayUtils {
 
 

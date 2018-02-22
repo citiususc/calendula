@@ -25,9 +25,6 @@ import java.util.List;
 
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by joseangel.pineiro on 10/9/14.
- */
 public class Testing {
 
     private static final String TAG = "Testing";

@@ -24,9 +24,6 @@ import android.net.Uri
 import es.usc.citius.servando.calendula.R
 import java.lang.ref.WeakReference
 
-/**
- * Created by alvaro.brey.vilas on 5/02/18.
- */
 
 class RingtoneNameResolver(context: Context) {
 

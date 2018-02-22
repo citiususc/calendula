@@ -28,9 +28,6 @@ import org.joda.time.format.DateTimeFormat;
 
 import java.sql.SQLException;
 
-/**
- * Created by joseangel.pineiro on 10/9/14.
- */
 public class LocalTimePersister extends BaseDataType {
 
     private static final LocalTimePersister singleton = new LocalTimePersister();

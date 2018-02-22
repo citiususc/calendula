@@ -28,9 +28,6 @@ import java.util.Comparator;
 import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalDatePersister;
 
 
-/**
- * Created by joseangel.pineiro on 4/9/15.
- */
 @DatabaseTable(tableName = "Pickups")
 public class PickupInfo {
 

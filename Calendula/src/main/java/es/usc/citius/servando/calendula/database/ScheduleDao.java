@@ -38,9 +38,6 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.alerts.StockAlertHandler;
 
-/**
- * Created by joseangel.pineiro on 3/26/15.
- */
 public class ScheduleDao extends GenericDao<Schedule, Long> {
 
     private static final String TAG = "ScheduleDao";

@@ -88,9 +88,6 @@ import es.usc.citius.servando.calendula.util.stock.MedicineScheduleStockProvider
 import es.usc.citius.servando.calendula.util.stock.StockCalculator;
 import es.usc.citius.servando.calendula.util.stock.StockDisplayUtils;
 
-/**
- * Created by joseangel.pineiro on 12/4/13.
- */
 public class MedicineCreateOrEditFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener,
         NumberPickerDialogFragment.NumberPickerDialogHandlerV2 {
 

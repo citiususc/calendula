@@ -26,8 +26,6 @@ import java.util.Iterator;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
- * Created by alvaro.brey.vilas on 8/3/17.
- * <p>
  * Handles PIN input with individual insertion/deletion of numbers.
  */
 public class PinInputStateManager {

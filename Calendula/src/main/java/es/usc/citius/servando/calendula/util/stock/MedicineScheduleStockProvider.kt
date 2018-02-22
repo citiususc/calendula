@@ -23,9 +23,6 @@ import es.usc.citius.servando.calendula.persistence.Medicine
 import es.usc.citius.servando.calendula.persistence.Schedule
 import org.joda.time.LocalDate
 
-/**
- * Created by alvaro.brey.vilas on 21/02/18.
- */
 class MedicineScheduleStockProvider(val m: Medicine) : StockForDayProvider {
 
     val schedules: List<Schedule>? by lazy { DB.schedules().findByMedicine(m) }

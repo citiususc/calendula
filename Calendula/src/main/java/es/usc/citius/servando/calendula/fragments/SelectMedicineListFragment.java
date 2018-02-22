@@ -51,9 +51,6 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 import es.usc.citius.servando.calendula.util.Snack;
 
-/**
- * Created by joseangel.pineiro on 12/2/13.
- */
 public class SelectMedicineListFragment extends Fragment {
 
 

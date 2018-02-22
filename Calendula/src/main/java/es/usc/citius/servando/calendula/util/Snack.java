@@ -26,9 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-/**
- * Created by joseangel.pineiro on 2/17/15.
- */
 public class Snack {
 
 

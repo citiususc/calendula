@@ -40,9 +40,6 @@ import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ZipUtil;
 
-/**
- * Created by joseangel.pineiro on 9/8/15.
- */
 public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
 
     public static final String PROSPECT_URL = "https://www.aemps.gob.es/cima/dochtml/p/#ID#/Prospecto_#ID#.html";

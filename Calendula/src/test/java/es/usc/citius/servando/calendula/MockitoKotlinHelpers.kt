@@ -21,11 +21,6 @@ package es.usc.citius.servando.calendula
 import org.mockito.Mockito
 
 /**
- * Created by alvaro.brey.vilas on 6/02/18.
- */
-
-
-/**
  * Returns [Mockito.any] as nullable to avoid [IllegalStateException]
  */
 fun <T> kotlinAny(): T = Mockito.any<T>()

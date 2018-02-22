@@ -26,9 +26,6 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.DrivingCautionAlert;
 
-/**
- * Created by joseangel.pineiro on 1/23/18.
- */
 
 public class DrivingAlertHandler {
 

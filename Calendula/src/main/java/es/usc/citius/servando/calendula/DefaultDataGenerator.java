@@ -30,9 +30,6 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by joseangel.pineiro on 12/2/13.
- */
 public class DefaultDataGenerator {
 
     private static final String TAG = "DefaultDataGenerator";

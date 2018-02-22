@@ -28,7 +28,6 @@ import es.usc.citius.servando.calendula.R;
  * <p>
  * To access the key string use {@link #key()}.
  * <p>
- * Created by alvaro.brey.vilas on 05/01/17.
  */
 public enum PreferenceKeys {
 

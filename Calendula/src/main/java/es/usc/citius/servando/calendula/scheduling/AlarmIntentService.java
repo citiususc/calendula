@@ -24,9 +24,6 @@ import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.WakeIntentService;
 
-/**
- * Created by joseangel.pineiro on 11/20/15.
- */
 public class AlarmIntentService extends WakeIntentService {
 
     private static final String TAG = "AlarmIntentService";

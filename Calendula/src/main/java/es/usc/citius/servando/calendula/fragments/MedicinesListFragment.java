@@ -68,9 +68,6 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.medicine.MedicineSortUtil.MedSortType;
 import es.usc.citius.servando.calendula.util.view.CollapseExpandAnimator;
 
-/**
- * Created by joseangel.pineiro on 12/2/13.
- */
 public class MedicinesListFragment extends Fragment {
 
     private static final String TAG = "MedicinesListFragment";

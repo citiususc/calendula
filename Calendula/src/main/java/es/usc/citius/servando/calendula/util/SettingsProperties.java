@@ -26,9 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-/**
- * Created by joseangel.pineiro on 7/3/14.
- */
 public class SettingsProperties {
 
     private static final String TAG = "SettingsProperties";

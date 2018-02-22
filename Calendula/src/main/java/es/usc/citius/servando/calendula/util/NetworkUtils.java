@@ -22,9 +22,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-/**
- * Created by alvaro.brey.vilas on 30/01/17.
- */
 
 public class NetworkUtils {
 

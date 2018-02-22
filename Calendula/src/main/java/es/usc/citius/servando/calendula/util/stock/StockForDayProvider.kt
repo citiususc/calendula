@@ -20,9 +20,6 @@ package es.usc.citius.servando.calendula.util.stock
 
 import org.joda.time.LocalDate
 
-/**
- * Created by alvaro.brey.vilas on 21/02/18.
- */
 interface StockForDayProvider {
     fun stockNeededForDay(date: LocalDate): Float
 }

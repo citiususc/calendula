@@ -18,9 +18,6 @@
 
 package es.usc.citius.servando.calendula.mvp
 
-/**
- * Created by alvaro.brey.vilas on 5/02/18.
- */
 interface BaseView<T : BasePresenter> {
     var presenter: T
 }

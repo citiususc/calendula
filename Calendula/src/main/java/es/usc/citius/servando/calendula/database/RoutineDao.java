@@ -38,9 +38,6 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by joseangel.pineiro on 3/26/15.
- */
 public class RoutineDao extends GenericDao<Routine, Long> {
 
     private static final String TAG = "RoutineDao";

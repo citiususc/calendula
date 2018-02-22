@@ -28,9 +28,6 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
-/**
- * Created by alvaro.brey.vilas on 7/02/18.
- */
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class)
 class RingtoneNameResolverTest {
