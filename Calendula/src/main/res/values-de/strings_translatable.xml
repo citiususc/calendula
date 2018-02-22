@@ -494,4 +494,12 @@ Wollen Sie nun die neue Datenbank installieren?
 
 "</string>
 <string name="pref_insistent_notification_tone">"Hartnäckiger Benachrichtigungston"</string>
+<string name="stock_enough_for_weeks_days">"Genug für %1$d Wochen und %2$d Tage mit den aktuellen Einnahmeplänen"</string>
+<string name="stock_running_out_dialog_message">"Es sind noch %1$d %2$s von %3$s übrig und der Vorrat wird mit den aktuellen Einnahmeplänen in %4$d Tagen erschöpft sein."</string>
+<string name="stock_running_out_dialog_title">"Vorrat für %1$s geht zur Neige"</string>
+<string name="manage_stock">"Vorrat verwalten"</string>
+<string name="message_generic_error">"Oh! Da ist ein Fehler aufgetreten."</string>
+<string name="ringtone_none">"Keiner"</string>
+<string name="patient_add">"Neuer Patient"</string>
+<string name="db_download_and_setup">"Herunterladen und installieren"</string>
 </resources>
