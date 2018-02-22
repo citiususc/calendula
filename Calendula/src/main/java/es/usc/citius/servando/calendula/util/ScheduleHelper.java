@@ -32,9 +32,6 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
-/**
- * Created by joseangel.pineiro on 12/12/13.
- */
 public class ScheduleHelper {
 
     private static final String TAG = "ScheduleHelper";

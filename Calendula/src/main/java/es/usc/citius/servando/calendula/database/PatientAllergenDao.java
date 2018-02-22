@@ -28,9 +28,6 @@ import java.util.List;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 
-/**
- * Created by alvaro.brey on 3/26/15.
- */
 public class PatientAllergenDao extends GenericDao<PatientAllergen, Long> {
 
     private static final String TAG = "HtmlCacheDAO";

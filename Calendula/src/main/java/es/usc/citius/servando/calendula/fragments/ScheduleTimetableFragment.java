@@ -87,9 +87,6 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 import es.usc.citius.servando.calendula.util.Snack;
 
-/**
- * Created by joseangel.pineiro on 12/11/13.
- */
 public class ScheduleTimetableFragment extends Fragment
         implements NumberPickerDialogFragment.NumberPickerDialogHandlerV2,
         RecurrencePickerDialogFragment.OnRecurrenceSetListener, RadialTimePickerDialogFragment.OnTimeSetListener {

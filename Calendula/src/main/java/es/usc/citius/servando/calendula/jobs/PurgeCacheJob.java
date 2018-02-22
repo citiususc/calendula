@@ -27,9 +27,6 @@ import org.joda.time.Duration;
 import es.usc.citius.servando.calendula.util.HtmlCacheManager;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by alvaro.brey.vilas on 17/11/16.
- */
 
 public class PurgeCacheJob extends CalendulaJob {
 

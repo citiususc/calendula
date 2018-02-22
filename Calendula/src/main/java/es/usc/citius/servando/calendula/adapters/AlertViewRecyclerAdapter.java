@@ -38,9 +38,6 @@ import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by joseangel.pineiro on 11/6/15.
- */
 public class AlertViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 

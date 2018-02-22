@@ -50,9 +50,6 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.SettingsProperties;
 import es.usc.citius.servando.calendula.util.SettingsPropertiesKeys;
 
-/**
- * Created by alvaro.brey.vilas on 21/03/17.
- */
 public class TestDataModule extends CalendulaModule {
 
     public static final String ID = "CALENDULA_TEST_DATA_MODULE";

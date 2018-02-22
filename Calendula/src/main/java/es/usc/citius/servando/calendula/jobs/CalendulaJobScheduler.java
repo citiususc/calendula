@@ -22,9 +22,6 @@ import com.evernote.android.job.JobManager;
 
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by alvaro.brey.vilas on 05/01/17.
- */
 
 public class CalendulaJobScheduler {
 

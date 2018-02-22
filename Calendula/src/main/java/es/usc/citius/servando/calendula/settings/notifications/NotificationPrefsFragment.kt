@@ -33,8 +33,6 @@ import es.usc.citius.servando.calendula.util.PreferenceKeys
 
 /**
  * Instantiated via reflection, don't delete!
- *
- * Created by alvaro.brey.vilas on 1/02/18.
  */
 class NotificationPrefsFragment : CalendulaPrefsFragment(), NotificationPrefsContract.View {
 

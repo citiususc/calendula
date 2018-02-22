@@ -48,9 +48,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-/**
- * Created by joseangel.pineiro
- */
 public abstract class GenericDao<T, I> implements Dao<T, I> {
 
     protected Dao<T, I> dao;

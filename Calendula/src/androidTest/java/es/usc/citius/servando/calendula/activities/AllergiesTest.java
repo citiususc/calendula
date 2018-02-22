@@ -52,10 +52,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by alvaro.brey.vilas on 06/02/17.
- */
-
 @RunWith(AndroidJUnit4.class)
 public class AllergiesTest {
 

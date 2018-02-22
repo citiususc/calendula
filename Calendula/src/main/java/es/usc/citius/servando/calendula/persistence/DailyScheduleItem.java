@@ -30,9 +30,6 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalDatePersister;
 import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimePersister;
 
-/**
- * Created by castrelo
- */
 @DatabaseTable(tableName = "DailyScheduleItems")
 public class DailyScheduleItem {
 

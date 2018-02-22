@@ -31,9 +31,6 @@ import es.usc.citius.servando.calendula.settings.database.DatabasePrefsFragment
 import es.usc.citius.servando.calendula.util.LogUtil
 
 
-/**
- * Created by alvaro.brey.vilas on 1/02/18.
- */
 class CalendulaSettingsActivity : CalendulaActivity(),
     PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 

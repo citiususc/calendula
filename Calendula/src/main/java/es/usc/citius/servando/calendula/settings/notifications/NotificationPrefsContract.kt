@@ -23,9 +23,6 @@ import android.net.Uri
 import es.usc.citius.servando.calendula.mvp.BasePresenter
 import es.usc.citius.servando.calendula.mvp.BaseView
 
-/**
- * Created by alvaro.brey.vilas on 5/02/18.
- */
 interface NotificationPrefsContract {
 
     interface View : BaseView<Presenter> {

@@ -22,9 +22,6 @@ import android.app.Activity;
 import android.support.test.espresso.Espresso;
 import android.view.WindowManager;
 
-/**
- * Created by joseangel.pineiro on 3/31/15.
- */
 public class TestUtils {
 
     public static void closeKeyboard() {

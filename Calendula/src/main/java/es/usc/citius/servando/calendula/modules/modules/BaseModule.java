@@ -50,9 +50,6 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.PresentationsTypeface;
 import es.usc.citius.servando.calendula.util.SettingsProperties;
 
-/**
- * Created by alvaro.brey.vilas on 30/11/16.
- */
 
 public class BaseModule extends CalendulaModule {
 

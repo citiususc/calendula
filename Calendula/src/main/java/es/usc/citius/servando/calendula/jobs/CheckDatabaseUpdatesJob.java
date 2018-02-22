@@ -38,9 +38,6 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
-/**
- * Created by alvaro.brey.vilas on 17/11/16.
- */
 public class CheckDatabaseUpdatesJob extends CalendulaJob {
 
     static final String TAG = "CheckDatabaseUpdJob";

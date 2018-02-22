@@ -78,18 +78,16 @@ import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.modules.modules.StockModule;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
-import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.Strings;
-import es.usc.citius.servando.calendula.util.medicine.StockUtils;
+import es.usc.citius.servando.calendula.util.stock.MedicineScheduleStockProvider;
+import es.usc.citius.servando.calendula.util.stock.StockCalculator;
+import es.usc.citius.servando.calendula.util.stock.StockDisplayUtils;
 
-/**
- * Created by joseangel.pineiro on 12/4/13.
- */
 public class MedicineCreateOrEditFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener,
         NumberPickerDialogFragment.NumberPickerDialogHandlerV2 {
 
@@ -808,13 +806,9 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         protected Boolean doInBackground(Void... params) {
             if (stock >= 0 && mMedicine != null) {
                 LogUtil.d(TAG, "updateStockText: medicina ok");
-                List<Schedule> schedules = DB.schedules().findByMedicine(mMedicine);
-                if (!schedules.isEmpty()) {
-                    LogUtil.d(TAG, "updateStockText: pautas " + schedules.size());
-                    LocalDate estimatedEnd = StockUtils.getEstimatedStockEnd(schedules, stock);
-                    text = StockUtils.getReadableStockDuration(estimatedEnd, getContext());
-                    return true;
-                }
+                final StockCalculator.StockEnd stockEnd = StockCalculator.calculateStockEnd(LocalDate.now(), new MedicineScheduleStockProvider(mMedicine), stock);
+                text = StockDisplayUtils.getReadableStockDuration(stockEnd, getContext());
+                return true;
             }
             return false;
         }

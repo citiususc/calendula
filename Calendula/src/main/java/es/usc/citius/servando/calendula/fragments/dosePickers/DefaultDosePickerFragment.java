@@ -31,9 +31,6 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 
 
-/**
- * Created by joseangel.pineiro on 12/4/13.
- */
 public class DefaultDosePickerFragment extends DosePickerFragment {
 
     TextView unitsText;

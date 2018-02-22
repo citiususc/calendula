@@ -22,9 +22,6 @@ import android.content.Context;
 
 import es.usc.citius.servando.calendula.modules.CalendulaModule;
 
-/**
- * Created by alvaro.brey.vilas on 12/12/16.
- */
 
 public class StockModule extends CalendulaModule {
 

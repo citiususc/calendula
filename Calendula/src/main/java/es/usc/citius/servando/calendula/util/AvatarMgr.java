@@ -29,9 +29,6 @@ import java.util.Map;
 
 import es.usc.citius.servando.calendula.R;
 
-/**
- * Created by joseangel.pineiro on 10/26/15.
- */
 public class AvatarMgr {
 
 

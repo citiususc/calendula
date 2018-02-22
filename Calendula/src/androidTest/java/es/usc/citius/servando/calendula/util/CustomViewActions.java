@@ -24,9 +24,6 @@ import android.view.View;
 
 import org.hamcrest.Matcher;
 
-/**
- * Created by alvaro.brey.vilas on 06/02/17.
- */
 
 public class CustomViewActions {
 

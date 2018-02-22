@@ -28,9 +28,6 @@ import es.usc.citius.servando.calendula.util.LogUtil
 import es.usc.citius.servando.calendula.util.PreferenceKeys
 import es.usc.citius.servando.calendula.util.PreferenceUtils
 
-/**
- * Created by alvaro.brey.vilas on 5/02/18.
- */
 class DatabasePrefsPresenter(
     private val view: DatabasePrefsContract.View,
     private var currentDbId: String

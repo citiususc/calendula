@@ -20,9 +20,6 @@ package es.usc.citius.servando.calendula.events;
 
 import es.usc.citius.servando.calendula.persistence.Medicine;
 
-/**
- * Created by joseangel.pineiro on 8/27/15.
- */
 public class StockRunningOutEvent {
 
     public Medicine m;

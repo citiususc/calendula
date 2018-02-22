@@ -32,9 +32,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by joseangel.pineiro on 4/16/15.
- */
 public class RepetitionRule {
 
     public static String DEFAULT_ICAL_VALUE = "RRULE:FREQ=DAILY;";

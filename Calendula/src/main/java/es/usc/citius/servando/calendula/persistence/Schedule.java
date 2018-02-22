@@ -46,9 +46,6 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 
 
-/**
- * Created by joseangel.pineiro
- */
 @DatabaseTable(tableName = "Schedules")
 public class Schedule {
 

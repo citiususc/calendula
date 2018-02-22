@@ -45,9 +45,6 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.SettingsProperties;
 import es.usc.citius.servando.calendula.util.SettingsPropertiesKeys;
 
-/**
- * Created by joseangel.pineiro on 9/2/15.
- */
 public class DownloadDatabaseHelper {
 
     private static final String TAG = "DownloadDatabaseHelper";

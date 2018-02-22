@@ -39,7 +39,9 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.util.IconUtils;
-import es.usc.citius.servando.calendula.util.medicine.StockUtils;
+import es.usc.citius.servando.calendula.util.stock.MedicineScheduleStockProvider;
+import es.usc.citius.servando.calendula.util.stock.StockCalculator;
+import es.usc.citius.servando.calendula.util.stock.StockDisplayUtils;
 
 /**
  * Represents an stock alert for an specific medicine
@@ -130,7 +132,8 @@ public class StockRunningOutAlert extends PatientAlert<StockRunningOutAlert, Sto
             final Context ctx = viewHolder.itemView.getContext();
             if (stock > 0) {
                 viewHolder.title.setText(R.string.stock_running_out);
-                viewHolder.duration.setText(ctx.getString(R.string.stock_enough_for_days, StockUtils.getEstimatedStockDays(m)));
+                final StockCalculator.StockEnd stockEnd = StockCalculator.calculateStockEnd(LocalDate.now(), new MedicineScheduleStockProvider(m), m.getStock());
+                viewHolder.duration.setText(StockDisplayUtils.getReadableStockDuration(stockEnd, ctx));
                 viewHolder.description.setText(ctx.getString(R.string.stock_remaining_msg, stock, m.getPresentation().units(c.getResources(), stock)));
             } else {
                 viewHolder.title.setText(R.string.stock_depleted);

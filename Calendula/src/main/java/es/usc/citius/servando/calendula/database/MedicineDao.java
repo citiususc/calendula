@@ -40,9 +40,6 @@ import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 import es.usc.citius.servando.calendula.util.alerts.DrivingAlertHandler;
 import es.usc.citius.servando.calendula.util.alerts.StockAlertHandler;
 
-/**
- * Created by joseangel.pineiro
- */
 public class MedicineDao extends GenericDao<Medicine, Long> {
 
 

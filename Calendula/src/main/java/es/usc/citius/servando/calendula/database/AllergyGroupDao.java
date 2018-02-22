@@ -27,9 +27,6 @@ import java.util.List;
 import es.usc.citius.servando.calendula.persistence.AllergyGroup;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by alvaro.brey on 3/26/15.
- */
 public class AllergyGroupDao extends GenericDao<AllergyGroup, Long> {
 
     private static final String TAG = "AllergyGroupDao";

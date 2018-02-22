@@ -30,9 +30,6 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 
-/**
- * Created by joseangel.pineiro on 11/15/13.
- */
 public class HomePageAdapter extends FragmentPagerAdapter {
 
     private static final String TAG = "HomePageAdapter";

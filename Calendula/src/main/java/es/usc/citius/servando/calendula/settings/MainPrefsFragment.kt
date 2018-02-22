@@ -24,9 +24,6 @@ import es.usc.citius.servando.calendula.CalendulaActivity
 import es.usc.citius.servando.calendula.R
 import es.usc.citius.servando.calendula.util.LogUtil
 
-/**
- * Created by alvaro.brey.vilas on 1/02/18.
- */
 class MainPrefsFragment : PreferenceFragmentCompat() {
 
     companion object {

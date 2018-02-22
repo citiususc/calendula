@@ -26,9 +26,6 @@ import es.usc.citius.servando.calendula.fragments.AlertListFragment;
 import es.usc.citius.servando.calendula.fragments.MedInfoFragment;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 
-/**
- * Created by joseangel.pineiro on 11/15/13.
- */
 public class MedInfoPageAdapter extends FragmentPagerAdapter {
 
     Medicine m;

@@ -61,9 +61,6 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.view.ParallaxImageView;
 
-/**
- * Created by joseangel.pineiro on 11/6/15.
- */
 public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "DailyAgendaAdapter";

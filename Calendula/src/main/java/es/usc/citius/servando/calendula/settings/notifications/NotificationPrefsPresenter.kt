@@ -29,9 +29,6 @@ import es.usc.citius.servando.calendula.util.PreferenceKeys
 import es.usc.citius.servando.calendula.util.PreferenceUtils
 
 
-/**
- * Created by alvaro.brey.vilas on 5/02/18.
- */
 class NotificationPrefsPresenter(
     val view: NotificationPrefsContract.View,
     private val ringtoneNameResolver: RingtoneNameResolver

@@ -56,9 +56,6 @@ import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by joseangel.pineiro on 12/2/13.
- */
 public class RoutinesListFragment extends Fragment {
 
 

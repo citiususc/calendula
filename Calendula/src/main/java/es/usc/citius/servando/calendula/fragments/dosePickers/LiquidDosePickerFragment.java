@@ -26,9 +26,6 @@ import android.widget.TextView;
 import es.usc.citius.servando.calendula.R;
 
 
-/**
- * Created by joseangel.pineiro on 12/4/13.
- */
 public class LiquidDosePickerFragment extends DosePickerFragment {
 
     private static final int MAX_DOSE = 50;

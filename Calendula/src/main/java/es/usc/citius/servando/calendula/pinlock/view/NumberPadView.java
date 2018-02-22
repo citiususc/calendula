@@ -33,9 +33,6 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by alvaro.brey.vilas on 8/3/17.
- */
 
 public class NumberPadView extends FrameLayout {
 

@@ -28,9 +28,6 @@ import es.usc.citius.servando.calendula.pinlock.fingerprint.FingerprintHelper
 import es.usc.citius.servando.calendula.util.LogUtil
 
 
-/**
- * Created by alvaro.brey.vilas on 5/02/18.
- */
 class PrivacyPrefsPresenter(val view: PrivacyPrefsContract.View, val fpHelper: FingerprintHelper) :
     PrivacyPrefsContract.Presenter {
 

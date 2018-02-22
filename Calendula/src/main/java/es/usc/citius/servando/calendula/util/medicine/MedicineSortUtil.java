@@ -30,9 +30,6 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 
-/**
- * Created by alvaro.brey.vilas on 21/02/17.
- */
 public class MedicineSortUtil {
 
     public enum MedSortType {

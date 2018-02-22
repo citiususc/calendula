@@ -25,8 +25,6 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Utility class to handle unlock state (for PIN lock)
- * <p>
- * Created by alvaro.brey.vilas on 5/05/17.
  */
 public class UnlockStateManager {
 

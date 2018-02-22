@@ -29,9 +29,6 @@ import com.mikepenz.iconics.typeface.IIcon;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.util.PresentationsTypeface;
 
-/**
- * Created by joseangel.pineiro on 12/10/13.
- */
 public enum Presentation {
 
     INJECTIONS(R.drawable.icp_injection, R.string.injections, R.plurals.injections_units),

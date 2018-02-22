@@ -25,9 +25,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-/**
- * Created by alvaro.brey.vilas on 06/02/17.
- */
 
 public class CustomViewMatchers {
 

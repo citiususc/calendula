@@ -21,9 +21,6 @@ package es.usc.citius.servando.calendula.allergies;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by alvaro.brey.vilas on 9/12/16.
- */
 
 public class AllergenGroupWrapper implements Parcelable {
 

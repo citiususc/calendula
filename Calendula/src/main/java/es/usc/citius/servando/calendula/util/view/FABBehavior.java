@@ -29,9 +29,6 @@ import android.view.ViewGroup;
 
 import java.lang.reflect.Method;
 
-/**
- * Created by joseangel.pineiro on 11/12/15.
- */
 public class FABBehavior extends FloatingActionButton.Behavior {
 
     public FABBehavior() {

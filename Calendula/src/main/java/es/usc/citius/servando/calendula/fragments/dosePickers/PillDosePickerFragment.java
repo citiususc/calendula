@@ -33,9 +33,6 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
 
-/**
- * Created by joseangel.pineiro on 12/4/13.
- */
 public class PillDosePickerFragment extends DosePickerFragment {
 
     public static final int MAX_DISPLAY_PILLS = 3;

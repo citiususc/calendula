@@ -42,9 +42,6 @@ import es.usc.citius.servando.calendula.util.CloseableUtil;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.debug.StethoHelper;
 
-/**
- * Created by castrelo on 4/10/14.
- */
 public class CalendulaApp extends MultiDexApplication {
 
     // INTENTS

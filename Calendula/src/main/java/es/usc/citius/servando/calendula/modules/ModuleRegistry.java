@@ -29,9 +29,6 @@ import es.usc.citius.servando.calendula.modules.modules.StockModule;
 import es.usc.citius.servando.calendula.modules.modules.TestDataModule;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by alvaro.brey.vilas on 30/11/16.
- */
 
 public class ModuleRegistry {
 

@@ -48,9 +48,6 @@ import java.io.InputStream;
 
 import es.usc.citius.servando.calendula.R;
 
-/**
- * Created by joseangel.pineiro on 11/20/13.
- */
 public class ScreenUtils {
 
     private static final String TAG = "ScreenUtils";

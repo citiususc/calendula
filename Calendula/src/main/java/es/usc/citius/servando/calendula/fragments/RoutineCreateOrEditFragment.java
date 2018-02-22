@@ -49,9 +49,6 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.Snack;
 
 
-/**
- * Created by joseangel.pineiro
- */
 public class RoutineCreateOrEditFragment extends DialogFragment implements RadialTimePickerDialogFragment.OnTimeSetListener, TimePickerDialogFragment.TimePickerDialogHandler {
 
     private static final String TAG = "RoutineCoEFragment";

@@ -42,9 +42,6 @@ import es.usc.citius.servando.calendula.util.PermissionUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 
-/**
- * Created by joseangel.pineiro on 10/30/15.
- */
 @SuppressLint("Registered")
 public abstract class CalendulaActivity extends AppCompatActivity {
 

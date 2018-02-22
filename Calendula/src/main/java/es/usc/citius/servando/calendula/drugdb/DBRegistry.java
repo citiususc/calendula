@@ -45,9 +45,6 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
-/**
- * Created by joseangel.pineiro on 9/4/15.
- */
 public class DBRegistry {
 
     private static final String TAG = "DBRegistry";

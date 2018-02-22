@@ -29,9 +29,6 @@ import org.joda.time.LocalDate;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by joseangel.pineiro on 7/9/14.
- */
 public class PickupReminderMgr {
 
 

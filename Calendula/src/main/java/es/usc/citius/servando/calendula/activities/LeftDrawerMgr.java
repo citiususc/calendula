@@ -56,9 +56,6 @@ import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 
-/**
- * Created by joseangel.pineiro on 10/28/15.
- */
 public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountHeader.OnAccountHeaderListener {
 
     public static final int HOME = 0;

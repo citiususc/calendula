@@ -21,9 +21,6 @@ package es.usc.citius.servando.calendula.util;
 import java.io.Closeable;
 import java.io.IOException;
 
-/**
- * Created by alvaro.brey.vilas on 19/02/18.
- */
 
 public class CloseableUtil {
 

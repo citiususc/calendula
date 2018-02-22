@@ -38,9 +38,6 @@ import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by joseangel.pineiro on 9/8/15.
- */
 public class USPrescriptionDBMgr extends PrescriptionDBMgr {
 
     private static final String TAG = "USPrescriptionDBMgr";
