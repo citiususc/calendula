@@ -35,6 +35,8 @@ interface DatabasePrefsContract {
         fun showDatabaseUpdateNotAvailable()
         fun getIntent(): Intent
         fun openDatabaseSelection()
+        fun askForDownloadPermission(dbId: String)
+        fun hasDownloadPermission(): Boolean
     }
 
     interface Presenter : BasePresenter {
@@ -42,6 +44,7 @@ interface DatabasePrefsContract {
         fun selectNewDb(dbId: String): Boolean
         fun onDbDownloadChoiceResult(result: Boolean)
         fun checkDatabaseUpdate(ctx: Context)
+        fun onDownloadPermissionGranted(dbId: String)
     }
 
 }

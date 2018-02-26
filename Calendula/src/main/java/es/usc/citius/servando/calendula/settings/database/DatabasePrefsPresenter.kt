@@ -35,6 +35,7 @@ class DatabasePrefsPresenter(
     DatabasePrefsContract.Presenter {
 
 
+
     companion object {
         private val TAG = "DatabasePrefsPresenter"
     }
@@ -42,6 +43,7 @@ class DatabasePrefsPresenter(
     private val noneId: String
     private val settingUpId: String
     private val noneDisplay: String
+    private var selectIdTemp: String? = null
 
 
     init {
@@ -61,6 +63,7 @@ class DatabasePrefsPresenter(
                 false
             )) {
             view.openDatabaseSelection()
+            view.getIntent().removeExtra(CalendulaSettingsActivity.EXTRA_SHOW_DB_DIALOG)
         }
     }
 
@@ -91,9 +94,12 @@ class DatabasePrefsPresenter(
         LogUtil.d(TAG, "selectNewDb() called with dbId=$dbId")
         if (dbId != currentDbId) {
             // if there is no actual update just return true and skip checks
-
-            if (dbId != noneId && noneId != settingUpId) {
-                view.showDatabaseDownloadChoice(dbId)
+            if (dbId != noneId && dbId != settingUpId) {
+                if (!view.hasDownloadPermission()) {
+                    view.askForDownloadPermission(dbId)
+                } else {
+                    view.showDatabaseDownloadChoice(dbId)
+                }
                 return false
             } else if (dbId == noneId) {
                 // if the db ID is "none", delete the current DB and let the pref update
@@ -115,6 +121,11 @@ class DatabasePrefsPresenter(
 
     override fun checkDatabaseUpdate(ctx: Context) {
         CheckDbUpdateTask(this).execute(ctx)
+    }
+
+
+    override fun onDownloadPermissionGranted(dbId: String) {
+        selectNewDb(dbId)
     }
 
     private fun notifyNoUpdate() {

@@ -20,15 +20,19 @@ package es.usc.citius.servando.calendula.settings.database
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.annotation.StringRes
+import android.support.v4.app.ActivityCompat
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
 import android.widget.Toast
+import es.usc.citius.servando.calendula.CalendulaActivity
 import es.usc.citius.servando.calendula.R
 import es.usc.citius.servando.calendula.drugdb.download.DownloadDatabaseHelper
 import es.usc.citius.servando.calendula.settings.CalendulaPrefsFragment
 import es.usc.citius.servando.calendula.util.LogUtil
+import es.usc.citius.servando.calendula.util.PermissionUtils
 import es.usc.citius.servando.calendula.util.PreferenceKeys
 import es.usc.citius.servando.calendula.util.PreferenceUtils
 
@@ -40,6 +44,7 @@ class DatabasePrefsFragment : CalendulaPrefsFragment(), DatabasePrefsContract.Vi
 
     companion object {
         private const val TAG = "DatabasePrefsFragment"
+        private const val REQUEST_DL_PERMISSION = 938
     }
 
     override lateinit var presenter: DatabasePrefsContract.Presenter
@@ -132,6 +137,38 @@ class DatabasePrefsFragment : CalendulaPrefsFragment(), DatabasePrefsContract.Vi
 
     override fun openDatabaseSelection() {
         preferenceManager.showDialog(dbPref)
+    }
+
+    override fun askForDownloadPermission(dbId: String) {
+        if (!hasDownloadPermission()) {
+            (activity as CalendulaActivity).requestPermission(object :
+                PermissionUtils.PermissionRequest {
+                override fun reqCode(): Int = REQUEST_DL_PERMISSION
+
+                override fun permissions(): Array<String> =
+                    arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+                override fun onPermissionGranted() {
+                    LogUtil.d(TAG, "onPermissionGranted() called")
+                    presenter.onDownloadPermissionGranted(dbId)
+                }
+
+                override fun onPermissionDenied() {
+                    LogUtil.d(TAG, "onPermissionDenied: permission denied")
+                }
+            })
+        } else {
+            throw IllegalStateException("Permissions already granted!")
+        }
+    }
+
+    override fun hasDownloadPermission(): Boolean {
+        val hasPermission = ActivityCompat.checkSelfPermission(
+            context,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+        LogUtil.d(TAG, "hasDownloadPermission: result is $hasPermission")
+        return hasPermission
     }
 
 
