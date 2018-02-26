@@ -75,6 +75,7 @@ public class StockAlertTest {
         DB.dropAndCreateDatabase();
         // set some vars
         PreferenceUtils.edit().putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), DATABASE).apply();
+        PreferenceUtils.edit().putString(PreferenceKeys.SETTINGS_STOCK_ALERT_DAYS.key(), "7").apply();
         // create some allergens
         final Patient p = DB.patients().getDefault();
         Medicine m = new Medicine();
