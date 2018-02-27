@@ -20,17 +20,21 @@ package es.usc.citius.servando.calendula.fragments;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -66,6 +70,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.IllegalFormatConversionException;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
@@ -320,6 +325,38 @@ public class ScheduleTimetableFragment extends Fragment
 
     void setupStartEndDatePickers(View rootView) {
 
+        /*
+         * Needed to fix crashes on samsung 5.0 devices.
+         *
+         * See: https://stackoverflow.com/q/28618405/4243049
+         */
+        final ContextWrapper datePickerContext = new ContextWrapper(getActivity()) {
+
+            private Resources wrappedResources;
+
+            @Override
+            public Resources getResources() {
+                Resources r = super.getResources();
+                if(wrappedResources == null) {
+                    wrappedResources = new Resources(r.getAssets(), r.getDisplayMetrics(), r.getConfiguration()) {
+                        @NonNull
+                        @Override
+                        public String getString(int id, Object... formatArgs) throws NotFoundException {
+                            try {
+                                return super.getString(id, formatArgs);
+                            } catch (IllegalFormatConversionException e) {
+                                Log.w(TAG, "Trying to fix resource exception", e);
+                                String template = super.getString(id);
+                                template = template.replaceAll("%" + e.getConversion(), "%s");
+                                return String.format(getConfiguration().locale, template, formatArgs);
+                            }
+                        }
+                    };
+                }
+                return wrappedResources;
+            }
+        };
+
         if (schedule.start() == null) {
             schedule.setStart(LocalDate.now());
         }
@@ -331,7 +368,7 @@ public class ScheduleTimetableFragment extends Fragment
             public void onClick(View v) {
 
                 DatePickerDialog dpd =
-                        new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                        new DatePickerDialog(datePickerContext, new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                                   int dayOfMonth) {
@@ -353,7 +390,7 @@ public class ScheduleTimetableFragment extends Fragment
                         schedule.end() != null ? schedule.end() : scheduleStart.plusMonths(3);
 
                 DatePickerDialog dpd =
-                        new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                        new DatePickerDialog(datePickerContext, new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                                   int dayOfMonth) {
