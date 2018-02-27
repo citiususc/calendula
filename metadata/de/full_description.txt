@@ -1,0 +1,31 @@
+Calendula ist der Assistent für Ihr persönliches Medizin-Management und wird Ihnen helfen, sich an Ihre Rezepte und Einnahmepläne zu halten. Sie müssen sich nicht mehr etliche Wecker auf dem Smartphone stellen oder Angst haben die Einnahme eines Medikaments zu vergessen. Stellen Sie sich einfach Ihren Einnahmeplan zusammen und lassen Sie Calendula die Arbeit erledigen.
+
+---
+
+Calendula bietet:
+○ Ein hübsches und benutzerfreundliches Design
+○ Individualisierbare Benachrichtigungen und Erinnerungen für Medikamente
+○ Flexible Einnahmepläne mit speziellen Optionen, etwa Pausezeiten für die Verhütungspille
+○ Medikamentensuche und Packungsbeilagen mit Daten von der spanischen "Agencia Española de Medicamentos y Productos Sanitarios" (http://www.aemps.gob.es)
+○ Kontrolle über die eingenommenen Medikamente
+○ Unterstützung für mehrere Patienten
+
+Besuchen Sie unsere Webseite für weitere Informationen: <a href="https://tec.citius.usc.es/calendula/">https://tec.citius.usc.es/calendula/</a>
+
+---
+
+App-Berechtigungen:
+
+Calendula benötigt keine vorherige Registrierung und sammelt auch keine persönlichen Daten. Wenn nötig fordert Calendula folgende Berechtigungen auf Ihrem Gerät an:
+
+○ Speicher: Wird benötigt um auf gespeicherte Benachrichtigungstöne für Ihre Erinnerungen zuzugreifen und um ggf. eine Medizindatenbank zu speichern.
+○ Kamera: Es ist möglich Medikamente durch scannen eines Barcodes hinzuzufügen. Dazu wird die Kamera benötigt.
+○ Internet: Diese Berechtigung wird nicht explizit angefordert und ist nur dazu nötig, ggf. eine Medizindatenbank herunterzuladen. Ihre persönlichen Medizindaten werden niemals Ihr Gerät verlassen.
+
+---
+
+Open Source:
+Calendula ist ein Open Source Projekt. Wenn Sie Ideen haben oder am Projekt mitarbeiten möchten, können Sie direkt durch unsere Webseite (<a href="https://tec.citius.usc.es/calendula/">https://tec.citius.usc.es/calendula/</a>) oder auf Github (<a href="https://github.com/citiususc/calendula">https://github.com/citiususc/calendula</a>) mit uns in Kontakt treten. Wir freuen uns über jede Mithilfe oder Anregung.
+
+Vielen Dank,
+das Calendula-Team
