@@ -26,7 +26,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'idea'
-
+// build config fields
+apply from: 'config.gradle'
 
 
 repositories {

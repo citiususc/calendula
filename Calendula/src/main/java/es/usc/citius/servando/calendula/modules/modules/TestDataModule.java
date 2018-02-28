@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import es.usc.citius.servando.calendula.BuildConfig;
 import es.usc.citius.servando.calendula.activities.PatientDetailActivity;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.CalendulaModule;
@@ -47,8 +48,6 @@ import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
-import es.usc.citius.servando.calendula.util.SettingsProperties;
-import es.usc.citius.servando.calendula.util.SettingsPropertiesKeys;
 
 public class TestDataModule extends CalendulaModule {
 
@@ -73,7 +72,7 @@ public class TestDataModule extends CalendulaModule {
         final boolean testDataGenerated = PreferenceUtils.getBoolean(PreferenceKeys.TEST_DATA_GENERATED, false);
         if (testDataGenerated) {
             LogUtil.d(TAG, "onApplicationStartup: Test data already generated, skipping");
-        } else if (!SettingsProperties.instance().get(SettingsPropertiesKeys.GENERATE_TEST_DATA).equals("yes")) {
+        } else if (!BuildConfig.TEST_GENERATE_TESTDATA) {
             LogUtil.d(TAG, "onApplicationStartup: GENERATE_TEST_DATA is not set");
         } else {
             LogUtil.d(TAG, "onApplicationStartup: Generating test data");

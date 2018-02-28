@@ -16,14 +16,9 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.util;
-
-
-public class SettingsPropertiesKeys {
-
-    public static final String DATABASE_LOCATION = "db.url";
-    public static final String GENERATE_TEST_DATA = "test.generate.testdata";
-
-    private SettingsPropertiesKeys() {
+android {
+    defaultConfig {
+        buildConfigField 'String', 'DB_DOWNLOAD_URL', '"http://tec.citius.usc.es/calendula/dbs/"'
+        buildConfigField 'boolean', 'TEST_GENERATE_TESTDATA', 'false'
     }
 }

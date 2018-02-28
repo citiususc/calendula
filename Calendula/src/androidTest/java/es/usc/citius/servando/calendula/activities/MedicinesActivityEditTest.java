@@ -25,6 +25,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import org.junit.Before;
 import org.junit.Test;
 
+import es.usc.citius.servando.calendula.BuildConfig;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;

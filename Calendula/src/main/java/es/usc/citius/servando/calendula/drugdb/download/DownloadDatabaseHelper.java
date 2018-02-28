@@ -35,6 +35,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.net.URI;
 
+import es.usc.citius.servando.calendula.BuildConfig;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
@@ -42,8 +43,6 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.NetworkUtils;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
-import es.usc.citius.servando.calendula.util.SettingsProperties;
-import es.usc.citius.servando.calendula.util.SettingsPropertiesKeys;
 
 public class DownloadDatabaseHelper {
 
@@ -197,7 +196,7 @@ public class DownloadDatabaseHelper {
                 final DownloadManager manager = (DownloadManager) ctx.getSystemService(Context.DOWNLOAD_SERVICE);
 
 
-                final String downloadUrl = SettingsProperties.instance().get(SettingsPropertiesKeys.DATABASE_LOCATION);
+                final String downloadUrl = BuildConfig.DB_DOWNLOAD_URL;
                 final String dbName = mgr.id();
 
                 try {//get version
