@@ -273,6 +273,7 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
         final String search = getIntent().getStringExtra(EXTRA_SEARCH_TERM);
         if (search != null) {
             searchEditText.setText(search);
+            searchEditText.setSelection(search.length());
         }
 
         searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -52,7 +52,6 @@
             android:layout_toLeftOf="@+id/main_progress_bar"
             android:layout_toStartOf="@+id/main_progress_bar"
             android:background="@null"
-            android:capitalize="words"
             android:gravity="center_vertical"
             android:hint="@string/search_med_hint"
             android:imeOptions="actionDone"
@@ -62,7 +61,10 @@
             android:textColor="#fff"
             android:textColorHint="#ececec"
             android:textCursorDrawable="@null"
-            android:textSize="20dp"/>
+            android:textSize="20dp">
+
+            <requestFocus />
+        </EditText>
 
         <ListView
             android:id="@+id/search_list"
