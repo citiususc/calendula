@@ -40,16 +40,24 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils
 /**
  * Instantiated via reflection, don't delete!
  */
-class DatabasePrefsFragment : CalendulaPrefsFragment(), DatabasePrefsContract.View {
+class DatabasePrefsFragment :
+    CalendulaPrefsFragment<DatabasePrefsContract.View, DatabasePrefsContract.Presenter>(),
+    DatabasePrefsContract.View {
 
     companion object {
         private const val TAG = "DatabasePrefsFragment"
         private const val REQUEST_DL_PERMISSION = 938
     }
 
-    override lateinit var presenter: DatabasePrefsContract.Presenter
     override val fragmentTitle: Int = R.string.pref_header_prescriptions
-
+    override val presenter: DatabasePrefsContract.Presenter by lazy {
+        DatabasePrefsPresenter(
+            PreferenceUtils.getString(
+                PreferenceKeys.DRUGDB_CURRENT_DB,
+                getString(R.string.database_none_id)
+            )
+        )
+    }
 
     private val dbPref: ListPreference by lazy {
         findPreference(getString(R.string.prefkey_drugdb_current_db)) as ListPreference
@@ -60,13 +68,6 @@ class DatabasePrefsFragment : CalendulaPrefsFragment(), DatabasePrefsContract.Vi
 
     private val noneId by lazy { getString(R.string.database_none_id) }
     private val settingUpId by lazy { getString(R.string.database_setting_up_id) }
-
-
-    override fun onResume() {
-        super.onResume()
-        presenter.start()
-    }
-
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         LogUtil.d(TAG, "onCreatePreferences() called")
@@ -80,14 +81,8 @@ class DatabasePrefsFragment : CalendulaPrefsFragment(), DatabasePrefsContract.Vi
             presenter.checkDatabaseUpdate(context)
             true
         }
-
-        DatabasePrefsPresenter(
-            this, PreferenceUtils.getString(
-                PreferenceKeys.DRUGDB_CURRENT_DB,
-                getString(R.string.database_none_id)
-            )
-        )
     }
+
 
     /**
      * From [SharedPreferences.OnSharedPreferenceChangeListener]

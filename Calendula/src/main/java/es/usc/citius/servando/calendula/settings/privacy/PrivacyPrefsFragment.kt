@@ -38,25 +38,26 @@ import es.usc.citius.servando.calendula.util.PreferenceKeys
 /**
  * Instantiated via reflection, don't delete!
  */
-class PrivacyPrefsFragment : CalendulaPrefsFragment(), PrivacyPrefsContract.View {
+class PrivacyPrefsFragment :
+    CalendulaPrefsFragment<PrivacyPrefsContract.View, PrivacyPrefsContract.Presenter>(),
+    PrivacyPrefsContract.View {
 
 
     companion object {
         private const val TAG = "PrivacyPrefsFragment"
     }
 
-    override lateinit var presenter: PrivacyPrefsContract.Presenter
+
+    override val presenter: PrivacyPrefsContract.Presenter by lazy {
+        PrivacyPrefsPresenter(
+            FingerprintHelper(context)
+        )
+    }
     override val fragmentTitle: Int = R.string.pref_header_privacy
 
 
     private val pinPref: Preference by lazy { findPreference(PreferenceKeys.UNLOCK_PIN.key()) }
     private val fingerprintPref: SwitchPreference by lazy { findPreference(PreferenceKeys.FINGERPRINT_ENABLED.key()) as SwitchPreference }
-
-
-    override fun onResume() {
-        super.onResume()
-        presenter.start()
-    }
 
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -68,7 +69,6 @@ class PrivacyPrefsFragment : CalendulaPrefsFragment(), PrivacyPrefsContract.View
             true
         }
 
-        PrivacyPrefsPresenter(this, FingerprintHelper(context))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

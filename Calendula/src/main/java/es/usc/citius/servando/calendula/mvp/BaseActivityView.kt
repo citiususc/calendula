@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
+ *    Copyright (C) 2016 CITIUS - USC
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -18,6 +18,22 @@
 
 package es.usc.citius.servando.calendula.mvp
 
-interface BaseView<T : BasePresenter> {
-    var presenter: T
+import android.os.Bundle
+import es.usc.citius.servando.calendula.CalendulaActivity
+
+
+abstract class BaseActivityView<in V : IView, out P : IPresenter<V>> : CalendulaActivity(), IView {
+
+    abstract val presenter: P
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        @Suppress("UNCHECKED_CAST")
+        presenter.attachView(this as V)
+    }
+
+    override fun onDestroy() {
+        presenter.detachView()
+        super.onDestroy()
+    }
 }

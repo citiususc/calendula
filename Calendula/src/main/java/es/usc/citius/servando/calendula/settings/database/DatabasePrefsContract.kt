@@ -21,13 +21,13 @@ package es.usc.citius.servando.calendula.settings.database
 import android.content.Context
 import android.content.Intent
 import android.support.annotation.StringRes
-import es.usc.citius.servando.calendula.mvp.BasePresenter
-import es.usc.citius.servando.calendula.mvp.BaseView
+import es.usc.citius.servando.calendula.mvp.IPresenter
+import es.usc.citius.servando.calendula.mvp.IView
 
 interface DatabasePrefsContract {
 
 
-    interface View : BaseView<Presenter> {
+    interface View : IView {
         fun setDbList(dbIds: Array<String>, dbDisplayNames: Array<String>)
         fun showSelectedDb(dbId: String)
         fun resolveString(@StringRes stringRes: Int): String
@@ -39,7 +39,7 @@ interface DatabasePrefsContract {
         fun hasDownloadPermission(): Boolean
     }
 
-    interface Presenter : BasePresenter {
+    interface Presenter : IPresenter<View> {
         fun currentDbUpdated(dbId: String)
         fun selectNewDb(dbId: String): Boolean
         fun onDbDownloadChoiceResult(result: Boolean)

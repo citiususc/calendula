@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
+ *    Copyright (C) 2016 CITIUS - USC
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -16,25 +16,25 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.settings.notifications
+package es.usc.citius.servando.calendula.mvp
 
-import android.content.Intent
-import android.net.Uri
-import es.usc.citius.servando.calendula.mvp.IPresenter
-import es.usc.citius.servando.calendula.mvp.IView
+import android.os.Bundle
 
-interface NotificationPrefsContract {
+abstract class StatefulBaseActivityView<in V : IView, out P : StatefulPresenter<V>> :
+    BaseActivityView<V, P>() {
 
-    interface View : IView {
-        fun hideStockPref()
-        fun requestRingtone(reqCode: Int, ringtoneType: Int, currentValue: Uri?)
-        fun setNotificationRingtoneText(text: String)
-        fun setInsistentRingtoneText(text: String)
+    companion object {
+        private const val SAVED_STATE_KEY = "STATEFUL_BASE_ACTIVITY_VIEW_STATE_BUNDLE"
     }
 
-    interface Presenter : IPresenter<View> {
-        fun onResult(reqCode: Int, result: Int, data: Intent?)
-        fun selectNotificationRingtone()
-        fun selectInsistentRingtone()
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putParcelable(SAVED_STATE_KEY, presenter.getState())
+        super.onSaveInstanceState(outState)
     }
+
+    override fun onRestoreInstanceState(savedState: Bundle?) {
+        super.onRestoreInstanceState(savedState)
+        savedState?.let { presenter.setState(it.getParcelable(SAVED_STATE_KEY)) }
+    }
+
 }

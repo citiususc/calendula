@@ -18,37 +18,9 @@
 
 package es.usc.citius.servando.calendula.mvp
 
-import kotlin.reflect.KProperty
+import android.os.Parcelable
 
-abstract class BasePresenter<V : IView> :
-    IPresenter<V> {
-
-    private var delegate = ViewDelegate<V>()
-    var view: V by delegate
-
-    override fun attachView(view: V) {
-        this.view = view
-    }
-
-    override fun detachView() {
-        this.delegate.view = null
-    }
-
-
-    fun isAttachedToView(): Boolean = this.delegate.view != null
-
-
-    private class ViewDelegate<V : IView> {
-
-        var view: V? = null
-
-        operator fun getValue(pres: BasePresenter<V>, prop: KProperty<*>): V {
-            return view ?: throw IllegalStateException("View cannot be null")
-        }
-
-        operator fun setValue(pres: BasePresenter<V>, prop: KProperty<*>, view: V) {
-            this.view = view
-        }
-    }
-
+interface StatefulPresenter<in V : IView> : IPresenter<V> {
+    fun getState(): Parcelable
+    fun setState(state: Parcelable)
 }
