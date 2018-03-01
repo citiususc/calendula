@@ -204,7 +204,7 @@ public class ScheduleTimetableFragment extends Fragment
 
         setupScheduleSpinner();
         setupDaySelectionListeners(rootView);
-        setupHourlyRepetitionLinsteners();
+        setupHourlyRepetitionListeners();
         setupStartEndDatePickers(rootView);
         setupForCurrentSchedule(rootView);
         setupCycleSpinner();
@@ -288,7 +288,7 @@ public class ScheduleTimetableFragment extends Fragment
         schedule.setStartTime(new LocalTime(hour, minute));
     }
 
-    void setupHourlyRepetitionLinsteners() {
+    void setupHourlyRepetitionListeners() {
         hourlyIntervalEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -370,7 +370,7 @@ public class ScheduleTimetableFragment extends Fragment
             @Override
             public boolean onLongClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage("Do you want this schedule to continue indefinitely?")
+                builder.setMessage(R.string.schedule_continue_indefinitely)
                         .setCancelable(true)
                         .setPositiveButton(getString(R.string.dialog_yes_option),
                                 new DialogInterface.OnClickListener() {
