@@ -80,6 +80,7 @@ public class FingerprintHelper {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void startAuthentication(FingerprintCallbackAdapter adapter) {
+        LogUtil.d(TAG, "startAuthentication() called with: adapter = [" + adapter + "]");
         if (!canUseFingerPrint()) {
             LogUtil.e(TAG, "Cannot use fingerprint on this device");
             throw new IllegalStateException("Can't use fingerprint on this device!");
@@ -94,6 +95,7 @@ public class FingerprintHelper {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void stop() {
+        LogUtil.d(TAG, "stop() called");
         if (handler != null) {
             handler.stopAuth();
             handler = null;
@@ -203,7 +205,7 @@ public class FingerprintHelper {
         }
 
         public void startAuth(FingerprintManager manager, FingerprintManager.CryptoObject cryptoObject) {
-
+            LogUtil.d(TAG, "startAuth() called with: manager = [" + manager + "], cryptoObject = [" + cryptoObject + "]");
             cancellationSignal = new CancellationSignal();
 
             if (ActivityCompat.checkSelfPermission(appContext, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
@@ -213,6 +215,7 @@ public class FingerprintHelper {
         }
 
         public void stopAuth() {
+            LogUtil.d(TAG, "stopAuth() called");
             if (cancellationSignal != null && !cancellationSignal.isCanceled()) {
                 cancellationSignal.cancel();
             }
@@ -220,11 +223,13 @@ public class FingerprintHelper {
 
         @Override
         public void onAuthenticationError(int errMsgId, CharSequence errString) {
+            LogUtil.w(TAG, "onAuthenticationError() called with: errMsgId = [" + errMsgId + "], errString = [" + errString + "]");
             Toast.makeText(appContext, errString, Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
+            LogUtil.d(TAG, "onAuthenticationHelp() called with: helpMsgId = [" + helpMsgId + "], helpString = [" + helpString + "]");
             Toast.makeText(appContext, helpString, Toast.LENGTH_LONG).show();
         }
 
