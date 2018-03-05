@@ -450,7 +450,9 @@ public class AlarmScheduler {
     private void cancelIntake(Routine r, LocalDate date) {
         for (ScheduleItem scheduleItem : r.getScheduleItems()) {
             DailyScheduleItem ds = DB.dailyScheduleItems().findByScheduleItemAndDate(scheduleItem, date);
-            if (ds.getTimeTaken() == null) {
+            if (ds == null) {
+                LogUtil.w(TAG, "cancelIntake: Schedule item not present in database");
+            } else if (ds.getTimeTaken() == null) {
                 LogUtil.d(TAG, "Cancelling schedule item");
                 ds.setTimeTaken(LocalTime.now());
                 ds.save();
