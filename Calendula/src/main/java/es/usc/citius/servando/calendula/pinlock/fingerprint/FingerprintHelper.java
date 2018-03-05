@@ -75,7 +75,9 @@ public class FingerprintHelper {
     public FingerprintHelper(Context context) {
         this.context = context.getApplicationContext();
         keyguardManager = (KeyguardManager) this.context.getSystemService(Context.KEYGUARD_SERVICE);
-        fingerprintManager = (FingerprintManager) this.context.getSystemService(Context.FINGERPRINT_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            fingerprintManager = (FingerprintManager) this.context.getSystemService(Context.FINGERPRINT_SERVICE);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -112,12 +114,14 @@ public class FingerprintHelper {
         return true;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public boolean canUseFingerPrint() {
-        return hasPermissions() && checkKeyguard() && fingerprintManager.hasEnrolledFingerprints();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return hasPermissions() && checkKeyguard() && fingerprintManager.hasEnrolledFingerprints();
+        } else {
+            return false;
+        }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public boolean fingerPrintEnabled() {
         return PreferenceUtils.getBoolean(PreferenceKeys.FINGERPRINT_ENABLED, false);
     }

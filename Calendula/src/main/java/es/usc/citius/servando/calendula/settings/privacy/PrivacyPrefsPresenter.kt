@@ -20,7 +20,6 @@ package es.usc.citius.servando.calendula.settings.privacy
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import es.usc.citius.servando.calendula.R
 import es.usc.citius.servando.calendula.mvp.BasePresenter
 import es.usc.citius.servando.calendula.pinlock.PINManager
@@ -40,7 +39,7 @@ class PrivacyPrefsPresenter(val fpHelper: FingerprintHelper) :
     override fun start() {
         if (PINManager.isPINSet()) {
             view.setPINPrefText(R.string.pref_summary_pin_lock_set)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && fpHelper.canUseFingerPrint()) {
+            if (fpHelper.canUseFingerPrint()) {
                 view.setFingerprintPrefEnabled(true)
             }
         } else {
@@ -55,7 +54,7 @@ class PrivacyPrefsPresenter(val fpHelper: FingerprintHelper) :
             val pinManagerResult = PINManager.savePIN(pin)
             if (pinManagerResult) {
                 view.setPINPrefText(R.string.pref_summary_pin_lock_set)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && fpHelper.canUseFingerPrint()) {
+                if (fpHelper.canUseFingerPrint()) {
                     view.setFingerprintPrefEnabled(true)
                     view.showEnableFingerprintDialog()
                 }
