@@ -395,7 +395,7 @@ Sie werden alle ihre Einnahmen auf dem Startbildschirm sehen."</string>
 <string name="pref_stock_warn_one_week">"In weniger als 1 Woche"</string>
 <string name="pref_stock_warn_two_weeks">"In weniger als 2 Wochen"</string>
 <string name="pref_stock_warn_three_weeks">"In weniger als 3 Wochen"</string>
-<string name="database_none_display">"Nichts"</string>
+<string name="database_none_display">"Keine"</string>
 <string name="database_aemps_display">"AEMPS Datenbank"</string>
 <string name="database_aemps_desc">"Agencia Española de Medicamentos y Productos Sanitarios Datenbank"</string>
 <string name="database_setting_up">"Einrichtung läuft..."</string>
