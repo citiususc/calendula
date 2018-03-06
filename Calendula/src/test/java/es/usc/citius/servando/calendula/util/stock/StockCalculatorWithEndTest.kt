@@ -19,8 +19,6 @@
 package es.usc.citius.servando.calendula.util.stock
 
 import es.usc.citius.servando.calendula.kotlinAny
-import es.usc.citius.servando.calendula.util.stock.StockCalculator
-import es.usc.citius.servando.calendula.util.stock.StockForDayProvider
 import org.joda.time.DateTime
 import org.junit.Assert
 import org.junit.Before
@@ -47,6 +45,7 @@ class StockCalculatorWithEndTest(
             arrayOf(1F, 1F, 1),
             arrayOf(1F, 1.1F, 0),
             arrayOf(1F, 2F, 0),
+            arrayOf(29F, 3F, 9),
             arrayOf(3F, 1.5F, 2),
             arrayOf(3F, 2.5F, 1),
             arrayOf(7F, 1F, 7),

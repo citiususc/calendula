@@ -185,6 +185,12 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
         LogUtil.d(TAG, "handleDbInstalled() called with: event = [" + event + "]");
         // enable barcode scan
 
+        refreshViews();
+
+    }
+
+    private void refreshViews() {
+        // TODO: 23/02/18 the current DBVersionMgr should tell us if the DB can handle barcodes
         if (!PreferenceUtils.getString(PreferenceKeys.DRUGDB_CURRENT_DB, CalendulaApp.getContext().getString(R.string.database_none_id))
                 .equals(CalendulaApp.getContext().getString(R.string.database_none_id))) {
             runOnUiThread(new Runnable() {
@@ -194,7 +200,6 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
                 }
             });
         }
-
     }
 
 
@@ -268,6 +273,7 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
         final String search = getIntent().getStringExtra(EXTRA_SEARCH_TERM);
         if (search != null) {
             searchEditText.setText(search);
+            searchEditText.setSelection(search.length());
         }
 
         searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -302,10 +308,8 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
         if (!PreferenceUtils.getString(PreferenceKeys.DRUGDB_CURRENT_DB, CalendulaApp.getContext().getString(R.string.database_none_id))
                 .equals(CalendulaApp.getContext().getString(R.string.database_none_id))) {
             enableBarcodeScan();
-        } else {
-            if (!PreferenceUtils.getBoolean(PreferenceKeys.MEDICINES_USE_PRESCRIPTIONS_SHOWN, false)) {
-                askForDatabase();
-            }
+        } else if (!PreferenceUtils.getBoolean(PreferenceKeys.MEDICINES_USE_PRESCRIPTIONS_SHOWN, false)) {
+            askForDatabase();
         }
 
 
@@ -379,6 +383,7 @@ public class MedicinesSearchActivity extends CalendulaActivity implements Medici
     protected void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
+        refreshViews();
     }
 
     @Override

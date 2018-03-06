@@ -26,7 +26,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'idea'
-
+// build config fields
+apply from: 'config.gradle'
 
 
 repositories {
@@ -76,8 +77,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 33
-        versionName "2.5.2"
+        versionCode 34
+        versionName "2.5.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         applicationId "es.usc.citius.servando.calendula"
         multiDexEnabled true

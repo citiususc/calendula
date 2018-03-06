@@ -23,34 +23,34 @@ import android.os.AsyncTask
 import es.usc.citius.servando.calendula.R
 import es.usc.citius.servando.calendula.drugdb.DBRegistry
 import es.usc.citius.servando.calendula.jobs.CheckDatabaseUpdatesJob
+import es.usc.citius.servando.calendula.mvp.BasePresenter
 import es.usc.citius.servando.calendula.settings.CalendulaSettingsActivity
 import es.usc.citius.servando.calendula.util.LogUtil
 import es.usc.citius.servando.calendula.util.PreferenceKeys
 import es.usc.citius.servando.calendula.util.PreferenceUtils
 
 class DatabasePrefsPresenter(
-    private val view: DatabasePrefsContract.View,
     private var currentDbId: String
 ) :
-    DatabasePrefsContract.Presenter {
+    DatabasePrefsContract.Presenter, BasePresenter<DatabasePrefsContract.View>() {
 
 
     companion object {
         private val TAG = "DatabasePrefsPresenter"
     }
 
-    private val noneId: String
-    private val settingUpId: String
-    private val noneDisplay: String
+    private lateinit var noneId: String
+    private lateinit var settingUpId: String
+    private lateinit var noneDisplay: String
+    private var selectIdTemp: String? = null
 
 
-    init {
-        view.presenter = this
+    override fun attachView(view: DatabasePrefsContract.View) {
+        super.attachView(view)
         noneDisplay = view.resolveString(R.string.database_none_display)
         noneId = view.resolveString(R.string.database_none_id)
         settingUpId = view.resolveString(R.string.database_setting_up_id)
     }
-
 
     override fun start() {
         LogUtil.d(TAG, "start() called")
@@ -61,6 +61,7 @@ class DatabasePrefsPresenter(
                 false
             )) {
             view.openDatabaseSelection()
+            view.getIntent().removeExtra(CalendulaSettingsActivity.EXTRA_SHOW_DB_DIALOG)
         }
     }
 
@@ -91,9 +92,12 @@ class DatabasePrefsPresenter(
         LogUtil.d(TAG, "selectNewDb() called with dbId=$dbId")
         if (dbId != currentDbId) {
             // if there is no actual update just return true and skip checks
-
-            if (dbId != noneId && noneId != settingUpId) {
-                view.showDatabaseDownloadChoice(dbId)
+            if (dbId != noneId && dbId != settingUpId) {
+                if (!view.hasDownloadPermission()) {
+                    view.askForDownloadPermission(dbId)
+                } else {
+                    view.showDatabaseDownloadChoice(dbId)
+                }
                 return false
             } else if (dbId == noneId) {
                 // if the db ID is "none", delete the current DB and let the pref update
@@ -115,6 +119,11 @@ class DatabasePrefsPresenter(
 
     override fun checkDatabaseUpdate(ctx: Context) {
         CheckDbUpdateTask(this).execute(ctx)
+    }
+
+
+    override fun onDownloadPermissionGranted(dbId: String) {
+        selectNewDb(dbId)
     }
 
     private fun notifyNoUpdate() {
@@ -141,6 +150,5 @@ class DatabasePrefsPresenter(
         }
 
     }
-
 
 }

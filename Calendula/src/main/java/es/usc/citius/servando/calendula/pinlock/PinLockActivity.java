@@ -19,7 +19,6 @@
 package es.usc.citius.servando.calendula.pinlock;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.hardware.fingerprint.FingerprintManager;
@@ -122,7 +121,11 @@ public class PinLockActivity extends CalendulaActivity {
     @OnClick(R.id.use_fingerprint_btn)
     @RequiresApi(Build.VERSION_CODES.M)
     void launchFingerprintAuth() {
+        showFingerprintDialog();
+        fpHelper.startAuthentication(new LoginFPCallbackAdapter(this, fingerprintDialog));
+    }
 
+    private void showFingerprintDialog() {
         fingerprintDialog = new MaterialDialog.Builder(this)
                 .icon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_fingerprint, R.color.android_blue_dark, 48))
                 .title(R.string.fingerprint_unlock_dialog_title)
@@ -137,47 +140,6 @@ public class PinLockActivity extends CalendulaActivity {
                 })
                 .build();
         fingerprintDialog.show();
-
-        final Context ctx = getApplicationContext();
-        fpHelper.startAuthentication(new FingerprintHelper.FingerprintCallbackAdapter() {
-            @Override
-            public void onAuthenticationFailed() {
-                if (fingerprintDialog != null) {
-                    fingerprintDialog.setTitle(R.string.fingerprint_unlock_dialog_failed_title);
-                    fingerprintDialog.setContent(R.string.fingerprint_unlock_dialog_failed_message);
-                    fingerprintDialog.setIcon(IconUtils.icon(PinLockActivity.this, GoogleMaterial.Icon.gmd_alert_circle, R.color.android_red, 48));
-                } else {
-                    Toast.makeText(ctx, R.string.fingerprint_unlock_dialog_failed_title, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
-                if (fingerprintDialog != null) {
-                    fingerprintDialog.setActionButton(DialogAction.NEGATIVE, null);
-                    fingerprintDialog.setTitle(R.string.fingerprint_unlock_dialog_successful_title);
-                    fingerprintDialog.setContent(R.string.fingerprint_unlock_dialog_successful_message);
-                    fingerprintDialog.setIcon(IconUtils.icon(PinLockActivity.this, GoogleMaterial.Icon.gmd_check_circle, R.color.android_green, 48));
-                }
-                UnlockStateManager.getInstance().unlock();
-                Intent i = new Intent(PinLockActivity.this, StartActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (fpHelper != null) {
-            fpHelper.stop();
-            fpHelper = null;
-        }
-        if (fingerprintDialog != null) {
-            fingerprintDialog.dismiss();
-        }
     }
 
     @Override
@@ -244,13 +206,22 @@ public class PinLockActivity extends CalendulaActivity {
         super.onPause();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (fpHelper != null && fingerprintDialog != null && fingerprintDialog.isShowing()) {
+                fpHelper.startAuthentication(new LoginFPCallbackAdapter(this, fingerprintDialog));
+            }
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.M)
     private void setupFingerprintAuth() {
         fpHelper = new FingerprintHelper(this);
-
         if (fpHelper.fingerPrintEnabled() && fpHelper.canUseFingerPrint()) {
             useFingerprintButton.setVisibility(View.VISIBLE);
-            launchFingerprintAuth();
+            showFingerprintDialog();
         }
 
     }
@@ -341,5 +312,42 @@ public class PinLockActivity extends CalendulaActivity {
             }
         }
 
+    }
+
+
+    private static class LoginFPCallbackAdapter implements FingerprintHelper.FingerprintCallbackAdapter {
+
+        private Activity activity;
+        private MaterialDialog fingerprintDialog;
+
+        LoginFPCallbackAdapter(Activity activity, MaterialDialog fingerprintDialog) {
+            this.activity = activity;
+            this.fingerprintDialog = fingerprintDialog;
+        }
+
+        @Override
+        public void onAuthenticationFailed() {
+            if (fingerprintDialog != null) {
+                fingerprintDialog.setTitle(R.string.fingerprint_unlock_dialog_failed_title);
+                fingerprintDialog.setContent(R.string.fingerprint_unlock_dialog_failed_message);
+                fingerprintDialog.setIcon(IconUtils.icon(activity, GoogleMaterial.Icon.gmd_alert_circle, R.color.android_red, 48));
+            } else {
+                Toast.makeText(activity, R.string.fingerprint_unlock_dialog_failed_title, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
+            if (fingerprintDialog != null) {
+                fingerprintDialog.setActionButton(DialogAction.NEGATIVE, null);
+                fingerprintDialog.setTitle(R.string.fingerprint_unlock_dialog_successful_title);
+                fingerprintDialog.setContent(R.string.fingerprint_unlock_dialog_successful_message);
+                fingerprintDialog.setIcon(IconUtils.icon(activity, GoogleMaterial.Icon.gmd_check_circle, R.color.android_green, 48));
+            }
+            UnlockStateManager.getInstance().unlock();
+            Intent i = new Intent(activity, StartActivity.class);
+            activity.startActivity(i);
+            activity.finish();
+        }
     }
 }

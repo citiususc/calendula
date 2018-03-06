@@ -1,0 +1,33 @@
+Calendula is an assistant for personal medication management that will help you to fulfill your prescriptions, 
+without setting thousands of alarms on your phone, or being worried about forgetting your medication. Just set 
+up your dose and schedule, bind them to your daily routines and let Calendula do the work for you.
+
+---
+
+Calendula provides:
+○ A nice, simple and friendly interface
+○ Medication alerts and reminders, with fully customizable alarms
+○ Flexible medication schedules, with specific options for birth control pills and other meds with rest intervals.
+○ Medicines search and leaflet consultation, with data provided by the "Agencia Española de Medicamentos y Productos Sanitarios"  (http://www.aemps.gob.es)
+○ Daily control over taken medicines
+○ Multiple patient support
+
+Visit our web site for more info: <a href="https://tec.citius.usc.es/calendula/">https://tec.citius.usc.es/calendula/</a>
+
+---
+
+About app permissions:
+
+Calendula does not require a previous registration and do not collects personal data. At some time, Calendula may request permission to access different resources of your device. Here's why:
+
+○ Storage: We need this permission to access ringtones stored on your device and allow you to choose the one you like the most for medication notifications, and to download medicine databases.
+○ Camera: It is possible to add drugs (only AEMPS at the moment) to the med-kit by scanning a bar code. We need access to your device's camera in order to do this.
+○ Internet access: This permission is not explicitly requested, and is only necessary to download the medication leaflets and setup the med database. Your medication data will not leave your phone at any time.
+
+--- 
+
+Open Source:
+Calendula is an open source project. If you have any ideas or are interested in contributing you can do it through our web site (<a href="https://tec.citius.usc.es/calendula/">https://tec.citius.usc.es/calendula/</a>) or through our Github community <a href="https://github.com/citiususc/calendula">https://github.com/citiususc/calendula</a>. We appreciate any contribution or suggestion.
+
+Thank you very much, 
+Calendula team.

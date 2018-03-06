@@ -348,7 +348,7 @@ Para este desenvolvemento facemos uso dalgunhas librarías e utilidades de códi
 <string name="install_db_notification_onfailure">"Fallou a instalación"</string>
 <string name="install_db_notification_onfailure_content">"Algo foi mal durante a instalación da base de datos"</string>
 <string name="intro_title">"Benvido a Calendula!"</string>
-<string name="intro_description">"Tomar correctamente a túa medicación non tén por que ser fácil, pero agora polo menos non será tan difícil.
+<string name="intro_description">"Tomar correctamente a túa medicación non é fácil, pero agora polo menos non será tan difícil.
 
 Por favor, bota un ollo ao que temos para ti!"</string>
 <string name="intro_routines_title">"Rutinas"</string>
@@ -502,4 +502,5 @@ Queres instalar a nova base de datos agora?"</string>
 <string name="ringtone_none">"Ningún"</string>
 <string name="patient_add">"Engadir paciente"</string>
 <string name="db_download_and_setup">"Descargar e instalar"</string>
+<string name="schedule_continue_indefinitely">"Queres que esta pauta continúe indefinidamente?"</string>
 </resources>

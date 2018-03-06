@@ -16,32 +16,10 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.settings.privacy
+package es.usc.citius.servando.calendula.mvp
 
-import android.content.Intent
-import android.support.annotation.StringRes
-import es.usc.citius.servando.calendula.mvp.IPresenter
-import es.usc.citius.servando.calendula.mvp.IView
 
-interface PrivacyPrefsContract {
-
-    interface View : IView {
-
-        fun recordPIN()
-        fun showPINOptions()
-        fun showConfirmDeletePinChoice()
-        fun setPINPrefText(@StringRes pinPrefText: Int)
-        fun setFingerprintPrefEnabled(enabled: Boolean)
-        fun showEnableFingerprintDialog()
-
-    }
-
-    interface Presenter : IPresenter<View> {
-
-        fun onResult(request: Int, result: Int, data: Intent?)
-        fun onClickPINPref()
-        fun onClickDeletePIN()
-        fun onClickModifyPIN()
-        fun confirmDeletePIN()
-    }
-}
+/**
+ * Interface for MVP views
+ */
+interface IView

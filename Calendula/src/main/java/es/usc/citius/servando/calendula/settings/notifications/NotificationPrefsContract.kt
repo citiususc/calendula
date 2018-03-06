@@ -20,19 +20,19 @@ package es.usc.citius.servando.calendula.settings.notifications
 
 import android.content.Intent
 import android.net.Uri
-import es.usc.citius.servando.calendula.mvp.BasePresenter
-import es.usc.citius.servando.calendula.mvp.BaseView
+import es.usc.citius.servando.calendula.mvp.IPresenter
+import es.usc.citius.servando.calendula.mvp.IView
 
 interface NotificationPrefsContract {
 
-    interface View : BaseView<Presenter> {
+    interface View : IView {
         fun hideStockPref()
         fun requestRingtone(reqCode: Int, ringtoneType: Int, currentValue: Uri?)
         fun setNotificationRingtoneText(text: String)
         fun setInsistentRingtoneText(text: String)
     }
 
-    interface Presenter : BasePresenter {
+    interface Presenter : IPresenter<View> {
         fun onResult(reqCode: Int, result: Int, data: Intent?)
         fun selectNotificationRingtone()
         fun selectInsistentRingtone()

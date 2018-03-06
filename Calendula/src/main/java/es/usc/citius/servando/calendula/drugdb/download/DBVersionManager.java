@@ -33,14 +33,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import es.usc.citius.servando.calendula.BuildConfig;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DatabaseHelper;
 import es.usc.citius.servando.calendula.util.HttpDownloadUtil;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
-import es.usc.citius.servando.calendula.util.SettingsProperties;
-import es.usc.citius.servando.calendula.util.SettingsPropertiesKeys;
 
 
 public class DBVersionManager {
@@ -56,7 +55,7 @@ public class DBVersionManager {
      * @return the newest working version
      */
     public static String getLastDBVersion(String databaseID) {
-        final String downloadUrl = SettingsProperties.instance().get(SettingsPropertiesKeys.DATABASE_LOCATION);
+        final String downloadUrl = BuildConfig.DB_DOWNLOAD_URL;
         final String url = downloadUrl + VERSION_FILE;
 
         try {

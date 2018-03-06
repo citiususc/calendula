@@ -64,6 +64,7 @@ class DatabasePrefsPresenterTest {
         Mockito.`when`(dbPrefView.resolveString(Mockito.anyInt())).thenAnswer {
             RuntimeEnvironment.application.getString(it.arguments[0] as Int)
         }
+        Mockito.`when`(dbPrefView.hasDownloadPermission()).thenReturn(true)
 
         // init DB registry so there are DB handlers
         DBRegistry.init(RuntimeEnvironment.application)
@@ -74,12 +75,8 @@ class DatabasePrefsPresenterTest {
             .commit()
 
 
-        dbPrefPresenter = DatabasePrefsPresenter(dbPrefView, INITIAL_DB_ID)
-    }
-
-    @Test
-    fun isPresenterSet() {
-        verify(dbPrefView).presenter = dbPrefPresenter
+        dbPrefPresenter = DatabasePrefsPresenter(INITIAL_DB_ID)
+        dbPrefPresenter.attachView(dbPrefView)
     }
 
     @Test
@@ -124,6 +121,18 @@ class DatabasePrefsPresenterTest {
 
         verify(dbPrefView).showDatabaseDownloadChoice(kotlinEq(NEW_DB_ID))
     }
+
+
+    @Test
+    fun selectDifferentDbNoPerms() {
+        Mockito.`when`(dbPrefView.hasDownloadPermission()).thenReturn(false)
+
+        dbPrefPresenter.selectNewDb(NEW_DB_ID)
+
+        verify(dbPrefView, never()).showDatabaseDownloadChoice(kotlinEq(NEW_DB_ID))
+        verify(dbPrefView).askForDownloadPermission(kotlinEq(NEW_DB_ID))
+    }
+
 
     @Test
     fun selectSameDb() {
