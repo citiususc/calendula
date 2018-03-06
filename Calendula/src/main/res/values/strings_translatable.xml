@@ -500,5 +500,5 @@ Do you want to install the new database now?
 <string name="ringtone_none">"None"</string>
 <string name="patient_add">"Add patient"</string>
 <string name="db_download_and_setup">"Download and setup"</string>
-    <string name="schedule_continue_indefinitely">Do you want this schedule to continue indefinitely?</string>
+<string name="schedule_continue_indefinitely">"Do you want this schedule to continue indefinitely?"</string>
 </resources>

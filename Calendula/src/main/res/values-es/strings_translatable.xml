@@ -350,7 +350,7 @@ Para este desarrollo hacemos uso de algunas librerías y utilidades de código a
 <string name="install_db_notification_onfailure">"La instalación ha fallado"</string>
 <string name="install_db_notification_onfailure_content">"Algo ha ido mal durante la instalación de la base de datos"</string>
 <string name="intro_title">"¡Bienvenido a Calendula!"</string>
-<string name="intro_description">"Tomar correctamente tu medicación no tiene por qué ser fácil, pero ahora al menos no será tan difícil
+<string name="intro_description">"Tomar correctamente tu medicación no es fácil, pero ahora al menos no será tan difícil.
         
 
 Por favor, ¡echa un vistazo a lo que tenemos para ti!"</string>
@@ -501,4 +501,5 @@ Quieres instalar la nueva base de datos ahora?"</string>
 <string name="ringtone_none">"Ninguno"</string>
 <string name="patient_add">"Añadir paciente"</string>
 <string name="db_download_and_setup">"Descargar y configurar"</string>
+<string name="schedule_continue_indefinitely">"¿Quieres que esta pauta continúe indefinidamente?"</string>
 </resources>
