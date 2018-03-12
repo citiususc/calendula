@@ -42,6 +42,9 @@ public enum Presentation {
     SPRAY(R.drawable.icp_nasalspray, R.string.spray, R.plurals.spray_units),
     PATCHES(R.drawable.icp_patches, R.string.patches, R.plurals.patches_units),
 
+    // TODO Make icons and add this presentations
+    //POWDER(R.drawable.icp_powder, R.string.powder, R.plurals.powder_units),
+    //CREAM(R.drawable.icp_cream, R.string.cream, R.plurals.pomade_units),
 
     UNKNOWN(R.drawable.ic_presentation_6, R.string.unknown, R.plurals.unknown_units);
 
