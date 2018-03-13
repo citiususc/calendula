@@ -159,7 +159,6 @@ public class DailyAgendaFragment extends Fragment {
                 el.medName = medicine.getName();
                 el.dose = schedule.dose();
                 el.displayDose = schedule.displayDose();
-                el.res = medicine.getPresentation().getDrawable();
                 el.presentation = medicine.getPresentation();
                 el.minute = time.toString("mm");
                 el.taken = dailyScheduleItem.getTakenToday();
@@ -236,7 +235,6 @@ public class DailyAgendaFragment extends Fragment {
                     el.dose = scheduleItem.getDose();
                     el.scheduleItemId = scheduleItem.getId();
                     el.displayDose = scheduleItem.displayDose();
-                    el.res = medicine.getPresentation().getDrawable();
                     el.presentation = medicine.getPresentation();
                     el.minute = time.toString("mm");
                     el.taken = dailyScheduleItem.getTakenToday();

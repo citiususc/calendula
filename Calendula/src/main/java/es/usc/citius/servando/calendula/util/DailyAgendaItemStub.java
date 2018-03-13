@@ -71,7 +71,6 @@ public class DailyAgendaItemStub {
 
     public static class DailyAgendaItemStubElement implements Comparable<DailyAgendaItemStubElement> {
 
-        public int res;
         public double dose;
         public boolean taken;
 

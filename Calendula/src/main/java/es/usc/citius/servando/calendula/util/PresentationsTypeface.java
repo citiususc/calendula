@@ -56,12 +56,12 @@ public class PresentationsTypeface implements ITypeface {
 
     @Override
     public String getMappingPrefix() {
-        return "faw";
+        return "med-presentation";
     }
 
     @Override
     public String getFontName() {
-        return "FontAwesome";
+        return "Calendula medicine Icons";
     }
 
     @Override
@@ -87,7 +87,7 @@ public class PresentationsTypeface implements ITypeface {
 
     @Override
     public String getAuthor() {
-        return "Ángel Piñeiro";
+        return "Calendula Team";
     }
 
     @Override
@@ -124,17 +124,26 @@ public class PresentationsTypeface implements ITypeface {
 
     public enum Icon implements IIcon {
 
-        ic_cream('\ue900'),
         ic_drops('\ue901'),
         ic_effervescent('\ue902'),
         ic_inhaler('\ue903'),
         ic_injection('\ue904'),
         ic_capsule('\ue905'),
         ic_pill('\ue906'),
-        ic_spray('\ue907'),
+        ic_spray('\ue90d'),
         ic_syrup('\ue908'),
-        ic_patch('\ue909');
-
+        ic_patch('\ue909'),
+        ic_powder('\ue91f'),
+        ic_cream('\ue90c'),
+        ic_pomade('\ue900'),
+        ic_powder_patch('\ue90e'),
+        ic_circle('\ue92f'),
+        ic_triangle('\ue92e'),
+        ic_square('\ue930'),
+        ic_pentagon('\ue933'),
+        ic_hexagon('\ue932'),
+        ic_diamond('\ue931'),
+        ic_unknown('\ue907');
 
         // remember the typeface so we can use it later
         private static ITypeface typeface;

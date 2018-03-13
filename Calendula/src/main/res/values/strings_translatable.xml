@@ -102,6 +102,11 @@
     <item quantity="one">"application"</item>
     <item quantity="other">"applications"</item>
 </plurals>
+<plurals name="generic_units">
+    <item quantity="one">"unit"</item>
+    <item quantity="other">"units"</item>
+</plurals>
+<string name="generic_presentation">"Generic"</string>
 <string name="never">"Never"</string>
 <string name="every_day">"Every day"</string>
 <string name="once_a_day">"Once a day"</string>

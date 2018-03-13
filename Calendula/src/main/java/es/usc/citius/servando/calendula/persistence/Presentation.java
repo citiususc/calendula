@@ -26,37 +26,41 @@ import android.support.annotation.StringRes;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.typeface.IIcon;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.util.PresentationsTypeface;
 
 public enum Presentation {
 
-    INJECTIONS(R.drawable.icp_injection, R.string.injections, R.plurals.injections_units),
-    CAPSULES(R.drawable.icp_capsule, R.string.capsules, R.plurals.capsules_units),
-    EFFERVESCENT(R.drawable.icp_effervescent, R.string.effervescent, R.plurals.effervescent_units),
-    PILLS(R.drawable.icp_pill, R.string.pills, R.plurals.pills_units),
-    SYRUP(R.drawable.icp_syrup, R.string.syrup, R.plurals.syrup_units),
-    DROPS(R.drawable.icp_drop, R.string.drops, R.plurals.drops_units),
-    POMADE(R.drawable.ic_ppomade, R.string.pomade, R.plurals.pomade_units),
-    INHALER(R.drawable.icp_inhaler, R.string.inhaler, R.plurals.inhaler_units),
-    SPRAY(R.drawable.icp_nasalspray, R.string.spray, R.plurals.spray_units),
-    PATCHES(R.drawable.icp_patches, R.string.patches, R.plurals.patches_units),
+    CAPSULES(R.string.capsules, R.plurals.capsules_units),
+    PILLS( R.string.pills, R.plurals.pills_units),
+    EFFERVESCENT( R.string.effervescent, R.plurals.effervescent_units),
+    DROPS(R.string.drops, R.plurals.drops_units),
+    SYRUP(R.string.syrup, R.plurals.syrup_units),
+    POMADE(R.string.pomade, R.plurals.pomade_units),
+    CREAM(R.string.cream, R.plurals.pomade_units),
+    PATCHES(R.string.patches, R.plurals.patches_units),
+    //POWDER_PATCHES(R.string.effervescent, R.plurals.effervescent_units),
+    POWDER(R.string.powder, R.plurals.powder_units),
+    SPRAY(R.string.spray, R.plurals.spray_units),
+    INHALER(R.string.inhaler, R.plurals.inhaler_units),
+    INJECTIONS(R.string.injections, R.plurals.injections_units),
+    DIAMOND(R.string.generic_presentation, R.plurals.generic_units),
+    SQUARE(R.string.generic_presentation, R.plurals.generic_units),
+    TRIANGLE(R.string.generic_presentation, R.plurals.generic_units),
+    CIRCLE(R.string.generic_presentation, R.plurals.generic_units),
+    HEXAGON(R.string.generic_presentation, R.plurals.generic_units),
+    PENTAGON(R.string.generic_presentation, R.plurals.generic_units),
+    UNKNOWN(R.string.unknown, R.plurals.unknown_units);
 
-    // TODO Make icons and add this presentations
-    //POWDER(R.drawable.icp_powder, R.string.powder, R.plurals.powder_units),
-    //CREAM(R.drawable.icp_cream, R.string.cream, R.plurals.pomade_units),
-
-    UNKNOWN(R.drawable.ic_presentation_6, R.string.unknown, R.plurals.unknown_units);
-
-    @DrawableRes
-    private int drawable = R.drawable.icp_injection;
-    @StringRes
     private int nameString = R.string.unknown;
     @PluralsRes
     private int unitsString = R.plurals.unknown_units;
 
-    Presentation(int drawable, int nameString, int unitsString) {
-        this.drawable = drawable;
+    Presentation(int nameString, int unitsString) {
         this.nameString = nameString;
         this.unitsString = unitsString;
     }
@@ -77,23 +81,36 @@ public enum Presentation {
             case PATCHES:
                 return PresentationsTypeface.Icon.ic_patch;
             case POMADE:
-                return PresentationsTypeface.Icon.ic_cream;
-            case SPRAY:
-                return PresentationsTypeface.Icon.ic_spray;
+                return PresentationsTypeface.Icon.ic_pomade;
             case SYRUP:
                 return PresentationsTypeface.Icon.ic_syrup;
+            case SPRAY:
+                return PresentationsTypeface.Icon.ic_spray;
             case PILLS:
                 return PresentationsTypeface.Icon.ic_pill;
+            //case POWDER_PATCHES:
+            //    return PresentationsTypeface.Icon.ic_powder_patch;
+            case CREAM:
+                return PresentationsTypeface.Icon.ic_cream;
+            case CIRCLE:
+                return PresentationsTypeface.Icon.ic_circle;
+            case POWDER:
+                return PresentationsTypeface.Icon.ic_powder;
+            case SQUARE:
+                return PresentationsTypeface.Icon.ic_square;
+            case DIAMOND:
+                return PresentationsTypeface.Icon.ic_diamond;
+            case HEXAGON:
+                return PresentationsTypeface.Icon.ic_hexagon;
+            case PENTAGON:
+                return PresentationsTypeface.Icon.ic_pentagon;
+            case TRIANGLE:
+                return PresentationsTypeface.Icon.ic_triangle;
+            case UNKNOWN:
+                return PresentationsTypeface.Icon.ic_unknown;
             default:
-                return CommunityMaterial.Icon.cmd_help_circle;
-
+                return PresentationsTypeface.Icon.ic_unknown;
         }
-
-
-    }
-
-    public int getDrawable() {
-        return drawable;
     }
 
     public String getName(Resources r) {
@@ -107,5 +124,14 @@ public enum Presentation {
 
     public IIcon icon() {
         return iconFor(this);
+    }
+
+    public static List<Presentation> available() {
+        // all minus unknown
+        List<Presentation> result = new ArrayList<>(Arrays.asList(values()));
+        if(result.contains(UNKNOWN)){
+            result.remove(UNKNOWN);
+        }
+        return result;
     }
 }
