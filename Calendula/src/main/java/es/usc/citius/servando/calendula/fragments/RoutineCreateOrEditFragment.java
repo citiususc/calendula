@@ -256,7 +256,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
     }
 
     void updateTime() {
-        timeButton.setText(new LocalTime(hour, minute).toString("kk:mm"));
+        timeButton.setText(new LocalTime(hour, minute).toString("HH:mm"));
     }
 
     private void setRoutine(Routine r) {

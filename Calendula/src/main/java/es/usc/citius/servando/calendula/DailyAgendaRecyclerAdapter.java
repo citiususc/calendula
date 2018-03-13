@@ -190,9 +190,9 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         if (expanded) {
             LocalDate d = viewHolder.stub.date;
             if (d.equals(DateTime.now().toLocalDate())) {
-                viewHolder.hourText.setText(item.time != null ? item.time.toString("kk:mm") : "--");
+                viewHolder.hourText.setText(item.time != null ? item.time.toString("HH:mm") : "--");
             } else {
-                viewHolder.hourText.setText(item.dateTime().toString("kk:mm"));
+                viewHolder.hourText.setText(item.dateTime().toString("HH:mm"));
             }
         }
         viewHolder.itemView.setVisibility(expanded ? View.VISIBLE : View.GONE);

@@ -64,7 +64,7 @@ public class DailyAgenda {
         final Long lastDate = settings.getLong(PREF_LAST_DATE, 0);
         final DateTime now = DateTime.now();
 
-        LogUtil.d(TAG, "Setup daily agenda. Last updated: " + new DateTime(lastDate).toString("dd/MM - kk:mm"));
+        LogUtil.d(TAG, "Setup daily agenda. Last updated: " + new DateTime(lastDate).toString("dd/MM - HH:mm"));
 
         Interval today = new Interval(now.withTimeAtStartOfDay(), now.withTimeAtStartOfDay().plusDays(1));
 

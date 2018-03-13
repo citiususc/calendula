@@ -250,7 +250,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                 LogUtil.d(TAG, "Saving daily schedule item..."
                         + dsi.getId()
                         + " timeToday: "
-                        + timeToday.toString("kk:mm"));
+                        + timeToday.toString("HH:mm"));
             }
         }
         // save and fire event
