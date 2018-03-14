@@ -37,6 +37,6 @@
         android:baselineAlignBottom="false"
         android:clickable="false"
         android:scaleType="fitCenter"
-        android:tag="med_type"/>
+        android:tag="@string/presentation_item_tag"/>
 </FrameLayout>
 
