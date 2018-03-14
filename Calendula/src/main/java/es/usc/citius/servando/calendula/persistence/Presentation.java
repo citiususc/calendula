@@ -19,11 +19,9 @@
 package es.usc.citius.servando.calendula.persistence;
 
 import android.content.res.Resources;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.PluralsRes;
 import android.support.annotation.StringRes;
 
-import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.typeface.IIcon;
 
 import java.util.ArrayList;
@@ -35,82 +33,37 @@ import es.usc.citius.servando.calendula.util.PresentationsTypeface;
 
 public enum Presentation {
 
-    CAPSULES(R.string.capsules, R.plurals.capsules_units),
-    PILLS( R.string.pills, R.plurals.pills_units),
-    EFFERVESCENT( R.string.effervescent, R.plurals.effervescent_units),
-    DROPS(R.string.drops, R.plurals.drops_units),
-    SYRUP(R.string.syrup, R.plurals.syrup_units),
-    POMADE(R.string.pomade, R.plurals.pomade_units),
-    CREAM(R.string.cream, R.plurals.pomade_units),
-    PATCHES(R.string.patches, R.plurals.patches_units),
+    CAPSULES(R.string.capsules, R.plurals.capsules_units, PresentationsTypeface.Icon.ic_capsule),
+    PILLS(R.string.pills, R.plurals.pills_units, PresentationsTypeface.Icon.ic_pill),
+    EFFERVESCENT(R.string.effervescent, R.plurals.effervescent_units, PresentationsTypeface.Icon.ic_effervescent),
+    DROPS(R.string.drops, R.plurals.drops_units, PresentationsTypeface.Icon.ic_drops),
+    SYRUP(R.string.syrup, R.plurals.syrup_units, PresentationsTypeface.Icon.ic_syrup),
+    POMADE(R.string.pomade, R.plurals.pomade_units, PresentationsTypeface.Icon.ic_pomade),
+    CREAM(R.string.cream, R.plurals.pomade_units, PresentationsTypeface.Icon.ic_cream),
+    PATCHES(R.string.patches, R.plurals.patches_units, PresentationsTypeface.Icon.ic_patch),
     //POWDER_PATCHES(R.string.effervescent, R.plurals.effervescent_units),
-    POWDER(R.string.powder, R.plurals.powder_units),
-    SPRAY(R.string.spray, R.plurals.spray_units),
-    INHALER(R.string.inhaler, R.plurals.inhaler_units),
-    INJECTIONS(R.string.injections, R.plurals.injections_units),
-    DIAMOND(R.string.generic_presentation, R.plurals.generic_units),
-    SQUARE(R.string.generic_presentation, R.plurals.generic_units),
-    TRIANGLE(R.string.generic_presentation, R.plurals.generic_units),
-    CIRCLE(R.string.generic_presentation, R.plurals.generic_units),
-    HEXAGON(R.string.generic_presentation, R.plurals.generic_units),
-    PENTAGON(R.string.generic_presentation, R.plurals.generic_units),
-    UNKNOWN(R.string.unknown, R.plurals.unknown_units);
+    POWDER(R.string.powder, R.plurals.powder_units, PresentationsTypeface.Icon.ic_powder),
+    SPRAY(R.string.spray, R.plurals.spray_units, PresentationsTypeface.Icon.ic_spray),
+    INHALER(R.string.inhaler, R.plurals.inhaler_units, PresentationsTypeface.Icon.ic_inhaler),
+    INJECTIONS(R.string.injections, R.plurals.injections_units, PresentationsTypeface.Icon.ic_injection),
+    DIAMOND(R.string.generic_presentation, R.plurals.generic_units, PresentationsTypeface.Icon.ic_diamond),
+    SQUARE(R.string.generic_presentation, R.plurals.generic_units, PresentationsTypeface.Icon.ic_square),
+    TRIANGLE(R.string.generic_presentation, R.plurals.generic_units, PresentationsTypeface.Icon.ic_triangle),
+    CIRCLE(R.string.generic_presentation, R.plurals.generic_units, PresentationsTypeface.Icon.ic_circle),
+    HEXAGON(R.string.generic_presentation, R.plurals.generic_units, PresentationsTypeface.Icon.ic_hexagon),
+    PENTAGON(R.string.generic_presentation, R.plurals.generic_units, PresentationsTypeface.Icon.ic_pentagon),
+    UNKNOWN(R.string.unknown, R.plurals.unknown_units, PresentationsTypeface.Icon.ic_unknown);
 
+    @StringRes
     private int nameString = R.string.unknown;
     @PluralsRes
     private int unitsString = R.plurals.unknown_units;
+    private IIcon icon;
 
-    Presentation(int nameString, int unitsString) {
+    Presentation(int nameString, int unitsString, IIcon icon) {
         this.nameString = nameString;
         this.unitsString = unitsString;
-    }
-
-    public static IIcon iconFor(Presentation p) {
-
-        switch (p) {
-            case CAPSULES:
-                return PresentationsTypeface.Icon.ic_capsule;
-            case DROPS:
-                return PresentationsTypeface.Icon.ic_drops;
-            case EFFERVESCENT:
-                return PresentationsTypeface.Icon.ic_effervescent;
-            case INHALER:
-                return PresentationsTypeface.Icon.ic_inhaler;
-            case INJECTIONS:
-                return PresentationsTypeface.Icon.ic_injection;
-            case PATCHES:
-                return PresentationsTypeface.Icon.ic_patch;
-            case POMADE:
-                return PresentationsTypeface.Icon.ic_pomade;
-            case SYRUP:
-                return PresentationsTypeface.Icon.ic_syrup;
-            case SPRAY:
-                return PresentationsTypeface.Icon.ic_spray;
-            case PILLS:
-                return PresentationsTypeface.Icon.ic_pill;
-            //case POWDER_PATCHES:
-            //    return PresentationsTypeface.Icon.ic_powder_patch;
-            case CREAM:
-                return PresentationsTypeface.Icon.ic_cream;
-            case CIRCLE:
-                return PresentationsTypeface.Icon.ic_circle;
-            case POWDER:
-                return PresentationsTypeface.Icon.ic_powder;
-            case SQUARE:
-                return PresentationsTypeface.Icon.ic_square;
-            case DIAMOND:
-                return PresentationsTypeface.Icon.ic_diamond;
-            case HEXAGON:
-                return PresentationsTypeface.Icon.ic_hexagon;
-            case PENTAGON:
-                return PresentationsTypeface.Icon.ic_pentagon;
-            case TRIANGLE:
-                return PresentationsTypeface.Icon.ic_triangle;
-            case UNKNOWN:
-                return PresentationsTypeface.Icon.ic_unknown;
-            default:
-                return PresentationsTypeface.Icon.ic_unknown;
-        }
+        this.icon = icon;
     }
 
     public String getName(Resources r) {
@@ -123,7 +76,7 @@ public enum Presentation {
     }
 
     public IIcon icon() {
-        return iconFor(this);
+        return this.icon;
     }
 
     public static List<Presentation> available() {

@@ -145,7 +145,7 @@ public class ScheduleSummaryFragment extends Fragment {
 
     IconicsDrawable iconFor(Presentation p) {
         return new IconicsDrawable(getContext())
-                .icon(Presentation.iconFor(p))
+                .icon(p.icon())
                 .colorRes(R.color.agenda_item_title)
                 .sizeDp(60);
     }

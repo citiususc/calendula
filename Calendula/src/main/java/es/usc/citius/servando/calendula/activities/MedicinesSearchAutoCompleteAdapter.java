@@ -153,7 +153,7 @@ public class MedicinesSearchAutoCompleteAdapter extends ArrayAdapter<MedicinesSe
             });
 
             holder.prView.setImageDrawable(new IconicsDrawable(getContext())
-                    .icon(expectedPresentation == null ? CommunityMaterial.Icon.cmd_help : Presentation.iconFor(expectedPresentation))
+                    .icon(expectedPresentation == null ? CommunityMaterial.Icon.cmd_help : expectedPresentation.icon())
                     .color(ScreenUtils.equivalentNoAlpha(patientColor, 0.8f))
                     .paddingDp(10)
                     .sizeDp(72));

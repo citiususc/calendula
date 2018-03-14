@@ -122,7 +122,7 @@ public class SelectMedicineListFragment extends Fragment {
     IconicsDrawable iconFor(Presentation p, boolean disabled) {
         int color = disabled ? R.color.drawer_item_disabled : R.color.agenda_item_title;
         return new IconicsDrawable(getContext())
-                .icon(Presentation.iconFor(p))
+                .icon(p.icon())
                 .colorRes(color)
                 .paddingDp(5)
                 .sizeDp(55);
