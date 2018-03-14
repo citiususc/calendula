@@ -1392,10 +1392,7 @@ public class ScheduleTimetableFragment extends Fragment
 //        if (med.presentation().equals(Presentation.SYRUP)) {
 //            dpf = new LiquidDosePickerFragment();
 //        }
-        if (med.getPresentation().equals(Presentation.DROPS)
-                || med.getPresentation().equals(Presentation.PILLS)
-                || med.getPresentation().equals(Presentation.CAPSULES)
-                || med.getPresentation().equals(Presentation.EFFERVESCENT)) {
+        if (med.getPresentation().equals(Presentation.PILLS)) {
             dpf = new PillDosePickerFragment();
         } else {
             dpf = new DefaultDosePickerFragment();
