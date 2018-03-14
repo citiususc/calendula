@@ -25,7 +25,6 @@ import android.test.ActivityInstrumentationTestCase2;
 import org.junit.Before;
 import org.junit.Test;
 
-import es.usc.citius.servando.calendula.BuildConfig;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DB;
@@ -36,6 +35,7 @@ import es.usc.citius.servando.calendula.util.TestUtils;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
 
 
 public class MedicinesActivityEditTest extends ActivityInstrumentationTestCase2<MedicinesActivity> {
@@ -85,7 +85,7 @@ public class MedicinesActivityEditTest extends ActivityInstrumentationTestCase2<
 
         TestUtils.sleep(1500);
         // select capsules presentation
-        onView(withId(R.id.med_presentation_2))
+        onView(withTagValue(new PresentationTagMatcher(Presentation.CAPSULES)))
                 .perform(click());
         TestUtils.sleep(200);
 

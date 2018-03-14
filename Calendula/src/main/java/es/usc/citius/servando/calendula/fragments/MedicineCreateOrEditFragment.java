@@ -62,7 +62,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -620,7 +619,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
 
     private void selectPresentation(Presentation p) {
         selectedPresentation = p;
-        for (View v : getViewsByTag((ViewGroup) getView(), "med_type")) {
+        for (View v : getViewsByTag((ViewGroup) getView(), getString(R.string.presentation_item_tag))) {
             v.setBackgroundColor(getResources().getColor(R.color.transparent));
         }
 
