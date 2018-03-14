@@ -45,6 +45,8 @@
 <string name="syrup">"Xarabe"</string>
 <string name="spray">"Spray"</string>
 <string name="patches">"Parches"</string>
+<string name="powder">"Po"</string>
+<string name="cream">"Crema"</string>
 <string name="unknown">"Descoñecido"</string>
 <string name="effervescent">"Efervescente"</string>
 <string name="schedule">"Pauta"</string>
@@ -92,6 +94,19 @@
 <item quantity="one">"sobre"</item>
 <item quantity="other">"sobres"</item>
 </plurals>
+<plurals name="generic_units">
+    <item quantity="one">"unidade"</item>
+    <item quantity="other">"unidades"</item>
+</plurals>
+<plurals name="powder_units">
+    <item quantity="one">"gramo"</item>
+    <item quantity="other">"gramos"</item>
+</plurals>
+<plurals name="cream_units">
+    <item quantity="one">"applicación"</item>
+    <item quantity="other">"aplicacións"</item>
+</plurals>
+<string name="generic_presentation">"Xenérico"</string>
 <string name="never">"Nunca"</string>
 <string name="every_day">"Tódolos días"</string>
 <string name="once_a_day">"Unha vez ó día"</string>

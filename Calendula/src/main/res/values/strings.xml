@@ -165,6 +165,7 @@
     <string name="database_file_location" translatable="false">%1$s%2$s/%2$s-%3$s.db</string>
     <string name="ml" translatable="false">ml</string>
     <string name="not_available_short" translatable="false">N/A</string>
+    <string name="presentation_item_tag" translatable="false">presentation_type</string>
 
     <string-array name="calendar_pickup_reminder_values">
         <item>@string/calendar_pickup_reminder_one_day_before</item>

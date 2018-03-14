@@ -22,6 +22,8 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.action.ViewActions;
 import android.test.ActivityInstrumentationTestCase2;
 
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,6 +40,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class MedicinesActivityCreateTest extends ActivityInstrumentationTestCase2<MedicinesActivity> {
@@ -97,8 +100,9 @@ public class MedicinesActivityCreateTest extends ActivityInstrumentationTestCase
                 .perform(click());
 
         // select capsules presentation
-        onView(withId(R.id.med_presentation_2))
+        onView(withTagValue(new PresentationTagMatcher(Presentation.CAPSULES)))
                 .perform(click());
+
         // click save
         onView(withId(R.id.add_button))
                 .perform(click());
