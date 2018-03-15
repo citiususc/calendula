@@ -92,10 +92,13 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     FloatingActionButton fab;
     int color;
 
+    private static final String STATE_STARTED_SEARCH = "STATE_STARTED_SEARCH";
+
     private Prescription prescriptionToSet = null;
     private String prescriptionNameToSet = null;
     private String intentAction;
     private String intentSearchText = null;
+    private boolean startedSearch = false;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -172,6 +175,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         Intent i = new Intent(this, MedicinesSearchActivity.class);
         i.putExtra(MedicinesSearchActivity.EXTRA_SEARCH_TERM, searchText);
         startActivityForResult(i, REQUEST_CODE_GET_MED);
+        startedSearch = true;
     }
 
 
@@ -208,7 +212,10 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
         title.setBackgroundColor(color);
 
-        if (mMedicineId == -1 || intentSearchText != null) {
+
+        if (savedInstanceState != null && savedInstanceState.getBoolean(STATE_STARTED_SEARCH)) {
+            LogUtil.d(TAG, "onCreate: search was started, ignoring search intents");
+        } else if (mMedicineId == -1 || intentSearchText != null) {
             mViewPager.post(new Runnable() {
                 @Override
                 public void run() {
@@ -217,6 +224,12 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
             });
         }
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(STATE_STARTED_SEARCH, startedSearch);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
