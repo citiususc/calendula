@@ -15,8 +15,8 @@
 <string name="title_edit_routine_activity">"Modifica routine"</string>
 <string name="title_create_routine_activity">"Crea routine"</string>
 <string name="title_activity_medicines">"Medicinali"</string>
-<string name="title_edit_schedule_activity">"Modifica programma"</string>
-<string name="title_create_schedule_activity">"Crea programma"</string>
+<string name="title_edit_schedule_activity">"Modifica trattamento"</string>
+<string name="title_create_schedule_activity">"Crea trattamento"</string>
 <string name="routine_name">"Nome routine"</string>
 <string name="routine_time">"Orario"</string>
 <string name="create_routine_button_text">"Crea routine"</string>
@@ -47,7 +47,7 @@
 <string name="patches">"Cerotti"</string>
 <string name="unknown">"Sconosciuto"</string>
 <string name="effervescent">"Bustina effervescente"</string>
-<string name="schedule">"Programma"</string>
+<string name="schedule">"Trattamento"</string>
 <plurals name="injections_units">
 <item quantity="one">"iniezione"</item>
 <item quantity="other">"iniezioni"</item>
@@ -123,14 +123,14 @@
 <string name="schedule_day_selector_su">"DO"</string>
 <string name="schedule_day_selector_none">"NESSUNO"</string>
 <string name="agenda_zoom_meds_time">"È ora di prendere medicine!"</string>
-<string name="create_schedule_unselected_med">"Seleziona una medicina per creare un programma"</string>
+<string name="create_schedule_unselected_med">"Seleziona una medicina per creare un trattamento"</string>
 <string name="create_schedule_incomplete_items">"Seleziona delle routine per tutte le tue assunzioni"</string>
 <string name="create_schedule_incomplete_doses">"Le dosi devono essere maggiori di zero"</string>
 <string name="home_no_pending_meds_message">"Non ci sono medicine in sospeso per oggi"</string>
 <string name="medicine_created_message">"Medicina creata!"</string>
 <string name="medicine_deleted_message">"Medicina cancellata!"</string>
 <string name="medicine_edited_message">"Medicina aggiornata!"</string>
-<string name="schedule_created_message">"Programma creato!"</string>
+<string name="schedule_created_message">"Trattamento creato!"</string>
 <string name="cycle_period_cero_message">"Assunzione ciclica e sospensione devono essere maggiori di zero"</string>
 <string name="reminder_cancelled_message">"Promemoria cancellato"</string>
 <string name="remove_routine_message_long">"Con la rimozione della routine %1$s, anche i programmi ad essa associati verranno eliminati. Vuoi procedere comunque?"</string>
@@ -139,8 +139,8 @@
 <string name="remove_medicine_message_short">"Rimuovere %1$s?"</string>
 <string name="remove_routine_dialog_title">"Rimuovi routine"</string>
 <string name="remove_medicine_dialog_title">"Rimuovi medicina"</string>
-<string name="remove_schedule_dialog_title">"Rimuovi programma"</string>
-<string name="remove_schedule_message">"Rimuovere il programma di %1$s?"</string>
+<string name="remove_schedule_dialog_title">"Rimuovi trattamento"</string>
+<string name="remove_schedule_message">"Rimuovere il trattamento di %1$s?"</string>
 <string name="dialog_yes_option">"Sì"</string>
 <string name="dialog_no_option">"No"</string>
 <string name="medicine_no_name_error_message">"Inserire un nome"</string>
@@ -186,86 +186,86 @@
 <string name="schedule_repeat_frequency_months">"mesi"</string>
 <string name="summary_show_calendar">"Mostra calendario"</string>
 <string name="hours">"ore"</string>
-<string name="schedule_help_no_type_selected">"Please, select a schedule type to keep on creating the schedule"</string>
-<string name="schedule_type_routines_title">"Routine schedule"</string>
-<string name="schedule_type_hourly_title">"Dosing interval"</string>
-<string name="schedule_type_period_title">"Period + rest"</string>
-<string name="schedule_type_common_periods">"Common cycles"</string>
-<string name="schedule_type_routines_description">"Ex: Every 3 days, at breakfast, lunch and dinner"</string>
-<string name="schedule_type_hourly_description">"Ex: Each 8 hours"</string>
-<string name="schedule_type_period_description">"Ex: 21 days + 7 days of rest"</string>
-<string name="schedule_help_cycle">"Setup repetition cycle (intake + rest)"</string>
-<string name="schedule_help_duration">"Finally, you can specify the schedule start and end. Leave it as it is to repeat indefinitely."</string>
-<string name="schedule_help_hourly">"Please state the repeat period, dosage, and time of the first intake"</string>
-<string name="schedule_help_repeat">"State the schedule repetition. If it repeats every day, you do not have to do anything."</string>
-<string name="schedule_help_timesbyday">"Please state the number of times per day that the schedule repeats"</string>
-<string name="schedule_help_timetable">"Now, link each intake to your routines and state the dosage for each of them"</string>
-<string name="title_activity_calendar">"Pickups calendar"</string>
-<string name="title_pickups_bottom_sheet">"Pickups on %1$s"</string>
-<string name="pickup_interval">"Until %1$s"</string>
-<string name="pickup_date_format">"MMMM dd"</string>
-<string name="title_activity_confirm_schedules">"Confirm schedules"</string>
-<string name="confirm_prescription_x_of_y">"Prescription %1$s of %2$s"</string>
-<string name="scan_prescriptions_title">"Scan prescriptions"</string>
-<string name="scan_qr">"Scan QR"</string>
-<string name="duration">"Duration"</string>
-<string name="all_meds_taken">"All meds taken!"</string>
-<string name="create_schedule_select_med_before_dose">"Please, select a med first"</string>
-<string name="title_activity_patients">"Patients"</string>
-<string name="schedule_type_help_title">"You are about to create a schedule, choose the one that best suits your needs!"</string>
-<string name="schedule_type_routines_help">"This kind of schedule lets you bind intakes to your routines, such as: \"Every day at breakfast and dinner, excluding sundays\", or \"Every 3 days, with lunch.\""</string>
-<string name="schedule_type_hourly_help">"Hourly schedules are intended to those intakes that repeat by a certain period, such as: \"Every 8 hours\". Set the time of the first intake and go on."</string>
-<string name="schedule_type_intervalrest_help">"Birth control pills and other meds are taken for a while, and then there's a rest. This kind of schedule allows you to specify both periods and simplify those intakes."</string>
-<string name="routines_list_empty_text">"There are no routines yet.
+<string name="schedule_help_no_type_selected">"Seleziona un tipo di trattamento per continuarne la creazione"</string>
+<string name="schedule_type_routines_title">"Collegato a routine"</string>
+<string name="schedule_type_hourly_title">"Intervallo orario"</string>
+<string name="schedule_type_period_title">"Ciclo di assunzione + pausa"</string>
+<string name="schedule_type_common_periods">"Cicli comuni"</string>
+<string name="schedule_type_routines_description">"Es: Ogni 3 giorni, a colazione, pranzo e cena"</string>
+<string name="schedule_type_hourly_description">"Es: Ogni 8 ore"</string>
+<string name="schedule_type_period_description">"Es: 21 giorni + 7 giorni di pausa"</string>
+<string name="schedule_help_cycle">"Indica il ciclo di ripetizione (assunzione + pausa)"</string>
+<string name="schedule_help_duration">"Indica infine l'inizio e la fine del trattamento. Ignora questo passaggio per una ripetizione indefinita del trattamento."</string>
+<string name="schedule_help_hourly">"Indica il periodo di ripetizione, il dosaggio e l'orario della prima assunzione"</string>
+<string name="schedule_help_repeat">"Indica i giorni di ripetizione del trattamento, Se si ripete tutti i giorni, non devi selezionare nulla."</string>
+<string name="schedule_help_timesbyday">"Indica il numero di volte al giorno in cui il trattamento si ripete"</string>
+<string name="schedule_help_timetable">"Ora associa ogni assunzione alle tue routine e indica il dosaggio per ciascuna di esse"</string>
+<string name="title_activity_calendar">"Calendario"</string>
+<string name="title_pickups_bottom_sheet">"Ritiri del %1$s"</string>
+<string name="pickup_interval">"Fino al %1$s"</string>
+<string name="pickup_date_format">"dd MMMM"</string>
+<string name="title_activity_confirm_schedules">"Conferma trattamenti"</string>
+<string name="confirm_prescription_x_of_y">"Prescrizione %1$s di %2$s"</string>
+<string name="scan_prescriptions_title">"Scannerizza prescrizione"</string>
+<string name="scan_qr">"Scannerizza QR"</string>
+<string name="duration">"Durata"</string>
+<string name="all_meds_taken">"Hai preso tutte le medicine!"</string>
+<string name="create_schedule_select_med_before_dose">"Seleziona prima una medicina"</string>
+<string name="title_activity_patients">"Pazienti"</string>
+<string name="schedule_type_help_title">"Stai per creare un trattamento. Scegli quello più adatto alle tue esigenze!"</string>
+<string name="schedule_type_routines_help">"Questo tipo di trattamento ti permette di collegare le assunzioni alle tue routine. Ad esempio: \"Ogni giorno a colazione e cena, escludendo le domeniche", oppure \"Ogni 3 giorni, a pranzo.\""</string>
+<string name="schedule_type_hourly_help">"I trattamenti orari sono indicati per le assunzioni che si ripetono con un certo periodo. Ad esempio: \"Ogni 8 ore\". Imposta l'orario della prima assunzione."</string>
+<string name="schedule_type_intervalrest_help">"Le pillole contraccettive ed altri medicinali vanno assunti per un certo periodo e poi sospesi. Questo tipo di trattamento ti permette di specificare il periodo di assunzione e quello di pausa."</string>
+<string name="routines_list_empty_text">"Nessuna routine configurata.
 
-Routines are times when you need to take meds, like breakfast or dinner. You can reuse it for creating schedules faster."</string>
-<string name="medicines_list_empty_text">"There are no meds yet.
+Le routine sono degli orari ai quali devi assumere medicine, come ad esempio colazione o cena. Puoi riutilizzarle per creare dei trattamenti in maniera più rapida."</string>
+<string name="medicines_list_empty_text">"Nessun medicinale configurato.
 
-Add your meds to the kit, and you will have easy access to leaflets and warnings."</string>
-<string name="schedules_list_empty_text">"There are no schedules yet.
+Aggiungi dei medicinali al kit per avere accesso ai foglietti illustrativi ed alle avvertenze."</string>
+<string name="schedules_list_empty_text">"Nessun trattamento configurato.
 
-Add your schedules here and let us just notify you!"</string>
+Aggiungi i tuoi trattamenti e lascia a noi il compito di inviarti delle notifiche!"</string>
 <string name="about_description"><![CDATA[
 <br/><br/>
-Calendula is developed by the Research Centre for Information Technologies of the USC (<a href=\'http://citius.usc.es\'>CITIUS</a>)
+Calendula è sviluppata dal Research Centre for Information Technologies dell'USC (<a href=\'http://citius.usc.es\'>CITIUS</a>)
 <br/><br/>
-Visit our web site for more info:
+Visita il nostro sito web per maggiori informazioni:
 <br/>
 <a href=\'http://citius.usc.es/calendula\'>citius.usc.es/calendula </a>
 <br/><br/>
-Calendula is an open source project. You can contribute with ideas or suggestions through our Github page or by sending an e-mail to us:
+Calendula è un progetto open source. Puoi contribuire con idee o suggerimenti sulla nostra pagina Github oppure inviandoci una mail:
 <br/>
 <a href=\'https://github.com/citiususc/calendula\'>https://github.com/citiususc/calendula </a>
  <br/>
 <a href=\'mailto:citius.calendula@usc.es\'>citius.calendula@usc.es</a>
 <br/><br/>
-For this development, we use several open source libraries that are shown below:
+Per lo sviluppo di Calendula utilizziamo diverse librerie open source di seguito elencate:
 "]]></string>
-<string name="message_generic_pageloaderror">"There was an error loading the page"</string>
-<string name="title_prospect_webview">"Prospect view"</string>
-<string name="message_generic_pleasewait">"Please wait for a few seconds…"</string>
-<string name="message_prospect_loading">"The leaflet will be ready soon…"</string>
-<string name="message_prospect_connection_error">"The leaflet could not be loaded"</string>
-<string name="message_prospect_not_found_error">"Sorry, but it there is no leaflet available for this med"</string>
-<string name="intake_not_available">"Intake not available"</string>
-<string name="confirm_future_intake_warning">"This intake will be available %1$s. We will notify you in that moment!"</string>
-<string name="confirm_past_intake_warning">"It's been several hours since this intake, did you take your medication and want to confirm now?"</string>
-<string name="meds_from">"Meds of"</string>
-<string name="at_time_connector">"at"</string>
-<string name="med_taken_at">"Confirmed at"</string>
-<string name="med_cancelled_at">"Cancelled at"</string>
-<string name="med_not_taken">"Not taken"</string>
-<string name="meds_confirm_ok">"Yes, I took it"</string>
+<string name="message_generic_pageloaderror">"Errore nel caricamento della pagina"</string>
+<string name="title_prospect_webview">"Vista prospetto"</string>
+<string name="message_generic_pleasewait">"Attendi qualche secondo…"</string>
+<string name="message_prospect_loading">"Il foglietto illustrativo sarà pronto fra un attimo…"</string>
+<string name="message_prospect_connection_error">"Impossibile caricare il foglietto illustrativo"</string>
+<string name="message_prospect_not_found_error">"Purtroppo non c'è nessun foglietto illustrativo disponibile per questa medicina"</string>
+<string name="intake_not_available">"Assunzione non disponibile"</string>
+<string name="confirm_future_intake_warning">"Questa assunzione sarà disponibile %1$s. Ti invieremo una notifica al momento giusto!"</string>
+<string name="confirm_past_intake_warning">"Sono trascorse diverse ore da questa assunzione. Hai preso la tua medicina e vuoi confermarla adesso?"</string>
+<string name="meds_from">"Medicina del"</string>
+<string name="at_time_connector">"alle"</string>
+<string name="med_taken_at">"Confermata alle"</string>
+<string name="med_cancelled_at">"Cancellata alle"</string>
+<string name="med_not_taken">"Non assunta"</string>
+<string name="meds_confirm_ok">"Sì, l'ho assunta"</string>
 <string name="meds_confirm_cancel">"No"</string>
 <string name="meds_unconfirm_ok">"No"</string>
-<string name="meds_unconfirm_cancel">"Yes, I took it"</string>
-<string name="unconfirm_past_intake_warning">"You confirmed this intake %1$s, did you take it?"</string>
-<string name="action_share_link">"Share with"</string>
-<string name="action_open_with_browser">"Open with browser"</string>
-<string name="title_share_link">"Share with…"</string>
-<string name="title_about">"About"</string>
-<string name="home_menu_allergies">"Allergies"</string>
-<string name="title_activity_allergies">"Allergies"</string>
+<string name="meds_unconfirm_cancel">"Sì, l'ho assunta"</string>
+<string name="unconfirm_past_intake_warning">"Hai confermato questa assunzione %1$s. Hai davvero preso la tua medicina?"</string>
+<string name="action_share_link">"Condividi con"</string>
+<string name="action_open_with_browser">"Apri nel browser"</string>
+<string name="title_share_link">"Condividi con…"</string>
+<string name="title_about">"Informazioni"</string>
+<string name="home_menu_allergies">"Allergie"</string>
+<string name="title_activity_allergies">"Allergie"</string>
 <string name="message_allergy_add_failure">"There was an error while trying to save your allergy preferences."</string>
 <string name="remove_allergy_message_short">"Remove allergy %1$s?"</string>
 <string name="excipient">"Excipient"</string>
