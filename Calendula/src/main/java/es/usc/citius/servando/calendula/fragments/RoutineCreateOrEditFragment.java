@@ -22,6 +22,7 @@ package es.usc.citius.servando.calendula.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.DisplayMetrics;
@@ -111,7 +112,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
 
                 float density = getResources().getDisplayMetrics().densityDpi;
                 LogUtil.d(TAG, "Density: " + density);
-                if (density >= DisplayMetrics.DENSITY_XHIGH) {
+                if (density >= DisplayMetrics.DENSITY_XHIGH || Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
                     RadialTimePickerDialogFragment timePickerFragment = new RadialTimePickerDialogFragment()
                             .setOnTimeSetListener(RoutineCreateOrEditFragment.this)
                             .setStartTime(hour, minute);
