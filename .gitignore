@@ -1,6 +1,5 @@
 # Local configuration file (sdk path, etc)
 /local.properties
-/keystore.properties
 /.idea/workspace.xml
 .DS_Store
 
@@ -42,6 +41,8 @@ libraries/*.iml
 
 Calendula/google-services/
 Calendula/google-services.json
+
+Calendula/keystore
 
 # captures
 captures/

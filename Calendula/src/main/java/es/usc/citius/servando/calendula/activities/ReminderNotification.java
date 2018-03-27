@@ -306,7 +306,7 @@ public class ReminderNotification {
         int delayMinutes = (int) Long.parseLong(delayMinutesStr);
 
         if (delayMinutes > 0 && !lost) {
-            String repeatTime = DateTime.now().plusMinutes(delayMinutes).toString("kk:mm");
+            String repeatTime = DateTime.now().plusMinutes(delayMinutes).toString("HH:mm");
             style.setSummaryText(context.getString(R.string.notification_repeat_message, repeatTime));
         } else {
             style.setSummaryText(med.getName() + "(" + context.getString(R.string.every) + " " + schedule.rule()

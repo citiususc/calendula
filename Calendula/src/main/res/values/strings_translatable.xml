@@ -45,6 +45,8 @@
 <string name="syrup">"Syrup"</string>
 <string name="spray">"Spray"</string>
 <string name="patches">"Patches"</string>
+<string name="powder">"Powder"</string>
+<string name="cream">"Cream"</string>
 <string name="unknown">"Unknown"</string>
 <string name="effervescent">"Effervescent"</string>
 <string name="schedule">"Schedule"</string>
@@ -92,6 +94,19 @@
 <item quantity="one">"sachet"</item>
 <item quantity="other">"sachets"</item>
 </plurals>
+<plurals name="powder_units">
+    <item quantity="one">"gram"</item>
+    <item quantity="other">"grams"</item>
+</plurals>
+<plurals name="cream_units">
+    <item quantity="one">"application"</item>
+    <item quantity="other">"applications"</item>
+</plurals>
+<plurals name="generic_units">
+    <item quantity="one">"unit"</item>
+    <item quantity="other">"units"</item>
+</plurals>
+<string name="generic_presentation">"Generic"</string>
 <string name="never">"Never"</string>
 <string name="every_day">"Every day"</string>
 <string name="once_a_day">"Once a day"</string>

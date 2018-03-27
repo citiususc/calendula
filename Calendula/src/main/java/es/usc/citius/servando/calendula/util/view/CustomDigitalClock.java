@@ -29,17 +29,12 @@ import android.util.AttributeSet;
 
 import java.util.Calendar;
 
-/**
- * You have to make a clone of the file DigitalClock.java to use in your application, modify in the following manner:-
- * private final static String m12 = "h:mm aa"; private final static String m24 = "k:mm";
- */
-
 public class CustomDigitalClock extends AppCompatTextView {
 
-    private final static String m12 = "kk:mm";
-    private final static String m24 = "kk:mm";
-    private final static String m12sec = "kk:mm:ss";
-    private final static String m24sec = "kk:mm:ss";
+    private final static String m12 = "h:mm a";
+    private final static String m24 = "HH:mm";
+    private final static String m12sec = "h:mm:ss a";
+    private final static String m24sec = "HH:mm:ss";
     Calendar mCalendar;
     String mFormat;
     boolean showSeconds = false;

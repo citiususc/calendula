@@ -92,10 +92,13 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
     FloatingActionButton fab;
     int color;
 
+    private static final String STATE_STARTED_SEARCH = "STATE_STARTED_SEARCH";
+
     private Prescription prescriptionToSet = null;
     private String prescriptionNameToSet = null;
     private String intentAction;
     private String intentSearchText = null;
+    private boolean startedSearch = false;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -172,6 +175,7 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
         Intent i = new Intent(this, MedicinesSearchActivity.class);
         i.putExtra(MedicinesSearchActivity.EXTRA_SEARCH_TERM, searchText);
         startActivityForResult(i, REQUEST_CODE_GET_MED);
+        startedSearch = true;
     }
 
 
@@ -208,34 +212,43 @@ public class MedicinesActivity extends CalendulaActivity implements MedicineCrea
 
         title.setBackgroundColor(color);
 
-        if (mMedicineId == -1 || intentSearchText != null) {
-            mViewPager.post(new Runnable() {
-                @Override
-                public void run() {
-                    showSearchView(intentSearchText);
-                }
-            });
+
+        if (savedInstanceState != null && savedInstanceState.getBoolean(STATE_STARTED_SEARCH)) {
+            LogUtil.d(TAG, "onCreate: search was started, ignoring search intents");
+        } else if (mMedicineId == -1 || intentSearchText != null) {
+            showSearchView(intentSearchText);
         }
 
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(STATE_STARTED_SEARCH, startedSearch);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         LogUtil.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
         if (requestCode == REQUEST_CODE_GET_MED) {
             if (resultCode == RESULT_OK) {
                 final String prescriptionName = data.getStringExtra(MedicinesSearchActivity.RETURN_EXTRA_PRESCRIPTION_NAME);
-                if (prescriptionName != null) {
-                    ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).setMedicineName(prescriptionName);
-                } else {
-                    final Prescription p = data.getParcelableExtra(MedicinesSearchActivity.RETURN_EXTRA_PRESCRIPTION);
-                    if (p != null) {
-                        ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).setPrescription(p);
-                    } else {
-                        LogUtil.e(TAG, "onActivityResult: result was OK but no prescription extras received ");
+                mViewPager.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (prescriptionName != null) {
+                            ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).setMedicineName(prescriptionName);
+                        } else {
+                            final Prescription p = data.getParcelableExtra(MedicinesSearchActivity.RETURN_EXTRA_PRESCRIPTION);
+                            if (p != null) {
+                                ((MedicineCreateOrEditFragment) getViewPagerFragment(0)).setPrescription(p);
+                            } else {
+                                LogUtil.e(TAG, "onActivityResult: result was OK but no prescription extras received ");
+                            }
+                        }
                     }
-                }
+                });
             }
         } else {
             LogUtil.w(TAG, "onActivityResult: invalid request code " + requestCode + ", ignoring");

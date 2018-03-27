@@ -64,14 +64,13 @@ public class DailyAgendaItemStub {
                 ", hasEvents=" + hasEvents +
                 ", count=" + (meds != null ? meds.size() : 0) +
                 ", title='" + title + '\'' +
-                ", time=" + time.toString("kk:mm") +
+                ", time=" + time.toString("HH:mm") +
                 ", date=" + date.toString("dd/MM") +
                 '}';
     }
 
     public static class DailyAgendaItemStubElement implements Comparable<DailyAgendaItemStubElement> {
 
-        public int res;
         public double dose;
         public boolean taken;
 

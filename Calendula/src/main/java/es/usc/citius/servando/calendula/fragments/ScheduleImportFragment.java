@@ -306,7 +306,7 @@ public class ScheduleImportFragment extends Fragment
 
     @Override
     public void onTimeSet(RadialTimePickerDialogFragment dialog, int hour, int minute) {
-        String time = new LocalTime(hour, minute).toString("kk:mm");
+        String time = new LocalTime(hour, minute).toString("HH:mm");
         hourlyIntervalFrom.setText(getString(R.string.first_intake) + ": " + time);
         schedule.setStartTime(new LocalTime(hour, minute));
     }
@@ -986,7 +986,7 @@ public class ScheduleImportFragment extends Fragment
             t = LocalTime.now().withMinuteOfHour(0);
             schedule.setStartTime(t);
         }
-        String time = new LocalTime(t.getHourOfDay(), t.getMinuteOfHour()).toString("kk:mm");
+        String time = new LocalTime(t.getHourOfDay(), t.getMinuteOfHour()).toString("HH:mm");
         hourlyIntervalFrom.setText(getString(R.string.first_intake) + ": " + time);
 
         if (schedule.rule().getInterval() < 1) {

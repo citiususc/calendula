@@ -210,10 +210,14 @@ public class AEMPSPrescriptionDBMgr extends PrescriptionDBMgr {
                 return Presentation.PILLS;
 
             case "44": // Solución / Suspensión oral efervescente
-            case "45": // Polvo / Granulado liberación modificada
                 return Presentation.EFFERVESCENT;
 
+            case "45": // Polvo / Granulado liberación modificada
+                return Presentation.POWDER;
+
             case "18": // Crema
+                return Presentation.CREAM;
+
             case "23": // Emulsion
             case "24": // Gel
             case "25": // Gel oftalmico

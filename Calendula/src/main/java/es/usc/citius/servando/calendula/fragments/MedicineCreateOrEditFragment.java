@@ -37,6 +37,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -52,6 +53,7 @@ import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.typeface.IIcon;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import org.joda.time.LocalDate;
@@ -211,7 +213,9 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
             mMedicine = Medicine.findById(mMedicineId);
         }
 
-        setupMedPresentationChooser(rootView);
+        addPresentations(rootView);
+
+        //setupMedPresentationChooser(rootView);
 
         mNameTextView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -485,147 +489,32 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
         npb.show();
     }
 
-    void setupMedPresentationChooser(final View rootView) {
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickMedicine(view.getId(), rootView);
-            }
-        };
-        for (View v : getViewsByTag((ViewGroup) rootView, "med_type")) {
-            ImageView iv = (ImageView) v;
-            iv.setOnClickListener(listener);
-            switch (v.getId()) {
-
-                case R.id.med_presentation_2:
-                    iv.setImageDrawable(iconFor(Presentation.CAPSULES));
-                    break;
-                case R.id.med_presentation_3:
-                    iv.setImageDrawable(iconFor(Presentation.EFFERVESCENT));
-                    break;
-                case R.id.med_presentation_4:
-                    iv.setImageDrawable(iconFor(Presentation.PILLS));
-                    LogUtil.d(TAG, "Pill");
-                    break;
-                case R.id.med_presentation_5:
-                    iv.setImageDrawable(iconFor(Presentation.SYRUP));
-                    break;
-                case R.id.med_presentation_6:
-                    iv.setImageDrawable(iconFor(Presentation.DROPS));
-                    break;
-                case R.id.med_presentation_7:
-                    iv.setImageDrawable(iconFor(Presentation.SPRAY));
-                    break;
-                case R.id.med_presentation_8:
-                    iv.setImageDrawable(iconFor(Presentation.INHALER));
-                    break;
-                case R.id.med_presentation_9:
-                    iv.setImageDrawable(iconFor(Presentation.INJECTIONS));
-                    break;
-                case R.id.med_presentation_10:
-                    iv.setImageDrawable(iconFor(Presentation.POMADE));
-                    break;
-                case R.id.med_presentation_11:
-                    iv.setImageDrawable(iconFor(Presentation.PATCHES));
-                    break;
-            }
-
+    void addPresentations(View rootView) {
+        LinearLayout parent = (LinearLayout) rootView.findViewById(R.id.presentation_scroll_content);
+        for (final Presentation p : Presentation.available()) {
+            View item = getLayoutInflater().inflate(R.layout.presentation_chooser_item, null);
+            ImageView imageView = (ImageView) item.findViewById(R.id.presentation_chooser_item_drawable);
+            imageView.setImageDrawable(iconFor(p.icon()));
+            item.setTag(p);
+            parent.addView(item);
+            item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectPresentation(p);
+                    updateStockText();
+                }
+            });
         }
     }
 
-    IconicsDrawable iconFor(Presentation p) {
+    IconicsDrawable iconFor(IIcon ic) {
         return new IconicsDrawable(getContext())
-                .icon(Presentation.iconFor(p))
-                //.color(pColor)
+                .alpha(50)
+                .icon(ic)
                 .colorRes(R.color.agenda_item_title)
                 .paddingDp(5)
                 .sizeDp(80);
     }
-
-    void onClickMedicine(int viewId, View rootView) {
-
-        for (View v : getViewsByTag((ViewGroup) rootView, "med_type")) {
-            v.setBackgroundColor(getResources().getColor(R.color.transparent));
-        }
-        rootView.findViewById(viewId).setBackgroundResource(R.drawable.presentation_circle_background);
-
-        switch (viewId) {
-
-            case R.id.med_presentation_2:
-                selectedPresentation = Presentation.CAPSULES;
-                LogUtil.d(TAG, "Capsule");
-                break;
-            case R.id.med_presentation_3:
-                selectedPresentation = Presentation.EFFERVESCENT;
-                LogUtil.d(TAG, "Effervescent");
-                break;
-            case R.id.med_presentation_4:
-                selectedPresentation = Presentation.PILLS;
-                LogUtil.d(TAG, "Pill");
-                break;
-            case R.id.med_presentation_5:
-                selectedPresentation = Presentation.SYRUP;
-                LogUtil.d(TAG, "Syrup");
-                break;
-            case R.id.med_presentation_6:
-                selectedPresentation = Presentation.DROPS;
-                LogUtil.d(TAG, "Drops");
-                break;
-            case R.id.med_presentation_7:
-                selectedPresentation = Presentation.SPRAY;
-                LogUtil.d(TAG, "Spray");
-                break;
-            case R.id.med_presentation_8:
-                selectedPresentation = Presentation.INHALER;
-                LogUtil.d(TAG, "Drops");
-                break;
-            case R.id.med_presentation_9:
-                selectedPresentation = Presentation.INJECTIONS;
-                LogUtil.d(TAG, "Injection");
-                break;
-            case R.id.med_presentation_10:
-                selectedPresentation = Presentation.POMADE;
-                LogUtil.d(TAG, "Pomade");
-                break;
-            case R.id.med_presentation_11:
-                selectedPresentation = Presentation.PATCHES;
-                LogUtil.d(TAG, "Patches");
-                break;
-        }
-
-        if (selectedPresentation != null) {
-            mPresentationTv.setText(": " + selectedPresentation.getName(getResources()));
-            updateStockText();
-        }
-    }
-
-    int getPresentationViewId(Presentation pres) {
-        switch (pres) {
-            case INJECTIONS:
-                return R.id.med_presentation_9;
-            case POMADE:
-                return R.id.med_presentation_10;
-            case CAPSULES:
-                return R.id.med_presentation_2;
-            case EFFERVESCENT:
-                return R.id.med_presentation_3;
-            case PILLS:
-                return R.id.med_presentation_4;
-            case SYRUP:
-                return R.id.med_presentation_5;
-            case DROPS:
-                return R.id.med_presentation_6;
-            case SPRAY:
-                return R.id.med_presentation_7;
-            case INHALER:
-                return R.id.med_presentation_8;
-            case PATCHES:
-                return R.id.med_presentation_11;
-            default:
-                return -1;
-        }
-    }
-
 
     void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -729,16 +618,19 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
     }
 
     private void selectPresentation(Presentation p) {
-        for (View v : getViewsByTag((ViewGroup) getView(), "med_type")) {
+        selectedPresentation = p;
+        for (View v : getViewsByTag((ViewGroup) getView(), getString(R.string.presentation_item_tag))) {
             v.setBackgroundColor(getResources().getColor(R.color.transparent));
         }
 
         if (p != null) {
-            int viewId = getPresentationViewId(p);
-            View view = getView().findViewById(viewId);
-            view.setBackgroundResource(R.drawable.presentation_circle_background);
-            mPresentationTv.setText(": " + p.getName(getResources()));
-            scrollToMedPresentation(view);
+            View view = getView().findViewWithTag(p);
+            if(view != null) {
+                ImageView image = (ImageView) view.findViewById(R.id.presentation_chooser_item_drawable);
+                image.setBackgroundResource(R.drawable.presentation_circle_background);
+                mPresentationTv.setText(": " + p.getName(getResources()));
+                scrollToMedPresentation(view);
+            }
         }
     }
 

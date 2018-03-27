@@ -129,14 +129,13 @@ public class MedicineDao extends GenericDao<Medicine, Long> {
                 for (PickupInfo p : pickups) {
                     DB.pickups().remove(p);
                 }
-                DB.medicines().remove(m);
 
                 //Remove alerts
                 final List<PatientAlert> alerts = DB.alerts().findBy(PatientAlert.COLUMN_MEDICINE, m);
                 for (PatientAlert alert : alerts) {
                     AlertManager.removeAlert(alert);
                 }
-
+                DB.medicines().remove(m);
                 return null;
             }
         });
