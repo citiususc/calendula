@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="home_menu_pharmacies">"Chemists"</string>
+<string name="pills">"Tablets"</string>
+<plurals name="pills_units">
+<item quantity="one">"tablet"</item>
+<item quantity="other">"tablets"</item>
+</plurals>
+<string name="intro_reminders_text">"Calendula will remind you about all your intakes. Remember to confirm, or we will notify you again!
+
+Customise alarms in the settings menu."</string>
+</resources>
