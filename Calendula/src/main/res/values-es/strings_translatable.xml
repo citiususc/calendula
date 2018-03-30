@@ -45,8 +45,6 @@
 <string name="syrup">"Jarabe"</string>
 <string name="spray">"Spray"</string>
 <string name="patches">"Parches"</string>
-<string name="powder">"Polvo"</string>
-<string name="cream">"Crema"</string>
 <string name="unknown">"Desconocido"</string>
 <string name="effervescent">"Efervescente"</string>
 <string name="schedule">"Pauta"</string>
@@ -86,14 +84,6 @@
 <item quantity="one">"parche"</item>
 <item quantity="other">"parches"</item>
 </plurals>
-<plurals name="powder_units">
-<item quantity="one">"gramo"</item>
-<item quantity="other">"gramos"</item>
-</plurals>
-<plurals name="cream_units">
-<item quantity="one">"applicación"</item>
-<item quantity="other">"aplicaciones"</item>
-</plurals>
 <plurals name="unknown_units">
 <item quantity="one">"unidad"</item>
 <item quantity="other">"unidades"</item>
@@ -102,11 +92,6 @@
 <item quantity="one">"sobre"</item>
 <item quantity="other">"sobres"</item>
 </plurals>
-<plurals name="generic_units">
-    <item quantity="one">"unidad"</item>
-    <item quantity="other">"unidades"</item>
-</plurals>
-<string name="generic_presentation">"Genérico"</string>
 <string name="never">"Nunca"</string>
 <string name="every_day">"Todos los días"</string>
 <string name="once_a_day">"Una vez al día"</string>
@@ -517,4 +502,20 @@ Quieres instalar la nueva base de datos ahora?"</string>
 <string name="patient_add">"Añadir paciente"</string>
 <string name="db_download_and_setup">"Descargar y configurar"</string>
 <string name="schedule_continue_indefinitely">"¿Quieres que esta pauta continúe indefinidamente?"</string>
+<string name="powder">"Polvo"</string>
+<string name="cream">"Crema"</string>
+<plurals name="powder_units">
+<item quantity="one">"gramo"</item>
+<item quantity="other">"gramos"</item>
+</plurals>
+<plurals name="cream_units">
+<item quantity="one">"aplicación"</item>
+<item quantity="other">"aplicaciones"</item>
+</plurals>
+<plurals name="generic_units">
+<item quantity="one">"unidad"</item>
+<item quantity="other">"unidades"</item>
+</plurals>
+<string name="generic_presentation">"Genérico"</string>
+<string name="notification_taken">"Tomado"</string>
 </resources>
