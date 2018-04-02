@@ -77,8 +77,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 34
-        versionName "2.5.3"
+        versionCode 35
+        versionName "2.5.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         applicationId "es.usc.citius.servando.calendula"
         multiDexEnabled true
@@ -153,7 +153,7 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${variant.name}-${variant.versionName}.apk"
+            outputFileName = "${project.name}-${variant.name}-${variant.versionName}.apk"
         }
     }
     compileOptions.incremental = false

@@ -503,4 +503,20 @@ Queres instalar a nova base de datos agora?"</string>
 <string name="patient_add">"Engadir paciente"</string>
 <string name="db_download_and_setup">"Descargar e instalar"</string>
 <string name="schedule_continue_indefinitely">"Queres que esta pauta continúe indefinidamente?"</string>
+<string name="powder">"Pó"</string>
+<string name="cream">"Crema"</string>
+<plurals name="powder_units">
+<item quantity="one">"gramo"</item>
+<item quantity="other">"gramos"</item>
+</plurals>
+<plurals name="cream_units">
+<item quantity="one">"aplicación"</item>
+<item quantity="other">"aplicacións"</item>
+</plurals>
+<plurals name="generic_units">
+<item quantity="one">"unidade"</item>
+<item quantity="other">"unidades"</item>
+</plurals>
+<string name="generic_presentation">"Xenérico"</string>
+<string name="notification_taken">"Tomado"</string>
 </resources>

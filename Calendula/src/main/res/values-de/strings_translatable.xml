@@ -502,4 +502,5 @@ Wollen Sie nun die neue Datenbank installieren?
 <string name="ringtone_none">"Keiner"</string>
 <string name="patient_add">"Neuer Patient"</string>
 <string name="db_download_and_setup">"Herunterladen und installieren"</string>
+<string name="schedule_continue_indefinitely">"Soll dieser Einnahmeplan dauerhaft fortgeführt werden?"</string>
 </resources>

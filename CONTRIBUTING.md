@@ -33,7 +33,7 @@ Non-code contributions are also welcome!. You can do a lot of things:
 
  * Comment on a issue or start your own to suggest ideas or give your opinion.
  * Fix typos, comments or clarify language to improve the quality of the app.
- * Propose an icon, a better drawable for an specific action, or even a new material app logo ;-).
+ * Propose [an icon](assets/icons), a better drawable for an specific action, or even a new material app logo ;-).
  * Be a member of the testing community by joining the testing group on Google Groups. You will automatically receive the updates from the BETA channel like normal updates from Google Play. This helps us find bugs before the public release!
 
 > Join the  BETA channel: [click here!](https://play.google.com/apps/testing/es.usc.citius.servando.calendula)
@@ -50,4 +50,3 @@ Alternatively, you can contribute translations via pull request:
  * Send a pull request.
 
 You can also improve an existing `strings_translatable.xml` file and make a PR with that!
-

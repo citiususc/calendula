@@ -134,7 +134,7 @@ public class ConfirmActivity extends CalendulaActivity {
     private boolean stateChanged = false;
     private ConfirmItemAdapter itemAdapter;
     private DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/YYYY");
-    private DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("kk:mm");
+    private DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm");
     private IconicsDrawable checkedIcon;
     private IconicsDrawable uncheckedIcon;
     private int color;
@@ -676,7 +676,7 @@ public class ConfirmActivity extends CalendulaActivity {
 
             String status = getString(R.string.med_not_taken);
             if (i.getTimeTaken() != null) {
-                status = (i.getTakenToday() ? getString(R.string.med_taken_at) : getString(R.string.med_cancelled_at)) + " " + i.getTimeTaken().toString("kk:mm") + "h";
+                status = (i.getTakenToday() ? getString(R.string.med_taken_at) : getString(R.string.med_cancelled_at)) + " " + i.getTimeTaken().toString("HH:mm") + "h";
             }
 
             h.med.setText(m.getName());

@@ -107,10 +107,6 @@ public class RoutineDao extends GenericDao<Routine, Long> {
     public List<Routine> findInHour(int hour) {
         try {
             LocalTime time = new LocalTime(hour, 0);
-            // get one hour interval [h:00, h:59:]
-            String start = time.toString("kk:mm");
-            String end = time.plusMinutes(59).toString("kk:mm");
-
 
             LocalTime endTime = time.plusMinutes(59);
 
