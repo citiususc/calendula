@@ -77,13 +77,13 @@ object StockDisplayUtils {
             .withDialogAnimation(true)
             .setDescription(msg)
             .setPositiveText(R.string.manage_stock)
-            .onPositive { dialog, which ->
+            .onPositive { _, _ ->
                 val i = Intent(context, MedicinesActivity::class.java)
                 i.putExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, m.id)
                 context.startActivity(i)
             }
             .setNeutralText(R.string.tutorial_understood)
-            .onNeutral { dialog, which -> dialog.dismiss() }
+            .onNeutral { dialog, _ -> dialog.dismiss() }
             .show()
 
     }
