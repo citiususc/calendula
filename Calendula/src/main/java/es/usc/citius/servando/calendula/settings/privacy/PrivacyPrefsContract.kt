@@ -28,6 +28,7 @@ interface PrivacyPrefsContract {
     interface View : IView {
 
         fun recordPIN()
+        fun verifyPIN(requestCode: Int)
         fun showPINOptions()
         fun showConfirmDeletePinChoice()
         fun setPINPrefText(@StringRes pinPrefText: Int)

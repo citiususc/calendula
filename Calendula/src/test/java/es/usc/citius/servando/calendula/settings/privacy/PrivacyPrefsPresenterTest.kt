@@ -31,6 +31,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.*
@@ -125,6 +126,31 @@ class PrivacyPrefsPresenterTest {
     }
 
     @Test
+    fun onResultValidDelete() {
+        presenter.onResult(
+            PrivacyPrefsPresenter.REQUEST_DELETE,
+            Activity.RESULT_OK,
+            Intent().putExtra(PinLockActivity.EXTRA_VERIFY_PIN_RESULT, true)
+        )
+
+        verify(view).setPINPrefText(kotlinEq(R.string.pref_summary_pin_lock_unset))
+        verify(view).setFingerprintPrefEnabled(kotlinEq(false))
+    }
+
+
+    @Test
+    fun onResultValidModify() {
+        presenter.onResult(
+            PrivacyPrefsPresenter.REQUEST_MODIFY,
+            Activity.RESULT_OK,
+            Intent().putExtra(PinLockActivity.EXTRA_VERIFY_PIN_RESULT, true)
+        )
+
+        verify(view).recordPIN()
+    }
+
+
+    @Test
     fun onClickPINPrefWithPinSet() {
 
         PreferenceUtils.edit()
@@ -154,15 +180,14 @@ class PrivacyPrefsPresenterTest {
     fun confirmDeletePIN() {
         presenter.confirmDeletePIN()
 
-        verify(view).setPINPrefText(kotlinEq(R.string.pref_summary_pin_lock_unset))
-        verify(view).setFingerprintPrefEnabled(kotlinEq(false))
+        verify(view).verifyPIN(ArgumentMatchers.anyInt())
     }
 
     @Test
     fun onClickModifyPIN() {
         presenter.onClickModifyPIN()
 
-        verify(view).recordPIN()
+        verify(view).verifyPIN(ArgumentMatchers.anyInt())
     }
 
 }

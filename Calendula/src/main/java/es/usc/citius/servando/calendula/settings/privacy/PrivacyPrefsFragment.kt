@@ -43,6 +43,7 @@ class PrivacyPrefsFragment :
     PrivacyPrefsContract.View {
 
 
+
     companion object {
         private const val TAG = "PrivacyPrefsFragment"
     }
@@ -153,5 +154,10 @@ class PrivacyPrefsFragment :
         // noop
     }
 
+    override fun verifyPIN(requestCode: Int) {
+        val i = Intent(activity, PinLockActivity::class.java)
+        i.action = PinLockActivity.ACTION_VERIFY_PIN
+        startActivityForResult(i, requestCode)
+    }
 
 }

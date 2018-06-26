@@ -20,6 +20,7 @@ package es.usc.citius.servando.calendula.settings.privacy
 
 import android.app.Activity
 import android.content.Intent
+import android.support.annotation.VisibleForTesting
 import es.usc.citius.servando.calendula.R
 import es.usc.citius.servando.calendula.mvp.BasePresenter
 import es.usc.citius.servando.calendula.pinlock.PINManager
@@ -34,6 +35,10 @@ class PrivacyPrefsPresenter(val fpHelper: FingerprintHelper) :
 
     companion object {
         private const val TAG = "PrivacyPrefsPresenter"
+        @VisibleForTesting
+        const val REQUEST_MODIFY = 12152
+        @VisibleForTesting
+        const val REQUEST_DELETE = 12318
     }
 
     override fun start() {
@@ -47,22 +52,39 @@ class PrivacyPrefsPresenter(val fpHelper: FingerprintHelper) :
         }
     }
 
-    override fun onResult(request: Int, result: Int, data: Intent?) {
-        LogUtil.d(TAG, "onResult() called with request=$request, result=$result, data=$data")
-        if (request == PinLockActivity.REQUEST_PIN && result == Activity.RESULT_OK && data != null) {
-            val pin = data.getStringExtra(PinLockActivity.EXTRA_NEW_PIN)
-            val pinManagerResult = PINManager.savePIN(pin)
-            if (pinManagerResult) {
-                view.setPINPrefText(R.string.pref_summary_pin_lock_set)
-                if (fpHelper.canUseFingerPrint()) {
-                    view.setFingerprintPrefEnabled(true)
-                    view.showEnableFingerprintDialog()
+    override fun onResult(requestCode: Int, result: Int, data: Intent?) {
+        LogUtil.d(
+            TAG,
+            "onResult() called with requestCode=$requestCode, result=$result, data=$data"
+        )
+
+        if (result == Activity.RESULT_OK && data != null) {
+            when (requestCode) {
+                PinLockActivity.REQUEST_PIN -> {
+                    val pin = data.getStringExtra(PinLockActivity.EXTRA_NEW_PIN)
+                    val pinManagerResult = PINManager.savePIN(pin)
+                    if (pinManagerResult) {
+                        view.setPINPrefText(R.string.pref_summary_pin_lock_set)
+                        if (fpHelper.canUseFingerPrint()) {
+                            view.setFingerprintPrefEnabled(true)
+                            view.showEnableFingerprintDialog()
+                        }
+                    }
+                }
+                REQUEST_DELETE -> {
+                    if (data.getBooleanExtra(PinLockActivity.EXTRA_VERIFY_PIN_RESULT, false)) {
+                        deletePIN()
+                    }
+                }
+                REQUEST_MODIFY -> {
+                    if (data.getBooleanExtra(PinLockActivity.EXTRA_VERIFY_PIN_RESULT, false)) {
+                        modifyPIN()
+                    }
                 }
             }
         } else {
             LogUtil.w(TAG, "onResult: invalid result or missing data")
         }
-
     }
 
     override fun onClickPINPref() {
@@ -78,13 +100,21 @@ class PrivacyPrefsPresenter(val fpHelper: FingerprintHelper) :
     }
 
     override fun confirmDeletePIN() {
+        view.verifyPIN(REQUEST_DELETE)
+    }
+
+    override fun onClickModifyPIN() {
+        view.verifyPIN(REQUEST_MODIFY)
+    }
+
+    private fun deletePIN() {
         LogUtil.d(TAG, "confirmDeletePIN: deleting PIN")
         PINManager.clearPIN()
         view.setPINPrefText(R.string.pref_summary_pin_lock_unset)
         view.setFingerprintPrefEnabled(false)
     }
 
-    override fun onClickModifyPIN() {
+    private fun modifyPIN() {
         view.recordPIN()
     }
 
