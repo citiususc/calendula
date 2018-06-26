@@ -50,7 +50,11 @@ class StartActivity : Activity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PinLockActivity.REQUEST_VERIFY) {
-            verifyUnlockAndLaunch()
+            if (resultCode == Activity.RESULT_CANCELED) {
+                finish()
+            } else {
+                verifyUnlockAndLaunch()
+            }
         }
     }
 }
