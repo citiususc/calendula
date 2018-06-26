@@ -248,6 +248,14 @@ public class PinLockActivity extends CalendulaActivity {
         return calledForResult;
     }
 
+    @Override
+    public void onBackPressed() {
+        // delete a number if possible, else go back
+        if (!pinInputStateManager.delete()) {
+            super.onBackPressed();
+        }
+    }
+
     private class NewPinListener implements PinInputStateManager.PinInputCompleteListener {
 
         private String firstPin;
