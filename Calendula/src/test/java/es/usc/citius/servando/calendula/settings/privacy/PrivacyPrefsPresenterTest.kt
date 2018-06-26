@@ -103,7 +103,7 @@ class PrivacyPrefsPresenterTest {
         presenter.onResult(
             PinLockActivity.REQUEST_PIN,
             Activity.RESULT_OK,
-            Intent().putExtra(PinLockActivity.EXTRA_PIN, FAKE_PIN)
+            Intent().putExtra(PinLockActivity.EXTRA_NEW_PIN, FAKE_PIN)
         )
 
         verify(view).setPINPrefText(kotlinEq(R.string.pref_summary_pin_lock_set))

@@ -82,6 +82,7 @@ class PrivacyPrefsFragment :
 
     override fun recordPIN() {
         val i = Intent(activity, PinLockActivity::class.java)
+        i.action = PinLockActivity.ACTION_NEW_PIN
         startActivityForResult(i, PinLockActivity.REQUEST_PIN)
     }
 

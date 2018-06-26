@@ -50,7 +50,7 @@ class PrivacyPrefsPresenter(val fpHelper: FingerprintHelper) :
     override fun onResult(request: Int, result: Int, data: Intent?) {
         LogUtil.d(TAG, "onResult() called with request=$request, result=$result, data=$data")
         if (request == PinLockActivity.REQUEST_PIN && result == Activity.RESULT_OK && data != null) {
-            val pin = data.getStringExtra(PinLockActivity.EXTRA_PIN)
+            val pin = data.getStringExtra(PinLockActivity.EXTRA_NEW_PIN)
             val pinManagerResult = PINManager.savePIN(pin)
             if (pinManagerResult) {
                 view.setPINPrefText(R.string.pref_summary_pin_lock_set)
