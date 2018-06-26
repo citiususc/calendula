@@ -394,7 +394,7 @@ Potrai vedere tutte le assunzioni nella schermata principale."</string>
 <string name="pref_stock_warn_two_weeks">"In meno di 2 settinane"</string>
 <string name="pref_stock_warn_three_weeks">"In meno di 3 settimane"</string>
 <string name="database_none_display">"Nessuno"</string>
-<string name="database_aemps_display">"Database AEMPS"</string>
+<string name="database_aemps_display">Database AEMPS (Spagna)</string>
 <string name="database_aemps_desc">"Database dell'Agencia Española de Medicamentos y Productos Sanitarios"</string>
 <string name="database_setting_up">"Configurazione…"</string>
 <string name="schedule_type_from_qr">"Codice QR"</string>

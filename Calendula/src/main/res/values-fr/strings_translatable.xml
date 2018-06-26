@@ -401,7 +401,7 @@ Vous verrez toutes leurs prises sur l'écran d'accueil."</string>
 <string name="pref_stock_warn_two_weeks">"Dans moins de 2 semaines"</string>
 <string name="pref_stock_warn_three_weeks">"Dans moins de 3 semaines"</string>
 <string name="database_none_display">"Aucun"</string>
-<string name="database_aemps_display">"Base de données de l'AEMPS"</string>
+<string name="database_aemps_display">Base de données de l\'AEMPS (Espagne)</string>
 <string name="database_aemps_desc">"Base de données de l'Agence Espagnole des Médicaments et des Produits Sanitaires"</string>
 <string name="database_setting_up">"Initialisation…"</string>
 <string name="schedule_type_from_qr">"À partir d'un QR"</string>

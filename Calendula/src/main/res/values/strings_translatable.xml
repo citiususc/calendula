@@ -395,7 +395,7 @@ You will see all their intakes in the home screen."</string>
 <string name="pref_stock_warn_two_weeks">"In less than 2 weeks"</string>
 <string name="pref_stock_warn_three_weeks">"In less than 3 weeks"</string>
 <string name="database_none_display">"None"</string>
-<string name="database_aemps_display">"AEMPS Database"</string>
+<string name="database_aemps_display">AEMPS Database (Spain)</string>
 <string name="database_aemps_desc">"Agencia Española de Medicamentos y Productos Sanitarios database"</string>
 <string name="database_setting_up">"Setting up…"</string>
 <string name="schedule_type_from_qr">"From QR"</string>
