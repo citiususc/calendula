@@ -129,6 +129,7 @@ public class PinLockActivity extends CalendulaActivity {
         fpHelper.startAuthentication(new LoginFPCallbackAdapter(this, fingerprintDialog));
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private void showFingerprintDialog() {
         fingerprintDialog = new MaterialDialog.Builder(this)
                 .icon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_fingerprint, R.color.android_blue_dark, 48))
@@ -315,11 +316,7 @@ public class PinLockActivity extends CalendulaActivity {
             if (checkPIN) {
                 //PIN is correct, forward to main activity
                 LogUtil.d(TAG, "PIN is correct");
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra(EXTRA_VERIFY_PIN_RESULT, true);
-                setResult(Activity.RESULT_OK, returnIntent);
-                UnlockStateManager.getInstance().unlock();
-                finish();
+                returnVerifiedResult();
             } else {
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -338,13 +335,21 @@ public class PinLockActivity extends CalendulaActivity {
 
     }
 
+    private void returnVerifiedResult() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(EXTRA_VERIFY_PIN_RESULT, true);
+        setResult(Activity.RESULT_OK, returnIntent);
+        UnlockStateManager.getInstance().unlock();
+        finish();
+    }
+
 
     private static class LoginFPCallbackAdapter implements FingerprintHelper.FingerprintCallbackAdapter {
 
-        private Activity activity;
+        private PinLockActivity activity;
         private MaterialDialog fingerprintDialog;
 
-        LoginFPCallbackAdapter(Activity activity, MaterialDialog fingerprintDialog) {
+        LoginFPCallbackAdapter(PinLockActivity activity, MaterialDialog fingerprintDialog) {
             this.activity = activity;
             this.fingerprintDialog = fingerprintDialog;
         }
@@ -368,10 +373,15 @@ public class PinLockActivity extends CalendulaActivity {
                 fingerprintDialog.setContent(R.string.fingerprint_unlock_dialog_successful_message);
                 fingerprintDialog.setIcon(IconUtils.icon(activity, GoogleMaterial.Icon.gmd_check_circle, R.color.android_green, 48));
             }
-            UnlockStateManager.getInstance().unlock();
-            Intent i = new Intent(activity, StartActivity.class);
-            activity.startActivity(i);
-            activity.finish();
+
+            switch (activity.getIntent().getAction()) {
+                case ACTION_NEW_PIN:
+                    throw new IllegalArgumentException("No fingerprint allowed for new pin recording");
+                case ACTION_VERIFY_PIN:
+                    activity.returnVerifiedResult();
+                    break;
+            }
+
         }
     }
 }
