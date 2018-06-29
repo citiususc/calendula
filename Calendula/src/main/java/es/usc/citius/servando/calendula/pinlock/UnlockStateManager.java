@@ -22,13 +22,15 @@ import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
 import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
  * Utility class to handle unlock state (for PIN lock)
  */
 public class UnlockStateManager {
 
-    private final static Duration MAX_UNLOCK_DURATION = Duration.standardMinutes(5);
+    private final static String DEFAULT_UNLOCK_DURATION_SECONDS = "120";
     private final static String TAG = "UnlockStateManager";
     private static UnlockStateManager theInstance;
     private DateTime unlockTimestamp;
@@ -76,7 +78,11 @@ public class UnlockStateManager {
         LogUtil.v(TAG, "isUnlocked() called");
         if (unlockTimestamp != null) {
             Duration diff = new Duration(unlockTimestamp, DateTime.now());
-            if (diff.compareTo(MAX_UNLOCK_DURATION) <= 0) {
+            // need to be a string to use a ListPreference
+            final String maxDurationStr = PreferenceUtils.getString(PreferenceKeys.UNLOCK_PIN_TIMEOUT, DEFAULT_UNLOCK_DURATION_SECONDS);
+            Duration maxDuration = Duration.standardSeconds(Integer.parseInt(maxDurationStr));
+            LogUtil.d(TAG, "Max unlock duration is " + maxDuration.toString());
+            if (diff.compareTo(maxDuration) <= 0) {
                 LogUtil.d(TAG, "isUnlocked() returned: " + true);
                 return true;
             } else {

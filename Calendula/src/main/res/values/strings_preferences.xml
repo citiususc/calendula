@@ -76,5 +76,6 @@
     <string name="prefkey_unlock_pin_hash" translatable="false">unlock_pin_hash</string>
     <string name="prefkey_unlock_pin_salt" translatable="false">unlock_pin_salt</string>
     <string name="prefkey_fingerprint_enabled" translatable="false">fingerprint_enabled</string>
+    <string name="prefkey_pin_timeout" translatable="false">pref_pin_timeout</string>
 
 </resources>

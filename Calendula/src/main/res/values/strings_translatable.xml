@@ -517,4 +517,9 @@ Do you want to install the new database now?
 </plurals>
 <string name="generic_presentation">"Generic"</string>
 <string name="notification_taken">"Taken"</string>
+    <string name="pref_pin_timeout_title">"Lock after"</string>
+    <string name="pref_lock_30s">"30 seconds"</string>
+    <string name="pref_lock_1m">"1 minute"</string>
+    <string name="pref_lock_2m">"2 minutes"</string>
+    <string name="pref_lock_5m">"5 minutes"</string>
 </resources>

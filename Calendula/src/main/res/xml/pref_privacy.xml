@@ -23,6 +23,16 @@
         android:summary="@string/pref_summary_pin_lock_unset"
         android:title="@string/pref_title_pin_lock"/>
 
+    <ListPreference
+        android:defaultValue="120"
+        android:enabled="false"
+        android:entries="@array/pref_lock_after_names"
+        android:entryValues="@array/pref_lock_after_values"
+        android:key="@string/prefkey_pin_timeout"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_pin_timeout_title" />
+
     <SwitchPreference
         android:defaultValue="false"
         android:enabled="false"

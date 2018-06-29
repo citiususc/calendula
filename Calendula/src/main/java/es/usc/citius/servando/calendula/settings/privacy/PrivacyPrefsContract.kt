@@ -33,8 +33,8 @@ interface PrivacyPrefsContract {
         fun showConfirmDeletePinChoice()
         fun setPINPrefText(@StringRes pinPrefText: Int)
         fun setFingerprintPrefEnabled(enabled: Boolean)
+        fun setPINDependentPrefsEnabled(enabled: Boolean)
         fun showEnableFingerprintDialog()
-
     }
 
     interface Presenter : IPresenter<View> {

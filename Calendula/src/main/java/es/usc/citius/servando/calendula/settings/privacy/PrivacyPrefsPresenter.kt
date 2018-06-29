@@ -47,6 +47,7 @@ class PrivacyPrefsPresenter(val fpHelper: FingerprintHelper) :
             if (fpHelper.canUseFingerPrint()) {
                 view.setFingerprintPrefEnabled(true)
             }
+            view.setPINDependentPrefsEnabled(true)
         } else {
             view.setPINPrefText(R.string.pref_summary_pin_lock_unset)
         }
@@ -69,6 +70,7 @@ class PrivacyPrefsPresenter(val fpHelper: FingerprintHelper) :
                             view.setFingerprintPrefEnabled(true)
                             view.showEnableFingerprintDialog()
                         }
+                        view.setPINDependentPrefsEnabled(true)
                     }
                 }
                 REQUEST_DELETE -> {
@@ -112,6 +114,7 @@ class PrivacyPrefsPresenter(val fpHelper: FingerprintHelper) :
         PINManager.clearPIN()
         view.setPINPrefText(R.string.pref_summary_pin_lock_unset)
         view.setFingerprintPrefEnabled(false)
+        view.setPINDependentPrefsEnabled(false)
     }
 
     private fun modifyPIN() {

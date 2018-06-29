@@ -96,7 +96,7 @@ class PrivacyPrefsPresenterTest {
 
         // when started PIN, PIN summary should be "PIN set", and fingerprint pref should be enabled
         verify(view).setPINPrefText(kotlinEq(R.string.pref_summary_pin_lock_set))
-        verify(view).setFingerprintPrefEnabled(kotlinEq(true))
+        verify(view).setPINDependentPrefsEnabled(kotlinEq(true))
     }
 
     @Test
@@ -108,7 +108,7 @@ class PrivacyPrefsPresenterTest {
         )
 
         verify(view).setPINPrefText(kotlinEq(R.string.pref_summary_pin_lock_set))
-        verify(view).setFingerprintPrefEnabled(kotlinEq(true))
+        verify(view).setPINDependentPrefsEnabled(kotlinEq(true))
         verify(view).showEnableFingerprintDialog()
     }
 
@@ -121,7 +121,7 @@ class PrivacyPrefsPresenterTest {
         )
 
         verify(view, never()).setPINPrefText(Mockito.anyInt())
-        verify(view, never()).setFingerprintPrefEnabled(Mockito.anyBoolean())
+        verify(view, never()).setPINDependentPrefsEnabled(Mockito.anyBoolean())
         verify(view, never()).showEnableFingerprintDialog()
     }
 
@@ -134,7 +134,7 @@ class PrivacyPrefsPresenterTest {
         )
 
         verify(view).setPINPrefText(kotlinEq(R.string.pref_summary_pin_lock_unset))
-        verify(view).setFingerprintPrefEnabled(kotlinEq(false))
+        verify(view).setPINDependentPrefsEnabled(kotlinEq(false))
     }
 
 
