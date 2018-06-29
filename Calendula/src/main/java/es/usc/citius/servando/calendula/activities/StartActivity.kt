@@ -31,6 +31,10 @@ import es.usc.citius.servando.calendula.pinlock.UnlockStateManager
 
 class StartActivity : Activity() {
 
+    companion object {
+        const val EXTRA_RETURN_TO_PREVIOUS = "StartActivity.extras.return_to_previous"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         verifyUnlockAndLaunch()
@@ -42,7 +46,11 @@ class StartActivity : Activity() {
             i.action = PinLockActivity.ACTION_VERIFY_PIN
             startActivityForResult(i, PinLockActivity.REQUEST_VERIFY)
         } else {
-            startActivity(Intent(this, HomePagerActivity::class.java))
+            val returnToPrevious  = intent.getBooleanExtra(EXTRA_RETURN_TO_PREVIOUS,false)
+            if (!returnToPrevious) {
+                // if "return to previous" is specified, just finish this activity to go back in the stack
+                startActivity(Intent(this, HomePagerActivity::class.java))
+            }
             finish()
         }
     }
