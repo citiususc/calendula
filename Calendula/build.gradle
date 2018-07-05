@@ -80,7 +80,7 @@ android {
         versionCode 36
         versionName "2.5.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        applicationId "es.usc.citius.servando.calendula"
+        applicationId "es.usc.citius.servando.calendula.allergiestesting"
         multiDexEnabled true
     }
 
