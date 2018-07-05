@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,21 +13,24 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.util.prospects;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 import org.joda.time.Duration;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.activities.WebViewActivity;
+import es.usc.citius.servando.calendula.activities.WebViewRequest;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
@@ -40,33 +43,40 @@ import es.usc.citius.servando.calendula.util.ScreenUtils;
  */
 public class ProspectUtils {
 
-    public static final Duration PROSPECT_TTL = Duration.standardDays(30);
+    private static final Duration PROSPECT_TTL = Duration.standardDays(30);
+    private static final String CSS_PLACEHOLDER_SCREEN_WIDTH = "###SCREEN_WIDTH###";
+    private static final String CSS_PLACEHOLDER_PATIENT_COLOR = "###PATIENT_COLOR###";
+    private static final String CSS_NORMALIZE_FILENAME = "normalize.css";
+    private static final String CSS_ADDITIONAL_TEMPLATE_FILENAME = "prospectView.css.template";
 
-    public static void openProspect(Prescription p, final Activity activity, boolean enableCache) {
+    public static void openProspect(Prescription p, final Context context, boolean enableCache) {
         PrescriptionDBMgr dbMgr = DBRegistry.instance().current();
         final String url = dbMgr.getProspectURL(p);
 
-        Intent i = new Intent(activity, WebViewActivity.class);
+        Intent i = new Intent(context, WebViewActivity.class);
 
-        final Patient patient = DB.patients().getActive(activity);
+        final Patient patient = DB.patients().getActive(context);
         Map<String, String> overrides = new HashMap<String, String>() {{
-            put("###SCREEN_WIDTH###", (int) (ScreenUtils.getDpSize(activity).x * 0.9) + "px");
-            put("###PATIENT_COLOR###", String.format("#%06X", (0xFFFFFF & patient.color())));
+            put(CSS_PLACEHOLDER_SCREEN_WIDTH, (int) (ScreenUtils.getDpSize(context).x * 0.9) + "px");
+            put(CSS_PLACEHOLDER_PATIENT_COLOR, String.format("#%06X", (0xFFFFFF & patient.getColor())));
         }};
 
-        WebViewActivity.WebViewRequest request = new WebViewActivity.WebViewRequest(url);
-        request.setCustomCss("prospectView.css", overrides);
-        request.setConnectionErrorMessage(activity.getString(R.string.message_prospect_connection_error));
-        request.setNotFoundErrorMessage(activity.getString(R.string.message_prospect_not_found_error));
-        request.setLoadingMessage(activity.getString(R.string.message_prospect_loading));
-        request.setTitle(activity.getString(R.string.title_prospect_webview));
+        final List<String> cssFiles = Arrays.asList(CSS_NORMALIZE_FILENAME, CSS_ADDITIONAL_TEMPLATE_FILENAME);
+
+        WebViewRequest request = new WebViewRequest(url);
+        request.setCustomCss(cssFiles);
+        request.setCustomCssOverrides(overrides);
+        request.setConnectionErrorMessage(context.getString(R.string.message_prospect_connection_error));
+        request.setNotFoundErrorMessage(context.getString(R.string.message_prospect_not_found_error));
+        request.setLoadingMessage(context.getString(R.string.message_prospect_loading));
+        request.setTitle(context.getString(R.string.title_prospect_webview));
         request.setPostProcessorClassname(LeafletHtmlPostProcessor.class.getCanonicalName());
         if (enableCache)
-            request.setCacheType(WebViewActivity.WebViewRequest.CacheType.DOWNLOAD_CACHE);
+            request.setCacheType(WebViewRequest.CacheType.DOWNLOAD_CACHE);
         request.setJavaScriptEnabled(true);
         request.setCacheTTL(PROSPECT_TTL);
         i.putExtra(WebViewActivity.PARAM_WEBVIEW_REQUEST, request);
-        activity.startActivity(i);
+        context.startActivity(i);
     }
 
 }

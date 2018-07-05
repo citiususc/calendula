@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,13 +13,10 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.database;
-
-import android.content.Context;
-import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.DeleteBuilder;
@@ -38,12 +35,12 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by joseangel.pineiro on 3/26/15.
- */
 public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
 
+
+    private static final String TAG = "DailyScheduleItemDao";
 
     public DailyScheduleItemDao(DatabaseHelper db) {
         super(db);
@@ -196,14 +193,14 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
         }
     }
 
-    public void saveAndUpdateStock(DailyScheduleItem model, boolean fireEvent, Context c) {
+    public void saveAndUpdateStock(DailyScheduleItem model, boolean fireEvent) {
         // get original value
         DailyScheduleItem original = findById(model.getId());
         // ensure checked status has changed
-        boolean updateStock = original.takenToday() != model.takenToday();
+        boolean updateStock = original.getTakenToday() != model.getTakenToday();
 
         if (updateStock) {
-            Schedule s = model.boundToSchedule() ? model.schedule() : model.scheduleItem().schedule();
+            Schedule s = model.boundToSchedule() ? model.getSchedule() : model.getScheduleItem().getSchedule();
             DB.schedules().refresh(s);
             Medicine m = s.medicine();
             DB.medicines().refresh(m);
@@ -212,19 +209,19 @@ public class DailyScheduleItemDao extends GenericDao<DailyScheduleItem, Long> {
                 try {
                     float amount;
                     if (s.repeatsHourly()) {
-                        amount = model.takenToday() ? -s.dose() : s.dose();
+                        amount = model.getTakenToday() ? -s.dose() : s.dose();
                     } else {
-                        ScheduleItem si = model.scheduleItem();
-                        amount = model.takenToday() ? -si.dose() : si.dose();
+                        ScheduleItem si = model.getScheduleItem();
+                        amount = model.getTakenToday() ? -si.getDose() : si.getDose();
                     }
-                    m.setStock(m.stock() + amount);
+                    m.setStock(m.getStock() + amount);
                     DB.medicines().save(m);
 
                     if (fireEvent) {
                         DB.medicines().fireEvent();
                     }
                 } catch (Exception e) {
-                    Log.e("DSIDAO", "An error occurred updating stock", e);
+                    LogUtil.e(TAG, "An error occurred updating stock", e);
                 }
             }
         }

@@ -1,0 +1,61 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-25-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "Calendula/build.gradle" }}
+#      - run:
+#         name: Install AVD
+#         command: |
+#            sdkmanager "system-images;android-25;google_apis;armeabi-v7a"
+#            echo no | avdmanager create avd --name test -k "system-images;android-25;google_apis;armeabi-v7a"
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies --no-daemon
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "Calendula/build.gradle" }}
+      - run:
+          name: Build
+          command: ./gradlew assembleCiDebug --no-daemon
+      - run:
+          name: Run Unit Tests
+          command: ./gradlew testCiDebugUnitTest --no-daemon
+          environment:
+            _JAVA_OPTIONS: "-Xmx2g"
+      - store_artifacts:
+          path: Calendula/build/reports/
+          destination: reports
+      - store_test_results:
+          path: Calendula/build/test-results
+#      - run:
+#          name: Launch Android Emulator
+#          command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && emulator64-arm -avd test -noaudio -no-boot-anim -no-window -accel on
+#          background: true
+#      - run:
+#          name: Wait For Emulator Bootup
+#          command: |
+#            circle-android wait-for-boot
+#            sleep 15
+#            adb shell input keyevent 82
+#      - run:
+#          name: Run Integration Tests
+#          command: ./gradlew connectedCiDebugAndroidTest --no-daemon
+      - run:
+          name: Generate Coverage Report
+          command: ./gradlew jacocoTestReportCiDebug --no-daemon
+      - store_artifacts:
+          path: Calendula/build/reports/
+          destination: reports
+      - run:
+          name: Report coverage
+          command: |
+            wget 'https://oss.sonatype.org/service/local/repositories/releases/content/com/codacy/codacy-coverage-reporter/2.0.2/codacy-coverage-reporter-2.0.2-assembly.jar' -O coverage-reporter.jar
+            java -cp coverage-reporter.jar com.codacy.CodacyCoverageReporter -l Java -r Calendula/build/reports/jacoco/ciDebug/jacoco.xml

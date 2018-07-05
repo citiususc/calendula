@@ -22,15 +22,19 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'idea'
-
+// build config fields
+apply from: 'config.gradle'
 
 
 repositories {
     mavenCentral()
     jcenter()
+    maven { url "https://maven.google.com" }
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-    maven { url "http://dl.bintray.com/journeyapps/maven" }
     maven { url 'https://jitpack.io' }
 }
 
@@ -56,16 +60,28 @@ def getDate() {
     return formattedDate
 }
 
+def getCustomProguardFiles() {
+    return fileTree(dir: "proguard", include: ["*.pro"]).asList().toArray()
+}
+
+// workaround for Kotlin coverage in Android Studio 3
+// see https://stackoverflow.com/questions/45819700/android-studio-3-0-gradle-3-0-0-beta2-breaks-kotlin-unit-test-coverage
+task copyTestClasses(type: Copy) {
+    from "build/tmp/kotlin-classes/developDebug"
+    into "build/intermediates/classes/develop/debug"
+}
+
 android {
-    compileSdkVersion 24
-    buildToolsVersion '25'
+    compileSdkVersion 26
+    buildToolsVersion '27.0.3'
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 23
-        versionCode 29
-        versionName "2.5-SNAPSHOT"
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 36
+        versionName "2.5.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         applicationId "es.usc.citius.servando.calendula"
+        multiDexEnabled true
     }
 
     packagingOptions {
@@ -81,6 +97,12 @@ android {
         }
     }
 
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
 
     lintOptions {
         abortOnError false
@@ -88,42 +110,50 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
+            proguardFiles getCustomProguardFiles()
+            testProguardFiles getDefaultProguardFile('proguard-android.txt')
+            testProguardFiles getCustomProguardFiles()
             signingConfig signingConfigs.release
         }
         debug {
             debuggable true
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
+            testCoverageEnabled true
         }
         beta {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             versionNameSuffix "-build" + getDate()
         }
         alpha {
             minifyEnabled false
             applicationIdSuffix ".alpha"
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
             signingConfig signingConfigs.release
             versionNameSuffix "-" + getDate()
         }
     }
 
+    flavorDimensions "buildType"
+
     productFlavors {
         develop {
             applicationIdSuffix ".dev"
+            dimension "buildType"
+            minSdkVersion 21
         }
         product {
-
+            dimension "buildType"
+        }
+        ci {
+            dimension "buildType"
+            minSdkVersion 21
         }
     }
 
     applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            output.outputFile = new File(output.outputFile.parent,
-                    output.outputFile.name.replace(".apk", "-${variant.versionName}.apk"))
+        variant.outputs.all {
+            outputFileName = "${project.name}-${variant.name}-${variant.versionName}.apk"
         }
     }
     compileOptions.incremental = false
@@ -131,103 +161,155 @@ android {
 
 dependencies {
 
-    compile 'com.google.code.gson:gson'
-    compile 'com.nispok:snackbar:2.9.0'
-    compile 'com.doomonafireball.betterpickers:library:1.5.5'
-    compile 'com.github.filippudak.progresspieview:library:1.0.+'
-    compile 'com.github.amlcurran.showcaseview:library:5.0.0'
+    /********** DEBUGGING **********/
+    // Chrome debug bridge
+    debugImplementation 'com.facebook.stetho:stetho:1.5.0'
 
-    // support
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:cardview-v7:24.2.1'
-    compile 'com.android.support:recyclerview-v7:24.2.1'
-    compile 'com.android.support:palette-v7:24.2.1'
-    compile 'com.android.support:support-v4:24.2.1'
-    compile 'com.android.support:design:24.2.1'
+    // Memory leak debugging
+    //  1.5.2 held back because of a bug with gradle 3.0
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    alphaImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    betaImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    androidTestImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
 
-    // view/resource binding
-    compile 'com.jakewharton:butterknife:8.4.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    /********** SUPPORT **********/
+    // Multidex support
+    implementation 'com.android.support:multidex:1.0.2'
 
-    // round image view
-    compile 'com.makeramen:roundedimageview:1.5.0'
+    // Support libs
+    implementation "com.android.support:appcompat-v7:$libVersions.android.support"
+    implementation "com.android.support:cardview-v7:$libVersions.android.support"
+    implementation "com.android.support:design:$libVersions.android.support"
+    implementation "com.android.support:gridlayout-v7:$libVersions.android.support"
+    implementation "com.android.support:palette-v7:$libVersions.android.support"
+    implementation "com.android.support:preference-v7:$libVersions.android.support"
+    implementation "com.android.support:recyclerview-v7:$libVersions.android.support"
+    implementation "com.android.support:support-annotations:$libVersions.android.support"
+    implementation "com.android.support:support-v4:$libVersions.android.support"
+    implementation "com.android.support:preference-v14:$libVersions.android.support"
 
-    // Time and date handling
-    compile 'joda-time:joda-time:2.3'
-    compile 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.1.0'
-    compile 'com.ocpsoft:ocpsoft-pretty-time:1.0.7'
+    // Testing dependencies
+    //  Made explicit to avoid conflicts with other testing libs
+    androidTestImplementation "com.android.support:appcompat-v7:$libVersions.android.support"
+    androidTestImplementation "com.android.support:design:$libVersions.android.support"
+    androidTestImplementation "com.android.support:recyclerview-v7:$libVersions.android.support"
+    androidTestImplementation "com.android.support:support-annotations:$libVersions.android.support"
+    androidTestImplementation "com.android.support:support-v4:$libVersions.android.support"
 
-    // Floating action button
-    compile 'com.melnykov:floatingactionbutton:1.1.0'
+    /********** TESTING **********/
+    // JUnit
+    testImplementation 'junit:junit:4.12'
 
-    // calendar view
-    compile 'com.squareup:android-times-square:1.6.4@aar'
-    compile 'com.roomorama:caldroid:3.0.1'
-    compile 'com.github.sundeepk:compact-calendar-view:1.8.4'
+    // Mockito
+    testImplementation "org.mockito:mockito-inline:2.13.0"
+    androidTestImplementation "org.mockito:mockito-android:2.13.0"
 
-    // Tab strip
-    //compile 'com.ogaclejapan.smarttablayout:library:1.1.0@aar'
-    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
+    // Support testing
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:rules:1.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+
+    // Roboelectric
+    testImplementation "org.robolectric:robolectric:3.6.1"
+    testImplementation "org.robolectric:shadows-multidex:3.6.1"
+
+    /********** UTILITIES **********/
+    // HTML parsing
+    implementation 'org.jsoup:jsoup:1.10.2'
 
     // Event bus
-    compile 'de.greenrobot:eventbus:2.2.1'
+    implementation 'org.greenrobot:eventbus:3.0.0'
 
-    // qr scanning
-    compile 'com.journeyapps:zxing-android-embedded:3.4.0@aar'
-    //compile 'com.journeyapps:zxing-android-integration:2.0.1@aar'
-    compile 'com.google.zxing:core:3.0.1'
+    // Jobs
+    implementation 'com.evernote:android-job:1.1.11'
 
-    // ormlite
-    compile 'com.j256.ormlite:ormlite-android:4.45'
+    // JSON serializing-deserializing
+    implementation 'com.google.code.gson:gson:2.8.1'
 
-    // testing
-    androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.0'
-    testCompile 'junit:junit:4.12'
-    testCompile "org.mockito:mockito-core:1.9.5"
+    // Lang utilities
+    //  Used for Levenshtein distance, etc
+    implementation 'org.apache.commons:commons-lang3:3.6'
+    implementation 'org.apache.commons:commons-text:1.1'
 
-    compile 'com.getbase:floatingactionbutton:1.9.0'
+    // QR code scanning
+    implementation 'com.google.zxing:core:3.3.0'
+    implementation 'com.journeyapps:zxing-android-embedded:3.5.0@aar'
 
-    // google rfc 2445
-    compile files('libs/rfc2445.jar')
+    // Recurrence processing
+    implementation files('libs/rfc2445.jar')
 
-    compile('com.mikepenz:materialdrawer:4.4.1@aar') {
+    // SQLite ORM
+    implementation 'com.j256.ormlite:ormlite-android:5.0'
+
+    // Time and date handling
+    implementation 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.6.0'
+    implementation 'joda-time:joda-time:2.9.7'
+
+    // View/resource binding
+    kapt 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+
+    /********** VIEWS AND VIEW UTILITIES **********/
+    // About page with libraries
+    implementation('com.mikepenz:aboutlibraries:5.2.5@aar') {
         transitive = true
     }
-    compile 'com.mikepenz:iconics-core:2.7.1@aar'
-    compile 'com.mikepenz:google-material-typeface:2.1.2.1@aar'
-    compile 'com.mikepenz:community-material-typeface:1.2.65.1@aar'
-    compile('com.mikepenz:materialize:0.2.7@aar') {
+
+    // Calendar views
+    implementation 'com.roomorama:caldroid:3.0.1'
+    implementation 'com.squareup:android-times-square:1.6.4@aar'
+
+    // Circular progress "pie" view
+    //  Used for pill picker
+    implementation 'com.github.filippudak.progresspieview:library:1.0.4'
+
+    // Dialogs with material style
+    implementation 'com.github.javiersantos:MaterialStyledDialogs:2.0'
+
+    // GIF ImageView
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
+
+    // Icons
+    implementation 'com.mikepenz:community-material-typeface:1.9.32.2@aar'
+    implementation 'com.mikepenz:google-material-typeface:2.1.2.1@aar'
+    implementation 'com.mikepenz:iconics-core:2.7.1@aar'
+
+    // Image loading
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+
+    // Intro slides
+    implementation 'com.heinrichreimersoftware:material-intro:1.5.8'
+
+    // Material style utilities
+    implementation('com.mikepenz:materialize:0.2.7@aar') {
         transitive = true
     }
-    compile('com.mikepenz:aboutlibraries:5.2.5@aar') {
+
+    // Picker DialogFragments
+    implementation 'com.code-troopers.betterpickers:library:3.1.0'
+
+    // Round image view
+    implementation 'com.makeramen:roundedimageview:1.5.0'
+
+    // Tab strip
+    implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
+
+    // Sliding left drawer
+    implementation('com.mikepenz:materialdrawer:4.4.1@aar') {
         transitive = true
     }
 
-    //
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.heinrichreimersoftware:material-intro:1.5.8'
-
-    // html parsing
-    compile 'org.jsoup:jsoup:1.7.2'
-
-    // material dialogs
-    compile 'com.github.javiersantos:MaterialStyledDialogs:2.0'
-
-    // jobs
-    compile 'com.evernote:android-job:1.1.3'
-
-    // recyclerview adapters
-    compile('com.mikepenz:fastadapter:2.1.5@aar') {
+    // Recyclerview adapters
+    implementation('com.mikepenz:fastadapter:2.1.5@aar') {
         transitive = true
     }
-    compile 'com.mikepenz:fastadapter-commons:2.1.0@aar'
-    compile 'com.mikepenz:fastadapter-extensions:2.1.0@aar'
+    implementation 'com.mikepenz:fastadapter-commons:2.1.0@aar'
+    implementation 'com.mikepenz:fastadapter-extensions:2.1.0@aar'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    // levenshtein distance etc
-    compile 'org.apache.commons:commons-lang3:3.5'
-
-    // gif imageview
-    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
 
 }
+

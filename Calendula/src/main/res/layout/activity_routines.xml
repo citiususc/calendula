@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -76,18 +77,18 @@
     </ScrollView>
 
 
-    <com.getbase.floatingactionbutton.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
-                                                           android:id="@+id/add_button"
-                                                           android:layout_width="wrap_content"
-                                                           android:layout_height="wrap_content"
-                                                           android:layout_alignParentEnd="true"
-                                                           android:layout_alignParentRight="true"
-                                                           android:layout_gravity="bottom|right"
-                                                           android:layout_marginRight="38dp"
-                                                           android:layout_marginTop="78dp"
-                                                           fab:fab_colorNormal="#efefef"
-                                                           fab:fab_colorPressed="#b7b7b7"
-                                                           fab:fab_icon="@drawable/ic_done_black_48dp"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="@dimen/fab_separator_right_margin"
+        android:layout_marginTop="@dimen/fab_separator_top_margin"
+        android:src="@drawable/ic_done_black_48dp"
+        app:backgroundTint="@color/fab_default_color"
+        app:elevation="@dimen/fab_elevation"/>
 
     <TextView
         android:id="@+id/textView"

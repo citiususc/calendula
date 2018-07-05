@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.drugdb;
@@ -59,9 +59,9 @@ public abstract class PrescriptionDBMgr {
 
     public abstract String getProspectURL(Prescription p);
 
-    public abstract Presentation expected(Prescription p);
+    public abstract Presentation expectedPresentation(Prescription p);
 
-    public abstract Presentation expected(String name, String content);
+    public abstract Presentation expectedPresentation(String name, String content);
 
     public abstract String shortName(Prescription p);
 

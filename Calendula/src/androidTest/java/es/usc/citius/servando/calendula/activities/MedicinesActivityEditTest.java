@@ -1,3 +1,21 @@
+/*
+ *    Calendula - An assistant for personal medication management.
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
+ *
+ *    Calendula is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.usc.citius.servando.calendula.activities;
 
 import android.content.Intent;
@@ -15,16 +33,14 @@ import es.usc.citius.servando.calendula.persistence.Presentation;
 import es.usc.citius.servando.calendula.util.TestUtils;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withTagValue;
 
 
 public class MedicinesActivityEditTest extends ActivityInstrumentationTestCase2<MedicinesActivity> {
 
-    public static final String NAME_BEFORE_EDIT = "Aspirin";
-    public static final String NAME_AFTER_EDIT = "Paracetamol";
+    public static final String MEDICINE_NAME = "Aspirin";
 
     private MedicinesActivity mActivity;
 
@@ -41,7 +57,8 @@ public class MedicinesActivityEditTest extends ActivityInstrumentationTestCase2<
         DB.dropAndCreateDatabase();
 
         // create medicine
-        Medicine created = new Medicine(NAME_BEFORE_EDIT, Presentation.EFFERVESCENT);
+        Medicine created = new Medicine(MEDICINE_NAME, Presentation.EFFERVESCENT);
+        created.setPatient(DB.patients().getDefault());
         created.save();
 
         // set edit intent
@@ -51,6 +68,7 @@ public class MedicinesActivityEditTest extends ActivityInstrumentationTestCase2<
 
 
         mActivity = getActivity();
+        TestUtils.unlockScreen(mActivity);
     }
 
     @Test
@@ -63,27 +81,23 @@ public class MedicinesActivityEditTest extends ActivityInstrumentationTestCase2<
     public void testEditMedicine() {
 
         assertEquals(1, DB.medicines().count());
-        assertEquals(NAME_BEFORE_EDIT, DB.medicines().findAll().get(0).name());
+        assertEquals(MEDICINE_NAME, DB.medicines().findAll().get(0).getName());
 
-        // type name
-        onView(withId(R.id.medicine_edit_name))
-                .perform(clearText())
-                .perform(typeText(NAME_AFTER_EDIT));
-        // close Soft Keyboard
-        TestUtils.closeKeyboard();
+        TestUtils.sleep(1500);
         // select capsules presentation
-        onView(withId(R.id.med_presentation_2))
+        onView(withTagValue(new PresentationTagMatcher(Presentation.CAPSULES)))
                 .perform(click());
+        TestUtils.sleep(200);
+
         // click save
         onView(withId(R.id.add_button))
                 .perform(click());
 
         // find edited med and do assertions
-        Medicine m = DB.medicines().findOneBy(Medicine.COLUMN_NAME, NAME_AFTER_EDIT);
+        Medicine m = DB.medicines().findOneBy(Medicine.COLUMN_NAME, MEDICINE_NAME);
         assertEquals(1, DB.medicines().count());
         assertNotNull(m);
-        assertEquals(NAME_AFTER_EDIT, m.name());
-        assertEquals(Presentation.CAPSULES, m.presentation());
+        assertEquals(Presentation.CAPSULES, m.getPresentation());
     }
 
 

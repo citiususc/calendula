@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.adapters.items;
@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula.adapters.items;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,10 +38,8 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by alvaro.brey.vilas on 22/11/16.
- */
 
 public class ScheduleListItem extends AbstractItem<ScheduleListItem, ScheduleListItem.ScheduleViewHolder> {
 
@@ -84,14 +81,14 @@ public class ScheduleListItem extends AbstractItem<ScheduleListItem, ScheduleLis
         if (schedule.type() != Schedule.SCHEDULE_TYPE_HOURLY) {
             timeStr = ScheduleUtils.getTimesStr(items != null ? items.size() : 0, ctx);
         } else {
-            timeStr = ScheduleUtils.getTimesStr(24 / schedule.rule().interval(), ctx);
+            timeStr = ScheduleUtils.getTimesStr(24 / schedule.rule().getInterval(), ctx);
         }
 
-        Log.d(TAG, "Schedule " + schedule.medicine().name() + " is scanned: " + schedule.scanned());
+        LogUtil.d(TAG, "Schedule " + schedule.medicine().getName() + " is scanned: " + schedule.scanned());
         String auto = schedule.scanned() ? " ↻" : "";
 
         holder.icon2.setImageDrawable(new IconicsDrawable(ctx)
-                .icon(schedule.medicine().presentation().icon())
+                .icon(schedule.medicine().getPresentation().icon())
                 .color(Color.WHITE)
                 .paddingDp(8)
                 .sizeDp(40));
@@ -104,7 +101,7 @@ public class ScheduleListItem extends AbstractItem<ScheduleListItem, ScheduleLis
                 .paddingDp(8)
                 .sizeDp(40));
 
-        holder.medName.setText(schedule.medicine().name() + auto);
+        holder.medName.setText(schedule.medicine().getName() + auto);
         holder.itemTimes.setText(timeStr);
         holder.itemDays.setText(schedule.toReadableString(ctx));
 

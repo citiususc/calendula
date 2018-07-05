@@ -1,0 +1,173 @@
+<!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true"
+                android:paddingTop="@dimen/status_bar_height">
+
+    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+                                       android:id="@+id/toolbar"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="56dp"
+                                       android:background="@color/dark_grey_home"
+                                       app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                                       app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <RelativeLayout
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ececec"
+        android:focusableInTouchMode="true"
+        android:visibility="visible">
+
+
+        <EditText
+            android:id="@+id/search_edit_text"
+            android:layout_width="fill_parent"
+            android:layout_height="56dp"
+            android:layout_alignBottom="@+id/imageView"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="60dp"
+            android:layout_toLeftOf="@+id/main_progress_bar"
+            android:layout_toStartOf="@+id/main_progress_bar"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/search_med_hint"
+            android:imeOptions="actionDone"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:singleLine="true"
+            android:textColor="#fff"
+            android:textColorHint="#ececec"
+            android:textCursorDrawable="@null"
+            android:textSize="20dp">
+
+            <requestFocus />
+        </EditText>
+
+        <ListView
+            android:id="@+id/search_list"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/search_edit_text"
+            android:background="#f2f2f2"/>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:id="@android:id/empty"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_below="@+id/search_edit_text"
+                      android:background="#fff"
+                      android:gravity="center_horizontal"
+                      android:orientation="vertical"
+                      android:paddingTop="70dp">
+
+            <ImageView
+                android:id="@+id/med_list_empty_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:alpha="0.3"
+                android:src="@drawable/ic_intro_alarm"/>
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.9"
+                android:gravity="center_horizontal"
+                android:padding="20dp"
+                android:text="@string/medicine_search_empty_list_msg"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#aaa"
+                android:textSize="16dp"/>
+
+            <Button
+                android:id="@+id/barcode_scan_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_list_item"
+                android:padding="10dp"
+                android:text="@string/scan_barcode"
+                android:visibility="gone"/>
+
+
+        </LinearLayout>
+
+
+        <ImageButton
+            android:id="@+id/back_button"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:padding="15dp"
+            android:src="@drawable/ic_search_white_48dp"/>
+
+        <ImageButton
+            android:id="@+id/close_search_button"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_alignParentRight="true"
+            android:padding="15dp"
+            android:src="@drawable/ic_cancel_white_48dp"
+            android:visibility="gone"/>
+
+
+        <ProgressBar
+            android:id="@+id/main_progress_bar"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_alignTop="@id/close_search_button"
+            android:layout_toLeftOf="@id/close_search_button"
+            android:padding="14dp"
+            android:visibility="gone"/>
+
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="5dp"
+            android:layout_below="@+id/search_edit_text"
+            android:alpha="0.3"
+            android:scaleType="fitXY"
+            android:src="@drawable/daily_view_list_item_tab_shadow_top"/>
+
+        <Button
+            android:id="@+id/add_custom_med_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/search_edit_text"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_list_item"
+            android:padding="10dp"
+            android:text="@string/add_custom_med_button_text"
+            android:textAllCaps="false"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

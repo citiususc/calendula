@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2017 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.util;
@@ -32,8 +32,12 @@ import java.util.zip.ZipInputStream;
 
 public class ZipUtil {
 
+    private static final String TAG = "ZipUtil";
+
     public static void unzip(File archive, File path) throws IOException {
         ZipInputStream zip = null;
+        BufferedInputStream buffer = null;
+        FileOutputStream output = null;
         String fileName = null;
         try {
             if (!path.exists()) {
@@ -44,18 +48,15 @@ public class ZipUtil {
             while ((zipEntry = zip.getNextEntry()) != null) {
                 fileName = zipEntry.getName();
                 final File outputFile = new File(path, fileName);
-                writeToStream(new BufferedInputStream(zip), new FileOutputStream(outputFile), false);
+                buffer = new BufferedInputStream(zip);
+                output = new FileOutputStream(outputFile);
+                writeToStream(buffer, output, false);
                 zip.closeEntry();
             }
             zip.close();
             zip = null;
         } finally {
-            if (zip != null) {
-                try {
-                    zip.close();
-                } catch (Exception e) {
-                }
-            }
+            CloseableUtil.closeQuietly(zip, buffer, output);
         }
     }
 

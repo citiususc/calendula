@@ -2,7 +2,7 @@
 
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/schedule_scroll"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -278,7 +279,7 @@
                         style="?android:attr/borderlessButtonStyle"
                         android:layout_width="65dp"
                         android:layout_height="40dp"
-                        android:text="1"
+                        tools:text="1"
                         android:textColor="@color/android_blue_dark"
                         android:textSize="18dp"
                         android:textStyle="bold"/>
@@ -304,7 +305,7 @@
                         android:ems="10"
                         android:gravity="center"
                         android:inputType="number"
-                        android:text="8"
+                        tools:text="8"
                         android:textColor="@color/android_blue_dark"
                         android:textSize="18dp"
                         android:textStyle="bold"/>
@@ -449,7 +450,6 @@
                     android:visibility="visible"/>
 
                 <LinearLayout
-                    android:id="@+id/hourly_interval_top"
                     android:layout_width="fill_parent"
                     android:layout_height="50dp"
                     android:layout_below="@+id/repeat_period_label"
@@ -461,7 +461,7 @@
                         style="?android:attr/borderlessButtonStyle"
                         android:layout_width="70dp"
                         android:layout_height="50dp"
-                        android:text="27"
+                        tools:text="27"
                         android:textColor="@color/android_blue_dark"
                         android:textSize="20dp"
                         android:textStyle="bold"/>
@@ -475,7 +475,8 @@
                         android:text="+"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="#444"
-                        android:textSize="20dp"/>
+                        android:textSize="20dp"
+                        tools:ignore="HardcodedText"/>
 
                     <Button
                         android:id="@+id/period_rest"
@@ -487,7 +488,7 @@
                         android:ems="10"
                         android:gravity="center"
                         android:inputType="number"
-                        android:text="8"
+                        tools:text="8"
                         android:textColor="@color/android_blue_dark"
                         android:textSize="20dp"
                         android:textStyle="bold"/>
@@ -531,7 +532,7 @@
                 android:background="#aaefefef"
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
-                android:text="Duration"
+                android:text="@string/duration"
                 android:textColor="#bfbfbf"
                 android:textSize="15dp"
                 android:visibility="visible"/>

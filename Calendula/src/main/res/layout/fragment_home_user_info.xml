@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/profile_container"
                 android:layout_width="fill_parent"
                 android:layout_height="300dp"
@@ -81,7 +82,7 @@
             android:layout_centerInParent="true"
             android:fontFamily="sans-serif-light"
             android:gravity="center"
-            android:text="Ángel Piñeiro"
+            tools:text="Ángel"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -112,7 +113,7 @@
                 android:layout_toLeftOf="@+id/profile_image_container"
                 android:layout_toStartOf="@+id/profile_image_container"
                 android:gravity="center|top"
-                android:text="OCT"
+                tools:text="OCT"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white"
                 android:textSize="20sp"
@@ -132,7 +133,7 @@
                 android:fontFamily="sans-serif-light"
                 android:gravity="center|bottom"
                 android:padding="0dp"
-                android:text="12"
+                tools:text="12"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white"
                 android:textSize="35sp"/>

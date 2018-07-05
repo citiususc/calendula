@@ -32,12 +32,11 @@
 <string name="confirm">"Confirm"</string>
 <string name="meds_time">"Remember to take your meds"</string>
 <string name="meds_time_lost">"Alarm lost"</string>
-<string name="title_select_dose_dialog">"Introduce a dose"</string>
+<string name="title_select_dose_dialog">"Select a dose"</string>
 <string name="doses_and_times">"Times and doses"</string>
 <string name="schedule_repeat_days">"Repeat"</string>
 <string name="summary_title">"Check and confirm"</string>
 <string name="summary">"Summary"</string>
-<string name="injections">"Injections"</string>
 <string name="pills">"Pills"</string>
 <string name="capsules">"Capsules"</string>
 <string name="inhaler">"Inhaler"</string>
@@ -49,17 +48,50 @@
 <string name="unknown">"Unknown"</string>
 <string name="effervescent">"Effervescent"</string>
 <string name="schedule">"Schedule"</string>
-<string name="injections_units">"injection"</string>
-<string name="pills_units">"pill"</string>
-<string name="capsules_units">"capsule"</string>
-<string name="inhaler_units">"inhalation"</string>
-<string name="spray_units">"application"</string>
-<string name="drops_units">"drop"</string>
-<string name="pomade_units">"application"</string>
-<string name="syrup_units">"ml"</string>
-<string name="patches_units">"patch"</string>
-<string name="unknown_units">"unit"</string>
-<string name="effervescent_units">"sachet"</string>
+<plurals name="injections_units">
+<item quantity="one">"injection"</item>
+<item quantity="other">"injections"</item>
+</plurals>
+<plurals name="pills_units">
+<item quantity="one">"pill"</item>
+<item quantity="other">"pills"</item>
+</plurals>
+<plurals name="capsules_units">
+<item quantity="one">"capsule"</item>
+<item quantity="other">"capsules"</item>
+</plurals>
+<plurals name="inhaler_units">
+<item quantity="one">"inhalation"</item>
+<item quantity="other">"inhalations"</item>
+</plurals>
+<plurals name="spray_units">
+<item quantity="one">"application"</item>
+<item quantity="other">"applications"</item>
+</plurals>
+<plurals name="drops_units">
+<item quantity="one">"drop"</item>
+<item quantity="other">"drops"</item>
+</plurals>
+<plurals name="pomade_units">
+<item quantity="one">"application"</item>
+<item quantity="other">"applications"</item>
+</plurals>
+<plurals name="syrup_units">
+<item quantity="one">"ml"</item>
+<item quantity="other">"ml"</item>
+</plurals>
+<plurals name="patches_units">
+<item quantity="one">"patch"</item>
+<item quantity="other">"patches"</item>
+</plurals>
+<plurals name="unknown_units">
+<item quantity="one">"unit"</item>
+<item quantity="other">"units"</item>
+</plurals>
+<plurals name="effervescent_units">
+<item quantity="one">"sachet"</item>
+<item quantity="other">"sachets"</item>
+</plurals>
 <string name="never">"Never"</string>
 <string name="every_day">"Every day"</string>
 <string name="once_a_day">"Once a day"</string>
@@ -150,7 +182,6 @@ Please carefully read the leaflet or ask your pharmacist before you get behind t
 <string name="schedule_repeat_type_everyday">"Every day"</string>
 <string name="schedule_repeat_type_some_week_days">"Some week days"</string>
 <string name="schedule_repeat_type_interval">"Interval"</string>
-<string name="schedule_repeat_frequency_hours">"hours"</string>
 <string name="schedule_repeat_frequency_days">"days"</string>
 <string name="schedule_repeat_frequency_weeks">"weeks"</string>
 <string name="schedule_repeat_frequency_months">"months"</string>
@@ -178,7 +209,6 @@ Please carefully read the leaflet or ask your pharmacist before you get behind t
 <string name="confirm_prescription_x_of_y">"Prescription %1$s of %2$s"</string>
 <string name="scan_prescriptions_title">"Scan prescriptions"</string>
 <string name="scan_qr">"Scan QR"</string>
-<string name="scan_barcode">"Scan barcode"</string>
 <string name="duration">"Duration"</string>
 <string name="all_meds_taken">"All meds taken!"</string>
 <string name="create_schedule_select_med_before_dose">"Please, select a med first"</string>
@@ -195,7 +225,7 @@ Routines are times when you need to take meds, like breakfast or dinner. You can
 Add your meds to the kit, and you will have easy access to leaflets and warnings."</string>
 <string name="schedules_list_empty_text">"There are no schedules yet.
 
-Add your schedules here and let we just notify you!"</string>
+Add your schedules here and let us just notify you!"</string>
 <string name="about_description"><![CDATA[
 <br/><br/>
 Calendula is developed by the Research Centre for Information Technologies of the USC (<a href=\'http://citius.usc.es\'>CITIUS</a>)
@@ -262,7 +292,7 @@ For this development, we use several open source libraries that are shown below:
 <string name="allergies_group_elements_selected">"%1$d elements (%2$d selected)"</string>
 <string name="add_custom_med_button_text">"Add \"%1$s\" to the med kit"</string>
 <string name="medicine_search_not_found_msg">"Sorry, we didn't find anything with that name"</string>
-<string name="medicine_search_empty_list_msg">"Type a drug name or code to start searching, or scan a package barcode"</string>
+<string name="medicine_search_empty_list_msg">"Type a drug name or code to start searching, or scan a package barcode…"</string>
 <string name="search_hint">"Search…"</string>
 <string name="database_us_display">"US Database"</string>
 <string name="pref_stock_alert_title">"Warn me when my medicines run out"</string>
@@ -283,7 +313,7 @@ For this development, we use several open source libraries that are shown below:
 <string name="create_default_routines">"Create default routines"</string>
 <string name="stock_running_out">"Running out of stock"</string>
 <string name="add_more_stock">"Add more"</string>
-<string name="stock_remaining_msg">"%1$d %2$s(s) remaining"</string>
+<string name="stock_remaining_msg">"%1$d %2$s remaining"</string>
 <string name="active_schedules_none">"No active schedules"</string>
 <string name="active_schedules_one">"1 active schedule"</string>
 <string name="active_schedules_number">"%1$d active schedules"</string>
@@ -365,7 +395,7 @@ You will see all their intakes in the home screen."</string>
 <string name="pref_stock_warn_two_weeks">"In less than 2 weeks"</string>
 <string name="pref_stock_warn_three_weeks">"In less than 3 weeks"</string>
 <string name="database_none_display">"None"</string>
-<string name="database_aemps_display">"AEMPS Database"</string>
+<string name="database_aemps_display">AEMPS Database (Spain)</string>
 <string name="database_aemps_desc">"Agencia Española de Medicamentos y Productos Sanitarios database"</string>
 <string name="database_setting_up">"Setting up…"</string>
 <string name="schedule_type_from_qr">"From QR"</string>
@@ -377,16 +407,120 @@ You will see all their intakes in the home screen."</string>
 <string name="text_take_medicines_now">"Take your medicines now"</string>
 <string name="message_patients_name_required">"Please input a name."</string>
 <string name="label_patient_name">"Name"</string>
-    <string name="title_database_update_available">Database update available</string>
-    <string name="text_database_update_available">There is an update available for the current medicine database. Do you want to download and install the update?</string>
-    <string name="action_download_update">Tap to download and install update!</string>
-    <string name="text_database_update_data_lost">Some of the medicines in your medkit have been removed from the database in the latest update. They remain in your medkits, but you won\'t be able to check their leaflets, etc. anymore.</string>
-    <string name="title_database_update_data_lost">Extra information lost after update</string>
-    <string name="preference_check_for_updates">Check for updates</string>
-    <string name="database_update_not_available">No database update available</string>
-    <string name="title_database_update_required">Database update required</string>
-    <string name="message_database_update_required">"This version of the app requires a newer database. Do you want to download and configure it now?
+<string name="scan_barcode">"Scan barcode"</string>
+<string name="title_database_update_available">"Database update available"</string>
+<string name="text_database_update_available">"There is an update available for the current medicine database. Do you want to download and install the update?"</string>
+<string name="action_download_update">"Tap to download and install update!"</string>
+<string name="text_database_update_data_lost">"Some of the medicines in your medkit have been removed from the database in the latest update. They remain in your medkits, but you won't be able to check their leaflets, etc. anymore."</string>
+<string name="title_database_update_data_lost">"Extra information lost after update"</string>
+<string name="preference_check_for_updates">"Check for updates"</string>
+<string name="database_update_not_available">"No database update available"</string>
+<string name="title_database_update_required">"Database update required"</string>
+<string name="message_database_update_required">"This version of the app requires a newer database. Do you want to download and configure it now?
 If you choose not to download it, some of your medicines' information may be lost."</string>
-    <string name="download">Download</string>
+<string name="download">"Download"</string>
+<string name="message_no_internet_error">"No internet connection available! Please establish a connection and try again."</string>
+<string name="action_edit">"Edit"</string>
+<string name="injections">"Injections"</string>
+<string name="title_reset_stock">"Reset stock?"</string>
+<string name="message_reset_stock">"The stock information for %1$s will reset to the default value."</string>
+<string name="reset">"Reset"</string>
+<string name="edit_medicine">"Edit medicine"</string>
+<string name="sort_by">"Sort by:"</string>
+<string name="sort_by_default">"Default"</string>
+<string name="sort_by_name">"Name"</string>
+<string name="sort_by_presentation">"Presentation"</string>
+<string name="action_sort">"Sort"</string>
+<string name="sort_by_alerts">"Alerts"</string>
+<string name="title_activity_pickup_calendar_short">"Pickups"</string>
+<string name="calendar_patient_all">"All"</string>
+<string name="calendar_updating">"Updating calendar…"</string>
+<string name="best_date_recommendation_title">"Advice"</string>
+<string name="best_single_day_message">"Visit your pharmacy %1$s and you will be able to pick up %2$s medicines at the same time:"</string>
+<string name="best_single_day_message_one_med">"Visit your pharmacy %1$s to pick up:"</string>
+<string name="best_single_day_message_after_pending">"Afterwards, you could go again %1$s to pick up %2$s medicines at the same time:"</string>
+<string name="best_single_day_message_after_pending_one_med">"Afterwards, you could go again %1$s and pick up:"</string>
+<string name="pending_meds_msg">"There's medicines pending pick-up. Please visit your pharmacy as soon as possible:"</string>
+<string name="best_date_format">"'on' MMMM d '('EEEE')'"</string>
+<string name="best_date_reminder">"Reminder"</string>
+<string name="calendar_pickup_reminder_one_day_before">"1 day before"</string>
+<string name="calendar_pickup_reminder_two_days_before">"2 days before"</string>
+<string name="calendar_pickup_reminder_three_days_before">"3 days before"</string>
+<string name="calendar_no_medicines_to_pick_up">"There's no medicines to pick up"</string>
+<string name="ok">"OK"</string>
+<string name="stock">"Stock"</string>
+<string name="expand">"Expand"</string>
+<string name="show_pickups">"Show pickups"</string>
+<string name="help">"Help"</string>
+<string name="title_activity_medicines_search">"Medicine search"</string>
+<string name="fingerprint_setup_dialog_message">"Do you want to unlock Calendula using your fingerprint?"</string>
+<string name="fingerprint_setup_dialog_success">"Fingerprint unlock enabled!"</string>
+<string name="fingerprint_setup_dialog_title">"Use fingerprint to unlock"</string>
+<string name="fingerprint_unlock_dialog_failed_message">"Please make sure your fingerprint sensor is clean, and try again."</string>
+<string name="fingerprint_unlock_dialog_failed_title">"Fingerprint authentication failed."</string>
+<string name="fingerprint_unlock_dialog_successful_message">"Please wait a few moments…"</string>
+<string name="fingerprint_unlock_dialog_successful_title">"Authentication successful"</string>
+<string name="fingerprint_unlock_dialog_title">"Use fingerprint to unlock"</string>
+<string name="fingerprint_unlock_dialog_use_pin">"Use PIN instead"</string>
+<string name="pin_actions_dialog_cancel">"Cancel"</string>
+<string name="pin_actions_dialog_delete">"Delete"</string>
+<string name="pin_actions_dialog_message">"The app is locked with a PIN number. What do you want to do?"</string>
+<string name="pin_actions_dialog_modify">"Modify"</string>
+<string name="pin_actions_dialog_title">"PIN lock"</string>
+<string name="pin_delete_dialog_message">"Are you sure you want to remove the PIN lock?"</string>
+<string name="pin_delete_dialog_title">"Remove PIN lock?"</string>
+<string name="pin_forgot_pin">"Forgot your PIN?"</string>
+<string name="pin_recovery_description">"If you've forgotten your PIN, you can log in again in order to access the app. Continue?"</string>
+<string name="pin_recovery_title">"PIN recovery"</string>
+<string name="pin_use_fingerprint">"Use fingerprint"</string>
+<string name="pref_fingerprint_enable_title">"Fingerprint unlock"</string>
+<string name="pref_header_privacy">"Privacy"</string>
+<string name="pref_summary_pin_lock_set">"PIN set"</string>
+<string name="pref_summary_pin_lock_unset">"PIN not set"</string>
+<string name="pref_title_pin_lock">"App lock"</string>
+<string name="text_pinlock_auth_error">"The input PIN is not correct. Please try again."</string>
+<string name="text_pinlock_auth_prompt">"Please input your PIN to continue"</string>
+<string name="text_pinlock_match_error">"The input PINs don't match. Please try again."</string>
+<string name="text_pinlock_new_prompt">"Please input a four digit PIN"</string>
+<string name="text_pinlock_or_fingerprint_auth_prompt">"Please input your PIN or use your fingerprint to continue"</string>
+<string name="text_pinlock_repeat_prompt">"Now, input the same PIN again…"</string>
+<string name="use_fingerprint_message">"or use your fingerprint to authenticate"</string>
+<string name="reinstall_prescriptions_dialog_message">"In order to provide you with better medicine information, the medicine database needs to be reinstalled through the Settings screen. If you don't reinstall it, you won't be able to access med leaflets or other extra functions anymore.
+
+Your schedules, medkit, routines and other basic functions are safe either way.
+
+Do you want to install the new database now?
+"</string>
+<string name="pref_insistent_notification_tone">"Insistent notifications ringtone"</string>
+<string name="stock_enough_for_weeks_days">"Enough for %1$d weeks and %2$d days with current schedules"</string>
+<string name="stock_running_out_dialog_message">"There are %1$d %2$s of %3$s remaining, and the stock will run out in %4$d days with the current schedules."</string>
+<string name="stock_running_out_dialog_title">"Stock is running out for %1$s"</string>
+<string name="manage_stock">"Manage stock"</string>
+<string name="message_generic_error">"Oops! There was an error."</string>
+<string name="ringtone_none">"None"</string>
+<string name="patient_add">"Add patient"</string>
+<string name="db_download_and_setup">"Download and setup"</string>
+<string name="schedule_continue_indefinitely">"Do you want this schedule to continue indefinitely?"</string>
+<string name="powder">"Powder"</string>
+<string name="cream">"Cream"</string>
+<plurals name="powder_units">
+<item quantity="one">"gram"</item>
+<item quantity="other">"grams"</item>
+</plurals>
+<plurals name="cream_units">
+<item quantity="one">"application"</item>
+<item quantity="other">"applications"</item>
+</plurals>
+<plurals name="generic_units">
+<item quantity="one">"unit"</item>
+<item quantity="other">"units"</item>
+</plurals>
+<string name="generic_presentation">"Generic"</string>
+<string name="notification_taken">"Taken"</string>
+    <string name="pref_pin_timeout_title">"Lock after"</string>
+    <string name="pref_lock_30s">"30 seconds"</string>
+    <string name="pref_lock_1m">"1 minute"</string>
+    <string name="pref_lock_2m">"2 minutes"</string>
+    <string name="pref_lock_5m">"5 minutes"</string>
     <string name="atc_therapeutic_pharmacological_subgroup">Therapeutic/Pharmacological subgroup</string>
 </resources>

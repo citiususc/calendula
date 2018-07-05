@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.fragments;
@@ -30,7 +30,6 @@ import android.support.v4.util.Pair;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +38,7 @@ import android.widget.ImageView;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.joda.time.LocalDate;
@@ -62,9 +62,12 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub.DailyAgendaItemStubElement;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
@@ -72,8 +75,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
  */
 public class DailyAgendaFragment extends Fragment {
 
-    public static final String PREF_EXPANDED = "DailyAgendaFragment.expanded";
-    final String TAG = "DailyAgendaFragment";
+    private static final String TAG = "DailyAgendaFragment";
     View emptyView;
 
     LinearLayoutManager llm;
@@ -102,7 +104,7 @@ public class DailyAgendaFragment extends Fragment {
         setupRecyclerView();
         setupEmptyView();
 
-        boolean expanded = PreferenceUtils.instance().preferences().getBoolean(PREF_EXPANDED, false);
+        boolean expanded = PreferenceUtils.getBoolean(PreferenceKeys.HOME_DAILYAGENDA_EXPANDED, false);
         if (expanded != isExpanded()) {
             toggleViewMode();
             ((HomePagerActivity) getActivity()).appBarLayout.setExpanded(!expanded);
@@ -136,10 +138,10 @@ public class DailyAgendaFragment extends Fragment {
         // create stubs for hourly schedule items
         for (DailyScheduleItem dailyScheduleItem : daily) {
             if (dailyScheduleItem.boundToSchedule()) {
-                Schedule schedule = dailyScheduleItem.schedule();
+                Schedule schedule = dailyScheduleItem.getSchedule();
                 Medicine medicine = schedule.medicine();
-                LocalTime time = dailyScheduleItem.time();
-                LocalDate date = dailyScheduleItem.date();
+                LocalTime time = dailyScheduleItem.getTime();
+                LocalDate date = dailyScheduleItem.getDate();
 
                 // create a stub for this item
                 DailyAgendaItemStub stub = new DailyAgendaItemStub(date, time);
@@ -154,13 +156,12 @@ public class DailyAgendaFragment extends Fragment {
 
                 // create a element for the schedule item
                 DailyAgendaItemStubElement el = new DailyAgendaItemStubElement();
-                el.medName = medicine.name();
+                el.medName = medicine.getName();
                 el.dose = schedule.dose();
                 el.displayDose = schedule.displayDose();
-                el.res = medicine.presentation().getDrawable();
-                el.presentation = medicine.presentation();
+                el.presentation = medicine.getPresentation();
                 el.minute = time.toString("mm");
-                el.taken = dailyScheduleItem.takenToday();
+                el.taken = dailyScheduleItem.getTakenToday();
                 stub.meds.add(el);
                 stubs.add(stub);
 
@@ -178,7 +179,7 @@ public class DailyAgendaFragment extends Fragment {
         final Map<LocalDate, Map<Routine, DailyAgendaItemStub>> dateStubs = new HashMap<>();
         // create stubs for routine items
         for (Routine routine : DB.routines().findAll()) {
-            for (ScheduleItem scheduleItem : routine.scheduleItems()) {
+            for (ScheduleItem scheduleItem : routine.getScheduleItems()) {
                 // get item from daily agenda if exists
                 List<DailyScheduleItem> dailyScheduleItems = DB.dailyScheduleItems().findAllByScheduleItem(scheduleItem);
 
@@ -189,7 +190,7 @@ public class DailyAgendaFragment extends Fragment {
                         break;
                     }
 
-                    LocalDate date = dailyScheduleItem.date();
+                    LocalDate date = dailyScheduleItem.getDate();
 
                     if (!dateStubs.containsKey(date)) {
                         dateStubs.put(date, new HashMap<Routine, DailyAgendaItemStub>());
@@ -199,15 +200,15 @@ public class DailyAgendaFragment extends Fragment {
 
                     DailyAgendaItemStub stub;
 
-                    LocalTime time = routine.time();
+                    LocalTime time = routine.getTime();
 
                     if (!routineStubs.containsKey(routine)) {
                         // create a new stub and add it to the list
-                        stub = new DailyAgendaItemStub(date, routine.time());
+                        stub = new DailyAgendaItemStub(date, routine.getTime());
                         stub.isRoutine = true;
                         stub.id = routine.getId();
-                        stub.patient = routine.patient();
-                        stub.title = routine.name();
+                        stub.patient = routine.getPatient();
+                        stub.title = routine.getName();
                         stub.time = time;
                         stub.meds = new ArrayList<>();
                         stub.hasEvents = true;
@@ -225,19 +226,18 @@ public class DailyAgendaFragment extends Fragment {
                         stub = routineStubs.get(routine);
                     }
 
-                    Schedule schedule = scheduleItem.schedule();
+                    Schedule schedule = scheduleItem.getSchedule();
                     Medicine medicine = schedule.medicine();
 
                     DailyAgendaItemStubElement el = new DailyAgendaItemStubElement();
                     // add element properties
-                    el.medName = medicine.name();
-                    el.dose = scheduleItem.dose();
+                    el.medName = medicine.getName();
+                    el.dose = scheduleItem.getDose();
                     el.scheduleItemId = scheduleItem.getId();
                     el.displayDose = scheduleItem.displayDose();
-                    el.res = medicine.presentation().getDrawable();
-                    el.presentation = medicine.presentation();
+                    el.presentation = medicine.getPresentation();
                     el.minute = time.toString("mm");
-                    el.taken = dailyScheduleItem.takenToday();
+                    el.taken = dailyScheduleItem.getTakenToday();
                     stub.meds.add(el);
                 }
             }
@@ -265,28 +265,10 @@ public class DailyAgendaFragment extends Fragment {
         for (DateTime start = min; start.isBefore(max); start = start.plusHours(1)) {
 
             boolean exact = false;
-            for (DailyAgendaItemStub item : items) {
+            for (DailyAgendaItemStub item : stubs) {
                 if (start.equals(item.dateTime())) {
                     exact = true;
                     break;
-                }
-            }
-
-            if (!exact) {
-                for (Routine routine : DB.routines().findAll()) {
-                    if (exact) {
-                        break;
-                    }
-                    for (ScheduleItem scheduleItem : routine.scheduleItems()) {
-                        List<DailyScheduleItem> dailyScheduleItems = DB.dailyScheduleItems().findAllByScheduleItem(scheduleItem);
-                        for (DailyScheduleItem dailyScheduleItem : dailyScheduleItems) {
-                            if (dailyScheduleItem == null) {
-                                break;
-                            } else if (dailyScheduleItem.time().equals(start.toLocalTime())) {
-                                exact = true;
-                            }
-                        }
-                    }
                 }
             }
 
@@ -355,10 +337,10 @@ public class DailyAgendaFragment extends Fragment {
 
     public void notifyDataChange() {
         try {
-            Log.d(TAG, "AgendaView NotifyDataChange");
+            LogUtil.d(TAG, "AgendaView NotifyDataChange");
             items.clear();
             items.addAll(buildItems());
-            Log.d(TAG, "Items after rebuild " + items.size());
+            LogUtil.d(TAG, "Items after rebuild " + items.size());
             rvAdapter.notifyDataSetChanged();
             // show empty list view if there are no items
             rv.postDelayed(new Runnable() {
@@ -368,7 +350,7 @@ public class DailyAgendaFragment extends Fragment {
                 }
             }, 100);
         } catch (Exception e) {
-            Log.e(TAG, "Error onPostExecute", e);
+            LogUtil.e(TAG, "Error onPostExecute", e);
         }
     }
 
@@ -377,17 +359,14 @@ public class DailyAgendaFragment extends Fragment {
     }
 
     // Method called from the event bus
-    @SuppressWarnings("unused")
-    public void onEvent(final Object evt) {
-        if (evt instanceof HomeProfileMgr.BackgroundUpdatedEvent) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    onBackgroundChange(HomeProfileMgr.colorForCurrent(getActivity()));
-                }
-            }, 500);
-
-        }
+    @Subscribe
+    public void handleBackgroundUpdatedEvent(final HomeProfileMgr.BackgroundUpdatedEvent event) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onBackgroundChange(HomeProfileMgr.colorForCurrent(getActivity()));
+            }
+        }, 500);
     }
 
     private void setupRecyclerView() {
@@ -415,14 +394,14 @@ public class DailyAgendaFragment extends Fragment {
     private void showConfirmActivity(View view, DailyAgendaItemStub item, int position) {
 
         Intent i = new Intent(getContext(), ConfirmActivity.class);
-        i.putExtra("position", position);
-        i.putExtra("date", item.date.toString("dd/MM/YYYY"));
+        i.putExtra(CalendulaApp.INTENT_EXTRA_POSITION, position);
+        i.putExtra(CalendulaApp.INTENT_EXTRA_DATE, item.date.toString("dd/MM/YYYY"));
 
         if (item.isRoutine) {
-            i.putExtra("routine_id", item.id);
+            i.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, item.id);
         } else {
-            i.putExtra("schedule_id", item.id);
-            i.putExtra("schedule_time", item.time.toString("kk:mm"));
+            i.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, item.id);
+            i.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, item.time.toString(AlarmIntentParams.TIME_FORMAT));
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -494,7 +473,7 @@ public class DailyAgendaFragment extends Fragment {
             int firstPosition = llm.findFirstVisibleItemPosition();
             firstTime = firstPosition >= 0 && firstPosition < items.size() ? items.get(firstPosition).dateTime() : null;
 
-            Log.d(TAG, "OnBeforeCollapse, somethingVisible is " + somethingVisible);
+            LogUtil.d(TAG, "OnBeforeCollapse, somethingVisible is " + somethingVisible);
 
             if (expanded) {
                 showOrHideEmptyView(false);
@@ -507,7 +486,7 @@ public class DailyAgendaFragment extends Fragment {
 
         @Override
         public void onAfterToggleCollapse(boolean expanded, boolean somethingVisible) {
-            PreferenceUtils.instance().edit().putBoolean(PREF_EXPANDED, expanded).apply();
+            PreferenceUtils.edit().putBoolean(PreferenceKeys.HOME_DAILYAGENDA_EXPANDED.key(), expanded).apply();
             /*if (expanded && firstTime != null) {
                 scrollTo(firstTime);
                 firstTime = null;

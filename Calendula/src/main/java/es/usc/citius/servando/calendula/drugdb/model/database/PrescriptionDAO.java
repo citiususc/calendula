@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,12 +13,10 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.drugdb.model.database;
-
-import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -30,6 +28,7 @@ import java.util.List;
 import es.usc.citius.servando.calendula.database.DatabaseHelper;
 import es.usc.citius.servando.calendula.database.GenericDao;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * This class was generated automatically.
@@ -37,7 +36,7 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
  */
 public class PrescriptionDAO extends GenericDao<Prescription, Long> {
 
-    public static final String TAG = "PrescriptionDAO";
+    private static final String TAG = "PrescriptionDAO";
 
     private Dao<Prescription, Long> daoInstance = null;
 
@@ -52,7 +51,7 @@ public class PrescriptionDAO extends GenericDao<Prescription, Long> {
                 daoInstance = dbHelper.getDao(Prescription.class);
             return daoInstance;
         } catch (SQLException e) {
-            Log.e(TAG, "Error creating Prescription DAO", e);
+            LogUtil.e(TAG, "Error creating Prescription DAO", e);
             throw new RuntimeException("Error creating Prescription DAO", e);
         }
     }
@@ -70,7 +69,7 @@ public class PrescriptionDAO extends GenericDao<Prescription, Long> {
      */
     public List<Prescription> findByNameOrCn(final String match, final int limit) {
         try {
-            Log.d("Prescription", "Query by name: " + match);
+            LogUtil.d(TAG, "Query by name: " + match);
             QueryBuilder<Prescription, Long> qb = dao.queryBuilder();
             Where w = qb.where();
             w.or(w.like(Prescription.COLUMN_NAME, "%" + match + "%"), w.like(Prescription.COLUMN_CODE, match + "%"));

@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,12 +13,10 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.database;
-
-import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedQuery;
@@ -31,13 +29,11 @@ import java.util.List;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by alvaro.brey on 3/26/15.
- */
 public class PatientAlertDao extends GenericDao<PatientAlert, Long> {
 
-    public static final String TAG = "AlertDao";
+    private static final String TAG = "AlertDao";
 
     private Dao<PatientAlert, Long> daoInstance = null;
 
@@ -64,7 +60,7 @@ public class PatientAlertDao extends GenericDao<PatientAlert, Long> {
                     .prepare();
             return dao.query(q);
         } catch (SQLException e) {
-            Log.e(TAG, "findByMedicineAndLevel: ", e);
+            LogUtil.e(TAG, "findByMedicineAndLevel: ", e);
             throw new RuntimeException("Cannot retrieve alerts: ", e);
         }
     }
@@ -78,7 +74,7 @@ public class PatientAlertDao extends GenericDao<PatientAlert, Long> {
             qb.orderBy(PatientAlert.COLUMN_LEVEL, false);
             return dao.query(qb.prepare());
         } catch (SQLException e) {
-            Log.e(TAG, "findByMedicineAndLevel: ", e);
+            LogUtil.e(TAG, "findByMedicineAndLevel: ", e);
             throw new RuntimeException("Cannot retrieve alerts: ", e);
         }
     }
@@ -92,7 +88,7 @@ public class PatientAlertDao extends GenericDao<PatientAlert, Long> {
                     .eq(PatientAlert.COLUMN_MEDICINE, m).prepare();
             return query(query);
         } catch (SQLException e) {
-            Log.e(TAG, "findByPatientMedicineAndType: ", e);
+            LogUtil.e(TAG, "findByPatientMedicineAndType: ", e);
             return null;
         }
     }
@@ -105,7 +101,7 @@ public class PatientAlertDao extends GenericDao<PatientAlert, Long> {
                     .prepare();
             return dao.query(q);
         } catch (SQLException e) {
-            Log.e(TAG, "findByMedicineAndType: ", e);
+            LogUtil.e(TAG, "findByMedicineAndType: ", e);
             throw new RuntimeException("Cannot retrieve alerts: ", e);
         }
     }

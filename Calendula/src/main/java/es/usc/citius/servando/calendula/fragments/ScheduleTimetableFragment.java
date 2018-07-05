@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,19 +13,22 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.fragments;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Html;
@@ -49,11 +52,11 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.doomonafireball.betterpickers.numberpicker.NumberPickerBuilder;
-import com.doomonafireball.betterpickers.numberpicker.NumberPickerDialogFragment;
-import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
-import com.doomonafireball.betterpickers.recurrencepicker.EventRecurrence;
-import com.doomonafireball.betterpickers.recurrencepicker.RecurrencePickerDialog;
+import com.codetroopers.betterpickers.numberpicker.NumberPickerBuilder;
+import com.codetroopers.betterpickers.numberpicker.NumberPickerDialogFragment;
+import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment;
+import com.codetroopers.betterpickers.recurrencepicker.EventRecurrence;
+import com.codetroopers.betterpickers.recurrencepicker.RecurrencePickerDialogFragment;
 import com.google.ical.values.DateTimeValueImpl;
 import com.google.ical.values.DateValue;
 import com.google.ical.values.Frequency;
@@ -62,9 +65,12 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.IllegalFormatConversionException;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.R;
@@ -82,23 +88,19 @@ import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.persistence.ScheduleItemComparator;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 import es.usc.citius.servando.calendula.util.Snack;
 
-/**
- * Created by joseangel.pineiro on 12/11/13.
- */
 public class ScheduleTimetableFragment extends Fragment
-        implements NumberPickerDialogFragment.NumberPickerDialogHandler,
-        RecurrencePickerDialog.OnRecurrenceSetListener, RadialTimePickerDialog.OnTimeSetListener {
-
-    public static final String TAG = ScheduleTimetableFragment.class.getName();
+        implements NumberPickerDialogFragment.NumberPickerDialogHandlerV2,
+        RecurrencePickerDialogFragment.OnRecurrenceSetListener, RadialTimePickerDialogFragment.OnTimeSetListener {
 
     public static final int REF_DIALOG_HOURLY_INTERVAL = 1;
     public static final int REF_DIALOG_ROUTINE_INTERVAL = 2;
     public static final int REF_DIALOG_CYCLE_DAYS = 3;
     public static final int REF_DIALOG_CYCLE_REST = 4;
-
+    private static final String TAG = "ScheduleTimetableFragm";
     final Frequency[] FREQ =
             new Frequency[]{Frequency.DAILY, Frequency.WEEKLY, Frequency.MONTHLY};
 
@@ -172,7 +174,7 @@ public class ScheduleTimetableFragment extends Fragment
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_schedule_timetable, container, false);
         patient = DB.patients().getActive(getActivity());
-        color = patient.color();
+        color = patient.getColor();
         scrollView = (ScrollView) rootView.findViewById(R.id.schedule_scroll);
         timetableContainer =
                 (LinearLayout) rootView.findViewById(R.id.schedule_timetable_container);
@@ -207,7 +209,7 @@ public class ScheduleTimetableFragment extends Fragment
 
         setupScheduleSpinner();
         setupDaySelectionListeners(rootView);
-        setupHourlyRepetitionLinsteners();
+        setupHourlyRepetitionListeners();
         setupStartEndDatePickers(rootView);
         setupForCurrentSchedule(rootView);
         setupCycleSpinner();
@@ -219,9 +221,9 @@ public class ScheduleTimetableFragment extends Fragment
     }
 
     public void onTypeSelected() {
-        Log.d(TAG, "onTypeSelected");
+        LogUtil.d(TAG, "onTypeSelected");
         if (getView() != null) {
-            Log.d(TAG, "getView() is not null");
+            LogUtil.d(TAG, "getView() is not null");
             setupForCurrentSchedule(getView());
         }
     }
@@ -235,40 +237,6 @@ public class ScheduleTimetableFragment extends Fragment
         super.onResume();
     }
 
-    @Override
-    public void onDialogNumberSet(int reference, int number, double decimal, boolean isNegative,
-                                  double fullNumber) {
-
-        if (reference == REF_DIALOG_ROUTINE_INTERVAL) {
-            intervalEditText.setText("" + number);
-            schedule.rule().setInterval(number);
-        } else if (reference == REF_DIALOG_HOURLY_INTERVAL) {
-            hourlyIntervalEditText.setText("" + number);
-            schedule.rule().setFrequency(Frequency.HOURLY);
-            schedule.rule().setInterval(number);
-        } else if (reference == REF_DIALOG_CYCLE_DAYS) {
-            periodValue.setText(String.valueOf(number));
-            cycleDays = number;
-            if (cycleRest > 0) {
-                schedule.setCycle(cycleDays, cycleRest);
-            }
-        } else if (reference == REF_DIALOG_CYCLE_REST) {
-            periodRest.setText(String.valueOf(number));
-            cycleRest = number;
-            if (cycleDays > 0) {
-                schedule.setCycle(cycleDays, cycleRest);
-            }
-        }
-    }
-
-    @Override
-    public void onTimeSet(RadialTimePickerDialog radialTimePickerDialog, int hour,
-                          int minute) {
-
-        String time = new LocalTime(hour, minute).toString("kk:mm");
-        hourlyIntervalFrom.setText(getString(R.string.first_intake) + ": " + time);
-        schedule.setStartTime(new LocalTime(hour, minute));
-    }
 
     @Override
     public void onRecurrenceSet(String s) {
@@ -282,18 +250,50 @@ public class ScheduleTimetableFragment extends Fragment
         event.parse(s);
         event.setStartDate(startDate);
 
-        Log.d(TAG, "OnRecurrenceSet: " + event.startDate);
+        LogUtil.d(TAG, "OnRecurrenceSet: " + event.startDate);
 
         schedule.setRepetition(new RepetitionRule("RRULE:" + s));
         setScheduleStart(schedule.start());
         LocalDate end = schedule.end();
-        Log.d(TAG, "ICAL: " + schedule.rule().toIcal());
+        LogUtil.d(TAG, "ICAL: " + schedule.rule().toIcal());
         setScheduleEnd(end);
-        Log.d(TAG, "ICAL: " + schedule.rule().toIcal());
+        LogUtil.d(TAG, "ICAL: " + schedule.rule().toIcal());
         ruleText.setText(getCurrentSchedule());
     }
 
-    void setupHourlyRepetitionLinsteners() {
+    @Override
+    public void onDialogNumberSet(int reference, BigInteger number, double decimal, boolean isNegative, BigDecimal fullNumber) {
+        final int numberValue = number.intValue();
+        if (reference == REF_DIALOG_ROUTINE_INTERVAL) {
+            intervalEditText.setText(Integer.toString(numberValue));
+            schedule.rule().setInterval(numberValue);
+        } else if (reference == REF_DIALOG_HOURLY_INTERVAL) {
+            hourlyIntervalEditText.setText(Integer.toString(numberValue));
+            schedule.rule().setFrequency(Frequency.HOURLY);
+            schedule.rule().setInterval(numberValue);
+        } else if (reference == REF_DIALOG_CYCLE_DAYS) {
+            periodValue.setText(String.valueOf(number));
+            cycleDays = numberValue;
+            if (cycleRest > 0) {
+                schedule.setCycle(cycleDays, cycleRest);
+            }
+        } else if (reference == REF_DIALOG_CYCLE_REST) {
+            periodRest.setText(String.valueOf(number));
+            cycleRest = numberValue;
+            if (cycleDays > 0) {
+                schedule.setCycle(cycleDays, cycleRest);
+            }
+        }
+    }
+
+    @Override
+    public void onTimeSet(RadialTimePickerDialogFragment dialog, int hour, int minute) {
+        String time = new LocalTime(hour, minute).toString("HH:mm");
+        hourlyIntervalFrom.setText(getString(R.string.first_intake) + ": " + time);
+        schedule.setStartTime(new LocalTime(hour, minute));
+    }
+
+    void setupHourlyRepetitionListeners() {
         hourlyIntervalEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -307,9 +307,10 @@ public class ScheduleTimetableFragment extends Fragment
 
                 DateTime time = schedule.startTime().toDateTimeToday();
 
-                RadialTimePickerDialog timePickerDialog =
-                        RadialTimePickerDialog.newInstance(ScheduleTimetableFragment.this,
-                                time.getHourOfDay(), time.getMinuteOfHour(), true);
+                RadialTimePickerDialogFragment timePickerDialog =
+                        new RadialTimePickerDialogFragment()
+                                .setOnTimeSetListener(ScheduleTimetableFragment.this)
+                                .setStartTime(time.getHourOfDay(), time.getMinuteOfHour());
                 timePickerDialog.show(getChildFragmentManager(), "111");
             }
         });
@@ -324,6 +325,38 @@ public class ScheduleTimetableFragment extends Fragment
 
     void setupStartEndDatePickers(View rootView) {
 
+        /*
+         * Needed to fix crashes on samsung 5.0 devices.
+         *
+         * See: https://stackoverflow.com/q/28618405/4243049
+         */
+        final ContextWrapper datePickerContext = new ContextWrapper(getActivity()) {
+
+            private Resources wrappedResources;
+
+            @Override
+            public Resources getResources() {
+                Resources r = super.getResources();
+                if(wrappedResources == null) {
+                    wrappedResources = new Resources(r.getAssets(), r.getDisplayMetrics(), r.getConfiguration()) {
+                        @NonNull
+                        @Override
+                        public String getString(int id, Object... formatArgs) throws NotFoundException {
+                            try {
+                                return super.getString(id, formatArgs);
+                            } catch (IllegalFormatConversionException e) {
+                                Log.w(TAG, "Trying to fix resource exception", e);
+                                String template = super.getString(id);
+                                template = template.replaceAll("%" + e.getConversion(), "%s");
+                                return String.format(getConfiguration().locale, template, formatArgs);
+                            }
+                        }
+                    };
+                }
+                return wrappedResources;
+            }
+        };
+
         if (schedule.start() == null) {
             schedule.setStart(LocalDate.now());
         }
@@ -335,11 +368,11 @@ public class ScheduleTimetableFragment extends Fragment
             public void onClick(View v) {
 
                 DatePickerDialog dpd =
-                        new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                        new DatePickerDialog(datePickerContext, new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                                   int dayOfMonth) {
-                                Log.d(TAG, year + " " + monthOfYear);
+                                LogUtil.d(TAG, year + " " + monthOfYear);
                                 LocalDate d = new LocalDate(year, monthOfYear + 1, dayOfMonth);
                                 setScheduleStart(d);
                             }
@@ -357,7 +390,7 @@ public class ScheduleTimetableFragment extends Fragment
                         schedule.end() != null ? schedule.end() : scheduleStart.plusMonths(3);
 
                 DatePickerDialog dpd =
-                        new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                        new DatePickerDialog(datePickerContext, new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                                   int dayOfMonth) {
@@ -374,7 +407,7 @@ public class ScheduleTimetableFragment extends Fragment
             @Override
             public boolean onLongClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage("Do you want this schedule to continue indefinitely?")
+                builder.setMessage(R.string.schedule_continue_indefinitely)
                         .setCancelable(true)
                         .setPositiveButton(getString(R.string.dialog_yes_option),
                                 new DialogInterface.OnClickListener() {
@@ -487,7 +520,7 @@ public class ScheduleTimetableFragment extends Fragment
                     schedule.setType(Schedule.SCHEDULE_TYPE_EVERYDAY);
                 }
 
-                Log.d(TAG, "All days selected: " + allDaysSelected + ", repeatType: " + schedule.type());
+                LogUtil.d(TAG, "All days selected: " + allDaysSelected + ", repeatType: " + schedule.type());
             }
         };
 
@@ -503,8 +536,8 @@ public class ScheduleTimetableFragment extends Fragment
     void showIntervalPickerDIalog() {
         NumberPickerBuilder npb =
                 new NumberPickerBuilder().setDecimalVisibility(NumberPicker.INVISIBLE)
-                        .setMinNumber(1)
-                        .setMaxNumber(31)
+                        .setMinNumber(BigDecimal.ONE)
+                        .setMaxNumber(BigDecimal.valueOf(31))
                         .setPlusMinusVisibility(NumberPicker.INVISIBLE)
                         .setFragmentManager(getChildFragmentManager())
                         .setTargetFragment(this).setReference(REF_DIALOG_ROUTINE_INTERVAL)
@@ -545,16 +578,16 @@ public class ScheduleTimetableFragment extends Fragment
     }
 
     void showRecurrencePickerDialog() {
-        RecurrencePickerDialog dialog = new RecurrencePickerDialog();
+        RecurrencePickerDialogFragment dialog = new RecurrencePickerDialogFragment();
 
         DateTime start = schedule.start() != null ? schedule.start().toDateTimeAtStartOfDay()
                 : DateTime.now().withTimeAtStartOfDay();
 
         Bundle b = new Bundle();
 
-        b.putString(RecurrencePickerDialog.BUNDLE_RRULE,
+        b.putString(RecurrencePickerDialogFragment.BUNDLE_RRULE,
                 schedule.rule().toIcal().replace("RRULE:", ""));
-        b.putLong(RecurrencePickerDialog.BUNDLE_START_TIME_MILLIS, DateTime.now().getMillis());
+        b.putLong(RecurrencePickerDialogFragment.BUNDLE_START_TIME_MILLIS, DateTime.now().getMillis());
         //b.putString(RecurrencePickerDialog.BUNDLE_TIME_ZONE, t.timezone);
 
         dialog.setArguments(b);
@@ -583,7 +616,7 @@ public class ScheduleTimetableFragment extends Fragment
 
             if (i < ScheduleHelper.instance().getScheduleItems().size()) {
                 ScheduleItem toCopy = ScheduleHelper.instance().getScheduleItems().get(i);
-                s = new ScheduleItem(null, toCopy.routine(), toCopy.dose());
+                s = new ScheduleItem(null, toCopy.getRoutine(), toCopy.getDose());
             } else {
                 s = new ScheduleItem(null, (i < routines.size()) ? routines.get(i) : null, 1);
             }
@@ -599,7 +632,7 @@ public class ScheduleTimetableFragment extends Fragment
         ScheduleHelper.instance().setScheduleItems(scheduleItems);
 
         //        for (ScheduleItem i : ScheduleCreationHelper.instance().getScheduleItems())
-        //            Log.d(TAG, "addTimetableEntries (end): " + i.getId() + ", " + i.routine().name() + ", " + i.dose());
+        //            LogUtil.d(TAG, "addTimetableEntries (end): " + i.getId() + ", " + i.routine().name() + ", " + i.dose());
 
     }
 
@@ -610,7 +643,7 @@ public class ScheduleTimetableFragment extends Fragment
         int j = 0;
         String[] routineNames = new String[routines.size() + 1];
         for (Routine r : routines) {
-            routineNames[j++] = r.name();
+            routineNames[j++] = r.getName();
         }
 
         routineNames[routineNames.length - 1] = getString(R.string.create_new_routine);
@@ -621,7 +654,7 @@ public class ScheduleTimetableFragment extends Fragment
     View buildTimetableEntry(ScheduleItem r, String[] routineNames, boolean enableDelete) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View entry = inflater.inflate(R.layout.schedule_timetable_entry, null);
-        updateEntryTime(r.routine(), entry);
+        updateEntryTime(r.getRoutine(), entry);
         setupScheduleEntrySpinners(entry, r, routineNames);
 
         if (enableDelete) {
@@ -653,10 +686,10 @@ public class ScheduleTimetableFragment extends Fragment
         String hourText;
         String minuteText;
         if (r != null) {
-            hourText = (r.time().getHourOfDay() < 10 ? "0" + r.time().getHourOfDay()
-                    : r.time().getHourOfDay()) + ":";
-            minuteText = (r.time().getMinuteOfHour() < 10 ? "0" + r.time().getMinuteOfHour()
-                    : r.time().getMinuteOfHour()) + "";
+            hourText = (r.getTime().getHourOfDay() < 10 ? "0" + r.getTime().getHourOfDay()
+                    : r.getTime().getHourOfDay()) + ":";
+            minuteText = (r.getTime().getMinuteOfHour() < 10 ? "0" + r.getTime().getMinuteOfHour()
+                    : r.getTime().getMinuteOfHour()) + "";
         } else {
             hourText = "--:";
             minuteText = "--";
@@ -691,11 +724,11 @@ public class ScheduleTimetableFragment extends Fragment
                         String names[] = getUpdatedRoutineNames();
                         updateRoutineSelectionAdapter(entryView, rSpinner, names);
 
-                        Log.d(TAG, "Routine name: " + r.name());
-                        Log.d(TAG, "Routine time: " + r.time().toString("hh:mm"));
-                        Log.d(TAG, "Names: " + Arrays.toString(names));
+                        LogUtil.d(TAG, "Routine name: " + r.getName());
+                        LogUtil.d(TAG, "Routine time: " + r.getTime().toString("hh:mm"));
+                        LogUtil.d(TAG, "Names: " + Arrays.toString(names));
 
-                        int selection = Arrays.asList(names).indexOf(r.name());
+                        int selection = Arrays.asList(names).indexOf(r.getName());
                         rSpinner.setSelection(selection);
 
                         updateEntryTime(r, entryView);
@@ -723,10 +756,10 @@ public class ScheduleTimetableFragment extends Fragment
                     new LiquidDosePickerFragment.OnDoseSelectedListener() {
                         @Override
                         public void onDoseSelected(double dose) {
-                            Log.d(TAG, "Set dose "
+                            LogUtil.d(TAG, "Set dose "
                                     + dose
                                     + " to item "
-                                    + item.routine().name()
+                                    + item.getRoutine().getName()
                                     + ", "
                                     + item.getId());
                             item.setDose((float) dose);
@@ -767,7 +800,7 @@ public class ScheduleTimetableFragment extends Fragment
 
     void checkSelectedDays(View rootView, boolean[] days) {
 
-        Log.d(TAG, "Checking selected days: " + Arrays.toString(days));
+        LogUtil.d(TAG, "Checking selected days: " + Arrays.toString(days));
         schedule.setDays(days);
 
         TextView mo = ((TextView) rootView.findViewById(R.id.day_mo));
@@ -806,13 +839,13 @@ public class ScheduleTimetableFragment extends Fragment
     void setScheduleEnd(LocalDate end) {
         if (end == null) {
             buttonScheduleEnd.setText(getString(R.string.never));
-            schedule.rule().iCalRule().setUntil(null);
+            schedule.rule().getRRule().setUntil(null);
             clearEndButton.setVisibility(View.INVISIBLE);
         } else {
             DateValue v =
                     new DateTimeValueImpl(end.getYear(), end.getMonthOfYear(), end.getDayOfMonth(), 0,
                             0, 0);
-            schedule.rule().iCalRule().setUntil(v);
+            schedule.rule().getRRule().setUntil(v);
             buttonScheduleEnd.setText(
                     end.toString(getString(R.string.schedule_limits_date_format)));
             clearEndButton.setVisibility(View.VISIBLE);
@@ -821,7 +854,7 @@ public class ScheduleTimetableFragment extends Fragment
 
     private void updateColors(View rootView) {
 
-        int color = DB.patients().getActive(getActivity()).color();
+        int color = DB.patients().getActive(getActivity()).getColor();
 
         ((TextView) rootView.findViewById(R.id.textView3)).setTextColor(color);
         ((TextView) rootView.findViewById(R.id.textView2)).setTextColor(color);
@@ -881,21 +914,21 @@ public class ScheduleTimetableFragment extends Fragment
             t = LocalTime.now().withMinuteOfHour(0);
             schedule.setStartTime(t);
         }
-        String time = new LocalTime(t.getHourOfDay(), t.getMinuteOfHour()).toString("kk:mm");
+        String time = new LocalTime(t.getHourOfDay(), t.getMinuteOfHour()).toString("HH:mm");
         hourlyIntervalFrom.setText(getString(R.string.first_intake) + ": " + time);
 
-        if (schedule.rule().interval() < 1) {
+        if (schedule.rule().getInterval() < 1) {
             schedule.rule().setInterval(8);
         }
         schedule.rule().setFrequency(Frequency.HOURLY);
-        hourlyIntervalEditText.setText(String.valueOf(schedule.rule().interval()));
+        hourlyIntervalEditText.setText(String.valueOf(schedule.rule().getInterval()));
         hourlyIntervalRepeatDose.setText(schedule.displayDose());
     }
 
     private void setupForKnownSchedule(View rootView) {
 
         int type = ScheduleHelper.instance().getScheduleType();
-        Log.d(TAG, "Setup for known schedule:  " + type);
+        LogUtil.d(TAG, "Setup for known schedule:  " + type);
 
         boxTimesByDay.setVisibility(View.GONE);
         boxTimetable.setVisibility(View.GONE);
@@ -931,7 +964,7 @@ public class ScheduleTimetableFragment extends Fragment
 
     private void setupForNewSchedule(View rootView) {
         int type = ScheduleHelper.instance().getScheduleType();
-        Log.d(TAG, "Setup for new schedule:  " + type);
+        LogUtil.d(TAG, "Setup for new schedule:  " + type);
 
         boxTimesByDay.setVisibility(View.GONE);
         boxTimetable.setVisibility(View.GONE);
@@ -982,8 +1015,8 @@ public class ScheduleTimetableFragment extends Fragment
             public void onClick(View v) {
                 NumberPickerBuilder npb =
                         new NumberPickerBuilder().setDecimalVisibility(NumberPicker.INVISIBLE)
-                                .setMinNumber(1)
-                                .setMaxNumber(100)
+                                .setMinNumber(BigDecimal.ONE)
+                                .setMaxNumber(BigDecimal.valueOf(100D))
                                 .setPlusMinusVisibility(NumberPicker.INVISIBLE)
                                 .setFragmentManager(getChildFragmentManager())
                                 .setTargetFragment(ScheduleTimetableFragment.this)
@@ -998,8 +1031,8 @@ public class ScheduleTimetableFragment extends Fragment
             public void onClick(View v) {
                 NumberPickerBuilder npb =
                         new NumberPickerBuilder().setDecimalVisibility(NumberPicker.INVISIBLE)
-                                .setMinNumber(1)
-                                .setMaxNumber(100)
+                                .setMinNumber(BigDecimal.ONE)
+                                .setMaxNumber(BigDecimal.valueOf(100D))
                                 .setPlusMinusVisibility(NumberPicker.INVISIBLE)
                                 .setFragmentManager(getChildFragmentManager())
                                 .setTargetFragment(ScheduleTimetableFragment.this)
@@ -1014,7 +1047,7 @@ public class ScheduleTimetableFragment extends Fragment
         int repeatType = schedule.type();
         setRepeatType(repeatType, rootView, true);
         repeatTypeSpinner.setSelection(repeatType);
-        intervalEditText.setText(String.valueOf(schedule.rule().interval()));
+        intervalEditText.setText(String.valueOf(schedule.rule().getInterval()));
     }
 
     private void showNext() {
@@ -1194,14 +1227,14 @@ public class ScheduleTimetableFragment extends Fragment
                     ruleText.setVisibility(View.GONE);
                     customRepeatBox.setVisibility(View.VISIBLE);
 
-                    int interval = schedule.rule().interval();
+                    int interval = schedule.rule().getInterval();
                     if (interval < 2) {
                         interval = 2;
                     }
                     schedule.rule().setInterval(interval);
-                    intervalEditText.setText(String.valueOf(schedule.rule().interval()));
+                    intervalEditText.setText(String.valueOf(schedule.rule().getInterval()));
 
-                    Frequency f = schedule.rule().frequency();
+                    Frequency f = schedule.rule().getFrequency();
 
                     if (f.equals(Frequency.WEEKLY)) {
                         freqSpinner.setSelection(1);
@@ -1222,7 +1255,7 @@ public class ScheduleTimetableFragment extends Fragment
 
         String text =
                 getString(R.string.schedule_custom_rule_text, schedule.toReadableString(getActivity()));
-        int count = schedule.rule().iCalRule().getCount();
+        int count = schedule.rule().getRRule().getCount();
         if (count > 0) {
             text += "<br><u>" + getString(R.string.schedules_stop_after, count) + "</u>";
         }
@@ -1274,8 +1307,8 @@ public class ScheduleTimetableFragment extends Fragment
         // set up the routine selection adapter
         updateRoutineSelectionAdapter(entryView, routineSpinner, routineNames);
 
-        if (scheduleItem != null && scheduleItem.routine() != null) {
-            String routineName = scheduleItem.routine().name();
+        if (scheduleItem != null && scheduleItem.getRoutine() != null) {
+            String routineName = scheduleItem.getRoutine().getName();
             int index = Arrays.asList(routineNames).indexOf(routineName);
             routineSpinner.setSelection(index);
         } else {
@@ -1312,8 +1345,8 @@ public class ScheduleTimetableFragment extends Fragment
                     updateEntryTime(null, entryView);
                     showAddNewRoutineDialog(entryView);
                 }
-                Log.d(TAG, "Updated routine to "
-                        + (r != null ? r.name() : "NULL")
+                LogUtil.d(TAG, "Updated routine to "
+                        + (r != null ? r.getName() : "NULL")
                         + " on item "
                         + item.getId());
                 item.setRoutine(r);
@@ -1344,9 +1377,9 @@ public class ScheduleTimetableFragment extends Fragment
 
     private void logScheduleItems() {
         for (ScheduleItem si : ScheduleHelper.instance().getScheduleItems()) {
-            Log.d("TAG", (si.routine() != null ? si.routine().name() : "NONE")
+            LogUtil.d(TAG, (si.getRoutine() != null ? si.getRoutine().getName() : "NONE")
                     + ", "
-                    + si.dose()
+                    + si.getDose()
                     + " ****************************");
         }
     }
@@ -1359,17 +1392,14 @@ public class ScheduleTimetableFragment extends Fragment
 //        if (med.presentation().equals(Presentation.SYRUP)) {
 //            dpf = new LiquidDosePickerFragment();
 //        }
-        if (med.presentation().equals(Presentation.DROPS)
-                || med.presentation().equals(Presentation.PILLS)
-                || med.presentation().equals(Presentation.CAPSULES)
-                || med.presentation().equals(Presentation.EFFERVESCENT)) {
+        if (med.getPresentation().equals(Presentation.PILLS)) {
             dpf = new PillDosePickerFragment();
         } else {
             dpf = new DefaultDosePickerFragment();
-            arguments.putSerializable("presentation", med.presentation());
+            arguments.putSerializable("presentation", med.getPresentation());
         }
         if (item != null) {
-            arguments.putDouble("dose", item.dose());
+            arguments.putDouble("dose", item.getDose());
         } else if (s != null) {
             arguments.putDouble("dose", s.dose());
         }

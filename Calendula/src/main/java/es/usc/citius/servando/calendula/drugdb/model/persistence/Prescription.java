@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,23 +13,25 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.drugdb.model.persistence;
 
-import com.j256.ormlite.field.DatabaseField;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.j256.ormlite.table.DatabaseTable;
+import com.j256.ormlite.field.DatabaseField;
 
 import es.usc.citius.servando.calendula.util.Strings;
 
 /**
  * This class was generated automatically.
  * Please check consistency and completion.
- * Replace {} with the appropriate classes and generate methods as needed.
  */
 @DatabaseTable(tableName = "Prescription")
-public class Prescription {
+public class Prescription implements Parcelable {
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_AFFECTS_DRIVING = "AffectsDriving";
@@ -37,6 +39,7 @@ public class Prescription {
     public static final String COLUMN_CODE = "Code";
     public static final String COLUMN_CONTENT = "Content";
     public static final String COLUMN_CONTENT_UNIT = "ContentUnit";
+    public static final String COLUMN_DCP_CODE = "DCPCode";
     public static final String COLUMN_DOSE = "Dose";
     public static final String COLUMN_GENERIC = "Generic";
     public static final String COLUMN_HOMOGENEOUS_GROUP = "HomogeneousGroup";
@@ -60,7 +63,9 @@ public class Prescription {
     @DatabaseField(columnName = COLUMN_CONTENT)
     private String content;
     @DatabaseField(columnName = COLUMN_CONTENT_UNIT)
-    private Long contentUnit;
+    private String contentUnit;
+    @DatabaseField(columnName = COLUMN_DCP_CODE)
+    private String dCPCode;
     @DatabaseField(columnName = COLUMN_DOSE)
     private String dose;
     @DatabaseField(columnName = COLUMN_GENERIC)
@@ -85,12 +90,13 @@ public class Prescription {
     }
 
 
-    public Prescription(Boolean affectsDriving, String atcCode, String code, String content, Long contentUnit, String dose, Boolean generic, String homogeneousGroup, String name, String pID, String packageType, Float packagingUnits, String presentationForm) {
+    public Prescription(Boolean affectsDriving, String atcCode, String code, String content, String contentUnit, String dCPCode, String dose, Boolean generic, String homogeneousGroup, String name, String pID, String packageType, Float packagingUnits, String presentationForm) {
         this.affectsDriving = affectsDriving;
         this.atcCode = atcCode;
         this.code = code;
         this.content = content;
         this.contentUnit = contentUnit;
+        this.dCPCode = dCPCode;
         this.dose = dose;
         this.generic = generic;
         this.homogeneousGroup = homogeneousGroup;
@@ -109,7 +115,7 @@ public class Prescription {
         this.id = id;
     }
 
-    public Boolean getAffectsDriving() {
+    public Boolean isAffectsDriving() {
         return affectsDriving;
     }
 
@@ -141,12 +147,20 @@ public class Prescription {
         this.content = content;
     }
 
-    public Long getContentUnit() {
+    public String getContentUnit() {
         return contentUnit;
     }
 
-    public void setContentUnit(Long contentUnit) {
+    public void setContentUnit(String contentUnit) {
         this.contentUnit = contentUnit;
+    }
+
+    public String getDCPCode() {
+        return dCPCode;
+    }
+
+    public void setDCPCode(String dCPCode) {
+        this.dCPCode = dCPCode;
     }
 
     public String getDose() {
@@ -157,7 +171,7 @@ public class Prescription {
         this.dose = dose;
     }
 
-    public Boolean getGeneric() {
+    public Boolean isGeneric() {
         return generic;
     }
 
@@ -181,11 +195,11 @@ public class Prescription {
         this.name = name;
     }
 
-    public String getpID() {
+    public String getPID() {
         return pID;
     }
 
-    public void setpID(String pID) {
+    public void setPID(String pID) {
         this.pID = pID;
     }
 
@@ -226,4 +240,57 @@ public class Prescription {
             return name;
         }
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.id);
+        dest.writeValue(this.affectsDriving);
+        dest.writeString(this.code);
+        dest.writeString(this.content);
+        dest.writeString(this.contentUnit);
+        dest.writeString(this.dCPCode);
+        dest.writeString(this.dose);
+        dest.writeValue(this.generic);
+        dest.writeString(this.homogeneousGroup);
+        dest.writeString(this.name);
+        dest.writeString(this.pID);
+        dest.writeString(this.packageType);
+        dest.writeValue(this.packagingUnits);
+        dest.writeString(this.presentationForm);
+    }
+
+    protected Prescription(Parcel in) {
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.affectsDriving = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.code = in.readString();
+        this.content = in.readString();
+        this.contentUnit = in.readString();
+        this.dCPCode = in.readString();
+        this.dose = in.readString();
+        this.generic = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.homogeneousGroup = in.readString();
+        this.name = in.readString();
+        this.pID = in.readString();
+        this.packageType = in.readString();
+        this.packagingUnits = (Float) in.readValue(Float.class.getClassLoader());
+        this.presentationForm = in.readString();
+    }
+
+    public static final Parcelable.Creator<Prescription> CREATOR = new Parcelable.Creator<Prescription>() {
+        @Override
+        public Prescription createFromParcel(Parcel source) {
+            return new Prescription(source);
+        }
+
+        @Override
+        public Prescription[] newArray(int size) {
+            return new Prescription[size];
+        }
+    };
 }

@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,12 +13,10 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.allergies;
-
-import android.util.Log;
 
 import com.j256.ormlite.stmt.PreparedQuery;
 
@@ -33,11 +31,9 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
 
-/**
- * Created by alvaro.brey.vilas on 17/11/16.
- */
 
 public class AllergyAlertUtil {
 
@@ -46,10 +42,10 @@ public class AllergyAlertUtil {
 
 
     public static List<PatientAlert> getAlertsForMedicine(final Medicine m) throws SQLException {
-        Log.d(TAG, "getAlertsForMedicine() called with: m = [" + m + "]");
+        LogUtil.d(TAG, "getAlertsForMedicine() called with: m = [" + m + "]");
         HashMap<String, Object> query = new HashMap<String, Object>() {{
             put(PatientAlert.COLUMN_TYPE, AllergyPatientAlert.class.getCanonicalName());
-            put(PatientAlert.COLUMN_PATIENT, m.patient());
+            put(PatientAlert.COLUMN_PATIENT, m.getPatient());
             put(PatientAlert.COLUMN_MEDICINE, m);
         }};
         return DB.alerts().queryForFieldValuesArgs(query);
@@ -62,7 +58,7 @@ public class AllergyAlertUtil {
      */
     public static void removeAllergyAlerts(final Medicine m) throws SQLException {
 
-        Log.d(TAG, "removeAllergyAlerts() called with: m = [" + m + "]");
+        LogUtil.d(TAG, "removeAllergyAlerts() called with: m = [" + m + "]");
         final List<PatientAlert> alerts = getAlertsForMedicine(m);
         DB.transaction(new Callable<Object>() {
             @Override
@@ -70,7 +66,7 @@ public class AllergyAlertUtil {
                 for (PatientAlert alert : alerts) {
                     DB.alerts().remove(alert);
                 }
-                Log.d(TAG, "removeAllergyAlerts: Removed " + alerts.size() + " alerts");
+                LogUtil.d(TAG, "removeAllergyAlerts: Removed " + alerts.size() + " alerts");
                 return null;
             }
         });
@@ -78,7 +74,7 @@ public class AllergyAlertUtil {
     }
 
     public static void removeAllergyAlerts(final PatientAllergen allergen) throws SQLException {
-        Log.d(TAG, "removeAllergyAlerts() called with: allergen = [" + allergen + "]");
+        LogUtil.d(TAG, "removeAllergyAlerts() called with: allergen = [" + allergen + "]");
         final AllergenVO vo = new AllergenVO(allergen);
 
         final List<PatientAlert> removed = new ArrayList<>();
@@ -120,7 +116,7 @@ public class AllergyAlertUtil {
      * @throws SQLException
      */
     public static boolean hasAllergyAlerts(final Medicine m) throws SQLException {
-        Log.d(TAG, "hasAllergyAlerts() called with: m = [" + m + "]");
+        LogUtil.d(TAG, "hasAllergyAlerts() called with: m = [" + m + "]");
 
         return getAlertsForMedicine(m).size() > 0;
     }

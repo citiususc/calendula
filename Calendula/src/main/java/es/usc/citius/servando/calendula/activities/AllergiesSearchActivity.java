@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.activities;
@@ -25,15 +25,14 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -43,7 +42,6 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -75,9 +73,12 @@ import es.usc.citius.servando.calendula.allergies.AllergenVO;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.ATCCode;
 import es.usc.citius.servando.calendula.persistence.AllergyGroup;
+import es.usc.citius.servando.calendula.settings.CalendulaSettingsActivity;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Strings;
 
 @SuppressWarnings("unchecked")
@@ -85,7 +86,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
 
 
     public static final int REQUEST_NEW_ALLERGIES = 1;
-    private static final String TAG = "AllergiesSearchActivity";
+    private static final String TAG = "AllergiesSearchAct";
     private final ISelectionListener<AbstractItem> selectionListener = new AllergySelectionListener();
 
     @BindView(R.id.close_search_button)
@@ -109,7 +110,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
 
     private FastItemAdapter<AbstractItem> searchAdapter;
     private List<AllergyGroup> groups;
-    private AsyncTask searchTask = null;
+    private DoSearchTask searchTask = null;
     private List<AllergenVO> patientAllergies;
 
     @Override
@@ -122,8 +123,8 @@ public class AllergiesSearchActivity extends CalendulaActivity {
      */
     public boolean askForDatabaseIfNeeded() {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean validDB = prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB, getString(R.string.database_none_id)).equals(getString(R.string.database_aemps_id));
+        SharedPreferences prefs = PreferenceUtils.instance().preferences();
+        boolean validDB = prefs.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), getString(R.string.database_none_id)).equals(getString(R.string.database_aemps_id));
 
         if (!validDB) {
             new MaterialStyledDialog.Builder(this)
@@ -138,8 +139,8 @@ public class AllergiesSearchActivity extends CalendulaActivity {
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Intent i = new Intent(AllergiesSearchActivity.this, SettingsActivity.class);
-                            i.putExtra("show_database_dialog", true);
+                            Intent i = new Intent(AllergiesSearchActivity.this, CalendulaSettingsActivity.class);
+                            i.putExtra(CalendulaSettingsActivity.EXTRA_SHOW_DB_DIALOG, true);
                             finish();
                             startActivity(i);
                         }
@@ -184,7 +185,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
                     vos.add(new AllergenGroupWrapper(item1.getVo()));
                     break;
                 default:
-                    Log.wtf(TAG, "Invalid item type in adapter: " + i);
+                    LogUtil.wtf(TAG, "Invalid item type in adapter: " + i);
                     break;
             }
 
@@ -206,7 +207,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
         setContentView(R.layout.activity_allergies_search);
         ButterKnife.bind(this);
 
-        int color = DB.patients().getActive(this).color();
+        int color = DB.patients().getActive(this).getColor();
         searchLayout.setBackgroundColor(color);
         setupStatusBar(color);
 
@@ -273,7 +274,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
             }
         }
 
-        Log.d(TAG, "getSelected() returned: " + items.size() + " elements");
+        LogUtil.d(TAG, "getSelected() returned: " + items.size() + " elements");
         return items;
     }
 
@@ -428,7 +429,7 @@ public class AllergiesSearchActivity extends CalendulaActivity {
         @Override
         protected List<AbstractItem> doInBackground(String... params) {
             if (params.length != 1) {
-                Log.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + params.length);
+                LogUtil.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + params.length);
                 throw new IllegalArgumentException("Invalid argument length");
             }
 

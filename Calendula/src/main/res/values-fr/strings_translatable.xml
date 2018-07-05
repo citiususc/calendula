@@ -10,10 +10,13 @@
 <string name="medicine">"médicament"</string>
 <string name="drawer_help_option">"Aide"</string>
 <string name="drawer_settings_option">"Paramètres"</string>
+<string name="drawer_about_option">"À propos"</string>
 <string name="title_activity_routines">"Routines"</string>
 <string name="title_edit_routine_activity">"Modifier la routine"</string>
 <string name="title_create_routine_activity">"Créer une routine"</string>
-<string name="title_activity_medicines">"Boîte à pharmacie"</string>
+
+<!-- "Trousse" is a bit better that "boite" in this case. -->
+<string name="title_activity_medicines">"Trousse à pharmacie"</string>
 <string name="title_edit_schedule_activity">"Modifier le traitement"</string>
 <string name="title_create_schedule_activity">"Créer un traitement"</string>
 <string name="routine_name">"Nom de la routine"</string>
@@ -30,12 +33,12 @@
 <string name="cancel">"Annuler"</string>
 <string name="confirm">"Confirmer"</string>
 <string name="meds_time">"Souvenez-vous de prendre vos médicaments"</string>
+<string name="meds_time_lost">"Alarme manquée"</string>
 <string name="title_select_dose_dialog">"Ajoutez une dose"</string>
 <string name="doses_and_times">"Horaires et doses"</string>
 <string name="schedule_repeat_days">"Répéter"</string>
 <string name="summary_title">"Vérifiez et confirmez"</string>
 <string name="summary">"Résumé"</string>
-<string name="injections">"Injections"</string>
 <string name="pills">"Comprimés"</string>
 <string name="capsules">"Gélules"</string>
 <string name="inhaler">"Inhalateur"</string>
@@ -43,21 +46,56 @@
 <string name="pomade">"Pommade"</string>
 <string name="syrup">"Sirop"</string>
 <string name="spray">"Spray"</string>
-<string name="patches">"Emplâtre"</string>
+<string name="patches">"Patchs"</string>
 <string name="unknown">"Inconnu"</string>
 <string name="effervescent">"Effervescent"</string>
 <string name="schedule">"Traitement"</string>
-<string name="injections_units">"injection"</string>
-<string name="pills_units">"comprimé"</string>
-<string name="capsules_units">"gélule"</string>
-<string name="inhaler_units">"inhalation"</string>
-<string name="spray_units">"application"</string>
-<string name="drops_units">"goutte"</string>
-<string name="pomade_units">"application"</string>
-<string name="syrup_units">"ml"</string>
-<string name="patches_units">"emplâtre"</string>
-<string name="unknown_units">"unité"</string>
-<string name="effervescent_units">"sachet"</string>
+<plurals name="injections_units">
+<item quantity="one">"injection"</item>
+<item quantity="other">"injections"</item>
+</plurals>
+<plurals name="pills_units">
+<item quantity="one">"comprimé"</item>
+<item quantity="other">"comprimés"</item>
+</plurals>
+<plurals name="capsules_units">
+<item quantity="one">"gélule"</item>
+<item quantity="other">"gélules"</item>
+</plurals>
+<plurals name="inhaler_units">
+<item quantity="one">"inhalation"</item>
+<item quantity="other">"inhalations"</item>
+</plurals>
+<plurals name="spray_units">
+<item quantity="one">"application"</item>
+<item quantity="other">"applications"</item>
+</plurals>
+<plurals name="drops_units">
+<item quantity="one">"goutte"</item>
+<item quantity="other">"gouttes"</item>
+</plurals>
+<plurals name="pomade_units">
+<item quantity="one">"application"</item>
+<item quantity="other">"applications"</item>
+</plurals>
+<plurals name="syrup_units">
+<item quantity="one">"ml"</item>
+<item quantity="other">"ml"</item>
+</plurals>
+
+<!-- Je crois que "patch" est plus couramment utilisé sur les boîtes à médicaments, même si c'est un anglicisme. -->
+<plurals name="patches_units">
+<item quantity="one">"patch"</item>
+<item quantity="other">"patchs"</item>
+</plurals>
+<plurals name="unknown_units">
+<item quantity="one">"unité"</item>
+<item quantity="other">"unités"</item>
+</plurals>
+<plurals name="effervescent_units">
+<item quantity="one">"sachet"</item>
+<item quantity="other">"sachets"</item>
+</plurals>
 <string name="never">"Jamais"</string>
 <string name="every_day">"Tous les jours"</string>
 <string name="once_a_day">"Une fois par jour"</string>
@@ -72,7 +110,14 @@
 <string name="schedule_timetable_time_column">"HEURE"</string>
 <string name="schedule_timetable_dose_column">"DOSE"</string>
 <string name="take">"Prendre"</string>
-<string name="first_intake">"Première dose à "</string>
+<string name="first_intake">"Première dose à"</string>
+<string name="day_monday_short">"Lun"</string>
+<string name="day_tuesday_short">"Mar"</string>
+<string name="day_wednesday_short">"Mer"</string>
+<string name="day_thursday_short">"Jeu"</string>
+<string name="day_friday_short">"Ven"</string>
+<string name="day_saturday_short">"Sam"</string>
+<string name="day_sunday_short">"Dim"</string>
 <string name="schedule_day_selector_mo">"LU"</string>
 <string name="schedule_day_selector_tu">"MA"</string>
 <string name="schedule_day_selector_we">"ME"</string>
@@ -80,43 +125,53 @@
 <string name="schedule_day_selector_fr">"VE"</string>
 <string name="schedule_day_selector_sa">"SA"</string>
 <string name="schedule_day_selector_su">"DI"</string>
-<string name="agenda_zoom_meds_time">"Prenez vos médicaments !"</string>
+<string name="schedule_day_selector_none">"AUCUN"</string>
+<string name="agenda_zoom_meds_time">"Il est l'heure de prendre vos médicaments !"</string>
 <string name="create_schedule_unselected_med">"Sélectionnez un médicament pour pouvoir créer le traitement"</string>
-<string name="create_schedule_incomplete_items">"Sélectionnez vos routines pour toutes vos doses"</string>
+<string name="create_schedule_incomplete_items">"Sélectionnez vos routines pour toutes vos prises"</string>
 <string name="create_schedule_incomplete_doses">"Les doses doivent être plus grandes que zéro"</string>
 <string name="home_no_pending_meds_message">"Il n'y a pas de médicaments prévus pour le reste de la journée"</string>
-<string name="medicine_created_message">"Médicament ajouté à la boîte à pharmacie"</string>
+<string name="medicine_created_message">"Médicament créé !"</string>
 <string name="medicine_deleted_message">"Médicament supprimé !"</string>
 <string name="medicine_edited_message">"Médicament mis à jour !"</string>
 <string name="schedule_created_message">"Traitement créé !"</string>
 <string name="cycle_period_cero_message">"Le cycle de prise et de pause doit être supérieur à zéro."</string>
 <string name="reminder_cancelled_message">"Rappel annulé"</string>
-<string name="remove_routine_message_long">"La routine %1$s a des traitements associés qui se perdront si vous la supprimez. Souhaitez-vous la supprimer de toute façon ?"</string>
+<string name="remove_routine_message_long">"La routine %1$s est associée à des traitements qui se perdront si vous la supprimez. Souhaitez-vous la supprimer malgré tout ?"</string>
+<string name="remove_medicine_message_long">"%1$s est associé à des traitements qui se perdront si vous le supprimez. Voulez-vous le supprimer malgré tout ?"</string>
 <string name="remove_routine_message_short">"Supprimer la routine %1$s ?"</string>
 <string name="remove_medicine_message_short">"Supprimer %1$s ?"</string>
 <string name="remove_routine_dialog_title">"Supprimer la routine"</string>
+<string name="remove_medicine_dialog_title">"Supprimer le médicament"</string>
+<string name="remove_schedule_dialog_title">"Supprimer le traitement"</string>
+<string name="remove_schedule_message">"Supprimer le traitement de %1$s?"</string>
 <string name="dialog_yes_option">"Oui"</string>
 <string name="dialog_no_option">"Non"</string>
-<string name="medicine_no_name_error_message">"Indiquez un nom, s'il vous plaît"</string>
+<string name="medicine_no_name_error_message">"Veuillez indiquer un nom"</string>
 <string name="medicine_unselected">"Pas encore sélectionné"</string>
-<string name="medicine_no_presentation_error_message">"Choisissez une forme, s'il vous plaît"</string>
+<string name="medicine_no_presentation_error_message">"Veuillez choisir une forme"</string>
 <string name="tutorial_understood">"OK"</string>
 <string name="notification_repeat_message">"L'alarme se répétera à %1$s"</string>
 <string name="notification_cancel_now">"Annuler maintenant"</string>
 <string name="notification_delay">"Remettre à plus tard"</string>
 <string name="alarm_delayed_message">"Alarme reportée %1$s minutes"</string>
 <string name="moods_dialog_title">"Comment vous sentez-vous ?"</string>
-
-<!-- Fuzzy -->
-<string name="search_med_hint">"Chercher…"</string>
+<string name="mood_very_bad">"Je me sens vraiment mal"</string>
+<string name="mood_bad">"Je me sens mal"</string>
+<string name="mood_neutral">"Je ne sens rien"</string>
+<string name="mood_good">"Je me sens bien"</string>
+<string name="mood_very_good">"Je me sens très bien"</string>
+<string name="search_med_hint">"Chercher par nom ou code…"</string>
+<string name="pref_header_prescriptions">"Base de données des médicaments"</string>
 <string name="medicine_edit_name_hint">"Écrivez ici…"</string>
 
 <!-- Fuzzy -->
-<string name="enable_prescriptions_dialog_message">"Vous pourrez ajouter plus facilement vos médicaments et consulter leurs notices en activant l'assistant de recherche. Si vous changez d'avis, vous pourrez le désactiver dans le menu paramètres."</string>
+<string name="enable_prescriptions_dialog_message">"Vous pouvez ajouter facilement vos médicaments et consulter leurs notices en activant une base de données des médicaments. Si vous préférez ne pas le faire, vous pourrez l'activer plus tard dans le menu paramètres."</string>
+<string name="enable_prescriptions_dialog_title">"Base de données des médicaments"</string>
 <string name="enable_prescriptions_dialog_yes">"Activer (Recommandé)"</string>
 <string name="enable_prescriptions_dialog_no">"Annuler"</string>
-<string name="driving_warning">"L'usage de ce médicament pourrait avoir des effets sur l'aptitude à conduire des véhicules.
-S'il vous plaît, lisez attentivement la notice d'emballage ou demandez conseil à votre pharmacien avant de conduire."</string>
+<string name="driving_warning">"L'usage de ce médicament pourrait avoir des effets sur votre aptitude à conduire des véhicules.
+Veuillez lire attentivement la notice d'emballage ou demandez conseil à votre pharmacien avant de vous mettre au volant."</string>
 <string name="driving_warning_title">"Soyez prudent"</string>
 <string name="driving_warning_show_prospect">"Voir notice"</string>
 <string name="driving_warning_gotit">"OK"</string>
@@ -128,11 +183,17 @@ S'il vous plaît, lisez attentivement la notice d'emballage ou demandez conseil 
 <string name="label_schedule_repeat_until">"Termine"</string>
 <string name="button_schedule_repeat_until">"Jamais"</string>
 <string name="schedule_limits_date_format">"'Le' dd MMMM YYYY"</string>
-<string name="schedules_stop_after">"Arrêter après %1$s doses"</string>
+<string name="schedules_stop_after">"Arrêter après %1$s prises"</string>
 <string name="schedule_repeat_period">"Période + pause"</string>
-<string name="summary_show_calendar">"voir calendrier"</string>
+<string name="schedule_repeat_type_everyday">"Chaque jour"</string>
+<string name="schedule_repeat_type_some_week_days">"Plusieurs jours par semaine"</string>
+<string name="schedule_repeat_type_interval">"Intervalle"</string>
+<string name="schedule_repeat_frequency_days">"jours"</string>
+<string name="schedule_repeat_frequency_weeks">"semaines"</string>
+<string name="schedule_repeat_frequency_months">"mois"</string>
+<string name="summary_show_calendar">"Voir le calendrier"</string>
 <string name="hours">"heures"</string>
-<string name="schedule_help_no_type_selected">"S'il vous plaît, choisissez un type de traitement pour pouvoir continuer"</string>
+<string name="schedule_help_no_type_selected">"Veuillez choisir un type de traitement pour pouvoir continuer"</string>
 <string name="schedule_type_routines_title">"Lié à des routines"</string>
 <string name="schedule_type_hourly_title">"Intervalle horaire"</string>
 <string name="schedule_type_period_title">"Cycle de prise / pause"</string>
@@ -140,33 +201,326 @@ S'il vous plaît, lisez attentivement la notice d'emballage ou demandez conseil 
 <string name="schedule_type_routines_description">"Ex: Tous les 3 jours, au petit-déjeuner, au déjeuner et au dîner"</string>
 <string name="schedule_type_hourly_description">"Ex: Toutes les 8 heures"</string>
 <string name="schedule_type_period_description">"Ex: 21 jours + 7 jours de pause"</string>
-<string name="schedule_help_cycle">"Indiquez le cycle de répétition (période + pause)"</string>
-<string name="schedule_help_duration">"Finalement, vous pouvez indiquer les dates de début et de fin du traitement. Vous pouvez le laisser tel quel pour qu'il se répète indéfiniment."</string>
-<string name="schedule_help_hourly">"S'il vous plaît, indiquez la période de répétition, la dose, et l'heure de la première prise du médicament"</string>
-<string name="schedule_help_repeat">"Indiquez les jours où le traitement se répète. S'il se répète tous les jours vous n'avez pas besoin de faire quoi que ce soit."</string>
-<string name="schedule_help_timesbyday">"S'il vous plaît, indiquez le nombre de fois par jour que le traitement se répète."</string>
+<string name="schedule_help_cycle">"Indiquez le cycle de répétition (prise + pause)"</string>
+<string name="schedule_help_duration">"Finalement, vous pouvez indiquer le début et la fin du traitement. Vous pouvez le laisser tel quel pour qu'il se répète indéfiniment."</string>
+<string name="schedule_help_hourly">"Veuillez indiquer la période de répétition, la dose, et l'heure de la première prise du médicament"</string>
+<string name="schedule_help_repeat">"Indiquez les jours où le traitement se répète. S'il se répète tous les jours, vous n'avez pas besoin de faire quoi que ce soit."</string>
+<string name="schedule_help_timesbyday">"Veuillez indiquer le nombre de fois par jour que le traitement se répète."</string>
 <string name="schedule_help_timetable">"Maintenant, associez chaque prise à vos routines e indiquez la dose pour chacune d'entre elles"</string>
+<string name="title_activity_calendar">"Calendrier de remises"</string>
+<string name="title_pickups_bottom_sheet">"Remises %1$s"</string>
+<string name="pickup_interval">"Jusqu'à %1$s"</string>
+<string name="pickup_date_format">"dd MMMM"</string>
+<string name="title_activity_confirm_schedules">"Confirmer les traitements"</string>
+<string name="confirm_prescription_x_of_y">"Ordonnance %1$s de %2$s"</string>
+<string name="scan_prescriptions_title">"Scanner les ordonnances"</string>
+<string name="scan_qr">"Scanner QR"</string>
+<string name="duration">"Durée"</string>
 <string name="all_meds_taken">"Tous les médicaments pris!"</string>
-<string name="message_generic_pageloaderror">"There was an error loading the page"</string>
-<string name="title_prospect_webview">"Prospect view"</string>
-<string name="message_generic_pleasewait">"Please wait for a few seconds…"</string>
-<string name="message_prospect_connection_error">"The leaflet could not be loaded"</string>
-<string name="message_prospect_not_found_error">"Sorry, but it there is no leaflet available for this med"</string>
+<string name="create_schedule_select_med_before_dose">"Veuillez sélectionner d'abord un médicament"</string>
+<string name="title_activity_patients">"Patients"</string>
+<string name="schedule_type_help_title">"Vous vous apprêtez à créer un traitement, choisissez celui qui correspond le mieux à vos besoins !"</string>
+<string name="schedule_type_routines_help">"Ce type de traitement vous permet de lier vos prises à vos routines, comme « Tous les jours au petit-déjeuner et au dîner, dimanches exclus. », ou « Tous les 3 jours au déjeuner. »"</string>
+<string name="schedule_type_hourly_help">"Les traitements par intervalles horaires sont destinés aux prises qui se répètent par une période donnée, par exemple : « Toutes les 8 heures ». Fixez l'heure de la première prise et continuez."</string>
+<string name="schedule_type_intervalrest_help">"Les pilules contraceptives et autres médicaments sont pris pendant un certain temps, puis il y a une pause. Ce type de traitement vous permet de définir les deux périodes et simplifier vos prises."</string>
+<string name="routines_list_empty_text">"Il n'y a pas encore de routines.
+
+Les routines sont des moments où vous prenez vos médicaments, comme le petit-déjeuner, ou le dîner. Vous pouvez les réutiliser pour créer vos traitements plus rapidement."</string>
+<string name="medicines_list_empty_text">"Il n'y a aucun médicament.
+
+Ajoutez vos médicaments à la trousse et vous aurez facilement accès aux notices et aux précautions d'emploi."</string>
+<string name="schedules_list_empty_text">"Il n'y a aucun traitement.
+
+Ajoutez vos traitements ici, et laissez-nous vous notifier !"</string>
+<string name="about_description"><![CDATA[
+<br/><br/>
+Calendula est développé par le Centre de Recherche des Technologies de l\'Information de l\'USC (<a href=\'http://citius.usc.es\'>CITIUS</a>)
+<br/><br/>
+Visitez notre site internet pour plus d\'informations :
+<br/>
+<a href=\'http://citius.usc.es/calendula\'>citius.usc.es/calendula </a>
+<br/><br/>
+Calendula est un projet open source. Vous pouvez contribuer, de par vos idées et vos suggestions via notre page Github ou en nous envoyant un courriel :
+<br/>
+<a href=\'https://github.com/citiususc/calendula\'>https://github.com/citiususc/calendula </a>
+ <br/>
+<a href=\'mailto:citius.calendula@usc.es\'>citius.calendula@usc.es</a>
+<br/><br/>
+Pour ce développement, nous utilisons plusieurs bibliothèques libres que voici :
+"]]></string>
+<string name="message_generic_pageloaderror">"Une erreur s'est produite lors du chargement de la page"</string>
+<string name="title_prospect_webview">"Vue de la notice"</string>
+<string name="message_generic_pleasewait">"Veuillez attendre quelques secondes…"</string>
+<string name="message_prospect_loading">"La notice sera bientôt prête..."</string>
+<string name="message_prospect_connection_error">"La notice n'a pas pu être chargée"</string>
+<string name="message_prospect_not_found_error">"Désolé, mais il n'y a pas de notice disponible pour ce médicament"</string>
+<string name="intake_not_available">"Prise pas disponible"</string>
+<string name="confirm_future_intake_warning">"Cette prise sera disponible %1$s. Nous vous notifierons à ce moment-là !"</string>
+<string name="confirm_past_intake_warning">"Cette prise date de plusieurs heures, avez-vous pris vos médicaments et voulez-vous confirmer maintenant ?"</string>
+<string name="meds_from">"Médicaments de"</string>
+<string name="at_time_connector">"à"</string>
+<string name="med_taken_at">"Confirmé à"</string>
+<string name="med_cancelled_at">"Annulé à"</string>
+<string name="med_not_taken">"Pas pris"</string>
+<string name="meds_confirm_ok">"Oui, je l'ai pris"</string>
+<string name="meds_confirm_cancel">"Non"</string>
+<string name="meds_unconfirm_ok">"Non"</string>
+<string name="meds_unconfirm_cancel">"Oui, je l'ai pris"</string>
+<string name="unconfirm_past_intake_warning">"Vous avez confirmé cette dose %1$s, l'avez-vous prise ?"</string>
+<string name="action_share_link">"Partager avec"</string>
+<string name="action_open_with_browser">"Ouvrir dans le navigateur"</string>
+<string name="title_share_link">"Partager avec..."</string>
+<string name="title_about">"À propos"</string>
+<string name="home_menu_allergies">"Allergies"</string>
+<string name="title_activity_allergies">"Allergies"</string>
+<string name="message_allergy_add_failure">"Une erreur s'est produite lors de la sauvegarde de vos allergies."</string>
+<string name="remove_allergy_message_short">"Supprimer l'allergie %$1s"</string>
+<string name="excipient">"Excipient"</string>
+<string name="active_ingredient">"Ingrédient actif"</string>
+<string name="delete_allergen_error">"Échec de la suppression des informations d'allergie."</string>
+<string name="allergies_placeholder">"Aucune allergie n'a été ajouté pour l'instant !"</string>
+<string name="allergies_search_placeholder">"Commencez par écrire votre allergie pour recevoir des suggestions."</string>
+<string name="allergies_search_placeholder_no_result">"Aucun résultat pour la recherche en cours"</string>
+<string name="notification_error_msg">"Il semblerait qu'il y eut un problème avec la notification. Veuillez regarder dans votre agenda s'il y a quelque chose en attente."</string>
+<string name="notification_error_title">"Oups..."</string>
+<string name="title_medicine_allergy_alert">"Allergies détectées pour ce médicament."</string>
+<string name="message_medicine_alert">"Ce médicament contient des ingrédients dont vous êtes allergique. Pour votre sécurité, vous ne pourrez pas définir de traitements pour ce médicament."</string>
+<string name="medicine_save_error_message">"Il y a eu une erreur en enregistrant votre médicament."</string>
+<string name="message_schedule_medicine_allergy">"Ce médicament ne peut pas faire partie d'un traitement car vous êtes allergique à plusieurs de ses composants."</string>
+<string name="title_allergies_detected_dialog">"Attention"</string>
+<string name="message_allergies_detected_dialog">"Certains médicaments de votre trousse à pharmacie contiennent l'allergène que vous venez d'ajouter. Veuillez lire leurs notices attentivement."</string>
+<string name="error_duplicate_medicine">"Ce médicament est déjà dans votre trousse à pharmacie"</string>
+<string name="allergies_group_elements_number">"%1$d éléments"</string>
+<string name="allergies_selected_number">"%1$d sélectionnées"</string>
+<string name="message_allergy_add_multiple_success">"Vos allergies ont été sauvegardées."</string>
+<string name="title_allergies_database_required">"Base de données requise"</string>
+<string name="message_allergies_database_required">"Pour l'instant, la gestion des allergies fonctionne uniquement avec la base de données des médicament de l'AEMPS. Voulez-vous l'activer ?"</string>
+<string name="allergies_group_elements_selected">"%1$d éléments (%2$d sélectionnés)"</string>
+<string name="add_custom_med_button_text">"Ajouter %$1s à votre trousse à pharmacie"</string>
+<string name="medicine_search_not_found_msg">"Désolé, nous n'avons rien trouvé avec ce nom."</string>
+<string name="medicine_search_empty_list_msg">"Tapez le nom d'un médicament ou son code pour commencer la recherche, ou scannez le code-barres du paquet..."</string>
+<string name="search_hint">"Recherche..."</string>
+<string name="database_us_display">"Base de données EUA"</string>
+<string name="pref_stock_alert_title">"Me prévenir lorsque mes médicaments se seront épuisés"</string>
+<string name="permission_dialog_go_to_settings">"Nous n'avons pas pu effectuer cette action car vous avez refusé notre précédente requête d'accéder au stock. Vous pouvez accorder la permission à nouveau dans les infos de l'appli."</string>
+<string name="permission_dialog_ok">"Aller aux infos sur l'appli"</string>
+<string name="title_alert_allergy">"Il y a des conflits d'allergie pour ce médicament"</string>
+<string name="description_alert_allergy">"Vous avez indiqué avoir une allergie à plusieurs éléments contenus dans ce médicament. Allergènes :"</string>
 <string name="default_user_name">"Utilisateur"</string>
 <string name="relation_user_possession_thing">"%2$s de %1$s"</string>
+<string name="schedules_for_med">"%1$d traitements associés"</string>
+<string name="schedules_for_med_none">"Aucun traitement associé"</string>
 <string name="yesterday">"Hier"</string>
 <string name="today">"Aujourd'hui"</string>
 <string name="tomorrow">"Demain"</string>
+<string name="message_delete_default_patient">"C'est le patient par défaut, il ne peut pas être supprimé. Voulez-vous supprimer tous ses traitements, médicaments et routines ?"</string>
+<string name="yes_delete_everything">"Oui, supprimer tout"</string>
+<string name="default_user_data_deleted">"Données de l'utilisateur supprimées !"</string>
+<string name="create_default_routines">"Créer les routines par défaut"</string>
+<string name="stock_running_out">"Stock bientôt épuisé"</string>
+<string name="add_more_stock">"En ajouter plus"</string>
+<string name="stock_remaining_msg">"%1$d  %2$s restants"</string>
+<string name="active_schedules_none">"Aucun traitement actif"</string>
+<string name="active_schedules_one">"1 traitement actif"</string>
+<string name="active_schedules_number">"%1$d traitements actifs"</string>
+<string name="message_link_real_prescription">"Lier à un médicament réel pour avoir plus d'informations."</string>
+<string name="stock_no_stock_info">"Il n'y a aucune information sur le stock de ce médicament"</string>
+<string name="stock_no_data">"Aucune donnée"</string>
+<string name="message_med_linked_success">"Médicament lié avec succès !"</string>
+<string name="label_info_short">"Info"</string>
+<string name="label_alerts_short">"Alertes"</string>
+<string name="medicine_not_found_error">"Médicament introuvable"</string>
+<string name="message_link_real_prescription_short">"Lien vers le médicament"</string>
+<string name="prospect">"Notice"</string>
+<string name="button_official_prospect">"Notice officielle"</string>
+<string name="stock_enough_for_days">"Assez pour %1$d jours avec les traitements actuels."</string>
+<string name="stock_enough_for_months_days">"Assez pour %1$d mois et %2$d jours avec les traitements actuels."</string>
+<string name="stock_enough_for_upper_limit">"Assez pour plus de trois mois avec les traitements actuels."</string>
+<string name="no_alerts_detected">"Aucune alerte détectée pour ce médicament"</string>
+<string name="stock_depleted">"Le stock est épuisé"</string>
+<string name="stock_depleted_msg">"Il n'y a plus de stock pour ce médicament"</string>
+<string name="message_allergies_experimental_warning">"La gestion des allergies est une fonctionnalité expérimentale. N'oubliez pas de lire les notices de vos médicaments pour être sûr des informations quant aux allergies possibles."</string>
+<string name="dialog_get_me_out">"Sortez-moi d'ici !"</string>
+<string name="dialog_continue_option">"Continuer"</string>
+<string name="important_info">"Information importante"</string>
+<string name="download_db_dialog_title">"Initialiser la base de données des médicaments"</string>
+<string name="download_db_dialog_message">"La base de données va être téléchargée et configurée. Cela peut prendre quelques secondes, mais vous pouvez continuer à utiliser l'application pendant ce temps."</string>
+<string name="download_db_unexpected_error">"Erreur lors du téléchargement de la base de données :("</string>
+<string name="install_db_notification_title">"Initialisation de la base de données"</string>
+<string name="install_db_notification_ticker">"Initialisation de la base de données"</string>
+<string name="install_db_notification_oncomplete">"Initialisation de la base de données terminée"</string>
+<string name="install_db_notification_oncomplete_text">"Touchez pour ajouter un nouveau médicament"</string>
+<string name="install_db_notification_content">"Initialisation en cours"</string>
+<string name="install_db_notification_onfailure">"Échec de l'initialisation de la base de données"</string>
+<string name="install_db_notification_onfailure_content">"Une erreur est survenue lors de l'initialisation de la base de données des médicaments"</string>
+<string name="intro_title">"Bienvenue sur Calendula !"</string>
+<string name="intro_description">"Prendre ses médicaments correctement n'est pas facile, mais au moins ce ne sera plus si difficile !
+
+Veuillez jeter un œil à ce que nous vous avons préparé !"</string>
+<string name="intro_routines_title">"Routines"</string>
+<string name="intro_routines_text">"Une routine est un moment de la journée où vous avez généralement besoin de prendre des médicaments.
+
+Est-ce que vous prenez plusieurs médicaments au petit-déjeuner ou au déjeuner ? Créez une routine pour cet horaire et Calendula regroupera toutes vos prises en une seule notification."</string>
+<string name="intro_meds_title">"Trousse à pharmacie"</string>
+<string name="intro_meds_text">"Gardez le contrôle de tous vos médicaments en utilisant la trousse à pharmacie et accédez facilement aux notices depuis des bases de données de médicaments officielles."</string>
+<string name="intro_schedules_title">"Traitements"</string>
+<string name="intro_schedules_text">"Créez votre programme en utilisant l'éditeur de traitements. Vous pouvez lier vos prises à vos routines, définir des répétitions horaires ou journalières et bien plus !"</string>
+<string name="intro_reminders_title">"Rappels"</string>
+<string name="intro_reminders_text">"Calendula vous rappellera toutes vos prises. Pensez à confirmer sinon nous vous les rappellerons encore une fois !
+
+Personnalisez les alarmes dans le menu paramètres."</string>
+<string name="intro_multipat_title">"Plusieurs patients !"</string>
+<string name="intro_multipat_text">"Calendula vous permet de gérer les médicaments de plusieurs patients ayant chacun leurs propres trousses à pharmacie, routines et traitements.
+
+Vous verrez toutes leurs prises sur l'écran d'accueil."</string>
 <string name="title_activity_settings">"Options"</string>
 <string name="pref_header_general">"Général"</string>
-<string name="pref_title_display_name">"Nom"</string>
+<string name="pref_title_display_name">"Afficher le nom"</string>
 <string name="pref_default_display_name">"Calendula"</string>
 <string name="pref_header_notifications">"Notifications"</string>
 <string name="pref_title_new_alarm_notification">"Rappels de médication"</string>
+<string name="pref_title_pickup_notification">"Notifications de remise de médicaments"</string>
 <string name="pref_title_insistent_alarms">"Rappels insistants"</string>
 <string name="pref_title_repeat_alarms">"Répéter les rappels"</string>
 <string name="pref_title_sync_frequency">"Répéter les rappels toutes les"</string>
 <string name="pref_title_reminder_window">"Arrêter les rappels après"</string>
 <string name="pref_notification_tone">"Sonnerie"</string>
 <string name="pref_notification_tone_sum">"Par défaut"</string>
+<string name="pref_alarm_repeat_five_min">"5 min"</string>
+<string name="pref_alarm_repeat_fifteen_min">"15 min"</string>
+<string name="pref_alarm_repeat_thirty_min">"30 min"</string>
+<string name="pref_alarm_repeat_sixty_min">"60 min"</string>
+<string name="pref_alarm_reminder_thirty_min">"30 min"</string>
+<string name="pref_alarm_reminder_one_hour">"1 heure"</string>
+<string name="pref_alarm_reminder_two_hours">"2 heures"</string>
+<string name="pref_enable_databases_title">"Activer la base de données des médicaments"</string>
+<string name="pref_available_databases_title">"Base de données sélectionnée"</string>
+<string name="pref_header_stock">"Contrôle du stock"</string>
+<string name="pref_stock_do_not_warn">"Ne pas m'avertir"</string>
+<string name="pref_stock_warn_one_week">"Dans moins d'une semaine"</string>
+<string name="pref_stock_warn_two_weeks">"Dans moins de 2 semaines"</string>
+<string name="pref_stock_warn_three_weeks">"Dans moins de 3 semaines"</string>
+<string name="database_none_display">"Aucun"</string>
+<string name="database_aemps_display">Base de données de l\'AEMPS (Espagne)</string>
+<string name="database_aemps_desc">"Base de données de l'Agence Espagnole des Médicaments et des Produits Sanitaires"</string>
+<string name="database_setting_up">"Initialisation…"</string>
+<string name="schedule_type_from_qr">"À partir d'un QR"</string>
+<string name="calendar_date_tomorrow">"demain"</string>
+<string name="delays_one_min">"1 min"</string>
+<string name="delays_thirty_min">"30 min"</string>
+<string name="delays_fifteen_min">"15 min"</string>
+<string name="delays_sixty_min">"60 min"</string>
+<string name="text_take_medicines_now">"Prenez vos médicaments maintenant"</string>
+<string name="message_patients_name_required">"Veuillez entrer un prénom."</string>
+<string name="label_patient_name">"Prénom"</string>
+<string name="scan_barcode">"Scanner un code-barres"</string>
+<string name="title_database_update_available">"Mise à jour de la base de données disponible"</string>
+<string name="text_database_update_available">"Une mise à jour de la base de données de médicaments utilisée est disponible. Voulez-vous télécharger et installer la mise à jour ?"</string>
+<string name="action_download_update">"Touchez pour télécharger et installer la mise à jour !"</string>
+<string name="text_database_update_data_lost">"Certains des médicaments de votre trousse à pharmacie ont été retirés de la base de données lors de la dernière mise à jour. Ils resteront dans votre trousse à pharmacie mais vous ne pourrez plus consulter leurs notices, etc."</string>
+<string name="title_database_update_data_lost">"Informations supplémentaires perdues après la mise à jour"</string>
+<string name="preference_check_for_updates">"Rechercher des mises à jour"</string>
+<string name="database_update_not_available">"Aucune mise à jour de la base de données disponible"</string>
+<string name="title_database_update_required">"Mise à jour de la base de données requise"</string>
+<string name="message_database_update_required">"Cette version de l'application nécessite une base de données plus récente. Voulez-bous la télécharger et la configurer maintenant ?
+Si vous choisissez de ne pas la télécharger, certaines informations concernant vos médicaments pourraient être perdues."</string>
+<string name="download">"Télécharger"</string>
+<string name="message_no_internet_error">"Aucune connexion interner disponible ! Veuillez vous connecter et réessayer."</string>
+<string name="action_edit">"Modifier"</string>
+<string name="injections">"Injections"</string>
+<string name="title_reset_stock">"Réinitialiser le stock ?"</string>
+<string name="message_reset_stock">"L'information de stock pour %1$s se réinitialisera à sa valeur par défaut."</string>
+<string name="reset">"Réinitialiser"</string>
+<string name="edit_medicine">"Modifier le médicament"</string>
+<string name="sort_by">"Trier par :"</string>
+<string name="sort_by_default">"Défaut"</string>
+<string name="sort_by_name">"Nom"</string>
+<string name="sort_by_presentation">"Forme"</string>
+<string name="action_sort">"Trier"</string>
+<string name="sort_by_alerts">"Alertes"</string>
+<string name="title_activity_pickup_calendar_short">"Remises"</string>
+<string name="calendar_patient_all">"Tous"</string>
+<string name="calendar_updating">"Mise à jour du calendrier…"</string>
+<string name="best_date_recommendation_title">"Conseil"</string>
+<string name="best_single_day_message">"Veuillez aller à votre pharmacie %1$s pour prendre %2$s médicaments en même temps :"</string>
+<string name="best_single_day_message_one_med">"Visitez votre pharmacie %1$s pour prendre :"</string>
+<string name="best_single_day_message_after_pending">"Ensuite, vous pourrez retourner %1$s pour prendre %2$s médicaments à la fois :"</string>
+<string name="best_single_day_message_after_pending_one_med">"Ensuite, vous pourrez retourner %1$s et prendre :"</string>
+<string name="pending_meds_msg">"Vous pouvez passer prendre des médicaments. Veuillez aller à votre pharmacie dès que possible :"</string>
+<string name="best_date_format">"'le' d MMMM '('EEEE')'"</string>
+<string name="best_date_reminder">"Rappel"</string>
+<string name="calendar_pickup_reminder_one_day_before">"1 jour avant"</string>
+<string name="calendar_pickup_reminder_two_days_before">"2 jours avant"</string>
+<string name="calendar_pickup_reminder_three_days_before">"3 jours avant"</string>
+<string name="calendar_no_medicines_to_pick_up">"Il n'y a pas de médicaments à prendre à la pharmacie"</string>
+<string name="ok">"OK"</string>
+<string name="stock">"Stock"</string>
+<string name="expand">"Étendre"</string>
+<string name="show_pickups">"Montrer les remises"</string>
+<string name="help">"Aide"</string>
+<string name="title_activity_medicines_search">"Recherche de médicaments"</string>
+<string name="fingerprint_setup_dialog_message">"Voulez-vous déverrouiller Calendula avec votre empreinte digitale ?"</string>
+<string name="fingerprint_setup_dialog_success">"Déverrouillage par empreinte digitale activé !"</string>
+<string name="fingerprint_setup_dialog_title">"Utiliser l'empreinte digitale pour déverrouiller"</string>
+<string name="fingerprint_unlock_dialog_failed_message">"Veuillez vérifier que votre capteur d'empreinte digitale est propre et réessayez."</string>
+<string name="fingerprint_unlock_dialog_failed_title">"Échec de l'authentification par empreinte digitale."</string>
+<string name="fingerprint_unlock_dialog_successful_message">"Veuillez patienter quelques instants…"</string>
+<string name="fingerprint_unlock_dialog_successful_title">"Authentification réussie"</string>
+<string name="fingerprint_unlock_dialog_title">"Utiliser l'empreinte digitale pour déverrouiller"</string>
+<string name="fingerprint_unlock_dialog_use_pin">"Utiliser plutôt un code PIN"</string>
+<string name="pin_actions_dialog_cancel">"Annuler"</string>
+<string name="pin_actions_dialog_delete">"Supprimer"</string>
+<string name="pin_actions_dialog_message">"L'application est verrouillée avec un code PIN. Que voulez-vous faire ?"</string>
+<string name="pin_actions_dialog_modify">"Modifier"</string>
+<string name="pin_actions_dialog_title">"Verrouillage par code PIN"</string>
+<string name="pin_delete_dialog_message">"Êtes-vous sûr de vouloir retirer le verrouillage par code PIN ?"</string>
+<string name="pin_delete_dialog_title">"Retirer le verrouillage par code PIN ?"</string>
+<string name="pin_forgot_pin">"Avez-vous oublié votre code PIN ?"</string>
+<string name="pin_recovery_description">"Si vous avez oublié votre code PIN, vous pouvez vous reconnecter afin d'accéder à l'application. Continuer ?"</string>
+<string name="pin_recovery_title">"Récupération du code PIN"</string>
+<string name="pin_use_fingerprint">"Utiliser l'empreinte digitale"</string>
+<string name="pref_fingerprint_enable_title">"Déverrouillage par empreinte digitale"</string>
+<string name="pref_header_privacy">"Confidentialité"</string>
+<string name="pref_summary_pin_lock_set">"Code PIN défini"</string>
+<string name="pref_summary_pin_lock_unset">"Code PIN non-défini"</string>
+<string name="pref_title_pin_lock">"Verrouillage de l'application"</string>
+<string name="text_pinlock_auth_error">"Le code PIN entré est incorrect. Veuillez réessayer."</string>
+<string name="text_pinlock_auth_prompt">"Veuillez entrer votre code PIN pour continuer"</string>
+<string name="text_pinlock_match_error">"Les codes PIN entrés ne correspondent pas. Veuillez réessayer."</string>
+<string name="text_pinlock_new_prompt">"Veuillez entrer un code PIN à quatre chiffres"</string>
+<string name="text_pinlock_or_fingerprint_auth_prompt">"Veuillez entrer votre code PIN ou utiliser votre empreinte digitale pour continuer"</string>
+<string name="text_pinlock_repeat_prompt">"Maintenant, entrez le même code PIN encore une fois…"</string>
+<string name="use_fingerprint_message">"ou utilisez votre empreinte digitale pour vous authentifier"</string>
+<string name="reinstall_prescriptions_dialog_message">"Afin de vous fournir de meilleures informations, la base de données des médicaments doit être réinstallée via l'écran Paramètres. Si vous ne la réinstallez pas, vous ne pourrez plus accéder aux notices et à d'autres fonctionnalités avancées.
+
+Vos traitements, trousse à pharmacie, routines et autres fonctionnalités de base sont conservés dans tous les cas.
+
+Voulez-vous installer la nouvelle base de données maintenant ?
+"</string>
+<string name="pref_insistent_notification_tone">"Sonnerie pour les notifications insistantes"</string>
+<string name="stock_enough_for_weeks_days">"Assez pour %1$d semaines et %2$d jours avec les traitements actuels."</string>
+<string name="stock_running_out_dialog_message">"Il reste %1$d %2$d de %3$d, et le stock se terminera dans %4$d jours avec les traitements actuels."</string>
+<string name="stock_running_out_dialog_title">"Le stock se termine pour %1$s"</string>
+<string name="manage_stock">"Gérer le stock"</string>
+<string name="message_generic_error">"Oups! Une erreur est survenue."</string>
+<string name="ringtone_none">"Aucune"</string>
+<string name="patient_add">"Ajouter un patient"</string>
+<string name="db_download_and_setup">"Télécharger et configurer"</string>
+<string name="schedule_continue_indefinitely">"Voulez-vous que ce traitement continue indéfiniment ?"</string>
+<string name="powder">"Poudre"</string>
+<string name="cream">"Crème"</string>
+<plurals name="powder_units">
+<item quantity="one">"gramme"</item>
+<item quantity="other">"grammes"</item>
+</plurals>
+<plurals name="cream_units">
+<item quantity="one">"application"</item>
+<item quantity="other">"applications"</item>
+</plurals>
+<plurals name="generic_units">
+<item quantity="one">"unité"</item>
+<item quantity="other">"unités"</item>
+</plurals>
+<string name="generic_presentation">"Générique"</string>
+<string name="notification_taken">"Pris"</string>
 </resources>

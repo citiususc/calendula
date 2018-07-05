@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2017 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.jobs;
@@ -24,8 +24,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
+import com.evernote.android.job.JobRequest;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 
 import org.joda.time.Duration;
@@ -34,16 +34,13 @@ import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.download.DBVersionManager;
 import es.usc.citius.servando.calendula.drugdb.download.UpdateDatabaseService;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
-/**
- * Created by alvaro.brey.vilas on 17/11/16.
- */
-
 public class CheckDatabaseUpdatesJob extends CalendulaJob {
 
-    public final static String TAG = "CheckDatabaseUpdatesJob";
+    static final String TAG = "CheckDatabaseUpdJob";
 
     private static final Integer PERIOD_DAYS = 7;
     private static final String UPDATE_NOTIFICATION_TAG = "Calendula.notifications.update_notification";
@@ -53,11 +50,6 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
     public CheckDatabaseUpdatesJob() {
     }
 
-    @Override
-    public Duration getInterval() {
-        return Duration.standardDays(PERIOD_DAYS);
-        //return Duration.standardMinutes(1L);
-    }
 
     @Override
     public String getTag() {
@@ -65,18 +57,18 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
     }
 
     @Override
-    public boolean requiresIdle() {
-        return false;
-    }
-
-    @Override
-    public boolean isPersisted() {
-        return true;
+    public JobRequest getRequest() {
+        return new JobRequest.Builder(getTag())
+                .setPeriodic(Duration.standardDays(PERIOD_DAYS).getMillis())
+                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
+                .setRequirementsEnforced(true)
+                .setPersisted(true)
+                .build();
     }
 
     public boolean checkForUpdate(Context ctx) {
         if (DBVersionManager.checkForUpdate(ctx) != null) {
-            notifyUpdate(ctx, PreferenceUtils.instance().preferences().getString(PreferenceKeys.DRUGDB_CURRENT_DB, null));
+            notifyUpdate(ctx, PreferenceUtils.getString(PreferenceKeys.DRUGDB_CURRENT_DB, null));
             return true;
         }
         return false;
@@ -85,8 +77,15 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
     @NonNull
     @Override
     protected Result onRunJob(Params params) {
-        Log.d(TAG, "onRunJob: Job started");
-        checkForUpdate(getContext());
+        LogUtil.d(TAG, "onRunJob: Job started");
+
+        try {
+            checkForUpdate(getContext());
+        } catch (Exception e) {
+            LogUtil.e(TAG, "onRunJob: ", e);
+            return Result.FAILURE;
+        }
+
         return Result.SUCCESS;
     }
 

@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.events;
@@ -24,9 +24,6 @@ import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 
-/**
- * Created by joseangel.pineiro on 11/4/14.
- */
 public class PersistenceEvents {
 
     public static ModelCreateOrUpdateEvent ROUTINE_EVENT = new ModelCreateOrUpdateEvent(Routine.class);
@@ -34,6 +31,13 @@ public class PersistenceEvents {
     public static ModelCreateOrUpdateEvent SCHEDULE_EVENT = new ModelCreateOrUpdateEvent(Schedule.class);
     public static ModelCreateOrUpdateEvent ALERT_EVENT = new ModelCreateOrUpdateEvent(PatientAlert.class);
 
+    public static class DatabaseUpdateEvent {
+
+    }
+
+    public static class DatabaseInstalledEvent {
+
+    }
 
     public static class ModelCreateOrUpdateEvent {
         public Class<?> clazz;

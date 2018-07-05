@@ -37,7 +37,6 @@
 <string name="schedule_repeat_days">"Repetir"</string>
 <string name="summary_title">"Revisa y confirma"</string>
 <string name="summary">"Resumen"</string>
-<string name="injections">"Inyecciones"</string>
 <string name="pills">"Pastillas"</string>
 <string name="capsules">"Cápsulas"</string>
 <string name="inhaler">"Inhalador"</string>
@@ -49,17 +48,50 @@
 <string name="unknown">"Desconocido"</string>
 <string name="effervescent">"Efervescente"</string>
 <string name="schedule">"Pauta"</string>
-<string name="injections_units">"inyección"</string>
-<string name="pills_units">"pastilla"</string>
-<string name="capsules_units">"cápsula"</string>
-<string name="inhaler_units">"inhalación"</string>
-<string name="spray_units">"aplicación"</string>
-<string name="drops_units">"gota"</string>
-<string name="pomade_units">"aplicación"</string>
-<string name="syrup_units">"ml"</string>
-<string name="patches_units">"parche"</string>
-<string name="unknown_units">"unidad"</string>
-<string name="effervescent_units">"sobre"</string>
+<plurals name="injections_units">
+<item quantity="one">"inyección"</item>
+<item quantity="other">"inyecciones"</item>
+</plurals>
+<plurals name="pills_units">
+<item quantity="one">"pastilla"</item>
+<item quantity="other">"pastillas"</item>
+</plurals>
+<plurals name="capsules_units">
+<item quantity="one">"cápsula"</item>
+<item quantity="other">"cápsulas"</item>
+</plurals>
+<plurals name="inhaler_units">
+<item quantity="one">"inhalación"</item>
+<item quantity="other">"inhalaciones"</item>
+</plurals>
+<plurals name="spray_units">
+<item quantity="one">"aplicación"</item>
+<item quantity="other">"aplicaciones"</item>
+</plurals>
+<plurals name="drops_units">
+<item quantity="one">"gota"</item>
+<item quantity="other">"gotas"</item>
+</plurals>
+<plurals name="pomade_units">
+<item quantity="one">"aplicación"</item>
+<item quantity="other">"aplicaciones"</item>
+</plurals>
+<plurals name="syrup_units">
+<item quantity="one">"ml"</item>
+<item quantity="other">"ml"</item>
+</plurals>
+<plurals name="patches_units">
+<item quantity="one">"parche"</item>
+<item quantity="other">"parches"</item>
+</plurals>
+<plurals name="unknown_units">
+<item quantity="one">"unidad"</item>
+<item quantity="other">"unidades"</item>
+</plurals>
+<plurals name="effervescent_units">
+<item quantity="one">"sobre"</item>
+<item quantity="other">"sobres"</item>
+</plurals>
 <string name="never">"Nunca"</string>
 <string name="every_day">"Todos los días"</string>
 <string name="once_a_day">"Una vez al día"</string>
@@ -150,7 +182,6 @@ Por favor, lee detenidamente las instrucciones de uso o consulta a tu farmacéut
 <string name="schedule_repeat_type_everyday">"Todos los días"</string>
 <string name="schedule_repeat_type_some_week_days">"Algunos días de la semana"</string>
 <string name="schedule_repeat_type_interval">"Intervalo"</string>
-<string name="schedule_repeat_frequency_hours">"horas"</string>
 <string name="schedule_repeat_frequency_days">"días"</string>
 <string name="schedule_repeat_frequency_weeks">"semanas"</string>
 <string name="schedule_repeat_frequency_months">"meses"</string>
@@ -166,10 +197,10 @@ Por favor, lee detenidamente las instrucciones de uso o consulta a tu farmacéut
 <string name="schedule_type_period_description">"Ex: 21 días + 7 de descanso"</string>
 <string name="schedule_help_cycle">"Indica el ciclo de repetición (período + descanso)"</string>
 <string name="schedule_help_duration">"Para acabar, puedes indicar cuando empieza y acaba esta pauta. Puedes dejarlo como está para que se repita indefinidamente."</string>
-<string name="schedule_help_hourly">"Por favor, indica el período de repetición, la dósis, y la hora de la primera toma"</string>
+<string name="schedule_help_hourly">"Por favor, indica el período de repetición, la dosis, y la hora de la primera toma"</string>
 <string name="schedule_help_repeat">"Indica cómo se repite la pauta. Si se repite todos los días no tienes que hacer nada."</string>
 <string name="schedule_help_timesbyday">"Por favor, indica el número de veces al día que se repite la pauta"</string>
-<string name="schedule_help_timetable">"Ahora, asocia cada toma a tus rutinas e indica la dósis para cada una"</string>
+<string name="schedule_help_timetable">"Ahora, asocia cada toma a tus rutinas e indica la dosis para cada una"</string>
 <string name="title_activity_calendar">"Calendario"</string>
 <string name="title_pickups_bottom_sheet">"Recogidas el %1$s"</string>
 <string name="pickup_interval">"Hasta el %1$s"</string>
@@ -178,7 +209,6 @@ Por favor, lee detenidamente las instrucciones de uso o consulta a tu farmacéut
 <string name="confirm_prescription_x_of_y">"Prescripción %1$s de %2$s"</string>
 <string name="scan_prescriptions_title">"Escanear prescripciones"</string>
 <string name="scan_qr">"Scanear QR"</string>
-<string name="scan_barcode">"Escanear código de barras"</string>
 <string name="duration">"Duración"</string>
 <string name="all_meds_taken">"¡Has tomado todas tus medicinas!"</string>
 <string name="create_schedule_select_med_before_dose">"Por favor, selecciona un medicamento primero"</string>
@@ -264,7 +294,7 @@ Para este desarrollo hacemos uso de algunas librerías y utilidades de código a
 <string name="allergies_group_elements_selected">"%1$d elementos (%2$d seleccionados)"</string>
 <string name="add_custom_med_button_text">"Añadir \"%1$s\" al botiquín"</string>
 <string name="medicine_search_not_found_msg">"Lo sentimos, no hemos podido encontrar nada con ese nombre"</string>
-<string name="medicine_search_empty_list_msg">"Escribe un nombre o un código de medicamento para comenzar a buscar, o escanea un código de barras"</string>
+<string name="medicine_search_empty_list_msg">"Escribe un nombre o un código de medicamento para comenzar a buscar, o escanea un código de barras…"</string>
 <string name="search_hint">"Buscar…"</string>
 <string name="database_us_display">"Base de datos US"</string>
 <string name="pref_stock_alert_title">"Avisar cuando mis medicamentos se agoten"</string>
@@ -285,7 +315,7 @@ Para este desarrollo hacemos uso de algunas librerías y utilidades de código a
 <string name="create_default_routines">"Crear rutinas por defecto"</string>
 <string name="stock_running_out">"Se está agotando el stock"</string>
 <string name="add_more_stock">"Recargar"</string>
-<string name="stock_remaining_msg">"Quedan %1$d %2$s(s)"</string>
+<string name="stock_remaining_msg">"Quedan %1$d %2$s"</string>
 <string name="active_schedules_none">"Sin pautas activas"</string>
 <string name="active_schedules_one">"1 pauta activa"</string>
 <string name="active_schedules_number">"%1$d pautas activas"</string>
@@ -320,7 +350,7 @@ Para este desarrollo hacemos uso de algunas librerías y utilidades de código a
 <string name="install_db_notification_onfailure">"La instalación ha fallado"</string>
 <string name="install_db_notification_onfailure_content">"Algo ha ido mal durante la instalación de la base de datos"</string>
 <string name="intro_title">"¡Bienvenido a Calendula!"</string>
-<string name="intro_description">"Tomar correctamente tu medicación no tiene por qué ser fácil, pero ahora al menos no será tan difícil
+<string name="intro_description">"Tomar correctamente tu medicación no es fácil, pero ahora al menos no será tan difícil.
         
 
 Por favor, ¡echa un vistazo a lo que tenemos para ti!"</string>
@@ -379,4 +409,113 @@ Verás todas sus tomas en la pantalla de inicio."</string>
 <string name="text_take_medicines_now">"Tómate tus medicinas ahora"</string>
 <string name="message_patients_name_required">"Por favor, introduce un nombre."</string>
 <string name="label_patient_name">"Nombre"</string>
+<string name="scan_barcode">"Escanear código de barras"</string>
+<string name="title_database_update_available">"Actualización disponible para la base de datos"</string>
+<string name="text_database_update_available">"Hay una actualización disponible para la base de datos de medicamentos actual ¿Quieres descargar e instalar la actualización?"</string>
+<string name="action_download_update">"¡Toca para descargar e instalar la actualización!"</string>
+<string name="text_database_update_data_lost">"Algunos de los medicamentos de tu botiquín se han eliminado de la base de datos en la última actualización. Siguen en tu botiquín, pero no podrás ver alguna información adicional como los prospectos."</string>
+<string name="title_database_update_data_lost">"Información adicional perdida tras la actualización"</string>
+<string name="preference_check_for_updates">"Buscar actualizaciones"</string>
+<string name="database_update_not_available">"No hay ninguna actualización disponible para la base de datos"</string>
+<string name="title_database_update_required">"Actualización de base de datos requerida"</string>
+<string name="message_database_update_required">"Esta versión de la aplicación requiere una base de datos nueva. Quieres descargarla y configurarla ahora?
+Si eliges no descargarla, puede perderse alguna información de tus medicamentos."</string>
+<string name="download">"Descargar"</string>
+<string name="message_no_internet_error">"¡No hay conexión a Internet! Por favor, establece una conexión e inténtalo de nuevo."</string>
+<string name="action_edit">"Editar"</string>
+<string name="injections">"Inyecciones"</string>
+<string name="title_reset_stock">"¿Reiniciar stock?"</string>
+<string name="message_reset_stock">"La información de stock para %1$s será reiniciada."</string>
+<string name="reset">"Reiniciar"</string>
+<string name="edit_medicine">"Editar medicamento"</string>
+<string name="sort_by">"Ordenar por:"</string>
+<string name="sort_by_default">"Por defecto"</string>
+<string name="sort_by_name">"Nombre"</string>
+<string name="sort_by_presentation">"Presentación"</string>
+<string name="action_sort">"Ordenar"</string>
+<string name="sort_by_alerts">"Alertas"</string>
+<string name="title_activity_pickup_calendar_short">"Dispensación"</string>
+<string name="calendar_patient_all">"Todos"</string>
+<string name="calendar_updating">"Actualizando calendario…"</string>
+<string name="best_date_recommendation_title">"Recomendación"</string>
+<string name="best_single_day_message">"Acude a tu farmacia %1$s y podrás recoger %2$s medicamentos a la vez:"</string>
+<string name="best_single_day_message_one_med">"Acude a tu farmacia %1$s para recoger:"</string>
+<string name="best_single_day_message_after_pending">"Después, podrás volver %1$s para recoger %2$s medicamentos a la vez:"</string>
+<string name="best_single_day_message_after_pending_one_med">"Después, podrás volver %1$s y recoger:"</string>
+<string name="pending_meds_msg">"Hay medicamentos pendientes de recoger. Por favor acude a tu farmacia lo más pronto posible:"</string>
+<string name="best_date_format">"'el' EEEE dd 'de' MMMM"</string>
+<string name="best_date_reminder">"Recordatorio"</string>
+<string name="calendar_pickup_reminder_one_day_before">"1 día antes"</string>
+<string name="calendar_pickup_reminder_two_days_before">"2 días antes"</string>
+<string name="calendar_pickup_reminder_three_days_before">"3 días antes"</string>
+<string name="calendar_no_medicines_to_pick_up">"No hay medicinas para recoger"</string>
+<string name="ok">"OK"</string>
+<string name="stock">"Stock"</string>
+<string name="expand">"Expandir"</string>
+<string name="show_pickups">"Ver dispensación"</string>
+<string name="help">"Ayuda"</string>
+<string name="title_activity_medicines_search">"Búsqueda de medicamentos"</string>
+<string name="fingerprint_setup_dialog_message">"¿Quieres desbloquear Calendula con tu huella dactilar?"</string>
+<string name="fingerprint_setup_dialog_success">"¡Desbloqueo con huella dactilar habilitado!"</string>
+<string name="fingerprint_setup_dialog_title">"Usar huella dactilar para desbloquear"</string>
+<string name="fingerprint_unlock_dialog_failed_message">"Por favor asegúrate de que tu sensor de huellas esté limpio, e inténtalo de nuevo."</string>
+<string name="fingerprint_unlock_dialog_failed_title">"Autenticación con huella dactilar fallida."</string>
+<string name="fingerprint_unlock_dialog_successful_message">"Por favor espera unos momentos…"</string>
+<string name="fingerprint_unlock_dialog_successful_title">"Autenticación exitosa"</string>
+<string name="fingerprint_unlock_dialog_title">"Usar huella dactilar para desbloquear"</string>
+<string name="fingerprint_unlock_dialog_use_pin">"Usar PIN"</string>
+<string name="pin_actions_dialog_cancel">"Cancelar"</string>
+<string name="pin_actions_dialog_delete">"Borrar"</string>
+<string name="pin_actions_dialog_message">"La aplicación está bloqueada con un PIN. ¿Qué quieres hacer?"</string>
+<string name="pin_actions_dialog_modify">"Modificar"</string>
+<string name="pin_actions_dialog_title">"Bloqueo con PIN"</string>
+<string name="pin_delete_dialog_message">"¿Seguro que quieres borrar el desbloqueo con PIN?"</string>
+<string name="pin_delete_dialog_title">"¿Borrar bloqueo con PIN?"</string>
+<string name="pin_forgot_pin">"¿Has olvidado tu PIN?"</string>
+<string name="pin_recovery_description">"Si has olvidado tu PIN, puedes volver a iniciar sesión para acceder a la aplicación. ¿Continuar?"</string>
+<string name="pin_recovery_title">"Recuperación de PIN"</string>
+<string name="pin_use_fingerprint">"Usar huella dactilar"</string>
+<string name="pref_fingerprint_enable_title">"Desbloqueo con huella dactilar"</string>
+<string name="pref_header_privacy">"Privacidad"</string>
+<string name="pref_summary_pin_lock_set">"PIN configurado"</string>
+<string name="pref_summary_pin_lock_unset">"PIN no configurado"</string>
+<string name="pref_title_pin_lock">"Bloqueo de aplicación"</string>
+<string name="text_pinlock_auth_error">"El PIN introducido no es correcto. Por favor inténtalo de nuevo."</string>
+<string name="text_pinlock_auth_prompt">"Por favor introduce tu PIN para continuar"</string>
+<string name="text_pinlock_match_error">"Los PINs introducidos no coinciden. Por favor inténtalo de nuevo."</string>
+<string name="text_pinlock_new_prompt">"Por favor introduce un PIN de cuatro dígitos."</string>
+<string name="text_pinlock_or_fingerprint_auth_prompt">"Por favor introduce tu PIN o utiliza tu huella dactilar para continuar"</string>
+<string name="text_pinlock_repeat_prompt">"Ahora, introduce el mismo PIN de nuevo…"</string>
+<string name="use_fingerprint_message">"o usa tu huella dactilar paraa continuar"</string>
+<string name="reinstall_prescriptions_dialog_message">"Para poder mejorar la información de los medicamentos, la base de datos de medicinas debe ser reinstalada a través de los ajustes de la aplicación. Si no la reinstalas, ya no podrás acceder a prospectos o otras funciones adicionales.
+
+Tus pautas, medicinas, rutinas y otras funcionalidades básicas seguirán disponibles en cualquier caso.
+
+Quieres instalar la nueva base de datos ahora?"</string>
+<string name="pref_insistent_notification_tone">"Tono de avisos insistentes"</string>
+<string name="stock_enough_for_weeks_days">"Suficiente para %1$d semanas y %2$d días con las pautas actuales."</string>
+<string name="stock_running_out_dialog_message">"Quedan %1$d %2$s de %3$s, y se agotarán en %4$d con las pautas actuales."</string>
+<string name="stock_running_out_dialog_title">"Se está acabando el stock de %1$s"</string>
+<string name="manage_stock">"Administrar stock"</string>
+<string name="message_generic_error">"Ups! Se ha producido un error."</string>
+<string name="ringtone_none">"Ninguno"</string>
+<string name="patient_add">"Añadir paciente"</string>
+<string name="db_download_and_setup">"Descargar y configurar"</string>
+<string name="schedule_continue_indefinitely">"¿Quieres que esta pauta continúe indefinidamente?"</string>
+<string name="powder">"Polvo"</string>
+<string name="cream">"Crema"</string>
+<plurals name="powder_units">
+<item quantity="one">"gramo"</item>
+<item quantity="other">"gramos"</item>
+</plurals>
+<plurals name="cream_units">
+<item quantity="one">"aplicación"</item>
+<item quantity="other">"aplicaciones"</item>
+</plurals>
+<plurals name="generic_units">
+<item quantity="one">"unidad"</item>
+<item quantity="other">"unidades"</item>
+</plurals>
+<string name="generic_presentation">"Genérico"</string>
+<string name="notification_taken">"Tomado"</string>
 </resources>

@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.util;
@@ -29,9 +29,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-/**
- * Created by mikepenz on 01.11.14.
- */
 public class PresentationsTypeface implements ITypeface {
     private static final String TTF_FILE = "presentation_icons.ttf";
 
@@ -59,12 +56,12 @@ public class PresentationsTypeface implements ITypeface {
 
     @Override
     public String getMappingPrefix() {
-        return "faw";
+        return "med-presentation";
     }
 
     @Override
     public String getFontName() {
-        return "FontAwesome";
+        return "Calendula medicine Icons";
     }
 
     @Override
@@ -90,7 +87,7 @@ public class PresentationsTypeface implements ITypeface {
 
     @Override
     public String getAuthor() {
-        return "Ángel Piñeiro";
+        return "Calendula Team";
     }
 
     @Override
@@ -127,17 +124,26 @@ public class PresentationsTypeface implements ITypeface {
 
     public enum Icon implements IIcon {
 
-        ic_cream('\ue900'),
         ic_drops('\ue901'),
         ic_effervescent('\ue902'),
         ic_inhaler('\ue903'),
         ic_injection('\ue904'),
         ic_capsule('\ue905'),
         ic_pill('\ue906'),
-        ic_spray('\ue907'),
+        ic_spray('\ue90d'),
         ic_syrup('\ue908'),
-        ic_patch('\ue909');
-
+        ic_patch('\ue909'),
+        ic_powder('\ue91f'),
+        ic_cream('\ue90c'),
+        ic_pomade('\ue900'),
+        ic_powder_patch('\ue90e'),
+        ic_circle('\ue92f'),
+        ic_triangle('\ue92e'),
+        ic_square('\ue930'),
+        ic_pentagon('\ue933'),
+        ic_hexagon('\ue932'),
+        ic_diamond('\ue931'),
+        ic_unknown('\ue907');
 
         // remember the typeface so we can use it later
         private static ITypeface typeface;

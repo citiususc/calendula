@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,12 +13,10 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.util.alerts;
-
-import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -34,19 +32,17 @@ import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 import static es.usc.citius.servando.calendula.persistence.PatientAlert.Level;
 
-/**
- * Created by alvaro.brey.vilas on 21/11/16.
- */
 
 public class AlertManager {
 
     private static final String TAG = "AlertManager";
 
     public static void createAlert(final PatientAlert alert) {
-        Log.d(TAG, "createAlert() called with: alert = [" + alert + "]");
+        LogUtil.d(TAG, "createAlert() called with: alert = [" + alert + "]");
         DB.alerts().save(alert);
 
         switch (alert.getLevel()) {
@@ -57,6 +53,7 @@ public class AlertManager {
             case Level.LOW:
                 //nothing
             default:
+                break;
         }
         CalendulaApp.eventBus().post(PersistenceEvents.ALERT_EVENT);
 
@@ -111,7 +108,7 @@ public class AlertManager {
             @Override
             public Object call() throws Exception {
                 final List<Schedule> schedules = DB.schedules().findByMedicine(medicine);
-                Log.d(TAG, "blockSchedulesForMedicine: Found " + schedules.size() + " schedules to block.");
+                LogUtil.d(TAG, "blockSchedulesForMedicine: Found " + schedules.size() + " schedules to block.");
                 for (Schedule schedule : schedules) {
                     blockSchedule(schedule);
                 }

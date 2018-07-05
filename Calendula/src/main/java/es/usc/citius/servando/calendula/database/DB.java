@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,25 +13,25 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.database;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.j256.ormlite.misc.TransactionManager;
 
 import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.drugdb.model.database.DrugDBModule;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 
 public class DB {
 
 
-    public static final String TAG = DB.class.getSimpleName();
+    private static final String TAG = "DB";
 
     // Database name
     public static String DB_NAME = "calendula.db";
@@ -89,7 +89,7 @@ public class DB {
             PatientAlerts = new PatientAlertDao(db);
             PatientAllergens = new PatientAllergenDao(db);
             AllergyGroups = new AllergyGroupDao(db);
-            Log.v(TAG, "DB initialized " + DB.DB_NAME);
+            LogUtil.v(TAG, "DB initialized " + DB.DB_NAME);
         }
 
     }
@@ -101,7 +101,7 @@ public class DB {
         initialized = false;
         db.close();
         manager.releaseHelper(db);
-        Log.v(TAG, "DB disposed");
+        LogUtil.v(TAG, "DB disposed");
     }
 
     public static DatabaseHelper helper() {

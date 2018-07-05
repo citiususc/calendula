@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.persistence;
@@ -54,7 +54,7 @@ public class Patient {
     @DatabaseField(columnName = COLUMN_COLOR)
     private int color = Color.parseColor("#3498db"); // material blue 700 1976d2
 
-    public Long id() {
+    public Long getId() {
         return id;
     }
 
@@ -62,7 +62,7 @@ public class Patient {
         this.id = id;
     }
 
-    public String name() {
+    public String getName() {
         return name;
     }
 
@@ -78,7 +78,7 @@ public class Patient {
         this.isDefault = isDefault;
     }
 
-    public String avatar() {
+    public String getAvatar() {
         return avatar;
     }
 
@@ -91,7 +91,7 @@ public class Patient {
         this.color = color;
     }
 
-    public int color() {
+    public int getColor() {
         return color;
     }
 

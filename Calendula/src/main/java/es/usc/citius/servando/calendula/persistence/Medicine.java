@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.persistence;
@@ -37,9 +37,6 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import static java.util.Collections.sort;
 
 
-/**
- * Created by joseangel.pineiro
- */
 @DatabaseTable(tableName = "Medicines")
 public class Medicine implements Comparable<Medicine> {
 
@@ -47,7 +44,7 @@ public class Medicine implements Comparable<Medicine> {
     public static final String COLUMN_NAME = "Name";
     public static final String COLUMN_PRESENTATION = "Presentation";
     public static final String COLUMN_CN = "cn";
-    public static final String COLUMN_HG = "hg";
+    public static final String COLUMN_HG = "homogeneousGroup";
     public static final String COLUMN_STOCK = "Stock";
     public static final String COLUMN_PATIENT = "Patient";
     public static final String COLUMN_DATABASE = "Database";
@@ -68,7 +65,7 @@ public class Medicine implements Comparable<Medicine> {
     private Float stock;
 
     @DatabaseField(columnName = COLUMN_HG)
-    private Long homogeneousGroup;
+    private String homogeneousGroup;
 
     @DatabaseField(columnName = COLUMN_PATIENT, foreign = true, foreignAutoRefresh = true)
     private Patient patient;
@@ -104,13 +101,13 @@ public class Medicine implements Comparable<Medicine> {
         Medicine m = new Medicine();
         m.setCn(String.valueOf(p.getCode()));
         m.setName(p.shortName());
-        Presentation pre = DBRegistry.instance().current().expected(p);
+        Presentation pre = DBRegistry.instance().current().expectedPresentation(p);
         m.setPresentation(pre != null ? pre : Presentation.PILLS);
         m.setDatabase(DBRegistry.instance().current().id());
         return m;
     }
 
-    public String cn() {
+    public String getCn() {
         return cn;
     }
 
@@ -118,11 +115,11 @@ public class Medicine implements Comparable<Medicine> {
         this.cn = cn;
     }
 
-    public Long homogeneousGroup() {
+    public String getHomogeneousGroup() {
         return homogeneousGroup;
     }
 
-    public void setHomogeneousGroup(Long homogeneousGroup) {
+    public void setHomogeneousGroup(String homogeneousGroup) {
         this.homogeneousGroup = homogeneousGroup;
     }
 
@@ -134,7 +131,7 @@ public class Medicine implements Comparable<Medicine> {
         this.id = id;
     }
 
-    public String name() {
+    public String getName() {
         return name;
     }
 
@@ -142,7 +139,7 @@ public class Medicine implements Comparable<Medicine> {
         this.name = name;
     }
 
-    public Presentation presentation() {
+    public Presentation getPresentation() {
         return presentation;
     }
 
@@ -150,11 +147,11 @@ public class Medicine implements Comparable<Medicine> {
         this.presentation = presentation;
     }
 
-    public Collection<PickupInfo> pickups() {
+    public Collection<PickupInfo> getPickups() {
         return DB.pickups().findByMedicine(this);
     }
 
-    public Patient patient() {
+    public Patient getPatient() {
         return patient;
     }
 
@@ -190,14 +187,14 @@ public class Medicine implements Comparable<Medicine> {
     public LocalDate nextPickupDate() {
 
         List<PickupInfo> pickupList = new ArrayList<>();
-        for (PickupInfo pickupInfo : pickups()) {
-            if (!pickupInfo.taken())
+        for (PickupInfo pickupInfo : getPickups()) {
+            if (!pickupInfo.isTaken())
                 pickupList.add(pickupInfo);
         }
 
         if (!pickupList.isEmpty()) {
             sort(pickupList, new PickupInfo.PickupComparator());
-            return pickupList.get(0).from();
+            return pickupList.get(0).getFrom();
         }
 
         return null;
@@ -209,10 +206,10 @@ public class Medicine implements Comparable<Medicine> {
     }
 
     public boolean isBoundToPrescription() {
-        return cn != null && database != null && database.equals(PreferenceUtils.instance().preferences().getString(PreferenceKeys.DRUGDB_CURRENT_DB, null));
+        return cn != null && database != null && database.equals(PreferenceUtils.getString(PreferenceKeys.DRUGDB_CURRENT_DB, null));
     }
 
-    public Float stock() {
+    public Float getStock() {
         return stock;
     }
 
@@ -221,7 +218,7 @@ public class Medicine implements Comparable<Medicine> {
     }
 
     public boolean stockManagementEnabled() {
-        return stock != -1;
+        return stock != null && stock != -1;
     }
 
     @Override

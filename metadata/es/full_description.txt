@@ -1,0 +1,31 @@
+Calendula es un asistente para la gestión personal de la medicación que te ayudará a seguir de forma correcta todas tus prescripciones, sin tener que recurrir a miles de alarmas en tu teléfono, o estar continuamente pendiente de haber tomado tu medicación. Simplemente introduce tus dosis y horarios, asócialos a tu rutina diaria y deja que Calendula haga el resto del trabajo por ti, avisándote en el momento oportuno para que no te olvides.
+
+---
+
+Te ofrecemos:
+○ Una interfaz simple y agradable
+○ Avisos y recordatorios de medicación, con alarmas totalmente configurables
+○ Pautas de medicación flexibles, con opciones específicas para anticonceptivos y otros medicamentos con descansos.
+○ Buscador de medicamentos y consulta de prospectos oficiales proporcionados por la Agencia Española de Medicamentos y Productos Sanitarios (http://www.aemps.gob.es)
+○ Control diario de medicinas tomadas
+○ Gestión de varios pacientes en la misma aplicación
+
+Para más información, visita nuestra web: <a href="https://tec.citius.usc.es/calendula/">https://tec.citius.usc.es/calendula/</a>
+
+---
+
+Información de permisos:
+
+Calendula no requiere registro previo ni recopila datos de carácter personal. Puede que solicite permiso en algún momento para acceder a diferentes recursos de tu dispositivo. A continuación te explicamos por qué:
+
+○ Almacenamiento: Necesitamos este permiso para acceder a los tonos de notificación almacenados en tu  dispositivo y que así puedas seleccionar el que más te apetezca como tono para Calendula, y para descargar la base de datos de medicamentos.
+○ Cámara: Como sabes, puedes añadir medicamentos de AEMPS al botiquín escaneando su código de barras. Para poder escanearlos necesitamos tener acceso a la cámara de tu dispositivo.
+○ Acceso a internet: Este permiso no se solicita de forma explícita, y solo es necesario para descargar prospectos y configurar la base de datos medicamentos. Tus datos de medicación no saldrán en ningún momento de tu teléfono.
+
+--- 
+
+Open Source:
+Calendula es un proyecto de código abierto. Si tienes alguna idea o estás interesado en contribuir puedes hacerlo a través de nuestra web (<a href="https://tec.citius.usc.es/calendula/">https://tec.citius.usc.es/calendula/</a>) o en nuestra comunidad de Github <a href="https://github.com/citiususc/calendula">https://github.com/citiususc/calendula</a>. Agradecemos cualquier aportación o sugerencia.
+
+Muchas gracias, 
+el equipo de Calendula.

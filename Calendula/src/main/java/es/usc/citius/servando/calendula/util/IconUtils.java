@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,13 +13,14 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.util;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorRes;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -32,9 +33,6 @@ import java.util.Random;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 
-/**
- * Created by joseangel.pineiro on 10/29/15.
- */
 public class IconUtils {
 
     private static Random random = new Random();
@@ -50,21 +48,21 @@ public class IconUtils {
 
     );
 
-    public static IconicsDrawable icon(Context ctx, IIcon ic, int color) {
+    public static IconicsDrawable icon(Context ctx, IIcon ic, @ColorRes int color) {
         return new IconicsDrawable(ctx, ic)
                 .sizeDp(48)
                 .paddingDp(2)
                 .colorRes(color);
     }
 
-    public static IconicsDrawable icon(Context ctx, IIcon ic, int color, int size) {
+    public static IconicsDrawable icon(Context ctx, IIcon ic, @ColorRes int color, int size) {
         return new IconicsDrawable(ctx, ic)
                 .sizeDp(size)
                 .paddingDp(0)
                 .colorRes(color);
     }
 
-    public static IconicsDrawable icon(Context ctx, IIcon ic, int color, int size, int padding) {
+    public static IconicsDrawable icon(Context ctx, IIcon ic, @ColorRes int color, int size, int padding) {
         return new IconicsDrawable(ctx, ic)
                 .sizeDp(size)
                 .paddingDp(padding)

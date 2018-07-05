@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.database;
@@ -21,7 +21,6 @@ package es.usc.citius.servando.calendula.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -61,6 +60,7 @@ import es.usc.citius.servando.calendula.persistence.RepetitionRule;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Database helper class used to manage the creation and upgrading of your database. This class also usually provides
@@ -68,9 +68,9 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
  */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
-    public static final String TAG = "DatabaseHelper";
     // any time you make changes to your database objects, you may have to increase the database version
     public static final int DATABASE_VERSION = 14;
+    private static final String TAG = "DatabaseHelper";
     // name of the database file for our application
     private static final String DATABASE_NAME = DB.DB_NAME;
     // List of persisted classes to simplify table creation
@@ -123,7 +123,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     // the DAO object we use to access the patients table
     private Dao<Patient, Long> patientDao = null;
 
-    private Context ctx;
+    private final Context ctx;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -137,17 +137,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db, ConnectionSource connectionSource) {
         try {
-            Log.i(DatabaseHelper.class.getName(), "onCreate");
+            LogUtil.i(TAG, "onCreate");
 
             for (Class<?> c : persistedClasses) {
-                Log.d(TAG, "Creating table for " + c.getSimpleName());
+                LogUtil.d(TAG, "Creating table for " + c.getSimpleName());
                 TableUtils.createTable(connectionSource, c);
             }
 
-            createDefaultPatient();
-
         } catch (SQLException e) {
-            Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
+            LogUtil.e(TAG, "Can't create database", e);
             throw new RuntimeException(e);
         }
     }
@@ -159,8 +157,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, ConnectionSource connectionSource, int oldVersion, int newVersion) {
         try {
-            Log.i(DatabaseHelper.class.getName(), "onUpgrade");
-            Log.d(DatabaseHelper.class.getName(), "OldVersion: " + oldVersion + ", newVersion: " + newVersion);
+            LogUtil.i(TAG, "onUpgrade");
+            LogUtil.d(TAG, "OldVersion: " + oldVersion + ", newVersion: " + newVersion);
 
             if (oldVersion < 6) {
                 oldVersion = 6;
@@ -215,11 +213,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             }
 
         } catch (Exception e) {
-            Log.e(DatabaseHelper.class.getName(), "Can't upgrade databases", e);
+            LogUtil.e(TAG, "Can't upgrade databases", e);
             try {
-                Log.d(DatabaseHelper.class.getName(), "Will try to recreate db...");
+                LogUtil.d(TAG, "Will try to recreate db...");
                 dropAndCreateAllTables();
-                createDefaultPatient();
             } catch (Exception ex) {
                 throw new RuntimeException(e);
             }
@@ -332,28 +329,29 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     public void dropAndCreateAllTables() {
 
-        Log.i(DatabaseHelper.class.getName(), "Dropping all tables...");
+        LogUtil.i(TAG, "Dropping all tables...");
         for (Class<?> c : persistedClasses) {
-            Log.d(TAG, "Dropping table " + c.getSimpleName());
+            LogUtil.d(TAG, "Dropping table " + c.getSimpleName());
             try {
                 TableUtils.dropTable(connectionSource, c, true);
             } catch (SQLException e) {
                 // ignore
-                Log.e(TAG, "Erro dropping table " + c.getSimpleName());
+                LogUtil.e(TAG, "Erro dropping table " + c.getSimpleName());
             }
 
         }
 
         try {
 
-            Log.i(DatabaseHelper.class.getName(), "Creating tables...");
+            LogUtil.i(TAG, "Creating tables...");
             for (Class<?> c : persistedClasses) {
-                Log.d(TAG, "Creating table " + c.getSimpleName());
+                LogUtil.d(TAG, "Creating table " + c.getSimpleName());
                 TableUtils.createTable(connectionSource, c);
             }
+            createDefaultPatient();
 
         } catch (SQLException e) {
-            Log.e(DatabaseHelper.class.getName(), "Can't recreate database", e);
+            LogUtil.e(TAG, "Can't recreate database", e);
             throw new RuntimeException(e);
         }
     }
@@ -365,9 +363,23 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void close() {
         super.close();
         medicinesDao = null;
+        routinesDao = null;
+        schedulesDao = null;
+        scheduleItemsDao = null;
+        dailyScheduleItemsDao = null;
+        prescriptionsDao = null;
+        homogeneousGroupsDao = null;
+        pickupInfoDao = null;
+        patientDao = null;
     }
 
-    private Patient createDefaultPatient() throws SQLException {
+    /**
+     * Creates a default patient.
+     *
+     * @return the created Patient
+     * @throws SQLException if anything goes wrong
+     */
+    public Patient createDefaultPatient() throws SQLException {
         // Create a default patient
         Patient p = new Patient();
         p.setName(ctx.getString(R.string.default_user_name));
@@ -389,27 +401,26 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         getRoutinesDao().executeRaw("ALTER TABLE DailyScheduleItems ADD COLUMN Date TEXT;");
 
         Patient p = createDefaultPatient();
-        // SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences();
-        // prefs.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).commit();
+        // PreferenceUtils.edit().putLong(PatientDao.PREFERENCE_ACTIVE_PATIENT, p.id()).commit();
 
         // Assign all routines to the default patient
         UpdateBuilder<Routine, Long> rUpdateBuilder = getRoutinesDao().updateBuilder();
-        rUpdateBuilder.updateColumnValue(Routine.COLUMN_PATIENT, p.id());
+        rUpdateBuilder.updateColumnValue(Routine.COLUMN_PATIENT, p.getId());
         rUpdateBuilder.update();
 
         // Assign all schedules to the default patient
         UpdateBuilder<Schedule, Long> sUpdateBuilder = getSchedulesDao().updateBuilder();
-        sUpdateBuilder.updateColumnValue(Schedule.COLUMN_PATIENT, p.id());
+        sUpdateBuilder.updateColumnValue(Schedule.COLUMN_PATIENT, p.getId());
         sUpdateBuilder.update();
 
         // Assign all medicines to the default patient
         UpdateBuilder<Medicine, Long> mUpdateBuilder = getMedicinesDao().updateBuilder();
-        mUpdateBuilder.updateColumnValue(Medicine.COLUMN_PATIENT, p.id());
+        mUpdateBuilder.updateColumnValue(Medicine.COLUMN_PATIENT, p.getId());
         mUpdateBuilder.update();
 
         // Assign all DailyScheduleItems to the default patient, for today
         UpdateBuilder<DailyScheduleItem, Long> siUpdateBuilder = getDailyScheduleItemsDao().updateBuilder();
-        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_PATIENT, p.id());
+        siUpdateBuilder.updateColumnValue(DailyScheduleItem.COLUMN_PATIENT, p.getId());
         siUpdateBuilder.update();
 
         // date formatter changes on v11, so we can no use LocalDatePersister here
@@ -442,7 +453,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             public Void call() throws Exception {
                 // iterate over schedules and replace days[] with rrule
                 List<Schedule> schedules = getSchedulesDao().queryForAll();
-                Log.d(TAG, "Upgrade " + schedules.size() + " schedules");
+                LogUtil.d(TAG, "Upgrade " + schedules.size() + " schedules");
                 for (Schedule s : schedules) {
                     if (s.rule() == null) {
                         s.setRepetition(new RepetitionRule(RepetitionRule.DEFAULT_ICAL_VALUE));

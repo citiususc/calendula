@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.activities;
@@ -66,9 +66,9 @@ public class SummaryCalendarActivity extends CalendulaActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        color = DB.patients().getActive(this).color();
+        color = DB.patients().getActive(this).getColor();
         setContentView(R.layout.activity_summary_calendar);
-        int color = DB.patients().getActive(this).color();
+        int color = DB.patients().getActive(this).getColor();
         setupToolbar(getString(R.string.title_activity_calendar), color);
         setupStatusBar(color);
         setupCalendar();
@@ -98,7 +98,7 @@ public class SummaryCalendarActivity extends CalendulaActivity {
 
             List<CalendarCellDecorator> decorators = new ArrayList<>();
 
-            DateValue v = r.iCalRule().getUntil();
+            DateValue v = r.getRRule().getUntil();
             Date start = date != null ? from.toDate() : null;
             Date end = v != null ? new LocalDate(v.year(), v.month(), v.day()).toDate() : null;
 

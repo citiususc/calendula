@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,12 +13,10 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.util;
-
-import android.util.Log;
 
 import com.google.ical.values.Frequency;
 
@@ -34,11 +32,9 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Schedule;
 import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 
-/**
- * Created by joseangel.pineiro on 12/12/13.
- */
 public class ScheduleHelper {
 
+    private static final String TAG = "ScheduleHelper";
     private static ScheduleHelper instance;
 
     private List<ScheduleItem> scheduleItems;
@@ -72,9 +68,9 @@ public class ScheduleHelper {
         int days = (int) new Interval(start, day).toDuration().getStandardDays();
         int cyclesUntilNow = days / cycleLength;
 
-        Log.d("ScheduleHelper",
+        LogUtil.d(TAG,
                 "start: " + start.toString("dd/MM/YYYY") + ", day: " + day.toString("dd/MM/YYYY"));
-        Log.d("ScheduleHelper", "Active: "
+        LogUtil.d(TAG, "Active: "
                 + activePeriod
                 + ", rest: "
                 + restPeriod
@@ -125,7 +121,7 @@ public class ScheduleHelper {
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
         if (schedule != null && scheduleType == -1) {
-            if (schedule.rule().frequency() == Frequency.HOURLY) {
+            if (schedule.rule().getFrequency() == Frequency.HOURLY) {
                 this.setScheduleType(ScheduleTypeFragment.TYPE_HOURLY);
             } else if (schedule.type() == Schedule.SCHEDULE_TYPE_CYCLE) {
                 this.setScheduleType(ScheduleTypeFragment.TYPE_PERIOD);
@@ -150,7 +146,7 @@ public class ScheduleHelper {
     @Override
     public String toString() {
         return "ScheduleCreationHelper{" +
-                "selectedMed=" + selectedMed.name() +
+                "selectedMed=" + selectedMed.getName() +
                 ", selectedScheduleIdx=" + selectedScheduleIdx +
                 ", timesPerDay=" + timesPerDay +
                 ", scheduleItems=" + scheduleItems.size() +

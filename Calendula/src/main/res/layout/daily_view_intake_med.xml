@@ -3,7 +3,7 @@
 
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:paddingBottom="2dp"
                 android:paddingTop="2dp">
 
@@ -59,7 +60,7 @@
         android:paddingBottom="3dp"
         android:scrollHorizontally="true"
         android:singleLine="true"
-        android:text="Ibuprofeno"
+        tools:text="Ibuprofeno"
         android:textColor="#222"
         android:textSize="16dp"/>
 
@@ -73,7 +74,7 @@
         android:layout_marginLeft="90dp"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center_vertical"
-        android:text="(1 capsule)"
+        tools:text="(1 capsule)"
         android:textColor="#000"
         android:visibility="gone"/>
 

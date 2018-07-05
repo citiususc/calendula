@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.adapters;
@@ -23,16 +23,13 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 
 import java.lang.reflect.Constructor;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 
-/**
- * Created by joseangel.pineiro on 11/15/13.
- */
 public class HomePageAdapter extends FragmentPagerAdapter {
 
     private static final String TAG = "HomePageAdapter";
@@ -59,7 +56,7 @@ public class HomePageAdapter extends FragmentPagerAdapter {
             final Constructor<?> constructor = Class.forName(cn).getConstructor();
             return (Fragment) constructor.newInstance();
         } catch (Exception e) {
-            Log.e(TAG, "getItem: cannot instantiate fragment.", e);
+            LogUtil.e(TAG, "getItem: cannot instantiate fragment.", e);
         }
 
         return null;

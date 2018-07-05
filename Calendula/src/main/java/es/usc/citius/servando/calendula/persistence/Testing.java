@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,34 +13,31 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.persistence;
-
-import android.util.Log;
 
 import org.joda.time.LocalTime;
 
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by joseangel.pineiro on 10/9/14.
- */
+import es.usc.citius.servando.calendula.util.LogUtil;
+
 public class Testing {
 
-    public static final String TAG = "Testing";
+    private static final String TAG = "Testing";
 
     public static void test() {
 
-        Log.d(TAG, "================================================================");
+        LogUtil.d(TAG, "================================================================");
 
         List<Routine> routines = Routine.findAll();
 
         for (Routine routine : routines) {
-            Medicine med = routine.scheduleItems().get(0).schedule().medicine();
-            Log.d(TAG, "Presentation of " + med.name() + ": " + med.presentation().name());
+            Medicine med = routine.getScheduleItems().get(0).getSchedule().medicine();
+            LogUtil.d(TAG, "Presentation of " + med.getName() + ": " + med.getPresentation().name());
         }
 
         Routine r = Routine.findByName("Breakfast");
@@ -49,7 +46,7 @@ public class Testing {
             // create and save routine
             r = new Routine(LocalTime.now(), "Lunch");
             r.save();
-        } else if (r.time() == null) {
+        } else if (r.getTime() == null) {
             r.setTime(LocalTime.now());
             r.save();
         }
@@ -74,26 +71,26 @@ public class Testing {
 
 
         for (Routine routine : routines) {
-            Log.d(TAG, "Routine: " + Routine.findById(routine.getId()).name() + ", " + routine.time());
-            for (ScheduleItem i : routine.scheduleItems()) {
-                Log.d(TAG, " -- ScheduleItem: " + i.getId() + ", " + i.schedule().getId() + ", " + i.schedule().medicine().name());
+            LogUtil.d(TAG, "Routine: " + Routine.findById(routine.getId()).getName() + ", " + routine.getTime());
+            for (ScheduleItem i : routine.getScheduleItems()) {
+                LogUtil.d(TAG, " -- ScheduleItem: " + i.getId() + ", " + i.getSchedule().getId() + ", " + i.getSchedule().medicine().getName());
             }
 
         }
 
         List<Medicine> medicines = Medicine.findAll();
         for (Medicine med : medicines) {
-            Log.d(TAG, "Medicine: " + med.name());
+            LogUtil.d(TAG, "Medicine: " + med.getName());
         }
 
 
         List<Schedule> schedules = Schedule.findAll();
         for (Schedule schedule : schedules) {
-            Log.d(TAG, "Schedule: " + schedule.medicine().name() + ", " + Arrays.toString(schedule.days()));
+            LogUtil.d(TAG, "Schedule: " + schedule.medicine().getName() + ", " + Arrays.toString(schedule.days()));
         }
 
 //        for (DailyScheduleItem d : DailyScheduleItem.fromDate(DateTime.now())) {
-//            Log.d(TAG, "DSI: " + d.toString());
+//            LogUtil.d(TAG, "DSI: " + d.toString());
 //        }
     }
 

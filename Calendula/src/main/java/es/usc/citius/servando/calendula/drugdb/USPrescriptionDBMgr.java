@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,17 +13,18 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.drugdb;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -33,11 +34,10 @@ import java.util.concurrent.Callable;
 
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
+import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Presentation;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by joseangel.pineiro on 9/8/15.
- */
 public class USPrescriptionDBMgr extends PrescriptionDBMgr {
 
     private static final String TAG = "USPrescriptionDBMgr";
@@ -45,7 +45,7 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
 
     @Override
     public String getProspectURL(Prescription p) {
-        return "http://www.accessdata.fda.gov/spl/data/#ID#/#ID#.xml".replaceAll("#ID#", p.getpID());
+        return "http://www.accessdata.fda.gov/spl/data/#ID#/#ID#.xml".replaceAll("#ID#", p.getPID());
     }
 
 
@@ -63,7 +63,7 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
 
         Prescription p = new Prescription();
         p.setCode(values[0]);
-        p.setpID(values[0]);
+        p.setPID(values[0]);
         p.setName(values[1]);
         p.setDose("0");
         p.setContent(values[2]);
@@ -75,14 +75,14 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
     }
 
     @Override
-    public Presentation expected(Prescription p) {
+    public Presentation expectedPresentation(Prescription p) {
         String name = p.getName();
         String content = p.getContent();
-        return expected(name, content);
+        return expectedPresentation(name, content);
     }
 
     @Override
-    public Presentation expected(String name, String content) {
+    public Presentation expectedPresentation(String name, String content) {
 
         String n = name.toLowerCase() + " " + content.toLowerCase();
         if (n.contains("tablet")) {
@@ -125,48 +125,66 @@ public class USPrescriptionDBMgr extends PrescriptionDBMgr {
             @Override
             public Object call() throws Exception {
 
-                DBRegistry.instance().clear();
+                BufferedReader br = null;
 
-                BufferedReader br;
-                String line;
-                int progressUpdateBy;
-                int lines = 0;
-                int i = 0;
+                try {
 
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
-                // count file lines (for progress updating)
-                while (br.readLine() != null) {
-                    lines++;
-                }
-                br.close();
-                progressUpdateBy = lines / 20;
-                updateProgress(l, 0);
+                    DBRegistry.instance().clear();
 
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
+                    String line;
+                    int progressUpdateBy;
+                    int lines = 0;
+                    int i = 0;
 
-                while ((line = br.readLine()) != null) {
-                    if (l != null && i % progressUpdateBy == 0) {
-                        int progress = (int) (((float) i / lines) * 100);
-                        l.onProgressUpdate(progress);
+                    br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
+                    // count file lines (for progress updating)
+                    while (br.readLine() != null) {
+                        lines++;
                     }
-                    // exec line content as raw sql
-                    Prescription prescription = fromCsv(line, "\\|");
-                    DB.drugDB().prescriptions().save(prescription);
-                    i++;
+                    br.close();
+
+                    if (lines > 0) {
+                        progressUpdateBy = lines / 20;
+                        updateProgress(l, 0);
+
+                        br = new BufferedReader(new InputStreamReader(new FileInputStream(downloadPath)));
+
+                        while ((line = br.readLine()) != null) {
+                            if (l != null && progressUpdateBy!=0 && i % progressUpdateBy == 0) {
+                                int progress = (int) (((float) i / lines) * 100);
+                                l.onProgressUpdate(progress);
+                            }
+                            // exec line content as raw sql
+                            Prescription prescription = fromCsv(line, "\\|");
+                            DB.drugDB().prescriptions().save(prescription);
+                            i++;
+                        }
+                    } else {
+                        LogUtil.e(TAG, "setup:  database file is empty");
+                        throw new IllegalArgumentException("Database file is empty");
+                    }
+                } catch (Exception e) {
+                    throw e;
+                } finally {
+                    if (br != null) {
+                        br.close();
+                    }
                 }
-                br.close();
                 return null;
+
             }
         });
 
-        Log.d(TAG, "setup: cleaning up...");
+        EventBus.getDefault().post(new PersistenceEvents.DatabaseInstalledEvent());
+
+        LogUtil.d(TAG, "setup: cleaning up...");
         try {
             boolean delete = new File(downloadPath).delete();
             if (!delete) {
-                Log.i(TAG, "setup: couldn't delete file " + downloadPath);
+                LogUtil.i(TAG, "setup: couldn't delete file " + downloadPath);
             }
         } catch (Exception e) {
-            Log.e(TAG, "setup: couldn't finish cleanup: ", e);
+            LogUtil.e(TAG, "setup: couldn't finish cleanup: ", e);
         }
     }
 

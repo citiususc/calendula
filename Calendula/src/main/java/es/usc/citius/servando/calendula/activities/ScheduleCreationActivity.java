@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.activities;
@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -31,7 +32,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,10 +40,8 @@ import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.j256.ormlite.misc.TransactionManager;
-import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.SnackbarManager;
-import com.nispok.snackbar.enums.SnackbarType;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
@@ -67,6 +65,7 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.scheduling.DailyAgenda;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
@@ -75,7 +74,7 @@ import es.usc.citius.servando.calendula.util.Snack;
 
 public class ScheduleCreationActivity extends CalendulaActivity implements ViewPager.OnPageChangeListener {
 
-    public static final String TAG = ScheduleCreationActivity.class.getName();
+    private static final String TAG = "ScheduleCreationAct";
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -115,13 +114,13 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                     s.setState(Schedule.ScheduleState.ENABLED);
                     s.save();
 
-                    Log.d(TAG, "Saving schedule..." + s.toString());
+                    LogUtil.d(TAG, "Saving schedule..." + s.toString());
 
                     if (!s.repeatsHourly()) {
                         for (ScheduleItem item : ScheduleHelper.instance().getScheduleItems()) {
                             item.setSchedule(s);
                             item.save();
-                            Log.d(TAG, "Saving item..." + item.getId());
+                            LogUtil.d(TAG, "Saving item..." + item.getId());
                             // add to daily schedule
                             DailyAgenda.instance().addItem(patient, item, false);
                         }
@@ -139,7 +138,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
 
             ScheduleHelper.instance().clear();
             AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ScheduleCreationActivity.this);
-            Log.d(TAG, "Schedule saved successfully!");
+            LogUtil.d(TAG, "Schedule saved successfully!");
             Snack.show(R.string.schedule_created_message, this);
             CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
             finish();
@@ -167,7 +166,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                         // remove days if changed
                         boolean[] days = s.days();
                         for (DailyScheduleItem dsi : DB.dailyScheduleItems().findBySchedule(s)) {
-                            if (days[dsi.date().getDayOfWeek() - 1]) {
+                            if (days[dsi.getDate().getDayOfWeek() - 1]) {
                                 DB.dailyScheduleItems().remove(dsi);
                             }
                         }
@@ -175,8 +174,8 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                         for (ScheduleItem item : s.items()) {
                             DailyScheduleItem d = DailyScheduleItem.findByScheduleItem(item);
                             // if taken today, add to the list
-                            if (d != null && d.takenToday()) {
-                                routinesTaken.add(item.routine().getId());
+                            if (d != null && d.getTakenToday()) {
+                                routinesTaken.add(item.getRoutine().getId());
                             }
                             item.deleteCascade();
                         }
@@ -185,12 +184,12 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                         for (ScheduleItem i : ScheduleHelper.instance().getScheduleItems()) {
 
                             ScheduleItem item = new ScheduleItem();
-                            item.setDose(i.dose());
-                            item.setRoutine(i.routine());
+                            item.setDose(i.getDose());
+                            item.setRoutine(i.getRoutine());
                             item.setSchedule(s);
                             item.save();
                             // add to daily schedule
-                            DailyAgenda.instance().addItem(patient, item, routinesTaken.contains(item.routine().getId()));
+                            DailyAgenda.instance().addItem(patient, item, routinesTaken.contains(item.getRoutine().getId()));
                         }
                     } else {
                         DB.dailyScheduleItems().removeAllFrom(s);
@@ -208,7 +207,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
 
             ScheduleHelper.instance().clear();
             AlarmScheduler.instance().onCreateOrUpdateSchedule(s, ScheduleCreationActivity.this);
-            Log.d(TAG, "Schedule saved successfully!");
+            LogUtil.d(TAG, "Schedule saved successfully!");
             Toast.makeText(this, R.string.schedule_created_message, Toast.LENGTH_SHORT).show();
             finish();
         } catch (Exception e) {
@@ -272,7 +271,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
 
         if (mScheduleId == -1) {
             String titleStart = getString(R.string.title_create_schedule_activity);
-            String medName = " (" + m.name() + ")";
+            String medName = " (" + m.getName() + ")";
             String fullTitle = titleStart + medName;
 
             SpannableString title = new SpannableString(fullTitle);
@@ -312,8 +311,9 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
 
     }
 
-    public void onEvent(PersistenceEvents.MedicineAddedEvent event) {
-        Log.d("onEvent", event.id + " ----");
+    @Subscribe
+    public void handleMedicineAdded(final PersistenceEvents.MedicineAddedEvent event) {
+        LogUtil.d(TAG, event.id + " ----");
         ((SelectMedicineListFragment) getViewPagerFragment(0)).setSelectedMed(event.id);
     }
 
@@ -326,7 +326,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
         }
 
         for (ScheduleItem i : ScheduleHelper.instance().getScheduleItems()) {
-            if (i.routine() == null) {
+            if (i.getRoutine() == null) {
                 mViewPager.setCurrentItem(1);
                 showSnackBar(R.string.create_schedule_incomplete_items);
                 return false;
@@ -334,7 +334,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
         }
 
         for (ScheduleItem i : ScheduleHelper.instance().getScheduleItems()) {
-            if (i.dose() <= 0) {
+            if (i.getDose() <= 0) {
                 mViewPager.setCurrentItem(1);
                 showSnackBar(R.string.create_schedule_incomplete_doses);
                 return false;
@@ -352,7 +352,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
 
     void showDeleteConfirmationDialog(final Schedule s) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(String.format(getString(R.string.remove_medicine_message_short), s.medicine().name()))
+        builder.setMessage(String.format(getString(R.string.remove_medicine_message_short), s.medicine().getName()))
                 .setCancelable(true)
                 .setPositiveButton(getString(R.string.dialog_yes_option), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -379,7 +379,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedules);
 
-        pColor = DB.patients().getActive(this).color();
+        pColor = DB.patients().getActive(this).getColor();
         setupToolbar(null, pColor);
         setupStatusBar(pColor);
         subscribeToEvents();
@@ -460,15 +460,15 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
     }
 
     private void showSnackBar(int string) {
-        SnackbarManager.show(
-                Snackbar.with(getApplicationContext())
-                        .actionLabel("OK")
-                        .actionColor(getResources().getColor(R.color.android_orange_darker))
-                        .type(SnackbarType.MULTI_LINE)
-                        .textColor(getResources().getColor(R.color.white_80)) // change the text color
-                        .color(getResources().getColor(R.color.android_orange_dark)) // change the background color
-                        .text(getResources().getString(string)), this);
-
+        final Snackbar snackbar = Snackbar.make(mViewPager, string, Snackbar.LENGTH_SHORT);
+        snackbar.setAction("OK", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar.dismiss();
+            }
+        });
+        snackbar.setActionTextColor(getResources().getColor(R.color.android_orange_darker));
+        snackbar.show();
     }
 
     /**

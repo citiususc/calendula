@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,17 +13,19 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula;
 
-import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.preference.PreferenceManager;
-import android.util.Log;
+import android.os.Build;
+import android.support.multidex.MultiDexApplication;
+
+import com.squareup.leakcanary.LeakCanary;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,22 +33,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
 import java.util.Locale;
 
-import de.greenrobot.event.EventBus;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.modules.ModuleManager;
-import es.usc.citius.servando.calendula.modules.modules.PharmacyModule;
-import es.usc.citius.servando.calendula.util.Settings;
+import es.usc.citius.servando.calendula.util.CloseableUtil;
+import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.util.debug.StethoHelper;
 
-/**
- * Created by castrelo on 4/10/14.
- */
-public class CalendulaApp extends Application {
+public class CalendulaApp extends MultiDexApplication {
 
-    // PREFERENCES
-    public static final String PREFERENCES_NAME = "CalendulaPreferences";
-    public static final String PREF_ALARM_SETTLED = "alarm_settled";
     // INTENTS
     public static final String INTENT_EXTRA_ACTION = "action";
     public static final String INTENT_EXTRA_ROUTINE_ID = "routine_id";
@@ -55,6 +52,8 @@ public class CalendulaApp extends Application {
     public static final String INTENT_EXTRA_SCHEDULE_TIME = "schedule_time";
     public static final String INTENT_EXTRA_DELAY_ROUTINE_ID = "delay_routine_id";
     public static final String INTENT_EXTRA_DELAY_SCHEDULE_ID = "delay_schedule_id";
+    public static final String INTENT_EXTRA_DATE = "date";
+    public static final String INTENT_EXTRA_POSITION = "position";
     // ACTIONS
     public static final int ACTION_ROUTINE_TIME = 1;
     public static final int ACTION_DAILY_ALARM = 2;
@@ -71,31 +70,22 @@ public class CalendulaApp extends Application {
     // REQUEST CODES
     public static final int RQ_SHOW_ROUTINE = 1;
     public static final int RQ_DELAY_ROUTINE = 2;
-    private final static String TAG = "CalendulaApp";
+    private static final String TAG = "CalendulaApp";
     public static boolean disableReceivers = false;
-    private static boolean isOpen;
-    private static EventBus eventBus = EventBus.getDefault();
 
-    public static String activePatientAuth(Context ctx) {
-        Long id = DB.patients().getActive(ctx).id();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        return prefs.getString("remote_token" + id, null);
-    }
+    private static WeakReference<EventBus> eventBusRef;
+    private static Context mContext;
+
 
     public static EventBus eventBus() {
-        return eventBus;
+        if (eventBusRef == null || eventBusRef.get() == null) {
+            eventBusRef = new WeakReference<>(EventBus.getDefault());
+        }
+        return eventBusRef.get();
     }
 
-    public static boolean isOpen() {
-        return isOpen;
-    }
-
-    public static boolean isPharmaModeEnabled() {
-        return ModuleManager.isEnabled(PharmacyModule.ID);
-    }
-
-    public static void open(boolean isOpen) {
-        CalendulaApp.isOpen = isOpen;
+    public static Context getContext() {
+        return mContext;
     }
 
     public void exportDatabase(Context context, String databaseName, File out) {
@@ -103,15 +93,16 @@ public class CalendulaApp extends Application {
 
         // If the database already exists, return
         if (!dbPath.exists()) {
-            Log.d("APP", "Database not found");
+            LogUtil.d(TAG, "Database not found");
             return;
         }
 
         // Try to copy database file
+        InputStream inputStream = null;
+        OutputStream output = null;
         try {
-            final InputStream inputStream = new FileInputStream(dbPath);
-            final OutputStream output = new FileOutputStream(out);
-
+            inputStream = new FileInputStream(dbPath);
+            output = new FileOutputStream(out);
             byte[] buffer = new byte[8192];
             int length;
 
@@ -120,32 +111,43 @@ public class CalendulaApp extends Application {
             }
 
             output.flush();
-            output.close();
-            inputStream.close();
         } catch (IOException e) {
-            Log.e("APP", "Failed to export database", e);
+            LogUtil.e(TAG, "Failed to export database", e);
+        } finally {
+            CloseableUtil.closeQuietly(inputStream, output);
         }
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "Application started");
-        //load settings
-        final Context applicationContext = getApplicationContext();
-        try {
-            Settings.instance().load(applicationContext);
-        } catch (Exception e) {
-            Log.e(TAG, "onCreate: An exception happened when loading settings file");
+
+        if (!Build.FINGERPRINT.equals("robolectric")) {
+            if (BuildConfig.DEBUG) {
+                new StethoHelper().init(this);
+            }
+
+            if (LeakCanary.isInAnalyzerProcess(CalendulaApp.this)) {
+                // This process is dedicated to LeakCanary for heap analysis.
+                return;
+            }
+
+            //initialize LeakCanary
+            LeakCanary.install(CalendulaApp.this);
         }
 
+        final Context applicationContext = getApplicationContext();
+        mContext = applicationContext;
+
+        LogUtil.d(TAG, "Application started");
+
         try {
-            Log.d(TAG, "Application flavor is \"" + BuildConfig.FLAVOR + "\"");
+            LogUtil.d(TAG, "Application flavor is \"" + BuildConfig.FLAVOR + "\"");
             final String flavor = BuildConfig.FLAVOR.toUpperCase();
             ModuleManager.getInstance().runModules(flavor, applicationContext);
         } catch (IllegalArgumentException | IllegalStateException e) {
-            Log.e(TAG, "onCreate: Error loading module configuration", e);
-            Log.w(TAG, "onCreate: Loading default module configuration instead");
+            LogUtil.e(TAG, "onCreate: Error loading module configuration", e);
+            LogUtil.w(TAG, "onCreate: Loading default module configuration instead");
             ModuleManager.getInstance().runDefaultModules(applicationContext);
         }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -17,14 +17,14 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/medicines_list_item_container"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/touchable_white">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:layout_width="fill_parent"
@@ -40,11 +40,11 @@
             android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="false"
-            android:layout_alignParentTop="true"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_centerVertical="true"
             android:background="@null"
-            android:scaleType="fitStart"/>
+            android:scaleType="fitStart"
+            tools:src="@drawable/icp_pill"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -58,24 +58,16 @@
                 android:id="@+id/medicines_list_item_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/imageButton"
-                android:layout_toEndOf="@+id/imageButton"
-                android:layout_toLeftOf="@+id/drive_icon"
-                android:layout_toRightOf="@+id/imageButton"
-                android:layout_toStartOf="@+id/drive_icon"
                 android:gravity="top"
-                android:text="Atrovent with another thing here"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#222"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                tools:text="Medicine name placeholder, possibly multiline"/>
 
             <TextView
                 android:id="@+id/stock_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/medicines_list_item_name"
-                android:layout_alignStart="@+id/medicines_list_item_name"
-                android:layout_below="@+id/medicines_list_item_name"
                 android:layout_marginTop="2dp"
                 android:text="@string/no_stock_info_msg"
                 android:textColor="@color/agenda_item_title"
@@ -96,7 +88,9 @@
             android:alpha="0.9"
             android:background="@drawable/simple_highlight_click_selector"
             android:padding="0dp"
-            android:src="@drawable/icprospect"/>
+            android:src="@drawable/icprospect"
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
     </RelativeLayout>
 

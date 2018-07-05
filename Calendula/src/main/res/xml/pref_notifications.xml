@@ -1,0 +1,87 @@
+<!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="@string/prefkey_settings_alarm_notifications"
+        android:title="@string/pref_title_new_alarm_notification"/>
+
+    <Preference
+        android:dependency="@string/prefkey_settings_alarm_notifications"
+        android:key="@string/prefkey_settings_notification_tone"
+        android:summary="@string/pref_notification_tone_sum"
+        android:title="@string/pref_notification_tone"/>
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:dependency="@string/prefkey_settings_alarm_notifications"
+        android:key="@string/prefkey_settings_alarm_repeat_enabled"
+        android:title="@string/pref_title_repeat_alarms"/>
+
+
+    <ListPreference
+        android:defaultValue="15"
+        android:dependency="@string/prefkey_settings_alarm_repeat_enabled"
+        android:entries="@array/pref_alarm_repeat_titles"
+        android:entryValues="@array/pref_alarm_repeat_values"
+        android:key="@string/prefkey_settings_alarm_repeat_frequency"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:summary="%s"
+        android:title="@string/pref_title_sync_frequency"/>
+
+    <ListPreference
+        android:defaultValue="120"
+        android:dependency="@string/prefkey_settings_alarm_repeat_enabled"
+        android:entries="@array/pref_alarm_reminder_window_titles"
+        android:entryValues="@array/pref_alarm_reminder_window_values"
+        android:key="@string/prefkey_settings_alarm_reminder_window"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:summary="%s"
+        android:title="@string/pref_title_reminder_window"/>
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:dependency="@string/prefkey_settings_alarm_notifications"
+        android:key="@string/prefkey_settings_alarm_insistent"
+        android:title="@string/pref_title_insistent_alarms"/>
+
+
+    <Preference
+        android:dependency="@string/prefkey_settings_alarm_insistent"
+        android:key="@string/prefkey_settings_insistent_notification_tone"
+        android:summary="@string/pref_notification_tone_sum"
+        android:title="@string/pref_insistent_notification_tone"/>
+
+
+    <ListPreference
+        android:defaultValue="7"
+        android:entries="@array/pref_stock"
+        android:entryValues="@array/pref_stock_values"
+        android:key="@string/prefkey_settings_stock_alert_days"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:summary="%s"
+        android:title="@string/pref_stock_alert_title"/>
+
+
+</PreferenceScreen>

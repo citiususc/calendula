@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.fragments;
@@ -23,8 +23,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.sql.SQLException;
@@ -46,16 +47,14 @@ import es.usc.citius.servando.calendula.allergies.AllergyAlertUtil;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Presentation;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 import es.usc.citius.servando.calendula.util.Snack;
 
-/**
- * Created by joseangel.pineiro on 12/2/13.
- */
 public class SelectMedicineListFragment extends Fragment {
 
 
-    private static String TAG = "SelectMedicineListFragm";
+    private static final String TAG = "SelectMedicineListFrag";
     List<Medicine> mMedicines;
     ArrayAdapter adapter;
     ListView listview;
@@ -67,12 +66,13 @@ public class SelectMedicineListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_select_medicine_list, container, false);
         listview = (ListView) rootView.findViewById(R.id.medicines_list);
-        pColor = DB.patients().getActive(getActivity()).color();
+        pColor = DB.patients().getActive(getActivity()).getColor();
         Medicine med = ScheduleHelper.instance().getSelectedMed();
         if (med != null)
             selectedId = med.getId();
 
-        rootView.findViewById(R.id.add_medicine_button).setOnClickListener(new View.OnClickListener() {
+        final FloatingActionButton addButton = (FloatingActionButton) rootView.findViewById(R.id.add_medicine_button);
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), MedicinesActivity.class);
@@ -80,6 +80,11 @@ public class SelectMedicineListFragment extends Fragment {
                 startActivity(i);
             }
         });
+        addButton.setImageDrawable(new IconicsDrawable(getContext())
+                .icon(GoogleMaterial.Icon.gmd_plus)
+                .paddingDp(5)
+                .sizeDp(24)
+                .colorRes(R.color.fab_default_icon_color));
 
         mMedicines = DB.medicines().findAllForActivePatient(getContext());
         Collections.sort(mMedicines);
@@ -117,7 +122,7 @@ public class SelectMedicineListFragment extends Fragment {
     IconicsDrawable iconFor(Presentation p, boolean disabled) {
         int color = disabled ? R.color.drawer_item_disabled : R.color.agenda_item_title;
         return new IconicsDrawable(getContext())
-                .icon(Presentation.iconFor(p))
+                .icon(p.icon())
                 .colorRes(color)
                 .paddingDp(5)
                 .sizeDp(55);
@@ -133,7 +138,7 @@ public class SelectMedicineListFragment extends Fragment {
                 hasAllergies = true;
             }
         } catch (SQLException e) {
-            Log.e(TAG, "createMedicineListItem: ", e);
+            LogUtil.e(TAG, "createMedicineListItem: ", e);
             hasAllergies = true;
         }
 
@@ -143,10 +148,10 @@ public class SelectMedicineListFragment extends Fragment {
         if (disabled) {
             tv.setTextColor(getResources().getColor(R.color.drawer_item_disabled));
         }
-        tv.setText(medicine.name());
+        tv.setText(medicine.getName());
 
         ImageView icon = (ImageView) item.findViewById(R.id.imageButton);
-        icon.setImageDrawable(iconFor(medicine.presentation(), disabled));
+        icon.setImageDrawable(iconFor(medicine.getPresentation(), disabled));
 
         View overlay = item.findViewById(R.id.medicines_list_item_container);
         overlay.setTag(medicine);

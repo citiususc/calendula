@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.activities;
@@ -27,17 +27,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -46,6 +45,7 @@ import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.listeners.ClickEventHook;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -84,6 +84,8 @@ import es.usc.citius.servando.calendula.persistence.PatientAllergen;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert.AllergyAlertInfo;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 import es.usc.citius.servando.calendula.util.alerts.AlertManager;
@@ -93,12 +95,9 @@ public class AllergiesActivity extends CalendulaActivity {
 
 
     private static final String TAG = "AllergiesActivity";
-
-    private static final String PREFERENCE_WARNING_SHOWN = "PREFERENCE_ALLERGY_WARNING_SHOWN";
-
     // main view
     @BindView(R.id.add_button)
-    protected AddFloatingActionButton addButton;
+    protected FloatingActionButton addButton;
     @BindView(R.id.allergies_recycler)
     protected RecyclerView allergiesRecycler;
     @BindView(R.id.textview_no_allergies_placeholder)
@@ -133,10 +132,16 @@ public class AllergiesActivity extends CalendulaActivity {
         setContentView(R.layout.activity_allergies);
         ButterKnife.bind(this);
 
+        addButton.setImageDrawable(new IconicsDrawable(this)
+                .icon(GoogleMaterial.Icon.gmd_plus)
+                .paddingDp(5)
+                .sizeDp(24)
+                .colorRes(R.color.fab_default_icon_color));
+
         //setup toolbar and status bar
         final Patient patient = DB.patients().getActive(this);
-        color = patient.color();
-        final String name = patient.name();
+        color = patient.getColor();
+        final String name = patient.getName();
         setupToolbar(getString(R.string.relation_user_possession_thing, name, getString(R.string.title_activity_allergies)), color);
         setupStatusBar(color);
 
@@ -157,7 +162,7 @@ public class AllergiesActivity extends CalendulaActivity {
 
     private void showWarningIfNeeded() {
         final SharedPreferences prefs = PreferenceUtils.instance().preferences();
-        if (!prefs.getBoolean(PREFERENCE_WARNING_SHOWN, false)) {
+        if (!prefs.getBoolean(PreferenceKeys.ALLERGIES_WARNING_SHOWN.key(), false)) {
             new MaterialStyledDialog.Builder(this)
                     .setStyle(Style.HEADER_WITH_ICON)
                     .setIcon(IconUtils.icon(this, GoogleMaterial.Icon.gmd_alert_circle, R.color.white, 100))
@@ -170,7 +175,7 @@ public class AllergiesActivity extends CalendulaActivity {
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            prefs.edit().putBoolean(PREFERENCE_WARNING_SHOWN, true).apply();
+                            prefs.edit().putBoolean(PreferenceKeys.ALLERGIES_WARNING_SHOWN.key(), true).apply();
                             dialog.dismiss();
                         }
                     })
@@ -203,7 +208,7 @@ public class AllergiesActivity extends CalendulaActivity {
                                 a.setDetails(d);
                                 DB.alerts().save(a);
                             } else {
-                                Log.wtf(TAG, "Duplicate alerts: " + list);
+                                LogUtil.wtf(TAG, "Duplicate alerts: " + list);
                             }
                         } else {
                             AlertManager.createAlert(new AllergyPatientAlert(conflict, new ArrayList<AllergenVO>() {{
@@ -276,7 +281,7 @@ public class AllergiesActivity extends CalendulaActivity {
 
             @Override
             public void onClick(View view, int i, FastAdapter fastAdapter, AbstractItem item) {
-                Log.d(TAG, "onEvent() called with: view = [" + view + ", i = [" + i + "], fastAdapter = [" + fastAdapter + "], item = [" + item + "]");
+                LogUtil.d(TAG, "onClick() called with: view = [" + view + ", i = [" + i + "], fastAdapter = [" + fastAdapter + "], item = [" + item + "]");
                 switch (view.getId()) {
                     case R.id.delete_button:
                         // check if group or item
@@ -288,7 +293,7 @@ public class AllergiesActivity extends CalendulaActivity {
                                 showDeleteConfirmationDialog((AllergyItem) item);
                                 break;
                             default:
-                                Log.w(TAG, "onClick: Unexpected item type: " + item);
+                                LogUtil.w(TAG, "onClick: Unexpected item type: " + item);
                                 break;
                         }
                         break;
@@ -303,7 +308,7 @@ public class AllergiesActivity extends CalendulaActivity {
                             allergiesAdapter.collapse(i);
                         break;
                     default:
-                        Log.w(TAG, "onClick: Unexpected view type on click hook: " + view);
+                        LogUtil.w(TAG, "onClick: Unexpected view type on click hook: " + view);
                         break;
                 }
             }
@@ -432,7 +437,7 @@ public class AllergiesActivity extends CalendulaActivity {
                 }
                 return index;
             } catch (SQLException e) {
-                Log.e(TAG, "Couldn't delete allergen " + a, e);
+                LogUtil.e(TAG, "Couldn't delete allergen " + a, e);
                 return -2;
             }
 
@@ -487,10 +492,10 @@ public class AllergiesActivity extends CalendulaActivity {
             try {
                 rows = DB.patientAllergens().create(allergen);
             } catch (SQLException e) {
-                Log.e(TAG, "storeAllergen: couldn't create allergy", e);
+                LogUtil.e(TAG, "storeAllergen: couldn't create allergy", e);
                 return SaveResult.ERROR;
             }
-            Log.d(TAG, "storeAllergen: inserted allergen into database: " + allergen);
+            LogUtil.d(TAG, "storeAllergen: inserted allergen into database: " + allergen);
             if (rows == 1) {
                 final boolean r = checkConflictsAndCreateAlerts(new AllergenVO(allergen));
                 currentAllergies.add(allergen);
@@ -524,9 +529,9 @@ public class AllergiesActivity extends CalendulaActivity {
 
         @Override
         protected Integer doInBackground(AllergyGroupItem... params) {
-            Log.d(TAG, "doInBackground() called with: params = [" + Arrays.toString(params) + "]");
+            LogUtil.d(TAG, "doInBackground() called with: params = [" + Arrays.toString(params) + "]");
             if (params.length != 1) {
-                Log.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + params.length);
+                LogUtil.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + params.length);
                 throw new IllegalArgumentException("Invalid argument length");
             }
             int index = allergiesAdapter.getAdapterPosition(params[0]);
@@ -600,7 +605,7 @@ public class AllergiesActivity extends CalendulaActivity {
         @Override
         protected Integer doInBackground(AllergyItem... params) {
             if (params.length != 1) {
-                Log.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + params.length);
+                LogUtil.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + params.length);
                 throw new IllegalArgumentException("Invalid argument length");
             }
             int index = allergiesAdapter.getAdapterPosition(params[0]);
@@ -639,7 +644,7 @@ public class AllergiesActivity extends CalendulaActivity {
         @Override
         protected final Result doInBackground(Collection<AllergenGroupWrapper>... items) {
             if (items.length != 1) {
-                Log.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + items.length);
+                LogUtil.e(TAG, "doInBackground: invalid argument length. Expected 1, got " + items.length);
                 throw new IllegalArgumentException("Invalid argument length");
             }
             final Collection<AllergenGroupWrapper> ws = items[0];

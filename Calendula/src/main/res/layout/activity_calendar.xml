@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -18,17 +18,16 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:background="#fff">
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        tools:context="com.castrelo.materialapp.MainActivity">
+        android:fitsSystemWindows="true">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar"
@@ -59,7 +58,7 @@
                     app:layout_collapseParallaxMultiplier="0.4">
 
                     <ImageView
-                        android:id="@+id/imageView5"
+                        android:id="@+id/top_background"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:background="#37474f"/>
@@ -67,8 +66,8 @@
                     <ImageView
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:layout_alignBottom="@+id/imageView5"
-                        android:layout_alignTop="@+id/imageView5"
+                        android:layout_alignBottom="@+id/top_background"
+                        android:layout_alignTop="@+id/top_background"
                         android:alpha="0.3"
                         android:scaleType="centerCrop"
                         android:src="@drawable/clock"/>
@@ -89,8 +88,8 @@
                         android:layout_height="fill_parent"
                         android:fontFamily="sans-serif-condensed"
                         android:gravity="center"
-                        android:text="Almorzo"
                         android:textColor="@color/agenda_item_title"
+                        tools:text="JULY 2017"
                         android:textSize="20dp"
                         android:textStyle="bold"
                         android:transitionName="title"/>
@@ -107,7 +106,7 @@
                                                    android:layout_marginTop="@dimen/status_bar_height"
                                                    android:gravity="top"
                                                    android:minHeight="?attr/actionBarSize"
-                                                   android:title="Patients"
+                                                   android:title="@string/title_activity_patients"
                                                    app:layout_collapseMode="pin"
                                                    app:layout_scrollFlags="scroll|enterAlways|snap"
                                                    app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -186,9 +185,6 @@
                         android:paddingRight="26dp"
                         android:paddingTop="10dp">
 
-                        <!--<include layout="@layout/calendar_pickup_list_item"/>-->
-
-                        <!--<include layout="@layout/calendar_pickup_list_item"/>-->
 
                     </LinearLayout>
 
@@ -209,7 +205,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginRight="16dp"
                         android:layout_marginTop="15dp"
-                        android:text="Close"
+                        android:text="@string/material_drawer_close"
                         android:textSize="15dp"/>
 
                 </RelativeLayout>
@@ -218,16 +214,6 @@
             </RelativeLayout>
 
 
-            <!--<com.squareup.timessquare.CalendarPickerView-->
-            <!--android:paddingLeft="20dp"-->
-            <!--android:paddingRight="20dp"-->
-            <!--android:scrollbars="none"-->
-            <!--android:id="@+id/calendar_view"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--app:tsquare_titleTextColor="#222"-->
-            <!--app:tsquare_headerTextColor="@color/android_blue"-->
-            <!--/>-->
         </android.support.v4.widget.NestedScrollView>
 
 
@@ -249,7 +235,7 @@
             android:layout_height="fill_parent"
             android:fontFamily="sans-serif-condensed"
             android:gravity="center"
-            android:text="Almorzo"
+            tools:text="Almorzo"
             android:textColor="@color/agenda_item_title"
             android:textSize="20dp"
             android:textStyle="bold"
@@ -297,32 +283,4 @@
     </RelativeLayout>
 
 
-</RelativeLayout><!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:descendantFocusability="beforeDescendants"--><!--android:focusableInTouchMode="true"--><!--android:paddingTop="@dimen/status_bar_height">-->
-
-    <!--<android.support.v7.widget.Toolbar--><!--android:id="@+id/toolbar"--><!--android:background="@color/android_green_dark"--><!--android:layout_width="match_parent"--><!--android:layout_height="56dp"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"--><!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />-->
-
-    <!--<com.squareup.timessquare.CalendarPickerView--><!--android:paddingLeft="20dp"--><!--android:paddingRight="20dp"--><!--android:scrollbars="none"--><!--android:layout_below="@+id/toolbar"--><!--android:id="@+id/calendar_view"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--app:tsquare_titleTextColor="#222"--><!--app:tsquare_headerTextColor="@color/android_blue"--><!--/>-->
-
-    <!--<RelativeLayout--><!--android:layout_width="fill_parent"--><!--android:layout_height="wrap_content"--><!--android:layout_alignParentBottom="true"--><!--android:layout_alignParentLeft="true"--><!--android:layout_alignParentStart="true"--><!--android:id="@+id/pickup_list_container">-->
-
-
-    <!--<TextView--><!--android:layout_width="fill_parent"--><!--android:layout_height="wrap_content"--><!--android:text="@string/title_pickups_bottom_sheet"--><!--android:id="@+id/bottom_sheet_title"--><!--android:layout_alignParentTop="true"--><!--android:background="#f7f7f7"--><!--android:layout_marginTop="5dp"--><!--android:textColor="@color/android_green_dark"--><!--android:textStyle="bold"--><!--android:textSize="18dp"--><!--android:paddingLeft="18dp"--><!--android:paddingRight="16dp"--><!--android:paddingTop="16dp"--><!--android:fontFamily="sans-serif-light" />-->
-
-    <!--<LinearLayout--><!--android:id="@+id/pickup_list"--><!--android:paddingLeft="18dp"--><!--android:paddingRight="26dp"--><!--android:paddingTop="10dp"--><!--android:paddingBottom="10dp"--><!--android:orientation="vertical"--><!--android:layout_width="fill_parent"--><!--android:layout_height="wrap_content"--><!--android:background="#f7f7f7"--><!--android:layout_below="@+id/bottom_sheet_title">-->
-
-    <!--<include layout="@layout/calendar_pickup_list_item" />-->
-
-    <!--<include layout="@layout/calendar_pickup_list_item" />-->
-
-    <!--<include layout="@layout/calendar_pickup_list_item" />--><!--</LinearLayout>-->
-
-    <!--<ImageView--><!--android:layout_width="fill_parent"--><!--android:layout_height="5dip"--><!--android:id="@+id/imageView4"--><!--android:src="@drawable/daily_view_list_item_tab_shadow_bottom"--><!--android:scaleType="fitXY"--><!--android:alpha="0.5" />-->
-
-    <!--<Button--><!--android:layout_width="wrap_content"--><!--android:layout_height="40dp"--><!--android:layout_alignParentTop="true"--><!--android:layout_alignParentRight="true"--><!--android:text="Close"--><!--android:id="@+id/close_pickup_list"--><!--android:layout_marginRight="16dp"--><!--android:layout_marginTop="15dp"--><!--style="?android:attr/borderlessButtonStyle"--><!--android:textSize="15dp" />-->
-
-    <!--</RelativeLayout>-->
-
-    <!--<ImageView--><!--android:layout_width="fill_parent"--><!--android:layout_height="5dp"--><!--android:id="@+id/tabs_shadow"--><!--android:src="@drawable/daily_view_list_item_tab_shadow_top"--><!--android:layout_below="@+id/toolbar"--><!--android:scaleType="fitXY"--><!--android:alpha="0.5" />-->
-
-
-    <!--</RelativeLayout>-->
+</RelativeLayout>

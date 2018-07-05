@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.fragments;
@@ -53,13 +53,12 @@ import es.usc.citius.servando.calendula.modules.ModuleManager;
 import es.usc.citius.servando.calendula.modules.modules.StockModule;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.IconUtils;
-import es.usc.citius.servando.calendula.util.medicine.StockUtils;
 import es.usc.citius.servando.calendula.util.prospects.ProspectUtils;
+import es.usc.citius.servando.calendula.util.stock.MedicineScheduleStockProvider;
+import es.usc.citius.servando.calendula.util.stock.StockCalculator;
+import es.usc.citius.servando.calendula.util.stock.StockDisplayUtils;
 
 
-/**
- * Created by joseangel.pineiro
- */
 public class MedInfoFragment extends Fragment {
 
     @BindView(R.id.ic_prospect)
@@ -146,7 +145,7 @@ public class MedInfoFragment extends Fragment {
         Drawable ic = new IconicsDrawable(c, CommunityMaterial.Icon.cmd_file_document)
                 .sizeDp(60)
                 .paddingDp(0)
-                .color(DB.patients().getActive(c).color());
+                .color(DB.patients().getActive(c).getColor());
 
         showProspectIcon.setImageDrawable(ic);
 
@@ -155,7 +154,7 @@ public class MedInfoFragment extends Fragment {
         String desc = "";
         if (m != null) {
             if (m.isBoundToPrescription()) {
-                Prescription p = DB.drugDB().prescriptions().findByCn(m.cn());
+                Prescription p = DB.drugDB().prescriptions().findByCn(m.getCn());
                 if (p != null) {
                     name += getNameWhyNot(p) + "\n";
                     desc += "CN - " + p.getCode() + "\n";
@@ -164,7 +163,7 @@ public class MedInfoFragment extends Fragment {
                 }
             } else {
                 desc = getString(R.string.message_link_real_prescription);
-                name += m.name();
+                name += m.getName();
             }
         }
 
@@ -188,7 +187,7 @@ public class MedInfoFragment extends Fragment {
             showProspectBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ProspectUtils.openProspect(DB.drugDB().prescriptions().findByCn(m.cn()), getActivity(), true);
+                    ProspectUtils.openProspect(DB.drugDB().prescriptions().findByCn(m.getCn()), getActivity(), true);
                 }
             });
         } else {
@@ -198,7 +197,7 @@ public class MedInfoFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getActivity(), MedicinesActivity.class);
-                    intent.putExtra("search_text", m.name());
+                    intent.putExtra(MedicinesActivity.EXTRA_SEARCH_TEXT, m.getName());
                     intent.putExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, m.getId());
                     startActivity(intent);
                 }
@@ -208,11 +207,11 @@ public class MedInfoFragment extends Fragment {
         if (ModuleManager.isEnabled(StockModule.ID)) {
             stockLayout.setVisibility(View.VISIBLE);
             if (m.stockManagementEnabled()) {
-                final Float s = m.stock();
+                final Float s = m.getStock();
                 final String stock = s.intValue() == s ? String.valueOf(s.intValue()) : String.valueOf(s);
-                stockInfo.setText(stock + " " + m.presentation().units(getResources()) + "(s)");
-                LocalDate d = StockUtils.getEstimatedStockEnd(m);
-                String msg = StockUtils.getReadableStockDuration(d, getContext());
+                stockInfo.setText(stock + " " + m.getPresentation().units(getResources(), s));
+                final StockCalculator.StockEnd stockEnd = StockCalculator.calculateStockEnd(LocalDate.now(), new MedicineScheduleStockProvider(m), m.getStock());
+                String msg = StockDisplayUtils.getReadableStockDuration(stockEnd, getContext());
                 stockInfoEnd.setText(msg);
             } else {
                 stockInfo.setText(R.string.stock_no_data);

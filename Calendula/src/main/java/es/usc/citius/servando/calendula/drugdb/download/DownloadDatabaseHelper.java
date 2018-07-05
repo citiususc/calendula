@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -29,27 +29,24 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
 
 import java.io.File;
 import java.net.URI;
 
+import es.usc.citius.servando.calendula.BuildConfig;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
+import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.util.NetworkUtils;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
-import es.usc.citius.servando.calendula.util.Settings;
-import es.usc.citius.servando.calendula.util.SettingsKeys;
 
-/**
- * Created by joseangel.pineiro on 9/2/15.
- */
 public class DownloadDatabaseHelper {
 
-    public static final String TAG = "DownloadDatabaseHelper";
+    private static final String TAG = "DownloadDatabaseHelper";
     private static final String downloadSuffix = ".db";
 
     private static DownloadDatabaseHelper instance;
@@ -65,20 +62,28 @@ public class DownloadDatabaseHelper {
 
     public void showDownloadDialog(final Context dialogCtx, final String database, final DownloadDatabaseDialogCallback callback) {
 
-        Log.d(TAG, "ShowDownloadDatabase");
+        LogUtil.d(TAG, "showDownloadDialog() called with: dialogCtx = [" + dialogCtx + "], database = [" + database + "], callback = [" + callback + "]");
         final Context appContext = dialogCtx.getApplicationContext();
         AlertDialog.Builder builder = new AlertDialog.Builder(dialogCtx);
         builder.setTitle(R.string.download_db_dialog_title);
         builder.setCancelable(false);
         builder.setMessage(R.string.download_db_dialog_message)
                 .setCancelable(false)
-                .setPositiveButton("Download and setup", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.db_download_and_setup, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if (callback != null) {
-                            callback.onDownloadAcceptedOrCancelled(true);
+                        if (NetworkUtils.isNetworkAvailable(appContext)) {
+                            if (callback != null) {
+                                callback.onDownloadAcceptedOrCancelled(true);
+                            }
+                            downloadDatabase(appContext, database, DBInstallType.SETUP);
+                            dialog.dismiss();
+                        } else {
+                            if (callback != null) {
+                                callback.onDownloadAcceptedOrCancelled(false);
+                            }
+                            Toast.makeText(appContext, R.string.message_no_internet_error, Toast.LENGTH_SHORT).show();
                         }
-                        downloadDatabase(appContext, database, DBInstallType.SETUP);
-                        dialog.dismiss();
+
                     }
                 })
                 .setNegativeButton(dialogCtx.getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -98,9 +103,9 @@ public class DownloadDatabaseHelper {
         Toast.makeText(context, R.string.download_db_unexpected_error, Toast.LENGTH_LONG).show();
         SharedPreferences settings = PreferenceUtils.instance().preferences();
         SharedPreferences.Editor edit = settings.edit();
-        edit.putString(PreferenceKeys.DRUGDB_LAST_VALID, context.getString(R.string.database_none_id));
-        edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB, context.getString(R.string.database_none_id));
-        edit.commit();
+        edit.putString(PreferenceKeys.DRUGDB_LAST_VALID.key(), context.getString(R.string.database_none_id));
+        edit.putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), context.getString(R.string.database_none_id));
+        edit.apply();
         Intent bcIntent = new Intent();
         bcIntent.setAction(InstallDatabaseService.ACTION_ERROR);
         context.sendBroadcast(bcIntent);
@@ -108,7 +113,7 @@ public class DownloadDatabaseHelper {
 
     public Pair<Integer, String> downloadStatus(long downloadId, Context context) {
         final DownloadManager dMgr = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-        Log.d(TAG, "Checking download status for id: " + downloadId);
+        LogUtil.d(TAG, "Checking download status for id: " + downloadId);
         // Verify if download was successful
         Cursor c = dMgr.query(new DownloadManager.Query().setFilterById(downloadId));
         if (c.moveToFirst()) {
@@ -116,7 +121,7 @@ public class DownloadDatabaseHelper {
             String title = c.getString(c.getColumnIndex(DownloadManager.COLUMN_TITLE));
             String path = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
             if (status == DownloadManager.STATUS_SUCCESSFUL) {
-                Log.d(TAG, "File was downloading properly. " + title);
+                LogUtil.d(TAG, "File was downloading properly. " + title);
                 try {
                     // convert uri to file path
                     path = new File(new URI(path).getPath()).getAbsolutePath();
@@ -126,7 +131,7 @@ public class DownloadDatabaseHelper {
                 return new Pair<>(status, path);
             } else {
                 int reason = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_REASON));
-                Log.d(TAG, "Download not correct, status [" + status + "] reason [" + reason + "]  " + title);
+                LogUtil.d(TAG, "Download not correct, status [" + status + "] reason [" + reason + "]  " + title);
                 return new Pair<>(status, null);
             }
         }
@@ -134,12 +139,12 @@ public class DownloadDatabaseHelper {
     }
 
     public boolean isDBDownloadingOrInstalling(Context context) {
-        long downloadId = PreferenceUtils.instance().preferences().getLong(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_ID, -1);
+        long downloadId = PreferenceUtils.getLong(PreferenceKeys.DRUGDB_DOWNLOAD_ID, -1);
         Pair<Integer, String> status = downloadStatus(downloadId, context);
-        Log.d(TAG, "isDBDownloadingOrInstalling: " + status + ", " + InstallDatabaseService.isRunning);
+        LogUtil.d(TAG, "isDBDownloadingOrInstalling: " + status + ", " + InstallDatabaseService.isRunning);
         int st = status != null ? status.first : DownloadManager.STATUS_FAILED;
         boolean iroi = InstallDatabaseService.isRunning || (st != DownloadManager.STATUS_FAILED && st != DownloadManager.STATUS_SUCCESSFUL);
-        Log.d(TAG, "isDBDownloadingOrInstalling: " + iroi);
+        LogUtil.d(TAG, "isDBDownloadingOrInstalling: " + iroi);
         return iroi;
 
     }
@@ -154,7 +159,7 @@ public class DownloadDatabaseHelper {
         File f = new File(path);
         if (f.exists()) {
             f.delete();
-            Log.d(TAG, "removePreviousDownloads: deleted file " + path);
+            LogUtil.d(TAG, "removePreviousDownloads: deleted file " + path);
         }
     }
 
@@ -177,7 +182,6 @@ public class DownloadDatabaseHelper {
         protected void onPostExecute(Boolean correct) {
             if (!correct) {
                 onDownloadFailed(ctx);
-                Toast.makeText(ctx, "Database not available :(", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -192,13 +196,13 @@ public class DownloadDatabaseHelper {
                 final DownloadManager manager = (DownloadManager) ctx.getSystemService(Context.DOWNLOAD_SERVICE);
 
 
-                final String downloadUrl = Settings.instance().get(SettingsKeys.DATABASE_LOCATION);
+                final String downloadUrl = BuildConfig.DB_DOWNLOAD_URL;
                 final String dbName = mgr.id();
 
                 try {//get version
                     final String dbVersion = DBVersionManager.getLastDBVersion(dbName);
                     final String url = ctx.getString(R.string.database_file_location, downloadUrl, dbName, dbVersion);
-                    Log.d(TAG, "doInBackground: Downloading database from " + url);
+                    LogUtil.d(TAG, "doInBackground: Downloading database from " + url);
 
 
                     // remove previous downloads and cancel notifications
@@ -216,17 +220,17 @@ public class DownloadDatabaseHelper {
                     // save id in preferences for later use in DBDownloadReceiver
                     SharedPreferences preferences = PreferenceUtils.instance().preferences();
                     preferences.edit()
-                            .putLong(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_ID, downloadId)
-                            .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_DB, dbName)
-                            .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_VERSION, dbVersion)
-                            .putString(DBDownloadReceiver.DOWNLOAD_MGR_DOWNLOAD_TYPE, type.toString())
+                            .putLong(PreferenceKeys.DRUGDB_DOWNLOAD_ID.key(), downloadId)
+                            .putString(PreferenceKeys.DRUGDB_DOWNLOAD_DB.key(), dbName)
+                            .putString(PreferenceKeys.DRUGDB_DOWNLOAD_VERSION.key(), dbVersion)
+                            .putString(PreferenceKeys.DRUGDB_DOWNLOAD_TYPE.key(), type.toString())
                             .apply();
                 } catch (Exception e) {
-                    Log.e(TAG, "doInBackground: ", e);
+                    LogUtil.e(TAG, "doInBackground: ", e);
                     return false;
                 }
             } else {
-                Log.e(TAG, "PrescriptionDBMgr for " + database + " is null");
+                LogUtil.e(TAG, "PrescriptionDBMgr for " + database + " is null");
                 return false;
             }
 

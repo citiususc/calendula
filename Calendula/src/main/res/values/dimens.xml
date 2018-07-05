@@ -1,6 +1,6 @@
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -43,5 +43,18 @@
     <dimen name="calendar_text_medium">16sp</dimen>
     <dimen name="calendar_text_small">12sp</dimen>
     <dimen name="negative_status_bar_height">0dp</dimen>
+    <dimen name="sort_bar_height">56dp</dimen>
+    <dimen name="fab_vertical_margin">24dp</dimen>
+    <dimen name="fab_horizontal_margin">22dp</dimen>
+    <dimen name="fab_mini_vertical_margin">32dp</dimen>
+    <dimen name="fab_mini_horizontal_margin">30dp</dimen>
+    <dimen name="fab_elevation">6dp</dimen>
+    <dimen name="fab_sub_elevation">0dp</dimen>
+    <dimen name="fab_separator_right_margin">38dp</dimen>
+    <dimen name="fab_separator_top_margin">84dp</dimen>
+    <dimen name="fab_sub_action_size">45dp</dimen>
+    <dimen name="fab_expand_base_margin">14dp</dimen>
+    <dimen name="fab_expand_additive_margin">64dp</dimen>
+
 
 </resources>

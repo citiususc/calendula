@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@
 
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -59,9 +61,9 @@
             android:inputType="text"
             android:paddingBottom="15dp"
             android:paddingTop="10dp"
-            android:text="Ibuprofeno Apotex"
             android:textColor="#222"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            tools:text="Medicine Placeholder"/>
 
         <ImageView
             android:id="@+id/search_button"
@@ -155,7 +157,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/med_presentation"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <TextView
                 android:id="@+id/medicine_stock_title"
@@ -164,7 +167,7 @@
                 android:layout_marginLeft="72dp"
                 android:layout_marginTop="25dp"
                 android:gravity="center_vertical"
-                android:text="Stock"
+                android:text="@string/stock"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/dark_grey_text"
                 android:textSize="20sp"/>
@@ -178,58 +181,102 @@
                 android:alpha="0.8"
                 android:src="@drawable/ic_edit_black_48dp"/>
 
-            <TextView
-                android:id="@+id/stock_units"
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:layout_below="@+id/medicine_stock_title"
-                android:layout_marginLeft="72dp"
-                android:layout_marginTop="10dp"
-                android:layout_toLeftOf="@+id/btn_stock_remove"
-                android:fontFamily="sans-serif-condensed"
-                android:gravity="center_vertical"
-                android:text="30 capsules"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textIsSelectable="false"
-                android:textSize="19sp"
-                android:textStyle="bold"/>
+            <RelativeLayout
+                android:id="@+id/stock_info_line"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/medicine_stock_title">
+
+                <TextView
+                    android:id="@+id/stock_units"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="72dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toLeftOf="@+id/stock_buttons"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textIsSelectable="false"
+                    android:textSize="19sp"
+                    android:textStyle="bold"
+                    tools:text="I got 99 placeholders but stock ain't one"/>
+
+                <LinearLayout
+                    android:id="@+id/stock_buttons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="32dp"
+                    android:gravity="center_vertical|right"
+                    android:orientation="horizontal">
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:id="@+id/btn_stock_remove"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        app:iiv_background_color="@color/agenda_item_title"
+                        app:iiv_color="@color/white"
+                        app:iiv_corner_radius="23dp"
+                        app:iiv_icon="cmd-minus"
+                        app:iiv_padding="12dp"
+                        app:iiv_size="40dp"
+                        tools:layout_height="50dp"
+                        tools:layout_width="45dp"
+                        tools:src="@drawable/abc_ic_star_black_16dp"
+                        />
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:id="@+id/btn_stock_add"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        app:iiv_background_color="@color/agenda_item_title"
+                        app:iiv_color="@color/white"
+                        app:iiv_corner_radius="23dp"
+                        app:iiv_icon="cmd-plus"
+                        app:iiv_padding="12dp"
+                        app:iiv_size="40dp"
+                        tools:layout_height="50dp"
+                        tools:layout_width="45dp"
+                        tools:src="@drawable/abc_ic_star_black_16dp"
+                        />
+
+                    <com.mikepenz.iconics.view.IconicsImageView
+                        android:id="@+id/btn_stock_reset"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        app:iiv_background_color="@color/agenda_item_title"
+                        app:iiv_color="@color/white"
+                        app:iiv_corner_radius="23dp"
+                        app:iiv_icon="cmd-reload"
+                        app:iiv_padding="12dp"
+                        app:iiv_size="40dp"
+                        tools:layout_height="50dp"
+                        tools:layout_width="45dp"
+                        tools:src="@drawable/abc_ic_star_black_16dp"
+                        />
+
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/stock_estimated_duration"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/stock_units"
+                android:layout_below="@+id/stock_info_line"
                 android:layout_marginLeft="72dp"
                 android:layout_marginRight="32dp"
                 android:layout_marginTop="5dp"
                 android:fontFamily="sans-serif-condensed"
                 android:gravity="center_vertical"
-                android:text="Enough for 2 weeks with the current schedule"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/android_blue_dark"
-                android:textSize="16sp"/>
-
-            <ImageButton
-                android:id="@+id/btn_stock_remove"
-                android:layout_width="45dp"
-                android:layout_height="50dp"
-                android:layout_alignTop="@+id/stock_units"
-                android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@+id/btn_stock_add"
-                android:background="@null"
-                android:scaleType="fitCenter"
-                android:src="@drawable/abc_ic_star_black_16dp"/>
-
-            <ImageButton
-                android:id="@+id/btn_stock_add"
-                android:layout_width="45dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/stock_units"
-                android:layout_marginRight="32dp"
-                android:background="@null"
-                android:scaleType="fitCenter"
-                android:src="@drawable/abc_ic_star_black_16dp"/>
+                android:textSize="16sp"
+                tools:text="Enough for two placeholders with the current placeholder"/>
 
             <Switch
                 android:id="@+id/stock_switch"

@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.fragments;
@@ -24,7 +24,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +45,7 @@ import es.usc.citius.servando.calendula.persistence.alerts.AllergyPatientAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.DrivingCautionAlert;
 import es.usc.citius.servando.calendula.persistence.alerts.StockRunningOutAlert;
 import es.usc.citius.servando.calendula.util.DailyAgendaItemStub;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 /**
  * Alert Lis Fragment
@@ -57,7 +57,7 @@ public class AlertListFragment extends Fragment {
             DrivingCautionAlert.DrivingAlertViewProvider.class,
             AllergyPatientAlert.AllergyAlertViewProvider.class
     };
-    final String TAG = "AlertListFragment";
+    private static final String TAG = "AlertListFragment";
     View emptyView;
     LinearLayoutManager llm;
     RecyclerView rv;
@@ -106,7 +106,7 @@ public class AlertListFragment extends Fragment {
         for (PatientAlert a : original) {
             typed.add(a.map());
         }
-        Log.d(TAG, "buildItems: Alerts: " + typed.size());
+        LogUtil.d(TAG, "buildItems: Alerts: " + typed.size());
         return typed;
 
     }
@@ -128,7 +128,7 @@ public class AlertListFragment extends Fragment {
                 }
             }, 100);
         } catch (Exception e) {
-            Log.e(TAG, "Error onPostExecute", e);
+            LogUtil.e(TAG, "Error onPostExecute", e);
         }
     }
 
@@ -149,7 +149,7 @@ public class AlertListFragment extends Fragment {
             try {
                 rvAdapter.registerViewProvider((AlertViewRecyclerAdapter.AlertViewProvider) vp.newInstance(), vp);
             } catch (Exception e) {
-                Log.e(TAG, "setupRecyclerView: ", e);
+                LogUtil.e(TAG, "setupRecyclerView: ", e);
                 throw new RuntimeException(e);
             }
         }

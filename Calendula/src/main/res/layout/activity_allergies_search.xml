@@ -2,7 +2,7 @@
 
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -15,10 +15,11 @@
   ~    GNU General Public License for more details.
   ~
   ~    You should have received a copy of the GNU General Public License
-  ~    along with this software.  If not, see <http://www.gnu.org/licenses>.
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/search_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -123,18 +124,20 @@
             android:id="@+id/allergies_selected_message"
             style="@style/menu_labels_style"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="3.5dp"/>
+            android:layout_height="wrap_content"/>
 
-        <com.getbase.floatingactionbutton.FloatingActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
-                                                               android:id="@+id/accept_selection_button"
-                                                               android:layout_width="wrap_content"
-                                                               android:layout_height="wrap_content"
-                                                               android:layout_margin="10dp"
-                                                               fab:fab_colorNormal="@color/md_light_green_800"
-                                                               fab:fab_colorPressed="@color/md_light_green_500"
-                                                               fab:fab_icon="@drawable/ic_done_white_48dp"
-                                                               fab:fab_labelStyle="@style/menu_labels_style"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/accept_selection_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:layout_marginRight="@dimen/fab_horizontal_margin"
+            android:layout_marginBottom="@dimen/fab_vertical_margin"
+            android:layout_marginTop="@dimen/fab_vertical_margin"
+            android:src="@drawable/ic_done_white_48dp"
+            app:backgroundTint="@color/md_light_green_800"
+            app:elevation="@dimen/fab_elevation"
+            />
 
     </LinearLayout>
 

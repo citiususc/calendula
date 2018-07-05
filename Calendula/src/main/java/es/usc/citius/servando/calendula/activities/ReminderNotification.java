@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.activities;
@@ -24,13 +24,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.Pair;
@@ -54,6 +53,7 @@ import es.usc.citius.servando.calendula.persistence.ScheduleItem;
 import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.NotificationEventReceiver;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
@@ -62,7 +62,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
  */
 public class ReminderNotification {
 
-    public static final String TAG = ReminderNotification.class.getName();
+    private static final String TAG = "ReminderNotification";
 
     private static final String NOTIFICATION_ROUTINE_TAG = "Reminder";
     private static final String NOTIFICATION_SCHEDULE_TAG = "ScheduleReminder";
@@ -78,10 +78,8 @@ public class ReminderNotification {
     }
 
     public static void notify(final Context context, final String title, Routine r, List<ScheduleItem> doses, LocalDate date, Intent intent, boolean lost) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean notifications = prefs.getBoolean("alarm_notifications", true);
 
-        if (!notifications) {
+        if (!PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_NOTIFICATIONS, true)) {
             return;
         }
 
@@ -98,21 +96,19 @@ public class ReminderNotification {
         NotificationOptions options = new NotificationOptions();
         options.style = style;
         options.lost = lost;
-        options.when = r.time().toDateTimeToday().getMillis();
+        options.when = r.getTime().toDateTimeToday().getMillis();
         options.tag = NOTIFICATION_ROUTINE_TAG;
         options.notificationNumber = doses.size();
-        options.picture = getLargeIcon(context.getResources(), r.patient());
-        options.text = r.name() + " (" + doses.size() + " " + context.getString(R.string.home_menu_medicines).toLowerCase() + ")";
+        options.picture = getLargeIcon(context.getResources(), r.getPatient());
+        options.text = r.getName() + " (" + doses.size() + " " + context.getString(R.string.home_menu_medicines).toLowerCase() + ")";
 
         notify(context, routineNotificationId(r.getId().intValue()), title, intents, confirmAll, intent, options);
         showInsistentScreen(context, intent);
     }
 
     public static void notify(final Context context, final String title, Schedule schedule, LocalDate date, LocalTime time, Intent intent, boolean lost) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean notifications = prefs.getBoolean("alarm_notifications", true);
 
-        if (!notifications) {
+        if (!PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_NOTIFICATIONS, true)) {
             return;
         }
 
@@ -124,7 +120,7 @@ public class ReminderNotification {
         final Intent confirmAll = new Intent(context, NotificationEventReceiver.class);
         confirmAll.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_CONFIRM_ALL_SCHEDULE);
         confirmAll.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
-        confirmAll.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, time.toString("kk:mm"));
+        confirmAll.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, time.toString(AlarmIntentParams.TIME_FORMAT));
 
         NotificationOptions options = new NotificationOptions();
         options.style = style;
@@ -133,7 +129,7 @@ public class ReminderNotification {
         options.tag = NOTIFICATION_SCHEDULE_TAG;
         options.notificationNumber = 1;
         options.picture = getLargeIcon(context.getResources(), schedule.patient());
-        options.text = schedule.medicine().name() + " (" + schedule.toReadableString(context) + ")";
+        options.text = schedule.medicine().getName() + " (" + schedule.toReadableString(context) + ")";
         notify(context, scheduleNotificationId(schedule.getId().intValue()), title, intents, confirmAll, intent, options);
 
         showInsistentScreen(context, intent);
@@ -156,7 +152,7 @@ public class ReminderNotification {
     }
 
     private static void showInsistentScreen(Context context, Intent i) {
-        boolean insistentNotifications = PreferenceUtils.instance().preferences().getBoolean("alarm_insistent", false);
+        boolean insistentNotifications = PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_INSISTENT, false);
         if (insistentNotifications) {
             Intent intent = new Intent(context, LockScreenAlarmActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -169,8 +165,8 @@ public class ReminderNotification {
                                Pair<Intent, Intent> actionIntents, Intent confirmIntent, Intent intent,
                                NotificationOptions options) {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean notifications = prefs.getBoolean("alarm_notifications", true);
+        boolean notifications = PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_NOTIFICATIONS, true);
+
 
         // if notifications are disabled, exit
         if (!notifications) {
@@ -210,7 +206,7 @@ public class ReminderNotification {
     private static Notification buildNotification(Context context, NotificationOptions options) {
 
         Resources res = context.getResources();
-        boolean insistentNotifications = PreferenceUtils.instance().preferences().getBoolean("alarm_insistent", false);
+        boolean insistentNotifications = PreferenceUtils.getBoolean(PreferenceKeys.SETTINGS_ALARM_INSISTENT, false);
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 
@@ -246,7 +242,7 @@ public class ReminderNotification {
             // add delay button and cancel button
             builder.addAction(R.drawable.ic_history_white_24dp, res.getString(R.string.notification_delay), options.delayIntent)
                     .addAction(R.drawable.ic_alarm_off_white_24dp, res.getString(R.string.notification_cancel_now), options.cancelIntent)
-                    .addAction(R.drawable.ic_done_white_36dp, res.getString(R.string.take), options.confirmAllIntent);
+                    .addAction(R.drawable.ic_done_white_36dp, res.getString(R.string.notification_taken), options.confirmAllIntent);
 
             builder.extend((new NotificationCompat.WearableExtender()
                     .addAction(new NotificationCompat.Action.Builder(
@@ -274,7 +270,6 @@ public class ReminderNotification {
 
     private static void styleForRoutine(Context ctx, NotificationCompat.InboxStyle style, Routine r, List<ScheduleItem> doses, boolean lost) {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
 
         for (ScheduleItem scheduleItem : doses) {
             //TODO: Use DecimalFormat
@@ -282,41 +277,40 @@ public class ReminderNotification {
             //String dfDose = timeFormatter.format(scheduleItem.dose());
 
             final SpannableStringBuilder SpItem = new SpannableStringBuilder();
-            final Medicine med = scheduleItem.schedule().medicine();
-            SpItem.append(med.name());
-            SpItem.append(":  " + scheduleItem.dose() + " " + med.presentation().units(ctx.getResources()));
+            final Medicine med = scheduleItem.getSchedule().medicine();
+            SpItem.append(med.getName());
+            SpItem.append(":  " + scheduleItem.getDose() + " " + med.getPresentation().units(ctx.getResources(), scheduleItem.getDose()));
             style.addLine(SpItem);
         }
-        String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
+        String delayMinutesStr = PreferenceUtils.getString(PreferenceKeys.SETTINGS_ALARM_REPEAT_FREQUENCY, "15");
         int delayMinutes = (int) Long.parseLong(delayMinutesStr);
 
         if (delayMinutes > 0 && !lost) {
             String repeatTime = DateTime.now().plusMinutes(delayMinutes).toString("HH:mm");
             style.setSummaryText(ctx.getResources().getString(R.string.notification_repeat_message, repeatTime));
         } else {
-            style.setSummaryText(doses.size() + " " + ctx.getString(R.string.medicine) + (doses.size() > 1 ? "s, " : ", ") + r.name());
+            style.setSummaryText(doses.size() + " " + ctx.getString(R.string.medicine) + (doses.size() > 1 ? "s, " : ", ") + r.getName());
         }
 
     }
 
     private static void styleForSchedule(Context context, NotificationCompat.InboxStyle style, Schedule schedule, boolean lost) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         final Medicine med = schedule.medicine();
         final SpannableStringBuilder SpItem = new SpannableStringBuilder();
-        SpItem.append(med.name());
-        SpItem.append("   " + schedule.dose() + " " + med.presentation().units(context.getResources()));
+        SpItem.append(med.getName());
+        SpItem.append("   " + schedule.dose() + " " + med.getPresentation().units(context.getResources(), schedule.dose()));
         style.addLine(SpItem);
 
-        String delayMinutesStr = prefs.getString("alarm_repeat_frequency", "15");
+        String delayMinutesStr = PreferenceUtils.getString(PreferenceKeys.SETTINGS_ALARM_REPEAT_FREQUENCY, "15");
         int delayMinutes = (int) Long.parseLong(delayMinutesStr);
 
         if (delayMinutes > 0 && !lost) {
-            String repeatTime = DateTime.now().plusMinutes(delayMinutes).toString("kk:mm");
+            String repeatTime = DateTime.now().plusMinutes(delayMinutes).toString("HH:mm");
             style.setSummaryText(context.getString(R.string.notification_repeat_message, repeatTime));
         } else {
-            style.setSummaryText(med.name() + "(" + context.getString(R.string.every) + " " + schedule.rule()
-                    .interval() + " " + context.getString(R.string.hours) + ")");
+            style.setSummaryText(med.getName() + "(" + context.getString(R.string.every) + " " + schedule.rule()
+                    .getInterval() + " " + context.getString(R.string.hours) + ")");
         }
     }
 
@@ -326,13 +320,13 @@ public class ReminderNotification {
         final Intent delay = new Intent(context, ConfirmActivity.class);
         delay.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, "delay");
         delay.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, r.getId());
-        delay.putExtra("date", date.toString(AlarmIntentParams.DATE_FORMAT));
+        delay.putExtra(CalendulaApp.INTENT_EXTRA_DATE, date.toString(AlarmIntentParams.DATE_FORMAT));
 
         // delay intent sent on click delay button
         final Intent cancel = new Intent(context, NotificationEventReceiver.class);
         cancel.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_CANCEL_ROUTINE);
         cancel.putExtra(CalendulaApp.INTENT_EXTRA_ROUTINE_ID, r.getId());
-        cancel.putExtra("date", date.toString(AlarmIntentParams.DATE_FORMAT));
+        cancel.putExtra(CalendulaApp.INTENT_EXTRA_DATE, date.toString(AlarmIntentParams.DATE_FORMAT));
 
         return new Pair<>(delay, cancel);
     }
@@ -342,24 +336,26 @@ public class ReminderNotification {
         final Intent delay = new Intent(context, ConfirmActivity.class);
         delay.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, "delay");
         delay.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
-        delay.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, date.toString("kk:mm"));
-        delay.putExtra("date", date.toString(AlarmIntentParams.DATE_FORMAT));
+        delay.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, time.toString(AlarmIntentParams.TIME_FORMAT));
+        delay.putExtra(CalendulaApp.INTENT_EXTRA_DATE, date.toString(AlarmIntentParams.DATE_FORMAT));
 
         final Intent cancel = new Intent(context, NotificationEventReceiver.class);
         cancel.putExtra(CalendulaApp.INTENT_EXTRA_ACTION, CalendulaApp.ACTION_CANCEL_HOURLY_SCHEDULE);
         cancel.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_ID, schedule.getId());
-        cancel.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, time.toString("kk:mm"));
-        cancel.putExtra("date", date.toString(AlarmIntentParams.DATE_FORMAT));
+        cancel.putExtra(CalendulaApp.INTENT_EXTRA_SCHEDULE_TIME, time.toString(AlarmIntentParams.TIME_FORMAT));
+        cancel.putExtra(CalendulaApp.INTENT_EXTRA_DATE, date.toString(AlarmIntentParams.DATE_FORMAT));
 
         return new Pair<>(delay, cancel);
     }
 
     private static Uri getRingtoneUri() {
-        return Settings.System.DEFAULT_NOTIFICATION_URI;
+        String r = PreferenceUtils.getString(PreferenceKeys.SETTINGS_NOTIFICATION_TONE, null);
+        Uri sound = r != null ? Uri.parse(r) : RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        return sound != null ? sound : Settings.System.DEFAULT_NOTIFICATION_URI;
     }
 
     private static Bitmap getLargeIcon(Resources r, Patient p) {
-        return BitmapFactory.decodeResource(r, AvatarMgr.res(p.avatar()));
+        return BitmapFactory.decodeResource(r, AvatarMgr.res(p.getAvatar()));
     }
 
 

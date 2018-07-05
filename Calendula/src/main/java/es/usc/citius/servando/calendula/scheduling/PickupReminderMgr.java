@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.scheduling;
@@ -22,20 +22,17 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by joseangel.pineiro on 7/9/14.
- */
 public class PickupReminderMgr {
 
 
-    private static final String TAG = PickupReminderMgr.class.getName();
+    private static final String TAG = "PickupReminderMgr";
     // static instance
     private static final PickupReminderMgr instance = new PickupReminderMgr();
 
@@ -56,7 +53,7 @@ public class PickupReminderMgr {
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
             alarmManager.set(AlarmManager.RTC_WAKEUP, d.getMillis(), calendarReminderPendingIntent);
-            Log.d(TAG, "Pickup check alarm scheduled!");
+            LogUtil.d(TAG, "Pickup check alarm scheduled!");
         }
     }
 

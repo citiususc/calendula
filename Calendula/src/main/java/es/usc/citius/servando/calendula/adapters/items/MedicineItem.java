@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.adapters.items;
@@ -39,9 +39,6 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.util.IconUtils;
 
-/**
- * Created by alvaro.brey.vilas on 22/11/16.
- */
 
 public class MedicineItem extends AbstractItem<MedicineItem, MedicineItem.MedicineViewHolder> {
 
@@ -76,9 +73,9 @@ public class MedicineItem extends AbstractItem<MedicineItem, MedicineItem.Medici
         super.bindView(holder, payloads);
         Context ctx = holder.itemView.getContext();
 
-        holder.name.setText(medicine.name());
+        holder.name.setText(medicine.getName());
         holder.icon.setImageDrawable(new IconicsDrawable(ctx)
-                .icon(medicine.presentation().icon())
+                .icon(medicine.getPresentation().icon())
                 .colorRes(R.color.agenda_item_title)
                 .paddingDp(8)
                 .sizeDp(40));
@@ -91,17 +88,17 @@ public class MedicineItem extends AbstractItem<MedicineItem, MedicineItem.Medici
                 holder.stockInfo.setText("Próxima e-Receta: " + nextPickup);
             }
 
-            if (medicine.stock() >= 0) {
-                holder.stockInfo.setText(ctx.getString(R.string.stock_remaining_msg, medicine.stock().intValue(), medicine.presentation().units(ctx.getResources())));
+            if (medicine.getStock() != null && medicine.getStock() >= 0) {
+                holder.stockInfo.setText(ctx.getString(R.string.stock_remaining_msg, medicine.getStock().intValue(), medicine.getPresentation().units(ctx.getResources(), medicine.getStock())));
+            } else {
+                holder.stockInfo.setText(R.string.no_stock_info_msg);
             }
         }
 
         List<PatientAlert> alerts = DB.alerts().findBy(PatientAlert.COLUMN_MEDICINE, medicine);
         boolean hasAlerts = !alerts.isEmpty();
 
-        if (!hasAlerts) {
-            holder.alertIcon.setVisibility(View.GONE);
-        } else {
+        if (hasAlerts) {
             int level = PatientAlert.Level.LOW;
             for (PatientAlert a : alerts) {
                 if (a.getLevel() > level) {
@@ -109,13 +106,18 @@ public class MedicineItem extends AbstractItem<MedicineItem, MedicineItem.Medici
                 }
             }
             holder.alertIcon.setImageDrawable(IconUtils.alertLevelIcon(level, ctx));
+            holder.alertIcon.setVisibility(View.VISIBLE);
         }
 
     }
 
-    //reset the view here (this is an optional method, but recommended)
     @Override
     public void unbindView(MedicineViewHolder holder) {
+        holder.icon.setImageDrawable(null);
+        holder.name.setText(null);
+        holder.stockInfo.setText(null);
+        holder.stockInfo.setVisibility(View.GONE);
+        holder.alertIcon.setVisibility(View.GONE);
         super.unbindView(holder);
     }
 

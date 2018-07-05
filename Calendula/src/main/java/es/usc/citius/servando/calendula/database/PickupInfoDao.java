@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.database;
@@ -32,9 +32,6 @@ import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PickupInfo;
 
-/**
- * Created by joseangel.pineiro on 3/26/15.
- */
 public class PickupInfoDao extends GenericDao<PickupInfo, Long> {
 
     public PickupInfoDao(DatabaseHelper db) {
@@ -92,9 +89,9 @@ public class PickupInfoDao extends GenericDao<PickupInfo, Long> {
             QueryBuilder<PickupInfo, Long> qb = dao.queryBuilder();
             Where w = qb.where();
             w.and(
-                    w.eq(PickupInfo.COLUMN_MEDICINE, pickupInfo.medicine()),
-                    w.eq(PickupInfo.COLUMN_FROM, pickupInfo.from()),
-                    w.eq(PickupInfo.COLUMN_TO, pickupInfo.to())
+                    w.eq(PickupInfo.COLUMN_MEDICINE, pickupInfo.getMedicine()),
+                    w.eq(PickupInfo.COLUMN_FROM, pickupInfo.getFrom()),
+                    w.eq(PickupInfo.COLUMN_TO, pickupInfo.getTo())
             );
             qb.setWhere(w);
             return qb.queryForFirst();

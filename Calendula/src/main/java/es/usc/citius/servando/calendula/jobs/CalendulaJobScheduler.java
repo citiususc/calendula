@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2017 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,23 +13,19 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.jobs;
 
-import android.util.Log;
-
 import com.evernote.android.job.JobManager;
-import com.evernote.android.job.JobRequest;
 
-/**
- * Created by alvaro.brey.vilas on 05/01/17.
- */
+import es.usc.citius.servando.calendula.util.LogUtil;
+
 
 public class CalendulaJobScheduler {
 
-    private final static String TAG = "CalendulaJobScheduler";
+    private static final String TAG = "CalendulaJobScheduler";
 
     private CalendulaJobScheduler() {
 
@@ -40,20 +36,20 @@ public class CalendulaJobScheduler {
         int jobs = JobManager.instance().getAllJobsForTag(job.getTag()).size();
         int requests = JobManager.instance().getAllJobRequestsForTag(job.getTag()).size();
 
-        Log.d(TAG, "scheduleJob: There are " + jobs + " running and " + requests + " requests already for " + job.getTag());
+        LogUtil.d(TAG, "scheduleJob: There are " + jobs + " running and " + requests + " requests already for " + job.getTag());
         if (job.isUnique()) {
             if (jobs + requests != 1 || job.shouldOverwritePrevious()) {
                 if (jobs + requests != 0) {
-                    Log.v(TAG, "Removing duplicate jobs/requests");
+                    LogUtil.v(TAG, "Removing duplicate jobs/requests");
                     JobManager.instance().cancelAllForTag(job.getTag());
                 }
                 //and create one
-                Log.v(TAG, "Scheduling new job " + job.getTag());
-                doSchedule(job);
+                LogUtil.v(TAG, "Scheduling new job " + job.getTag());
+                job.getRequest().schedule();
             }
         } else {
-            Log.v(TAG, "Scheduling new job " + job.getTag());
-            doSchedule(job);
+            LogUtil.v(TAG, "Scheduling new job " + job.getTag());
+            job.getRequest().schedule();
         }
 
     }
@@ -64,12 +60,4 @@ public class CalendulaJobScheduler {
         }
     }
 
-    private static int doSchedule(CalendulaJob job) {
-        return new JobRequest.Builder(job.getTag())
-                .setPeriodic(job.getInterval().getMillis())
-                .setRequiresDeviceIdle(job.requiresIdle())
-                .setPersisted(job.isPersisted())
-                .build()
-                .schedule();
-    }
 }

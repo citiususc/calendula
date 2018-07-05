@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.activities;
@@ -30,9 +30,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,15 +54,16 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.nispok.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.DefaultDataGenerator;
 import es.usc.citius.servando.calendula.R;
@@ -70,13 +71,14 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.util.AvatarMgr;
 import es.usc.citius.servando.calendula.util.KeyboardUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 import es.usc.citius.servando.calendula.util.Snack;
 
 public class PatientDetailActivity extends CalendulaActivity implements GridView.OnItemClickListener {
 
     public static final String[] COLORS = new String[]{
-
             "#1abc9c",
             "#16a085",
             "#f1c40f",
@@ -93,56 +95,52 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             "#8e44ad",
             "#2c3e50",
             "#34495e"
-
-
-//            "#f44336",
-//            "#e91e63",
-//            "#9c27b0",
-//            "#673ab7",
-//            "#3f51b5",
-//            "#1976d2",
-//            "#2196f3",
-//            "#03a9f4",
-//            "#00bcd4",
-//            "#009688",
-//            "#4caf50",
-//            "#8bc34a",
-//            "#cddc39",
-//            "#ffeb3b",
-//            "#ffc107",
-//            "#ff9800",
-//            "#ff5722",
-//            "#795548",
-//            "#9e9e9e",
-//            "#607d8b"
     };
+
+    private static final String TAG = "PatientDetailActivity";
+
+    @BindView(R.id.grid)
     GridView avatarGrid;
-    BaseAdapter adapter;
-    Patient patient;
+    @BindView(R.id.patient_avatar)
     ImageView patientAvatar;
+    @BindView(R.id.patient_avatar_bg)
     View patientAvatarBg;
+    @BindView(R.id.grid_container)
     RelativeLayout gridContainer;
-    //    TextView selectAvatarMsg;
+    @BindView(R.id.top)
     View top;
+    @BindView(R.id.bg)
     View bg;
-    EditText patientName;
-    List<String> avatars = new ArrayList<>(AvatarMgr.avatars.keySet());
+    @BindView(R.id.avatar_change)
     FloatingActionButton fab;
-    int color1;
-    int color2;
-    Drawable iconClose;
-    Drawable iconSwitch;
+    @BindView(R.id.patient_name)
+    EditText patientName;
+    @BindView(R.id.checkBox)
     CheckBox addRoutinesCheckBox;
+    @BindView(R.id.color_chooser)
     LinearLayout colorList;
-    HorizontalScrollView colorScroll;
-    Button linkButton;
-    boolean linked = false;
-    String token = null;
-    long patientId;
+    @BindView(R.id.scroll)
     ScrollView scroll;
+    @BindView(R.id.textView2)
     TextView patientNameLabel;
-    private Menu menu;
+    @BindView(R.id.colorScroll)
+    HorizontalScrollView colorScroll;
+    @BindView(R.id.linkButton)
+    Button linkButton;
+
+
+    private BaseAdapter adapter;
+    private boolean linked = false;
+    private Drawable iconClose;
+    private Drawable iconSwitch;
     private int avatarBackgroundColor;
+    private int color1;
+    private int color2;
+    private List<String> avatars = new ArrayList<>(AvatarMgr.avatars.keySet());
+    private long patientId;
+    private Menu menu;
+    private Patient patient;
+    private String token = null;
 
     @Override
     public void onBackPressed() {
@@ -183,13 +181,14 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
 
                 String text = patientName.getText().toString().trim();
 
-                if (!TextUtils.isEmpty(text) && !text.equals(patient.name())) {
+                if (!TextUtils.isEmpty(text) && !text.equals(patient.getName())) {
                     patient.setName(text);
                 }
 
-                if (!TextUtils.isEmpty(patient.name())) {
+                if (!TextUtils.isEmpty(patient.getName())) {
                     DB.patients().saveAndFireEvent(patient);
-                    if (addRoutinesCheckBox.isChecked()) {
+                    if (addRoutinesCheckBox.isChecked() && addRoutinesCheckBox.getVisibility() == View.VISIBLE) {
+                        // if the checkbox is not visible, we're editing, not adding a patient
                         DefaultDataGenerator.generateDefaultRoutines(patient, this);
                     }
                     supportFinishAfterTransition();
@@ -224,20 +223,20 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
         String qrData = i.getStringExtra("qr_data");
         if (qrData != null) {
             PatientLinkWrapper p = new Gson().fromJson(qrData, PatientLinkWrapper.class);
-            Snack.show("Usuario vinculado correctamente!", this, Snackbar.SnackbarDuration.LENGTH_LONG);
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(PatientDetailActivity.this);
+            Snack.show("Usuario vinculado correctamente!", this, Snackbar.LENGTH_LONG);
+            SharedPreferences prefs = PreferenceUtils.instance().preferences();
             prefs.edit().putString("remote_token" + patientId, p.token).apply();
-            Log.d("PatDetail", p.toString());
+            LogUtil.d(TAG, p.toString());
         }
     }
 
     void setSwitchFab() {
-        fab.setIconDrawable(iconSwitch);
+        fab.setImageDrawable(iconSwitch);
 
     }
 
     void setCloseFab() {
-        fab.setIconDrawable(iconClose);
+        fab.setImageDrawable(iconClose);
     }
 
     void hideAvatarSelector() {
@@ -253,21 +252,13 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_detail);
-        top = findViewById(R.id.top);
-        bg = findViewById(R.id.bg);
-        patientAvatar = (ImageView) findViewById(R.id.patient_avatar);
-        patientAvatarBg = findViewById(R.id.patient_avatar_bg);
-        gridContainer = (RelativeLayout) findViewById(R.id.grid_container);
-        patientName = (EditText) findViewById(R.id.patient_name);
-        fab = (FloatingActionButton) findViewById(R.id.avatar_change);
-        avatarGrid = (GridView) findViewById(R.id.grid);
-        addRoutinesCheckBox = (CheckBox) findViewById(R.id.checkBox);
-        colorScroll = (HorizontalScrollView) findViewById(R.id.colorScroll);
-        linkButton = (Button) findViewById(R.id.linkButton);
-        scroll = (ScrollView) findViewById(R.id.scroll);
-        patientNameLabel = (TextView) findViewById(R.id.textView2);
+        ButterKnife.bind(this);
 
 
+        Collections.sort(avatars);
+        for (String s : avatars) {
+            LogUtil.d(TAG, "onCreate: " + s);
+        }
         avatarGrid.setVisibility(View.VISIBLE);
         gridContainer.setVisibility(View.GONE);
 
@@ -279,7 +270,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             patient = DB.patients().findById(patientId);
             addRoutinesCheckBox.setVisibility(View.GONE);
 
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences prefs = PreferenceUtils.instance().preferences();
             token = prefs.getString("remote_token" + patientId, null);
             if (token != null) {
                 linkButton.setVisibility(View.VISIBLE);
@@ -314,7 +305,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
 
 
         setSwitchFab();
-        setupToolbar(patient.name(), Color.TRANSPARENT);
+        setupToolbar(patient.getName(), Color.TRANSPARENT);
         setupStatusBar(Color.TRANSPARENT);
         setupAvatarList();
         setupColorChooser();
@@ -339,7 +330,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
                 .setPositiveButton("Si, desvincular", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         token = null;
-                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(PatientDetailActivity.this);
+                        SharedPreferences prefs = PreferenceUtils.instance().preferences();
                         prefs.edit().remove("remote_token" + patientId).apply();
                         linkButton.setText("Vincular");
                     }
@@ -365,7 +356,6 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
 
     private void setupColorChooser() {
 
-        colorList = (LinearLayout) findViewById(R.id.color_chooser);
         colorList.removeAllViews();
 
         for (final String hex : COLORS) {
@@ -373,7 +363,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             final int color = Color.parseColor(hex);
             colorView.setBackgroundColor(color);
             colorView.setPadding(2, 2, 2, 2);
-            if (color == patient.color()) {
+            if (color == patient.getColor()) {
                 colorView.setImageDrawable(new IconicsDrawable(this)
                         .icon(CommunityMaterial.Icon.cmd_checkbox_marked_circle)
                         .paddingDp(30)
@@ -392,7 +382,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
                     patient.setColor(color);
                     setupColorChooser();
                     int x = (int) view.getX() + view.getWidth() / 2 - colorScroll.getScrollX();
-                    updateAvatar(patient.avatar(), 1, 400, x);
+                    updateAvatar(patient.getAvatar(), 1, 400, x);
                     colorList.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -435,7 +425,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             gridContainer.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    scrollToColor(patient.color());
+                    scrollToColor(patient.getColor());
                 }
             }, duration);
         }
@@ -504,14 +494,14 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
     }
 
     private void loadPatient() {
-        patientName.setText(patient.name());
-        top.setBackgroundColor(patient.color());
-        updateAvatar(patient.avatar(), 400, 400, patientAvatar.getWidth() / 2);
+        patientName.setText(patient.getName());
+        top.setBackgroundColor(patient.getColor());
+        updateAvatar(patient.getAvatar(), 400, 400, patientAvatar.getWidth() / 2);
     }
 
     private void updateAvatar(String avatar, int delay, final int duration, final int x) {
         patientAvatar.setImageResource(AvatarMgr.res(avatar));
-        color1 = patient.color();
+        color1 = patient.getColor();
         color2 = ScreenUtils.equivalentNoAlpha(color1, 0.7f);
         avatarBackgroundColor = color1;
         gridContainer.setBackgroundColor(getResources().getColor(R.color.dark_grey_home));
@@ -587,7 +577,7 @@ public class PatientDetailActivity extends CalendulaActivity implements GridView
             v = (ImageView) view.findViewById(R.id.imageView);
             v.setImageResource(resource);
 
-            if (avatar.equals(patient.avatar())) {
+            if (avatar.equals(patient.getAvatar())) {
                 v.setBackgroundResource(R.drawable.avatar_list_item_bg);
             } else {
                 v.setBackgroundResource(R.color.transparent);

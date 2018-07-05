@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -42,6 +42,7 @@
     <color name="android_blue_light">#5533B5E5</color>
     <color name="white_80">#EEFFFFFF</color>
     <color name="white_50">#55FFFFFF</color>
+    <color name="white_20">#22FFFFFF</color>
     <color name="black_20">#22000000</color>
     <color name="black_40">#44000000</color>
     <color name="black_80">#88000000</color>
@@ -135,6 +136,8 @@
     <color name="alarm_activity_bg_color">#e36c4c</color>
     <color name="alarm_activity_bg_overlay">#44000000</color>
 
-    <color name="transparent_black">#3000</color>
+    <color name="transparent_black">#6000</color>
+    <color name="fab_default_color">#e7e7e7</color>
+    <color name="fab_default_icon_color">#263238</color>
 
 </resources>

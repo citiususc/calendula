@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.persistence.alerts;
@@ -39,7 +39,9 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.util.IconUtils;
-import es.usc.citius.servando.calendula.util.medicine.StockUtils;
+import es.usc.citius.servando.calendula.util.stock.MedicineScheduleStockProvider;
+import es.usc.citius.servando.calendula.util.stock.StockCalculator;
+import es.usc.citius.servando.calendula.util.stock.StockDisplayUtils;
 
 /**
  * Represents an stock alert for an specific medicine
@@ -59,7 +61,7 @@ public class StockRunningOutAlert extends PatientAlert<StockRunningOutAlert, Sto
      */
     public StockRunningOutAlert(Medicine m, LocalDate date) {
         super();
-        setPatient(m.patient());
+        setPatient(m.getPatient());
         setMedicine(m);
         setType(StockRunningOutAlert.class.getCanonicalName());
         setLevel(Level.MEDIUM);
@@ -124,14 +126,15 @@ public class StockRunningOutAlert extends PatientAlert<StockRunningOutAlert, Sto
             final Medicine m = alert.getMedicine();
             final Context c = viewHolder.context;
             DB.medicines().refresh(m);
-            int stock = m.stock().intValue();
+            int stock = m.getStock().intValue();
             // setup ui
             viewHolder.alertIcon.setImageDrawable(IconUtils.alertLevelIcon(alert.getLevel(), c));
             final Context ctx = viewHolder.itemView.getContext();
             if (stock > 0) {
                 viewHolder.title.setText(R.string.stock_running_out);
-                viewHolder.duration.setText(ctx.getString(R.string.stock_enough_for_days, StockUtils.getEstimatedStockDays(m)));
-                viewHolder.description.setText(ctx.getString(R.string.stock_remaining_msg, stock, m.presentation().units(c.getResources())));
+                final StockCalculator.StockEnd stockEnd = StockCalculator.calculateStockEnd(LocalDate.now(), new MedicineScheduleStockProvider(m), m.getStock());
+                viewHolder.duration.setText(StockDisplayUtils.getReadableStockDuration(stockEnd, ctx));
+                viewHolder.description.setText(ctx.getString(R.string.stock_remaining_msg, stock, m.getPresentation().units(c.getResources(), stock)));
             } else {
                 viewHolder.title.setText(R.string.stock_depleted);
                 viewHolder.description.setVisibility(View.GONE);

@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,25 +13,29 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -43,6 +47,10 @@ import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.listeners.ClickEventHook;
 
+import org.greenrobot.eventbus.Subscribe;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,10 +64,10 @@ import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.util.medicine.MedicineSortUtil.MedSortType;
+import es.usc.citius.servando.calendula.util.view.CollapseExpandAnimator;
 
-/**
- * Created by joseangel.pineiro on 12/2/13.
- */
 public class MedicinesListFragment extends Fragment {
 
     private static final String TAG = "MedicinesListFragment";
@@ -71,6 +79,12 @@ public class MedicinesListFragment extends Fragment {
     RecyclerView recyclerView;
     @BindView(android.R.id.empty)
     View emptyView;
+    @BindView(R.id.sort_layout)
+    View sortLayout;
+    @BindView(R.id.medicine_sort_spinner)
+    AppCompatSpinner sortSpinner;
+    @BindView(R.id.med_list_container)
+    View medListContainer;
 
     FastItemAdapter<MedicineItem> adapter;
     Handler handler;
@@ -82,9 +96,18 @@ public class MedicinesListFragment extends Fragment {
         unbinder = ButterKnife.bind(this, rootView);
         handler = new Handler();
         mMedicines = DB.medicines().findAllForActivePatient(getContext());
-        if (mMedicines.size() > 0)
-            emptyView.setVisibility(View.GONE);
         setupRecyclerView();
+        setupSortSpinner();
+        medListContainer.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (!isSortCollapsed()) {
+                    toggleSort();
+                }
+                return false;
+            }
+        });
+        updateViewVisibility();
         return rootView;
     }
 
@@ -107,7 +130,7 @@ public class MedicinesListFragment extends Fragment {
     }
 
     public void notifyDataChange() {
-        Log.d(getTag(), "Medicines - Notify data change");
+        LogUtil.d(TAG, "Medicines - Notify data change");
         new ReloadItemsTask().execute();
     }
 
@@ -134,18 +157,31 @@ public class MedicinesListFragment extends Fragment {
 
     // Method called from the event bus
     @SuppressWarnings("unused")
-    public void onEvent(Object evt) {
-        if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
-            notifyDataChange();
-        } else if (evt instanceof PersistenceEvents.ModelCreateOrUpdateEvent) {
-            if (((PersistenceEvents.ModelCreateOrUpdateEvent) evt).clazz.equals(Medicine.class)) {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        notifyDataChange();
-                    }
-                });
-            }
+    @Subscribe
+    public void handleActiveUserChange(final PersistenceEvents.ActiveUserChangeEvent event) {
+        notifyDataChange();
+    }
+
+    @SuppressWarnings("unused")
+    @Subscribe
+    public void handleModelCreateOrUpdate(final PersistenceEvents.ModelCreateOrUpdateEvent event) {
+        if (event.clazz.equals(Medicine.class)) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    notifyDataChange();
+                }
+            });
+        }
+    }
+
+    public void toggleSort() {
+        LogUtil.d(TAG, "toggleSort() called");
+        if (isSortCollapsed()) {
+            int targetHeight = (int) getResources().getDimension(R.dimen.sort_bar_height);
+            CollapseExpandAnimator.expand(sortLayout, 100, targetHeight);
+        } else {
+            CollapseExpandAnimator.collapse(sortLayout, 100, 0);
         }
     }
 
@@ -159,9 +195,9 @@ public class MedicinesListFragment extends Fragment {
     void showDeleteConfirmationDialog(final Medicine m) {
         String message;
         if (!DB.schedules().findByMedicine(m).isEmpty()) {
-            message = String.format(getString(R.string.remove_medicine_message_long), m.name());
+            message = String.format(getString(R.string.remove_medicine_message_long), m.getName());
         } else {
-            message = String.format(getString(R.string.remove_medicine_message_short), m.name());
+            message = String.format(getString(R.string.remove_medicine_message_short), m.getName());
         }
 
         new MaterialStyledDialog.Builder(getActivity())
@@ -189,6 +225,37 @@ public class MedicinesListFragment extends Fragment {
                 })
                 .show();
 
+    }
+
+    private boolean isSortCollapsed() {
+        final boolean collapsed = sortLayout.getLayoutParams().height == 0;
+        LogUtil.d(TAG, "isSortCollapsed() returned: " + collapsed);
+        return collapsed;
+    }
+
+    private void setupSortSpinner() {
+        ArrayAdapter<MedSortType> spinnerAdapter = new ArrayAdapter<>(getContext(), R.layout.sort_spinner_item, MedSortType.values());
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortSpinner.setAdapter(spinnerAdapter);
+        sortSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP); //change caret color
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                final MedSortType type = (MedSortType) parent.getItemAtPosition(position);
+                Comparator<Medicine> cmp = type.comparator();
+                if (cmp != null) {
+                    Collections.sort(mMedicines, cmp);
+                    updateAdapterItems();
+                } else {
+                    LogUtil.e(TAG, "onItemSelected: null comparator! wrong sort type?");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //noop
+            }
+        });
     }
 
     private void setupRecyclerView() {
@@ -233,6 +300,33 @@ public class MedicinesListFragment extends Fragment {
         });
 
         recyclerView.setAdapter(adapter);
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (!isSortCollapsed()) {
+                    toggleSort();
+                }
+                return false;
+            }
+        });
+    }
+
+    private void updateViewVisibility() {
+        if (mMedicines.size() > 0) {
+            emptyView.setVisibility(View.GONE);
+            sortLayout.setVisibility(View.VISIBLE);
+        } else {
+            emptyView.setVisibility(View.VISIBLE);
+            sortLayout.setVisibility(View.GONE);
+        }
+    }
+
+    private void updateAdapterItems() {
+        adapter.clear();
+        for (Medicine m : mMedicines) {
+            adapter.add(new MedicineItem(m));
+        }
+        adapter.notifyAdapterDataSetChanged();
     }
 
     //
@@ -248,7 +342,7 @@ public class MedicinesListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            Log.d(TAG, "Reloading items...");
+            LogUtil.d(TAG, "Reloading items...");
             mMedicines = DB.medicines().findAllForActivePatient(getContext());
             return null;
         }
@@ -256,17 +350,11 @@ public class MedicinesListFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            if (mMedicines.size() > 0) {
-                emptyView.setVisibility(View.GONE);
-            } else {
-                emptyView.setVisibility(View.VISIBLE);
-            }
-            adapter.clear();
-            for (Medicine m : mMedicines) {
-                adapter.add(new MedicineItem(m));
-            }
-            adapter.notifyAdapterDataSetChanged();
-            Log.d(TAG, "Reloaded items, count: " + mMedicines.size());
+            final MedSortType sortType = (MedSortType) sortSpinner.getSelectedItem();
+            Collections.sort(mMedicines, sortType.comparator());
+            updateViewVisibility();
+            updateAdapterItems();
+            LogUtil.d(TAG, "Reloaded items, count: " + mMedicines.size());
         }
     }
 

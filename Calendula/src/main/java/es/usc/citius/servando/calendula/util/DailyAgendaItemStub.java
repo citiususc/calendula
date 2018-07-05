@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.util;
@@ -32,7 +32,7 @@ import es.usc.citius.servando.calendula.persistence.Presentation;
  */
 public class DailyAgendaItemStub {
 
-    public static final String TAG = "DailyAgendaItemStub";
+    private static final String TAG = "DailyAgendaItemStub";
 
     public List<DailyAgendaItemStubElement> meds;
 
@@ -64,14 +64,13 @@ public class DailyAgendaItemStub {
                 ", hasEvents=" + hasEvents +
                 ", count=" + (meds != null ? meds.size() : 0) +
                 ", title='" + title + '\'' +
-                ", time=" + time.toString("kk:mm") +
+                ", time=" + time.toString("HH:mm") +
                 ", date=" + date.toString("dd/MM") +
                 '}';
     }
 
     public static class DailyAgendaItemStubElement implements Comparable<DailyAgendaItemStubElement> {
 
-        public int res;
         public double dose;
         public boolean taken;
 

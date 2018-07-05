@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.activities;
@@ -22,9 +22,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -34,15 +35,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
-import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.SnackbarManager;
-import com.nispok.snackbar.enums.SnackbarType;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import es.usc.citius.servando.calendula.CalendulaActivity;
 import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
@@ -58,25 +64,36 @@ import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.persistence.PatientAlert;
 import es.usc.citius.servando.calendula.util.FragmentUtils;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.Snack;
 
 public class MedicineInfoActivity extends CalendulaActivity {
 
     private static final String TAG = "MedicineInfoActivity";
+
+    @BindView(R.id.appbar)
     AppBarLayout appBarLayout;
-    CollapsingToolbarLayout toolbarLayout;
-    TextView toolbarTitle;
-    boolean appBarLayoutExpanded = true;
-    Patient activePatient;
-    Medicine medicine;
-    PrescriptionDBMgr dbMgr;
+    @BindView(R.id.medicine_icon)
     ImageView medIcon;
-    int alertLevel = -1;
-    private MedInfoPageAdapter mSectionsPagerAdapter;
+    @BindView(R.id.medicine_name)
+    TextView medName;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
-    private Handler handler;
+    @BindView(R.id.container)
+    ViewPager mViewPager;
+    @BindView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout toolbarLayout;
+    @BindView(R.id.toolbar_title)
+    TextView toolbarTitle;
+    @BindView(R.id.sliding_tabs)
+    TabLayout tabLayout;
+
+    Patient activePatient;
+    Medicine medicine;
+    PrescriptionDBMgr dbMgr;
+    int alertLevel = -1;
+
+    private MedInfoPageAdapter mSectionsPagerAdapter;
     private boolean showAlerts = false;
 
     @Override
@@ -99,30 +116,61 @@ public class MedicineInfoActivity extends CalendulaActivity {
                 intent.putExtra(CalendulaApp.INTENT_EXTRA_MEDICINE_ID, medicine.getId());
                 startActivity(intent);
                 return true;
+            case R.id.action_remove:
+                showDeleteConfirmationDialog(medicine);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    public void showDeleteConfirmationDialog(final Medicine m) {
+        String message;
+        if (!DB.schedules().findByMedicine(m).isEmpty()) {
+            message = String.format(getString(R.string.remove_medicine_message_long), m.getName());
+        } else {
+            message = String.format(getString(R.string.remove_medicine_message_short), m.getName());
+        }
+
+        new MaterialStyledDialog.Builder(this)
+                .setStyle(Style.HEADER_WITH_ICON)
+                .setIcon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_pill, R.color.white, 100))
+                .setHeaderColor(R.color.android_red)
+                .withDialogAnimation(true)
+                .setTitle(getString(R.string.remove_medicine_dialog_title))
+                .setDescription(message)
+                .setCancelable(true)
+                .setNeutralText(getString(R.string.dialog_no_option))
+                .setPositiveText(getString(R.string.dialog_yes_option))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        DB.medicines().deleteCascade(m, true);
+                        CalendulaApp.eventBus().post(PersistenceEvents.MEDICINE_EVENT);
+                        finish();
+                    }
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
+    }
+
     // Method called from the event bus
-    @SuppressWarnings("unused")
-    public void onEvent(Object evt) {
-        if (evt instanceof PersistenceEvents.ModelCreateOrUpdateEvent) {
-            Class<?> cls = ((PersistenceEvents.ModelCreateOrUpdateEvent) evt).clazz;
-            Object model = ((PersistenceEvents.ModelCreateOrUpdateEvent) evt).model;
+    @Subscribe
+    public void handleEvent(final PersistenceEvents.ModelCreateOrUpdateEvent event) {
+        Class<?> cls = event.clazz;
+        Object model = event.model;
             if (cls.equals(Medicine.class) && model != null) {
 
                 Medicine med = (Medicine) model;
 
-                if (med.getId() == medicine.getId()) {
+                if (med.getId().equals(medicine.getId())) {
 
-                    if (medicine.cn() == null && med.cn() != null) {
-                        SnackbarManager.show(Snackbar.with(getApplicationContext())
-                                        .type(SnackbarType.MULTI_LINE)
-                                        .color(getResources().getColor(R.color.android_green_dark))
-                                        .textColor(getResources().getColor(R.color.white))
-                                        .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
-                                        .text(R.string.message_med_linked_success)
-                                , this);
+                    if (medicine.getCn() == null && med.getCn() != null) {
+                        Snack.show(R.string.message_med_linked_success, this, Snackbar.LENGTH_SHORT);
                     }
                     ((MedInfoFragment) getViewPagerFragment(0)).notifyDataChange();
                     ((AlertListFragment) getViewPagerFragment(1)).notifyDataChange();
@@ -131,8 +179,6 @@ public class MedicineInfoActivity extends CalendulaActivity {
 
                 }
             }
-
-        }
     }
 
     Fragment getViewPagerFragment(int position) {
@@ -144,29 +190,26 @@ public class MedicineInfoActivity extends CalendulaActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicine_info);
+        ButterKnife.bind(this);
         setupToolbar(null, Color.TRANSPARENT);
         setupStatusBar(Color.TRANSPARENT);
-        handler = new Handler();
+
         activePatient = DB.patients().getActive(this);
         dbMgr = DBRegistry.instance().current();
+
         processIntent();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new MedInfoPageAdapter(getSupportFragmentManager(), medicine);
-        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
-        medIcon = (ImageView) findViewById(R.id.medicine_icon);
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(getPageChangeListener());
         mViewPager.setOffscreenPageLimit(5);
 
-        toolbarLayout.setContentScrimColor(activePatient.color());
-        toolbarLayout.setBackgroundColor(activePatient.color());
+        toolbarLayout.setContentScrimColor(activePatient.getColor());
+        toolbarLayout.setBackgroundColor(activePatient.getColor());
         updateMedDetails();
         // Setup the tabLayout
         setupTabLayout();
@@ -191,13 +234,7 @@ public class MedicineInfoActivity extends CalendulaActivity {
             mViewPager.setCurrentItem(1);
         }
 
-        CalendulaApp.eventBus().register(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        CalendulaApp.eventBus().unregister(this);
+        subscribeToEvents();
     }
 
     @Override
@@ -216,9 +253,9 @@ public class MedicineInfoActivity extends CalendulaActivity {
     }
 
     private void updateMedDetails() {
-        toolbarTitle.setText(getString(R.string.label_info_short) + " | " + medicine.name());
-        ((TextView) findViewById(R.id.medicine_name)).setText(medicine.name());
-        medIcon.setImageDrawable(IconUtils.icon(this, medicine.presentation().icon(), R.color.white));
+        toolbarTitle.setText(getString(R.string.label_info_short) + " | " + medicine.getName());
+        medName.setText(medicine.getName());
+        medIcon.setImageDrawable(IconUtils.icon(this, medicine.getPresentation().icon(), R.color.white));
     }
 
     private void processIntent() {
@@ -244,7 +281,6 @@ public class MedicineInfoActivity extends CalendulaActivity {
 
     private void setupTabLayout() {
 
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
         IIcon[] icons = new IIcon[]{
@@ -276,9 +312,9 @@ public class MedicineInfoActivity extends CalendulaActivity {
             public void onPageSelected(int position) {
                 if (medicine != null) {
                     if (position == 0) {
-                        toolbarTitle.setText(getString(R.string.label_info_short) + " | " + medicine.name());
+                        toolbarTitle.setText(getString(R.string.label_info_short) + " | " + medicine.getName());
                     } else if (position == 1) {
-                        toolbarTitle.setText(getString(R.string.label_alerts_short) + " | " + medicine.name());
+                        toolbarTitle.setText(getString(R.string.label_alerts_short) + " | " + medicine.getName());
                     }
 
                 }

@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.persistence;
@@ -32,9 +32,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by joseangel.pineiro on 4/16/15.
- */
 public class RepetitionRule {
 
     public static String DEFAULT_ICAL_VALUE = "RRULE:FREQ=DAILY;";
@@ -65,13 +62,13 @@ public class RepetitionRule {
                 DateValue v = new DateTimeValueImpl(1,0,0,0,0,0);
                 rrule.setUntil(v);
             }*/
-            //Log.d("RRule", "Creating repetition rule: " + rrule.toIcal());
+            //LogUtil.d(TAG, "Creating repetition rule: " + rrule.toIcal());
         } catch (ParseException p) {
             throw new RuntimeException("Error parsing RRule", p);
         }
     }
 
-    public String start() {
+    public String getStart() {
         return start;
     }
 
@@ -79,11 +76,11 @@ public class RepetitionRule {
         this.start = start;
     }
 
-    public Frequency frequency() {
+    public Frequency getFrequency() {
         return rrule.getFreq();
     }
 
-    public int interval() {
+    public int getInterval() {
         return rrule.getInterval();
     }
 
@@ -109,7 +106,7 @@ public class RepetitionRule {
         this.days = null;
     }
 
-    public boolean[] days() {
+    public boolean[] getDays() {
         if (this.days == null) {
             this.days = new boolean[7];
             for (WeekdayNum w : rrule.getByDay()) {
@@ -147,7 +144,7 @@ public class RepetitionRule {
         }
     }
 
-    public RRule iCalRule() {
+    public RRule getRRule() {
         return rrule;
     }
 

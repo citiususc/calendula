@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,13 +13,12 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.fragments.dosePickers;
 
 
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
@@ -31,14 +30,13 @@ import java.util.List;
 import java.util.Locale;
 
 import es.usc.citius.servando.calendula.R;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
 
-/**
- * Created by joseangel.pineiro on 12/4/13.
- */
 public class PillDosePickerFragment extends DosePickerFragment {
 
     public static final int MAX_DISPLAY_PILLS = 3;
+    private static final String TAG = "PillDosePickerFragm";
     NumberPicker leftPicker;
     NumberPicker rightPicker;
     LinearLayout graphicsLayout;
@@ -184,7 +182,7 @@ public class PillDosePickerFragment extends DosePickerFragment {
     @Override
     protected double getSelectedDose() {
         double dose = leftValues[leftPicker.getValue()] + rightValues[rightPicker.getValue()];
-        Log.d("VALUE ", leftValues[leftPicker.getValue()] + "." + rightValues[rightPicker.getValue()]);
+        LogUtil.d(TAG, leftValues[leftPicker.getValue()] + "." + rightValues[rightPicker.getValue()]);
         return dose;
     }
 

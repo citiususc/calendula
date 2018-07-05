@@ -2,7 +2,7 @@
 
 <!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -87,7 +88,7 @@
             android:inputType="number"
             android:nextFocusLeft="@id/interval_edit_text"
             android:nextFocusUp="@id/interval_edit_text"
-            android:text="2"
+            tools:text="2"
             android:textColor="@color/android_blue_dark"
             android:textSize="20dp"
             android:textStyle="bold"/>

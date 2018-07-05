@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<android.support.v7.widget.GridLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:grid="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerHorizontal="true"
+    android:padding="4dp"
+    grid:columnCount="3"
+    tools:ignore="HardcodedText">
+
+    <android.support.v7.widget.AppCompatButton
+        style="@style/KeypadButtonStyle"
+        android:tag="1"
+        android:text="1"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_rowWeight="1"/>
+
+    <android.support.v7.widget.AppCompatButton
+        style="@style/KeypadButtonStyle"
+        android:tag="2"
+        android:text="2"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_rowWeight="1"/>
+
+    <android.support.v7.widget.AppCompatButton
+        style="@style/KeypadButtonStyle"
+        android:tag="3"
+        android:text="3"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_rowWeight="1"/>
+
+    <android.support.v7.widget.AppCompatButton
+        style="@style/KeypadButtonStyle"
+        android:tag="4"
+        android:text="4"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_rowWeight="1"/>
+
+    <android.support.v7.widget.AppCompatButton
+        style="@style/KeypadButtonStyle"
+        android:tag="5"
+        android:text="5"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_rowWeight="1"/>
+
+    <android.support.v7.widget.AppCompatButton
+        style="@style/KeypadButtonStyle"
+        android:tag="6"
+        android:text="6"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_rowWeight="1"/>
+
+    <android.support.v7.widget.AppCompatButton
+        style="@style/KeypadButtonStyle"
+        android:tag="7"
+        android:text="7"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_rowWeight="1"/>
+
+    <android.support.v7.widget.AppCompatButton
+        style="@style/KeypadButtonStyle"
+        android:tag="8"
+        android:text="8"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_rowWeight="1"/>
+
+    <android.support.v7.widget.AppCompatButton
+        style="@style/KeypadButtonStyle"
+        android:tag="9"
+        android:text="9"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_rowWeight="1"/>
+
+    <!--spacer-->
+    <android.support.v7.widget.AppCompatButton
+        android:enabled="false"
+        android:tag="SPACER"
+        android:visibility="invisible"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_rowWeight="1"/>
+
+    <android.support.v7.widget.AppCompatButton
+        style="@style/KeypadButtonStyle"
+        android:tag="0"
+        android:text="0"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_rowWeight="1"/>
+
+    <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/numpad_delete_btn"
+        style="@style/KeypadButtonStyle"
+        android:tag="DEL"
+        grid:layout_columnWeight="1"
+        grid:layout_gravity="fill_horizontal"
+        grid:layout_rowWeight="1"/>
+
+
+</android.support.v7.widget.GridLayout>

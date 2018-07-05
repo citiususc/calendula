@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2017 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.adapters;
@@ -28,9 +28,6 @@ import es.usc.citius.servando.calendula.fragments.MedicinesListFragment;
 import es.usc.citius.servando.calendula.fragments.RoutinesListFragment;
 import es.usc.citius.servando.calendula.fragments.ScheduleListFragment;
 
-/**
- * Created by alvaro.brey.vilas on 02/01/17.
- */
 public enum HomePages {
     // attention: order is important!!!
     HOME(DailyAgendaFragment.class.getName(), R.string.app_name, GoogleMaterial.Icon.gmd_home),
@@ -46,5 +43,9 @@ public enum HomePages {
         this.className = className;
         this.title = title;
         this.icon = icon;
+    }
+
+    public static HomePages getPage(final int position) throws IndexOutOfBoundsException {
+        return values()[position];
     }
 }

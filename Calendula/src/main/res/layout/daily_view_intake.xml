@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -16,245 +16,249 @@
   ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="#fff">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
-        android:id="@+id/bottom"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/routine_list_item_container"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="0dp"
-        android:visibility="visible">
-
-        <LinearLayout
-            android:id="@+id/med_item_list"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="16dp"
-            android:orientation="vertical">
-
-            <include layout="@layout/daily_view_intake_med"/>
-
-            <include layout="@layout/daily_view_intake_med"/>
-
-            <include layout="@layout/daily_view_intake_med"/>
-
-        </LinearLayout>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff">
 
         <RelativeLayout
-            android:id="@+id/action_container"
-            android:layout_width="match_parent"
+            android:id="@+id/bottom"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/med_item_list"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="26dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/agenda_item_take_all_now_bg"
-            android:gravity="right"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/routine_list_item_container"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="0dp"
             android:visibility="visible">
 
+            <LinearLayout
+                android:id="@+id/med_item_list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="16dp"
+                android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/check_all_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="0dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/ic_done_black_48dp"/>
+                <include layout="@layout/daily_view_intake_med"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginRight="10dp"
-                android:fontFamily="sans-serif-light"
-                android:gravity="center"
-                android:text="@string/text_take_medicines_now"
-                android:textColor="#fff"
-                android:textSize="15dp"
-                android:textStyle="bold"/>
+                <include layout="@layout/daily_view_intake_med"/>
 
-            <ImageView
+                <include layout="@layout/daily_view_intake_med"/>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/action_container"
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:background="#ececec"
-                android:visibility="visible"/>
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/med_item_list"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="26dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/agenda_item_take_all_now_bg"
+                android:gravity="right"
+                android:visibility="visible">
 
+
+                <ImageButton
+                    android:id="@+id/check_all_button"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_done_black_48dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginRight="10dp"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center"
+                    android:text="@string/text_take_medicines_now"
+                    android:textColor="#fff"
+                    android:textSize="15dp"
+                    android:textStyle="bold"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#ececec"
+                    android:visibility="visible"/>
+
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/taken_overlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/imageView2"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="false"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="1px"
-        android:background="#aaffffff"
-        android:visibility="gone"/>
-
-    <RelativeLayout
-        android:id="@+id/routine_list_item_container"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="26dp"
-        android:layout_marginTop="10dp"
-        android:paddingTop="2dp">
-
-        <ImageButton
-            android:id="@+id/count_container"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:alpha="0.8"
-            android:background="@null"
-            android:paddingBottom="3dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="8dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/arrow_down"
+        <ImageView
+            android:id="@+id/taken_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/imageView2"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="false"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="1px"
+            android:background="#aaffffff"
             android:visibility="gone"/>
 
-
-        <TextView
-            android:id="@+id/routines_list_item_name"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@+id/linearLayout"
-            android:ellipsize="end"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="bottom"
-            android:text="Breakfast"
-            android:textAllCaps="false"
-            android:textColor="@color/agenda_item_title"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:transitionName="title"/>
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/routine_list_item_container"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="false"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="5dp"
-            android:transitionName="time">
+            android:layout_marginLeft="26dp"
+            android:layout_marginTop="10dp"
+            android:paddingTop="2dp">
 
             <ImageButton
-                android:id="@+id/imageButton2"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:id="@+id/count_container"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_gravity="center_vertical"
+                android:alpha="0.8"
                 android:background="@null"
+                android:paddingBottom="3dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="8dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_alarm_black_48dp"/>
-
-            <TextView
-                android:id="@+id/routines_list_item_hour"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"
-                android:gravity="bottom"
-                android:text="08:"
-                android:textColor="#111"
-                android:textSize="20dp"/>
-
-            <TextView
-                android:id="@+id/routines_list_item_minute"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/routines_list_item_hour"
-                android:gravity="bottom"
-                android:text="00"
-                android:textColor="#111"
-                android:textSize="20dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_gravity="left"
-                android:layout_toRightOf="@+id/routines_list_item_minute"
-                android:gravity="bottom"
-                android:text=" h"
-                android:textColor="#111"
-                android:textSize="20dp"
+                android:src="@drawable/arrow_down"
                 android:visibility="gone"/>
 
-        </LinearLayout>
+
+            <TextView
+                android:id="@+id/routines_list_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/linearLayout"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="bottom"
+                tools:text="Breakfast"
+                android:textAllCaps="false"
+                android:textColor="@color/agenda_item_title"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:transitionName="title"/>
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="false"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="5dp"
+                android:transitionName="time">
+
+                <ImageButton
+                    android:id="@+id/imageButton2"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_alarm_black_48dp"/>
+
+                <TextView
+                    android:id="@+id/routines_list_item_hour"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="bottom"
+                    tools:text="08:"
+                    android:textColor="#111"
+                    android:textSize="20dp"/>
+
+                <TextView
+                    android:id="@+id/routines_list_item_minute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/routines_list_item_hour"
+                    android:gravity="bottom"
+                    tools:text="00"
+                    android:textColor="#111"
+                    android:textSize="20dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="left"
+                    android:layout_toRightOf="@+id/routines_list_item_minute"
+                    android:gravity="bottom"
+                    tools:text=" h"
+                    android:textColor="#111"
+                    android:textSize="20dp"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_alignParentBottom="true"
+                android:background="#ececec"
+                android:visibility="gone"/>
+
+
+        </RelativeLayout>
 
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
+            android:layout_below="@+id/bottom"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
             android:background="#ececec"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
+
+        <ImageView
+            android:id="@+id/patient_indicator_band"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="1px"/>
+
+
+        <ImageView
+            android:id="@+id/patient_avatar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="10dp"
+            android:background="@null"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:scaleType="fitCenter"
+            android:transitionName="avatar_transition"
+            android:visibility="visible"/>
 
     </RelativeLayout>
-
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="1px"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/bottom"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
-        android:background="#ececec"
-        android:visibility="visible"/>
-
-
-    <ImageView
-        android:id="@+id/patient_indicator_band"
-        android:layout_width="10dp"
-        android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/imageView2"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="false"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="1px"/>
-
-
-    <ImageView
-        android:id="@+id/patient_avatar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="10dp"
-        android:background="@null"
-        android:paddingBottom="5dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="5dp"
-        android:scaleType="fitCenter"
-        android:transitionName="avatar_transition"
-        android:visibility="visible"/>
-
-</RelativeLayout>
+</LinearLayout>

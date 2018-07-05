@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.fragments;
@@ -26,7 +26,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +41,9 @@ import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import es.usc.citius.servando.calendula.CalendulaApp;
@@ -52,13 +54,12 @@ import es.usc.citius.servando.calendula.events.PersistenceEvents;
 import es.usc.citius.servando.calendula.persistence.Routine;
 import es.usc.citius.servando.calendula.scheduling.AlarmScheduler;
 import es.usc.citius.servando.calendula.util.IconUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by joseangel.pineiro on 12/2/13.
- */
 public class RoutinesListFragment extends Fragment {
 
 
+    private static final String TAG = "RoutinesListFragment";
     List<Routine> mRoutines;
     OnRoutineSelectedListener mRoutineSelectedCallback;
     ArrayAdapter adapter;
@@ -73,9 +74,7 @@ public class RoutinesListFragment extends Fragment {
 
         View empty = rootView.findViewById(android.R.id.empty);
         listview.setEmptyView(empty);
-
-        mRoutines = DB.routines().findAllForActivePatient(getContext());
-
+        mRoutines = new ArrayList<>();
         ic = new IconicsDrawable(getContext())
                 .icon(CommunityMaterial.Icon.cmd_clock)
                 .colorRes(R.color.agenda_item_title)
@@ -84,14 +83,14 @@ public class RoutinesListFragment extends Fragment {
 
         adapter = new RoutinesListAdapter(getActivity(), R.layout.routines_list_item, mRoutines);
         listview.setAdapter(adapter);
-
+        new ReloadItemsTask().execute();
         return rootView;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.d(getTag(), "Activity " + activity.getClass().getName() + ", " + (activity instanceof OnRoutineSelectedListener));
+        LogUtil.d(TAG, "Activity " + activity.getClass().getName() + ", " + (activity instanceof OnRoutineSelectedListener));
         // If the container activity has implemented
         // the callback interface, set it as listener
         if (activity instanceof OnRoutineSelectedListener) {
@@ -100,7 +99,7 @@ public class RoutinesListFragment extends Fragment {
     }
 
     public void notifyDataChange() {
-        Log.d(getTag(), "Routines - Notify data change");
+        LogUtil.d(TAG, "Routines - Notify data change");
         new ReloadItemsTask().execute();
     }
 
@@ -118,19 +117,18 @@ public class RoutinesListFragment extends Fragment {
 
     // Method called from the event bus
     @SuppressWarnings("unused")
-    public void onEvent(Object evt) {
-        if (evt instanceof PersistenceEvents.ActiveUserChangeEvent) {
-            notifyDataChange();
-        }
+    @Subscribe
+    public void handleActiveUserChange(final PersistenceEvents.ActiveUserChangeEvent event) {
+        notifyDataChange();
     }
 
     void showDeleteConfirmationDialog(final Routine r) {
 
         String message;
-        if (r.scheduleItems().size() > 0) {
-            message = String.format(getString(R.string.remove_routine_message_long), r.name());
+        if (r.getScheduleItems().size() > 0) {
+            message = String.format(getString(R.string.remove_routine_message_long), r.getName());
         } else {
-            message = String.format(getString(R.string.remove_routine_message_short), r.name());
+            message = String.format(getString(R.string.remove_routine_message_short), r.getName());
         }
 
         new MaterialStyledDialog.Builder(getActivity())
@@ -165,8 +163,8 @@ public class RoutinesListFragment extends Fragment {
 
     private View createRoutineListItem(LayoutInflater inflater, final Routine routine) {
 
-        int hour = routine.time().getHourOfDay();
-        int minute = routine.time().getMinuteOfHour();
+        int hour = routine.getTime().getHourOfDay();
+        int minute = routine.getTime().getMinuteOfHour();
 
         String strHour = String.valueOf(hour >= 10 ? hour : "0" + hour);
         String strMinute = ":" + String.valueOf(minute >= 10 ? minute : "0" + minute);
@@ -175,10 +173,10 @@ public class RoutinesListFragment extends Fragment {
 
         ((TextView) item.findViewById(R.id.routines_list_item_hour)).setText(strHour);
         ((TextView) item.findViewById(R.id.routines_list_item_minute)).setText(strMinute);
-        ((TextView) item.findViewById(R.id.routines_list_item_name)).setText(routine.name());
+        ((TextView) item.findViewById(R.id.routines_list_item_name)).setText(routine.getName());
         ((ImageButton) item.findViewById(R.id.imageButton2)).setImageDrawable(ic);
 
-        int items = routine.scheduleItems().size();
+        int items = routine.getScheduleItems().size();
 
         String schedules = items > 0 ? getString(R.string.schedules_for_med, items) : getString(R.string.schedules_for_med_none);
         ((TextView) item.findViewById(R.id.routines_list_item_subtitle)).setText(schedules);
@@ -190,10 +188,10 @@ public class RoutinesListFragment extends Fragment {
             public void onClick(View view) {
                 Routine r = (Routine) view.getTag();
                 if (mRoutineSelectedCallback != null && r != null) {
-                    Log.d(getTag(), "Click at " + r.name());
+                    LogUtil.d(TAG, "Click at " + r.getName());
                     mRoutineSelectedCallback.onRoutineSelected(r);
                 } else {
-                    Log.d(getTag(), "No callback set");
+                    LogUtil.d(TAG, "No callback set");
                 }
 
             }
@@ -237,18 +235,14 @@ public class RoutinesListFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            mRoutines = DB.routines().findAllForActivePatient(getContext());
-
+            mRoutines.clear();
+            mRoutines.addAll(DB.routines().findAllForActivePatient(getContext()));
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            adapter.clear();
-            for (Routine r : mRoutines) {
-                adapter.add(r);
-            }
             adapter.notifyDataSetChanged();
         }
     }

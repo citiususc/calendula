@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,17 +13,16 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.persistence;
 
 import android.content.Context;
 import android.text.format.Time;
-import android.util.Log;
 
-import com.doomonafireball.betterpickers.recurrencepicker.EventRecurrence;
-import com.doomonafireball.betterpickers.recurrencepicker.EventRecurrenceFormatter;
+import com.codetroopers.betterpickers.recurrencepicker.EventRecurrence;
+import com.codetroopers.betterpickers.recurrencepicker.EventRecurrenceFormatter;
 import com.google.ical.values.DateValue;
 import com.google.ical.values.Frequency;
 import com.j256.ormlite.field.DatabaseField;
@@ -43,12 +42,10 @@ import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalDatePer
 import es.usc.citius.servando.calendula.persistence.typeSerializers.LocalTimePersister;
 import es.usc.citius.servando.calendula.persistence.typeSerializers.RRulePersister;
 import es.usc.citius.servando.calendula.scheduling.ScheduleUtils;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.ScheduleHelper;
 
 
-/**
- * Created by joseangel.pineiro
- */
 @DatabaseTable(tableName = "Schedules")
 public class Schedule {
 
@@ -57,6 +54,7 @@ public class Schedule {
     public static final int SCHEDULE_TYPE_INTERVAL = 2;
     public static final int SCHEDULE_TYPE_HOURLY = 4;
     public static final int SCHEDULE_TYPE_CYCLE = 5;
+
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_MEDICINE = "Medicine";
     public static final String COLUMN_DAYS = "Days";
@@ -69,6 +67,8 @@ public class Schedule {
     public static final String COLUMN_SCANNED = "Scanned";
     public static final String COLUMN_PATIENT = "Patient";
     public static final String COLUMN_STATE = "State";
+    private static final String TAG = "Schedule";
+
     @DatabaseField(columnName = COLUMN_ID, generatedId = true)
     private Long id;
     @DatabaseField(columnName = COLUMN_MEDICINE, foreign = true, foreignAutoRefresh = true)
@@ -179,7 +179,7 @@ public class Schedule {
     }
 
     public boolean[] days() {
-        return rrule.days();
+        return rrule.getDays();
     }
 
     public void setDays(boolean[] days) {
@@ -230,8 +230,8 @@ public class Schedule {
 
     public String toReadableString(Context ctx) {
 
-        if (rule().frequency() == Frequency.HOURLY) {
-            return ctx.getString(R.string.repeat_every_tostr, rule().interval(),
+        if (rule().getFrequency() == Frequency.HOURLY) {
+            return ctx.getString(R.string.repeat_every_tostr, rule().getInterval(),
                     ctx.getString(R.string.hours));
         } else if (type == SCHEDULE_TYPE_CYCLE) {
             return getCycleDays() + " + " + getCycleRest();
@@ -291,7 +291,7 @@ public class Schedule {
         boolean[] d = days();
         d[i] = !d[i];
         rrule.setDays(d);
-        Log.d("Schedule", "Days: " + Arrays.toString(days()));
+        LogUtil.d(TAG, "Days: " + Arrays.toString(days()));
     }
     //    final int[] byHour = rule().iCalRule().getByHour();
     //    if (byHour != null && byHour.length == 1)
@@ -306,7 +306,7 @@ public class Schedule {
     //}
 
     public LocalDate end() {
-        DateValue v = rrule.iCalRule().getUntil();
+        DateValue v = rrule.getRRule().getUntil();
         return v != null ? new LocalDate(v.year(), v.month(), v.day()) : null;
     }
 
@@ -322,7 +322,7 @@ public class Schedule {
     }
 
     public DateValue until() {
-        return rrule.iCalRule().getUntil();
+        return rrule.getRRule().getUntil();
     }
 
     @Override

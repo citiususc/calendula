@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,15 +13,13 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.drugdb;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
@@ -44,13 +42,13 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionActiveIngredient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionExcipient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PresentationForm;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
-/**
- * Created by joseangel.pineiro on 9/4/15.
- */
 public class DBRegistry {
 
+    private static final String TAG = "DBRegistry";
     private static DBRegistry instance;
 
     private Map<String, PrescriptionDBMgr> databases;
@@ -76,7 +74,7 @@ public class DBRegistry {
             instance = new DBRegistry();
             instance.databases = new HashMap<>();
 
-            instance.settings = PreferenceManager.getDefaultSharedPreferences(ctx);
+            instance.settings = PreferenceUtils.instance().preferences();
             instance.none = ctx.getString(R.string.database_none_id);
             instance.settingUp = ctx.getString(R.string.database_setting_up);
 
@@ -113,8 +111,8 @@ public class DBRegistry {
     }
 
     public PrescriptionDBMgr current() {
-        String key = settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB, none);
-        Log.d("DBRegistry", "Key: " + key);
+        String key = settings.getString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), none);
+        LogUtil.d(TAG, "Key: " + key);
         return (key != null && !key.equals(none) && !key.equals(settingUp)) ? databases.get(key) : defaultDBMgr;
     }
 
@@ -123,7 +121,6 @@ public class DBRegistry {
     }
 
     public void clear() throws SQLException {
-
         Class<?>[] medDbClasses = new Class<?>[]{
                 ActiveIngredient.class,
                 ContentUnit.class,
@@ -141,6 +138,7 @@ public class DBRegistry {
         for (Class<?> c : medDbClasses) {
             TableUtils.clearTable(connectionSource, c);
         }
+        LogUtil.d(TAG, "Drug DB cleared");
     }
 
 }

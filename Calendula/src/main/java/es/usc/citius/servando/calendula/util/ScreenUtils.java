@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.util;
@@ -31,9 +31,9 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.ColorInt;
 import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
@@ -48,19 +48,14 @@ import java.io.InputStream;
 
 import es.usc.citius.servando.calendula.R;
 
-/**
- * Created by joseangel.pineiro on 11/20/13.
- */
 public class ScreenUtils {
 
+    private static final String TAG = "ScreenUtils";
     private static Palette p;
 
-    public static PointF getDpSize(Activity activity) {
-
+    public static PointF getDpSize(Context context) {
         PointF p = new PointF();
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        display.getMetrics(outMetrics);
+        DisplayMetrics outMetrics = context.getResources().getDisplayMetrics();
         p.set(outMetrics.widthPixels / outMetrics.density, outMetrics.heightPixels / outMetrics.density);
         return p;
     }
@@ -92,20 +87,19 @@ public class ScreenUtils {
 
 
     public static Bitmap getResizedBitmap(Context ctx, String pathOfInputImage, int dstWidth, int dstHeight) {
+
+        InputStream in = null;
         try {
-
-
             int inWidth = 0;
             int inHeight = 0;
 
-            InputStream in = ctx.getAssets().open(pathOfInputImage);
+            in = ctx.getAssets().open(pathOfInputImage);
 
             // decode image size (decode metadata only, not the whole image)
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(in, null, options);
             in.close();
-            in = null;
 
             // save width and height
             inWidth = options.outWidth;
@@ -131,7 +125,9 @@ public class ScreenUtils {
             return Bitmap.createScaledBitmap(roughBitmap, (int) (roughBitmap.getWidth() * values[0]), (int) (roughBitmap.getHeight() * values[4]), true);
 
         } catch (IOException e) {
-            Log.e("Image", e.getMessage(), e);
+            LogUtil.e(TAG, e.getMessage(), e);
+        } finally {
+            CloseableUtil.closeQuietly(in);
         }
         return null;
     }
@@ -171,7 +167,7 @@ public class ScreenUtils {
 
     }
 
-    public static void setStatusBarColor(Activity activity, int color) {
+    public static void setStatusBarColor(Activity activity, @ColorInt int color) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = activity.getWindow();

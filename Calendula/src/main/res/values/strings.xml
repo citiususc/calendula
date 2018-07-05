@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
-  ~    Copyright (C) 2016 CITIUS - USC
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
   ~    Calendula is free software; you can redistribute it and/or modify
   ~    it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@
         <item>@string/mood_very_good</item>
     </string-array>
 
-    <string name="schedule_custom_rule_text">&lt;u> %1$s &lt;/u></string>
+    <string name="schedule_custom_rule_text" translatable="false">&lt;u> %1$s &lt;/u></string>
 
     <string-array name="schedule_repeat_types">
         <item>@string/schedule_repeat_type_everyday</item>
@@ -57,7 +57,6 @@
     </string-array>
 
     <string-array name="schedule_repeat_frequency_units">
-        <item>@string/schedule_repeat_frequency_hours</item>
         <item>@string/schedule_repeat_frequency_days</item>
         <item>@string/schedule_repeat_frequency_weeks</item>
         <item>@string/schedule_repeat_frequency_months</item>
@@ -132,6 +131,7 @@
     <string name="database_none_id" translatable="false">None</string>
     <string name="database_aemps_id" translatable="false">AEMPS</string>
     <string name="database_us_id" translatable="false">US</string>
+    <string name="database_setting_up_id" translatable="false">DB_ID_SETTING_UP</string>
     <!--<string name="database_uk_id">UK</string>-->
 
     <string-array name="pref_alarm_repeat_values" translatable="false">
@@ -162,6 +162,30 @@
     </string-array>
 
 
-    <string name="database_file_location">%1$s%2$s/%2$s-%3$s.db</string>
+    <string name="database_file_location" translatable="false">%1$s%2$s/%2$s-%3$s.db</string>
+    <string name="ml" translatable="false">ml</string>
+    <string name="not_available_short" translatable="false">N/A</string>
+    <string name="presentation_item_tag" translatable="false">presentation_type</string>
+
+    <string-array name="calendar_pickup_reminder_values">
+        <item>@string/calendar_pickup_reminder_one_day_before</item>
+        <item>@string/calendar_pickup_reminder_two_days_before</item>
+        <item>@string/calendar_pickup_reminder_three_days_before</item>
+    </string-array>
+
+    <string-array name="pref_lock_after_names">
+        <item>@string/pref_lock_30s</item>
+        <item>@string/pref_lock_1m</item>
+        <item>@string/pref_lock_2m</item>
+        <item>@string/pref_lock_5m</item>
+    </string-array>
+
+    <string-array name="pref_lock_after_values" translatable="false">
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+        <item>300</item>
+    </string-array>
+
 
 </resources>

@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.util;
@@ -27,7 +27,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 
@@ -87,16 +86,24 @@ public class PermissionUtils {
     }
 
     public static boolean hasAskedForPermission(Activity activity, String permission) {
-        return PreferenceManager
-                .getDefaultSharedPreferences(activity)
+        return PreferenceUtils.instance().preferences()
                 .getBoolean("asked-for" + permission, false);
     }
 
-    public static void markedPermissionAsAsked(Activity activity, String permission) {
-        PreferenceManager
-                .getDefaultSharedPreferences(activity)
+    public static void markPermissionAsAsked(Activity activity, String permission) {
+        PreferenceUtils
                 .edit()
                 .putBoolean("asked-for" + permission, true)
                 .apply();
+    }
+
+    public interface PermissionRequest {
+        public int reqCode();
+
+        public String[] permissions();
+
+        public void onPermissionGranted();
+
+        public void onPermissionDenied();
     }
 }

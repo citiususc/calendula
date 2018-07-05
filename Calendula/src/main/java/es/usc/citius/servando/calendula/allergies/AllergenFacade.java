@@ -1,6 +1,6 @@
 /*
  *    Calendula - An assistant for personal medication management.
- *    Copyright (C) 2016 CITIUS - USC
+ *    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
  *
  *    Calendula is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -13,13 +13,12 @@
  *    GNU General Public License for more details.
  *
  *    You should have received a copy of the GNU General Public License
- *    along with this software.  If not, see <http://www.gnu.org/licenses>.
+ *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package es.usc.citius.servando.calendula.allergies;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,10 +35,8 @@ import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionActiveIngredient;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.PrescriptionExcipient;
 import es.usc.citius.servando.calendula.persistence.Medicine;
+import es.usc.citius.servando.calendula.util.LogUtil;
 
-/**
- * Created by alvaro.brey.vilas on 15/11/16.
- */
 
 public class AllergenFacade {
 
@@ -48,28 +45,28 @@ public class AllergenFacade {
 
 
     public static List<AllergenVO> searchForAllergens(final String name) {
-        Log.d(TAG, "searchForAllergens() called with: name = [" + name + "]");
+        LogUtil.d(TAG, "searchForAllergens() called with: name = [" + name + "]");
 
         final String pattern = "%" + name + "%";
 
         List<AllergenVO> ret = new ArrayList<>();
         List<ActiveIngredient> activeIngredients = DB.drugDB().activeIngredients().like(ActiveIngredient.COLUMN_NAME, pattern, ALLERGEN_SEARCH_LIMIT);
-        Log.v(TAG, "Received " + activeIngredients.size() + " active ingredients");
+        LogUtil.v(TAG, "Received " + activeIngredients.size() + " active ingredients");
         for (ActiveIngredient activeIngredient : activeIngredients) {
             ret.add(new AllergenVO(activeIngredient));
         }
         List<Excipient> excipients = DB.drugDB().excipients().like(ActiveIngredient.COLUMN_NAME, pattern, ALLERGEN_SEARCH_LIMIT - activeIngredients.size());
-        Log.v(TAG, "Received " + excipients.size() + " excipients");
+        LogUtil.v(TAG, "Received " + excipients.size() + " excipients");
         for (Excipient excipient : excipients) {
             ret.add(new AllergenVO(excipient));
         }
 
-        Log.d(TAG, "searchForAllergens() returned: " + ret);
+        LogUtil.d(TAG, "searchForAllergens() returned: " + ret);
         return ret;
     }
 
     public static List<AllergenVO> findAllergensForPrescription(final Prescription p) {
-        Log.d(TAG, "getAllergensForPrescription() called with: p = [" + p + "]");
+        LogUtil.d(TAG, "getAllergensForPrescription() called with: p = [" + p + "]");
         final String code = p.getCode();
         List<AllergenVO> ret = new ArrayList<>();
         // active ingredients
@@ -77,7 +74,7 @@ public class AllergenFacade {
         for (PrescriptionActiveIngredient pai : pais) {
             List<ActiveIngredient> dbai = DB.drugDB().activeIngredients().findBy(ActiveIngredient.COLUMN_ACTIVE_INGREDIENT_CODE, pai.getActiveIngredientID());
             if (dbai.size() != 1) {
-                Log.e(TAG, "findAllergensForPrescription: wrong AI: " + pai);
+                LogUtil.e(TAG, "findAllergensForPrescription: wrong AI: " + pai);
             } else {
                 ret.add(new AllergenVO(dbai.get(0)));
             }
@@ -88,7 +85,7 @@ public class AllergenFacade {
         for (PrescriptionExcipient pe : pes) {
             List<Excipient> dbe = DB.drugDB().excipients().findBy(Excipient.COLUMN_EXCIPIENT_ID, pe.getExcipientID());
             if (dbe.size() != 1) {
-                Log.e(TAG, "findAllergensForPrescription: wrong AI: " + pe);
+                LogUtil.e(TAG, "findAllergensForPrescription: wrong AI: " + pe);
             } else {
                 ret.add(new AllergenVO(dbe.get(0)));
             }
@@ -101,7 +98,7 @@ public class AllergenFacade {
         }
 
 
-        Log.d(TAG, "getAllergensForPrescription() returned: " + ret);
+        LogUtil.d(TAG, "getAllergensForPrescription() returned: " + ret);
         return ret;
     }
 
@@ -157,20 +154,20 @@ public class AllergenFacade {
      * @return the medicines
      */
     public static List<Medicine> checkNewMedicineAllergies(Context ctx, AllergenVO newAllergen) {
-        Log.d(TAG, "checkNewMedicineAllergies() called with: ctx = [" + ctx + "], newAllergen = [" + newAllergen + "]");
+        LogUtil.d(TAG, "checkNewMedicineAllergies() called with: ctx = [" + ctx + "], newAllergen = [" + newAllergen + "]");
 
         List<Medicine> medicines = new ArrayList<>();
 
         List<Medicine> patientMedicines = DB.medicines().findAllForActivePatient(ctx);
         for (Medicine m : patientMedicines) {
             if (m.isBoundToPrescription()) {
-                final Prescription p = DB.drugDB().prescriptions().findByCn(m.cn());
+                final Prescription p = DB.drugDB().prescriptions().findByCn(m.getCn());
                 if (checkAllergies(ctx, p).size() > 0)
                     medicines.add(m);
             }
         }
 
-        Log.d(TAG, "checkNewMedicineAllergies() returned: " + medicines);
+        LogUtil.d(TAG, "checkNewMedicineAllergies() returned: " + medicines);
         return medicines;
     }
 
