@@ -18,7 +18,7 @@
 
 android {
     defaultConfig {
-        buildConfigField 'String', 'DB_DOWNLOAD_URL', '"http://tec.citius.usc.es/calendula/dbs/"'
+        buildConfigField 'String', 'DB_DOWNLOAD_URL', '"http://tec.citius.usc.es/calendula/dbs-allergies/"'
         buildConfigField 'boolean', 'TEST_GENERATE_TESTDATA', 'false'
     }
 }
