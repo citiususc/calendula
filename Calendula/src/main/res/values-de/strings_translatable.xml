@@ -503,4 +503,20 @@ Wollen Sie nun die neue Datenbank installieren?
 <string name="patient_add">"Neuer Patient"</string>
 <string name="db_download_and_setup">"Herunterladen und installieren"</string>
 <string name="schedule_continue_indefinitely">"Soll dieser Einnahmeplan dauerhaft fortgeführt werden?"</string>
+<string name="powder">"Puder"</string>
+<string name="cream">"Creme"</string>
+<plurals name="powder_units">
+<item quantity="one">"Gramm"</item>
+<item quantity="other">"Gramm"</item>
+</plurals>
+<plurals name="cream_units">
+<item quantity="one">"Anwendung"</item>
+<item quantity="other">"Anwendungen"</item>
+</plurals>
+<plurals name="generic_units">
+<item quantity="one">"Einheit"</item>
+<item quantity="other">"Einheiten"</item>
+</plurals>
+<string name="generic_presentation">"Generisch"</string>
+<string name="notification_taken">"Eingenommen"</string>
 </resources>

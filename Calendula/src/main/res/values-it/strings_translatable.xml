@@ -227,7 +227,7 @@ Aggiungi dei medicinali al kit per avere accesso ai foglietti illustrativi ed al
 Aggiungi i tuoi trattamenti e lascia a noi il compito di inviarti delle notifiche!"</string>
 <string name="about_description"><![CDATA[
 <br/><br/>
-Calendula è sviluppata dal Research Centre for Information Technologies dell'USC (<a href=\'http://citius.usc.es\'>CITIUS</a>)
+Calendula è sviluppata dal Research Centre for Information Technologies dell\'USC (<a href=\'http://citius.usc.es\'>CITIUS</a>)
 <br/><br/>
 Visita il nostro sito web per maggiori informazioni:
 <br/>
@@ -283,8 +283,8 @@ Per lo sviluppo di Calendula utilizziamo diverse librerie open source di seguito
 <string name="title_allergies_detected_dialog">"Attenzione"</string>
 <string name="message_allergies_detected_dialog">"Alcune medicine del tuo kit contengono l'allergene che hai appena aggiunto. Ricontrollane con cura i foglietti illustrativi."</string>
 <string name="error_duplicate_medicine">"Questa medicina è già presente nel tuo kit."</string>
-<string name="allergies_group_elements_number">"%1$d elementi</string>
-<string name="allergies_selected_number">"%1$d selezionato</string>
+<string name="allergies_group_elements_number">"%1$d elementi"</string>
+<string name="allergies_selected_number">"%1$d selezionato"</string>
 <string name="message_allergy_add_multiple_success">"Allergia salvata."</string>
 <string name="title_allergies_database_required">"È necessario un database delle allergie"</string>
 <string name="message_allergies_database_required">"La gestione delle allergie al momento è possibile solo con il database delle medicine AEMPS. Vuoi attivarlo?"</string>
@@ -317,7 +317,7 @@ Per lo sviluppo di Calendula utilizziamo diverse librerie open source di seguito
 <string name="active_schedules_one">"1 trattamento attivo"</string>
 <string name="active_schedules_number">"%1$d trattamenti attivi"</string>
 <string name="message_link_real_prescription">"Collega ad una medicina per avere maggiori informazioni"</string>
- <string name="stock_no_stock_info">"Non sono disponibili informazioni sulle scorte di questa medicina"</string>
+<string name="stock_no_stock_info">"Non sono disponibili informazioni sulle scorte di questa medicina"</string>
 <string name="stock_no_data">"Nessun dato"</string>
 <string name="message_med_linked_success">"Medicina collegata con successo!"</string>
 <string name="label_info_short">"Info"</string>
@@ -330,7 +330,7 @@ Per lo sviluppo di Calendula utilizziamo diverse librerie open source di seguito
 <string name="stock_enough_for_months_days">"Scorte sufficienti per %1$d mesi e %2$d giorni con i trattamenti correnti"</string>
 <string name="stock_enough_for_upper_limit">"Scorte sufficienti per più di tre mesi con i trattamenti correnti"</string>
 <string name="no_alerts_detected">"Nessun avviso per questa medicina"</string>
-<string name="stock_depleted">"Scorte esaurite</string>
+<string name="stock_depleted">"Scorte esaurite"</string>
 <string name="stock_depleted_msg">"Scorte esaurite per questa medicina."</string>
 <string name="message_allergies_experimental_warning">"La gestione delle allergie è una funzionalità sperimentale. Ricordati di leggere sempre i foglietti illustrativi delle tue medicine per le informazioni riguardanti le allergie."</string>
 <string name="dialog_get_me_out">"Fammi uscire di qui!"</string>
@@ -500,4 +500,20 @@ Vuoi installare il nuovo database adesso?
 <string name="patient_add">"Aggiungi paziente"</string>
 <string name="db_download_and_setup">"Download e configurazione"</string>
 <string name="schedule_continue_indefinitely">"Vuoi che questo trattamento continui all'infinito?"</string>
+<string name="powder">"Cipria"</string>
+<string name="cream">"Crema"</string>
+<plurals name="powder_units">
+<item quantity="one">"grammo"</item>
+<item quantity="other">"grammi"</item>
+</plurals>
+<plurals name="cream_units">
+<item quantity="one">"applicazione"</item>
+<item quantity="other">"applicazioni"</item>
+</plurals>
+<plurals name="generic_units">
+<item quantity="one">"unità"</item>
+<item quantity="other">"unità"</item>
+</plurals>
+<string name="generic_presentation">"Generico"</string>
+<string name="notification_taken">"Preso"</string>
 </resources>
