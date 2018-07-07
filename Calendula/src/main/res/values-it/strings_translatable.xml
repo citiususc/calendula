@@ -213,7 +213,7 @@
 <string name="create_schedule_select_med_before_dose">"Seleziona prima una medicina"</string>
 <string name="title_activity_patients">"Pazienti"</string>
 <string name="schedule_type_help_title">"Stai per creare un trattamento. Scegli quello più adatto alle tue esigenze!"</string>
-<string name="schedule_type_routines_help">"Questo tipo di trattamento ti permette di collegare le assunzioni alle tue routine. Ad esempio: \"Ogni giorno a colazione e cena, escludendo le domeniche", oppure \"Ogni 3 giorni, a pranzo.\""</string>
+<string name="schedule_type_routines_help">"Questo tipo di trattamento ti permette di collegare le assunzioni alle tue routine. Ad esempio: \"Ogni giorno a colazione e cena, escludendo le domeniche\", oppure \"Ogni 3 giorni, a pranzo.\""</string>
 <string name="schedule_type_hourly_help">"I trattamenti orari sono indicati per le assunzioni che si ripetono con un certo periodo. Ad esempio: \"Ogni 8 ore\". Imposta l'orario della prima assunzione."</string>
 <string name="schedule_type_intervalrest_help">"Le pillole contraccettive ed altri medicinali vanno assunti per un certo periodo e poi sospesi. Questo tipo di trattamento ti permette di specificare il periodo di assunzione e quello di pausa."</string>
 <string name="routines_list_empty_text">"Nessuna routine configurata.
