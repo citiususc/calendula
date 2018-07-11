@@ -1,0 +1,33 @@
+Calendula is een assistent voor het beheren van je persoonlijke medicatie. De app helpt bij het beheren van je recepten, 
+zonder dat je daarvoor duizenden alarmen hoeft in te stellen op je telefoon en je hoeft je geen zorgen meer te maken dat je je
+medicatie vergeet. Stel een dosering en schema in, koppel ze aan je dagelijkse routines en laat Calendula zijn werk doen.
+
+---
+
+Calendula beschikt over:
+○ een fijn, eenvoudig en gebruiksvriendelijk uiterlijk
+○ medicatiemeldingen en -herinneringen, met volledig instelbare alarmen
+○ flexibele medicatieschema's, met specifieke opties voor anticonceptiepillen en andere medicatie met stopperiodes
+○ een medicijn-zoekfunctie en bijsluiterweergave, met gegevens van de "Agencia Española de Medicamentos y Productos Sanitarios"  (http://www.aemps.gob.es)
+○ dagelijks beheer over gebruikte medicatie
+○ ondersteuning voor meerdere patiënten
+
+Bezoek onze website voor meer informatie: <a href="https://tec.citius.usc.es/calendula/">https://tec.citius.usc.es/calendula/</a>
+
+---
+
+Over machtigingen:
+
+Calendula vereist geen eerdere registratie en verzamelt geen persoonlijke gegevens. Het kan zijn dat Calendula soms vraagt om een machtiging voor toegang tot verschillende bronnen op je apparaat. We leggen uit waarom:
+
+○ Opslag: we hebben deze machtiging nodig om de medicijndatabanken te kunnen downloden en om toegang te krijgen tot geluiden op je apparaat. Zo kun je kiezen voor je favoriete geluid bij medicatiemeldingen. 
+○ Camera: het is mogelijk om medicijnen (momenteel alleen AEMPS) toe te voegen aan je overzicht door de barcode van een verpakking te scannen. Daarvoor hebben we toegang nodig tot je camera.
+○ Internettoegang: deze machtiging wordt niet expliciet gevraagd en is alleen nodig voor het downloaden van bijsluiters en het instellen van de medicijndatabank. Je medicatiegegevens blijven ten allen tijde op je telefoon.
+
+--- 
+
+Open source:
+Calendula is een open-bronproject. Als je ideëen hebt of wilt bijdragen, dan kun je dit melden via onze website (<a href="https://tec.citius.usc.es/calendula/">https://tec.citius.usc.es/calendula/</a>) of via onze GitHub-gemeenschap <a href="https://github.com/citiususc/calendula">https://github.com/citiususc/calendula</a>. We waarderen elke bijdrage of suggestie.
+
+Hartelijke bedankt namens 
+het Calendula-team.
