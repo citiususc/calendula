@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="title_home">"Startpagina"</string>
+<string name="action_settings">"Instellingen"</string>
+<string name="action_remove">"Verwijderen"</string>
+<string name="home_menu_routines">"ROUTINES"</string>
+<string name="home_menu_medicines">"MEDICIJNEN"</string>
+<string name="home_menu_pharmacies">"Apotheken"</string>
+<string name="home_menu_plantrip">"Route plannen"</string>
+<string name="medicine">"medicijn"</string>
+<string name="drawer_help_option">"Rondleiding"</string>
+<string name="drawer_settings_option">"Instellingen"</string>
+<string name="drawer_about_option">"Over"</string>
+<string name="title_activity_routines">"Routines"</string>
+<string name="title_edit_routine_activity">"Routine bewerken"</string>
+<string name="title_create_routine_activity">"Routine creëren"</string>
+<string name="title_activity_medicines">"Medicijnen"</string>
+<string name="title_edit_schedule_activity">"Schema bewerken"</string>
+<string name="title_create_schedule_activity">"Schema creëren"</string>
+<string name="routine_name">"Routinenaam"</string>
+<string name="routine_time">"Tijd"</string>
+<string name="create_routine_button_text">"Routine creëren"</string>
+<string name="create_new_routine">"Nieuwe routine creëren…"</string>
+<string name="medicine_name">"Medicatienaam"</string>
+<string name="medicine_presentation">"Presentatie"</string>
+<string name="create_medicine_button_text">"Medicijn creëren"</string>
+<string name="no_stock_info_msg">"Geen informatie"</string>
+<string name="title_activity_schedules">"Schema\'s"</string>
+<string name="delay">"Vertraging"</string>
+<string name="done">"Klaar"</string>
+<string name="cancel">"Annuleren"</string>
+<string name="confirm">"Bevestigen"</string>
+<string name="meds_time">"Denk eraan om je medicijnen te gebruiken"</string>
+<string name="meds_time_lost">"Alarm ontbreekt"</string>
+<string name="title_select_dose_dialog">"Selecteer een dosering"</string>
+<string name="doses_and_times">"Tijden en doseringen"</string>
+<string name="schedule_repeat_days">"Herhalen"</string>
+<string name="summary_title">"Controleren en bevestigen"</string>
+<string name="summary">"Samenvatting"</string>
+<string name="pills">"Pillen"</string>
+<string name="capsules">"Capsules"</string>
+<string name="inhaler">"Inhaler"</string>
+<string name="drops">"Druppels"</string>
+<string name="pomade">"Pommade"</string>
+<string name="syrup">"Siroop"</string>
+<string name="spray">"Spray"</string>
+<string name="patches">"Pleisters"</string>
+<string name="unknown">"Onbekend"</string>
+<string name="effervescent">"Verstuiver"</string>
+<string name="schedule">"Schema"</string>
+<plurals name="injections_units">
+<item quantity="one">"injectie"</item>
+<item quantity="other">"injecties"</item>
+</plurals>
+<plurals name="pills_units">
+<item quantity="one">"pil"</item>
+<item quantity="other">"pillen"</item>
+</plurals>
+<plurals name="capsules_units">
+<item quantity="one">"capsule"</item>
+<item quantity="other">"capsules"</item>
+</plurals>
+<plurals name="inhaler_units">
+<item quantity="one">"inhalatie"</item>
+<item quantity="other">"inhalaties"</item>
+</plurals>
+<plurals name="spray_units">
+<item quantity="one">"toepassing"</item>
+<item quantity="other">"toepassingen"</item>
+</plurals>
+<plurals name="drops_units">
+<item quantity="one">"druppel"</item>
+<item quantity="other">"druppels"</item>
+</plurals>
+<plurals name="pomade_units">
+<item quantity="one">"toepassing"</item>
+<item quantity="other">"toepassingen"</item>
+</plurals>
+<plurals name="syrup_units">
+<item quantity="one">"ml"</item>
+<item quantity="other">"ml"</item>
+</plurals>
+<plurals name="patches_units">
+<item quantity="one">"pleister"</item>
+<item quantity="other">"pleisters"</item>
+</plurals>
+<plurals name="unknown_units">
+<item quantity="one">"eenheid"</item>
+<item quantity="other">"eenheden"</item>
+</plurals>
+<plurals name="effervescent_units">
+<item quantity="one">"sachet"</item>
+<item quantity="other">"sachets"</item>
+</plurals>
+<string name="never">"Nooit"</string>
+<string name="every_day">"Elke dag"</string>
+<string name="once_a_day">"Eén keer per dag"</string>
+<string name="twice_a_day">"Twee keer per dag"</string>
+<string name="tree_times_a_day">"Drie keer per dag"</string>
+<string name="four_times_a_day">"Vier keer per dag"</string>
+<string name="times_a_day">"keer per dag"</string>
+<string name="and">"en"</string>
+<string name="routine_breakfast">"Ontbijt"</string>
+<string name="routine_lunch">"Lunch"</string>
+<string name="routine_dinner">"Avondeten"</string>
+<string name="schedule_timetable_time_column">"TIJD"</string>
+<string name="schedule_timetable_dose_column">"DOSERING"</string>
+<string name="take">"Inname"</string>
+<string name="first_intake">"Eerste keer innemen op"</string>
+<string name="day_monday_short">"Ma"</string>
+<string name="day_tuesday_short">"Di"</string>
+<string name="day_wednesday_short">"Woe"</string>
+<string name="day_thursday_short">"Do"</string>
+<string name="day_friday_short">"Vrij"</string>
+<string name="day_saturday_short">"Za"</string>
+<string name="day_sunday_short">"Zo"</string>
+<string name="schedule_day_selector_mo">"MA"</string>
+<string name="schedule_day_selector_tu">"DI"</string>
+<string name="schedule_day_selector_we">"WOE"</string>
+<string name="schedule_day_selector_th">"DO"</string>
+<string name="schedule_day_selector_fr">"VRIJ"</string>
+<string name="schedule_day_selector_sa">"ZA"</string>
+<string name="schedule_day_selector_su">"ZO"</string>
+<string name="schedule_day_selector_none">"NIET"</string>
+<string name="agenda_zoom_meds_time">"Het is tijd om je medijnen te gebruiken!"</string>
+<string name="create_schedule_unselected_med">"Selecteer een medicijn om een schema te creëren"</string>
+<string name="create_schedule_incomplete_items">"Selecteer routines voor al je innames"</string>
+<string name="create_schedule_incomplete_doses">"Doseringen moeten hoger dan nul zijn"</string>
+<string name="home_no_pending_meds_message">"Geen medicijnen vandaag"</string>
+<string name="medicine_created_message">"Medicijn gecreëerd!"</string>
+<string name="medicine_deleted_message">"Medicijn verwijderd!"</string>
+<string name="medicine_edited_message">"Medicijn bijgewerkt!"</string>
+<string name="schedule_created_message">"Schema gecreëerd!"</string>
+<string name="cycle_period_cero_message">"De innamecyclus moet hoger dan nul zijn"</string>
+<string name="reminder_cancelled_message">"Herinnering geannuleerd"</string>
+<string name="remove_routine_message_long">"De routine '%1$s' is gekoppeld aan schema\'s, welke verloren zullen gaan als je de routine verwijdert. Wil je de routine tóch verwijderen?"</string>
+<string name="remove_medicine_message_long">"'%1$s' is gekoppeld aan schema\'s, welke verloren zullen gaan als je de routine verwijdert. Wil je de routine tóch verwijderen?"</string>
+<string name="remove_routine_message_short">"Routine '%1$s' verwijderen?"</string>
+<string name="remove_medicine_message_short">"'%1$s' verwijderen?"</string>
+<string name="remove_routine_dialog_title">"Routine verwijderen"</string>
+<string name="remove_medicine_dialog_title">"Medicijn verwijderen"</string>
+<string name="remove_schedule_dialog_title">"Schema verwijderen"</string>
+<string name="remove_schedule_message">"Schema '%1$s' verwijderen?"</string>
+<string name="dialog_yes_option">"Ja"</string>
+<string name="dialog_no_option">"Nee"</string>
+<string name="medicine_no_name_error_message">"Typ een naam"</string>
+<string name="medicine_unselected">"Nog niks geselecteerd"</string>
+<string name="medicine_no_presentation_error_message">"Selecteer een presentatie"</string>
+<string name="tutorial_understood">"Ik begrijp het"</string>
+<string name="notification_repeat_message">"Het alarm wordt herhaald om %1$s"</string>
+<string name="notification_cancel_now">"Nu annuleren"</string>
+<string name="notification_delay">"Uitstellen"</string>
+<string name="alarm_delayed_message">"Het alarm is uitgesteld met '%1$s' minuten"</string>
+<string name="moods_dialog_title">"Hoe voel je je?"</string>
+<string name="mood_very_bad">"Ik voel me erg slecht"</string>
+<string name="mood_bad">"Ik voel me slecht"</string>
+<string name="mood_neutral">"Ik voel niks"</string>
+<string name="mood_good">"Ik voel me goed"</string>
+<string name="mood_very_good">"Ik voel me erg goed"</string>
+<string name="search_med_hint">"Zoeken op naam of code…"</string>
+<string name="pref_header_prescriptions">"Medicijndatabank"</string>
+<string name="medicine_edit_name_hint">"Typ hier…"</string>
+<string name="enable_prescriptions_dialog_message">"Je kunt medicijnen eenvoudig toevoegen en bijsluiters bekijken door de medicijndatabank in te schakelen. Als je dat nu niet wilt doen, dan kan dat later alsnog in de instellingen."</string>
+<string name="enable_prescriptions_dialog_title">"Medicijndatabank"</string>
+<string name="enable_prescriptions_dialog_yes">"Activeren (aanbevolen)"</string>
+<string name="enable_prescriptions_dialog_no">"Annuleren"</string>
+<string name="driving_warning">"Dit medicijn kan je rijvaardigheid beïnvloeden.
+Lees de bijsluiter nauwkeurig of vraag je apotheker om advies voordat je achter stuur kruipt."</string>
+<string name="driving_warning_title">"Wees voorzichtig"</string>
+<string name="driving_warning_show_prospect">"Bijsluiter lezen"</string>
+<string name="driving_warning_gotit">"Ik begrijp het"</string>
+<string name="dialog_interval_title">"Tussenpoos"</string>
+<string name="every">"elke"</string>
+<string name="repeat_every_tostr">"Elke %1$s %2$s"</string>
+<string name="label_schedule_repeat_today">"Beginnen"</string>
+<string name="button_schedule_repeat_today">"Vandaag"</string>
+<string name="label_schedule_repeat_until">"Stoppen"</string>
+<string name="button_schedule_repeat_until">"Nooit"</string>
+<string name="schedule_limits_date_format">"dd MMMM YYYY"</string>
+<string name="schedules_stop_after">"Stoppen na %1$s innames"</string>
+<string name="schedule_repeat_period">"Periode + tijdelijke stop"</string>
+<string name="schedule_repeat_type_everyday">"Elke dag"</string>
+<string name="schedule_repeat_type_some_week_days">"Enkele dagen per week"</string>
+<string name="schedule_repeat_type_interval">"Tussenpoos"</string>
+<string name="schedule_repeat_frequency_days">"dagen"</string>
+<string name="schedule_repeat_frequency_weeks">"weken"</string>
+<string name="schedule_repeat_frequency_months">"maanden"</string>
+<string name="summary_show_calendar">"Kalender tonen"</string>
+<string name="hours">"uur"</string>
+<string name="schedule_help_no_type_selected">"Selecteer een schematype om door te gaan met creëren"</string>
+<string name="schedule_type_routines_title">"Routineschema"</string>
+<string name="schedule_type_hourly_title">"Dosering met tussenpoos"</string>
+<string name="schedule_type_period_title">"Periode + tijdelijke stop"</string>
+<string name="schedule_type_common_periods">"Gebruikelijke cycli"</string>
+<string name="schedule_type_routines_description">"Bijv.: elke 3 dagen, bij het ontbijt, lunch en avondeten"</string>
+<string name="schedule_type_hourly_description">"Bijv.: elke 8 uur"</string>
+<string name="schedule_type_period_description">"Bijv.: 21 dagen + 7 dagen stoppen"</string>
+<string name="schedule_help_cycle">"Herhaalperiode instellen (inname + tijdelijke stop)"</string>
+<string name="schedule_help_duration">"Ten slotte kun je het begin en einde van het schema opgeven. Gebruik de standaardwaarden om het schema oneindig te herhalen."</string>
+<string name="schedule_help_hourly">"Geef de herhaalperiode, dosering en eerste innametijd op."</string>
+<string name="schedule_help_repeat">"Geef de herhaalperiode op. Als deze elke dag hetzelfde is, dan hoef je niks op te geven."</string>
+<string name="schedule_help_timesbyday">"Geef op hoeveel keer per dag het schema herhaald moet worden."</string>
+<string name="schedule_help_timetable">"Koppel nu elke inname met je routines en geef de doseringen op."</string>
+<string name="title_activity_calendar">"Ophaalkalender"</string>
+<string name="title_pickups_bottom_sheet">"Ophalen op %1$s"</string>
+<string name="pickup_interval">"Tot %1$s"</string>
+<string name="pickup_date_format">"dd MMMM"</string>
+<string name="title_activity_confirm_schedules">"Schema\'s bevestigen"</string>
+<string name="confirm_prescription_x_of_y">"Recept %1$s van %2$s"</string>
+<string name="scan_prescriptions_title">"Recepten scannen"</string>
+<string name="scan_qr">"QR-code scannen"</string>
+<string name="duration">"Duur"</string>
+<string name="all_meds_taken">"Alle medicijnen zijn ingenomen!"</string>
+<string name="create_schedule_select_med_before_dose">"Selecteer eerst een medicijn"</string>
+<string name="title_activity_patients">"Patiënten"</string>
+<string name="schedule_type_help_title">"Je staat op het punt om een schema te creëren. Kies het schema dat het beste aansluit!"</string>
+<string name="schedule_type_routines_help">"Dit schema stelt je in staat om innames te verbinden met routines, zoals bijv.: \"Elke dag bij het ontbijt en avondeten, behalve op zondag\", of \"Elke 3 dagen bij de lunch.\""</string>
+<string name="schedule_type_hourly_help">"Uurschema\'s zijn bedoeld voor innames die zich per periode herhalen, zoals bijv.: \"Elke 8 uur\". Stel de eerste innametijd in en ga zo verder."</string>
+<string name="schedule_type_intervalrest_help">"Anticonceptiepillen en andere medicatie worden voor een bepaalde periode ingenomen, waarna een stopperiode volgt. Dit schema stelt je in staat om beide periodes in te stellen."</string>
+<string name="routines_list_empty_text">"Er zijn nog geen routines.
+
+Routines zijn tijden waarop je medicijnen moet innemen, zoals ontbijt en avondeten. Je kunt dit hergebruiken om toekomstige schema\'s sneller te creëren."</string>
+<string name="medicines_list_empty_text">"Er zijn nog geen medicijnen.
+
+Voeg medicijnen toe om eenvoudig toegang te krijgen tot bijsluiters en waarschuwingen."</string>
+<string name="schedules_list_empty_text">"Er zijn nog een schema\'s.
+
+Voeg je schema\'s hier toe en krijg een melding van ons!"</string>
+<string name="about_description"><![CDATA[
+<br/><br/>
+Calendula wordt ontwikkeld door het Research Centre for Information Technologies van de USC (<a href=\'http://citius.usc.es\'>CITIUS</a>)
+<br/><br/>
+Bezoek onze website voor meer informatie:
+<br/>
+<a href=\'http://citius.usc.es/calendula\'>citius.usc.es/calendula </a>
+<br/><br/>
+Calendula is een open-bronproject. Je kunt ideëen en suggesties bijdragen op onze GitHub-pagina of door een e-mail te sturen:
+<br/>
+<a href=\'https://github.com/citiususc/calendula\'>https://github.com/citiususc/calendula </a>
+ <br/>
+<a href=\'mailto:citius.calendula@usc.es\'>citius.calendula@usc.es</a>
+<br/><br/>
+Voor de ontwikkeling gebruiken wij verschillende open-bronbibliotheken, die hieronder worden vermeldt:
+"]]></string>
+<string name="message_generic_pageloaderror">"Er is een fout opgetreden tijdens het laden van de pagina"</string>
+<string name="title_prospect_webview">"Vooruitzicht"</string>
+<string name="message_generic_pleasewait">"Een paar seconden geduld..."</string>
+<string name="message_prospect_loading">"De bijsluiter zal spoedig gereed zijn…"</string>
+<string name="message_prospect_connection_error">"De bijsluiter kan niet worden geladen"</string>
+<string name="message_prospect_not_found_error">"Sorry, er is geen bijsluiter beschikbaar voor dit medicijn"</string>
+<string name="intake_not_available">"Geen inname beschikbaar"</string>
+<string name="confirm_future_intake_warning">"De inname zal beschikbaar zijn op %1$s. We sturen je een meldig zodra het zover is!"</string>
+<string name="confirm_past_intake_warning">"Er zijn vele uren verstreken sinds de laatste inname. Heb je je medicatie genomen en wil je dit nu bevestigen?"</string>
+<string name="meds_from">"Medicatie van"</string>
+<string name="at_time_connector">"op"</string>
+<string name="med_taken_at">"Bevestigd op"</string>
+<string name="med_cancelled_at">"Geannuleerd op"</string>
+<string name="med_not_taken">"Nee, ik heb het niet ingenomen"</string>
+<string name="meds_confirm_ok">"Ja, ik heb het ingenomen"</string>
+<string name="meds_confirm_cancel">"Nee"</string>
+<string name="meds_unconfirm_ok">"Nee"</string>
+<string name="meds_unconfirm_cancel">"Ja, ik heb het ingenomen"</string>
+<string name="unconfirm_past_intake_warning">"Je hebt deze inname bevestigd %1$s. Heb je het genomen?"</string>
+<string name="action_share_link">"Delen met"</string>
+<string name="action_open_with_browser">"Openen in webbrowser"</string>
+<string name="title_share_link">"Delen met…"</string>
+<string name="title_about">"Over"</string>
+<string name="home_menu_allergies">"Allergieën"</string>
+<string name="title_activity_allergies">"Allergieën"</string>
+<string name="message_allergy_add_failure">"Er is een fout opgetreden tijdens opslaan van je allergieën."</string>
+<string name="remove_allergy_message_short">"Allergie '%1$s' verwijderen?"</string>
+<string name="excipient">"Hulpstof"</string>
+<string name="active_ingredient">"Actief ingrediënt"</string>
+<string name="delete_allergen_error">"Het verwijderen van allergie-informatie is mislukt."</string>
+<string name="allergies_placeholder">"Er zijn nog geen allergieën toegevoegd!"</string>
+<string name="allergies_search_placeholder">"Begin met typen van je allergie om suggesties te krijgen."</string>
+<string name="allergies_search_placeholder_no_result">"Geen resultaten voor huidige zoekopdracht"</string>
+<string name="notification_error_msg">"Het lijkt erop dat er een probleem is opgetreden bij het melden. Kijk in je agenda of er iets te melden valt."</string>
+<string name="notification_error_title">"Oeps…"</string>
+<string name="title_medicine_allergy_alert">"Allergieën gedetecteerd voor dit medicijn."</string>
+<string name="message_medicine_alert">"Dit medicijn bevat ingrediënten waar je allergisch voor bent. Omwille van je eigen veiligheid, kun je dit medcijn niet inplannen."</string>
+<string name="medicine_save_error_message">"Er is een fout opgetreden tijdens het opslaan van je medicijn."</string>
+<string name="message_schedule_medicine_allergy">"Dit medicijn kan niet worden ingepland omdat je allergisch bent voor sommige hulpstoffen."</string>
+<string name="title_allergies_detected_dialog">"Waarschuwing"</string>
+<string name="message_allergies_detected_dialog">"Enkele van je medicijnen bevatten het zojuist toegevoegde allergeen. Bekijk hun vooruitzichten nauwkeurig."</string>
+<string name="error_duplicate_medicine">"Dit medicijn is al toegevoegd."</string>
+<string name="allergies_group_elements_number">"%1$d elementen"</string>
+<string name="allergies_selected_number">"%1$d geselecteerd"</string>
+<string name="message_allergy_add_multiple_success">"Je allergie-informatie is opgeslagen."</string>
+<string name="title_allergies_database_required">"Databank vereist"</string>
+<string name="message_allergies_database_required">"Allergiebeheer wordt momenteel alleen ondersteund i.c.m. de AEMPS-medicatiedatabank. Wil je deze activeren?"</string>
+<string name="allergies_group_elements_selected">"%1$d elementen (%2$d geselecteerd)"</string>
+<string name="add_custom_med_button_text">"\"%1$s\" toevoegen"</string>
+<string name="medicine_search_not_found_msg">"Sorry, we hebben niks kunnen vinden met die naam"</string>
+<string name="medicine_search_empty_list_msg">"Typ een medicijnnaam of -code om te beginnen met zoeken of scan de barcode van een verpakking..."</string>
+<string name="search_hint">"Zoeken…"</string>
+<string name="database_us_display">"VS-databank"</string>
+<string name="pref_stock_alert_title">"Waarschuwen als mijn medicatievoorraad opraakt"</string>
+<string name="permission_dialog_go_to_settings">"Deze actie kan niet worden uitgevoerd omdat je ons vorige machtigingsverzoek voor opslag hebt geweigerd. Je kunt de machtiging alsnog afgeven in de app-informatieweergave."</string>
+<string name="permission_dialog_ok">"Ga naar app-informatie"</string>
+<string name="title_alert_allergy">"Er zijn allergieconflicten voor dit medicijn"</string>
+<string name="description_alert_allergy">"Je hebt opgegeven dat je allergisch bent voor enkele stoffen die dit medicijn bevat. Allergenen:"</string>
+<string name="default_user_name">"Gebruiker"</string>
+<string name="relation_user_possession_thing">"%1$s\'s %2$s"</string>
+<string name="schedules_for_med">"%1$d gekoppelde schema\'s"</string>
+<string name="schedules_for_med_none">"Geen gekoppelde schema\'s"</string>
+<string name="yesterday">"Gisteren"</string>
+<string name="today">"Vandaag"</string>
+<string name="tomorrow">"Morgen"</string>
+<string name="message_delete_default_patient">"Dit is de standaardpatiënt; deze kan niet worden verwijderd. Wil je al zijn/haar schema\'s, medicijnen en routines verwijderen?"</string>
+<string name="yes_delete_everything">"Ja, alles verwijderen"</string>
+<string name="default_user_data_deleted">"Gebruikersgegevens verwijderd!"</string>
+<string name="create_default_routines">"Standaardroutines creëren"</string>
+<string name="stock_running_out">"Voorraad raakt op"</string>
+<string name="add_more_stock">"Meer toevoegen"</string>
+<string name="stock_remaining_msg">"%1$d %2$s resterend"</string>
+<string name="active_schedules_none">"Geen actieve schema\'s"</string>
+<string name="active_schedules_one">"1 actief schema"</string>
+<string name="active_schedules_number">"%1$d actieve schema\'s"</string>
+<string name="message_link_real_prescription">"Koppel een echt medicijn om meer informatie te verkrijgen"</string>
+<string name="stock_no_stock_info">"Er is standaardinformatie over dit medicijn"</string>
+<string name="stock_no_data">"Geen gegevens"</string>
+<string name="message_med_linked_success">"Het medicijn is gekoppeld!"</string>
+<string name="label_info_short">"Informatie"</string>
+<string name="label_alerts_short">"Waarschuwingen"</string>
+<string name="medicine_not_found_error">"Medicijn niet gevonden"</string>
+<string name="message_link_real_prescription_short">"Koppelen aan medicijn"</string>
+<string name="prospect">"Bijsluiter"</string>
+<string name="button_official_prospect">"Officiële bijsluiter"</string>
+<string name="stock_enough_for_days">"Met de huidige schema\'s heb je voldoende voor %1$d dagen"</string>
+<string name="stock_enough_for_months_days">"Met de huidige schema\'s heb je voldoende voor %1$d maanden en %2$d dagen"</string>
+<string name="stock_enough_for_upper_limit">"Met de huidige schema\'s heb je voldoende voor meer dan drie maanden"</string>
+<string name="no_alerts_detected">"Geen waarschuwingen gevonden voor dit medicijn"</string>
+<string name="stock_depleted">"Geen voorraad meer"</string>
+<string name="stock_depleted_msg">"Je hebt dit medicijn niet meer op voorraad."</string>
+<string name="message_allergies_experimental_warning">"Allergiebeheer is een experimentele functie. Denk eraan om bijsluiters te lezen zodat je zeker weet dat je wel of niet allergisch bent."</string>
+<string name="dialog_get_me_out">"Haal me hier vandaan!"</string>
+<string name="dialog_continue_option">"Doorgaan"</string>
+<string name="important_info">"Belangrijke informatie"</string>
+<string name="download_db_dialog_title">"Medicijndatabank gebruiken"</string>
+<string name="download_db_dialog_message">"De databankwordt gedownload en ingesteld. Dit kan een paar seconden duren, maar je kunt de app gewoon blijven gebruiken."</string>
+<string name="download_db_unexpected_error">"Fout bij downloaden van databank :("</string>
+<string name="install_db_notification_title">"Bezig met instellen van databank"</string>
+<string name="install_db_notification_ticker">"Bezig met instellen van databank"</string>
+<string name="install_db_notification_oncomplete">"Databank is ingesteld"</string>
+<string name="install_db_notification_oncomplete_text">"Druk hier om een nieuw medicijn toe te voegen"</string>
+<string name="install_db_notification_content">"Bezig met instellen"</string>
+<string name="install_db_notification_onfailure">"Databank instellen mislukt"</string>
+<string name="install_db_notification_onfailure_content">"Er is iets misgegaan tijdens het instellen van de databank."</string>
+<string name="intro_title">"Welkom bij Calendula!"</string>
+<string name="intro_description">"Het gebruiken van je medicatie is niet gemakkelijk, maar nu wordt het in ieder geval minder moeilijk!
+   
+Kijk wat we je kunnen bieden!"</string>
+<string name="intro_routines_title">"Routines"</string>
+<string name="intro_routines_text">"Een routine is een tijdstip waarop je medicijnen moet gebruiken.
+
+Gebruik je meerdere medicijnen bij het ontbijt of de lunch? Creëer dan een routine op dat tijdstip en Calendula zal alle innames groeperen in één melding."</string>
+<string name="intro_meds_title">"Medicatie-overzicht"</string>
+<string name="intro_meds_text">"Houd al je medicijnen overzichtelijk door het overzicht te gebruiken. Je krijgt hierdoor eenvoudig toegang tot bijsluiters uit de officiële databanken."</string>
+<string name="intro_schedules_title">"Schema\'s"</string>
+<string name="intro_schedules_text">"Creëer een medicijnkalender d.m.v. de schemabewerker. Je kunt je innames koppelen aan routines, uurlijkse of dagelijkse herhalingen instellen en nog veel meer!"</string>
+<string name="intro_reminders_title">"Herinneringen"</string>
+<string name="intro_reminders_text">"Calendula stuurt je een melding over je innames. Denk eraan om dit te bevestigen, anders sturen we je opnieuw een melding!
+
+Pas meldingen aan in de instellingen."</string>
+<string name="intro_multipat_title">"Meerdere patiënten!"</string>
+<string name="intro_multipat_text">"Calendula stelt je in staat om de medicatie van meerdere patiënten te beheren, met hun eigen medicijnoverzicht, routines en schema\'s.
+
+Je kunt al hun innames bekijken op het hoofdscherm."</string>
+<string name="title_activity_settings">"Instellingen"</string>
+<string name="pref_header_general">"Algemeen"</string>
+<string name="pref_title_display_name">"Getoonde naam"</string>
+<string name="pref_default_display_name">"Calendula"</string>
+<string name="pref_header_notifications">"Meldingen"</string>
+<string name="pref_title_new_alarm_notification">"Medicijninname-meldingen"</string>
+<string name="pref_title_pickup_notification">"Medicijnen ophalen-meldingen"</string>
+<string name="pref_title_insistent_alarms">"Aanhoudende meldingen"</string>
+<string name="pref_title_repeat_alarms">"Meldingen herhalen"</string>
+<string name="pref_title_sync_frequency">"Herhalen, elke"</string>
+<string name="pref_title_reminder_window">"Meldingen verwerpen na"</string>
+<string name="pref_notification_tone">"Geluid"</string>
+<string name="pref_notification_tone_sum">"Standaard"</string>
+<string name="pref_alarm_repeat_five_min">"5 min"</string>
+<string name="pref_alarm_repeat_fifteen_min">"15 min"</string>
+<string name="pref_alarm_repeat_thirty_min">"30 min"</string>
+<string name="pref_alarm_repeat_sixty_min">"60 min"</string>
+<string name="pref_alarm_reminder_thirty_min">"30 min"</string>
+<string name="pref_alarm_reminder_one_hour">"1 uur"</string>
+<string name="pref_alarm_reminder_two_hours">"2 uur"</string>
+<string name="pref_enable_databases_title">"Medicijndatabank inschakelen"</string>
+<string name="pref_available_databases_title">"Geselecteerde databank"</string>
+<string name="pref_header_stock">"Voorraadbeheer"</string>
+<string name="pref_stock_do_not_warn">"Geen waarschuwing"</string>
+<string name="pref_stock_warn_one_week">"Minder dan één week"</string>
+<string name="pref_stock_warn_two_weeks">"Minder dan twee weken"</string>
+<string name="pref_stock_warn_three_weeks">"Minder dan drie weken"</string>
+<string name="database_none_display">"Geen"</string>
+
+<!-- for languages outside Spain please add (Spain) in your language at the end of the display string -->
+<string name="database_aemps_display">"AEMPS-databank (Spanien)"</string>
+<string name="database_aemps_desc">"Agencia Española de Medicamentos y Productos Sanitarios-databank"</string>
+<string name="database_setting_up">"Bezig met instellen…"</string>
+<string name="schedule_type_from_qr">"Van QR-code"</string>
+<string name="calendar_date_tomorrow">"morgen"</string>
+<string name="delays_one_min">"1 min"</string>
+<string name="delays_thirty_min">"30 min"</string>
+<string name="delays_fifteen_min">"15 min"</string>
+<string name="delays_sixty_min">"60 min"</string>
+<string name="text_take_medicines_now">"Neem je medicijnen nu in"</string>
+<string name="message_patients_name_required">"Voer een naam in."</string>
+<string name="label_patient_name">"Naam"</string>
+<string name="scan_barcode">"Barcode scannen"</string>
+<string name="title_database_update_available">"Databank-update beschikbaar"</string>
+<string name="text_database_update_available">"Er is een update beschikbaar van de huidige medicijndatabank. Wil je deze downloaden en installeren?"</string>
+<string name="action_download_update">"Druk hier om te downloaden en installeren"</string>
+<string name="text_database_update_data_lost">"In de nieuwste update van de databank zijn enkele van je medicijnen verwijderd. Ze blijven beschikbaar op je overzicht, maar je kunt geen bijsluiters e.d. meer bekijken."</string>
+<string name="title_database_update_data_lost">"Extra informatie verloren na update"</string>
+<string name="preference_check_for_updates">"Controleren op updates"</string>
+<string name="database_update_not_available">"Geen databank-update beschikbaar"</string>
+<string name="title_database_update_required">"Databank-update vereist"</string>
+<string name="message_database_update_required">"Deze versie van de app vereist een nieuwere databank. Wil je deze nu downloaden en instellen?
+Als je dit niet doet, dan kan sommige medicijninformatie verloren gaan."</string>
+<string name="download">"Downloaden"</string>
+<string name="message_no_internet_error">"Geen internetverbinding beschikbaar! Maak verbinding met het internet en probeer het opnieuw."</string>
+<string name="action_edit">"Bewerken"</string>
+<string name="injections">"Injecties"</string>
+<string name="title_reset_stock">"Voorraad terugzetten?"</string>
+<string name="message_reset_stock">"De voorraadinformatie van %1$s wordt teruggezet op de standaardwaarde."</string>
+<string name="reset">"Terugzetten"</string>
+<string name="edit_medicine">"Medicijn bewerken"</string>
+<string name="sort_by">"Sorteren op:"</string>
+<string name="sort_by_default">"Standaard"</string>
+<string name="sort_by_name">"Naam"</string>
+<string name="sort_by_presentation">"Presentatie"</string>
+<string name="action_sort">"Sorteren"</string>
+<string name="sort_by_alerts">"Meldingen"</string>
+<string name="title_activity_pickup_calendar_short">"Ophalen"</string>
+<string name="calendar_patient_all">"Alles"</string>
+<string name="calendar_updating">"Bezig met bijwerken van kalender..."</string>
+<string name="best_date_recommendation_title">"Advies"</string>
+<string name="best_single_day_message">"Bezoek je apotheek, %1$s, om %2$s medicijnen tegelijkertijd op te halen:"</string>
+<string name="best_single_day_message_one_med">"Bezoek je apotheek, %1$s, om het volgende op te halen:"</string>
+<string name="best_single_day_message_after_pending">"Nadien kun je opnieuw naar %1$s gaan om %2$s medicijnen tegelijkertijd op te halen:"</string>
+<string name="best_single_day_message_after_pending_one_med">"Nadien kun je opnieuw naar %1$s gaan en het volgende ophalen:"</string>
+<string name="pending_meds_msg">"Er staan medicijnen voor je klaar bij de apotheek; haal ze zo spoedig mogelijk op:"</string>
+<string name="best_date_format">"'op' d MMMM '('EEEE')'"</string>
+<string name="best_date_reminder">"Herinnering"</string>
+<string name="calendar_pickup_reminder_one_day_before">"1 dag ervoor"</string>
+<string name="calendar_pickup_reminder_two_days_before">"2 dagen ervoor"</string>
+<string name="calendar_pickup_reminder_three_days_before">"3 dagen ervoor"</string>
+<string name="calendar_no_medicines_to_pick_up">"Er zijn geen op te halen medicijnen."</string>
+<string name="ok">"Oké"</string>
+<string name="stock">"Voorraad"</string>
+<string name="expand">"Uitklappen"</string>
+<string name="show_pickups">"Ophalingen tonen"</string>
+<string name="help">"Hulp"</string>
+<string name="title_activity_medicines_search">"Medicijnen zoeken"</string>
+<string name="fingerprint_setup_dialog_message">"Wil je Calendula ontgrendelen met je vingerafdruk?"</string>
+<string name="fingerprint_setup_dialog_success">"Vingerafdruk-ontgrendeling ingschakeld!"</string>
+<string name="fingerprint_setup_dialog_title">"Gebruik je vingerafdruk om te ontgrendelen"</string>
+<string name="fingerprint_unlock_dialog_failed_message">"Zorg ervoor dat je vingerafdruksensor schoon is en probeer het opnieuw."</string>
+<string name="fingerprint_unlock_dialog_failed_title">"Vingerafdruk-authenticatie mislukt."</string>
+<string name="fingerprint_unlock_dialog_successful_message">"Even geduld…"</string>
+<string name="fingerprint_unlock_dialog_successful_title">"Authenticatie gelukt"</string>
+<string name="fingerprint_unlock_dialog_title">"Vingerafdruk-ontgrendeling"</string>
+<string name="fingerprint_unlock_dialog_use_pin">"Pincode-ontgrendeling"</string>
+<string name="pin_actions_dialog_cancel">"Annuleren"</string>
+<string name="pin_actions_dialog_delete">"Verwijderen"</string>
+<string name="pin_actions_dialog_message">"De app is vergrendeld met een pincode. Wat wil je doen?"</string>
+<string name="pin_actions_dialog_modify">"Bewerken"</string>
+<string name="pin_actions_dialog_title">"Pincode"</string>
+<string name="pin_delete_dialog_message">"Weet je zeker dat je de pinvergrendeling wilt verwijderen?"</string>
+<string name="pin_delete_dialog_title">"Pinvergrendeling verwijderen?"</string>
+<string name="pin_forgot_pin">"Pincode vergeten?"</string>
+<string name="pin_recovery_description">"Als je je pincode bent vergeten, dan kun je opnieuw inloggen om weer toegang te krijgen. Wil je doorgaan?"</string>
+<string name="pin_recovery_title">"Pincodeherstel"</string>
+<string name="pin_use_fingerprint">"Vingerafdruk gebruiken"</string>
+<string name="pref_fingerprint_enable_title">"Vingerafdruk-ontgrendeling"</string>
+<string name="pref_header_privacy">"Privacy"</string>
+<string name="pref_summary_pin_lock_set">"Pincode ingesteld"</string>
+<string name="pref_summary_pin_lock_unset">"Geen pincode ingesteld"</string>
+<string name="pref_title_pin_lock">"App-vergrendeling"</string>
+<string name="text_pinlock_auth_error">"De ingevoerde pincode is onjuist. Probeer het opnieuw."</string>
+<string name="text_pinlock_auth_prompt">"Voer je pincode in om door te gaan."</string>
+<string name="text_pinlock_match_error">"De ingevoerde codes komen niet overeen. Probeer het opnieuw."</string>
+<string name="text_pinlock_new_prompt">"Voer een viercijferige pincode in."</string>
+<string name="text_pinlock_or_fingerprint_auth_prompt">"Voer je pincode in of gebruik je vingerafdruk om door te gaan"</string>
+<string name="text_pinlock_repeat_prompt">"Voer dezelfde pincode nogmaals in..."</string>
+<string name="use_fingerprint_message">"of gebruik je vingerafdruk om te authenticeren"</string>
+<string name="reinstall_prescriptions_dialog_message">"Om je te voorzien van betere medicijninformatie, is het nodig dat je de medicijndatabank herinstalleert via de Instellingen. Als je dit niet doet, dan heb je geen toegang meer tot bijsluiters of andere extra functies.
+
+Aan je schema\'s, medicijnoverzicht, routines en andere basisfuncties verandert niks, ongeacht je keuze.
+
+Wil je de nieuwe databank nu installeren?
+"</string>
+<string name="pref_insistent_notification_tone">"Geluid van aanhoudende meldingen"</string>
+<string name="stock_enough_for_weeks_days">"Met de huidige schema\'s heb je voldoende voor %1$d weken en %2$d dagen"</string>
+<string name="stock_running_out_dialog_message">"Er zijn nog %1$d %2$s van %3$s aanwezig en met de huidige schema\'s raakt de voorraad raakt over %4$d dagen."</string>
+<string name="stock_running_out_dialog_title">"Voorraad van %1$s raakt op"</string>
+<string name="manage_stock">"Voorraad beheren"</string>
+<string name="message_generic_error">"Oeps! Er is een fout opgetreden."</string>
+<string name="ringtone_none">"Geen"</string>
+<string name="patient_add">"Patiënt toevoegen"</string>
+<string name="db_download_and_setup">"Downloaden en instellen"</string>
+<string name="schedule_continue_indefinitely">"Wil je dat dit schema oneindig wordt herhaald?"</string>
+<string name="powder">"Poeder"</string>
+<string name="cream">"Crème"</string>
+<plurals name="powder_units">
+<item quantity="one">"gram"</item>
+<item quantity="other">"gram"</item>
+</plurals>
+<plurals name="cream_units">
+<item quantity="one">"toepassing"</item>
+<item quantity="other">"toepassingen"</item>
+</plurals>
+<plurals name="generic_units">
+<item quantity="one">"eenheid"</item>
+<item quantity="other">"eenheden"</item>
+</plurals>
+<string name="generic_presentation">"Algemeen"</string>
+<string name="notification_taken">"Ingenomen"</string>
+</resources>
