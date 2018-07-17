@@ -518,4 +518,22 @@ Quieres instalar la nueva base de datos ahora?"</string>
 </plurals>
 <string name="generic_presentation">"Genérico"</string>
 <string name="notification_taken">"Tomado"</string>
+<string name="pref_pin_timeout_title">"Bloquear después de"</string>
+<string name="pref_lock_30s">"30 segundos"</string>
+<string name="pref_lock_1m">"1 minuto"</string>
+<string name="pref_lock_2m">"2 minutos"</string>
+<string name="pref_lock_5m">"5 minutos"</string>
+<string name="second">"segundo"</string>
+<string name="seconds">"segundos"</string>
+<string name="minute">"minuto"</string>
+<string name="minutes">"minutes"</string>
+<string name="hour">"hora"</string>
+<string name="day">"día"</string>
+<string name="days">"días"</string>
+<string name="week">"semana"</string>
+<string name="weeks">"semanas"</string>
+<string name="month">"mes"</string>
+<string name="months">"meses"</string>
+<string name="year">"año"</string>
+<string name="years">"años"</string>
 </resources>
