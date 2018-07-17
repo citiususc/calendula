@@ -395,7 +395,9 @@ Je kunt al hun innames bekijken op het hoofdscherm."</string>
 <string name="pref_stock_warn_two_weeks">"Minder dan twee weken"</string>
 <string name="pref_stock_warn_three_weeks">"Minder dan drie weken"</string>
 <string name="database_none_display">"Geen"</string>
-<string name="database_aemps_display">"AEMPS-databank"</string>
+
+<!-- for languages outside Spain please add (Spain) in your language at the end of the display string -->
+<string name="database_aemps_display">"AEMPS-databank (Spanien)"</string>
 <string name="database_aemps_desc">"Agencia Española de Medicamentos y Productos Sanitarios-databank"</string>
 <string name="database_setting_up">"Bezig met instellen…"</string>
 <string name="schedule_type_from_qr">"Van QR-code"</string>
