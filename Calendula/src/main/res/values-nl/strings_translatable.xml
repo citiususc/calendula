@@ -181,7 +181,7 @@ Lees de bijsluiter nauwkeurig of vraag je apotheker om advies voordat je achter 
 <string name="schedule_repeat_period">"Periode + tijdelijke stop"</string>
 <string name="schedule_repeat_type_everyday">"Elke dag"</string>
 <string name="schedule_repeat_type_some_week_days">"Enkele dagen per week"</string>
-<string name="schedule_repeat_type_interval">"Tussenpoos</string>
+<string name="schedule_repeat_type_interval">"Tussenpoos"</string>
 <string name="schedule_repeat_frequency_days">"dagen"</string>
 <string name="schedule_repeat_frequency_weeks">"weken"</string>
 <string name="schedule_repeat_frequency_months">"maanden"</string>
