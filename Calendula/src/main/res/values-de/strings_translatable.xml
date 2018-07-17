@@ -396,7 +396,9 @@ Sie werden alle ihre Einnahmen auf dem Startbildschirm sehen."</string>
 <string name="pref_stock_warn_two_weeks">"In weniger als 2 Wochen"</string>
 <string name="pref_stock_warn_three_weeks">"In weniger als 3 Wochen"</string>
 <string name="database_none_display">"Keine"</string>
-<string name="database_aemps_display">"AEMPS Datenbank"</string>
+
+<!-- for languages outside Spain please add (Spain) in your language at the end of the display string -->
+<string name="database_aemps_display">"AEMPS Datenbank (Spanien)"</string>
 <string name="database_aemps_desc">"Agencia Española de Medicamentos y Productos Sanitarios Datenbank"</string>
 <string name="database_setting_up">"Einrichtung läuft..."</string>
 <string name="schedule_type_from_qr">"Von QR-Code"</string>
