@@ -48,14 +48,14 @@ jobs:
 #      - run:
 #          name: Run Integration Tests
 #          command: ./gradlew connectedCiDebugAndroidTest --no-daemon
-      - run:
-          name: Generate Coverage Report
-          command: ./gradlew jacocoTestReportCiDebug --no-daemon
-      - store_artifacts:
-          path: Calendula/build/reports/
-          destination: reports
-      - run:
-          name: Report coverage
-          command: |
-            wget 'https://oss.sonatype.org/service/local/repositories/releases/content/com/codacy/codacy-coverage-reporter/2.0.2/codacy-coverage-reporter-2.0.2-assembly.jar' -O coverage-reporter.jar
-            java -cp coverage-reporter.jar com.codacy.CodacyCoverageReporter -l Java -r Calendula/build/reports/jacoco/ciDebug/jacoco.xml
+#      - run:
+#          name: Generate Coverage Report
+#          command: ./gradlew jacocoTestReportCiDebug --no-daemon
+#      - store_artifacts:
+#          path: Calendula/build/reports/
+#          destination: reports
+#      - run:
+#          name: Report coverage
+#          command: |
+#            wget 'https://oss.sonatype.org/service/local/repositories/releases/content/com/codacy/codacy-coverage-reporter/2.0.2/codacy-coverage-reporter-2.0.2-assembly.jar' -O coverage-reporter.jar
+#            java -cp coverage-reporter.jar com.codacy.CodacyCoverageReporter -l Java -r Calendula/build/reports/jacoco/ciDebug/jacoco.xml
