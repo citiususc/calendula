@@ -147,7 +147,7 @@
 <string name="medicine_unselected">"Non ancora selezionato"</string>
 <string name="medicine_no_presentation_error_message">"Seleziona una presentazione"</string>
 <string name="tutorial_understood">"Capito"</string>
-<string name="notification_repeat_message">"L'allarme verrà ripeturo alle %1$s"</string>
+<string name="notification_repeat_message">"L'allarme verrà ripetuto alle %1$s"</string>
 <string name="notification_cancel_now">"Cancella ora"</string>
 <string name="notification_delay">"Ritarda"</string>
 <string name="alarm_delayed_message">"Allarme ritardato di %1$s minuti"</string>
@@ -213,7 +213,7 @@
 <string name="create_schedule_select_med_before_dose">"Seleziona prima una medicina"</string>
 <string name="title_activity_patients">"Pazienti"</string>
 <string name="schedule_type_help_title">"Stai per creare un trattamento. Scegli quello più adatto alle tue esigenze!"</string>
-<string name="schedule_type_routines_help">"Questo tipo di trattamento ti permette di collegare le assunzioni alle tue routine. Ad esempio: \"Ogni giorno a colazione e cena, escludendo le domeniche, oppure \"Ogni 3 giorni, a pranzo.\""</string>
+<string name="schedule_type_routines_help">"Questo tipo di trattamento ti permette di collegare le assunzioni alle tue routine. Ad esempio: \"Ogni giorno a colazione e cena, escludendo le domeniche\", oppure \"Ogni 3 giorni, a pranzo.\""</string>
 <string name="schedule_type_hourly_help">"I trattamenti orari sono indicati per le assunzioni che si ripetono con un certo periodo. Ad esempio: \"Ogni 8 ore\". Imposta l'orario della prima assunzione."</string>
 <string name="schedule_type_intervalrest_help">"Le pillole contraccettive ed altri medicinali vanno assunti per un certo periodo e poi sospesi. Questo tipo di trattamento ti permette di specificare il periodo di assunzione e quello di pausa."</string>
 <string name="routines_list_empty_text">"Nessuna routine configurata.
@@ -295,7 +295,7 @@ Per lo sviluppo di Calendula utilizziamo diverse librerie open source di seguito
 <string name="search_hint">"Ricerca…"</string>
 <string name="database_us_display">"Database USA"</string>
 <string name="pref_stock_alert_title">"Avvertimi quando le mie scorte stanno per finire"</string>
-<string name="permission_dialog_go_to_settings">"Impossibile completare quest'azione perché la precedente richiesta di accesso allo storage è stata negata. Puoi dare l'autorizzazione nella scħermata di informazioni dell'app."</string>
+<string name="permission_dialog_go_to_settings">"Impossibile completare quest'azione perché la precedente richiesta di accesso allo storage è stata negata. Puoi dare l'autorizzazione nella schermata di informazioni dell'app."</string>
 <string name="permission_dialog_ok">"Vai alle informazioni dell'app"</string>
 <string name="title_alert_allergy">"Questa medicina non è compatibile con le tue allergie"</string>
 <string name="description_alert_allergy">"Hai specificato di essere allergico ad alcune componenti contenute in questa medicina. Allergeni:"</string>
@@ -336,7 +336,7 @@ Per lo sviluppo di Calendula utilizziamo diverse librerie open source di seguito
 <string name="dialog_get_me_out">"Fammi uscire di qui!"</string>
 <string name="dialog_continue_option">"Continua"</string>
 <string name="important_info">"Informazioni importanti"</string>
-<string name="download_db_dialog_title">"Comfigura database delle medicine"</string>
+<string name="download_db_dialog_title">"Configura database delle medicine"</string>
 <string name="download_db_dialog_message">"Il database verrà scaricato e configurato. Potrebbero volerci alcuni secondi, ma nel frattempo puoi continuare ad utilizzare l'applicazione."</string>
 <string name="download_db_unexpected_error">"Errore nello scaricamento del database :("</string>
 <string name="install_db_notification_title">"Configurazione del database"</string>
@@ -391,10 +391,12 @@ Potrai vedere tutte le assunzioni nella schermata principale."</string>
 <string name="pref_header_stock">"Controllo delle riserve"</string>
 <string name="pref_stock_do_not_warn">"Non avvisarmi"</string>
 <string name="pref_stock_warn_one_week">"In meno di una settimana"</string>
-<string name="pref_stock_warn_two_weeks">"In meno di 2 settinane"</string>
+<string name="pref_stock_warn_two_weeks">"In meno di 2 settimane"</string>
 <string name="pref_stock_warn_three_weeks">"In meno di 3 settimane"</string>
 <string name="database_none_display">"Nessuno"</string>
-<string name="database_aemps_display">"Database AEMPS"</string>
+
+<!-- for languages outside Spain please add (Spain) in your language at the end of the display string -->
+<string name="database_aemps_display">"Database AEMPS (Spagna)"</string>
 <string name="database_aemps_desc">"Database dell'Agencia Española de Medicamentos y Productos Sanitarios"</string>
 <string name="database_setting_up">"Configurazione…"</string>
 <string name="schedule_type_from_qr">"Codice QR"</string>
@@ -452,7 +454,7 @@ Se decidi di non scaricarlo, alcune informazioni riguardanti le tue medicine pot
 <string name="show_pickups">"Mostra ritiri"</string>
 <string name="help">"Aiuto"</string>
 <string name="title_activity_medicines_search">"Ricerca medicine"</string>
-<string name="fingerprint_setup_dialog_message">"Vuoi sbloccare Calendula usando l'impronŧa digitale?"</string>
+<string name="fingerprint_setup_dialog_message">"Vuoi sbloccare Calendula usando l'impronta digitale?"</string>
 <string name="fingerprint_setup_dialog_success">"Sblocco con impronta digitale abilitato!"</string>
 <string name="fingerprint_setup_dialog_title">"Usa l'impronta digitale per sbloccare"</string>
 <string name="fingerprint_unlock_dialog_failed_message">"Assicurati che il sensore delle impronte digitali sia pulito e riprova."</string>
@@ -507,9 +509,7 @@ Vuoi installare il nuovo database adesso?
 <item quantity="other">"grammi"</item>
 </plurals>
 <plurals name="cream_units">
-<item quantity="one">"applicazione
-	
-"</item>
+<item quantity="one">"applicazione"</item>
 <item quantity="other">"applicazioni"</item>
 </plurals>
 <plurals name="generic_units">
