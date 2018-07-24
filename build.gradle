@@ -6,7 +6,7 @@ buildscript {
     }
 
     ext {
-        kotlin_version = '1.2.50'
+        kotlin_version = '1.2.51'
         libVersions = [
                 android: [
                         support: '25.4.0'
