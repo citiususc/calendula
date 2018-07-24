@@ -5,7 +5,8 @@ jobs:
     docker:
       - image: circleci/android:api-25-alpha
     environment:
-      JVM_OPTS: -Xmx3200m
+      JAVA_OPTS: "-Xms512m -Xmx2048m"
+      GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
     steps:
       - checkout
       - restore_cache:
@@ -17,19 +18,17 @@ jobs:
 #            echo no | avdmanager create avd --name test -k "system-images;android-25;google_apis;armeabi-v7a"
       - run:
           name: Download Dependencies
-          command: ./gradlew androidDependencies --no-daemon
+          command: ./gradlew androidDependencies
       - save_cache:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "Calendula/build.gradle" }}
       - run:
           name: Build
-          command: ./gradlew assembleCiDebug --no-daemon
+          command: ./gradlew assembleCiDebug
       - run:
           name: Run Unit Tests
-          command: ./gradlew testCiDebugUnitTest --no-daemon
-          environment:
-            _JAVA_OPTIONS: "-Xmx2g"
+          command: ./gradlew testCiDebugUnitTest
       - store_artifacts:
           path: Calendula/build/reports/
           destination: reports
