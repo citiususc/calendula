@@ -31,6 +31,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.*
@@ -95,7 +96,7 @@ class PrivacyPrefsPresenterTest {
 
         // when started PIN, PIN summary should be "PIN set", and fingerprint pref should be enabled
         verify(view).setPINPrefText(kotlinEq(R.string.pref_summary_pin_lock_set))
-        verify(view).setFingerprintPrefEnabled(kotlinEq(true))
+        verify(view).setPINDependentPrefsEnabled(kotlinEq(true))
     }
 
     @Test
@@ -103,11 +104,11 @@ class PrivacyPrefsPresenterTest {
         presenter.onResult(
             PinLockActivity.REQUEST_PIN,
             Activity.RESULT_OK,
-            Intent().putExtra(PinLockActivity.EXTRA_PIN, FAKE_PIN)
+            Intent().putExtra(PinLockActivity.EXTRA_NEW_PIN, FAKE_PIN)
         )
 
         verify(view).setPINPrefText(kotlinEq(R.string.pref_summary_pin_lock_set))
-        verify(view).setFingerprintPrefEnabled(kotlinEq(true))
+        verify(view).setPINDependentPrefsEnabled(kotlinEq(true))
         verify(view).showEnableFingerprintDialog()
     }
 
@@ -120,9 +121,34 @@ class PrivacyPrefsPresenterTest {
         )
 
         verify(view, never()).setPINPrefText(Mockito.anyInt())
-        verify(view, never()).setFingerprintPrefEnabled(Mockito.anyBoolean())
+        verify(view, never()).setPINDependentPrefsEnabled(Mockito.anyBoolean())
         verify(view, never()).showEnableFingerprintDialog()
     }
+
+    @Test
+    fun onResultValidDelete() {
+        presenter.onResult(
+            PrivacyPrefsPresenter.REQUEST_DELETE,
+            Activity.RESULT_OK,
+            Intent().putExtra(PinLockActivity.EXTRA_VERIFY_PIN_RESULT, true)
+        )
+
+        verify(view).setPINPrefText(kotlinEq(R.string.pref_summary_pin_lock_unset))
+        verify(view).setPINDependentPrefsEnabled(kotlinEq(false))
+    }
+
+
+    @Test
+    fun onResultValidModify() {
+        presenter.onResult(
+            PrivacyPrefsPresenter.REQUEST_MODIFY,
+            Activity.RESULT_OK,
+            Intent().putExtra(PinLockActivity.EXTRA_VERIFY_PIN_RESULT, true)
+        )
+
+        verify(view).recordPIN()
+    }
+
 
     @Test
     fun onClickPINPrefWithPinSet() {
@@ -154,15 +180,14 @@ class PrivacyPrefsPresenterTest {
     fun confirmDeletePIN() {
         presenter.confirmDeletePIN()
 
-        verify(view).setPINPrefText(kotlinEq(R.string.pref_summary_pin_lock_unset))
-        verify(view).setFingerprintPrefEnabled(kotlinEq(false))
+        verify(view).verifyPIN(ArgumentMatchers.anyInt())
     }
 
     @Test
     fun onClickModifyPIN() {
         presenter.onClickModifyPIN()
 
-        verify(view).recordPIN()
+        verify(view).verifyPIN(ArgumentMatchers.anyInt())
     }
 
 }
