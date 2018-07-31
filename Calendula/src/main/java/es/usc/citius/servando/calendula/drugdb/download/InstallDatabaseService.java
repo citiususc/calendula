@@ -36,6 +36,7 @@ import es.usc.citius.servando.calendula.database.migrationHelpers.DrugModelMigra
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
+import es.usc.citius.servando.calendula.notifications.NotificationHelper;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
@@ -121,7 +122,7 @@ public class InstallDatabaseService extends IntentService {
     private void notifyDataMissing() {
 
         mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mBuilder = new NotificationCompat.Builder(this)
+        mBuilder = new NotificationCompat.Builder(this, NotificationHelper.CHANNEL_DEFAULT_ID)
                 .setTicker("")
                 .setSmallIcon(R.drawable.ic_launcher_white)
                 .setLargeIcon(IconUtils.icon(getApplicationContext(), GoogleMaterial.Icon.gmd_alert_triangle, R.color.white, 100).toBitmap())
@@ -175,7 +176,7 @@ public class InstallDatabaseService extends IntentService {
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, activity, PendingIntent.FLAG_CANCEL_CURRENT);
 
         mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mBuilder = new NotificationCompat.Builder(this)
+        mBuilder = new NotificationCompat.Builder(this, NotificationHelper.CHANNEL_DEFAULT_ID)
                 .setTicker("")
                 .setSmallIcon(android.R.drawable.stat_sys_download) //stat_notify_sync
                 .setTicker(getString(R.string.install_db_notification_ticker))
@@ -209,7 +210,7 @@ public class InstallDatabaseService extends IntentService {
     private void onFailure() {
         isRunning = false;
         if (mBuilder == null) {
-            mBuilder = new NotificationCompat.Builder(this);
+            mBuilder = new NotificationCompat.Builder(this, NotificationHelper.CHANNEL_DEFAULT_ID);
         }
         mBuilder.setContentTitle(getString(R.string.install_db_notification_onfailure));
         mBuilder.setContentText(getString(R.string.install_db_notification_onfailure_content));
