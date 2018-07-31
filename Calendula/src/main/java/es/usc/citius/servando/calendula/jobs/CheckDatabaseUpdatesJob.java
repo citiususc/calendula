@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 
 import com.evernote.android.job.JobRequest;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -97,7 +98,7 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
         PendingIntent updateIntent = PendingIntent.getService(ctx, 0, i, 0);
 
 
-        NotificationManager nManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManagerCompat nManager = NotificationManagerCompat.from(ctx);
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NotificationHelper.CHANNEL_DEFAULT_ID)
                 .setContentTitle(ctx.getString(R.string.title_database_update_available))
                 .setContentText(ctx.getString(R.string.action_download_update))

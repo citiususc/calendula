@@ -20,7 +20,6 @@ package es.usc.citius.servando.calendula.drugdb.download;
 
 import android.app.AlertDialog;
 import android.app.DownloadManager;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,6 +28,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Pair;
 import android.widget.Toast;
 
@@ -192,7 +192,7 @@ public class DownloadDatabaseHelper {
             PrescriptionDBMgr mgr = DBRegistry.instance().db(database);
             if (mgr != null) {
                 InstallDatabaseService.isRunning = true;
-                NotificationManager mNotifyManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+                final NotificationManagerCompat mNotifyManager = NotificationManagerCompat.from(ctx);
                 final DownloadManager manager = (DownloadManager) ctx.getSystemService(Context.DOWNLOAD_SERVICE);
 
 

@@ -20,7 +20,6 @@ package es.usc.citius.servando.calendula.activities;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +31,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.util.Pair;
 import android.text.SpannableStringBuilder;
 
@@ -141,15 +141,9 @@ public class ReminderNotification {
      */
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     public static void cancel(final Context context, int id) {
-        final NotificationManager nm =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
-            nm.cancel(NOTIFICATION_ROUTINE_TAG, id);
-            nm.cancel(NOTIFICATION_SCHEDULE_TAG, id);
-        } else {
-            nm.cancel(id);
-            nm.cancel(id);
-        }
+        final NotificationManagerCompat nm = NotificationManagerCompat.from(context);
+        nm.cancel(NOTIFICATION_ROUTINE_TAG, id);
+        nm.cancel(NOTIFICATION_SCHEDULE_TAG, id);
     }
 
     private static void showInsistentScreen(Context context, Intent i) {
@@ -363,13 +357,8 @@ public class ReminderNotification {
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     private static void notify(final Context context, int id, final Notification notification, String tag) {
         //int id = Math.abs(tag.hashCode());
-        final NotificationManager nm =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
-            nm.notify(tag, id, notification);
-        } else {
-            nm.notify(id, notification);
-        }
+        final NotificationManagerCompat nm = NotificationManagerCompat.from(context);
+        nm.notify(tag, id, notification);
     }
 
     private static class NotificationOptions {

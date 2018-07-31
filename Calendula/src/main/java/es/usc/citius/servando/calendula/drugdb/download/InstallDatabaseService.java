@@ -19,12 +19,12 @@
 package es.usc.citius.servando.calendula.drugdb.download;
 
 import android.app.IntentService;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.util.Pair;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -58,8 +58,8 @@ public class InstallDatabaseService extends IntentService {
     private static final String EXTRA_DB_VERSION = "calendula.persistence.medDatabases.extra.DB_VERSION";
     public static int NOTIFICATION_ID = "InstallDatabaseService".hashCode();
     public static boolean isRunning = false;
-    NotificationCompat.Builder mBuilder;
-    NotificationManager mNotifyManager;
+    private NotificationCompat.Builder mBuilder;
+    private NotificationManagerCompat mNotifyManager;
 
     public InstallDatabaseService() {
         super("SetupDBService");
@@ -121,7 +121,6 @@ public class InstallDatabaseService extends IntentService {
 
     private void notifyDataMissing() {
 
-        mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mBuilder = new NotificationCompat.Builder(this, NotificationHelper.CHANNEL_DEFAULT_ID)
                 .setTicker("")
                 .setSmallIcon(R.drawable.ic_launcher_white)
@@ -131,7 +130,7 @@ public class InstallDatabaseService extends IntentService {
                 .setContentTitle(getString(R.string.title_database_update_data_lost))
                 .setContentText(getString(R.string.text_database_update_data_lost));
 
-        mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
+        getNotificationManager().notify(NOTIFICATION_ID, mBuilder.build());
     }
 
     private void handleSetup(final String dbPath, final String dbPref, final String dbVersion) {
@@ -175,7 +174,6 @@ public class InstallDatabaseService extends IntentService {
         Intent activity = new Intent(this, MedicinesActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, activity, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mBuilder = new NotificationCompat.Builder(this, NotificationHelper.CHANNEL_DEFAULT_ID)
                 .setTicker("")
                 .setSmallIcon(android.R.drawable.stat_sys_download) //stat_notify_sync
@@ -186,7 +184,7 @@ public class InstallDatabaseService extends IntentService {
                 .setContentText(getString(R.string.install_db_notification_content))
                 .setProgress(max, prog, false);
 
-        mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
+        getNotificationManager().notify(NOTIFICATION_ID, mBuilder.build());
     }
 
     private void onComplete() {
@@ -198,7 +196,7 @@ public class InstallDatabaseService extends IntentService {
         mBuilder.setSmallIcon(R.drawable.ic_done_white_36dp);
         mBuilder.setContentInfo("");
 
-        mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
+        getNotificationManager().notify(NOTIFICATION_ID, mBuilder.build());
         Intent bcIntent = new Intent();
         bcIntent.setAction(ACTION_COMPLETE);
         sendBroadcast(bcIntent);
@@ -220,10 +218,14 @@ public class InstallDatabaseService extends IntentService {
         mBuilder.setContentInfo("");
         mBuilder.setContentIntent(null);
 
+        getNotificationManager().notify(NOTIFICATION_ID, mBuilder.build());
+    }
+
+    private NotificationManagerCompat getNotificationManager() {
         if (mNotifyManager == null) {
-            mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotifyManager = NotificationManagerCompat.from(this);
         }
-        mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
+        return mNotifyManager;
     }
 
 }

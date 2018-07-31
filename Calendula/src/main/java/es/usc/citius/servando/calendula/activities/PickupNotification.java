@@ -20,7 +20,6 @@ package es.usc.citius.servando.calendula.activities;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +28,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.notifications.NotificationHelper;
@@ -105,15 +105,12 @@ public class PickupNotification {
      */
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     public static void cancel(final Context context) {
-        final NotificationManager nm = (NotificationManager) context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.cancel(NOTIFICATION_TAG, 0);
+        NotificationManagerCompat.from(context).cancel(NOTIFICATION_TAG, 0);
     }
 
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     private static void notify(final Context context, final Notification notification) {
-        final NotificationManager nm = (NotificationManager) context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.notify(NOTIFICATION_TAG, 0, notification);
+        NotificationManagerCompat.from(context)
+                .notify(NOTIFICATION_TAG, 0, notification);
     }
 }
