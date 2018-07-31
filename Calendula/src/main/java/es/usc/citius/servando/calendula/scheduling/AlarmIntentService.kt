@@ -67,7 +67,7 @@ class AlarmIntentService : JobIntentService() {
             CalendulaApp.ACTION_ROUTINE_TIME, CalendulaApp.ACTION_ROUTINE_DELAYED_TIME -> {
                 AlarmScheduler.instance().onAlarmReceived(
                     params,
-                    this.applicationContextg
+                    this.applicationContext
                 )
             }
 
