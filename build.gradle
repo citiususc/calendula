@@ -9,7 +9,7 @@ buildscript {
         kotlin_version = '1.2.51'
         libVersions = [
                 android: [
-                        support: '25.4.0'
+                        support: '26.1.0'
                 ]
         ]
     }
