@@ -33,7 +33,7 @@ apply from: 'config.gradle'
 repositories {
     mavenCentral()
     jcenter()
-    maven { url "https://maven.google.com" }
+    google()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     maven { url 'https://jitpack.io' }
 }
@@ -76,7 +76,7 @@ android {
     buildToolsVersion '27.0.3'
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 37
         versionName "2.5.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
