@@ -214,14 +214,14 @@ dependencies {
     androidTestImplementation "org.mockito:mockito-android:2.13.0"
 
     // Support testing
-    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    androidTestImplementation 'com.android.support.test:rules:1.0.1'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 
     // Roboelectric
-    testImplementation "org.robolectric:robolectric:3.6.1"
-    testImplementation "org.robolectric:shadows-multidex:3.6.1"
+    testImplementation "org.robolectric:robolectric:3.8"
+    testImplementation "org.robolectric:shadows-multidex:3.8"
 
     /********** UTILITIES **********/
     // HTML parsing
