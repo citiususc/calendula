@@ -61,7 +61,7 @@ object NotificationHelper {
             val defaultChannel = NotificationChannel(
                 CHANNEL_DEFAULT_ID,
                 defaultChannelName,
-                NotificationManager.IMPORTANCE_HIGH
+                NotificationManager.IMPORTANCE_DEFAULT
             )
 
             defaultChannel.description = defaultChannelDesc
