@@ -16,40 +16,42 @@
  *    along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package es.usc.citius.servando.calendula.scheduling;
+package es.usc.citius.servando.calendula.scheduling
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 
-import es.usc.citius.servando.calendula.CalendulaApp;
-import es.usc.citius.servando.calendula.util.LogUtil;
+import es.usc.citius.servando.calendula.CalendulaApp
+import es.usc.citius.servando.calendula.util.LogUtil
 
 /**
  * This class receives our routine alarms
  */
-public class AlarmReceiver extends BroadcastReceiver {
+class AlarmReceiver : BroadcastReceiver() {
 
-    private static final String TAG = "AlarmReceiver.class";
+    companion object {
+        private const val TAG = "AlarmReceiver"
+    }
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
+    override fun onReceive(context: Context, intent: Intent) {
 
         if (CalendulaApp.disableReceivers) {
-            return;
+            return
         }
 
-        AlarmIntentParams params = AlarmScheduler.getAlarmParams(intent);
+        val params = AlarmScheduler.getAlarmParams(intent)
 
         if (params == null) {
-            LogUtil.w(TAG, "No extra params supplied");
-            return;
+            LogUtil.w(TAG, "No extra params supplied")
+            return
         } else {
-            LogUtil.d(TAG, "Received alarm: " + params.action);
+            LogUtil.d(TAG, "Received alarm: " + params.action)
         }
 
-        Intent serviceIntent = new Intent(context, AlarmIntentService.class);
-        AlarmScheduler.setAlarmParams(serviceIntent, params);
-        context.startService(serviceIntent);
+        val serviceIntent = Intent(context, AlarmIntentService::class.java)
+        AlarmScheduler.setAlarmParams(serviceIntent, params)
+        AlarmIntentService.enqueueWork(context, serviceIntent)
     }
+
 }
