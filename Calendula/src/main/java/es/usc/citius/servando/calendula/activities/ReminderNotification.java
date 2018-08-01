@@ -242,7 +242,7 @@ public class ReminderNotification {
             // add delay button and cancel button
             builder.addAction(R.drawable.ic_history_white_24dp, res.getString(R.string.notification_delay), options.delayIntent)
                     .addAction(R.drawable.ic_alarm_off_white_24dp, res.getString(R.string.notification_cancel_now), options.cancelIntent)
-                    .addAction(R.drawable.ic_done_white_36dp, res.getString(R.string.take), options.confirmAllIntent);
+                    .addAction(R.drawable.ic_done_white_36dp, res.getString(R.string.notification_taken), options.confirmAllIntent);
 
             builder.extend((new NotificationCompat.WearableExtender()
                     .addAction(new NotificationCompat.Action.Builder(
