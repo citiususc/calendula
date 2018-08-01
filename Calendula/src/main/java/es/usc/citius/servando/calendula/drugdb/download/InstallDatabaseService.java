@@ -18,7 +18,6 @@
 
 package es.usc.citius.servando.calendula.drugdb.download;
 
-import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -46,7 +45,7 @@ import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
- * An {@link IntentService} subclass for handling asynchronous database setup tasks
+ * An {@link JobIntentService} subclass for handling asynchronous database setup tasks
  */
 public class InstallDatabaseService extends JobIntentService {
 
