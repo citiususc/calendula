@@ -28,12 +28,13 @@ interface PrivacyPrefsContract {
     interface View : IView {
 
         fun recordPIN()
+        fun verifyPIN(requestCode: Int)
         fun showPINOptions()
         fun showConfirmDeletePinChoice()
         fun setPINPrefText(@StringRes pinPrefText: Int)
         fun setFingerprintPrefEnabled(enabled: Boolean)
+        fun setPINDependentPrefsEnabled(enabled: Boolean)
         fun showEnableFingerprintDialog()
-
     }
 
     interface Presenter : IPresenter<View> {

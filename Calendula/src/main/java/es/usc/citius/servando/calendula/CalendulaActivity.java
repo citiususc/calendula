@@ -21,6 +21,7 @@ package es.usc.citius.servando.calendula;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -38,6 +39,11 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.usc.citius.servando.calendula.activities.StartActivity;
+import es.usc.citius.servando.calendula.pinlock.PINManager;
+import es.usc.citius.servando.calendula.pinlock.PinLockActivity;
+import es.usc.citius.servando.calendula.pinlock.UnlockStateManager;
+import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PermissionUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 
@@ -177,4 +183,16 @@ public abstract class CalendulaActivity extends AppCompatActivity {
         alert.show();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (PINManager.isPINSet() && !UnlockStateManager.getInstance().isUnlocked() && !(this instanceof PinLockActivity)) {
+            // If we get unlock timeout on resume, we'll call StartActivity to ask for a PIN
+            LogUtil.d("CalendulaActivity", "Unlock has expired");
+            final Intent i = new Intent(this, StartActivity.class);
+            i.putExtra(StartActivity.EXTRA_RETURN_TO_PREVIOUS, true);
+            //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+        }
+    }
 }

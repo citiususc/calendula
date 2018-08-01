@@ -38,15 +38,15 @@ Non-code contributions are also welcome!. You can do a lot of things:
 
 > Join the  BETA channel: [click here!](https://play.google.com/apps/testing/es.usc.citius.servando.calendula)
 
-
 ### Help with app translations
+
 Contributing translations is now easier than ever! Just join us at POEditor using [this link](https://poeditor.com/join/project/kIdyqFodDn) and start translating Calendula to one of the existing languages, or suggest a new one. **This is the recommended method for translations**.
 You can also contribute with better translations for particular words or sentences.
 
 Alternatively, you can contribute translations via pull request:
 
- * Add a new folder named `values-{LANG}/` at `Calendula/src/main/res/`
- * Translate the `strings_translatable.xml` file from `values` to your desired language.
- * Send a pull request.
+* Add a new folder named `values-{LANG}/` at `Calendula/src/main/res/`.
+* Translate the `strings_translatable.xml` file from `Calendula/src/main/res/values` to your desired language.
+* Send a pull request to the `translations` branch.
 
 You can also improve an existing `strings_translatable.xml` file and make a PR with that!

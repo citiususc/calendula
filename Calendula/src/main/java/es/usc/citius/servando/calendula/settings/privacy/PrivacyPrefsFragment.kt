@@ -22,6 +22,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v14.preference.SwitchPreference
+import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog
 import com.github.javiersantos.materialstyleddialogs.enums.Style
@@ -43,6 +44,7 @@ class PrivacyPrefsFragment :
     PrivacyPrefsContract.View {
 
 
+
     companion object {
         private const val TAG = "PrivacyPrefsFragment"
     }
@@ -58,6 +60,7 @@ class PrivacyPrefsFragment :
 
     private val pinPref: Preference by lazy { findPreference(PreferenceKeys.UNLOCK_PIN.key()) }
     private val fingerprintPref: SwitchPreference by lazy { findPreference(PreferenceKeys.FINGERPRINT_ENABLED.key()) as SwitchPreference }
+    private val pinTimeoutPref: ListPreference by lazy { findPreference(PreferenceKeys.UNLOCK_PIN_TIMEOUT.key()) as ListPreference }
 
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -68,6 +71,8 @@ class PrivacyPrefsFragment :
             presenter.onClickPINPref()
             true
         }
+        pinTimeoutPref.summary = pinTimeoutPref.entry
+
 
     }
 
@@ -77,11 +82,16 @@ class PrivacyPrefsFragment :
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        //noop
+        when (key) {
+            pinTimeoutPref.key -> {
+                pinTimeoutPref.summary = pinTimeoutPref.entry
+            }
+        }
     }
 
     override fun recordPIN() {
         val i = Intent(activity, PinLockActivity::class.java)
+        i.action = PinLockActivity.ACTION_NEW_PIN
         startActivityForResult(i, PinLockActivity.REQUEST_PIN)
     }
 
@@ -148,9 +158,19 @@ class PrivacyPrefsFragment :
         fingerprintPref.isEnabled = enabled
     }
 
-    override fun showEnableFingerprintDialog() {
-        // noop
+    override fun setPINDependentPrefsEnabled(enabled: Boolean) {
+        pinTimeoutPref.isEnabled = enabled
     }
 
+
+    override fun showEnableFingerprintDialog() {
+        //TODO
+    }
+
+    override fun verifyPIN(requestCode: Int) {
+        val i = Intent(activity, PinLockActivity::class.java)
+        i.action = PinLockActivity.ACTION_VERIFY_PIN
+        startActivityForResult(i, requestCode)
+    }
 
 }

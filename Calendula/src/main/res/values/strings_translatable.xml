@@ -395,7 +395,9 @@ You will see all their intakes in the home screen."</string>
 <string name="pref_stock_warn_two_weeks">"In less than 2 weeks"</string>
 <string name="pref_stock_warn_three_weeks">"In less than 3 weeks"</string>
 <string name="database_none_display">"None"</string>
-<string name="database_aemps_display">"AEMPS Database"</string>
+
+<!-- for languages outside Spain please add (Spain) in your language at the end of the display string -->
+<string name="database_aemps_display">"AEMPS Database (Spain)"</string>
 <string name="database_aemps_desc">"Agencia Española de Medicamentos y Productos Sanitarios database"</string>
 <string name="database_setting_up">"Setting up…"</string>
 <string name="schedule_type_from_qr">"From QR"</string>
@@ -517,4 +519,22 @@ Do you want to install the new database now?
 </plurals>
 <string name="generic_presentation">"Generic"</string>
 <string name="notification_taken">"Taken"</string>
+<string name="pref_pin_timeout_title">"Lock after"</string>
+<string name="pref_lock_30s">"30 seconds"</string>
+<string name="pref_lock_1m">"1 minute"</string>
+<string name="pref_lock_2m">"2 minutes"</string>
+<string name="pref_lock_5m">"5 minutes"</string>
+<string name="second">"second"</string>
+<string name="seconds">"seconds"</string>
+<string name="minute">"minute"</string>
+<string name="minutes">"minutes"</string>
+<string name="hour">"hour"</string>
+<string name="day">"day"</string>
+<string name="days">"days"</string>
+<string name="week">"week"</string>
+<string name="weeks">"weeks"</string>
+<string name="month">"month"</string>
+<string name="months">"months"</string>
+<string name="year">"year"</string>
+<string name="years">"years"</string>
 </resources>

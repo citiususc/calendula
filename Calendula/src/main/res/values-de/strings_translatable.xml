@@ -396,7 +396,9 @@ Sie werden alle ihre Einnahmen auf dem Startbildschirm sehen."</string>
 <string name="pref_stock_warn_two_weeks">"In weniger als 2 Wochen"</string>
 <string name="pref_stock_warn_three_weeks">"In weniger als 3 Wochen"</string>
 <string name="database_none_display">"Keine"</string>
-<string name="database_aemps_display">"AEMPS Datenbank"</string>
+
+<!-- for languages outside Spain please add (Spain) in your language at the end of the display string -->
+<string name="database_aemps_display">"AEMPS Datenbank (Spanien)"</string>
 <string name="database_aemps_desc">"Agencia Española de Medicamentos y Productos Sanitarios Datenbank"</string>
 <string name="database_setting_up">"Einrichtung läuft..."</string>
 <string name="schedule_type_from_qr">"Von QR-Code"</string>
@@ -503,4 +505,20 @@ Wollen Sie nun die neue Datenbank installieren?
 <string name="patient_add">"Neuer Patient"</string>
 <string name="db_download_and_setup">"Herunterladen und installieren"</string>
 <string name="schedule_continue_indefinitely">"Soll dieser Einnahmeplan dauerhaft fortgeführt werden?"</string>
+<string name="powder">"Puder"</string>
+<string name="cream">"Creme"</string>
+<plurals name="powder_units">
+<item quantity="one">"Gramm"</item>
+<item quantity="other">"Gramm"</item>
+</plurals>
+<plurals name="cream_units">
+<item quantity="one">"Anwendung"</item>
+<item quantity="other">"Anwendungen"</item>
+</plurals>
+<plurals name="generic_units">
+<item quantity="one">"Einheit"</item>
+<item quantity="other">"Einheiten"</item>
+</plurals>
+<string name="generic_presentation">"Generisch"</string>
+<string name="notification_taken">"Eingenommen"</string>
 </resources>

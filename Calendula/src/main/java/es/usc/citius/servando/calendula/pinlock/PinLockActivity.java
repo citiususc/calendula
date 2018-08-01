@@ -57,8 +57,12 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 public class PinLockActivity extends CalendulaActivity {
 
-    public static final String EXTRA_PIN = "PinLockActivity.result";
+    public static final String EXTRA_NEW_PIN = "PinLockActivity.newpin.result";
+    public static final String EXTRA_VERIFY_PIN_RESULT = "PinLockActivity.verify.result";
+    public static final String ACTION_NEW_PIN = "PinLockActivity.action.new_pin";
+    public static final String ACTION_VERIFY_PIN = "PinLockActivity.action.verify_pin";
     public static final int REQUEST_PIN = 15765;
+    public static final int REQUEST_VERIFY = 15766;
     private static final int PIN_SIZE = 4;
 
     private static final String TAG = "PinLockActivity";
@@ -125,6 +129,7 @@ public class PinLockActivity extends CalendulaActivity {
         fpHelper.startAuthentication(new LoginFPCallbackAdapter(this, fingerprintDialog));
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private void showFingerprintDialog() {
         fingerprintDialog = new MaterialDialog.Builder(this)
                 .icon(IconUtils.icon(this, CommunityMaterial.Icon.cmd_fingerprint, R.color.android_blue_dark, 48))
@@ -147,6 +152,15 @@ public class PinLockActivity extends CalendulaActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pin_lock);
         ButterKnife.bind(this);
+
+        if (!isCalledForResult()) {
+            throw new IllegalStateException("This activity can only be called for result");
+        }
+
+        final String action = getIntent().getAction();
+        if (action == null) {
+            throw new IllegalArgumentException("Action required!");
+        }
 
         pinInputStateManager = new PinInputStateManager(PIN_SIZE);
         indicatorDotView.setSize(PIN_SIZE);
@@ -176,23 +190,25 @@ public class PinLockActivity extends CalendulaActivity {
                 android.graphics.PorterDuff.Mode.MULTIPLY);
 
         setupStatusBar(ContextCompat.getColor(this, R.color.android_blue_dark));
-        if (isCalledForResult()) {
-            // if called for result we will return a PIN
-            pinInputStateManager.setPinCompleteListener(new NewPinListener());
-            promptMessage.setText(R.string.text_pinlock_new_prompt);
-            setupToolbar(null, ContextCompat.getColor(this, R.color.android_blue_dark));
-        } else {
-            // if not called for result, we will authorize access
-            pinInputStateManager.setPinCompleteListener(new AuthorizeAccessListener());
-            errorMessage.setVisibility(View.GONE); // indicator shows error
-            promptMessage.setText(R.string.text_pinlock_auth_prompt);
-            footer.setVisibility(View.VISIBLE);
-            toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
-            toolbar.setVisibility(View.GONE);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                setupFingerprintAuth();
-            }
+        switch (action) {
+            case ACTION_NEW_PIN:
+                pinInputStateManager.setPinCompleteListener(new NewPinListener());
+                promptMessage.setText(R.string.text_pinlock_new_prompt);
+                setupToolbar(null, ContextCompat.getColor(this, R.color.android_blue_dark));
+                break;
+            case ACTION_VERIFY_PIN:
+                pinInputStateManager.setPinCompleteListener(new AuthorizeAccessListener());
+                errorMessage.setVisibility(View.GONE); // indicator shows error
+                promptMessage.setText(R.string.text_pinlock_auth_prompt);
+                footer.setVisibility(View.VISIBLE);
+                toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+                toolbar.setVisibility(View.GONE);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    setupFingerprintAuth();
+                }
+                break;
         }
     }
 
@@ -233,6 +249,14 @@ public class PinLockActivity extends CalendulaActivity {
         return calledForResult;
     }
 
+    @Override
+    public void onBackPressed() {
+        // delete a number if possible, else go back
+        if (!pinInputStateManager.delete()) {
+            super.onBackPressed();
+        }
+    }
+
     private class NewPinListener implements PinInputStateManager.PinInputCompleteListener {
 
         private String firstPin;
@@ -256,7 +280,7 @@ public class PinLockActivity extends CalendulaActivity {
                         if (pin.equals(firstPin)) {
                             // everything's fine, return the PIN
                             Intent returnIntent = new Intent();
-                            returnIntent.putExtra(EXTRA_PIN, pin);
+                            returnIntent.putExtra(EXTRA_NEW_PIN, pin);
                             setResult(Activity.RESULT_OK, returnIntent);
                             LogUtil.d(TAG, "PIN input correct");
                             finish();
@@ -291,11 +315,8 @@ public class PinLockActivity extends CalendulaActivity {
             boolean checkPIN = PINManager.checkPIN(pin);
             if (checkPIN) {
                 //PIN is correct, forward to main activity
-                LogUtil.d(TAG, "PIN is correct, setting unlock and forwarding to main activity");
-                UnlockStateManager.getInstance().unlock();
-                Intent i = new Intent(PinLockActivity.this, StartActivity.class);
-                startActivity(i);
-                finish();
+                LogUtil.d(TAG, "PIN is correct");
+                returnVerifiedResult();
             } else {
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -314,13 +335,21 @@ public class PinLockActivity extends CalendulaActivity {
 
     }
 
+    private void returnVerifiedResult() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(EXTRA_VERIFY_PIN_RESULT, true);
+        setResult(Activity.RESULT_OK, returnIntent);
+        UnlockStateManager.getInstance().unlock();
+        finish();
+    }
+
 
     private static class LoginFPCallbackAdapter implements FingerprintHelper.FingerprintCallbackAdapter {
 
-        private Activity activity;
+        private PinLockActivity activity;
         private MaterialDialog fingerprintDialog;
 
-        LoginFPCallbackAdapter(Activity activity, MaterialDialog fingerprintDialog) {
+        LoginFPCallbackAdapter(PinLockActivity activity, MaterialDialog fingerprintDialog) {
             this.activity = activity;
             this.fingerprintDialog = fingerprintDialog;
         }
@@ -344,10 +373,15 @@ public class PinLockActivity extends CalendulaActivity {
                 fingerprintDialog.setContent(R.string.fingerprint_unlock_dialog_successful_message);
                 fingerprintDialog.setIcon(IconUtils.icon(activity, GoogleMaterial.Icon.gmd_check_circle, R.color.android_green, 48));
             }
-            UnlockStateManager.getInstance().unlock();
-            Intent i = new Intent(activity, StartActivity.class);
-            activity.startActivity(i);
-            activity.finish();
+
+            switch (activity.getIntent().getAction()) {
+                case ACTION_NEW_PIN:
+                    throw new IllegalArgumentException("No fingerprint allowed for new pin recording");
+                case ACTION_VERIFY_PIN:
+                    activity.returnVerifiedResult();
+                    break;
+            }
+
         }
     }
 }
