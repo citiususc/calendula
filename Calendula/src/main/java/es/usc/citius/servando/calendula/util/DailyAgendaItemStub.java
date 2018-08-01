@@ -18,6 +18,8 @@
 
 package es.usc.citius.servando.calendula.util;
 
+import android.graphics.drawable.Drawable;
+
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -74,6 +76,7 @@ public class DailyAgendaItemStub {
         public double dose;
         public boolean taken;
 
+        public Drawable medNameDecorator;
         public String medName;
         public String minute;
         public String displayDose;

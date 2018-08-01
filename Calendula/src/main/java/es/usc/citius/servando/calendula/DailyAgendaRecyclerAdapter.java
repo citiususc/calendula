@@ -345,11 +345,16 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             TextView medName = (TextView) intakeView.findViewById(R.id.med_item_name);
             TextView medDose = (TextView) intakeView.findViewById(R.id.med_item_dose);
             ImageView image = (ImageView) intakeView.findViewById(R.id.imageView);
-
+            ImageView nameDecorator = (ImageView) intakeView.findViewById(R.id.name_decorator);
             String units = element.presentation.units(viewHolder.context.getResources(), element.dose);
             image.setImageDrawable(medIcon(element.presentation.icon(), intakeView.getContext()));
             medDose.setText(element.displayDose + " " + units);
             medName.setText(element.medName);
+            if (element.medNameDecorator != null) {
+                nameDecorator.setImageDrawable(element.medNameDecorator);
+            } else {
+                nameDecorator.setVisibility(View.GONE);
+            }
 
             if (element.taken) {
                 intakeView.findViewById(R.id.ic_done).setVisibility(View.VISIBLE);
