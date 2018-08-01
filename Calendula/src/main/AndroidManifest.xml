@@ -171,11 +171,13 @@
 
         <service
             android:name=".scheduling.AlarmIntentService"
-            android:label="AlarmIntentService"/>
+            android:label="AlarmIntentService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
         <service
             android:name=".drugdb.download.InstallDatabaseService"
-            android:exported="false"/>
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
         <service
             android:name=".drugdb.download.UpdateDatabaseService"

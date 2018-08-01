@@ -67,7 +67,7 @@ class NotificationPrefsPresenterTest {
         PreferenceUtils.edit().putString(
             PreferenceKeys.SETTINGS_INSISTENT_NOTIFICATION_TONE.key(),
             INITIAL_RINGTONE_URI
-        ).commit()
+        ).apply()
 
         presenter = NotificationPrefsPresenter(
             resolver

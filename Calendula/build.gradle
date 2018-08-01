@@ -33,7 +33,7 @@ apply from: 'config.gradle'
 repositories {
     mavenCentral()
     jcenter()
-    maven { url "https://maven.google.com" }
+    google()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     maven { url 'https://jitpack.io' }
 }
@@ -76,7 +76,7 @@ android {
     buildToolsVersion '27.0.3'
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 37
         versionName "2.5.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -214,14 +214,14 @@ dependencies {
     androidTestImplementation "org.mockito:mockito-android:2.13.0"
 
     // Support testing
-    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    androidTestImplementation 'com.android.support.test:rules:1.0.1'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 
     // Roboelectric
-    testImplementation "org.robolectric:robolectric:3.6.1"
-    testImplementation "org.robolectric:shadows-multidex:3.6.1"
+    testImplementation "org.robolectric:robolectric:3.8"
+    testImplementation "org.robolectric:shadows-multidex:3.8"
 
     /********** UTILITIES **********/
     // HTML parsing

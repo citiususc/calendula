@@ -72,7 +72,7 @@ class DatabasePrefsPresenterTest {
         // Reset db id
         PreferenceUtils.edit()
             .putString(PreferenceKeys.DRUGDB_CURRENT_DB.key(), INITIAL_DB_ID)
-            .commit()
+            .apply()
 
 
         dbPrefPresenter = DatabasePrefsPresenter(INITIAL_DB_ID)
