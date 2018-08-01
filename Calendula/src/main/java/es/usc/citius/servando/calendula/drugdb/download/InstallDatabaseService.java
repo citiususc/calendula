@@ -23,6 +23,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+import android.support.v4.app.JobIntentService;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.util.Pair;
@@ -46,7 +48,7 @@ import es.usc.citius.servando.calendula.util.PreferenceUtils;
 /**
  * An {@link IntentService} subclass for handling asynchronous database setup tasks
  */
-public class InstallDatabaseService extends IntentService {
+public class InstallDatabaseService extends JobIntentService {
 
     public static final String ACTION_COMPLETE = "calendula.persistence.medDatabases.action.DONE";
     public static final String ACTION_ERROR = "calendula.persistence.medDatabases.action.ERROR";
@@ -61,9 +63,7 @@ public class InstallDatabaseService extends IntentService {
     private NotificationCompat.Builder mBuilder;
     private NotificationManagerCompat mNotifyManager;
 
-    public InstallDatabaseService() {
-        super("SetupDBService");
-    }
+    private static final int JOB_ID = 1;
 
     public static void startSetup(Context context, String dbPath, Pair<String, String> databaseInfo, DBInstallType type) {
         context = context.getApplicationContext();
@@ -79,21 +79,19 @@ public class InstallDatabaseService extends IntentService {
         intent.putExtra(EXTRA_DB_PATH, dbPath);
         intent.putExtra(EXTRA_DB_PREF_VALUE, databaseInfo.first);
         intent.putExtra(EXTRA_DB_VERSION, databaseInfo.second);
-        context.startService(intent);
+        JobIntentService.enqueueWork(context, InstallDatabaseService.class, JOB_ID, intent);
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
-            final String action = intent.getAction();
-            if (ACTION_SETUP.equals(action) || ACTION_UPDATE.equals(action)) {
-                final String dbPath = intent.getStringExtra(EXTRA_DB_PATH);
-                final String dbPref = intent.getStringExtra(EXTRA_DB_PREF_VALUE);
-                final String dbVersion = intent.getStringExtra(EXTRA_DB_VERSION);
-                handleSetup(dbPath, dbPref, dbVersion);
-                if (ACTION_UPDATE.equals(action)) {
-                    checkForInvalidData();
-                }
+    protected void onHandleWork(@NonNull Intent intent) {
+        final String action = intent.getAction();
+        if (ACTION_SETUP.equals(action) || ACTION_UPDATE.equals(action)) {
+            final String dbPath = intent.getStringExtra(EXTRA_DB_PATH);
+            final String dbPref = intent.getStringExtra(EXTRA_DB_PREF_VALUE);
+            final String dbVersion = intent.getStringExtra(EXTRA_DB_VERSION);
+            handleSetup(dbPath, dbPref, dbVersion);
+            if (ACTION_UPDATE.equals(action)) {
+                checkForInvalidData();
             }
         }
     }
