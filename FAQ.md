@@ -8,9 +8,7 @@ Thus the importance of taking medication at the appropriate time and developed t
 
 #### What data does Calendula collect?
 
-Calendula doesn't collect any personal information, which is required when adding your list of medications.
-How do I check my daily schedule on Calendula?
-Click the *icon at the top right corner of the home screen*; this would display a 24-hour schedule for your medications.
+Calendula doesn't collect any personal information
 
 #### Does Calendula have access to my mobile data?
 
