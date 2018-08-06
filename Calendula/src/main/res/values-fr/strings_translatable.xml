@@ -296,7 +296,7 @@ Pour ce développement, nous utilisons plusieurs bibliothèques libres que voici
 <string name="title_allergies_database_required">"Base de données requise"</string>
 <string name="message_allergies_database_required">"Pour l'instant, la gestion des allergies fonctionne uniquement avec la base de données des médicament de l'AEMPS. Voulez-vous l'activer ?"</string>
 <string name="allergies_group_elements_selected">"%1$d éléments (%2$d sélectionnés)"</string>
-<string name="add_custom_med_button_text">"Ajouter %$1s à votre trousse à pharmacie"</string>
+<string name="add_custom_med_button_text">"Ajouter \"%1$s\" à votre trousse à pharmacie"</string>
 <string name="medicine_search_not_found_msg">"Désolé, nous n'avons rien trouvé avec ce nom."</string>
 <string name="medicine_search_empty_list_msg">"Tapez le nom d'un médicament ou son code pour commencer la recherche, ou scannez le code-barres du paquet..."</string>
 <string name="search_hint">"Recherche..."</string>
@@ -525,4 +525,22 @@ Voulez-vous installer la nouvelle base de données maintenant ?
 </plurals>
 <string name="generic_presentation">"Générique"</string>
 <string name="notification_taken">"Pris"</string>
+<string name="pref_pin_timeout_title">"Verrouiller après"</string>
+<string name="pref_lock_30s">"30 secondes"</string>
+<string name="pref_lock_1m">"1 minute"</string>
+<string name="pref_lock_2m">"2 minutes"</string>
+<string name="pref_lock_5m">"5 minutes"</string>
+<string name="second">"seconde"</string>
+<string name="seconds">"secondes"</string>
+<string name="minute">"minute"</string>
+<string name="minutes">"minutes"</string>
+<string name="hour">"heure"</string>
+<string name="day">"jour"</string>
+<string name="days">"jours"</string>
+<string name="week">"semaine"</string>
+<string name="weeks">"semaines"</string>
+<string name="month">"mois"</string>
+<string name="months">"mois"</string>
+<string name="year">"année"</string>
+<string name="years">"années"</string>
 </resources>
