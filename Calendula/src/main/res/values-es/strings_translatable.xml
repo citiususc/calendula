@@ -397,6 +397,8 @@ Verás todas sus tomas en la pantalla de inicio."</string>
 <string name="pref_stock_warn_two_weeks">"En menos de 2 semanas"</string>
 <string name="pref_stock_warn_three_weeks">"En menos de 3 semanas"</string>
 <string name="database_none_display">"Ninguna"</string>
+
+<!-- for languages outside Spain please add (Spain) in your language at the end of the display string -->
 <string name="database_aemps_display">"Base de datos AEMPS"</string>
 <string name="database_aemps_desc">"Base de datos de la Agencia Española de Medicamentos y Productos Sanitarios"</string>
 <string name="database_setting_up">"Configurando…"</string>
@@ -536,4 +538,8 @@ Quieres instalar la nueva base de datos ahora?"</string>
 <string name="months">"meses"</string>
 <string name="year">"año"</string>
 <string name="years">"años"</string>
+<string name="channel_meds_name">"Medicamentos"</string>
+<string name="channel_meds_description">"Notificaciones relacionadas con medicamentos, como recordatorios de tomas."</string>
+<string name="channel_default_name">"Por defecto"</string>
+<string name="channel_default_description">"Otras notificaciones."</string>
 </resources>
