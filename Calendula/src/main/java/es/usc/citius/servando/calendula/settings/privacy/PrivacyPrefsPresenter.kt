@@ -53,14 +53,14 @@ class PrivacyPrefsPresenter(val fpHelper: FingerprintHelper) :
         }
     }
 
-    override fun onResult(requestCode: Int, result: Int, data: Intent?) {
+    override fun onResult(request: Int, result: Int, data: Intent?) {
         LogUtil.d(
             TAG,
-            "onResult() called with requestCode=$requestCode, result=$result, data=$data"
+            "onResult() called with requestCode=$request, result=$result, data=$data"
         )
 
         if (result == Activity.RESULT_OK && data != null) {
-            when (requestCode) {
+            when (request) {
                 PinLockActivity.REQUEST_PIN -> {
                     val pin = data.getStringExtra(PinLockActivity.EXTRA_NEW_PIN)
                     val pinManagerResult = PINManager.savePIN(pin)
