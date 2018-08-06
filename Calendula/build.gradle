@@ -72,7 +72,7 @@ task copyTestClasses(type: Copy) {
 }
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion '27.0.3'
     defaultConfig {
         minSdkVersion 16
