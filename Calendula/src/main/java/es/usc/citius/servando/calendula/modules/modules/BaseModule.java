@@ -28,8 +28,6 @@ import com.mikepenz.iconics.Iconics;
 
 import org.joda.time.LocalTime;
 
-import java.io.IOException;
-
 import es.usc.citius.servando.calendula.DefaultDataGenerator;
 import es.usc.citius.servando.calendula.database.DB;
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
@@ -39,6 +37,7 @@ import es.usc.citius.servando.calendula.jobs.CalendulaJobScheduler;
 import es.usc.citius.servando.calendula.jobs.CheckDatabaseUpdatesJob;
 import es.usc.citius.servando.calendula.jobs.PurgeCacheJob;
 import es.usc.citius.servando.calendula.modules.CalendulaModule;
+import es.usc.citius.servando.calendula.notifications.NotificationHelper;
 import es.usc.citius.servando.calendula.persistence.Patient;
 import es.usc.citius.servando.calendula.scheduling.AlarmIntentParams;
 import es.usc.citius.servando.calendula.scheduling.AlarmReceiver;
@@ -98,6 +97,9 @@ public class BaseModule extends CalendulaModule {
 
         // initialize SQLite engine
         initializeDatabase(ctx);
+
+        // create notification channels
+        NotificationHelper.createNotificationChannels(ctx);
 
         // initialize daily agenda
         DailyAgenda.instance().setupForToday(ctx, false);

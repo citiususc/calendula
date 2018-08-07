@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 
 import com.evernote.android.job.JobRequest;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
@@ -33,6 +34,7 @@ import org.joda.time.Duration;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.drugdb.download.DBVersionManager;
 import es.usc.citius.servando.calendula.drugdb.download.UpdateDatabaseService;
+import es.usc.citius.servando.calendula.notifications.NotificationHelper;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
@@ -96,8 +98,8 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
         PendingIntent updateIntent = PendingIntent.getService(ctx, 0, i, 0);
 
 
-        NotificationManager nManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
-        final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx)
+        NotificationManagerCompat nManager = NotificationManagerCompat.from(ctx);
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NotificationHelper.CHANNEL_DEFAULT_ID)
                 .setContentTitle(ctx.getString(R.string.title_database_update_available))
                 .setContentText(ctx.getString(R.string.action_download_update))
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(ctx.getString(R.string.action_download_update)))

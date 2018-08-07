@@ -521,4 +521,22 @@ Wollen Sie nun die neue Datenbank installieren?
 </plurals>
 <string name="generic_presentation">"Generisch"</string>
 <string name="notification_taken">"Eingenommen"</string>
+<string name="pref_pin_timeout_title">"Sperren nach"</string>
+<string name="pref_lock_30s">"30 Sekunden"</string>
+<string name="pref_lock_1m">"1 Minute"</string>
+<string name="pref_lock_2m">"2 Minuten"</string>
+<string name="pref_lock_5m">"5 Minuten"</string>
+<string name="second">"Sekunde"</string>
+<string name="seconds">"Sekunden"</string>
+<string name="minute">"Minute"</string>
+<string name="minutes">"Minuten"</string>
+<string name="hour">"Stunde"</string>
+<string name="day">"Tag"</string>
+<string name="days">"Tage"</string>
+<string name="week">"Woche"</string>
+<string name="weeks">"Wochen"</string>
+<string name="month">"Monat"</string>
+<string name="months">"Monate"</string>
+<string name="year">"Jahr"</string>
+<string name="years">"Jahre"</string>
 </resources>

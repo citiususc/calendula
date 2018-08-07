@@ -40,7 +40,7 @@ abstract class CalendulaPrefsFragment<in V : IView, out P : IPresenter<V>> :
 
 
     override fun onCreateView(
-        inflater: LayoutInflater?,
+        inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {

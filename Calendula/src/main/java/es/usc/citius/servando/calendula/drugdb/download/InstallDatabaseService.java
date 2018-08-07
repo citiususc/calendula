@@ -18,13 +18,14 @@
 
 package es.usc.citius.servando.calendula.drugdb.download;
 
-import android.app.IntentService;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+import android.support.v4.app.JobIntentService;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.util.Pair;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -36,6 +37,7 @@ import es.usc.citius.servando.calendula.database.migrationHelpers.DrugModelMigra
 import es.usc.citius.servando.calendula.drugdb.DBRegistry;
 import es.usc.citius.servando.calendula.drugdb.PrescriptionDBMgr;
 import es.usc.citius.servando.calendula.drugdb.model.persistence.Prescription;
+import es.usc.citius.servando.calendula.notifications.NotificationHelper;
 import es.usc.citius.servando.calendula.persistence.Medicine;
 import es.usc.citius.servando.calendula.util.IconUtils;
 import es.usc.citius.servando.calendula.util.LogUtil;
@@ -43,9 +45,9 @@ import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 
 /**
- * An {@link IntentService} subclass for handling asynchronous database setup tasks
+ * An {@link JobIntentService} subclass for handling asynchronous database setup tasks
  */
-public class InstallDatabaseService extends IntentService {
+public class InstallDatabaseService extends JobIntentService {
 
     public static final String ACTION_COMPLETE = "calendula.persistence.medDatabases.action.DONE";
     public static final String ACTION_ERROR = "calendula.persistence.medDatabases.action.ERROR";
@@ -57,12 +59,10 @@ public class InstallDatabaseService extends IntentService {
     private static final String EXTRA_DB_VERSION = "calendula.persistence.medDatabases.extra.DB_VERSION";
     public static int NOTIFICATION_ID = "InstallDatabaseService".hashCode();
     public static boolean isRunning = false;
-    NotificationCompat.Builder mBuilder;
-    NotificationManager mNotifyManager;
+    private NotificationCompat.Builder mBuilder;
+    private NotificationManagerCompat mNotifyManager;
 
-    public InstallDatabaseService() {
-        super("SetupDBService");
-    }
+    private static final int JOB_ID = 1;
 
     public static void startSetup(Context context, String dbPath, Pair<String, String> databaseInfo, DBInstallType type) {
         context = context.getApplicationContext();
@@ -78,21 +78,19 @@ public class InstallDatabaseService extends IntentService {
         intent.putExtra(EXTRA_DB_PATH, dbPath);
         intent.putExtra(EXTRA_DB_PREF_VALUE, databaseInfo.first);
         intent.putExtra(EXTRA_DB_VERSION, databaseInfo.second);
-        context.startService(intent);
+        JobIntentService.enqueueWork(context, InstallDatabaseService.class, JOB_ID, intent);
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
-            final String action = intent.getAction();
-            if (ACTION_SETUP.equals(action) || ACTION_UPDATE.equals(action)) {
-                final String dbPath = intent.getStringExtra(EXTRA_DB_PATH);
-                final String dbPref = intent.getStringExtra(EXTRA_DB_PREF_VALUE);
-                final String dbVersion = intent.getStringExtra(EXTRA_DB_VERSION);
-                handleSetup(dbPath, dbPref, dbVersion);
-                if (ACTION_UPDATE.equals(action)) {
-                    checkForInvalidData();
-                }
+    protected void onHandleWork(@NonNull Intent intent) {
+        final String action = intent.getAction();
+        if (ACTION_SETUP.equals(action) || ACTION_UPDATE.equals(action)) {
+            final String dbPath = intent.getStringExtra(EXTRA_DB_PATH);
+            final String dbPref = intent.getStringExtra(EXTRA_DB_PREF_VALUE);
+            final String dbVersion = intent.getStringExtra(EXTRA_DB_VERSION);
+            handleSetup(dbPath, dbPref, dbVersion);
+            if (ACTION_UPDATE.equals(action)) {
+                checkForInvalidData();
             }
         }
     }
@@ -120,8 +118,7 @@ public class InstallDatabaseService extends IntentService {
 
     private void notifyDataMissing() {
 
-        mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mBuilder = new NotificationCompat.Builder(this)
+        mBuilder = new NotificationCompat.Builder(this, NotificationHelper.CHANNEL_DEFAULT_ID)
                 .setTicker("")
                 .setSmallIcon(R.drawable.ic_launcher_white)
                 .setLargeIcon(IconUtils.icon(getApplicationContext(), GoogleMaterial.Icon.gmd_alert_triangle, R.color.white, 100).toBitmap())
@@ -130,7 +127,7 @@ public class InstallDatabaseService extends IntentService {
                 .setContentTitle(getString(R.string.title_database_update_data_lost))
                 .setContentText(getString(R.string.text_database_update_data_lost));
 
-        mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
+        getNotificationManager().notify(NOTIFICATION_ID, mBuilder.build());
     }
 
     private void handleSetup(final String dbPath, final String dbPref, final String dbVersion) {
@@ -174,8 +171,7 @@ public class InstallDatabaseService extends IntentService {
         Intent activity = new Intent(this, MedicinesActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, activity, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mBuilder = new NotificationCompat.Builder(this)
+        mBuilder = new NotificationCompat.Builder(this, NotificationHelper.CHANNEL_DEFAULT_ID)
                 .setTicker("")
                 .setSmallIcon(android.R.drawable.stat_sys_download) //stat_notify_sync
                 .setTicker(getString(R.string.install_db_notification_ticker))
@@ -185,7 +181,7 @@ public class InstallDatabaseService extends IntentService {
                 .setContentText(getString(R.string.install_db_notification_content))
                 .setProgress(max, prog, false);
 
-        mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
+        getNotificationManager().notify(NOTIFICATION_ID, mBuilder.build());
     }
 
     private void onComplete() {
@@ -197,7 +193,7 @@ public class InstallDatabaseService extends IntentService {
         mBuilder.setSmallIcon(R.drawable.ic_done_white_36dp);
         mBuilder.setContentInfo("");
 
-        mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
+        getNotificationManager().notify(NOTIFICATION_ID, mBuilder.build());
         Intent bcIntent = new Intent();
         bcIntent.setAction(ACTION_COMPLETE);
         sendBroadcast(bcIntent);
@@ -209,7 +205,7 @@ public class InstallDatabaseService extends IntentService {
     private void onFailure() {
         isRunning = false;
         if (mBuilder == null) {
-            mBuilder = new NotificationCompat.Builder(this);
+            mBuilder = new NotificationCompat.Builder(this, NotificationHelper.CHANNEL_DEFAULT_ID);
         }
         mBuilder.setContentTitle(getString(R.string.install_db_notification_onfailure));
         mBuilder.setContentText(getString(R.string.install_db_notification_onfailure_content));
@@ -219,10 +215,14 @@ public class InstallDatabaseService extends IntentService {
         mBuilder.setContentInfo("");
         mBuilder.setContentIntent(null);
 
+        getNotificationManager().notify(NOTIFICATION_ID, mBuilder.build());
+    }
+
+    private NotificationManagerCompat getNotificationManager() {
         if (mNotifyManager == null) {
-            mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotifyManager = NotificationManagerCompat.from(this);
         }
-        mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
+        return mNotifyManager;
     }
 
 }

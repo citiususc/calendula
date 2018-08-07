@@ -1,0 +1,33 @@
+Calendula è un assistente per la gestione personale delle medicine che ti aiuterà a seguire le tue prescrizioni mediche
+senza impostare migliaia di promemoria sul tuo telefono od avere paura di dimenticare di assumere farmaci.
+Imposta dose e trattamento, associali alla tua routine giornaliera e lascia che Calendula lavori per te.
+
+---
+
+Calendula fornisce:
+○ Un'interfaccia semplice ed intuitiva
+○ Promemoria per l'assunzione di medicine, con allarmi completamente configurabili
+○ Trattamenti flessibili, con opzioni specifiche per pillole contraccettive ed altri medicinali con periodo di sospensione
+○ Ricerca delle medicine e consultazione dei foglietti illustrativi, con dati forniti dall'"Agencia Española de Medicamentos y Productos Sanitarios"  (http://www.aemps.gob.es)
+○ Controllo giornaliero delle medicine assunte
+○ Supporto per più di un paziente
+
+Visita il nostro sito web per maggiori informazioni: <a href="https://tec.citius.usc.es/calendula/">https://tec.citius.usc.es/calendula/</a>
+
+---
+
+Permessi dell'app:
+
+Calendula non richiede alcuna registrazione e non raccoglie dati personali. Per determinate funzionalità, Calendula potrebbe richiedere il permesso di accedere a risorse del tuo dispositivo. Ecco perché:
+
+○ Spazio di archiviazione: Questo permesso è necessario per accedere alle suonerie salvate sul tuo dispositivo e per scaricare il database delle medicine.
+○ Fotocamera: È possibile aggiungere farmaci (al momento solo quelli presenti sul database AEMPS) al kit delle medicine effettuando la scansione dei codici a barre. Per utilizzare questa funzionalità è necessario abilitare l'accesso alla fotocamera.
+○ Accesso ad Internet: Questo permesso non viene esplicitamente richiesto, ed è necessario soltanto per lo scaricamento dei foglietti illustrativi e del database dei medicinali. I tuoi dati personali sono custoditi sul tuo telefono e non verranno mai trasmessi a terzi.
+
+--- 
+
+Open Source:
+Calendula è un progetto open source. Se hai delle idee oppure sei interessato a contribuire al progetto, puoi farlo visitando il nostro sito web (<a href="https://tec.citius.usc.es/calendula/">https://tec.citius.usc.es/calendula/</a>) oppure attraverso la nostra community su Github <a href="https://github.com/citiususc/calendula">https://github.com/citiususc/calendula</a>. Apprezziamo qualsiasi contributo o suggerimento.
+
+Grazie, 
+il team di Calendula.
