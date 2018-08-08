@@ -23,8 +23,8 @@ These instructions will get you a copy of the project up and running on your loc
 We use [Android Studio](https://developer.android.com/studio/index.html) (the official Android IDE) for development, so we recommend it as the IDE to use in your development environment. Once you install Android Studio, you can use the Android SDK Manager to obtain the SDK tools, platforms, and other components you will need to start developing. The most important are:
 
 * Android SDK Tools and Android SDK Platform-tools (upgrade to their last versions is usually a good idea).
-* Android SDK Build-Tools 26.0.2.
-* Android 7.1 (API Level 25) SDK Platform.
+* Android SDK Build-Tools 27.0.3.
+* Android 8.1 (API Level 27) SDK Platform.
 * Android Support Repository
 
 You can also install other packages like emulators for running the app, if you don't have or don't want to use a real device. The minimum supported Android version is *4.1, Jelly Bean (API level 16).*
@@ -100,7 +100,7 @@ If you're not a developer but you want to help, don't worry! You can help [with 
 
 ## License
 
-Copyright 2016 CITIUS - USC
+Copyright 2018 CITIUS - USC
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
