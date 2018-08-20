@@ -1,0 +1,28 @@
+image: circleci/android:api-27-alpha
+
+before_script:
+  - export GRADLE_USER_HOME="$(pwd)/.gradle"
+  - export GRADLE_OPTS='-Dorg.gradle.daemon=false'
+
+cache:
+  paths:
+    - .gradle
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - ./gradlew assembleCiDebug
+    - ./gradlew testCiDebugUnitTest
+    - ./gradlew jacocoTestReportCiDebug
+    - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, "instructions covered"; print 100*covered/instructions, "% covered" }' Calendula/build/reports/jacoco/ciDebug/jacoco.csv
+    - if grep -r '* Created by' Calendula/src/; then exit 1; fi
+  artifacts:
+    paths:
+      - Calendula/build/outputs/
+      - Calendula/build/reports/tests/
+      - Calendula/build/test-results/
+      - Calendula/build/reports/jacoco/
+    expire_in: 1 week
