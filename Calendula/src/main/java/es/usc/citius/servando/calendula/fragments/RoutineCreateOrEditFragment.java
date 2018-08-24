@@ -119,7 +119,7 @@ public class RoutineCreateOrEditFragment extends DialogFragment implements Radia
                     timePickerFragment.show(getActivity().getSupportFragmentManager(), "TIME_PICKER_FRAGMENT");
                 } else {
                     TimePickerBuilder tpb = new TimePickerBuilder()
-                            .setFragmentManager(getChildFragmentManager())
+                            .setFragmentManager(getActivity().getSupportFragmentManager())
                             .setStyleResId(R.style.BetterPickersDialogFragment_Light);
                     tpb.addTimePickerDialogHandler(RoutineCreateOrEditFragment.this);
                     tpb.show();

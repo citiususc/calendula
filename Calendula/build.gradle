@@ -72,13 +72,13 @@ task copyTestClasses(type: Copy) {
 }
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion '27.0.3'
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 37
-        versionName "2.5.6"
+        versionCode 38
+        versionName "2.5.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         applicationId "es.usc.citius.servando.calendula"
         multiDexEnabled true

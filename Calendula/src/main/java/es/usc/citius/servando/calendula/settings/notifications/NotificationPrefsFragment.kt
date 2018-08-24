@@ -45,7 +45,7 @@ class NotificationPrefsFragment :
     override val fragmentTitle: Int = R.string.pref_header_notifications
     override val presenter: NotificationPrefsContract.Presenter by lazy {
         NotificationPrefsPresenter(
-            RingtoneNameResolver(context)
+            RingtoneNameResolver(context!!)
         )
     }
 

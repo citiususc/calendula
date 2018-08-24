@@ -78,7 +78,7 @@ class DatabasePrefsFragment :
             presenter.selectNewDb(newValue as String)
         }
         updateDBPref.setOnPreferenceClickListener {
-            presenter.checkDatabaseUpdate(context)
+            context?.let(presenter::checkDatabaseUpdate)
             true
         }
     }
@@ -109,7 +109,7 @@ class DatabasePrefsFragment :
     }
 
     override fun resolveString(@StringRes stringRes: Int): String {
-        return context.getString(stringRes)
+        return context!!.getString(stringRes)
     }
 
     override fun showSelectedDb(dbId: String) {
@@ -119,16 +119,16 @@ class DatabasePrefsFragment :
 
     override fun showDatabaseDownloadChoice(dbId: String) {
         DownloadDatabaseHelper.instance()
-            .showDownloadDialog(activity, dbId, { accepted ->
+            .showDownloadDialog(activity, dbId) { accepted ->
                 presenter.onDbDownloadChoiceResult(accepted)
-            })
+            }
     }
 
     override fun showDatabaseUpdateNotAvailable() {
         Toast.makeText(context, R.string.database_update_not_available, Toast.LENGTH_SHORT).show()
     }
 
-    override fun getIntent(): Intent = activity.intent
+    override fun getIntent(): Intent = activity!!.intent
 
     override fun openDatabaseSelection() {
         preferenceManager.showDialog(dbPref)
@@ -159,7 +159,7 @@ class DatabasePrefsFragment :
 
     override fun hasDownloadPermission(): Boolean {
         val hasPermission = ActivityCompat.checkSelfPermission(
-            context,
+            context!!,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
         LogUtil.d(TAG, "hasDownloadPermission: result is $hasPermission")
