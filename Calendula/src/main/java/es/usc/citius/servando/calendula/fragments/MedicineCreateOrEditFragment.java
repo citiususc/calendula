@@ -483,7 +483,7 @@ public class MedicineCreateOrEditFragment extends Fragment implements SharedPref
                         //.setLabelText(ref == DIALOG_STOCK_ADD ? "Increase stock by" : "Decrease stock by")
                         .setDecimalVisibility(NumberPicker.VISIBLE)
                         .setPlusMinusVisibility(NumberPicker.INVISIBLE)
-                        .setFragmentManager(getChildFragmentManager())
+                        .setFragmentManager(getActivity().getSupportFragmentManager())
                         .setTargetFragment(this).setReference(ref)
                         .setStyleResId(R.style.BetterPickersDialogFragment_Calendula);
         npb.show();

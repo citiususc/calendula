@@ -311,7 +311,7 @@ public class ScheduleTimetableFragment extends Fragment
                         new RadialTimePickerDialogFragment()
                                 .setOnTimeSetListener(ScheduleTimetableFragment.this)
                                 .setStartTime(time.getHourOfDay(), time.getMinuteOfHour());
-                timePickerDialog.show(getChildFragmentManager(), "111");
+                timePickerDialog.show(getActivity().getSupportFragmentManager(), "111");
             }
         });
 
@@ -539,7 +539,7 @@ public class ScheduleTimetableFragment extends Fragment
                         .setMinNumber(BigDecimal.ONE)
                         .setMaxNumber(BigDecimal.valueOf(31))
                         .setPlusMinusVisibility(NumberPicker.INVISIBLE)
-                        .setFragmentManager(getChildFragmentManager())
+                        .setFragmentManager(getActivity().getSupportFragmentManager())
                         .setTargetFragment(this).setReference(REF_DIALOG_ROUTINE_INTERVAL)
                         .setStyleResId(R.style.BetterPickersDialogFragment_Calendula);
         npb.show();
@@ -551,7 +551,7 @@ public class ScheduleTimetableFragment extends Fragment
                 .setMinNumber(1)
                 .setMaxNumber(24)
                 .setPlusMinusVisibility(NumberPicker.INVISIBLE)
-                .setFragmentManager(getChildFragmentManager())
+                .setFragmentManager(getActivity().getSupportFragmentManager())
                 .setTargetFragment(this)
                 .setReference(REF_DIALOG_HOURLY_INTERVAL)
                 .setStyleResId(R.style.BetterPickersDialogFragment_Calendula);
@@ -592,7 +592,7 @@ public class ScheduleTimetableFragment extends Fragment
 
         dialog.setArguments(b);
         dialog.setOnRecurrenceSetListener(this);
-        dialog.show(getChildFragmentManager(), "REC");
+        dialog.show(getActivity().getSupportFragmentManager(), "REC");
     }
 
     void addTimetableEntries(int timesPerDay, List<Routine> routines) {
@@ -1018,7 +1018,7 @@ public class ScheduleTimetableFragment extends Fragment
                                 .setMinNumber(BigDecimal.ONE)
                                 .setMaxNumber(BigDecimal.valueOf(100D))
                                 .setPlusMinusVisibility(NumberPicker.INVISIBLE)
-                                .setFragmentManager(getChildFragmentManager())
+                                .setFragmentManager(getActivity().getSupportFragmentManager())
                                 .setTargetFragment(ScheduleTimetableFragment.this)
                                 .setReference(REF_DIALOG_CYCLE_DAYS)
                                 .setStyleResId(R.style.BetterPickersDialogFragment_Calendula);
@@ -1034,7 +1034,7 @@ public class ScheduleTimetableFragment extends Fragment
                                 .setMinNumber(BigDecimal.ONE)
                                 .setMaxNumber(BigDecimal.valueOf(100D))
                                 .setPlusMinusVisibility(NumberPicker.INVISIBLE)
-                                .setFragmentManager(getChildFragmentManager())
+                                .setFragmentManager(getActivity().getSupportFragmentManager())
                                 .setTargetFragment(ScheduleTimetableFragment.this)
                                 .setReference(REF_DIALOG_CYCLE_REST)
                                 .setStyleResId(R.style.BetterPickersDialogFragment_Calendula);
