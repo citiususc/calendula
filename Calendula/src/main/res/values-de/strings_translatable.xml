@@ -539,4 +539,8 @@ Wollen Sie nun die neue Datenbank installieren?
 <string name="months">"Monate"</string>
 <string name="year">"Jahr"</string>
 <string name="years">"Jahre"</string>
+<string name="channel_meds_name">"Medikamente"</string>
+<string name="channel_meds_description">"Benachrichtigungen bzgl. Medikamente, etwa Einnahmeerinnerungen."</string>
+<string name="channel_default_name">"Standard"</string>
+<string name="channel_default_description">"Sonstige Benachrichtigungen."</string>
 </resources>
