@@ -75,7 +75,7 @@ android {
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 18
         targetSdkVersion 26
         versionCode 39
         versionName "2.5.8"
@@ -316,6 +316,9 @@ dependencies {
     implementation 'com.mikepenz:fastadapter-commons:2.1.0@aar'
     implementation 'com.mikepenz:fastadapter-extensions:2.1.0@aar'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // Secured preferences
+    compile 'online.devliving:securedpreferencestore:0.7.3'
 
 
 }

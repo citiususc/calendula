@@ -47,6 +47,7 @@ import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.PresentationsTypeface;
+import es.usc.citius.servando.calendula.util.security.SecuredVault;
 
 
 public class BaseModule extends CalendulaModule {
@@ -94,6 +95,9 @@ public class BaseModule extends CalendulaModule {
     @Override
     protected void onApplicationStartup(Context ctx) {
         PreferenceUtils.init(ctx);
+
+        // initialize secured vault
+        SecuredVault.INSTANCE.init(ctx);
 
         // initialize SQLite engine
         initializeDatabase(ctx);
