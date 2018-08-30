@@ -97,7 +97,7 @@ public class BaseModule extends CalendulaModule {
         PreferenceUtils.init(ctx);
 
         // initialize secured vault
-        SecuredVault.INSTANCE.init(ctx);
+        SecuredVault.init(ctx);
 
         // initialize SQLite engine
         initializeDatabase(ctx);

@@ -19,78 +19,50 @@
 package es.usc.citius.servando.calendula.util.security
 
 import android.content.Context
+import android.content.SharedPreferences
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
-import es.usc.citius.servando.calendula.util.PreferenceKeys
 
+/**
+ * Allows storage of shared preferences encrypted using a key
+ * generated and stored using the android keystore
+ */
+class SecuredVault private constructor(impl: SecuredPreferenceStore) : SharedPreferences by impl {
 
-object SecuredVault {
+    /**
+     * This needs to be implemented as a companion object:
+     * - We want to compose this class with SecuredPreferenceStore, in order expose the same interface
+     * - We can't use an object instead of a class because SecuredPreferenceStore has constructor with params
+     * - We want to use this class like a singleton anyway
+     */
+    companion object {
 
-    private const val STORE_NAME = "secure_vault"
-    private const val STORE_PREFIX = "vault_pref"
-    private const val SEED_KEY = "CalendulaVault"
+        private const val STORE_NAME = "secure_vault"
+        private const val STORE_PREFIX = "vault_pref"
+        private const val SEED_KEY = "CalendulaVault"
 
-    private val securedPrefs: SecuredPreferenceStore by lazy { SecuredPreferenceStore.getSharedInstance() }
+        private var instance: SecuredVault? = null
 
-    @JvmOverloads
-    fun init(context: Context, deftSecrets: Map<PreferenceKeys, Any> = mapOf()) {
-
-        // init secured preference store
-        SecuredPreferenceStore.init(
-            context.applicationContext,
-            STORE_NAME,
-            STORE_PREFIX,
-            SEED_KEY.toByteArray(),
-            DefaultRecoveryHandler()
-        )
-
-        // store default values if any
-        if (deftSecrets.isNotEmpty()) {
-            val editor = securedPrefs.Editor()
-            for ((k, v) in deftSecrets) {
-                store(k, v, editor, apply = false)
+        @JvmStatic
+        fun instance(): SecuredVault {
+            if (instance == null) {
+                throw  IllegalStateException("Not initialized")
+            } else {
+                return instance!!
             }
-            editor.apply()
         }
-    }
 
-    @JvmOverloads
-    fun store(
-        name: PreferenceKeys,
-        value: Any,
-        editor: SecuredPreferenceStore.Editor = securedPrefs.Editor(),
-        apply: Boolean = true
-    ) {
-        when (value) {
-            is String -> editor.putString(name.key(), value)
-            is Int -> editor.putInt(name.key(), value)
-            is Boolean -> editor.putBoolean(name.key(), value)
-            else -> throw IllegalArgumentException("Unsupported value type")
+        @JvmStatic
+        fun init(ctx: Context) {
+            SecuredPreferenceStore.init(
+                ctx.applicationContext,
+                STORE_NAME,
+                STORE_PREFIX,
+                SEED_KEY.toByteArray(),
+                DefaultRecoveryHandler()
+            )
+            instance = SecuredVault(SecuredPreferenceStore.getSharedInstance())
         }
-        if (apply) {
-            editor.apply()
-        }
-    }
-
-    @JvmOverloads
-    fun retrieve(name: PreferenceKeys, defValue: String? = null): String? {
-        return securedPrefs.getString(name.key(), defValue)
-    }
-
-    fun contains(name: PreferenceKeys): Boolean {
-        return securedPrefs.contains(name.key())
-    }
-
-    fun remove(vararg prefs: PreferenceKeys) {
-        val editor = securedPrefs.Editor()
-        for (p in prefs) {
-            editor.remove(p.key())
-        }
-        editor.apply()
-    }
-
-    fun preferences(): SecuredPreferenceStore {
-        return securedPrefs
     }
 
 
