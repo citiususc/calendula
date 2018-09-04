@@ -18,8 +18,6 @@
 
 package es.usc.citius.servando.calendula.persistence.typeSerializers;
 
-import android.util.Base64;
-
 import com.j256.ormlite.field.FieldType;
 import com.j256.ormlite.field.SqlType;
 import com.j256.ormlite.field.types.BaseDataType;
@@ -58,8 +56,10 @@ public class SecureStringPersister extends BaseDataType {
         if (sqlArg == null) {
             return null;
         }
-        String v = new String(Base64.decode((String) sqlArg, Base64.DEFAULT), UTF8);
-        return SecurityProvider.getEncryptionProvider().decrypt(v);
+        if (((String) sqlArg).isEmpty()) {
+            return "";
+        }
+        return SecurityProvider.getEncryptionProvider().decrypt((String) sqlArg);
     }
 
     @Override
@@ -67,7 +67,9 @@ public class SecureStringPersister extends BaseDataType {
         if (javaObject == null) {
             return null;
         }
-        String encrypted = SecurityProvider.getEncryptionProvider().encrypt((String) javaObject);
-        return Base64.encodeToString(encrypted.getBytes(UTF8), Base64.DEFAULT);
+        if (((String) javaObject).isEmpty()) {
+            return "";
+        }
+        return SecurityProvider.getEncryptionProvider().encrypt((String) javaObject);
     }
 }
