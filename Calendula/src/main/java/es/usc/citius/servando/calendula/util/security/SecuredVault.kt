@@ -20,17 +20,19 @@ package es.usc.citius.servando.calendula.util.security
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.support.annotation.VisibleForTesting
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler
 import devliving.online.securedpreferencestore.EncryptionManager
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
 import es.usc.citius.servando.calendula.util.GsonUtil
 import es.usc.citius.servando.calendula.util.LogUtil
+import es.usc.citius.servando.calendula.util.PreferenceUtils
 
 /**
  * Allows storage of shared preferences encrypted using a key
  * generated and stored using the android keystore
  */
-class SecuredVault private constructor(impl: SecuredPreferenceStore) : SharedPreferences by impl {
+class SecuredVault private constructor(val impl: SharedPreferences) : SharedPreferences by impl {
 
     /**
      * This needs to be implemented as a companion object:
@@ -69,30 +71,48 @@ class SecuredVault private constructor(impl: SecuredPreferenceStore) : SharedPre
         }
 
         @JvmStatic
+        @VisibleForTesting
+        fun initForTesting() {
+            instance = SecuredVault(PreferenceUtils.instance().preferences())
+        }
+
+        @JvmStatic
         fun encrypt(value: String?): String? {
-            value?.let {
-                val data = value.toByteArray(charset("UTF-8"))
-                val secret =
-                    SecuredPreferenceStore.getSharedInstance().encryptionManager.encrypt(data)
-                return GsonUtil.get().toJson(secret)
+            if (instance().impl is SecuredPreferenceStore) {
+                value?.let {
+                    val data = value.toByteArray(charset("UTF-8"))
+                    val secret =
+                        (instance().impl as SecuredPreferenceStore).encryptionManager.encrypt(data)
+                    return GsonUtil.get().toJson(secret)
+                }
+                return null
+            } else {
+                return value
             }
-            return null
+
         }
 
         @JvmStatic
         fun decrypt(value: String?): String? {
-            if (value != null && value.isNotEmpty()) {
-                try {
-                    val secret =
-                        GsonUtil.get().fromJson(value, EncryptionManager.EncryptedData::class.java)
-                    val data =
-                        SecuredPreferenceStore.getSharedInstance().encryptionManager.decrypt(secret)
-                    return data.toString(charset("UTF-8"))
-                } catch (e: Exception) {
-                    LogUtil.d(TAG, "Error decrypting property", e)
+            when {
+                //testing only!
+                instance().impl !is SecuredPreferenceStore -> return value
+                value == null -> return null
+                value.isEmpty() -> return ""
+                else ->{
+                    try {
+                        val secret =
+                            GsonUtil.get().fromJson(value, EncryptionManager.EncryptedData::class.java)
+                        val data =
+                            (instance().impl as SecuredPreferenceStore).encryptionManager.decrypt(secret)
+                        return data.toString(charset("UTF-8"))
+                    } catch (e: Exception) {
+                        LogUtil.d(TAG, "Error decrypting property", e)
+                        throw e
+                    }
                 }
             }
-            return ""
+
         }
     }
 

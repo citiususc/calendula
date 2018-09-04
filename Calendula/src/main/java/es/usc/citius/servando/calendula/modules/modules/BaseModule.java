@@ -22,6 +22,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 
 import com.evernote.android.job.JobManager;
 import com.mikepenz.iconics.Iconics;
@@ -97,7 +98,11 @@ public class BaseModule extends CalendulaModule {
         PreferenceUtils.init(ctx);
 
         // initialize secured vault
-        SecuredVault.init(ctx);
+        if (!Build.FINGERPRINT.equals("robolectric")) {
+            SecuredVault.init(ctx);
+        } else {
+            SecuredVault.initForTesting();
+        }
 
         // initialize SQLite engine
         initializeDatabase(ctx);
