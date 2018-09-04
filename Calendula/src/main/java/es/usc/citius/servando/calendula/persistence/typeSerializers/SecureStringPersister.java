@@ -28,7 +28,7 @@ import com.j256.ormlite.support.DatabaseResults;
 import java.nio.charset.Charset;
 import java.sql.SQLException;
 
-import es.usc.citius.servando.calendula.util.security.SecuredVault;
+import es.usc.citius.servando.calendula.util.security.SecurityProvider;
 
 public class SecureStringPersister extends BaseDataType {
 
@@ -55,13 +55,19 @@ public class SecureStringPersister extends BaseDataType {
 
     @Override
     public Object sqlArgToJava(FieldType fieldType, Object sqlArg, int columnPos) throws SQLException {
+        if (sqlArg == null) {
+            return null;
+        }
         String v = new String(Base64.decode((String) sqlArg, Base64.DEFAULT), UTF8);
-        return SecuredVault.instance().decrypt(v);
+        return SecurityProvider.getEncryptionProvider().decrypt(v);
     }
 
     @Override
     public Object javaToSqlArg(FieldType fieldType, Object javaObject) throws SQLException {
-        String encrypted = SecuredVault.instance().encrypt((String) javaObject);
+        if (javaObject == null) {
+            return null;
+        }
+        String encrypted = SecurityProvider.getEncryptionProvider().encrypt((String) javaObject);
         return Base64.encodeToString(encrypted.getBytes(UTF8), Base64.DEFAULT);
     }
 }

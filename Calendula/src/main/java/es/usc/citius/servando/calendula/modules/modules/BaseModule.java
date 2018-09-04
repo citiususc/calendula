@@ -49,6 +49,7 @@ import es.usc.citius.servando.calendula.util.PreferenceKeys;
 import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.PresentationsTypeface;
 import es.usc.citius.servando.calendula.util.security.SecuredVault;
+import es.usc.citius.servando.calendula.util.security.SecurityProvider;
 
 
 public class BaseModule extends CalendulaModule {
@@ -99,9 +100,7 @@ public class BaseModule extends CalendulaModule {
 
         // initialize secured vault
         if (!Build.FINGERPRINT.equals("robolectric")) {
-            SecuredVault.init(ctx);
-        } else {
-            SecuredVault.initForTesting();
+            SecurityProvider.init(ctx);
         }
 
         // initialize SQLite engine
