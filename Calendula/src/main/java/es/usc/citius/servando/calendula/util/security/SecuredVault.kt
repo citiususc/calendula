@@ -21,7 +21,10 @@ package es.usc.citius.servando.calendula.util.security
 import android.content.Context
 import android.content.SharedPreferences
 import devliving.online.securedpreferencestore.DefaultRecoveryHandler
+import devliving.online.securedpreferencestore.EncryptionManager
 import devliving.online.securedpreferencestore.SecuredPreferenceStore
+import es.usc.citius.servando.calendula.util.GsonUtil
+import es.usc.citius.servando.calendula.util.LogUtil
 
 /**
  * Allows storage of shared preferences encrypted using a key
@@ -37,6 +40,7 @@ class SecuredVault private constructor(impl: SecuredPreferenceStore) : SharedPre
      */
     companion object {
 
+        private const val TAG = "SecuredVault"
         private const val STORE_NAME = "secure_vault"
         private const val STORE_PREFIX = "vault_pref"
         private const val SEED_KEY = "CalendulaVault"
@@ -62,6 +66,33 @@ class SecuredVault private constructor(impl: SecuredPreferenceStore) : SharedPre
                 DefaultRecoveryHandler()
             )
             instance = SecuredVault(SecuredPreferenceStore.getSharedInstance())
+        }
+
+        @JvmStatic
+        fun encrypt(value: String?): String? {
+            value?.let {
+                val data = value.toByteArray(charset("UTF-8"))
+                val secret =
+                    SecuredPreferenceStore.getSharedInstance().encryptionManager.encrypt(data)
+                return GsonUtil.get().toJson(secret)
+            }
+            return null
+        }
+
+        @JvmStatic
+        fun decrypt(value: String?): String? {
+            if (value != null && value.isNotEmpty()) {
+                try {
+                    val secret =
+                        GsonUtil.get().fromJson(value, EncryptionManager.EncryptedData::class.java)
+                    val data =
+                        SecuredPreferenceStore.getSharedInstance().encryptionManager.decrypt(secret)
+                    return data.toString(charset("UTF-8"))
+                } catch (e: Exception) {
+                    LogUtil.d(TAG, "Error decrypting property", e)
+                }
+            }
+            return ""
         }
     }
 
