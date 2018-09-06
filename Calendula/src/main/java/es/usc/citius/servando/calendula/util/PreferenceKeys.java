@@ -77,7 +77,9 @@ public enum PreferenceKeys {
     UNLOCK_PIN_HASH(R.string.prefkey_unlock_pin_hash),
     UNLOCK_PIN_SALT(R.string.prefkey_unlock_pin_salt),
     FINGERPRINT_ENABLED(R.string.prefkey_fingerprint_enabled),
-    UNLOCK_PIN_TIMEOUT(R.string.prefkey_pin_timeout);
+    UNLOCK_PIN_TIMEOUT(R.string.prefkey_pin_timeout),
+    // Secure window
+    SECURE_WINDOW(R.string.prefkey_secure_window);
 
     @StringRes
     private final int stringId;

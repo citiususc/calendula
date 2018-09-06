@@ -479,6 +479,8 @@ Se escolles non facelo, algunha información das túas medicinas pode perderse."
 <string name="pin_recovery_title">"Recuperación de PIN"</string>
 <string name="pin_use_fingerprint">"Usar pegada dactilar"</string>
 <string name="pref_fingerprint_enable_title">"Desbloqueo con pegada dactilar"</string>
+    <string name="pref_secure_window_title">"Xanela segura"</string>
+    <string name="pref_secure_window_summary">"Impide que se amose información da app en capturas de pantalla ou no menú de aplicacións en execución"</string>
 <string name="pref_header_privacy">"Privacidade"</string>
 <string name="pref_summary_pin_lock_set">"PIN configurado"</string>
 <string name="pref_summary_pin_lock_unset">"PIN non configurado"</string>

@@ -476,6 +476,8 @@ If you choose not to download it, some of your medicines' information may be los
 <string name="pin_recovery_title">"PIN recovery"</string>
 <string name="pin_use_fingerprint">"Use fingerprint"</string>
 <string name="pref_fingerprint_enable_title">"Fingerprint unlock"</string>
+    <string name="pref_secure_window_title">"Secure window"</string>
+    <string name="pref_secure_window_summary">"Prevents app info from appearing in screenshots or in the open apps menu"</string>
 <string name="pref_header_privacy">"Privacy"</string>
 <string name="pref_summary_pin_lock_set">"PIN set"</string>
 <string name="pref_summary_pin_lock_unset">"PIN not set"</string>
