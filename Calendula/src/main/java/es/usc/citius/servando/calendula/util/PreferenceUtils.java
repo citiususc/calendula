@@ -52,7 +52,7 @@ public class PreferenceUtils {
                 PreferenceManager.setDefaultValues(context, R.xml.pref_privacy, true);
                 PreferenceManager.setDefaultValues(context, R.xml.pref_database, true);
                 PreferenceManager.setDefaultValues(context, R.xml.pref_notifications, true);
-                edit().putBoolean(PreferenceKeys.SETTINGS_DEFAULTS_LOADED.key(), true);
+                edit().putBoolean(PreferenceKeys.SETTINGS_DEFAULTS_LOADED.key(), true).apply();
             }
         }
     }
