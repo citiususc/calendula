@@ -9,8 +9,14 @@ buildscript {
         kotlin_version = '1.2.60'
         libVersions = [
                 android: [
-                        support: '27.1.1'
-                ]
+                        espresso:'3.0.2',
+                        support: '27.1.1',
+                        test: '1.0.2'
+                ],
+                butterknife: '8.8.1',
+                leakcanary: '1.5.1',
+                mockito: '2.13.0',
+                robolectric: '3.8'
         ]
     }
 
