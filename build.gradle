@@ -23,7 +23,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:$gradle_plugin_version"
+        classpath "com.android.tools.build:gradle:3.2.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.vanniktech:gradle-android-junit-jacoco-plugin:$jacoco_plugin_version"
     }
