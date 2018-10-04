@@ -20,6 +20,7 @@
 
   <integer-array name="delays_array_values">
       <item>1</item>
+      <item>5</item>
       <item>15</item>
       <item>30</item>
       <item>60</item>

@@ -403,6 +403,7 @@ You will see all their intakes in the home screen."</string>
 <string name="schedule_type_from_qr">"From QR"</string>
 <string name="calendar_date_tomorrow">"tomorrow"</string>
 <string name="delays_one_min">"1 min"</string>
+<string name="delays_five_min">"5 min"</string>
 <string name="delays_thirty_min">"30 min"</string>
 <string name="delays_fifteen_min">"15 min"</string>
 <string name="delays_sixty_min">"60 min"</string>
