@@ -193,10 +193,7 @@ public class ConfirmSchedulesActivity extends CalendulaActivity implements ViewP
                 DailyAgenda.instance().addItem(patient, item, false);
             }
         } else {
-            for (DateTime time : s.hourlyItemsToday()) {
-                LocalTime timeToday = time.toLocalTime();
-                DailyAgenda.instance().addItem(patient, s, timeToday);
-            }
+            DailyAgenda.instance().generateItemsForHourlySchedule(patient, s);
         }
         // save and fire event
         DB.schedules().saveAndFireEvent(s);

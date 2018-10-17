@@ -42,8 +42,6 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.j256.ormlite.misc.TransactionManager;
 
 import org.greenrobot.eventbus.Subscribe;
-import org.joda.time.DateTime;
-import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,10 +123,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                             DailyAgenda.instance().addItem(patient, item, false);
                         }
                     } else {
-                        for (DateTime time : s.hourlyItemsToday()) {
-                            LocalTime timeToday = time.toLocalTime();
-                            DailyAgenda.instance().addItem(patient, s, timeToday);
-                        }
+                        DailyAgenda.instance().generateItemsForHourlySchedule(patient, s);
                     }
                     // save and fire event
                     DB.schedules().saveAndFireEvent(s);
@@ -193,10 +188,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
                         }
                     } else {
                         DB.dailyScheduleItems().removeAllFrom(s);
-                        for (DateTime time : s.hourlyItemsToday()) {
-                            LocalTime timeToday = time.toLocalTime();
-                            DailyAgenda.instance().addItem(patient, s, timeToday);
-                        }
+                        DailyAgenda.instance().generateItemsForHourlySchedule(patient, s);
                     }
 
                     // save and fire event
@@ -215,6 +207,7 @@ public class ScheduleCreationActivity extends CalendulaActivity implements ViewP
             e.printStackTrace();
         }
     }
+
 
     public void saveSchedule() {
 
