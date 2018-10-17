@@ -6,8 +6,8 @@ buildscript {
     }
 
     ext {
-        gradle_plugin_version = '3.1.4'
-        kotlin_version = '1.2.70'
+        gradle_plugin_version = '3.2.1'
+        kotlin_version = '1.2.71'
         jacoco_plugin_version = '0.12.0'
         libVersions = [
                 android: [
@@ -23,7 +23,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:3.2.0"
+        classpath "com.android.tools.build:gradle:$gradle_plugin_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.vanniktech:gradle-android-junit-jacoco-plugin:$jacoco_plugin_version"
     }
