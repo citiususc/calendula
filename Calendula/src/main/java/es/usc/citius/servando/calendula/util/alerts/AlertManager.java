@@ -18,9 +18,6 @@
 
 package es.usc.citius.servando.calendula.util.alerts;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalTime;
-
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -94,10 +91,7 @@ public class AlertManager {
                 DailyAgenda.instance().addItem(schedule.patient(), item, false);
             }
         } else {
-            for (DateTime time : schedule.hourlyItemsToday()) {
-                LocalTime timeToday = time.toLocalTime();
-                DailyAgenda.instance().addItem(schedule.patient(), schedule, timeToday);
-            }
+            DailyAgenda.instance().generateItemsForHourlySchedule(schedule.patient(), schedule);
         }
         CalendulaApp.eventBus().post(PersistenceEvents.SCHEDULE_EVENT);
     }

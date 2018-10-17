@@ -26,6 +26,7 @@ import com.j256.ormlite.misc.TransactionManager;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
 import java.sql.SQLException;
@@ -161,6 +162,9 @@ public class DailyAgenda {
         }
     }
 
+    /**
+     * Generates item for a ROUTINE SCHEDULE
+     */
     public void addItem(Patient p, ScheduleItem item, boolean taken) {
         // add to daily schedule
         DailyScheduleItem dsi;
@@ -183,21 +187,35 @@ public class DailyAgenda {
         }
     }
 
-    public void addItem(Patient p, Schedule s, LocalTime time) {
+
+    /**
+     * Generates item for a HOURLY REP SCHEDULE
+     */
+    private void addItem(Patient p, Schedule s, LocalDateTime time) {
         // add to daily schedule
         DailyScheduleItem dsi;
-        if (s.enabledForDate(LocalDate.now())) {
-            dsi = new DailyScheduleItem(s, time);
+        if (s.enabledForDate(time.toLocalDate())) {
+            dsi = new DailyScheduleItem(s, time.toLocalTime());
+            dsi.setDate(time.toLocalDate());
             dsi.setPatient(p);
             dsi.save();
         }
-        for (int i = 1; i <= NEXT_DAYS_TO_SHOW; i++) {
-            LocalDate date = LocalDate.now().plusDays(i);
-            if (s.enabledForDate(date)) {
-                dsi = new DailyScheduleItem(s, time);
-                dsi.setPatient(p);
-                dsi.setDate(date);
-                dsi.save();
+    }
+
+
+    /**
+     * Generates DailyScheduleItems for today and tomorrow for the given HOURLY schedule
+     *
+     * @param patient the patient
+     * @param s the HOURLY schedule
+     */
+    public void generateItemsForHourlySchedule(Patient patient, Schedule s) {
+        for (DateTime time : s.hourlyItemsToday()) {
+            DailyAgenda.instance().addItem(patient, s, time.toLocalDateTime());
+        }
+        for (int i = 1; i <= DailyAgenda.NEXT_DAYS_TO_SHOW; i++) {
+            for (DateTime time : s.hourlyItemsAt(DateTime.now().plusDays(i))) {
+                DailyAgenda.instance().addItem(patient, s, time.toLocalDateTime());
             }
         }
     }
