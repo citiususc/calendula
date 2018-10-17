@@ -478,8 +478,6 @@ Si eliges no descargarla, puede perderse alguna información de tus medicamentos
 <string name="pin_recovery_title">"Recuperación de PIN"</string>
 <string name="pin_use_fingerprint">"Usar huella dactilar"</string>
 <string name="pref_fingerprint_enable_title">"Desbloqueo con huella dactilar"</string>
-    <string name="pref_secure_window_title">"Ventana segura"</string>
-    <string name="pref_secure_window_summary">"Impide que se muestre información de la app en capturas de pantalla o en el menú de aplicaciones en ejecución"</string>
 <string name="pref_header_privacy">"Privacidad"</string>
 <string name="pref_summary_pin_lock_set">"PIN configurado"</string>
 <string name="pref_summary_pin_lock_unset">"PIN no configurado"</string>
@@ -544,4 +542,6 @@ Quieres instalar la nueva base de datos ahora?"</string>
 <string name="channel_meds_description">"Notificaciones relacionadas con medicamentos, como recordatorios de tomas."</string>
 <string name="channel_default_name">"Por defecto"</string>
 <string name="channel_default_description">"Otras notificaciones."</string>
+<string name="pref_secure_window_title">"Ventana segura"</string>
+<string name="pref_secure_window_summary">"Impide que se muestre información de la app en capturas de pantalla o en el menú de aplicaciones en ejecución"</string>
 </resources>
