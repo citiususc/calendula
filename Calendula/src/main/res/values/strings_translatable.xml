@@ -541,4 +541,7 @@ Do you want to install the new database now?
 <string name="channel_meds_description">"Notifications related to medicines such as intake reminders."</string>
 <string name="channel_default_name">"Default"</string>
 <string name="channel_default_description">"Other notifications."</string>
+<string name="delays_five_min">"5 min"</string>
+<string name="pref_secure_window_title">"Secure window"</string>
+<string name="pref_secure_window_summary">"Prevents app info from appearing in screenshots or in the open apps menu"</string>
 </resources>

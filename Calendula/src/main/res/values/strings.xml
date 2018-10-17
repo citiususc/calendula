@@ -156,6 +156,7 @@
 
     <string-array name="delays_array">
         <item>@string/delays_one_min</item>
+        <item>@string/delays_five_min</item>
         <item>@string/delays_fifteen_min</item>
         <item>@string/delays_thirty_min</item>
         <item>@string/delays_sixty_min</item>
@@ -187,5 +188,15 @@
         <item>300</item>
     </string-array>
 
+    <string-array name="hourly_repetition_display" translatable="false">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>8</item>
+        <item>10</item>
+        <item>12</item>
+    </string-array>
 
 </resources>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Calendula - An assistant for personal medication management.
   ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
   ~
@@ -18,12 +17,12 @@
   -->
 
 <resources>
-    <item name="fastadapter_allergen_item" type="id">1</item>
-    <item name="fastadapter_allergen_group_item" type="id">2</item>
-    <item name="fastadapter_allergen_group_sub_item" type="id">3</item>
-    <item name="fastadapter_allergy_group_item" type="id">4</item>
-    <item name="fastadapter_allergy_group_sub_item" type="id">5</item>
-    <item name="fastadapter_allergy_item" type="id">6</item>
-    <item name="fastadapter_medicine_item" type="id">7</item>
-    <item name="fastadapter_schedule_item" type="id">8</item>
+    <item name="fastadapter_allergen_item" type="id" />
+    <item name="fastadapter_allergen_group_item" type="id" />
+    <item name="fastadapter_allergen_group_sub_item" type="id" />
+    <item name="fastadapter_allergy_group_item" type="id" />
+    <item name="fastadapter_allergy_group_sub_item" type="id" />
+    <item name="fastadapter_allergy_item" type="id" />
+    <item name="fastadapter_medicine_item" type="id" />
+    <item name="fastadapter_schedule_item" type="id" />
 </resources>

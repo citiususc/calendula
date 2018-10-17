@@ -18,6 +18,7 @@
 
 package es.usc.citius.servando.calendula.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ContextWrapper;
@@ -337,7 +338,7 @@ public class ScheduleTimetableFragment extends Fragment
             @Override
             public Resources getResources() {
                 Resources r = super.getResources();
-                if(wrappedResources == null) {
+                if (wrappedResources == null) {
                     wrappedResources = new Resources(r.getAssets(), r.getDisplayMetrics(), r.getConfiguration()) {
                         @NonNull
                         @Override
@@ -546,27 +547,22 @@ public class ScheduleTimetableFragment extends Fragment
     }
 
     void showHourlyPickerDIalog() {
-        /*NumberPickerBuilder npb =
-            new NumberPickerBuilder().setDecimalVisibility(NumberPicker.INVISIBLE)
-                .setMinNumber(1)
-                .setMaxNumber(24)
-                .setPlusMinusVisibility(NumberPicker.INVISIBLE)
-                .setFragmentManager(getActivity().getSupportFragmentManager())
-                .setTargetFragment(this)
-                .setReference(REF_DIALOG_HOURLY_INTERVAL)
-                .setStyleResId(R.style.BetterPickersDialogFragment_Calendula);
-        npb.show();*/
 
         AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
         b.setTitle(getString(R.string.dialog_interval_title));
-        final String[] types = {"2", "3", "4", "6", "8", "12"};
-        b.setItems(types, new DialogInterface.OnClickListener() {
 
+        final int[] hourlyRepValues = getContext().getResources().getIntArray(R.array.hourly_repetition_values);
+//        final String[] hourlyRepDisplay = getContext().getResources().getStringArray(R.array.hourly_repetition_display);
+
+        b.setItems(R.array.hourly_repetition_display, new DialogInterface.OnClickListener() {
+
+            @SuppressLint("SetTextI18n")
+            //the int is put into a button with just the value, no need for localization
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                int result = Integer.valueOf(types[which]);
-                hourlyIntervalEditText.setText("" + result);
+                final int result = hourlyRepValues[which];
+                hourlyIntervalEditText.setText(Integer.toString(result));
                 schedule.rule().setFrequency(Frequency.HOURLY);
                 schedule.rule().setInterval(result);
             }

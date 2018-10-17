@@ -542,4 +542,6 @@ Quieres instalar la nueva base de datos ahora?"</string>
 <string name="channel_meds_description">"Notificaciones relacionadas con medicamentos, como recordatorios de tomas."</string>
 <string name="channel_default_name">"Por defecto"</string>
 <string name="channel_default_description">"Otras notificaciones."</string>
+<string name="pref_secure_window_title">"Ventana segura"</string>
+<string name="pref_secure_window_summary">"Impide que se muestre información de la app en capturas de pantalla o en el menú de aplicaciones en ejecución"</string>
 </resources>

@@ -25,11 +25,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -45,6 +47,8 @@ import es.usc.citius.servando.calendula.pinlock.PinLockActivity;
 import es.usc.citius.servando.calendula.pinlock.UnlockStateManager;
 import es.usc.citius.servando.calendula.util.LogUtil;
 import es.usc.citius.servando.calendula.util.PermissionUtils;
+import es.usc.citius.servando.calendula.util.PreferenceKeys;
+import es.usc.citius.servando.calendula.util.PreferenceUtils;
 import es.usc.citius.servando.calendula.util.ScreenUtils;
 
 
@@ -63,6 +67,16 @@ public abstract class CalendulaActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // set FLAG secure if the secure_window preference is enabled
+        if (PreferenceUtils.getBoolean(PreferenceKeys.SECURE_WINDOW, false)) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
+                    WindowManager.LayoutParams.FLAG_SECURE);
+        }
     }
 
     protected CalendulaActivity setupToolbar(@Nullable String title, @ColorInt int color, @ColorInt int iconColor) {
