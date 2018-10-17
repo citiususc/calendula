@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="title_home">"Обзор"</string>
+<string name="action_settings">"Настройки"</string>
+<string name="action_remove">"Удалить"</string>
+<string name="home_menu_routines">"СОБЫТИЯ"</string>
+<string name="home_menu_medicines">"ЛЕКАРСТВА"</string>
+<string name="home_menu_pharmacies">"Аптеки"</string>
+<string name="home_menu_plantrip">"План поездки"</string>
+<string name="medicine">"лекарство"</string>
+<string name="drawer_help_option">"Помощь"</string>
+<string name="drawer_settings_option">"Настройки"</string>
+<string name="drawer_about_option">"О приложении"</string>
+<string name="title_activity_routines">"События"</string>
+<string name="title_edit_routine_activity">"Изменить событие"</string>
+<string name="title_create_routine_activity">"Создать событие"</string>
+<string name="title_activity_medicines">"Лекарства"</string>
+<string name="title_edit_schedule_activity">"Изменить график"</string>
+<string name="title_create_schedule_activity">"Создать график"</string>
+<string name="routine_name">"Название события"</string>
+<string name="routine_time">"Время"</string>
+<string name="create_routine_button_text">"Создать событие"</string>
+<string name="create_new_routine">"Создать новое событие..."</string>
+<string name="medicine_name">"Назв. лек-ва"</string>
+<string name="medicine_presentation">"Форма"</string>
+<string name="create_medicine_button_text">"Создать лекарство"</string>
+<string name="no_stock_info_msg">"Наличие неизвестно"</string>
+<string name="title_activity_schedules">"Графики"</string>
+<string name="delay">"Отложить"</string>
+<string name="done">"Готово"</string>
+<string name="cancel">"Отмена"</string>
+<string name="confirm">"Подтвердить"</string>
+<string name="meds_time">"Время принять лекарства"</string>
+<string name="meds_time_lost">"Приём пропущен"</string>
+<string name="title_select_dose_dialog">"Введите дозу"</string>
+<string name="doses_and_times">"Время приёма и дозы"</string>
+<string name="schedule_repeat_days">"Повтор"</string>
+<string name="summary_title">"Проверьте график"</string>
+<string name="summary">"Итого"</string>
+<string name="pills">"Таблетки"</string>
+<string name="capsules">"Капсулы"</string>
+<string name="inhaler">"Ингалятор"</string>
+<string name="drops">"Капли"</string>
+<string name="pomade">"Мазь"</string>
+<string name="syrup">"Сироп"</string>
+<string name="spray">"Спрей"</string>
+<string name="patches">"Пластыри"</string>
+<string name="unknown">"Неизвестно"</string>
+<string name="effervescent">"Быстрорастворимые"</string>
+<string name="schedule">"График"</string>
+<plurals name="injections_units">
+<item quantity="one">"инъекция"</item>
+<item quantity="few">"инъекции"</item>
+<item quantity="many">"инъекций"</item>
+<item quantity="other">"инъекций"</item>
+</plurals>
+<plurals name="pills_units">
+<item quantity="one">"таблетка"</item>
+<item quantity="few">"таблетки"</item>
+<item quantity="many">"таблеток"</item>
+<item quantity="other">"таблеток"</item>
+</plurals>
+<plurals name="capsules_units">
+<item quantity="one">"капсула"</item>
+<item quantity="few">"капсулы"</item>
+<item quantity="many">"капсул"</item>
+<item quantity="other">"капсул"</item>
+</plurals>
+<plurals name="inhaler_units">
+<item quantity="one">"ингаляция"</item>
+<item quantity="few">"ингаляции"</item>
+<item quantity="many">"ингаляций"</item>
+<item quantity="other">"ингаляций"</item>
+</plurals>
+<plurals name="spray_units">
+<item quantity="one">"нажатие"</item>
+<item quantity="few">"нажатия"</item>
+<item quantity="many">"нажатий"</item>
+<item quantity="other">"нажатий"</item>
+</plurals>
+<plurals name="drops_units">
+<item quantity="one">"капля"</item>
+<item quantity="few">"капли"</item>
+<item quantity="many">"капель"</item>
+<item quantity="other">"капель"</item>
+</plurals>
+<plurals name="pomade_units">
+<item quantity="one">"доза"</item>
+<item quantity="few">"дозы"</item>
+<item quantity="many">"доз"</item>
+<item quantity="other">"доз"</item>
+</plurals>
+<plurals name="syrup_units">
+<item quantity="one">"мл"</item>
+<item quantity="few">"мл"</item>
+<item quantity="many">"мл"</item>
+<item quantity="other">"мл"</item>
+</plurals>
+<plurals name="patches_units">
+<item quantity="one">"пластырь"</item>
+<item quantity="few">"пластыря"</item>
+<item quantity="many">"пластырей"</item>
+<item quantity="other">"пластырей"</item>
+</plurals>
+<plurals name="unknown_units">
+<item quantity="one">"единица"</item>
+<item quantity="few">"единицы"</item>
+<item quantity="many">"единиц"</item>
+<item quantity="other">"единиц"</item>
+</plurals>
+<plurals name="effervescent_units">
+<item quantity="one">"пакетик"</item>
+<item quantity="few">"пакетика"</item>
+<item quantity="many">"пакетиков"</item>
+<item quantity="other">"пакетиков"</item>
+</plurals>
+<string name="never">"Никогда"</string>
+<string name="every_day">"Каждый день"</string>
+<string name="once_a_day">"1 раз в день"</string>
+<string name="twice_a_day">"2 раза в день"</string>
+<string name="tree_times_a_day">"3 раза в день"</string>
+<string name="four_times_a_day">"4 раза в день"</string>
+<string name="times_a_day">"раз в день"</string>
+<string name="and">"и"</string>
+<string name="routine_breakfast">"Завтрак"</string>
+<string name="routine_lunch">"Обед"</string>
+<string name="routine_dinner">"Ужин"</string>
+<string name="schedule_timetable_time_column">"ВРЕМЯ"</string>
+<string name="schedule_timetable_dose_column">"ДОЗА"</string>
+<string name="take">"Приём"</string>
+<string name="first_intake">"Первый приём в"</string>
+<string name="day_monday_short">"Пн"</string>
+<string name="day_tuesday_short">"Вт"</string>
+<string name="day_wednesday_short">"Ср"</string>
+<string name="day_thursday_short">"Чт"</string>
+<string name="day_friday_short">"Пт"</string>
+<string name="day_saturday_short">"Сб"</string>
+<string name="day_sunday_short">"Вс"</string>
+<string name="schedule_day_selector_mo">"ПН"</string>
+<string name="schedule_day_selector_tu">"ВТ"</string>
+<string name="schedule_day_selector_we">"СР"</string>
+<string name="schedule_day_selector_th">"ЧТ"</string>
+<string name="schedule_day_selector_fr">"ПТ"</string>
+<string name="schedule_day_selector_sa">"СБ"</string>
+<string name="schedule_day_selector_su">"ВС"</string>
+<string name="schedule_day_selector_none">"НЕТ"</string>
+<string name="agenda_zoom_meds_time">"Время принимать лекарства!"</string>
+<string name="create_schedule_unselected_med">"Выберите лекарство, чтобы задать график его приёма"</string>
+<string name="create_schedule_incomplete_items">"Выберите, с какими событиями связать приёмы"</string>
+<string name="create_schedule_incomplete_doses">"Дозы должны быть больше нуля"</string>
+<string name="home_no_pending_meds_message">"Сегодня принимать лекарства не нужно"</string>
+<string name="medicine_created_message">"Лекарство создано!"</string>
+<string name="medicine_deleted_message">"Лекарство удалено!"</string>
+<string name="medicine_edited_message">"Лекарство обновлено!"</string>
+<string name="schedule_created_message">"График создан!"</string>
+<string name="cycle_period_cero_message">"Период приёма и перерыв должны быть больше нуля"</string>
+<string name="reminder_cancelled_message">"Напоминание отменено"</string>
+<string name="remove_routine_message_long">"С событием %1$s связаны графики, которые при удалении события будут утеряны. Удалить?"</string>
+<string name="remove_medicine_message_long">"С лекарством %1$s связаны графики, которые при удалении лекарства будут утеряны. Удалить?"</string>
+<string name="remove_routine_message_short">"Удалить событие %1$s?"</string>
+<string name="remove_medicine_message_short">"Удалить лекарство %1$s?"</string>
+<string name="remove_routine_dialog_title">"Удалить событие"</string>
+<string name="remove_medicine_dialog_title">"Удалить лекарство"</string>
+<string name="remove_schedule_dialog_title">"Удалить график"</string>
+<string name="remove_schedule_message">"Удалить график приёма лекарства %1$s?"</string>
+<string name="dialog_yes_option">"Да"</string>
+<string name="dialog_no_option">"Нет"</string>
+<string name="medicine_no_name_error_message">"Пожалуйста, введите название"</string>
+<string name="medicine_unselected">"Не выбрано"</string>
+<string name="medicine_no_presentation_error_message">"Пожалуйста, выберите лекарственную форму"</string>
+<string name="tutorial_understood">"Понятно"</string>
+<string name="notification_repeat_message">"Напоминание повторится в %1$s"</string>
+<string name="notification_cancel_now">"Отменить"</string>
+<string name="notification_delay">"Отложить"</string>
+
+<!-- If the number here is never less than 5, pluralization for Russian is not strictly necessary here. -->
+<string name="alarm_delayed_message">"Отложено на %1$s минут"</string>
+<string name="moods_dialog_title">"Как самочувствие?"</string>
+<string name="mood_very_bad">"Очень плохо"</string>
+<string name="mood_bad">"Плохо"</string>
+<string name="mood_neutral">"Нормально"</string>
+<string name="mood_good">"Хорошо"</string>
+<string name="mood_very_good">"Отлично"</string>
+<string name="search_med_hint">"Поиск по названию или коду..."</string>
+<string name="pref_header_prescriptions">"База лекарств"</string>
+<string name="medicine_edit_name_hint">"Вводите сюда..."</string>
+
+<!-- Fuzzy -->
+<string name="enable_prescriptions_dialog_message">"Добавлять лекарства станет проще, если включить базу лекарств. С ее помощью можно также просматривать инструкции к ним. Это можно сделать позже в меню настроек."</string>
+<string name="enable_prescriptions_dialog_title">"База лекарств"</string>
+<string name="enable_prescriptions_dialog_yes">"Включить (рекомендуется)"</string>
+<string name="enable_prescriptions_dialog_no">"Отменить"</string>
+<string name="driving_warning">"Приём этого лекарства может быть нежелателен перед вождением. Внимательно прочитайте инструкцию или проконсультируйтесь у фармацевта, прежде чем садиться за руль."</string>
+<string name="driving_warning_title">"Осторожно"</string>
+<string name="driving_warning_show_prospect">"Инструкция"</string>
+<string name="driving_warning_gotit">"Понятно"</string>
+<string name="dialog_interval_title">"Интервал"</string>
+
+<!-- If this is the one at "Take X every Y hours", then this needs pluralization by Y in Russian: "Принять N каждый 1 час", "...каждые 2 часа", "...каждые 5 часов", "...каждые 0 часов" -->
+<string name="every">"каждые"</string>
+<string name="repeat_every_tostr">"Каждые %1$s %2$s"</string>
+<string name="label_schedule_repeat_today">"От"</string>
+<string name="button_schedule_repeat_today">"Сегодня"</string>
+<string name="label_schedule_repeat_until">"До"</string>
+<string name="button_schedule_repeat_until">"Никогда"</string>
+<string name="schedule_limits_date_format">"dd MMMM YYYY"</string>
+
+<!-- May need pluralization -->
+<string name="schedules_stop_after">"Прекратить после %1$s приёмов"</string>
+<string name="schedule_repeat_period">"Приём + перерыв"</string>
+<string name="schedule_repeat_type_everyday">"Каждый день"</string>
+<string name="schedule_repeat_type_some_week_days">"По дням недели"</string>
+<string name="schedule_repeat_type_interval">"Интервал"</string>
+<string name="schedule_repeat_frequency_days">"дней"</string>
+<string name="schedule_repeat_frequency_weeks">"недель"</string>
+<string name="schedule_repeat_frequency_months">"месяцев"</string>
+<string name="summary_show_calendar">"Показать календарь"</string>
+<string name="hours">"часов"</string>
+<string name="schedule_help_no_type_selected">"Пожалуйста, выберите тип графика, чтобы продолжить создание"</string>
+<string name="schedule_type_routines_title">"Приём по событиям"</string>
+<string name="schedule_type_hourly_title">"Приём с интервалом"</string>
+<string name="schedule_type_period_title">"Приём с перерывами"</string>
+<string name="schedule_type_common_periods">"Типичные циклы"</string>
+<string name="schedule_type_routines_description">"Пример: каждые 3 дня, с завтраком, обедом и ужином"</string>
+<string name="schedule_type_hourly_description">"Пример: каждые 8 часов"</string>
+<string name="schedule_type_period_description">"Пример: 21 день + перерыв 7 дней"</string>
+<string name="schedule_help_cycle">"Укажите цикл повтора (приём + перерыв)"</string>
+<string name="schedule_help_duration">"И, наконец, можно обозначить начало и конец курса приёма. Оставьте как есть, чтобы он не заканчивался."</string>
+<string name="schedule_help_hourly">"Пожалуйста, укажите период повтора, дозировку и время первго приёма."</string>
+<string name="schedule_help_repeat">"Укажите, как повторяется график. Если каждый день, ничего изменять не требуется."</string>
+<string name="schedule_help_timesbyday">"Пожалуйста, укажите число приёмов в день"</string>
+<string name="schedule_help_timetable">"Теперь свяжите приёмы лекарств с событиями и для каждого приёма укажите дозировку"</string>
+<string name="title_activity_calendar">"Календарь приёма"</string>
+<string name="title_pickups_bottom_sheet">"Приёмы %1$s"</string>
+<string name="pickup_interval">"До %1$s"</string>
+<string name="pickup_date_format">"dd MMMM"</string>
+<string name="title_activity_confirm_schedules">"Подтвердите расписания"</string>
+<string name="confirm_prescription_x_of_y">"Прописано %1$s %2$s"</string>
+<string name="scan_prescriptions_title">"Сканировать рецепт"</string>
+<string name="scan_qr">"Сканировать QR"</string>
+<string name="duration">"Длительность"</string>
+<string name="all_meds_taken">"Все лекарства приняты!"</string>
+<string name="create_schedule_select_med_before_dose">"Пожалуйста, сначала выберите лекарство"</string>
+<string name="title_activity_patients">"Пациенты"</string>
+<string name="schedule_type_help_title">"Вы создаёте новый график приёма; выберите наиболее подходящий тип!"</string>
+<string name="schedule_type_routines_help">"Этот тип графика привязывает приём к действиям из вашего быта, например \"Каждый день с завтраком и ужином, кроме воскресений\" или \"Каждые 3 дня с обедом.\""</string>
+<string name="schedule_type_hourly_help">"Почасовые графики приёма предназначены для приёма через заданные периоды, как например \"Каждые 8 часов\". Укажите время первого приёма и вперёд."</string>
+<string name="schedule_type_intervalrest_help">"Противозачаточные и некоторые другие виды лекарств принимаются с регулярными перерывами. В таком расписании можно указать длительность периодов приёма и перерывов."</string>
+<string name="routines_list_empty_text">"Список событий пуст.
+
+События вроде завтрака и обеда, происходящие в заданное время, связываются с приёмами лекарств. С их помощью можно быстрее создавать графики приёма."</string>
+<string name="medicines_list_empty_text">"Список лекарств пуст.
+
+Добавьте принимаемые лекарства в список, чтобы облегчить доступ к инструкциям и предупреждениям."</string>
+<string name="schedules_list_empty_text">"Список графиков приёма пуст.
+
+Создайте графики приёма для своих лекарств, а мы сообщим вам, когда настанет время их принимать!"</string>
+<string name="about_description"><![CDATA[
+<br/><br/>
+Приложение Calendula разработано Исследовательским Центром по Информационным Техпологиям при Университете Сантьяго-де-Компостела (<a href=\'http://citius.usc.es\'>CITIUS</a>)
+<br/><br/>
+Дополнительную информацию вы можете найти у нас на сайте:
+<br/>
+<a href=\'http://citius.usc.es/calendula\'>citius.usc.es/calendula </a>
+<br/><br/>
+Calendula является проектом с открытым исходным кодом. Идеи и предложения можно отправить на нашей странице на GitHub или по электронной почте:
+<br/>
+<a href=\'https://github.com/citiususc/calendula\'>https://github.com/citiususc/calendula </a>
+ <br/>
+<a href=\'mailto:citius.calendula@usc.es\'>citius.calendula@usc.es</a>
+<br/><br/>
+В этом проекте используются следующие библиотеки с открытым исходным кодом:
+"]]></string>
+<string name="message_generic_pageloaderror">"При загрузке страницы произошла ошибка"</string>
+
+<!-- Fuzzy -->
+<string name="title_prospect_webview">"Просмотр рецепта"</string>
+<string name="message_generic_pleasewait">"Секундочку..."</string>
+<string name="message_prospect_loading">"Инструкция скоро будет..."</string>
+<string name="message_prospect_connection_error">"Не удалось загрузить инструкцию"</string>
+<string name="message_prospect_not_found_error">"К сожалению, инструкция для этого лекарства не обнаружена"</string>
+<string name="intake_not_available">"Приём недоступен"</string>
+<string name="confirm_future_intake_warning">"Этот приём назначен на %1$s. Мы сообщим вам, когда время придёт!"</string>
+<string name="confirm_past_intake_warning">"Со времени приёма прошло несколько часов, вы приняли лекарство и подтверждаете приём сейчас?"</string>
+<string name="meds_from">"Лекарства за"</string>
+<string name="at_time_connector">"в"</string>
+<string name="med_taken_at">"Подтверждено в"</string>
+<string name="med_cancelled_at">"Отменено в"</string>
+<string name="med_not_taken">"Не принято"</string>
+<string name="meds_confirm_ok">"Да, принято"</string>
+<string name="meds_confirm_cancel">"Нет"</string>
+<string name="meds_unconfirm_ok">"Нет"</string>
+<string name="meds_unconfirm_cancel">"Да, принято"</string>
+<string name="unconfirm_past_intake_warning">"Вы подтвердили приём в %1$s, приём был?"</string>
+<string name="action_share_link">"Поделиться"</string>
+<string name="action_open_with_browser">"Открыть в браузере"</string>
+<string name="title_share_link">"Поделиться..."</string>
+<string name="title_about">"О приложении"</string>
+<string name="home_menu_allergies">"Аллергия"</string>
+<string name="title_activity_allergies">"Аллергия"</string>
+<string name="message_allergy_add_failure">"При сохранении сведений об аллергии произошла ошибка."</string>
+<string name="remove_allergy_message_short">"Удалить запись об аллергии на %1$s?"</string>
+<string name="excipient">"Наполнитель"</string>
+<string name="active_ingredient">"Активное вещество"</string>
+<string name="delete_allergen_error">"Не удалось удалить запись об аллергии."</string>
+<string name="allergies_placeholder">"Записей об аллергии нет!"</string>
+<string name="allergies_search_placeholder">"Введите свой вид аллергии, чтобы получить предложения."</string>
+<string name="allergies_search_placeholder_no_result">"Поиск не дал результатов"</string>
+<string name="notification_error_msg">"Кажется, при отправке уведомления возникла проблема. Посмотрите в расписание, возможно что-то нужно сделать."</string>
+<string name="notification_error_title">"Ой-ой..."</string>
+<string name="title_medicine_allergy_alert">"Обнаружена аллергия на лекарство."</string>
+<string name="message_medicine_alert">"В этом лекарстве есть ингредиенты, на которые у вас аллергия. Для вашей же безопасности создание графиков приёма для него недоступно."</string>
+<string name="medicine_save_error_message">"При сохранении лекарства возникла ошибка."</string>
+<string name="message_schedule_medicine_allergy">"Нельзя создать график приёма для этого лекарства, поскольку у вас аллергия на его компоненты."</string>
+<string name="title_allergies_detected_dialog">"Внимание"</string>
+<string name="message_allergies_detected_dialog">"Некоторые лекарства у вас в аптечке содержат только что добавленный аллерген. Внимательно изучите прописанные вам лекарства."</string>
+<string name="error_duplicate_medicine">"Это лекарство уже у вас в аптечке."</string>
+
+<!-- Pluralization? -->
+<string name="allergies_group_elements_number">"%1$d элементов"</string>
+<string name="allergies_selected_number">"%1$d выбрано"</string>
+<string name="message_allergy_add_multiple_success">"Информация об аллергии сохранена."</string>
+<string name="title_allergies_database_required">"Необходима база лекарств"</string>
+<string name="message_allergies_database_required">"Отслеживание аллергии доступно только для базы лекарств AEMPS. Активировать её?"</string>
+<string name="allergies_group_elements_selected">"%1$d элементов (%2$d выбрано)"</string>
+<string name="add_custom_med_button_text">"Добавить \"%1$s\" в аптечку"</string>
+<string name="medicine_search_not_found_msg">"К сожалению, ничего с таким названием не найдено"</string>
+<string name="medicine_search_empty_list_msg">"Введите название лекарства или код для начала поиска, или отсканируйте штрих-код..."</string>
+<string name="search_hint">"Поиск..."</string>
+<string name="database_us_display">"База лекарств США"</string>
+<string name="pref_stock_alert_title">"Предупреждать о кончающихся лекарствах"</string>
+<string name="permission_dialog_go_to_settings">"Это действие не удалось совершить, поскольку вы отказали в доступе к хранилищу данных. Дать разрешение вы можете в настройках приложения в системе."</string>
+<string name="permission_dialog_ok">"Перейти к настройкам приложения"</string>
+<string name="title_alert_allergy">"Это лекарство может вызвать аллергию"</string>
+<string name="description_alert_allergy">"У вас указана аллергия на некоторые компоненты этого лекарства. Аллергены:"</string>
+<string name="default_user_name">"Пользователь"</string>
+<string name="relation_user_possession_thing">"%1$s: %2$s"</string>
+<string name="schedules_for_med">"%1$d графиков приёма"</string>
+<string name="schedules_for_med_none">"Нет графиков приёма"</string>
+<string name="yesterday">"Вчера"</string>
+<string name="today">"Сегодня"</string>
+<string name="tomorrow">"Завтра"</string>
+<string name="message_delete_default_patient">"Это изначальный пациент и он не может быть удалён. Удалить все его графики, лекарства и события?"</string>
+<string name="yes_delete_everything">"Да, удалить все"</string>
+<string name="default_user_data_deleted">"Данные пользователя удалены!"</string>
+<string name="create_default_routines">"Создать исходные события"</string>
+<string name="stock_running_out">"Заканчиваются"</string>
+<string name="add_more_stock">"Добавить"</string>
+<string name="stock_remaining_msg">"%1$d: осталось %2$s"</string>
+<string name="active_schedules_none">"Нет активных графиков"</string>
+<string name="active_schedules_one">"1 активный график"</string>
+
+<!-- Needs proper pluralization -->
+<!-- Fuzzy -->
+<string name="active_schedules_number">"%1$d активных графиков"</string>
+<string name="message_link_real_prescription">"Для дополнительной информации свяжите с лекарством из БД"</string>
+<string name="stock_no_stock_info">"Нет информации о количестве"</string>
+<string name="stock_no_data">"Нет данных"</string>
+<string name="message_med_linked_success">"Связь сохранена!"</string>
+<string name="label_info_short">"Инфо"</string>
+<string name="label_alerts_short">"Напомин."</string>
+<string name="medicine_not_found_error">"Лекарство не найдено"</string>
+<string name="message_link_real_prescription_short">"Связать с лек-вом из БД"</string>
+<string name="prospect">"Инструкция"</string>
+<string name="button_official_prospect">"Официальная инструкция"</string>
+
+<!-- Needs pluralization -->
+<!-- Fuzzy -->
+<string name="stock_enough_for_days">"Хватит на %1$d дней при текущем расходе"</string>
+
+<!-- Needs pluralization -->
+<!-- Fuzzy -->
+<string name="stock_enough_for_months_days">"Хватит на %1$d месяцев и %2$d дней при текущем расходе"</string>
+<string name="stock_enough_for_upper_limit">"Хватит более чем на три месяца"</string>
+<string name="no_alerts_detected">"Для лекарства нет напоминаний"</string>
+<string name="stock_depleted">"Закончилось"</string>
+<string name="stock_depleted_msg">"Это лекарство закончилось."</string>
+<string name="message_allergies_experimental_warning">"Отслеживание аллергии пока работает как эксперимент. Даже пользуясь им, стоит сверяться с инструкциями к лекарствам самостоятельно."</string>
+<string name="dialog_get_me_out">"Тогда не надо!"</string>
+<string name="dialog_continue_option">"Продолжить"</string>
+<string name="important_info">"Важная информация"</string>
+<string name="download_db_dialog_title">"Установка базы лекарств"</string>
+<string name="download_db_dialog_message">"База будет загружена и настроена. Это займет несколько секунд, но в это время можно будет пользоваться приложением как обычно."</string>
+<string name="download_db_unexpected_error">"Не удалось загрузить базу :("</string>
+<string name="install_db_notification_title">"Установка базы..."</string>
+<string name="install_db_notification_ticker">"Установка базы..."</string>
+<string name="install_db_notification_oncomplete">"База установлена"</string>
+<string name="install_db_notification_oncomplete_text">"Нажмите чтобы добавить лекарство"</string>
+<string name="install_db_notification_content">"Идет установка"</string>
+<string name="install_db_notification_onfailure">"Не удалось настроить базу"</string>
+<string name="install_db_notification_onfailure_content">"Что-то пошло не так во время настройки базы лекарств"</string>
+<string name="intro_title">"Добро пожаловать в Calendula!"</string>
+<string name="intro_description">"Соблюдать график приёма лекарств может быть непросто, но теперь это будет хотя бы несложно!
+
+Взгляните, что у нас для вас есть!"</string>
+<string name="intro_routines_title">"События"</string>
+<string name="intro_routines_text">"К событию, происходящему каждый день, удобно привязывать приёмы лекарств.
+
+Скажем, вы принимаете несколько лекарств за завтраком или обедом? Привяжите их к событиям, к каждому из них Calendula сгруппирует все напоминания в одно уведомление."</string>
+<string name="intro_meds_title">"Аптечка"</string>
+<string name="intro_meds_text">"Отслеживайте имеющиеся у вас лекарства с помощью аптечки и с лёгкостью скачивайте инструкции из официальных баз данных о лекарствах."</string>
+<string name="intro_schedules_title">"Графики"</string>
+<string name="intro_schedules_text">"С помощью редактора графиков приёма опишите, что принимаете, когда и в каких количествах. Приёмы можно привязывать к каждодневным событиям, фиксированной периодичности в днях и часах и не только!"</string>
+<string name="intro_reminders_title">"Напоминания"</string>
+<string name="intro_reminders_text">"Calendula напомнит вам обо всех приёмах. И не забудьте подтвердить приём, иначе напоминание повторится!
+
+В меню настроек есть дополнительные опции для напоминаний."</string>
+<string name="intro_multipat_title">"Несколько пациентов!"</string>
+<string name="intro_multipat_text">"В одном приложении Calendula можно работать с несколькими пациентами сразу, у каждого из которых собственная аптечка, события и графики приёма.
+
+На главном экране будут видны приёмы лекарств всех пациентов."</string>
+<string name="title_activity_settings">"Настройки"</string>
+<string name="pref_header_general">"Общие"</string>
+<string name="pref_title_display_name">"Отображаемое имя"</string>
+<string name="pref_default_display_name">"Calendula"</string>
+<string name="pref_header_notifications">"Уведомления"</string>
+<string name="pref_title_new_alarm_notification">"Напоминания о приёмах"</string>
+<string name="pref_title_pickup_notification">"Напоминания о получении"</string>
+<string name="pref_title_insistent_alarms">"Настойчивые уведомления"</string>
+<string name="pref_title_repeat_alarms">"Повторять уведомления"</string>
+<string name="pref_title_sync_frequency">"Повторять каждые"</string>
+<string name="pref_title_reminder_window">"Выключать уведомление через"</string>
+<string name="pref_notification_tone">"Мелодия"</string>
+<string name="pref_notification_tone_sum">"По умолчанию"</string>
+<string name="pref_alarm_repeat_five_min">"5 минут"</string>
+<string name="pref_alarm_repeat_fifteen_min">"15 минут"</string>
+<string name="pref_alarm_repeat_thirty_min">"30 минут"</string>
+<string name="pref_alarm_repeat_sixty_min">"60 минут"</string>
+<string name="pref_alarm_reminder_thirty_min">"30 минут"</string>
+<string name="pref_alarm_reminder_one_hour">"1 час"</string>
+<string name="pref_alarm_reminder_two_hours">"2 часа"</string>
+<string name="pref_enable_databases_title">"Включить базу лекарств"</string>
+<string name="pref_available_databases_title">"Выбранная база"</string>
+<string name="pref_header_stock">"Контроль запаса"</string>
+<string name="pref_stock_do_not_warn">"Не предупреждать"</string>
+<string name="pref_stock_warn_one_week">"Меньше недели"</string>
+<string name="pref_stock_warn_two_weeks">"Меньше 2 недель"</string>
+<string name="pref_stock_warn_three_weeks">"Меньше 3 недель"</string>
+<string name="database_none_display">"Не выбрана"</string>
+
+<!-- for languages outside Spain please add (Spain) in your language at the end of the display string -->
+<string name="database_aemps_display">"База AEMPS (Испания)"</string>
+<string name="database_aemps_desc">"База Испанского агентства медикаментов и товаров медицинского назначения"</string>
+<string name="database_setting_up">"Настройка..."</string>
+<string name="schedule_type_from_qr">"Из QR-кода"</string>
+<string name="calendar_date_tomorrow">"завтра"</string>
+<string name="delays_one_min">"1 мин."</string>
+<string name="delays_thirty_min">"30 мин."</string>
+<string name="delays_fifteen_min">"15 мин."</string>
+<string name="delays_sixty_min">"60 мин."</string>
+<string name="text_take_medicines_now">"Примите лекарства"</string>
+<string name="message_patients_name_required">"Введите имя"</string>
+<string name="label_patient_name">"Имя"</string>
+<string name="scan_barcode">"Считать штрих-код"</string>
+<string name="title_database_update_available">"Доступно обновление базы"</string>
+<string name="text_database_update_available">"Доступна новая версия базы лекарств. Загрузить?"</string>
+<string name="action_download_update">"Нажмите, чтобы скачать и установить обновление!"</string>
+<string name="text_database_update_data_lost">"Некоторые лекарства из аптечки отсутствуют в новой версии базы. Они останутся в аптечке, но станут недоступны инструкции к ним и прочая дополнительная информация."</string>
+<string name="title_database_update_data_lost">"Доп. информация утеряна после обновления"</string>
+<string name="preference_check_for_updates">"Проверять наличие обновлений"</string>
+<string name="database_update_not_available">"Нет обновлений базы"</string>
+<string name="title_database_update_required">"Требуется обновление"</string>
+<string name="message_database_update_required">"Этой версии приложения требуется более новая база. Загрузить?
+В противном случае может быть утеряна некоторая информация о лекарствах в аптечке."</string>
+<string name="download">"Скачать"</string>
+<string name="message_no_internet_error">"Интернет-соединение отсутствует! Пожалуйста, установите его и попробуйте ещё раз."</string>
+<string name="action_edit">"Редактировать"</string>
+<string name="injections">"Инъекции"</string>
+<string name="title_reset_stock">"Сбросить запас?"</string>
+<string name="message_reset_stock">"Информация о запасе лекарства %1$s будет сброшена на значение по умолчанию."</string>
+<string name="reset">"Сброс"</string>
+<string name="edit_medicine">"Редактировать лекарство"</string>
+<string name="sort_by">"Сортировать по:"</string>
+<string name="sort_by_default">"По умолчанию"</string>
+<string name="sort_by_name">"Название"</string>
+<string name="sort_by_presentation">"Исполнение"</string>
+<string name="action_sort">"Сортировать"</string>
+<string name="sort_by_alerts">"Напоминания"</string>
+<string name="title_activity_pickup_calendar_short">"Получения"</string>
+<string name="calendar_patient_all">"Все"</string>
+<string name="calendar_updating">"Обновление календаря..."</string>
+<string name="best_date_recommendation_title">"Совет"</string>
+
+<!-- May need pluralization by 2nd variable -->
+<!-- Fuzzy -->
+<string name="best_single_day_message">"Зайдите в аптеку %1$s, чтобы приобрести %2$s лекарств сразу:"</string>
+<string name="best_single_day_message_one_med">"Зайдите в аптеку %1$s, чтобы приобрести:"</string>
+<string name="best_single_day_message_after_pending">"После, можете зайти в аптеку %1$s, чтобы приобрести %2$s лекарств сразу:"</string>
+<string name="best_single_day_message_after_pending_one_med">"После, можете зайти в аптеку %1$s, чтобы приобрести:"</string>
+<string name="pending_meds_msg">"Нужно приобрести лекарства. Как можно скорее зайдите в аптеку."</string>
+<string name="best_date_format">"d MMMM '('EEEE')'"</string>
+<string name="best_date_reminder">"Напоминание"</string>
+<string name="calendar_pickup_reminder_one_day_before">"За день"</string>
+<string name="calendar_pickup_reminder_two_days_before">"За 2 дня"</string>
+<string name="calendar_pickup_reminder_three_days_before">"За 3 дня"</string>
+<string name="calendar_no_medicines_to_pick_up">"Ничего покупать не нужно"</string>
+<string name="ok">"ОК"</string>
+<string name="stock">"Запас"</string>
+<string name="expand">"Расширить"</string>
+<string name="show_pickups">"Показать покупки"</string>
+<string name="help">"Помощь"</string>
+<string name="title_activity_medicines_search">"Поиск лекарств"</string>
+<string name="fingerprint_setup_dialog_message">"Хотите разблокировать Calendula отпечатком пальца?"</string>
+<string name="fingerprint_setup_dialog_success">"Разблокировка отпечатком пальца включено!"</string>
+<string name="fingerprint_setup_dialog_title">"Считайте отпечаток пальца для разблокировки"</string>
+<string name="fingerprint_unlock_dialog_failed_message">"Пожалуйста, убедитесь, что датчик чистый, и попробуйте ещё раз"</string>
+<string name="fingerprint_unlock_dialog_failed_title">"Отпечаток не распознан"</string>
+<string name="fingerprint_unlock_dialog_successful_message">"Секундочку..."</string>
+<string name="fingerprint_unlock_dialog_successful_title">"Отпечаток распознан"</string>
+<string name="fingerprint_unlock_dialog_title">"Считайте отпечаток пальца для разблокировки"</string>
+<string name="fingerprint_unlock_dialog_use_pin">"Использовать PIN-код"</string>
+<string name="pin_actions_dialog_cancel">"Отмена"</string>
+<string name="pin_actions_dialog_delete">"Удалить"</string>
+<string name="pin_actions_dialog_message">"Приложение закрыто на PIN-код. Что сделать?"</string>
+<string name="pin_actions_dialog_modify">"Изменить"</string>
+<string name="pin_actions_dialog_title">"PIN-блок"</string>
+<string name="pin_delete_dialog_message">"Уверены, что хотите убрать блокировку PIN-кодом?"</string>
+<string name="pin_delete_dialog_title">"Убрать PIN-блок?"</string>
+<string name="pin_forgot_pin">"Забыли PIN-код?"</string>
+<string name="pin_recovery_description">"Если забыли PIN-код, можете войти снова, чтобы пользоваться приложением. Продолжить?"</string>
+<string name="pin_recovery_title">"Восстановление PIN-кода"</string>
+<string name="pin_use_fingerprint">"Отпечаток пальца"</string>
+<string name="pref_fingerprint_enable_title">"Разблокировка отпечатком пальца"</string>
+<string name="pref_header_privacy">"Приватность"</string>
+<string name="pref_summary_pin_lock_set">"PIN-код установлен"</string>
+<string name="pref_summary_pin_lock_unset">"PIN-код не установлен"</string>
+<string name="pref_title_pin_lock">"Блокировка приложения"</string>
+<string name="text_pinlock_auth_error">"Введённый PIN-код неверен. Попробуйте ещё раз."</string>
+<string name="text_pinlock_auth_prompt">"Введите PIN-код, чтобы продолжить"</string>
+<string name="text_pinlock_match_error">"Введённые PIN-коды не совпадают. Попробуйте ещё раз."</string>
+<string name="text_pinlock_new_prompt">"Пожалуйста, введите PIN-код из 4 цифр."</string>
+<string name="text_pinlock_or_fingerprint_auth_prompt">"Пожалуйста, введите PIN-код или считайте отпечаток пальца, чтобы продолжить"</string>
+<string name="text_pinlock_repeat_prompt">"Теперь введите тот же PIN-код ещё раз..."</string>
+<string name="use_fingerprint_message">"или используйте отпечаток пальца для входа"</string>
+<string name="reinstall_prescriptions_dialog_message">"Для предоставления расширенной информации о лекарствах базу лекарств требуется переустановить через меню настроек. Без этого будут недоступны инструкции и другая расширенная информация.
+
+События, аптечка, графики приема и остальные базовые функции в любом случае не пострадают.
+
+Установить новую базу сейчас?
+"</string>
+<string name="pref_insistent_notification_tone">"Мелодия настойчивых уведомлений"</string>
+<string name="stock_enough_for_weeks_days">"Хватит на %1$d недель и %2$d дней с текущими графиками"</string>
+<string name="stock_running_out_dialog_message">"Осталось %1$d %2$ы лекарства %3$s, с текущими графиками запас будет исчерпан через %4$d дней."</string>
+<string name="stock_running_out_dialog_title">"Заканчивается лекарство %1$s."</string>
+<string name="manage_stock">"Управление запасами"</string>
+<string name="message_generic_error">"Ой! Произошла ошибка."</string>
+<string name="ringtone_none">"Нет"</string>
+<string name="patient_add">"Добавить пациента"</string>
+<string name="db_download_and_setup">"Скачать и установить"</string>
+<string name="schedule_continue_indefinitely">"Сделать этот график бесконечным?"</string>
+<string name="powder">"Порошок"</string>
+<string name="cream">"Крем"</string>
+<plurals name="powder_units">
+<item quantity="one">"грамм"</item>
+<item quantity="few">"грамма"</item>
+<item quantity="many">"граммов"</item>
+<item quantity="other">"граммов"</item>
+</plurals>
+<plurals name="cream_units">
+<item quantity="one">"доза"</item>
+<item quantity="few">"дозы"</item>
+<item quantity="many">"доз"</item>
+<item quantity="other">"доз"</item>
+</plurals>
+<plurals name="generic_units">
+<item quantity="one">"единица"</item>
+<item quantity="few">"единицы"</item>
+<item quantity="many">"единиц"</item>
+<item quantity="other">"единиц"</item>
+</plurals>
+<string name="generic_presentation">"Общее"</string>
+<string name="notification_taken">"Принято"</string>
+<string name="pref_pin_timeout_title">"Блокировать через"</string>
+<string name="pref_lock_30s">"30 секунд"</string>
+<string name="pref_lock_1m">"1 минуту"</string>
+<string name="pref_lock_2m">"2 минуты"</string>
+<string name="pref_lock_5m">"5 минут"</string>
+<string name="second">"секунду"</string>
+<string name="seconds">"секунд"</string>
+<string name="minute">"минуту"</string>
+<string name="minutes">"минут"</string>
+<string name="hour">"час"</string>
+<string name="day">"день"</string>
+<string name="days">"дней"</string>
+<string name="week">"неделю"</string>
+<string name="weeks">"недель"</string>
+<string name="month">"месяц"</string>
+<string name="months">"месяцев"</string>
+<string name="year">"год"</string>
+<string name="years">"лет"</string>
+<string name="channel_meds_name">"Лекарства"</string>
+<string name="channel_meds_description">"Уведомления связанные с лекарствами, например напоминания о приёме."</string>
+<string name="channel_default_name">"По умолчанию"</string>
+<string name="channel_default_description">"Другие уведомления."</string>
+</resources>

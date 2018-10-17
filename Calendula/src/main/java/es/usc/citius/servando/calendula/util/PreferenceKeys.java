@@ -64,11 +64,11 @@ public enum PreferenceKeys {
     SETTINGS_ALARM_REPEAT_ENABLED(R.string.prefkey_settings_alarm_repeat_enabled),
     SETTINGS_ALARM_REPEAT_FREQUENCY(R.string.prefkey_settings_alarm_repeat_frequency),
     SETTINGS_ALARM_NOTIFICATIONS(R.string.prefkey_settings_alarm_notifications),
-
     SETTINGS_DATABASE_UPDATE(R.string.prefkey_settings_database_update),
     SETTINGS_NOTIFICATION_TONE(R.string.prefkey_settings_notification_tone),
     SETTINGS_INSISTENT_NOTIFICATION_TONE(R.string.prefkey_settings_insistent_notification_tone),
     SETTINGS_STOCK_ALERT_DAYS(R.string.prefkey_settings_stock_alert_days),
+    SETTINGS_DEFAULTS_LOADED(R.string.prefkey_settings_defaults_loaded),
     // Schedules
     SCHEDULES_HELP_SHOWN(R.string.prefkey_schedules_help_shown),
     // Unlock PIN
@@ -77,7 +77,9 @@ public enum PreferenceKeys {
     UNLOCK_PIN_HASH(R.string.prefkey_unlock_pin_hash),
     UNLOCK_PIN_SALT(R.string.prefkey_unlock_pin_salt),
     FINGERPRINT_ENABLED(R.string.prefkey_fingerprint_enabled),
-    UNLOCK_PIN_TIMEOUT(R.string.prefkey_pin_timeout);
+    UNLOCK_PIN_TIMEOUT(R.string.prefkey_pin_timeout),
+    // Secure window
+    SECURE_WINDOW(R.string.prefkey_secure_window);
 
     @StringRes
     private final int stringId;

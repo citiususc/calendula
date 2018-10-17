@@ -39,4 +39,12 @@
         android:key="@string/prefkey_fingerprint_enabled"
         android:title="@string/pref_fingerprint_enable_title"/>
 
+    <SwitchPreference
+        android:defaultValue="true"
+        android:enabled="true"
+        android:key="@string/prefkey_secure_window"
+        android:title="@string/pref_secure_window_title"
+        android:summary="@string/pref_secure_window_summary"
+        />
+
 </PreferenceScreen>

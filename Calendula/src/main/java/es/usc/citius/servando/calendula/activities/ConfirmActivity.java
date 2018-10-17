@@ -203,6 +203,7 @@ public class ConfirmActivity extends CalendulaActivity {
     }
 
     public void showDelayDialog() {
+        //TODO allow custom delay values
         final int[] values = this.getResources().getIntArray(R.array.delays_array_values);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.notification_delay)

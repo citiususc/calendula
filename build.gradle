@@ -6,18 +6,26 @@ buildscript {
     }
 
     ext {
-        kotlin_version = '1.2.60'
+        gradle_plugin_version = '3.2.1'
+        kotlin_version = '1.2.71'
+        jacoco_plugin_version = '0.12.0'
         libVersions = [
                 android: [
-                        support: '27.1.1'
-                ]
+                        espresso:'3.0.2',
+                        support: '27.1.1',
+                        test: '1.0.2'
+                ],
+                butterknife: '8.8.1',
+                leakcanary: '1.5.1',
+                mockito: '2.13.0',
+                robolectric: '3.8'
         ]
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath "com.android.tools.build:gradle:$gradle_plugin_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.vanniktech:gradle-android-junit-jacoco-plugin:0.11.0'
+        classpath "com.vanniktech:gradle-android-junit-jacoco-plugin:$jacoco_plugin_version"
     }
 }
 

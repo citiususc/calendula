@@ -63,6 +63,7 @@
     <string name="prefkey_settings_notification_tone" translatable="false">pref_notification_tone</string>
     <string name="prefkey_settings_stock_alert_days" translatable="false">stock_alert_days</string>
     <string name="prefkey_settings_database_update" translatable="false">prescriptions_database_update</string>
+    <string name="prefkey_settings_defaults_loaded" translatable="false">pref_defaults_loaded</string>
 
     <!-- Schedules -->
     <string name="prefkey_schedules_help_shown" translatable="false">PREFERENCE_SCHEDULE_HELP_SHOWN</string>
@@ -77,5 +78,7 @@
     <string name="prefkey_unlock_pin_salt" translatable="false">unlock_pin_salt</string>
     <string name="prefkey_fingerprint_enabled" translatable="false">fingerprint_enabled</string>
     <string name="prefkey_pin_timeout" translatable="false">pref_pin_timeout</string>
+    <!-- Allow screenshots -->
+    <string name="prefkey_secure_window">pref_key_secure_window</string>
 
 </resources>
