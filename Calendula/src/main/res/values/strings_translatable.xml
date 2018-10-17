@@ -403,7 +403,6 @@ You will see all their intakes in the home screen."</string>
 <string name="schedule_type_from_qr">"From QR"</string>
 <string name="calendar_date_tomorrow">"tomorrow"</string>
 <string name="delays_one_min">"1 min"</string>
-<string name="delays_five_min">"5 min"</string>
 <string name="delays_thirty_min">"30 min"</string>
 <string name="delays_fifteen_min">"15 min"</string>
 <string name="delays_sixty_min">"60 min"</string>
@@ -477,8 +476,6 @@ If you choose not to download it, some of your medicines' information may be los
 <string name="pin_recovery_title">"PIN recovery"</string>
 <string name="pin_use_fingerprint">"Use fingerprint"</string>
 <string name="pref_fingerprint_enable_title">"Fingerprint unlock"</string>
-    <string name="pref_secure_window_title">"Secure window"</string>
-    <string name="pref_secure_window_summary">"Prevents app info from appearing in screenshots or in the open apps menu"</string>
 <string name="pref_header_privacy">"Privacy"</string>
 <string name="pref_summary_pin_lock_set">"PIN set"</string>
 <string name="pref_summary_pin_lock_unset">"PIN not set"</string>
@@ -544,4 +541,7 @@ Do you want to install the new database now?
 <string name="channel_meds_description">"Notifications related to medicines such as intake reminders."</string>
 <string name="channel_default_name">"Default"</string>
 <string name="channel_default_description">"Other notifications."</string>
+<string name="delays_five_min">"5 min"</string>
+<string name="pref_secure_window_title">"Secure window"</string>
+<string name="pref_secure_window_summary">"Prevents app info from appearing in screenshots or in the open apps menu"</string>
 </resources>
