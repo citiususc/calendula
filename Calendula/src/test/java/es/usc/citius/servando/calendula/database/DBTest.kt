@@ -20,6 +20,7 @@ package es.usc.citius.servando.calendula.database
 
 import es.usc.citius.servando.calendula.CalendulaApp
 import es.usc.citius.servando.calendula.persistence.*
+import org.codehaus.plexus.util.FileUtils
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import org.junit.Assert.assertEquals
@@ -29,7 +30,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-
+import java.io.File
+import java.time.Clock
 
 
 @RunWith(RobolectricTestRunner::class)
@@ -92,5 +94,18 @@ class DBTest {
         )
         assertEquals(DB.medicines().findAll()[0].name, MED_NAME)
         assertEquals(DB.schedules().findAll()[0].items().size.toLong(), 1)
+    }
+
+    /**
+     * Abuse test framework to export database into a project folder, allowing further analysis of database schema
+     */
+    @Test
+    fun exportDatabase() {
+        val db = DB.helper().writableDatabase;
+        val destination = File("../db")
+        destination.mkdirs()
+        System.out.println(String.format("Exporting application database %s to %s", db.path, destination.absolutePath))
+        FileUtils.copyFileToDirectory(File(db.path), destination)
+        assertNotNull(db.path);
     }
 }
