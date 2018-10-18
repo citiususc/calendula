@@ -102,6 +102,7 @@ class DBTest {
     @Test
     fun exportDatabase() {
         val db = DB.helper().writableDatabase;
+        DB.helper().close();
         val destination = File("../db")
         destination.mkdirs()
         System.out.println(String.format("Exporting application database %s to %s", db.path, destination.absolutePath))
