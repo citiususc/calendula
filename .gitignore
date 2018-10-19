@@ -48,3 +48,4 @@ Calendula/keystore
 captures/
 
 hs_err_*.log
+generated/
