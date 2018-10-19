@@ -20,18 +20,19 @@ package es.usc.citius.servando.calendula.database
 
 import es.usc.citius.servando.calendula.CalendulaApp
 import es.usc.citius.servando.calendula.persistence.*
-import org.codehaus.plexus.util.FileUtils
 import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import java.io.File
-import java.time.Clock
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 
 @RunWith(RobolectricTestRunner::class)
@@ -42,6 +43,8 @@ class DBTest {
         private const val ROUTINE_NAME = "Test"
         private const val FROM_DATE = "2015-01-01"
         private const val TO_DATE = "2015-02-05"
+        private const val GENERATED_DB_NAME = "db"
+        private val GENERATED_DB_PATH = "..${File.separator}generated"
     }
 
     @Before
@@ -101,12 +104,19 @@ class DBTest {
      */
     @Test
     fun exportDatabase() {
-        val db = DB.helper().writableDatabase;
-        DB.helper().close();
-        val destination = File("../generated/db")
-        destination.mkdirs()
-        System.out.println(String.format("Exporting application database %s to %s", db.path, destination.absolutePath))
-        FileUtils.copyFileToDirectory(File(db.path), destination)
-        assertNotNull(db.path);
+        // get DB path
+        val dbPath = DB.helper().writableDatabase.path
+        // force writing pending transactions
+        DB.helper().close()
+
+        // create target dir if necessary
+        File(GENERATED_DB_PATH).mkdirs()
+
+        val source = File(dbPath).toPath()
+        val destination = File("$GENERATED_DB_PATH${File.separator}$GENERATED_DB_NAME").toPath()
+
+        Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING)
+
+        println("Exported application database $dbPath to $destination")
     }
 }
