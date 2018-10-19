@@ -25,7 +25,7 @@ Driessen](http://nvie.com/about/) on [this article](http://nvie.com/posts/a-succ
  * The `develop` branch reflects the code of the latest delivered development changes for the next release.
  * Furthermore, when a development version (almost) reflects the desired state of the new release, a release branch is created. Release branches are usually deployed through the *Google Play BETA channel* before they are made available to everyone
 
-Create a topic branch from where you want to work. This may be usually the `master` or `release` branch for bug fixes or `develop` for adding new features. Please avoid working directly on the master branch.
+Create a topic branch from where you want to work. This may be usually the `master` or `release` branch for bug fixes or `develop` for adding new features. **Please avoid working directly on the `master` branch, and do not submits pull requests with `master` as a target.**
 
 ## I would like to contribute, but I'm not a developer...
 
