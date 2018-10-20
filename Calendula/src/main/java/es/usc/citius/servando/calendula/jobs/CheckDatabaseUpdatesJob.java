@@ -18,6 +18,7 @@
 
 package es.usc.citius.servando.calendula.jobs;
 
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -105,8 +106,7 @@ public class CheckDatabaseUpdatesJob extends CalendulaJob {
                 .setTicker(ctx.getString(R.string.app_name) + ctx.getString(R.string.text_database_update_available))
                 .setSmallIcon(R.drawable.ic_launcher_white)
                 .setLargeIcon(IconUtils.icon(ctx, CommunityMaterial.Icon.cmd_database, R.color.white, 100).toBitmap())
-                .setVibrate(NotificationHelper.VIBRATION_PATTERN_DB)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setVibrate(new long[]{0, 400})
                 .setAutoCancel(true)
                 .setContentIntent(updateIntent);
 
