@@ -386,12 +386,6 @@ Vous verrez toutes leurs prises sur l'écran d'accueil."</string>
 <string name="pref_title_reminder_window">"Arrêter les rappels après"</string>
 <string name="pref_notification_tone">"Sonnerie"</string>
 <string name="pref_notification_tone_sum">"Par défaut"</string>
-<string name="pref_notification_vibration">"Vibration"</string>
-<string name="pref_notification_vibration_title">"Vibrer"</string>
-<string name="pref_notification_vibration_always">"Toujours"</string>
-<string name="pref_notification_vibration_alarm_audible">"Seulement quand l'alarme est audible"</string>
-<string name="pref_notification_vibration_alarm_silent">"Seulement Quand l'alarme est silencieuse"</string>
-<string name="pref_notification_vibration_never">"Jamais"</string>
 <string name="pref_alarm_repeat_five_min">"5 min"</string>
 <string name="pref_alarm_repeat_fifteen_min">"15 min"</string>
 <string name="pref_alarm_repeat_thirty_min">"30 min"</string>

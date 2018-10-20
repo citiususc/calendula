@@ -30,17 +30,6 @@
         android:summary="@string/pref_notification_tone_sum"
         android:title="@string/pref_notification_tone"/>
 
-    <ListPreference
-        android:dependency="@string/prefkey_settings_alarm_notifications"
-        android:defaultValue="0"
-        android:entries="@array/pref_notification_vibration_titles"
-        android:entryValues="@array/pref_notification_vibration_values"
-        android:key="@string/prefkey_settings_notification_vibration"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:summary="%s"
-        android:title="@string/pref_notification_vibration_title"/>
-
     <SwitchPreference
         android:defaultValue="true"
         android:dependency="@string/prefkey_settings_alarm_notifications"

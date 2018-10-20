@@ -21,29 +21,19 @@ package es.usc.citius.servando.calendula.notifications
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.media.AudioManager
 import android.os.Build
 import es.usc.citius.servando.calendula.R
-import es.usc.citius.servando.calendula.util.PreferenceKeys
-import es.usc.citius.servando.calendula.util.PreferenceUtils
 
 
 object NotificationHelper {
 
-    @JvmField
-    val VIBRATION_PATTERN_MEDS = longArrayOf(1000, 200, 100, 500, 400, 200, 100, 500, 400, 200, 100, 500, 1000)
-    @JvmField
-    val VIBRATION_PATTERN_DEFAULT = longArrayOf(1000, 200, 500, 200, 100, 200, 1000)
-    @JvmField
-    val VIBRATION_PATTERN_DB = longArrayOf(0, 400)
-    @JvmField
-    val VIBRATION_PATTERN_NONE = longArrayOf(0L)
 
     /**
      * Intended for high-importance med notifications such as intake reminders.
      */
     const val CHANNEL_MEDS_ID = "calendula.channels.meds"
     const val CHANNEL_DEFAULT_ID = "calendula.channels.default"
+
 
     /**
      * Creates notification channels for the app (required from api 26 up).
@@ -60,18 +50,18 @@ object NotificationHelper {
             val medChannelName = context.getString(R.string.channel_meds_name)
             val medChannelDesc = context.getString(R.string.channel_meds_description)
             val medChannel = NotificationChannel(
-                    CHANNEL_MEDS_ID,
-                    medChannelName,
-                    NotificationManager.IMPORTANCE_HIGH
+                CHANNEL_MEDS_ID,
+                medChannelName,
+                NotificationManager.IMPORTANCE_HIGH
             )
             medChannel.description = medChannelDesc
             //create other channel
             val defaultChannelName = context.getString(R.string.channel_default_name)
             val defaultChannelDesc = context.getString(R.string.channel_default_description)
             val defaultChannel = NotificationChannel(
-                    CHANNEL_DEFAULT_ID,
-                    defaultChannelName,
-                    NotificationManager.IMPORTANCE_DEFAULT
+                CHANNEL_DEFAULT_ID,
+                defaultChannelName,
+                NotificationManager.IMPORTANCE_DEFAULT
             )
 
             defaultChannel.description = defaultChannelDesc
@@ -82,24 +72,4 @@ object NotificationHelper {
         }
     }
 
-    /**
-     * Get notification vibration setting for the app.
-     *
-     * @param context a [Context], required for getting audioManager
-     * @return a [Boolean], true if vibration setting is enabled; false otherwise
-     */
-    @JvmStatic
-    fun isNotificationVibrationEnabled(context: Context): Boolean {
-
-        val vibrationSettingInt = PreferenceUtils.getString(PreferenceKeys.SETTINGS_NOTIFICATION_VIBRATION, "0").toInt()
-        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
-        return when (vibrationSettingInt) {
-            0 -> true
-            1 -> return audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0
-            2 -> return audioManager.getStreamVolume(AudioManager.STREAM_ALARM) == 0
-            3 -> false
-            else -> true
-        }
-    }
 }

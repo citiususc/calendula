@@ -61,7 +61,6 @@
     <string name="prefkey_settings_insistent_notification_tone" translatable="false">pref_insistent_notification_tone</string>
 
     <string name="prefkey_settings_notification_tone" translatable="false">pref_notification_tone</string>
-    <string name="prefkey_settings_notification_vibration" translatable="false">pref_notification_vibration</string>
     <string name="prefkey_settings_stock_alert_days" translatable="false">stock_alert_days</string>
     <string name="prefkey_settings_database_update" translatable="false">prescriptions_database_update</string>
     <string name="prefkey_settings_defaults_loaded" translatable="false">pref_defaults_loaded</string>
