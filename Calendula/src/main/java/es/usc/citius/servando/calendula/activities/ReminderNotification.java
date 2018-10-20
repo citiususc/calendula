@@ -211,7 +211,7 @@ public class ReminderNotification {
                 .setSmallIcon(options.lost ? R.drawable.ic_pill_small_lost : R.drawable.ic_pill_small)
                 .setContentTitle(options.title)
                 .setContentText(options.text)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
                 // Provide a large icon, shown with the notification in the
                 // notification drawer on devices running Android 3.0 or later.
                 .setLargeIcon(options.picture)
@@ -227,10 +227,13 @@ public class ReminderNotification {
                 .setStyle(options.style)
                 // Automatically dismiss the notification when it is touched.
                 .setAutoCancel(true);
-
+        // if insistent is enabled, an activity with vibration will start
         if (!insistentNotifications) {
-            // if insistent is enabled, an activity with vibration will start
-            builder.setVibrate(new long[]{1000, 200, 100, 500, 400, 200, 100, 500, 400, 200, 100, 500, 1000}).setSound(options.ringtone);
+            if (NotificationHelper.isNotificationVibrationEnabled(context)) {
+                builder.setVibrate(NotificationHelper.VIBRATION_PATTERN_MEDS).setSound(options.ringtone);
+            } else {
+                builder.setVibrate(NotificationHelper.VIBRATION_PATTERN_NONE).setSound(options.ringtone);
+            }
         }
 
         if (!options.lost) {
