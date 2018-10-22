@@ -227,7 +227,7 @@ public class DailyAgendaRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             }
 
             viewHolder.title.setText(item.title);
-            viewHolder.hour.setText(String.format("%s:", item.time.toString("HH")));
+            viewHolder.hour.setText(item.time.toString("kk") + ":");
             viewHolder.minute.setText(item.time.toString("mm"));
 
             boolean allTaken = addMeds(viewHolder, item);
