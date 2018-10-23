@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.support.v14.preference.SwitchPreference
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
+import android.view.WindowManager
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog
 import com.github.javiersantos.materialstyleddialogs.enums.Style
 import com.mikepenz.google_material_typeface_library.GoogleMaterial
@@ -40,9 +41,8 @@ import es.usc.citius.servando.calendula.util.PreferenceKeys
  * Instantiated via reflection, don't delete!
  */
 class PrivacyPrefsFragment :
-    CalendulaPrefsFragment<PrivacyPrefsContract.View, PrivacyPrefsContract.Presenter>(),
-    PrivacyPrefsContract.View {
-
+        CalendulaPrefsFragment<PrivacyPrefsContract.View, PrivacyPrefsContract.Presenter>(),
+        PrivacyPrefsContract.View {
 
 
     companion object {
@@ -52,7 +52,7 @@ class PrivacyPrefsFragment :
 
     override val presenter: PrivacyPrefsContract.Presenter by lazy {
         PrivacyPrefsPresenter(
-            FingerprintHelper(context)
+                FingerprintHelper(context)
         )
     }
     override val fragmentTitle: Int = R.string.pref_header_privacy
@@ -61,6 +61,7 @@ class PrivacyPrefsFragment :
     private val pinPref: Preference by lazy { findPreference(PreferenceKeys.UNLOCK_PIN.key()) }
     private val fingerprintPref: SwitchPreference by lazy { findPreference(PreferenceKeys.FINGERPRINT_ENABLED.key()) as SwitchPreference }
     private val pinTimeoutPref: ListPreference by lazy { findPreference(PreferenceKeys.UNLOCK_PIN_TIMEOUT.key()) as ListPreference }
+    private val secureWindowPref: SwitchPreference by lazy { findPreference(PreferenceKeys.SECURE_WINDOW.key()) as SwitchPreference }
 
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -86,6 +87,14 @@ class PrivacyPrefsFragment :
             pinTimeoutPref.key -> {
                 pinTimeoutPref.summary = pinTimeoutPref.entry
             }
+            secureWindowPref.key -> {
+                if (secureWindowPref.isChecked) {
+                    activity?.window?.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
+                            WindowManager.LayoutParams.FLAG_SECURE)
+                } else {
+                    activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+                }
+            }
         }
     }
 
@@ -97,57 +106,57 @@ class PrivacyPrefsFragment :
 
     override fun showPINOptions() {
         MaterialStyledDialog.Builder(context)
-            .setTitle(getString(R.string.pin_actions_dialog_title))
-            .setDescription(R.string.pin_actions_dialog_message)
-            .setHeaderColor(R.color.android_green)
-            .setStyle(Style.HEADER_WITH_ICON)
-            .withDialogAnimation(true)
-            .setIcon(
-                IconUtils.icon(
-                    context,
-                    GoogleMaterial.Icon.gmd_key,
-                    R.color.white,
-                    100
+                .setTitle(getString(R.string.pin_actions_dialog_title))
+                .setDescription(R.string.pin_actions_dialog_message)
+                .setHeaderColor(R.color.android_green)
+                .setStyle(Style.HEADER_WITH_ICON)
+                .withDialogAnimation(true)
+                .setIcon(
+                        IconUtils.icon(
+                                context,
+                                GoogleMaterial.Icon.gmd_key,
+                                R.color.white,
+                                100
+                        )
                 )
-            )
-            .setPositiveText(R.string.pin_actions_dialog_delete)
-            .setNegativeText(R.string.pin_actions_dialog_modify)
-            .setNeutralText(R.string.pin_actions_dialog_cancel)
-            .onPositive { dialog, _ ->
-                presenter.onClickDeletePIN()
-                dialog.dismiss()
-            }
-            .onNegative { dialog, _ ->
-                presenter.onClickModifyPIN()
-                dialog.dismiss()
-            }
-            .onNeutral { dialog, _ -> dialog.dismiss() }
-            .show()
+                .setPositiveText(R.string.pin_actions_dialog_delete)
+                .setNegativeText(R.string.pin_actions_dialog_modify)
+                .setNeutralText(R.string.pin_actions_dialog_cancel)
+                .onPositive { dialog, _ ->
+                    presenter.onClickDeletePIN()
+                    dialog.dismiss()
+                }
+                .onNegative { dialog, _ ->
+                    presenter.onClickModifyPIN()
+                    dialog.dismiss()
+                }
+                .onNeutral { dialog, _ -> dialog.dismiss() }
+                .show()
     }
 
     override fun showConfirmDeletePinChoice() {
         MaterialStyledDialog.Builder(context)
-            .setTitle(getString(R.string.pin_delete_dialog_title))
-            .setDescription(R.string.pin_delete_dialog_message)
-            .setHeaderColor(R.color.android_red_dark)
-            .setStyle(Style.HEADER_WITH_ICON)
-            .withDialogAnimation(true)
-            .setIcon(
-                IconUtils.icon(
-                    context,
-                    GoogleMaterial.Icon.gmd_key,
-                    R.color.white,
-                    100
+                .setTitle(getString(R.string.pin_delete_dialog_title))
+                .setDescription(R.string.pin_delete_dialog_message)
+                .setHeaderColor(R.color.android_red_dark)
+                .setStyle(Style.HEADER_WITH_ICON)
+                .withDialogAnimation(true)
+                .setIcon(
+                        IconUtils.icon(
+                                context,
+                                GoogleMaterial.Icon.gmd_key,
+                                R.color.white,
+                                100
+                        )
                 )
-            )
-            .setPositiveText(R.string.pin_actions_dialog_delete)
-            .setNegativeText(R.string.pin_actions_dialog_cancel)
-            .onPositive { dialog, _ ->
-                presenter.confirmDeletePIN()
-                dialog.dismiss()
-            }
-            .onNegative { dialog, _ -> dialog.dismiss() }
-            .show()
+                .setPositiveText(R.string.pin_actions_dialog_delete)
+                .setNegativeText(R.string.pin_actions_dialog_cancel)
+                .onPositive { dialog, _ ->
+                    presenter.confirmDeletePIN()
+                    dialog.dismiss()
+                }
+                .onNegative { dialog, _ -> dialog.dismiss() }
+                .show()
     }
 
     override fun setPINPrefText(pinPrefText: Int) {
