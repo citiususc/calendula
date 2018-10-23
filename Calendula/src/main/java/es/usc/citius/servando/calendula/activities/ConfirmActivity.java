@@ -379,9 +379,9 @@ public class ConfirmActivity extends CalendulaActivity {
 
         relativeTime = DateUtils.getRelativeTimeSpanString(dt.getMillis(), now.getMillis(), 5 * DateUtils.MINUTE_IN_MILLIS, DateUtils.FORMAT_ABBREV_ALL).toString();
 
-        hour.setText(time.toString("kk:"));
+        hour.setText(time.toString("HH:"));
         minute.setText(time.toString("mm"));
-        friendlyTime.setText(relativeTime.substring(0, 1).toUpperCase() + relativeTime.substring(1));
+        friendlyTime.setText(String.format("%s%s", relativeTime.substring(0, 1).toUpperCase(), relativeTime.substring(1)));
 
         if (isDistant) {
             fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.android_orange_dark)));
