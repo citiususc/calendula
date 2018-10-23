@@ -381,7 +381,7 @@ You will see all their intakes in the home screen."</string>
 <string name="pref_notification_tone">"Ringtone"</string>
 <string name="pref_notification_tone_sum">"Default"</string>
 <string name="pref_notification_vibration">"Vibration"</string>
-<string name="pref_notification_vibration_title">"vibrate"</string>
+<string name="pref_notification_vibration_title">"Vibrate"</string>
 <string name="pref_notification_vibration_always">"Always"</string>
 <string name="pref_notification_vibration_alarm_audible">"When alarm is audible only"</string>
 <string name="pref_notification_vibration_alarm_silent">"When alarm is silent only"</string>
