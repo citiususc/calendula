@@ -41,8 +41,8 @@ import es.usc.citius.servando.calendula.util.PreferenceKeys
  * Instantiated via reflection, don't delete!
  */
 class PrivacyPrefsFragment :
-        CalendulaPrefsFragment<PrivacyPrefsContract.View, PrivacyPrefsContract.Presenter>(),
-        PrivacyPrefsContract.View {
+    CalendulaPrefsFragment<PrivacyPrefsContract.View, PrivacyPrefsContract.Presenter>(),
+    PrivacyPrefsContract.View {
 
 
     companion object {
@@ -52,7 +52,7 @@ class PrivacyPrefsFragment :
 
     override val presenter: PrivacyPrefsContract.Presenter by lazy {
         PrivacyPrefsPresenter(
-                FingerprintHelper(context)
+            FingerprintHelper(context)
         )
     }
     override val fragmentTitle: Int = R.string.pref_header_privacy
@@ -89,8 +89,10 @@ class PrivacyPrefsFragment :
             }
             secureWindowPref.key -> {
                 if (secureWindowPref.isChecked) {
-                    activity?.window?.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
-                            WindowManager.LayoutParams.FLAG_SECURE)
+                    activity?.window?.setFlags(
+                        WindowManager.LayoutParams.FLAG_SECURE,
+                        WindowManager.LayoutParams.FLAG_SECURE
+                    )
                 } else {
                     activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
                 }
@@ -106,57 +108,57 @@ class PrivacyPrefsFragment :
 
     override fun showPINOptions() {
         MaterialStyledDialog.Builder(context)
-                .setTitle(getString(R.string.pin_actions_dialog_title))
-                .setDescription(R.string.pin_actions_dialog_message)
-                .setHeaderColor(R.color.android_green)
-                .setStyle(Style.HEADER_WITH_ICON)
-                .withDialogAnimation(true)
-                .setIcon(
-                        IconUtils.icon(
-                                context,
-                                GoogleMaterial.Icon.gmd_key,
-                                R.color.white,
-                                100
-                        )
+            .setTitle(getString(R.string.pin_actions_dialog_title))
+            .setDescription(R.string.pin_actions_dialog_message)
+            .setHeaderColor(R.color.android_green)
+            .setStyle(Style.HEADER_WITH_ICON)
+            .withDialogAnimation(true)
+            .setIcon(
+                IconUtils.icon(
+                    context,
+                    GoogleMaterial.Icon.gmd_key,
+                    R.color.white,
+                    100
                 )
-                .setPositiveText(R.string.pin_actions_dialog_delete)
-                .setNegativeText(R.string.pin_actions_dialog_modify)
-                .setNeutralText(R.string.pin_actions_dialog_cancel)
-                .onPositive { dialog, _ ->
-                    presenter.onClickDeletePIN()
-                    dialog.dismiss()
-                }
-                .onNegative { dialog, _ ->
-                    presenter.onClickModifyPIN()
-                    dialog.dismiss()
-                }
-                .onNeutral { dialog, _ -> dialog.dismiss() }
-                .show()
+            )
+            .setPositiveText(R.string.pin_actions_dialog_delete)
+            .setNegativeText(R.string.pin_actions_dialog_modify)
+            .setNeutralText(R.string.pin_actions_dialog_cancel)
+            .onPositive { dialog, _ ->
+                presenter.onClickDeletePIN()
+                dialog.dismiss()
+            }
+            .onNegative { dialog, _ ->
+                presenter.onClickModifyPIN()
+                dialog.dismiss()
+            }
+            .onNeutral { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 
     override fun showConfirmDeletePinChoice() {
         MaterialStyledDialog.Builder(context)
-                .setTitle(getString(R.string.pin_delete_dialog_title))
-                .setDescription(R.string.pin_delete_dialog_message)
-                .setHeaderColor(R.color.android_red_dark)
-                .setStyle(Style.HEADER_WITH_ICON)
-                .withDialogAnimation(true)
-                .setIcon(
-                        IconUtils.icon(
-                                context,
-                                GoogleMaterial.Icon.gmd_key,
-                                R.color.white,
-                                100
-                        )
+            .setTitle(getString(R.string.pin_delete_dialog_title))
+            .setDescription(R.string.pin_delete_dialog_message)
+            .setHeaderColor(R.color.android_red_dark)
+            .setStyle(Style.HEADER_WITH_ICON)
+            .withDialogAnimation(true)
+            .setIcon(
+                IconUtils.icon(
+                    context,
+                    GoogleMaterial.Icon.gmd_key,
+                    R.color.white,
+                    100
                 )
-                .setPositiveText(R.string.pin_actions_dialog_delete)
-                .setNegativeText(R.string.pin_actions_dialog_cancel)
-                .onPositive { dialog, _ ->
-                    presenter.confirmDeletePIN()
-                    dialog.dismiss()
-                }
-                .onNegative { dialog, _ -> dialog.dismiss() }
-                .show()
+            )
+            .setPositiveText(R.string.pin_actions_dialog_delete)
+            .setNegativeText(R.string.pin_actions_dialog_cancel)
+            .onPositive { dialog, _ ->
+                presenter.confirmDeletePIN()
+                dialog.dismiss()
+            }
+            .onNegative { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 
     override fun setPINPrefText(pinPrefText: Int) {
