@@ -100,6 +100,7 @@ object NotificationHelper {
         return when (vibrationSettingInt) {
             0 -> true
             1 -> return audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0
+            // TODO this should not only be if system alarm volume is 0, but also if the selected ringtone is "None"
             2 -> return audioManager.getStreamVolume(AudioManager.STREAM_ALARM) == 0
             3 -> false
             else -> true

@@ -30,6 +30,7 @@
         android:summary="@string/pref_notification_tone_sum"
         android:title="@string/pref_notification_tone"/>
 
+    <!-- TODO hide this setting on android 8+ ?-->
     <ListPreference
         android:dependency="@string/prefkey_settings_alarm_notifications"
         android:defaultValue="0"
