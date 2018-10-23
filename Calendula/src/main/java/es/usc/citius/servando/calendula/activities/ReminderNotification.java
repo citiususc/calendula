@@ -226,13 +226,16 @@ public class ReminderNotification {
                 // or later.
                 .setStyle(options.style)
                 // Automatically dismiss the notification when it is touched.
-                .setAutoCancel(true);
+                .setAutoCancel(true)
+                // Set ringtone
+                .setSound(options.ringtone);
+
         // if insistent is enabled, an activity with vibration will start
         if (!insistentNotifications) {
             if (NotificationHelper.isNotificationVibrationEnabled(context)) {
-                builder.setVibrate(NotificationHelper.VIBRATION_PATTERN_MEDS).setSound(options.ringtone);
+                builder.setVibrate(NotificationHelper.VIBRATION_PATTERN_MEDS);
             } else {
-                builder.setVibrate(NotificationHelper.VIBRATION_PATTERN_NONE).setSound(options.ringtone);
+                builder.setVibrate(NotificationHelper.VIBRATION_PATTERN_NONE);
             }
         }
 
