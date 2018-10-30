@@ -46,7 +46,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class RoutinesActivityCreateTest extends ActivityInstrumentationTestCase2<RoutinesActivity> {
 
-    public static final String NAME = "breakfast";
+    private static final String NAME = "Breakfast";
 
     private RoutinesActivity mActivity;
 

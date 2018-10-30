@@ -44,8 +44,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class RoutinesActivityEditTest extends ActivityInstrumentationTestCase2<RoutinesActivity> {
 
-    public static final String NAME_BEFORE_EDIT = "breakfast";
-    public static final String NAME_AFTER_EDIT = "lunch";
+    private static final String NAME_BEFORE_EDIT = "Breakfast";
+    private static final String NAME_AFTER_EDIT = "Lunch";
 
     private RoutinesActivity mActivity;
 
