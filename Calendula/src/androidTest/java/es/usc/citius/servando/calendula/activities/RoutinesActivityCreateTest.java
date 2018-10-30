@@ -19,8 +19,12 @@
 package es.usc.citius.servando.calendula.activities;
 
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.assertion.ViewAssertions;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.View;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.joda.time.LocalTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -93,9 +97,11 @@ public class RoutinesActivityCreateTest extends ActivityInstrumentationTestCase2
 
         // find routine and do assertions
         Routine r = DB.routines().findOneBy(Routine.COLUMN_NAME, NAME);
-        assertNotNull(r);
-        assertEquals(NAME, r.getName());
-        assertEquals(new LocalTime(18, 30), r.getTime());
+
+        assertEquals("Routine count is wrong", 1, DB.routines().count());
+        assertNotNull("Routine is null", r);
+        assertEquals("Routine name is wrong", NAME, r.getName());
+        assertEquals("Routine time is wrong", new LocalTime(18, 30), r.getTime());
     }
 
 
