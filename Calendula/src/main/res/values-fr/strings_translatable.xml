@@ -392,6 +392,8 @@ Vous verrez toutes leurs prises sur l'écran d'accueil."</string>
 <string name="pref_notification_vibration_alarm_audible">"Seulement quand l'alarme est audible"</string>
 <string name="pref_notification_vibration_alarm_silent">"Seulement Quand l'alarme est silencieuse"</string>
 <string name="pref_notification_vibration_never">"Jamais"</string>
+<string name="pref_notification_management">"Gérer les notifications"</string>
+<string name="pref_notification_management_sum">"Paramètres d'urgence, de son et de vibration"</string>
 <string name="pref_alarm_repeat_five_min">"5 min"</string>
 <string name="pref_alarm_repeat_fifteen_min">"15 min"</string>
 <string name="pref_alarm_repeat_thirty_min">"30 min"</string>

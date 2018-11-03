@@ -22,10 +22,12 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.media.RingtoneManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.support.v7.preference.Preference
 import es.usc.citius.servando.calendula.R
+import es.usc.citius.servando.calendula.notifications.NotificationHelper
 import es.usc.citius.servando.calendula.settings.CalendulaPrefsFragment
 import es.usc.citius.servando.calendula.util.LogUtil
 import es.usc.citius.servando.calendula.util.PreferenceKeys
@@ -42,6 +44,7 @@ class NotificationPrefsFragment :
         private const val TAG = "NotificationPrefsFragm"
     }
 
+    private val applicationPackageName: String by lazy { activity!!.packageName as String }
     override val fragmentTitle: Int = R.string.pref_header_notifications
     override val presenter: NotificationPrefsContract.Presenter by lazy {
         NotificationPrefsPresenter(
@@ -65,6 +68,16 @@ class NotificationPrefsFragment :
             }
             PreferenceKeys.SETTINGS_INSISTENT_NOTIFICATION_TONE.key() -> {
                 presenter.selectInsistentRingtone()
+                return true
+            }
+            PreferenceKeys.SETTINGS_NOTIFICATION_MANAGEMENT.key() -> {
+               if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                   val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
+                        putExtra(Settings.EXTRA_APP_PACKAGE, applicationPackageName)
+                        putExtra(Settings.EXTRA_CHANNEL_ID, NotificationHelper.CHANNEL_DEFAULT_ID)
+                    }
+                   startActivity(intent)
+                }
                 return true
             }
         }
@@ -123,5 +136,10 @@ class NotificationPrefsFragment :
         insistentNotificationPref.summary = text
     }
 
+    override fun hideNotificationManagementPref() {
+        val preference = findPreference(PreferenceKeys.SETTINGS_NOTIFICATION_MANAGEMENT.key())
+        preference.isEnabled = false
+        preference.isVisible = false
+    }
 
 }

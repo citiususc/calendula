@@ -21,6 +21,7 @@ package es.usc.citius.servando.calendula.settings.notifications
 import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import es.usc.citius.servando.calendula.modules.ModuleManager
 import es.usc.citius.servando.calendula.modules.modules.StockModule
@@ -47,6 +48,8 @@ class NotificationPrefsPresenter(
             view.hideStockPref()
         }
         updateRingtoneSummaries()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) else { view.hideNotificationManagementPref() }
     }
 
 

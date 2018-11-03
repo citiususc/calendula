@@ -84,6 +84,11 @@
         android:summary="@string/pref_notification_tone_sum"
         android:title="@string/pref_insistent_notification_tone"/>
 
+    <Preference
+        android:dependency="@string/prefkey_settings_alarm_notifications"
+        android:key="@string/prefkey_settings_notification_management"
+        android:summary="@string/pref_notification_management_sum"
+        android:title="@string/pref_notification_management"/>
 
     <ListPreference
         android:defaultValue="7"
