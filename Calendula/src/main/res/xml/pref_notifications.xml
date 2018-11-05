@@ -22,8 +22,12 @@
     <SwitchPreference
         android:defaultValue="true"
         android:key="@string/prefkey_settings_alarm_notifications"
-        android:title="@string/pref_title_new_alarm_notification"/>
-
+        android:title="@string/pref_title_new_alarm_notification" />
+    <Preference
+        android:dependency="@string/prefkey_settings_alarm_notifications"
+        android:key="@string/prefkey_settings_notification_management"
+        android:summary="@string/pref_notification_management_sum"
+        android:title="@string/pref_notification_management" />
     <Preference
         android:dependency="@string/prefkey_settings_alarm_notifications"
         android:key="@string/prefkey_settings_notification_tone"
@@ -83,7 +87,6 @@
         android:key="@string/prefkey_settings_insistent_notification_tone"
         android:summary="@string/pref_notification_tone_sum"
         android:title="@string/pref_insistent_notification_tone"/>
-
 
     <ListPreference
         android:defaultValue="7"
