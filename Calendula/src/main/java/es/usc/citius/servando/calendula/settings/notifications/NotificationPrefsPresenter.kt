@@ -49,7 +49,11 @@ class NotificationPrefsPresenter(
         }
         updateRingtoneSummaries()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) else { view.hideNotificationManagementPref() }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            view.setVisibleNotificationManagementPref(true)
+        } else {
+            view.setVisibleNotificationManagementPref(false)
+        }
     }
 
 
