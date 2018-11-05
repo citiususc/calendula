@@ -87,10 +87,14 @@ public class PickupNotification {
                 .setTicker(ticker)
                 .setContentIntent(defaultIntent)
                 .setStyle(style)
-                .setPriority(Notification.PRIORITY_DEFAULT)
-                .setVibrate(new long[]{1000, 200, 500, 200, 100, 200, 1000})
                 //.setSound(ringtoneUri != null ? ringtoneUri : Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setAutoCancel(true);
+
+        if (NotificationHelper.isNotificationVibrationEnabled(context)) {
+            builder.setVibrate(NotificationHelper.VIBRATION_PATTERN_DEFAULT);
+        } else {
+            builder.setVibrate(NotificationHelper.VIBRATION_PATTERN_NONE);
+        }
 
         Notification n = builder.build();
         n.defaults = 0;

@@ -91,6 +91,12 @@
     <string name="title_activity_webview" translatable="false">WebViewActivity</string>
     <string name="title_activity_allergies_search" translatable="false">AllergiesSearchActivity</string>
 
+    <string-array name="pref_notification_vibration_titles">
+        <item>@string/pref_notification_vibration_always</item>
+        <item>@string/pref_notification_vibration_alarm_audible</item>
+        <item>@string/pref_notification_vibration_alarm_silent</item>
+        <item>@string/pref_notification_vibration_never</item>
+    </string-array>
 
     <string-array name="pref_alarm_repeat_titles">
         <item>@string/pref_alarm_repeat_five_min</item>
@@ -133,6 +139,13 @@
     <string name="database_us_id" translatable="false">US</string>
     <string name="database_setting_up_id" translatable="false">DB_ID_SETTING_UP</string>
     <!--<string name="database_uk_id">UK</string>-->
+
+    <string-array name="pref_notification_vibration_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 
     <string-array name="pref_alarm_repeat_values" translatable="false">
         <item>5</item>

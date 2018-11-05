@@ -179,6 +179,7 @@ public class InstallDatabaseService extends JobIntentService {
                 .setContentIntent(pIntent)
                 .setContentTitle(getString(R.string.install_db_notification_title))
                 .setContentText(getString(R.string.install_db_notification_content))
+                .setOnlyAlertOnce(true)
                 .setProgress(max, prog, false);
 
         getNotificationManager().notify(NOTIFICATION_ID, mBuilder.build());

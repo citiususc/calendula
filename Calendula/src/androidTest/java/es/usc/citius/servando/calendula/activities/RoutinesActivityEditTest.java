@@ -44,8 +44,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class RoutinesActivityEditTest extends ActivityInstrumentationTestCase2<RoutinesActivity> {
 
-    public static final String NAME_BEFORE_EDIT = "breakfast";
-    public static final String NAME_AFTER_EDIT = "lunch";
+    private static final String NAME_BEFORE_EDIT = "Breakfast";
+    private static final String NAME_AFTER_EDIT = "Lunch";
 
     private RoutinesActivity mActivity;
 
@@ -109,10 +109,10 @@ public class RoutinesActivityEditTest extends ActivityInstrumentationTestCase2<R
 
         // find edited routine and do assertions
         Routine r = DB.routines().findOneBy(Routine.COLUMN_NAME, NAME_AFTER_EDIT);
-        assertEquals(1, DB.routines().count());
-        assertNotNull(r);
-        assertEquals(NAME_AFTER_EDIT, r.getName());
-        assertEquals(new LocalTime(20, 0), r.getTime());
+        assertEquals("Routine count is wrong",1, DB.routines().count());
+        assertNotNull("Routine is null", r);
+        assertEquals("Routine name is wrong",NAME_AFTER_EDIT, r.getName());
+        assertEquals("Routine time is wrong", new LocalTime(20, 0), r.getTime());
     }
 
 

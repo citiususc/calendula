@@ -21,12 +21,24 @@ package es.usc.citius.servando.calendula.notifications
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.media.AudioManager
 import android.os.Build
 import es.usc.citius.servando.calendula.R
+import es.usc.citius.servando.calendula.util.PreferenceKeys
+import es.usc.citius.servando.calendula.util.PreferenceUtils
 
 
 object NotificationHelper {
 
+    @JvmField
+    val VIBRATION_PATTERN_MEDS =
+        longArrayOf(1000, 200, 100, 500, 400, 200, 100, 500, 400, 200, 100, 500, 1000)
+    @JvmField
+    val VIBRATION_PATTERN_DEFAULT = longArrayOf(1000, 200, 500, 200, 100, 200, 1000)
+    @JvmField
+    val VIBRATION_PATTERN_DB = longArrayOf(0, 400)
+    @JvmField
+    val VIBRATION_PATTERN_NONE = longArrayOf(0L)
 
     /**
      * Intended for high-importance med notifications such as intake reminders.
@@ -72,4 +84,26 @@ object NotificationHelper {
         }
     }
 
+    /**
+     * Get notification vibration setting for the app.
+     *
+     * @param context a [Context], required for getting audioManager
+     * @return a [Boolean], true if vibration setting is enabled; false otherwise
+     */
+    @JvmStatic
+    fun isNotificationVibrationEnabled(context: Context): Boolean {
+
+        val vibrationSettingInt =
+            PreferenceUtils.getInt(PreferenceKeys.SETTINGS_NOTIFICATION_VIBRATION, 0)
+        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+        return when (vibrationSettingInt) {
+            0 -> true
+            1 -> return audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0
+            // TODO this should not only be if system alarm volume is 0, but also if the selected ringtone is "None"
+            2 -> return audioManager.getStreamVolume(AudioManager.STREAM_ALARM) == 0
+            3 -> false
+            else -> true
+        }
+    }
 }

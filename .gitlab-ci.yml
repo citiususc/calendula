@@ -25,4 +25,5 @@ build:
       - Calendula/build/reports/tests/
       - Calendula/build/test-results/
       - Calendula/build/reports/jacoco/
+      - generated/
     expire_in: 1 week
