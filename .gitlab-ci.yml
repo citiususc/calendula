@@ -8,12 +8,9 @@ cache:
   paths:
     - .gradle
 
-stages:
-  - build
-
 build:
-  stage: build
   script:
+    - du -hs .gradle/ || true
     - ./gradlew assembleCiDebug
     - ./gradlew testCiDebugUnitTest
     - ./gradlew jacocoTestReportCiDebug
