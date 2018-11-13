@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.support.v14.preference.SwitchPreference
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
+import android.view.WindowManager
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog
 import com.github.javiersantos.materialstyleddialogs.enums.Style
 import com.mikepenz.google_material_typeface_library.GoogleMaterial
@@ -44,7 +45,6 @@ class PrivacyPrefsFragment :
     PrivacyPrefsContract.View {
 
 
-
     companion object {
         private const val TAG = "PrivacyPrefsFragment"
     }
@@ -61,6 +61,7 @@ class PrivacyPrefsFragment :
     private val pinPref: Preference by lazy { findPreference(PreferenceKeys.UNLOCK_PIN.key()) }
     private val fingerprintPref: SwitchPreference by lazy { findPreference(PreferenceKeys.FINGERPRINT_ENABLED.key()) as SwitchPreference }
     private val pinTimeoutPref: ListPreference by lazy { findPreference(PreferenceKeys.UNLOCK_PIN_TIMEOUT.key()) as ListPreference }
+    private val secureWindowPref: SwitchPreference by lazy { findPreference(PreferenceKeys.SECURE_WINDOW.key()) as SwitchPreference }
 
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -85,6 +86,16 @@ class PrivacyPrefsFragment :
         when (key) {
             pinTimeoutPref.key -> {
                 pinTimeoutPref.summary = pinTimeoutPref.entry
+            }
+            secureWindowPref.key -> {
+                if (secureWindowPref.isChecked) {
+                    activity?.window?.setFlags(
+                        WindowManager.LayoutParams.FLAG_SECURE,
+                        WindowManager.LayoutParams.FLAG_SECURE
+                    )
+                } else {
+                    activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+                }
             }
         }
     }

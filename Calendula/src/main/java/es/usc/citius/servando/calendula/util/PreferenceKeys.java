@@ -66,6 +66,8 @@ public enum PreferenceKeys {
     SETTINGS_ALARM_NOTIFICATIONS(R.string.prefkey_settings_alarm_notifications),
     SETTINGS_DATABASE_UPDATE(R.string.prefkey_settings_database_update),
     SETTINGS_NOTIFICATION_TONE(R.string.prefkey_settings_notification_tone),
+    SETTINGS_NOTIFICATION_VIBRATION(R.string.prefkey_settings_notification_vibration),
+    SETTINGS_NOTIFICATION_MANAGEMENT(R.string.prefkey_settings_notification_management),
     SETTINGS_INSISTENT_NOTIFICATION_TONE(R.string.prefkey_settings_insistent_notification_tone),
     SETTINGS_STOCK_ALERT_DAYS(R.string.prefkey_settings_stock_alert_days),
     SETTINGS_DEFAULTS_LOADED(R.string.prefkey_settings_defaults_loaded),

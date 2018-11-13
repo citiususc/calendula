@@ -25,11 +25,14 @@ import org.joda.time.LocalTime
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 
 @RunWith(RobolectricTestRunner::class)
@@ -40,6 +43,8 @@ class DBTest {
         private const val ROUTINE_NAME = "Test"
         private const val FROM_DATE = "2015-01-01"
         private const val TO_DATE = "2015-02-05"
+        private const val GENERATED_DB_NAME = "db"
+        private val GENERATED_DB_PATH = "..${File.separator}generated"
     }
 
     @Before
@@ -92,5 +97,26 @@ class DBTest {
         )
         assertEquals(DB.medicines().findAll()[0].name, MED_NAME)
         assertEquals(DB.schedules().findAll()[0].items().size.toLong(), 1)
+    }
+
+    /**
+     * Abuse test framework to export database into a project folder, allowing further analysis of database schema
+     */
+    @Test
+    fun exportDatabase() {
+        // get DB path
+        val dbPath = DB.helper().writableDatabase.path
+        // force writing pending transactions
+        DB.helper().close()
+
+        // create target dir if necessary
+        File(GENERATED_DB_PATH).mkdirs()
+
+        val source = File(dbPath).toPath()
+        val destination = File("$GENERATED_DB_PATH${File.separator}$GENERATED_DB_NAME").toPath()
+
+        Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING)
+
+        println("Exported application database $dbPath to $destination")
     }
 }
