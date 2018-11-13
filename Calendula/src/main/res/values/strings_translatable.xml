@@ -380,14 +380,6 @@ You will see all their intakes in the home screen."</string>
 <string name="pref_title_reminder_window">"Dismiss alarms after"</string>
 <string name="pref_notification_tone">"Ringtone"</string>
 <string name="pref_notification_tone_sum">"Default"</string>
-<string name="pref_notification_vibration">"Vibration"</string>
-<string name="pref_notification_vibration_title">"Vibrate"</string>
-<string name="pref_notification_vibration_always">"Always"</string>
-<string name="pref_notification_vibration_alarm_audible">"When alarm is audible only"</string>
-<string name="pref_notification_vibration_alarm_silent">"When alarm is silent only"</string>
-<string name="pref_notification_vibration_never">"Never"</string>
-<string name="pref_notification_management">"Manage notifications"</string>
-<string name="pref_notification_management_sum">"Importance, sound and vibration settings"</string>
 <string name="pref_alarm_repeat_five_min">"5 min"</string>
 <string name="pref_alarm_repeat_fifteen_min">"15 min"</string>
 <string name="pref_alarm_repeat_thirty_min">"30 min"</string>
@@ -552,4 +544,12 @@ Do you want to install the new database now?
 <string name="delays_five_min">"5 min"</string>
 <string name="pref_secure_window_title">"Secure window"</string>
 <string name="pref_secure_window_summary">"Prevents app info from appearing in screenshots or in the open apps menu"</string>
+<string name="pref_notification_vibration">"Vibration"</string>
+<string name="pref_notification_vibration_title">"Vibrate"</string>
+<string name="pref_notification_vibration_always">"Always"</string>
+<string name="pref_notification_vibration_alarm_audible">"When alarm is audible only"</string>
+<string name="pref_notification_vibration_alarm_silent">"When alarm is silent only"</string>
+<string name="pref_notification_vibration_never">"Never"</string>
+<string name="pref_notification_management">"Manage notifications"</string>
+<string name="pref_notification_management_sum">"Importance, sound and vibration settings"</string>
 </resources>
