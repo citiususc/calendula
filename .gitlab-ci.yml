@@ -1,4 +1,4 @@
-image: circleci/android:api-28-alpha
+image: circleci/android:api-27-alpha
 
 before_script:
   - export GRADLE_USER_HOME="$(pwd)/.gradle"
@@ -8,12 +8,9 @@ cache:
   paths:
     - .gradle
 
-stages:
-  - build
-
 build:
-  stage: build
   script:
+    - du -hs .gradle/ || true
     - ./gradlew assembleCiDebug
     - ./gradlew testCiDebugUnitTest
     - ./gradlew jacocoTestReportCiDebug
