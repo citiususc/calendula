@@ -542,6 +542,15 @@ Quieres instalar la nueva base de datos ahora?"</string>
 <string name="channel_meds_description">"Notificaciones relacionadas con medicamentos, como recordatorios de tomas."</string>
 <string name="channel_default_name">"Por defecto"</string>
 <string name="channel_default_description">"Otras notificaciones."</string>
+<string name="delays_five_min">"5 min"</string>
 <string name="pref_secure_window_title">"Ventana segura"</string>
 <string name="pref_secure_window_summary">"Impide que se muestre información de la app en capturas de pantalla o en el menú de aplicaciones en ejecución"</string>
+<string name="pref_notification_vibration">"Vibración"</string>
+<string name="pref_notification_vibration_title">"Vibrar"</string>
+<string name="pref_notification_vibration_always">"Siempre"</string>
+<string name="pref_notification_vibration_alarm_audible">"Sólo cuando la alarma es audible"</string>
+<string name="pref_notification_vibration_alarm_silent">"Sólo cuando la alarma es silenciosa"</string>
+<string name="pref_notification_vibration_never">"Nunca"</string>
+<string name="pref_notification_management">"Configurar notificaciones"</string>
+<string name="pref_notification_management_sum">"Ajustes de importancia, sonido y vibración"</string>
 </resources>
