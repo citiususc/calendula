@@ -32,7 +32,7 @@ object NotificationHelper {
 
     @JvmField
     val VIBRATION_PATTERN_MEDS =
-        longArrayOf(1000, 200, 100, 500, 400, 200, 100, 500, 400, 200, 100, 500, 1000)
+            longArrayOf(1000, 200, 100, 500, 400, 200, 100, 500, 400, 200, 100, 500, 1000)
     @JvmField
     val VIBRATION_PATTERN_DEFAULT = longArrayOf(1000, 200, 500, 200, 100, 200, 1000)
     @JvmField
@@ -62,18 +62,18 @@ object NotificationHelper {
             val medChannelName = context.getString(R.string.channel_meds_name)
             val medChannelDesc = context.getString(R.string.channel_meds_description)
             val medChannel = NotificationChannel(
-                CHANNEL_MEDS_ID,
-                medChannelName,
-                NotificationManager.IMPORTANCE_HIGH
+                    CHANNEL_MEDS_ID,
+                    medChannelName,
+                    NotificationManager.IMPORTANCE_HIGH
             )
             medChannel.description = medChannelDesc
             //create other channel
             val defaultChannelName = context.getString(R.string.channel_default_name)
             val defaultChannelDesc = context.getString(R.string.channel_default_description)
             val defaultChannel = NotificationChannel(
-                CHANNEL_DEFAULT_ID,
-                defaultChannelName,
-                NotificationManager.IMPORTANCE_DEFAULT
+                    CHANNEL_DEFAULT_ID,
+                    defaultChannelName,
+                    NotificationManager.IMPORTANCE_DEFAULT
             )
 
             defaultChannel.description = defaultChannelDesc
@@ -93,8 +93,8 @@ object NotificationHelper {
     @JvmStatic
     fun isNotificationVibrationEnabled(context: Context): Boolean {
 
-        val vibrationSettingInt =
-            PreferenceUtils.getInt(PreferenceKeys.SETTINGS_NOTIFICATION_VIBRATION, 0)
+        val vibrationSettingInt = Integer.parseInt(
+                PreferenceUtils.getString(PreferenceKeys.SETTINGS_NOTIFICATION_VIBRATION, "0"))
         val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
         return when (vibrationSettingInt) {
