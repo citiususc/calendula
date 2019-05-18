@@ -1,0 +1,36 @@
+<!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2014-2018 CiTIUS - University of Santiago de Compostela
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="scan_dose_changed_msg">המינון השתנה</string>
+    <string name="scan_dose_zero_msg">המינון שצוין אינו חד משמעי. נא להתאים אותו ידנית.</string>
+    <string name="scan_existing_schedule">תזמון קיים (יעודכן)</string>
+    <string name="scan_frequency_changed_msg">התדירות השתנתה מ־%1$s ל־%2$s פעמים ביום</string>
+    <string name="scan_interval_changed_msg">ההפרש השתנה מ־%1$s ל־%2$s</string>
+    <string name="scan_new_schedule">תזמון חדש!</string>
+    <string name="scan_prescriptions">מרשמים</string>
+    <string name="scan_reading_qr">ה־QR נקרא…</string>
+    <string name="scan_review_prescriptions_start">התחלה</string>
+    <string name="scan_review_prescriptions_title">סקירת מרשמים</string>
+    <string name="scan_review_text">נא לעיין במרשמים שנסרקו בקפידה, לשנות אותם במידת הצורך ולאשר כשהתוצאה נושאת חן בעיניך.</string>
+    <string name="scan_review_title">סקירה</string>
+    <string name="scan_schedule_changed">תזמון זה השתנה:</string>
+    <string name="scan_schedule_ends_msg">סדר יום זה תקף ל־%1$s ימים. נא לאשר את מועדי ההתחלה והסיום</string>
+    <string name="scan_schedules_to_create">%1$s תזמונים יווצרו</string>
+    <string name="scan_schedules_to_update">%1$s תזמונים יעודכנו</string>
+</resources>
