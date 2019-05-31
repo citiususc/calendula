@@ -1,3 +1,5 @@
+## This project is currently **unmantained**. Sorry for the inconvenience.
+
 ![](https://tec.citius.usc.es/calendula/github-assets/calendula_promo_google_play.png)
 # Calendula [![Gitlab CI](https://gitlab.com/calendula-ci/calendula/badges/develop/build.svg)](https://gitlab.com/calendula-ci/calendula/pipelines)
 
