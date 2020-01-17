@@ -1,7 +1,5 @@
-## This project is currently **unmantained**. Sorry for the inconvenience.
-
 ![](https://tec.citius.usc.es/calendula/github-assets/calendula_promo_google_play.png)
-# Calendula [![Gitlab CI](https://gitlab.com/calendula-ci/calendula/badges/develop/build.svg)](https://gitlab.com/calendula-ci/calendula/pipelines)
+# Calendula
 
 Calendula is an Android assistant for personal medication management, aimed at those who have trouble following their medication regimen, forget to take their drugs, or have complex schedules that are difficult to remember.
 
@@ -102,7 +100,7 @@ If you're not a developer but you want to help, don't worry! You can help [with 
 
 ## License
 
-Copyright 2018 CITIUS - USC
+Copyright 2020 CITIUS - USC
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
