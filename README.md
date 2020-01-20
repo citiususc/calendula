@@ -85,7 +85,7 @@ We have a lot of development ideas, and we are open to newer ones. Below are som
 We are using the the following resources in the app:
 
 * [People Vector Pack](http://www.freepik.com/free-vector/people-avatars_761436.htm) by [Freepik](http://www.freepik.com)
-* [Baby](http://www.flaticon.com/free-icon/baby_136272), [Dog](http://www.flaticon.com/free-icon/dog_194178) and [cat](http://www.flaticon.com/free-icon/cat_194179) icons by <a href="https://www.flaticon.com/" title="Flaticon">Flaticon</a> (<a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>)
+* [Baby](http://www.flaticon.com/free-icon/baby_136272), [Dog](http://www.flaticon.com/free-icon/dog_194178) and [cat](http://www.flaticon.com/free-icon/cat_194179) icons by <a href="https://www.flaticon.com/" title="Flaticon">Flaticon</a> (<a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>)
 * [Alarm clock animation](https://dribbble.com/shots/1114887-Alarm-Clock-GIF) by  [Daan De Deckere](http://daandd.be/)
 
 ## Contributing
