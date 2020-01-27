@@ -1,0 +1,8 @@
+title: Calendula
+description: "An Android assistant for personal medication management "
+google_analytics: UA-59276741-1
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions
