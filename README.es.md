@@ -1,7 +1,7 @@
 ![](https://tec.citius.usc.es/calendula/github-assets/calendula_promo_google_play.png)
 # Calendula
 
-Calendula es un asistente en Android para la gestión de medicación personal. Está dirigido a aquellos que tienen problemas en seguir su régimen de medicación, se olvidan de tomar las pastillas o tienen horarios complicados difíciles de recordar.
+Calendula es un asistente en Android para la gestión de medicación personal. Está dirigido a aquellos que tienen problemas en seguir su régimen de medicación, se olvidan de tomar las pastillas o tienen horarios difíciles de recordar.
 
 La aplicación está disponible para su descarga en Google Play, F-Droid y Github. 
 
@@ -21,7 +21,7 @@ Estas instrucciones le permitirán obtener una copia del proyecto listo para usa
 
 ### Preparación del entorno de desarollo
 
-Para desarrollo, utilizamos [Android Studio](https://developer.android.com/studio/index.html) (el IDE oficial de Android), así que le recomendamos que lo utilice en su entorno de desarrollo. Una vez instalado Android Sutdio, puede utilizar el Android SDK Manager para obtener las herramientas, plataformas y otros componentes que necesitará para comenzar el desarrollo. Las más importantes son:
+Para desarrollo, utilizamos [Android Studio](https://developer.android.com/studio/index.html) (el IDE oficial de Android), así que le recomendamos que lo utilice en su entorno de desarrollo. Una vez instalado Android Studio, puede utilizar el Android SDK Manager para obtener las herramientas, plataformas y otros componentes que necesitará para comenzar el desarrollo. Las más importantes son:
 
 * Android SDK Tools y Android SDK Platform-tools (actualizar a la última versión suele ser una buena idea).
 * Android SDK Build-Tools 27.0.3.
@@ -60,7 +60,7 @@ Actualmente se mantienen lanzamientos de Calendula en Google Play, F-Droid y Git
  * La última versión de la app disponible en esas páginas refleja el código de la rama `master`.
  * Las ramas de lanzamiento se distribuyen normalmente a través del *Google Play BETA channel* antes de hacerlas públicas. Si quiere ser un miembro de la comunidad de pruebas, únase al grupo de pruebas en Google Groups y automáticamente recibirá las actualizaciones del canal BETA como cualquier otra actualización de Google Play. 
  
-> Unirse al canal BETA: [haga click aquí!](https://play.google.com/apps/testing/es.usc.citius.servando.calendula)
+> Unirse al canal BETA: [¡haga click aquí!](https://play.google.com/apps/testing/es.usc.citius.servando.calendula)
 
 Revise las [normas de contribución](CONTRIBUTING.md) para más información acerca del modelo de ramas.
 
@@ -74,7 +74,7 @@ Intentamos seguir los principios de [Material Design](https://material.google.co
 
 ## Trabajo futuro
 
-TEnemos una gran cantidad de ideas para nuevos desarrollos y también estamos abiertos a otras nuevas. Las siguientes nuevas características podrían ser útiles:
+Tenemos una gran cantidad de ideas para nuevos desarrollos y también estamos abiertos a otras nuevas. Las siguientes nuevas características podrían ser útiles:
 
 * Información de farmacias cercanas, su localización y horarios. 
 * Asistente de viaje ¿cuántas pastillas necesito para este fin de semana?)
@@ -85,7 +85,7 @@ TEnemos una gran cantidad de ideas para nuevos desarrollos y también estamos ab
 Actualmente estamos utilizando los siguientes recursos en la app:
 
 * [People Vector Pack](http://www.freepik.com/free-vector/people-avatars_761436.htm) por [Freepik](http://www.freepik.com)
-* Iconos [Baby](http://www.flaticon.com/free-icon/baby_136272), [Dog](http://www.flaticon.com/free-icon/dog_194178) and [cat](http://www.flaticon.com/free-icon/cat_194179) por <a href="https://www.flaticon.com/" title="Flaticon">Flaticon</a> (<a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>)
+* Iconos [Baby](http://www.flaticon.com/free-icon/baby_136272), [Dog](http://www.flaticon.com/free-icon/dog_194178) y [cat](http://www.flaticon.com/free-icon/cat_194179) por <a href="https://www.flaticon.com/" title="Flaticon">Flaticon</a> (<a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>)
 * [Animación de Despertador](https://dribbble.com/shots/1114887-Alarm-Clock-GIF) por  [Daan De Deckere](http://daandd.be/)
 
 ## Contribuir
