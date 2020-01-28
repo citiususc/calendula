@@ -1,0 +1,1 @@
+Pendente de tradución.
