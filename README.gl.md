@@ -60,13 +60,13 @@ Neste momento mantemos lanzamentos de Calendula en Google Play, F-Droid y Github
  * A última versión da app dispoñible nesas páxinas reflexa o código da rama `master`.
  * As ramas de lanzamento distribúense normalmente a través do *Google Play BETA channel* antes de facelas públicas. Se quere ser membro da comunidade de probas, únase ó grupo de probas en Google Groups e automáticamente recibirá as actualizacións da canle BETA como cualquera outra actualización de Google Play. 
  
-> Unirse á canle BETA: [¡faga click aquí!](https://play.google.com/apps/testing/es.usc.citius.servando.calendula)
+> Unirse á canle BETA: [faga click aquí!](https://play.google.com/apps/testing/es.usc.citius.servando.calendula)
 
 Revise as [normas de contribución](CONTRIBUTING.md) para máis información acerca do modelo de ramas.
 
-## ¿Qué pinta ten?
+## Qué pinta ten?
 
-Intentamos seguir os principios de [Material Design](https://material.google.com/#). ¿Que pensa do resultado?
+Intentamos seguir os principios de [Material Design](https://material.google.com/#). Que pensa do resultado?
 
   | <img src="https://tec.citius.usc.es/calendula/github-assets/home.png" width="230px"/>  | <img src="https://tec.citius.usc.es/calendula/github-assets/agenda.png" width="230px"/> | <img src="https://tec.citius.usc.es/calendula/github-assets/schedules.png" width="230px"/>
   |:---:|:---:|:---:|
@@ -77,7 +77,7 @@ Intentamos seguir os principios de [Material Design](https://material.google.com
 Temos moitas ideas para novos desenvolvementos e tamén estamos abertos a outras novas. As seguintes novas características poderían ser útiles:
 
 * Información de farmacias cercanas, a súa localización e horarios. 
-* Asistente de viaxe ¿cántas pílulas necesito para este fin de semana?)
+* Asistente de viaxe: cántas pílulas necesito para este fin de semana?)
 * Introducir conceptos de [ludificación](https://en.wikipedia.org/wiki/Gamification) para mellorar a adhesión ó tratamento.
 
 ## Atribución do deseño
@@ -94,9 +94,9 @@ Pode facer un fork e enviar un pull request se quere contribuir ó proxecto. Cal
 
 Antes de comezar, revise as nosas [normas de contribución](CONTRIBUTING.md).
 
-### quero contribuir, pero non son desenvolvedor...
+### Quero contribuir, pero non son desenvolvedor...
 
-Se non é un desenvolvedor pero quere axudar, ¡non se preocupe! Pode axudarnos a [traducir a aplicación](CONTRIBUTING.md#help-with-app-translations), [uníndose á canle BETA](#app-versions), y [moito máis](CONTRIBUTING.md#i-would-like-to-contribute-but-im-not-a-developer). ¡Todo o mundo é benvido!
+Se non é un desenvolvedor pero quere axudar, non se preocupe! Pode axudarnos a [traducir a aplicación](CONTRIBUTING.md#help-with-app-translations), [uníndose á canle BETA](#app-versions), e [moito máis](CONTRIBUTING.md#i-would-like-to-contribute-but-im-not-a-developer). Todo o mundo é benvido!
 
 ## Licenza
 
