@@ -28,7 +28,7 @@ Para desarrollo, utilizamos [Android Studio](https://developer.android.com/studi
 * Android 8.1 (API Level 27) SDK Platform.
 * Android Support Repository
 
-También puede instalar otros paquetes como emuladores para ejecutar la aplicación, si no dispone o no quiere utilizar un dispositivo hardware. La mínima versión de Android suportada es *4.1, Jelly Bean (API level 16).*
+También puede instalar otros paquetes como emuladores para ejecutar la aplicación, si no dispone o no quiere utilizar un dispositivo hardware. La mínima versión de Android soportada es *4.1, Jelly Bean (API level 16).*
 
 ### Compilando e instalando la aplicación
 
@@ -46,7 +46,7 @@ Android Studio utiliza Gradle como el componente principal del mecanismo de comp
 ```
 *Nota: "developDebug" es la [build variant](https://developer.android.com/studio/build/build-variants.html) que utilizamos para desarrollo. Para otras variantes, por favor revise el archivo `Calendula/build.gradle`.*
 
-Despues, podrá instalar la aplicación en un dispositivo o emulador: 
+Después, podrá instalar la aplicación en un dispositivo o emulador: 
 
 ```bash
 adb install Calendula/build/apk/develop/debug/developDebug-[version].apk
@@ -90,13 +90,13 @@ Actualmente estamos utilizando los siguientes recursos en la app:
 
 ## Contribuir
 
-Puede hacer un fork y enviar un pull request si quiere contribuir al proyecto. Calendula sigue los términos de licencia de la [GNU General Public License (v3)](LICENSE.md), así que al subir contenidos al repositorio estará liberando su trabajo según ésta licencia. 
+Puede hacer un fork y enviar un pull request si quiere contribuir al proyecto. Calendula sigue los términos de licencia de la [GNU General Public License (v3)](LICENSE.md), así que al subir contenidos al repositorio estará liberando su trabajo según esta licencia. 
 
 Antes de empezar, revise nuestras [normas de contribución](CONTRIBUTING.md).
 
 ### Quiero contribuir, pero no soy desarrollador...
 
-Si no es un desarrollador pero quiere ayudar, ¡no se preocupe! Puede ayudarnos a [traducir la aplicación](CONTRIBUTING.md#help-with-app-translations), [uniéndose al grupo BETA](#app-versions), y [mucho mñas](CONTRIBUTING.md#i-would-like-to-contribute-but-im-not-a-developer). ¡Todo el mundo es bienvenido!
+Si no es un desarrollador pero quiere ayudar, ¡no se preocupe! Puede ayudarnos a [traducir la aplicación](CONTRIBUTING.md#help-with-app-translations), [uniéndose al grupo BETA](#app-versions), y [mucho más](CONTRIBUTING.md#i-would-like-to-contribute-but-im-not-a-developer). ¡Todo el mundo es bienvenido!
 
 ## Licencia
 
