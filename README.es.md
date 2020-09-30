@@ -1,5 +1,5 @@
 ![](https://tec.citius.usc.es/calendula/github-assets/calendula_promo_google_play.png)
-# Calendula
+# Calendula(a personal medical assistant)
 
 Calendula es un asistente en Android para la gestión de medicación personal. Está dirigido a aquellos que tienen problemas en seguir su régimen de medicación, se olvidan de tomar las pastillas o tienen horarios difíciles de recordar.
 
