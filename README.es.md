@@ -15,6 +15,37 @@ La aplicación está disponible para su descarga en Google Play, F-Droid y Githu
 
 Visite nuestra página web para más información [https://citius.usc.es/calendula/](https://citius.usc.es/calendula/)
 
+## Novedades de Caledula
+
+¡Tenemos buenas noticias!
+
+El Servicio Gallego de Salud (SERGAS) ha adoptado Calendula para ser conectada con su Sistema de Receta Electrónica. Esto ha dado lugar a varias extensiones a partir de la versión libre, incluyendo: 
+
+* Descarga automática de la pauta de medicación del paciente.
+* Acceso automático al calendario de recogida de medicaciones.
+* Recomendación automática de las mejores fechas de recogida, para optimizar las visitas a la farmacia. 
+* Acceso al régimen de dosis de anticoagulantes.
+
+El proceso de integración se ha focalizado en dos aspectos fundamentales: interoperabilidad y seguridad.
+
+Con respecto a la interoperabilidad, la adopción del estándar internacional HL7-FHIR facilitará la integración de caléndula con otros sistemas de salud.
+
+Con respecto a la seguridad, se ha adoptado la especificación OpenID Connect, lo que permite a Calendula verifiar la identidad de los usuarios a partir de una autenticación realizada por servidores del SERGAS.
+
+A lo largo de este proceso, hemos trabajado en muchas mejoras, incluyendo: 
+* Incrementar el nivel de API Android de desarrollo al 29: 
+* Adaptar las notificaciones y servicios en segundo plano a los requisitos de las nuevas versiones de Android.
+* Actualizar versiones de Gradle, Java y Kotlin.
+* Migrar las librerías Android a AndroidX
+* Actualizar las versiones de las librerías: Google, Iconics, Material-Drawer, Fast Adapter, ButterLnife, Caldroid y Android Jobs.
+* Mejoras en la UI para solucionar fallos de actualización y NPEs.
+* Actualización de internacionalización: añadir nuevos idiomas y actualizar los soportados actualmente.
+* Mejoras de rendimiento en el uso de memoria: migrar recursos gráficos de tipo bitmap a formato vectorial.
+* Notificaciones y ahorro de batería: se añade la opción de excluir la aplicación del sistema de ahorro de batería para evitar que el sistema suspenda la aplicación e impida la entrega notificaciones al usuario.
+* Corrección de fallos menores.
+
+Estos cambios pronto estarán disponibles en este repositorio y se aplicarán a la versión de Google Play!
+
 ## Empezando
 
 Estas instrucciones le permitirán obtener una copia del proyecto listo para usar en su máquina local. Si quiere contribuir al desarrollo de la aplicación, por favor diríjase a la sección Contribuir. 
