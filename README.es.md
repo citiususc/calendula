@@ -15,7 +15,7 @@ La aplicación está disponible para su descarga en Google Play, F-Droid y Githu
 
 Visite nuestra página web para más información [https://citius.usc.es/calendula/](https://citius.usc.es/calendula/)
 
-## Novedades de Caledula
+## Novedades de Calendula
 
 ¡Tenemos buenas noticias!
 
