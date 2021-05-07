@@ -14,6 +14,37 @@ The app is available for download in Google Play, F-Droid and Github.
 
 Visit our web page for more info  [https://citius.usc.es/calendula/](https://citius.usc.es/calendula/)
 
+## Calendula News
+
+We have some good news!
+
+Our Regional Public Health Authority (SERGAS) has adopted Calendula to be connected with its Electronic Prescription System, resulting in the extension of previous features from the open source version, to include: 
+
+* Automatic download of the patient medication regime. 
+* Access to the medication pickup calendar
+* Automatic recommendation of the best dates to optimize the number of visits to pharmacy
+* Acess to the anticoagulant dosing regime. 
+
+The integration process has faced two key issues: interoperability and security.
+
+With regard to the first one, the adoption of the international standard HL7-FHIR (Fast Healthcare Interoperability Resources) will smooth the way for an easy deployment in other healthcare systems. 
+
+Regarding security, the OpenID Connect specification has been adopted, allowing Calendula to verify the identity of users based on an authentication performed by an authorization server provided by SERGAS.
+
+Along the way, we have worked on a lot of bug fixes and feature improvements, including: 
+* Increase Android API Level to level 29.
+* Update notifications and background services to the latest Android versions.
+* Update Gradle, Kotlin and Java versions.
+* Migrate Android libraries to AndroidX.
+* Update the following libraries: Google, Iconics, Material-Drawer, Fast Adapter, ButterKnife, Caldroid and Android Jobs.
+* Improve the UI to fix update problems and NPEs. 
+* Localization updates: new languages will be included and updates will be provided for existing ones. 
+* Memory performance updates: bitmaps will be migrated to vectorial formats. 
+* Fixes regarding notifications and battery saving mode: added the option to exclude Calendula from battery saving mode, to avoid Calendula to be suspended, and thus still be able to get notifications all the time. 
+* Other minor bug fixes. 
+
+These will soon be made available in this repository and applied to the version in Google Play. Stay tuned!
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine ready for development. If you want to help developing the app take a look to the contributing section, at the end.
