@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~    Calendula - An assistant for personal medication management.
+  ~    Copyright (C) 2014-2020 CiTIUS - University of Santiago de Compostela
+  ~
+  ~    Calendula is free software; you can redistribute it and/or modify
+  ~    it under the terms of the GNU General Public License as published by
+  ~    the Free Software Foundation; either version 3 of the License, or
+  ~    (at your option) any later version.
+  ~
+  ~    This program is distributed in the hope that it will be useful,
+  ~    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~    GNU General Public License for more details.
+  ~
+  ~    You should have received a copy of the GNU General Public License
+  ~    along with this software.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="scan_dose_changed_msg">Dosis hat sich geändert</string>
+    <string name="scan_dose_zero_msg">Der angegebene Einnahmeplan ist uneindeutig. Bitte korrigieren Sie diesen manuell.</string>
+    <string name="scan_existing_schedule">Einnahmeplan existiert (dieser wird aktualisiert)</string>
+    <string name="scan_frequency_changed_msg">Frequenz hat sich von %1$s zu %2$s mal pro Tag geändert</string>
+    <string name="scan_interval_changed_msg">Interval hat sich von %1$s zu %2$s geändert</string>
+    <string name="scan_new_schedule">Neuer Plan!</string>
+    <string name="scan_prescriptions">Rezepte</string>
+    <string name="scan_reading_qr">Lese QR…</string>
+    <string name="scan_review_prescriptions_start">Start</string>
+    <string name="scan_review_prescriptions_title">Rezepte prüfen</string>
+    <string name="scan_review_text">Bitte prüfen sorgfältig die gescannten Rezepte, ändere sie falls notwendig, und bestätige, wenn du einverstanden bist.</string>
+    <string name="scan_review_title">Prüfen</string>
+    <string name="scan_schedule_changed">Dieser Plan hat sich geändert:</string>
+    <string name="scan_schedules_to_create">%1$s Pläne werden angelegt</string>
+    <string name="scan_schedules_to_update">%1$s Pläne werden aktualisiert</string>
+
+</resources>
