@@ -139,6 +139,7 @@ public class HomePagerActivity extends CalendulaActivity implements
     private LeftDrawerMgr drawerMgr;
     private Patient activePatient;
     private int pendingRefresh = -2;
+    private int pagerPositionNow = 0;
     private Queue<Object> pendingEvents = new LinkedList<>();
     private Handler handler;
 
@@ -580,6 +581,7 @@ public class HomePagerActivity extends CalendulaActivity implements
             public void onPageSelected(int position) {
                 updateTitle(position);
                 updateScrim(position);
+                pagerPositionNow = position;
                 fabMgr.onViewPagerItemChange(position);
                 if (position == HomePages.HOME.ordinal() && !((DailyAgendaFragment) getViewPagerFragment(HomePages.HOME)).isExpanded()) {
                     appBarLayout.setExpanded(true);
@@ -591,6 +593,7 @@ public class HomePagerActivity extends CalendulaActivity implements
                     CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
                     ((DisableableAppBarLayoutBehavior) layoutParams.getBehavior()).setEnabled(false);
                 }
+                drawerMgr.changePageSelected(position);
 
                 invalidateOptionsMenu();
             }
@@ -642,6 +645,12 @@ public class HomePagerActivity extends CalendulaActivity implements
     private void launchActivity(Intent i) {
         startActivity(i);
         this.overridePendingTransition(0, 0);
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        drawerMgr.changePageSelected(pagerPositionNow);
     }
 
     /*
