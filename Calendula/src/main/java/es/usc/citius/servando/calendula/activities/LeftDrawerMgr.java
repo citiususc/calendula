@@ -237,6 +237,23 @@ public class LeftDrawerMgr implements Drawer.OnDrawerItemClickListener, AccountH
         }
     }
 
+    public void changePageSelected(int pagerPosition) {
+        switch (pagerPosition) {
+            case 0:
+                drawer.setSelection(HOME, false);
+                break;
+            case 1:
+                drawer.setSelection(MEDICINES, false);
+                break;
+            case 2:
+                drawer.setSelection(ROUTINES, false);
+                break;
+            case 3:
+                drawer.setSelection(SCHEDULES, false);
+                break;
+        }
+    }
+
     @Override
     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
 
