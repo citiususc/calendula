@@ -1,4 +1,4 @@
-![](https://tec.citius.usc.es/calendula/github-assets/calendula_promo_google_play.png)
+![](assets/calendula_promo_google_play.png)
 # Calendula
 
 Calendula es un asistente en Android para la gestión de medicación personal. Está dirigido a aquellos que tienen problemas en seguir su régimen de medicación, se olvidan de tomar las pastillas o tienen horarios difíciles de recordar.
@@ -99,9 +99,10 @@ Revise las [normas de contribución](CONTRIBUTING.md) para más información ace
 
 Intentamos seguir los principios de [Material Design](https://material.google.com/#). ¿Qué le parece el resultado?
 
-  | <img src="https://tec.citius.usc.es/calendula/github-assets/home.png" width="230px"/>  | <img src="https://tec.citius.usc.es/calendula/github-assets/agenda.png" width="230px"/> | <img src="https://tec.citius.usc.es/calendula/github-assets/schedules.png" width="230px"/>
+ | <img src="assets/screenshots/v2.5-en/1.png" width="230px"/>  | <img src="assets/screenshots/v2.5-en/2.png" width="230px"/> | <img src="assets/screenshots/v2.5-en/8.png" width="230px"/>
   |:---:|:---:|:---:|
-  | <img src="https://tec.citius.usc.es/calendula/github-assets/aviso.png" width="230px"/> | <img src="https://tec.citius.usc.es/calendula/github-assets/navdrawer.png" width="230px"/> | <img src="https://tec.citius.usc.es/calendula/github-assets/profile.png" width="230px"/>
+  | <img src="assets/screenshots/v2.5-en/3.png" width="230px"/> | <img src="assets/screenshots/v2.5-en/5.png" width="230px"/> | <img src="assets/screenshots/v2.5-en/4.png" width="230px"/>
+
 
 ## Trabajo futuro
 
