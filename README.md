@@ -1,4 +1,4 @@
-![](https://tec.citius.usc.es/calendula/github-assets/calendula_promo_google_play.png)
+![](assets/calendula_promo_google_play.png)
 # Calendula
 
 Calendula is an Android assistant for personal medication management, aimed at those who have trouble following their medication regimen, forget to take their drugs, or have complex schedules that are difficult to remember.
@@ -80,7 +80,7 @@ Then you may install the app on a device or emulator:
 
 ```bash
 adb install Calendula/build/apk/develop/debug/developDebug-[version].apk
-```
+``` 
 
 These tasks can also be executed from Android Studio with a few clicks.
 
@@ -99,9 +99,9 @@ Check out the [contributing guidelines](CONTRIBUTING.md) for more info about the
 
 We try to follow [Material Design](https://material.google.com/#) principles. Take a look at the result!
 
-  | <img src="https://tec.citius.usc.es/calendula/github-assets/home.png" width="230px"/>  | <img src="https://tec.citius.usc.es/calendula/github-assets/agenda.png" width="230px"/> | <img src="https://tec.citius.usc.es/calendula/github-assets/schedules.png" width="230px"/>
+  | <img src="assets/screenshots/v2.5-en/1.png" width="230px"/>  | <img src="assets/screenshots/v2.5-en/2.png" width="230px"/> | <img src="assets/screenshots/v2.5-en/8.png" width="230px"/>
   |:---:|:---:|:---:|
-  | <img src="https://tec.citius.usc.es/calendula/github-assets/aviso.png" width="230px"/> | <img src="https://tec.citius.usc.es/calendula/github-assets/navdrawer.png" width="230px"/> | <img src="https://tec.citius.usc.es/calendula/github-assets/profile.png" width="230px"/>
+  | <img src="assets/screenshots/v2.5-en/3.png" width="230px"/> | <img src="assets/screenshots/v2.5-en/5.png" width="230px"/> | <img src="assets/screenshots/v2.5-en/4.png" width="230px"/>
 
 ## Future work
 
