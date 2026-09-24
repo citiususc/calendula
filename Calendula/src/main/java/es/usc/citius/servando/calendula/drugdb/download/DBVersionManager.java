@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 import es.usc.citius.servando.calendula.BuildConfig;
+import es.usc.citius.servando.calendula.CalendulaApp;
 import es.usc.citius.servando.calendula.R;
 import es.usc.citius.servando.calendula.database.DatabaseHelper;
 import es.usc.citius.servando.calendula.util.HttpDownloadUtil;
@@ -54,13 +55,18 @@ public class DBVersionManager {
      * @param databaseID the database ID
      * @return the newest working version
      */
-    public static String getLastDBVersion(String databaseID) {
+    public static String getLastDBVersion(Context ctx, String databaseID) {
         final String downloadUrl = BuildConfig.DB_DOWNLOAD_URL;
         final String url = downloadUrl + VERSION_FILE;
 
         try {
 
-            final String result = HttpDownloadUtil.downloadFileToText(url).trim();
+            final String downloaded = HttpDownloadUtil.downloadFileToText(ctx, url);
+            if (downloaded == null) {
+                LogUtil.w(TAG, "getLastDBVersion: backend is not reachable");
+                return null;
+            }
+            final String result = downloaded.trim();
             LogUtil.d(TAG, "getLastDBVersion: json is: " + result);
 
             Type type = new TypeToken<Map<String, Map<Integer, String>>>() {
@@ -102,6 +108,14 @@ public class DBVersionManager {
     }
 
 
+    /** Backwards-compatible overload for existing callers. */
+    @Deprecated
+    public static String getLastDBVersion(String databaseID) {
+        Context context = CalendulaApp.getContext();
+        return context != null ? getLastDBVersion(context, databaseID) : null;
+    }
+
+
     /**
      * Checks if there is any available update for the current medicine database.
      *
@@ -116,7 +130,11 @@ public class DBVersionManager {
 
         if (!database.equals(noneId) && !database.equals(ctx.getString(R.string.database_setting_up))) {
             if (currentVersion != null) {
-                final String lastDBVersion = DBVersionManager.getLastDBVersion(database);
+                final String lastDBVersion = DBVersionManager.getLastDBVersion(ctx, database);
+                if (lastDBVersion == null) {
+                    LogUtil.w(TAG, "checkForUpdate: unable to reach database backend");
+                    return null;
+                }
                 final DateTime lastDBDate = DateTime.parse(lastDBVersion, ISODateTimeFormat.basicDate());
                 final DateTime currentDBDate = DateTime.parse(currentVersion, ISODateTimeFormat.basicDate());
 

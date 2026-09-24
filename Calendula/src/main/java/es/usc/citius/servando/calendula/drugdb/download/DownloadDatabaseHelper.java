@@ -200,8 +200,16 @@ public class DownloadDatabaseHelper {
                 final String dbName = mgr.id();
 
                 try {//get version
-                    final String dbVersion = DBVersionManager.getLastDBVersion(dbName);
+                    final String dbVersion = DBVersionManager.getLastDBVersion(ctx, dbName);
+                    if (dbVersion == null) {
+                        LogUtil.w(TAG, "doInBackground: unable to resolve database version backend");
+                        return false;
+                    }
                     final String url = ctx.getString(R.string.database_file_location, downloadUrl, dbName, dbVersion);
+                    if (!NetworkUtils.isBackendAvailable(ctx, url)) {
+                        LogUtil.w(TAG, "doInBackground: backend is not reachable: " + url);
+                        return false;
+                    }
                     LogUtil.d(TAG, "doInBackground: Downloading database from " + url);
 
 

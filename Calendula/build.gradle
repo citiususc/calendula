@@ -155,7 +155,11 @@ android {
             outputFileName = "${project.name}-${variant.name}-${variant.versionName}.apk"
         }
     }
-    compileOptions.incremental = false
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        incremental = false
+    }
 }
 
 
